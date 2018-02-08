@@ -33,16 +33,18 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private void Crumble() {
 			RoomControl.RemoveTile(this);
-			RoomControl.SpawnEntity(new EffectFallingObject(DepthLayer.EffectCrackedFloorCrumble), Center);
+			if (!IsSilent)
+				RoomControl.SpawnEntity(new EffectFallingObject(DepthLayer.EffectCrackedFloorCrumble), Center);
 
 			// Play crumble sound
-			AudioSystem.PlaySound(GameData.SOUND_FLOOR_CRUMBLE);
+			if (!IsSilent)
+				AudioSystem.PlaySound(GameData.SOUND_FLOOR_CRUMBLE);
 
 			// Create a pit tile if this tile is on the bottom layer.
-			if (Layer == 0) {
-				TileData pitTileData = Resources.GetResource<TileData>("pit");
-				Tile pitTile = Tile.CreateTile(pitTileData);
-				RoomControl.PlaceTile(pitTile, Location, Layer);
+			if (Layer == 0 && TileBelow == null) {
+				TileData holeTileData = Resources.GetResource<TileData>("hole");
+				Tile holeTile = Tile.CreateTile(holeTileData);
+				RoomControl.PlaceTile(holeTile, Location, Layer);
 			}
 		}
 
@@ -69,6 +71,15 @@ namespace ZeldaOracle.Game.Tiles {
 			else {
 				crumbleTimer = 0;
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool IsSilent {
+			get { return Properties.GetBoolean("silent", false); }
 		}
 
 

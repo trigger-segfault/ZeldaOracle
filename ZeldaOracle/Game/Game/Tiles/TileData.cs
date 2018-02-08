@@ -21,6 +21,8 @@ namespace ZeldaOracle.Game.Tiles {
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;
 		private CollisionModel		model;
+		/// <summary>The tile to appear when this one is removed while on layer 1.</summary>
+		private TileData            tileBelow;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,6 +36,7 @@ namespace ZeldaOracle.Game.Tiles {
 			spriteAsObject		= null;
 			breakAnimation		= null;
 			model               = null;
+			tileBelow			= null;
 
 			// General.
 			properties.Set("size", Point2I.One)
@@ -92,10 +95,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("draw_as_entity", false)
 				.SetDocumentation("Draw as Entity", "", "", "Drawing", "", true, false);
 
-			// Events.
-			/*properties.Set("on_move", "")
-				.SetDocumentation("On Move", "script", "", "Events",
-				"Occurs when the tile is moved.", true, false);*/
+			// Events
 			events.AddEvent("moved", "Moved", "Movement", "Occurs when the tile is moved.");
 		}
 		
@@ -109,12 +109,12 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileData(TileData copy) : base(copy) {
-			//size				= copy.size;
 			spriteAbove			= copy.spriteAbove;
 			spriteAsObject		= copy.spriteAsObject;
 			breakAnimation		= copy.breakAnimation;
 			spriteList			= new ISprite[copy.spriteList.Length];
 			model				= copy.model;
+			tileBelow			= copy.tileBelow;
 			
 			for (int i = 0; i < spriteList.Length; i++)
 				spriteList[i] = copy.spriteList[i];
@@ -124,12 +124,12 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Clone(copy);
 			if (copy is TileData) {
 				TileData copyTileData = (TileData) copy;
-				//size				= copyTileData.size;
 				spriteAbove			= copyTileData.spriteAbove;
 				spriteAsObject		= copyTileData.spriteAsObject;
 				breakAnimation		= copyTileData.breakAnimation;
 				breakSound			= copyTileData.breakSound;
 				model				= copyTileData.model;
+				tileBelow			= copyTileData.tileBelow;
 
 				if (copyTileData.spriteList.Length > 0) {
 					spriteList = new ISprite[copyTileData.spriteList.Length];
@@ -273,6 +273,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool DrawAsEntity {
 			get { return properties.GetBoolean("draw_as_entity", false); }
 			set { properties.Set("draw_as_entity", value); }
+		}
+
+		/// <summary>Gets or sets the tile to appear when
+		/// this one is removed while on layer 1.</summary>
+		public TileData TileBelow {
+			get { return tileBelow; }
+			set { tileBelow = value; }
 		}
 	}
 }

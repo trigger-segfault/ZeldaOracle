@@ -400,6 +400,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				tileData.HurtArea = parameters.GetRectangle(1);
 			});
 			//=====================================================================================
+			AddCommand("TILEBELOW", (int) Modes.Tile,
+				"const none", "const null",
+			delegate (CommandParam parameters) {
+				tileData.TileBelow = null;
+			});
+			//=====================================================================================
+			AddCommand("TILEBELOW", (int) Modes.Tile,
+				"string tileData",
+			delegate (CommandParam parameters) {
+				tileData.TileBelow = GetResource<TileData>(parameters.GetString(0));
+			});
+			//=====================================================================================
 			AddCommand("CLONE", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"string tileDataName",
 			delegate (CommandParam parameters) {

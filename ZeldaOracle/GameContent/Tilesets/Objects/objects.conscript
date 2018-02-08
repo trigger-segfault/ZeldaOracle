@@ -113,10 +113,10 @@ ADDTILE ( 1, 10), wall_webbed_right;
 ADDTILE ( 2, 10), wall_bombable_down;
 ADDTILE ( 3, 10), wall_bombable_right;
 
-ADDTILE (6, 9), "wall_tunnel_up_keyhole";
-ADDTILE (6, 10), "wall_tunnel_down_keyhole";
-ADDTILE (7, 9), "wall_tunnel_left_keyhole";
-ADDTILE (7, 10), "wall_tunnel_right_keyhole";
+ADDTILE (6, 9), "wall_tunnel_keyhole_up";
+ADDTILE (6, 10), "wall_tunnel_keyhole_down";
+ADDTILE (7, 9), "wall_tunnel_keyhole_left";
+ADDTILE (7, 10), "wall_tunnel_keyhole_right";
 # Wall down
 # Wall right
 # Keyhole wall down

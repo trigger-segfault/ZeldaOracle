@@ -5,6 +5,9 @@
 TILE "temp_wall_bombable";
 	SOLID		block;
 	FLAGS		Bombable;
+	RESETWHEN	Never;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
@@ -25,10 +28,56 @@ TILE "wall_inside_sw"; SAMESPRITE; SOLID block; END;
 TILE "wall_inside_ne"; SAMESPRITE; SOLID block; END;
 TILE "wall_inside_nw"; SAMESPRITE; SOLID block; END;
 
-TILE "wall_bombable_right";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_bombable_up";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_bombable_left";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_bombable_down";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
+TILE "wall_tunnel_down"; SAMESPRITE; END;
+TILE "wall_tunnel_up"; SAMESPRITE; END;
+TILE "wall_tunnel_left"; SAMESPRITE; END;
+TILE "wall_tunnel_right"; SAMESPRITE; END;
+
+TILE "wall_tunnel_keyhole_down";
+	SOLID		block;
+	RESETWHEN	Never;
+	TILEBELOW	"wall_tunnel_down";
+	SAMESPRITE;
+END;
+TILE "wall_tunnel_keyhole_up";
+	SOLID		block;
+	RESETWHEN	Never;
+	TILEBELOW	"wall_tunnel_up";
+	SAMESPRITE;
+END;
+TILE "wall_tunnel_keyhole_left";
+	SOLID		block;
+	RESETWHEN	Never;
+	TILEBELOW	"wall_tunnel_left";
+	SAMESPRITE;
+END;
+TILE "wall_tunnel_keyhole_right";
+	SOLID		block;
+	RESETWHEN	Never;
+	TILEBELOW	"wall_tunnel_right";
+	SAMESPRITE;
+END;
+
+TILE "wall_bombable_down";
+	CLONE		"temp_wall_bombable";
+	TILEBELOW	"wall_tunnel_down";
+	SAMESPRITE;
+END;
+TILE "wall_bombable_up";
+	CLONE		"temp_wall_bombable";
+	TILEBELOW	"wall_tunnel_up";
+	SAMESPRITE;
+END;
+TILE "wall_bombable_left";
+	CLONE		"temp_wall_bombable";
+	TILEBELOW	"wall_tunnel_left";
+	SAMESPRITE;
+END;
+TILE "wall_bombable_right";
+	CLONE		"temp_wall_bombable";
+	TILEBELOW	"wall_tunnel_right";
+	SAMESPRITE;
+END;
 
 TILE "ceiling"; SAMESPRITE; SOLID block; END;
 
@@ -46,22 +95,12 @@ TILE "wall_alt_inside_sw"; SAMESPRITE; SOLID block; END;
 TILE "wall_alt_inside_ne"; SAMESPRITE; SOLID block; END;
 TILE "wall_alt_inside_nw"; SAMESPRITE; SOLID block; END;
 
-TILE "wall_alt_bombable_right";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_alt_bombable_up";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_alt_bombable_left";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_alt_bombable_down";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
+#TILE "wall_alt_bombable_right";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
+#TILE "wall_alt_bombable_up";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
+#TILE "wall_alt_bombable_left";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
+#TILE "wall_alt_bombable_down";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
 
 TILE "ceiling_alt"; SAMESPRITE; SOLID block; END;
-
-TILE "wall_tunnel_down"; SAMESPRITE; END;
-TILE "wall_tunnel_up"; SAMESPRITE; END;
-TILE "wall_tunnel_left"; SAMESPRITE; END;
-TILE "wall_tunnel_right"; SAMESPRITE; END;
-
-TILE "wall_tunnel_down_keyhole"; SAMESPRITE; SOLID block; END;
-TILE "wall_tunnel_up_keyhole"; SAMESPRITE; SOLID block; END;
-TILE "wall_tunnel_left_keyhole"; SAMESPRITE; SOLID block; END;
-TILE "wall_tunnel_right_keyhole"; SAMESPRITE; SOLID block; END;
 
 TILE "stairs_down"; SAMESPRITE; ENVTYPE Stairs; END;
 TILE "stairs_up"; SAMESPRITE; ENVTYPE Stairs; END;

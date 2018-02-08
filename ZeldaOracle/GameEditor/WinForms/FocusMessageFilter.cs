@@ -14,6 +14,8 @@ namespace ZeldaEditor.WinForms {
 	public class WpfFocusMessageFilter : IMessageFilter {
 		/// <summary>The WPF element to focus on.</summary>
 		private FrameworkElement element;
+		/// <summary>True if this filter ignores mouse buttons.</summary>
+		private bool ignoreMouseButtons;
 
 
 		//-----------------------------------------------------------------------------
@@ -32,15 +34,25 @@ namespace ZeldaEditor.WinForms {
 
 		/// <summary>Filters out a message before it is dispatched.</summary>
 		public bool PreFilterMessage(ref Message m) {
-			if (m.Msg == NativeMethods.WM_MOUSEWHEEL || m.Msg == NativeMethods.WM_LBUTTONDOWN ||
-				m.Msg == NativeMethods.WM_RBUTTONDOWN || m.Msg == NativeMethods.WM_MBUTTONDOWN)
-			{
+			if (m.Msg == NativeMethods.WM_MOUSEWHEEL) {
 				var focusElement = FocusManager.GetFocusedElement(element);
 				if (element.IsMouseOver && !element.IsFocused &&
-					focusElement != element/* && focusElement == null*/)
+					focusElement != element)
 				{
 					element.Focus();
-					HwndSource hwndSource = (HwndSource)HwndSource.FromVisual(element);
+					HwndSource hwndSource = (HwndSource)HwndSource.FromDependencyObject(element);
+					NativeMethods.SendMessage(hwndSource.Handle, m.Msg, m.WParam, m.LParam);
+					return true;
+				}
+			}
+			else if (!ignoreMouseButtons && (m.Msg == NativeMethods.WM_LBUTTONDOWN ||
+				m.Msg == NativeMethods.WM_RBUTTONDOWN || m.Msg == NativeMethods.WM_MBUTTONDOWN)) {
+				var focusElement = FocusManager.GetFocusedElement(element);
+				if (element.IsMouseOver && !element.IsFocused &&
+					focusElement != element)
+				{
+					element.Focus();
+					HwndSource hwndSource = (HwndSource)HwndSource.FromDependencyObject(element);
 					NativeMethods.SendMessage(hwndSource.Handle, m.Msg, m.WParam, m.LParam);
 					return true;
 				}
@@ -56,7 +68,8 @@ namespace ZeldaEditor.WinForms {
 
 		/// <summary>Adds the message filter to the application.
 		/// Call remove when the control is removed.</summary>
-		public void AddFilter() {
+		public void AddFilter(bool ignoreMouseButtons = false) {
+			this.ignoreMouseButtons = ignoreMouseButtons;
 			System.Windows.Forms.Application.AddMessageFilter(this);
 		}
 
