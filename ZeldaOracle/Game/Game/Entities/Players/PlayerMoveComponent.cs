@@ -67,12 +67,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Movement modes
 		private PlayerMotionType	mode;
-		private PlayerMotionType	moveModeNormal;		// For regular walking.
-		private PlayerMotionType	moveModeSlow;		// For climbing ladders and stairs.
-		private PlayerMotionType	moveModeGrass;		// For walking in grass.
-		private PlayerMotionType	moveModeIce;		// For walking on ice.
-		private PlayerMotionType	moveModeAir;		// For jumping
-		private PlayerMotionType	moveModeWater;		// For swimming.
+		private PlayerMotionType	moveModeNormal;
 
 
 		//-----------------------------------------------------------------------------
@@ -121,52 +116,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Normal movement.
 			moveModeNormal = new PlayerMotionType();
-			moveModeNormal.MoveSpeed			= 1.0f;
-			moveModeNormal.CanLedgeJump			= true;
-			moveModeNormal.CanRoomChange		= true;
-			
-			// Slow movement.
-			moveModeSlow = new PlayerMotionType(moveModeNormal);
-			moveModeSlow.MoveSpeed = 0.5f;
-			
-			// Grass movement.
-			moveModeGrass = new PlayerMotionType(moveModeNormal);
-			moveModeGrass.MoveSpeed = 0.75f;
-			
-			// Ice movement.
-			moveModeIce = new PlayerMotionType();
-			moveModeIce.MoveSpeed				= 1.0f;
-			moveModeIce.CanLedgeJump			= true;
-			moveModeIce.CanRoomChange			= true;
-			moveModeIce.IsSlippery				= true;
-			moveModeIce.Acceleration			= 0.02f;
-			moveModeIce.Deceleration			= 0.05f;
-			moveModeIce.MinSpeed				= 0.05f;
-			moveModeIce.DirectionSnapCount		= 32;
-			
-			// Air/jump movement.
-			moveModeAir = new PlayerMotionType();
-			moveModeAir.IsStrafing				= true;
-			moveModeAir.MoveSpeed				= 1.0f;
-			moveModeAir.CanLedgeJump			= false;
-			moveModeAir.CanRoomChange			= false;
-			moveModeAir.IsSlippery				= true;
-			moveModeAir.Acceleration			= 0.1f;
-			moveModeAir.Deceleration			= 0.0f;
-			moveModeAir.MinSpeed				= 0.05f;
-			moveModeAir.DirectionSnapCount		= 8;//32;
-			
-			// Water/swim movement.
-			moveModeWater = new PlayerMotionType();
-			moveModeWater.MoveSpeed				= 0.5f;
-			moveModeWater.CanLedgeJump			= true;
-			moveModeWater.CanRoomChange			= true;
-			moveModeWater.IsSlippery			= true;
-			moveModeWater.Acceleration			= 0.08f;
-			moveModeWater.Deceleration			= 0.05f;
-			moveModeWater.MinSpeed				= 0.05f;
-			moveModeWater.DirectionSnapCount	= 32;
-
 			mode = moveModeNormal;
 		}
 		
@@ -194,8 +143,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Vector2F moveVector = PollMovementKeys(true);
 
 					if (isMoving) {
-						float scaledSpeed		= moveModeAir.MoveSpeed * moveSpeedScale;
-						if (isSprinting && mode != moveModeWater)
+						float scaledSpeed = mode.MovementSpeed * moveSpeedScale;
+						if (isSprinting)
 							scaledSpeed *= sprintSpeedScale;
 						Vector2F keyMotion		= moveVector * scaledSpeed;
 						player.Physics.Velocity	= keyMotion;
@@ -217,9 +166,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
 				
+				// Make sure we go to the environment state for jumping
+				player.RequestNaturalState();
+
 				player.OnJump();
 			}
 			else {
+				// NOTE: this was removed when revamping player state system
 				//if (player.CurrentState is PlayerNormalState)
 				//if (player.)
 				//if (moveCondition == PlayerMoveCondition.FreeMovement)
@@ -303,7 +256,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
 			
 			// Don't affect the facing direction when strafing
-			if (!isStrafing && !mode.IsStrafing && isMoving &&
+			if (!isStrafing && isMoving &&
 				(!onlyFaceLeftOrRight || moveDirection == Directions.Left ||
 					moveDirection == Directions.Right))
 				player.Direction = moveDirection;
@@ -314,8 +267,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveAngle = Directions.ToAngle(player.Direction);
 
 				// Determine key-motion (the velocity we want to move at)
-				float scaledSpeed = mode.MoveSpeed * moveSpeedScale;
-				if (isSprinting && mode != moveModeWater)
+				float scaledSpeed = mode.MovementSpeed * moveSpeedScale * player.StateParameters.MovementSpeedScale;
+				if (isSprinting && !player.IsSwimming)
 					scaledSpeed *= sprintSpeedScale;
 				Vector2F keyMotion = keyMoveVector * scaledSpeed;
 
@@ -519,30 +472,27 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public void Update() {
-			// Determine movement mode.
-			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder)
-				mode = moveModeNormal;
-			else if (player.Physics.IsInWater || player.RoomControl.IsUnderwater)
-				mode = moveModeWater;
-			else if (player.Physics.IsInAir)
-				mode = moveModeAir;
-			else if ((!player.RoomControl.IsSideScrolling && player.Physics.IsOnIce) ||
-				(player.RoomControl.IsSideScrolling && player.Physics.IsOnSideScrollingIce))
-				mode = moveModeIce;
-			else if (player.Physics.IsOnStairs || player.Physics.IsOnLadder)
-				mode = moveModeSlow;
-			else if (player.Physics.IsInGrass)
-				mode = moveModeGrass;
+			// Get the movement mode for the current environment state
+			if (player.EnvironmentState != null)
+				mode = player.EnvironmentState.MotionSettings;
 			else
 				mode = moveModeNormal;
-
-			player.Physics.OnGroundOverride = isOnSideScrollLadder ||
-				(player.RoomControl.IsSideScrolling && player.Physics.IsInWater);
-
+			
 			// Update movement.
 			UpdateMoveControls();
 			UpdateFallingInHoles();
 			velocityPrev = player.Physics.Velocity;
+
+			if (allowMovementControl) {
+				if (player.StateParameters.AlwaysFaceUp)
+					player.Direction = Directions.Up;
+				else if (player.StateParameters.AlwaysFaceLeftOrRight) {
+					if (player.Direction == Directions.Up)
+						player.Direction = Directions.Right;
+					if (player.Direction == Directions.Down)
+						player.Direction = Directions.Left;
+				}
+			}
 
 			// Update sprinting.
 			if (isSprinting) {
@@ -561,7 +511,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
-			if (canLedgeJump && mode.CanLedgeJump && isMoving &&
+			if (canLedgeJump && isMoving &&
 				collisionInfo.Type == CollisionType.Tile &&
 				!player.RoomControl.IsSideScrolling)
 			{
@@ -742,10 +692,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public bool IsOnSideScrollLadder {
 			get { return isOnSideScrollLadder; }
-			set {
-				isOnSideScrollLadder = value;
-				player.Physics.OnGroundOverride = value;
-			}
+			set { isOnSideScrollLadder = value; }
 		}
 
 		public Rectangle2F ClimbCollisionBox {

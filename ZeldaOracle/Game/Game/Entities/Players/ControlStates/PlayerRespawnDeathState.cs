@@ -65,10 +65,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		public override bool RequestStateChange(PlayerState newState) {
-			return false;
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Properties

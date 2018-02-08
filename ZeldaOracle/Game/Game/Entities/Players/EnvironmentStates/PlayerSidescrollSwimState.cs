@@ -4,7 +4,7 @@ using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerSidescrollSwimState : PlayerState {
+	public class PlayerSidescrollSwimState : PlayerEnvironmentStateJump {
 
 
 		//-----------------------------------------------------------------------------
@@ -13,6 +13,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public PlayerSidescrollSwimState() {
 			IsNaturalState = true;
+			
+			MotionSettings = new PlayerMotionType() {
+				MovementSpeed			= 0.5f,
+				IsSlippery				= true,
+				Acceleration			= 0.08f,
+				Deceleration			= 0.05f,
+				MinSpeed				= 0.05f,
+				DirectionSnapCount		= 32,
+			};
 		}
 
 
@@ -33,39 +42,29 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override bool RequestStateChange(PlayerState newState) {
-			return true;
-		}
-
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.CanJump			= false;
 			player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
-			player.Movement.OnlyFaceLeftOrRight	= true;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
-			player.Physics.HasGravity		= false;
 			player.Graphics.PlayAnimation(player.MoveAnimation);
+			
+			StateParameters.DisableGravity			= true;
+			StateParameters.EnableGroundOverride	= true;
+			StateParameters.AlwaysFaceLeftOrRight	= true;
+			StateParameters.ProhibitJumping			= true;
 
-			// Force facing left or right
-			if (player.Direction == Directions.Up)
-				player.Direction = Directions.Right;
-			if (player.Direction == Directions.Down)
-				player.Direction = Directions.Left;
-
-			if (previousState.IsNaturalState)
+			if (previousState == null || previousState is PlayerEnvironmentStateJump)
 				CreateSplashEffect();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump			= true;
 			player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
-			player.Movement.OnlyFaceLeftOrRight	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
-			player.Physics.HasGravity		= true;
 			
-			if (!player.Movement.IsOnSideScrollLadder && newState.IsNaturalState)
+			if (!player.Movement.IsOnSideScrollLadder &&
+				(newState == null || newState is PlayerEnvironmentStateJump))
 			{
 				// Jump out of the water, and create a splash effect
 				player.Physics.ZVelocity = 1.5f;
@@ -77,12 +76,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// TODO: Code duplication with PlayerSwimState
 			
-			// Force facing left or right
-			if (player.Direction == Directions.Up)
-				player.Direction = Directions.Right;
-			if (player.Direction == Directions.Down)
-				player.Direction = Directions.Left;
-
 			// Slow down movement over time from strokes
 			if (player.Movement.MoveSpeedScale > 1.0f)
 				player.Movement.MoveSpeedScale -= 0.025f;

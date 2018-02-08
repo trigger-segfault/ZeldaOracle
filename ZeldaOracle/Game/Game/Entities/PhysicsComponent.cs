@@ -713,7 +713,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsOnLadder {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ladder && !entity.RoomControl.IsSideScrolling; }
+			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ladder; }
 		}
 
 		public bool IsOverHalfSolid {

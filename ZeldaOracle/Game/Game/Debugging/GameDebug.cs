@@ -460,19 +460,26 @@ namespace ZeldaOracle.Game.Debug {
 			string controlStateName = "";
 			if (player.ControlState != null)
 				controlStateName = player.ControlState.GetType().Name;
+			string environmentStateName = "";
+			if (player.EnvironmentState != null)
+				environmentStateName = player.EnvironmentState.GetType().Name;
 
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 
 			g.DrawString(GameData.FONT_SMALL, weaponStateName, cursorPos, Color.Red);
-			cursorPos.X += 100;
-
+			cursorPos.Y -= 24;
 			g.DrawString(GameData.FONT_SMALL, controlStateName, cursorPos, Color.Cyan);
-			cursorPos.X += 100;
+			cursorPos.Y -= 24;
+			g.DrawString(GameData.FONT_SMALL, environmentStateName, cursorPos, Color.Yellow);
+			cursorPos.Y -= 24;
+
+			cursorPos.Y += 24 * 3;
+			cursorPos.X += 250;
 
 			foreach (PlayerState state in player.ConditionStates) {
 				string stateName = state.GetType().Name;
 				g.DrawString(GameData.FONT_SMALL, stateName, cursorPos, Color.Green);
-				cursorPos.Y -= 20;
+				cursorPos.Y -= 24;
 			}
 
 			g.End();

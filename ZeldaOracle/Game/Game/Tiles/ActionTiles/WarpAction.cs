@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			}
 
 			// Setup the player's state.
-			player.InterruptItems();
+			player.InterruptWeapons();
 			player.BeginNormalState();
 			player.StopPushing();
 		}

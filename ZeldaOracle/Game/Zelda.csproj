@@ -354,11 +354,12 @@
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
     <Compile Include="Game\Entities\NPC.cs" />
+    <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerEnvironmentStates.cs" />
     <Compile Include="Game\Entities\Players\PlayerStateMachine.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerLeapLedgeJumpState.cs" />
-    <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerPullHandleState.cs" />
+    <Compile Include="Game\Entities\Players\ControlStates\PlayerPullHandleState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerJumpToState.cs" />
     <Compile Include="Game\Entities\Players\ConditionStates\PlayerMagicBoomerangState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerMinecartState.cs" />

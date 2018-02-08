@@ -87,6 +87,8 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 		
 		public virtual bool IsUsable() {
+			if (Player.StateParameters.ProhibitWeaponUse)
+				return false;
 			if (Player.IsInMinecart && !flags.HasFlag(ItemFlags.UsableInMinecart))
 				return false;
 			else if (Player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
@@ -100,11 +102,10 @@ namespace ZeldaOracle.Game.Items {
 			{
 				return true;
 			}
-			else if (Player.CurrentState is PlayerUnderwaterState ||
-				Player.CurrentState is PlayerSidescrollSwimState)
+			else if (Player.IsSwimmingUnderwater)
 				return flags.HasFlag(ItemFlags.UsableUnderwater);
 			else
-				return (Player.CurrentState is PlayerNormalState);
+				return true;
 		}
 
 		// Immediately interrupt this item (ex: if the player falls in a hole).

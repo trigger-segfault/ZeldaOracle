@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// <summary>Transition to the given player state if it is not already active
 		/// </summary>
 		public void BeginState(PlayerState newState) {
-			if (newState != state || !state.IsActive)
+			if (newState != state || (state != null && !state.IsActive))
 				ForceBeginState(newState);
 		}
 

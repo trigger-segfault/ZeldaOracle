@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool ProhibitPushing { get; set; } = false;
 		public bool ProhibitWeaponUse { get; set; } = false;
 		public bool ProhibitEnteringMinecart { get; set; } = false;
+		public bool ProhibitRoomTransitions { get; set; } = false;
 
 		public bool EnableStrafing { get; set; } = false;
 		//public bool AlwaysFaceRight { get; set; } = false;
@@ -69,6 +70,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				ProhibitPushing = a.ProhibitPushing || b.ProhibitPushing,
 				ProhibitWeaponUse = a.ProhibitWeaponUse || b.ProhibitWeaponUse,
 				ProhibitEnteringMinecart = a.ProhibitEnteringMinecart || b.ProhibitEnteringMinecart,
+				ProhibitRoomTransitions = a.ProhibitRoomTransitions || b.ProhibitRoomTransitions,
 
 				EnableStrafing = a.EnableStrafing || b.EnableStrafing,
 				//AlwaysFaceRight = a.AlwaysFaceRight || b.AlwaysFaceRight,
@@ -122,36 +124,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
-
-		/// <summary>
-		/// This function returns whether or not the player is allowed to
-		/// automatically change a new state. This is called when the player 
-		/// is not in his natural state, and then requests to change back to
-		/// his natural state.<para/>
-		/// The default implementation makes this State allow changing to any
-		/// state that is not the Normal state, unless this state is a natural
-		/// state, then it allows changing to any other state.<para/>
-		/// 
-		/// For example, when the player is swinging his sword, he should not
-		/// transition back to the Normal state until he is done. But if the
-		/// player falls in water, then he should transition to the Swim state,
-		/// interrupting his swing.
-		/// </summary>
-		/// 
-		/// <param name="newState">The desired state to change to</param>
-		/// 
-		/// <returns>True if the state change is allowed else false</returns>
-		public virtual bool RequestStateChange(PlayerState newState) {
-			if (!isNaturalState &&
-				(newState is PlayerNormalState ||
-				newState is PlayerUnderwaterState || // "normal" state for underwater rooms
-				newState is PlayerSidescrollSwimState))
-			{
-				return false;
-			}
-			return true;
-		}
-
+		
 		public virtual void OnBegin(PlayerState previousState) {}
 		
 		public virtual void OnEnd(PlayerState newState) {}
@@ -180,7 +153,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void Begin(Player player, PlayerState previousState) {
 			this.player = player;
 			this.isActive = true;
-			this.stateParameters = new PlayerStateParameters();
 			OnBegin(previousState);
 		}
 

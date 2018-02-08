@@ -40,6 +40,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			minecart		= null;
 			trackTile		= null;
 			minecartAnimationPlayer = new AnimationPlayer();
+
+			StateParameters.EnableAutomaticRoomTransitions	= true;
+			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisableSolidCollisions			= true;
 		}
 
 		
@@ -72,11 +76,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				ExitMinecart(Directions.Reverse(player.Direction));
 				return;
 			}
-
-			// No other player states should change these variables while in a minecart.
-			StateParameters.EnableAutomaticRoomTransitions	= true;
-			StateParameters.DisableInteractionCollisions	= true;
-			StateParameters.DisableSolidCollisions			= true;
 
 			// Play the animations.
 			player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;

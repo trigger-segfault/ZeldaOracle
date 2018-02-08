@@ -11,7 +11,8 @@ using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
-	public class PlayerUnderwaterState : PlayerState {
+
+	public class PlayerUnderwaterState : PlayerEnvironmentStateJump {
 
 		// Used in OnEnterRoom() to know if we resurfaced into the room
 		bool isResurfacing = false;
@@ -23,6 +24,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public PlayerUnderwaterState() {
 			IsNaturalState = true;
+			
+			MotionSettings = new PlayerMotionType() {
+				MovementSpeed			= 0.5f,
+				IsSlippery				= true,
+				Acceleration			= 0.08f,
+				Deceleration			= 0.05f,
+				MinSpeed				= 0.05f,
+				DirectionSnapCount		= 32,
+			};
 		}
 		
 
@@ -77,15 +87,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		// Always allow state changes, because this is the "Normal" state for
-		// underwater rooms. Every other state takes precidence over the player's
-		// "Normal" state
-		public override bool RequestStateChange(PlayerState newState) {
-			return true;
-		}
-
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.CanJump			= false;
+			StateParameters.ProhibitJumping	= true;
+
 			player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
@@ -95,7 +99,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump			= true;
 			player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;

@@ -44,11 +44,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-
-		public override bool RequestStateChange(PlayerState newState) {
-			return true;
-		}
-
+		
 		public override void OnBegin(PlayerState previousState) {
 			pushTimer = 0;
 			Player.Graphics.PlayAnimation(player.MoveAnimation);

@@ -19,7 +19,8 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.GameStates.Transitions;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
-	public class PlayerSwimState : PlayerState {
+
+	public class PlayerSwimState : PlayerEnvironmentStateJump {
 
 		private bool	isSubmerged;
 		private int		submergedTimer;
@@ -36,6 +37,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			isSubmerged			= false;
 			submergedTimer		= 0;
 			IsNaturalState		= true;
+			
+			MotionSettings = new PlayerMotionType() {
+				MovementSpeed			= 0.5f,
+				IsSlippery				= true,
+				Acceleration			= 0.08f,
+				Deceleration			= 0.05f,
+				MinSpeed				= 0.05f,
+				DirectionSnapCount		= 32,
+			};
 		}
 		
 
@@ -91,14 +101,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		public override bool RequestStateChange(PlayerState newState) {
-			return true;
-		}
-
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.CanJump = false;
+			StateParameters.ProhibitJumping		= true;
+			StateParameters.ProhibitWeaponUse	= true;
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
+
+			player.InterruptWeapons();
 
 			isDiving	= false;
 			isSubmerged	= false;
