@@ -56,6 +56,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private bool isFrozen;
 
+		/// <summary>Used to collect divable rewards.</summary>
+		private bool isSubmerged;
+
 		private Animation moveAnimation;
 
 		private bool isStateControlled; // Is the player fully being controlled by its current state?
@@ -940,6 +943,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool IsFrozen {
 			get { return isFrozen; }
 			set { isFrozen = value; }
+		}
+
+		/// <summary>Used to collect divable rewards.</summary>
+		public bool IsSubmerged {
+			get { return isSubmerged; }
+			set { isSubmerged = value; }
 		}
 	}
 }

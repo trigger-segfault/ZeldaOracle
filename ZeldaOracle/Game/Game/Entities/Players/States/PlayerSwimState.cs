@@ -141,6 +141,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
+			player.IsSubmerged = false;
 			
 			isDiving = false;
 			
@@ -160,6 +161,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				submergedTimer--;
 				player.IsPassable = true;
 				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
+					player.IsSubmerged = false;
 					isSubmerged = false;
 					player.IsPassable = false;
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
@@ -167,6 +169,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 			}
 			else if (Controls.B.IsPressed()) {
+				player.IsSubmerged = true;
 				isSubmerged = true;
 				player.IsPassable = true;
 				submergedTimer = submergedDuration;

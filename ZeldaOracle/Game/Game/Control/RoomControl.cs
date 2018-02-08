@@ -63,6 +63,8 @@ namespace ZeldaOracle.Game.Control {
 		private RoomVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
 		private int					currentRoomTicks;
+		/// <summary>Useful for keeping track of the current room through properties.</summary>
+		private int					roomNumber;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -311,6 +313,7 @@ namespace ZeldaOracle.Game.Control {
 			this.isSideScrolling	= room.Zone.IsSideScrolling;
 			this.isUnderwater		= room.Zone.IsUnderwater;
 			this.deathOutOfBounds	= room.DeathOutOfBounds;
+			this.roomNumber         = GameControl.NextRoomNumber();
 			if (this.isUnderwater)
 				visualEffect = visualEffectUnderwater;
 			else
@@ -915,6 +918,11 @@ namespace ZeldaOracle.Game.Control {
 		public bool DeathOutOfBounds {
 			get { return deathOutOfBounds; }
 			set { deathOutOfBounds = value; }
+		}
+
+		/// <summary>Useful for keeping track of the current room through properties.</summary>
+		public int RoomNumber {
+			get { return roomNumber; }
 		}
 	}
 }

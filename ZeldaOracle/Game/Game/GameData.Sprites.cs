@@ -106,6 +106,7 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_TILE_MINECART_TRACK_DOWN_LEFT;
 		public static ISprite SPR_TILE_MINECART_TRACK_DOWN_RIGHT;
 		public static ISprite SPR_TILE_DIGABLE_REWARD_DIRT;
+		public static ISprite SPR_TILE_DIVABLE_REWARD_WATER;
 
 		public static ISprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 

@@ -43,6 +43,7 @@ namespace ZeldaOracle.Game.Control {
 		private bool			animateRoom;
 		private ScriptRunner	scriptRunner;
 		private Room			lastRoomOnMap;
+		private int				nextRoomNumber;
 
 		// Menus
 		private MenuWeapons			menuWeapons;
@@ -97,6 +98,7 @@ namespace ZeldaOracle.Game.Control {
 		// Start a new game.
 		public void StartGame() {
 			roomTicks = 0;
+			nextRoomNumber = 0;
 
 			// Setup the player beforehand so certain classes such as the HUD can reference it
 			player = new Player();
@@ -354,6 +356,10 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Room state management
 		//-----------------------------------------------------------------------------
+
+		public int NextRoomNumber() {
+			return nextRoomNumber++;
+		}
 
 		public void UpdateRoomState() {
 			roomStateStack.Update();

@@ -2,25 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
-using ZeldaOracle.Game.Items.Drops;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
-	public class TileDigableReward : Tile {
-
+	public class TileDivableReward : Tile, ZeldaAPI.Reward {
+		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileDigableReward() { }
-		
+		public TileDivableReward() { }
+
+
+		//-----------------------------------------------------------------------------
+		// Reward Methods
+		//-----------------------------------------------------------------------------
+
+		public void SpawnReward() {
+			if (!IsLooted && RoomControl.RoomNumber != Properties.GetInteger("last_room_number", -1)) {
+				string rewardName = Properties.GetString("reward", "rupees_1");
+				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+
+				CollectibleReward collectible = new CollectibleReward(reward, isSubmergable: true);
+				collectible.Collected += delegate () {
+					Properties.Set("looted", true);
+					IsEnabled = false;
+				};
+
+				// Spawn the reward collectible.
+				collectible.SetPositionByCenter(Center);
+				RoomControl.SpawnEntity(collectible);
+
+				if (Properties.GetBoolean("spawn_from_ceiling", false)) {
+					collectible.ZPosition                       = Center.Y + 8;
+					collectible.Physics.HasGravity              = true;
+					collectible.Physics.CollideWithWorld        = RoomControl.IsSideScrolling;
+				}
+				else {
+					collectible.Physics.CollideWithWorld        = false;
+					collectible.Physics.HasGravity              = false;
+					collectible.Physics.IsDestroyedInHoles      = false;
+					collectible.Physics.IsDestroyedOutsideRoom  = false;
+				}
+
+				// Keep track of this so that the reward cannot
+				// be spawned a second time in the current room.
+				Properties.Set("last_room_number", RoomControl.RoomNumber);
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -29,45 +64,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		public override void OnInitialize() {
 			base.OnInitialize();
 
-			if (IsLooted) {
-				DropList = null;
-			}
-			else {
-				string rewardName = Properties.GetString("reward", "rupees_1");
-				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
-				DropList = new DropList();
-				if (reward != null)
-					DropList.AddDrop(1, reward);
-			}
-		}
-
-		public override bool OnDig(int direction) {
-			if (IsMoving)
-				return false;
-
-			// Remove/dig the tile.
 			RoomControl.RemoveTile(this);
-
-			// Spawn the a "dug" tile in this tile's place.
-			TileData data = Resources.GetResource<TileData>("dug");
-			Tile dugTile = Tile.CreateTile(data);
-			RoomControl.PlaceTile(dugTile, Location, Layer);
-
-			// Spawn drops.
-			Entity dropEntity = SpawnDrop();
-			if (dropEntity != null) {
-				if (dropEntity is CollectibleReward) {
-					var collectibleReward = dropEntity as CollectibleReward;
-					collectibleReward.Collected += delegate () {
-						Properties.Set("looted", true);
-						IsEnabled = false;
-					};
-					collectibleReward.PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-				}
-				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
-			}
-
-			return true;
+			SpawnReward();
 		}
 
 
@@ -85,7 +83,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					args.Position,
 					args.Color);
 				g.DrawSprite(
-					GameData.SPR_TILE_DIGABLE_REWARD_DIRT,
+					GameData.SPR_TILE_DIVABLE_REWARD_WATER,
 					args.SpriteDrawSettings,
 					args.Position,
 					args.Color);
