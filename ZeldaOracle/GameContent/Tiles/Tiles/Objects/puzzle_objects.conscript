@@ -622,3 +622,20 @@ TILE "digable_reward";
 			"Looted", "", "Reward",
 			"True if the item has been taken.");
 END;
+
+# Divable Reward ----------------------------------------------
+
+TILE "divable_reward";
+	TYPE		TileDivableReward;
+	FLAGS		Digable;
+	MODEL		center;
+	RESETWHEN	Never;
+	PREVIEW		"preview_divable_reward";
+	PROPERTIES
+		(string, reward, "heart_piece",
+			"Reward", "reward", "Reward",
+			 "The reward to spawn."),
+		(boolean, looted, "false",
+			"Looted", "", "Reward",
+			"True if the item has been taken.");
+END;

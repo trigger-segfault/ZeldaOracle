@@ -505,6 +505,7 @@
     <Compile Include="Game\Tiles\Custom\TileArrowCannon.cs" />
     <Compile Include="Game\Tiles\Custom\TileArrowShooter.cs" />
     <Compile Include="Game\Tiles\Custom\TileDigableReward.cs" />
+    <Compile Include="Game\Tiles\Custom\TileDivableReward.cs" />
     <Compile Include="Game\Tiles\Custom\TileFireShooter.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
