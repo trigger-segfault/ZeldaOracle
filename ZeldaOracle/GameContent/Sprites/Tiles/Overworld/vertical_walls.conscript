@@ -23,6 +23,7 @@ SPRITESET "tiles_vertical_walls", (8, 16);
 		END;
 		
 	MULTIPLE BASIC (0, 4), (0, 4), (7, 10); END;
+	SINGLE BASIC (7, 7); END;
 	MULTIPLE BASIC (7, 12), (7, 12), (1, 2); END;
 	MULTIPLE BASIC (0, 14), (0, 14), (4, 2); END;
 END;
@@ -77,9 +78,10 @@ NAME "tile_vertical_brick_wall_bottom_right_cracked_left"	(3, 7);
 NAME "tile_vertical_brick_wall_bombable"					(4, 6);
 NAME "tile_vertical_brick_wall_hole"						(5, 6);
 NAME "tile_vertical_brick_wall_doorway"						(6, 6);
-NAME "tile_vertical_brick_wall_cliff_1"						(4, 7);
-NAME "tile_vertical_brick_wall_cliff_2"						(5, 7);
-NAME "tile_vertical_brick_wall_keyhole"						(6, 7);
+NAME "tile_vertical_brick_wall_keyhole"						(4, 7);
+NAME "tile_vertical_brick_wall_tunnel"						(5, 7);
+NAME "tile_vertical_brick_wall_cliff_1"						(6, 7);
+NAME "tile_vertical_brick_wall_cliff_2"						(7, 7);
 
 NAME "tile_vertical_brick_wall_alt_left"			(0, 8);
 NAME "tile_vertical_brick_wall_alt"					(1, 8);
