@@ -338,12 +338,20 @@ namespace ZeldaOracle.Game.Control {
 					for (int i = 0; i < room.LayerCount; i++) {
 						TileDataInstance data = room.TileData[x, y, i];
 
-						if (data != null && data.IsAtLocation(x, y) &&
-							data.ModifiedProperties.GetBoolean("enabled", true))
-						{
-							// Place the tile.
-							Tile tile = Tile.CreateTile(data);
-							PlaceTile(tile, x, y, i, false);
+						if (data != null && data.IsAtLocation(x, y)) {
+							if (data.ModifiedProperties.GetBoolean("enabled", true)) {
+								// Place the tile.
+								Tile tile = Tile.CreateTile(data);
+								PlaceTile(tile, x, y, i, false);
+							}
+							else if (i == 0 && data.TileBelow != null) {
+								Tile tile = Tile.CreateTile(data.TileBelow);
+								PlaceTile(tile, x, y, i, false);
+							}
+							else if (i == 0 && Zone.DefaultTileData != null) {
+								Tile tile = Tile.CreateTile(Zone.DefaultTileData);
+								PlaceTile(tile, x, y, i, false);
+							}
 						}
 					}
 				}

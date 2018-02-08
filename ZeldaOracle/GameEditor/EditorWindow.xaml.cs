@@ -56,10 +56,6 @@ namespace ZeldaEditor {
 
 		private DispatcherTimer updateTimer;
 
-		private WpfFocusMessageFilter messageFilterLayers;
-		private WpfFocusMessageFilter messageFilterTilesets;
-		private WpfFocusMessageFilter messageFilterZones;
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -68,15 +64,6 @@ namespace ZeldaEditor {
 			InitializeComponent();
 			// Create the editor control instance.
 			editorControl = new EditorControl(this);
-
-			// Catch messages from popups over winforms
-			// controls before they can try to steal focus.
-			messageFilterLayers = new WpfFocusMessageFilter(comboBoxLayers);
-			messageFilterLayers.AddFilter();
-			messageFilterTilesets = new WpfFocusMessageFilter(comboBoxTilesets);
-			messageFilterTilesets.AddFilter();
-			messageFilterZones = new WpfFocusMessageFilter(comboBoxZones);
-			messageFilterZones.AddFilter();
 
 			// Initialize world tree view.
 			treeViewWorld.EditorControl = editorControl;
@@ -484,7 +471,9 @@ namespace ZeldaEditor {
 		}
 
 		private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e) {
-			if (!WpfHelper.IsDescendant(this, Keyboard.FocusedElement as DependencyObject)) {
+			if (!WpfHelper.IsDescendant(this, Keyboard.FocusedElement as DependencyObject) &&
+				Keyboard.FocusedElement is TextBox)
+			{
 				Keyboard.Focus(this);
 			}
 		}

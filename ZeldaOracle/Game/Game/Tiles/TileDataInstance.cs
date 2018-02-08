@@ -194,7 +194,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool DrawAsEntity {
 			get { return TileData.DrawAsEntity; }
-			set { TileData.DrawAsEntity = value; }
+		}
+
+		/// <summary>Gets the tile to appear when
+		/// this one is removed while on layer 1.</summary>
+		public TileData TileBelow {
+			get { return TileData.TileBelow; }
 		}
 	}
 }

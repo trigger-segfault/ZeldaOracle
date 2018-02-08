@@ -331,7 +331,6 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData data = Resources.GetResource<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-				//Graphics.PlayAnimation(GameData.SPR_TILE_DUG);
 			}
 			else {
 				roomControl.RemoveTile(this);
@@ -938,8 +937,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool DrawAsEntity {
 			get { return TileData.DrawAsEntity; }
-			set { TileData.DrawAsEntity = value; }
 		}
+
+		/// <summary>Gets the tile data to appear when
+		/// this one is removed while on layer 1.</summary>
+		public TileData TileBelow {
+			get { return TileData.TileBelow; }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Flag Properties

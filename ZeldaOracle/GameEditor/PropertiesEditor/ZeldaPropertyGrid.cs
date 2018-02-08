@@ -24,7 +24,6 @@ namespace ZeldaEditor.PropertiesEditor {
 		private EditorControl editorControl;
 		private IPropertyObject propertyObject;
 		private PropertiesContainer propertiesContainer;
-		//private Dictionary<string, CustomPropertyEditor> typeEditors;
 		private WpfFocusMessageFilter messageFilter;
 
 		//-----------------------------------------------------------------------------
@@ -32,20 +31,20 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 
 		public ZeldaPropertyGrid() {
-			editorControl       = null;
-			propertyObject      = null;
-			propertiesContainer = new PropertiesContainer(this);
-			//typeEditors         = new Dictionary<string, CustomPropertyEditor>();
+			editorControl		= null;
+			propertyObject		= null;
+			propertiesContainer	= new PropertiesContainer(this);
 
-			this.SelectedObject         = propertiesContainer;
-			this.PropertyValueChanged   += OnPropertyChange;
+			this.SelectedObject			= propertiesContainer;
+			this.PropertyValueChanged	+= OnPropertyChange;
 			this.IsMiscCategoryLabelHidden = false;
-			this.ShowAdvancedOptions = false;
-			this.AdvancedOptionsMenu = null;
+			this.ShowAdvancedOptions	= false;
+			this.AdvancedOptionsMenu	= null;
 			FocusManager.SetIsFocusScope(this, true);
 
+			// Ignore mouse buttons to prevent breaking comboboxes.
 			this.messageFilter = new WpfFocusMessageFilter(this);
-			this.messageFilter.AddFilter();
+			this.messageFilter.AddFilter(true);
 		}
 
 		public void Initialize(EditorControl editorControl) {
