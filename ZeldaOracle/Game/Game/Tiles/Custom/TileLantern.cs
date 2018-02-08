@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
@@ -29,7 +30,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Light(bool stayLit = false) {
 			if (!IsLit) {
 				IsLit = true;
-				//Graphics.PlaySprite(GameData.ANIM_TILE_LANTERN);
 				Graphics.PlayAnimation(SpriteList[0]);
 				Properties.Set("lit", true);
 				GameControl.FireEvent(this, "light", this);
@@ -39,7 +39,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public void PutOut(bool stayLit = false) {
 			if (IsLit) {
 				IsLit = false;
-				//Graphics.PlaySprite(GameData.SPR_TILE_LANTERN_UNLIT);
 				Graphics.PlayAnimation(SpriteList[1]);
 				Properties.Set("lit", false);
 				GameControl.FireEvent(this, "put_out", this);
@@ -54,16 +53,14 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnSeedHit(SeedType seedType, SeedEntity seed) {
 			if (seedType == SeedType.Ember && !Properties.GetBoolean("lit", false)) {
 				Light();
+				// TODO: Should this sound be played in TileLantern.Light() instead?
+				AudioSystem.PlaySound(GameData.SOUND_FIRE);
 				seed.Destroy();
 			}
 		}
 
 		public override void OnInitialize() {
 			Graphics.PlayAnimation(SpriteList[IsLit ? 0 : 1]);
-			/*if (IsLit)
-				Graphics.PlaySprite(GameData.ANIM_TILE_LANTERN);
-			else
-				Graphics.PlaySprite(GameData.SPR_TILE_LANTERN_UNLIT);*/
 		}
 
 

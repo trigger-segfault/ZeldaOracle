@@ -35,9 +35,13 @@ namespace ZeldaEditor.WinForms {
 		/// <summary>Filters out a message before it is dispatched.</summary>
 		public bool PreFilterMessage(ref Message m) {
 			if (m.Msg == NativeMethods.WM_MOUSEWHEEL) {
+				
 				var focusElement = FocusManager.GetFocusedElement(element);
+				var focusScope = FocusManager.GetFocusScope(element);
+				bool isDescendant = WpfHelper.IsDescendant(focusScope, focusElement as DependencyObject);
 				if (element.IsMouseOver && !element.IsFocused &&
-					focusElement != element)
+					((!ignoreMouseButtons && focusElement != element) ||
+					focusElement == null))
 				{
 					element.Focus();
 					HwndSource hwndSource = (HwndSource)HwndSource.FromDependencyObject(element);
