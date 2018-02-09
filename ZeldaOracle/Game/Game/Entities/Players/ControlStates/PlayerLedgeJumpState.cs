@@ -51,18 +51,17 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 
-			// The player can hold his sword while ledge jumping.
-			isHoldingSword = (previousState == player.HoldSwordState);
-
-			if (isHoldingSword) {
-				isHoldingSword = true;
+			// Play the jump animation
+			if (player.WeaponState == null)
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+			else
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-			}
-			else {
-				player.Direction = direction;
-			}
 
-			// Find the landing position, calculating the move distance in pixels.
+			// Face the ledge direction
+			if (!player.StateParameters.EnableStrafing)
+				player.Direction = direction;
+
+			// Find the landing position, calculating the move distance in pixels
 			Vector2F pos = player.Position + Directions.ToVector(direction);
 			int distance = 0;
 			while (!CanLandAtPosition(pos)) {

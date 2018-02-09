@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			timer = 0;
 			
-			if (!player.IsSwimming && !player.IsInAir)
+			if (!player.IsSwimming)
 				StateParameters.MovementSpeedScale = movementSpeedScale;
 			else
 				StateParameters.MovementSpeedScale = 1.0f;
@@ -41,15 +41,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void Update() {
 			timer++;
 
-			if (!player.IsSwimming && !player.IsInAir)
-				StateParameters.MovementSpeedScale = movementSpeedScale;
-			else
-				StateParameters.MovementSpeedScale = 1.0f;
-			
 			if (!player.IsSwimming) {
+				StateParameters.MovementSpeedScale = movementSpeedScale;
+
 				// Spawn the dust particles
-				if (timer % GameSettings.PLAYER_SPRINT_EFFECT_INTERVAL == 0 &&
-					player.IsOnGround && !player.IsSwimming)
+				if (player.IsOnGround &&
+					timer % GameSettings.PLAYER_SPRINT_EFFECT_INTERVAL == 0)
 				{
 					AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
 					Effect dustParticle = new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF,
@@ -57,10 +54,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.RoomControl.SpawnEntity(dustParticle, player.Position);
 				}
 			}
-
-			if (timer >= duration) {
-				End();
+			else {
+				StateParameters.MovementSpeedScale = 1.0f;
 			}
+
+			// Check if the time is up
+			if (timer >= duration)
+				End();
 		}
 	}
 }

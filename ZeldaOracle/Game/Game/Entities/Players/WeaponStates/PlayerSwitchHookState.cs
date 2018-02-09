@@ -173,7 +173,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnHurt(DamageInfo damage) {
 			base.OnHurt(damage);
-			player.BeginNormalState();
+			End();
 		}
 
 		public override void Update() {
@@ -214,7 +214,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 						}
 
 						// Return to normal.
-						player.BeginNormalState();
+						End();
 					}
 				}
 				
@@ -227,7 +227,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				hookedEntity.ZPosition		= liftZPosition;
 			}
 			else if (hookProjectile.IsDestroyed) {
-				player.BeginNormalState();
+				End();
 			}
 		}
 

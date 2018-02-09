@@ -53,10 +53,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 
-			// Play the jump animation.
-			if (player.CurrentState is PlayerNormalState)
+			// Play the jump animation
+			if (player.WeaponState == null)
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
-			else if (player.CurrentState is PlayerCarryState)
+			else if (player.WeaponState == player.CarryState)
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
 			else if (player.Graphics.Animation == player.MoveAnimation)
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);

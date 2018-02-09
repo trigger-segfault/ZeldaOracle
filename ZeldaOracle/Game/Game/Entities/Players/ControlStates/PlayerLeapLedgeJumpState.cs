@@ -35,18 +35,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.DisableInteractionCollisions	= true;
 			StateParameters.DisablePlayerControl			= true;
 
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
-
-			// The player can hold his sword while ledge jumping.
-			isHoldingSword = (previousState == player.HoldSwordState);
-
-			if (isHoldingSword) {
-				isHoldingSword = true;
+			// Play the jump animation
+			if (player.WeaponState == null)
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+			else
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-			}
-			else {
+
+			// Face the jump direction
+			if (!player.StateParameters.EnableStrafing)
 				player.Direction = direction;
-			}
 
 			timer = GameSettings.PLAYER_LEAP_LEDGE_JUMP_DURATION + 1;
 

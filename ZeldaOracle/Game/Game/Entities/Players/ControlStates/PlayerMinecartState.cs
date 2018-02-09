@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Play the animations.
 			player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;
-			if (player.CurrentState != player.CarryState)
+			if (player.WeaponState != player.CarryState)
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_IDLE);
 			minecartAnimationPlayer.Play(GameData.ANIM_MINECART);
 

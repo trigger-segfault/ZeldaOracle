@@ -95,9 +95,9 @@ namespace ZeldaOracle.Game.Items {
 				return false;
 			else if (Player.Physics.IsInHole && !flags.HasFlag(ItemFlags.UsableWhileInHole))
 				return false;
-			else if (((Player.CurrentState is PlayerHoldSwordState) ||
-				(Player.CurrentState is PlayerSwingState) ||
-				(Player.CurrentState is PlayerSpinSwordState)) &&
+			else if (((Player.WeaponState is PlayerHoldSwordState) ||
+				(Player.WeaponState is PlayerSwingState) ||
+				(Player.WeaponState is PlayerSpinSwordState)) &&
 				flags.HasFlag(ItemFlags.UsableWithSword))
 			{
 				return true;

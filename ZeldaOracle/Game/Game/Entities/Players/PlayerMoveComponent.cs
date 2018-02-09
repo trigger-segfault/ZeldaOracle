@@ -35,9 +35,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				canJump;
 		private bool				canPush;
 		private bool				canUseWarpPoint;		// Can the player go through warp points?
-		private bool				onlyFaceLeftOrRight;
-		private int					sprintTimer;
-		private float				sprintSpeedScale;
 
 		// Internal
 		private Player				player;
@@ -80,9 +77,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			canJump					= true;
 			canPush					= true;
 			canUseWarpPoint			= true;
-			onlyFaceLeftOrRight		= false;
-			sprintTimer				= 0;
-			sprintSpeedScale		= 1.5f;
 
 			// Internal.
 			allowMovementControl	= true;
@@ -153,7 +147,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					player.Physics.ZVelocity = GameSettings.PLAYER_SIDESCROLL_JUMP_SPEED;
 				else
 					player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
-				if (player.CurrentState is PlayerNormalState)
+				if (player.WeaponState == null)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
 				
@@ -186,7 +180,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				else
 					player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
-				if (player.CurrentState is PlayerNormalState)
+				if (player.WeaponState == null)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CAPE);
 			}
 		}
@@ -276,32 +270,31 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 				// Update acceleration-based motion.
 				if (mode.IsSlippery) {
-					// If player velocity has been halted by collisions, mirror that in the motion vector.
+					// If player velocity has been halted by collisions, then
+					// represent that in the motion vector
 					Vector2F velocity = player.Physics.Velocity;
-					if (Math.Abs(velocity.X) < Math.Abs(velocityPrev.X) || Math.Sign(velocity.X) != Math.Sign(velocityPrev.X))
+					if (Math.Abs(velocity.X) < Math.Abs(velocityPrev.X) ||
+						Math.Sign(velocity.X) != Math.Sign(velocityPrev.X))
 						motion.X = velocity.X;
 					if (!player.RoomControl.IsSideScrolling) {
-						if (Math.Abs(velocity.Y) < Math.Abs(velocityPrev.Y) || Math.Sign(velocity.Y) != Math.Sign(velocityPrev.Y))
+						if (Math.Abs(velocity.Y) < Math.Abs(velocityPrev.Y) ||
+							Math.Sign(velocity.Y) != Math.Sign(velocityPrev.Y))
 							motion.Y = velocity.Y;
 					}
 
-					// Apply acceleration and limit speed.
+					// Apply acceleration and limit speed
 					motion += keyMotion * mode.Acceleration;
 					float newLength = motion.Length;
 					if (newLength >= scaledSpeed)
 						motion.Length = scaledSpeed;
 
-					// TODO: For jumping, sideways motion should be accelerated somehow.
-
-					// TODO: what does this do again?
-					if (Math.Abs(newLength - (motion + (keyMotion * 0.08f)).Length) < mode.Acceleration * 2.0f) {
-						motion += keyMotion * 0.04f;
-					}
-
-					// Set the players velocity.
-					if (mode.DirectionSnapCount > 0 && !player.RoomControl.IsSideScrolling) {
-						// Snap velocity direction.
-						player.Physics.Velocity = Vector2F.SnapDirectionByCount(motion, mode.DirectionSnapCount);
+					// Set the players velocity
+					if (mode.DirectionSnapCount > 0 &&
+						!player.RoomControl.IsSideScrolling)
+					{
+						// Snap velocity direction
+						player.Physics.Velocity = Vector2F.SnapDirectionByCount(
+							motion, mode.DirectionSnapCount);
 					}
 					else {
 						// Don't snap velocity direction.
@@ -309,13 +302,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 					}
 				}
 				else {
-					// For non-acceleration based motion, move at regular speed.
+					// For non-acceleration based motion, move at regular speed
 					motion = keyMotion;
 					player.Physics.Velocity = motion;
 				}
 			}
 			else {
-				// Stop movement, using deceleration for slippery motion.
+				// Stop movement, using deceleration for slippery motion
 				if (mode.IsSlippery) {
 					float length = motion.Length;
 					if (length < mode.MinSpeed)
@@ -595,11 +588,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool CanPush {
 			get { return canPush; }
 			set { canPush = value; }
-		}
-		
-		public bool OnlyFaceLeftOrRight {
-			get { return onlyFaceLeftOrRight; }
-			set { onlyFaceLeftOrRight = value; }
 		}
 		
 		public bool IsMoving {

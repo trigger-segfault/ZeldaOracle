@@ -85,7 +85,6 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 			// Setup the player's state.
 			player.InterruptWeapons();
-			player.BeginNormalState();
 			player.StopPushing();
 		}
 
@@ -121,7 +120,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			if (destination != null) {
 				AudioSystem.PlaySound(GameData.SOUND_ROOM_EXIT);
 				RoomControl.Warp(this, destination);
-				RoomControl.Player.BeginNormalState();
+				RoomControl.Player.InterruptWeapons();
 			}
 			else {
 				Console.WriteLine("Invalid warp destination!");

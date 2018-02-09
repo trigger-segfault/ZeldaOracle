@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Entities.Players.States.SwingStates;
@@ -32,52 +23,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Animation Default;
 	}
 
-	public enum PlayerStateParameterType {
-		ProhibitJumping = 0,
-		ProhibitLedgeJumping,
-		ProhibitWarping,
-		ProhibitMovementControlOnGround,
-		ProhibitMovementControlInAir,
-		ProhibitPushing,
-		ProhibitWeaponUse,
-		EnableStrafing,
-		AlwaysFaceRight,
-		AlwaysFaceUp,
-		AlwaysFaceLeft,
-		AlwaysFaceDown,
-		EnableAutomaticRoomTransitions,
-		DisableMovement,
-		DisableAutomaticStateTransitions,
-		DisableUpdateMethod,
-
-		MovementSpeedScale,
-
-		Boolean,
-		Float,
-
-		Count
-	}
-
 	public class Player : Unit {
 
-		// The current direction that the player wants to face to use items.
+		/// <summary>The current direction that the player wants to face to use items.</summary>
 		private int useDirection;
-		// The current angle that the player wants face to use items.
+		/// <summary>The current angle that the player wants face to use items.</summary>
 		private int useAngle;
-		// The player doesn't need to be moving to transition.
+		/// <summary>The player doesn't need to be moving to transition.</summary>
 		private bool autoRoomTransition;
-		// The position the player was at when he entered the room.
+		/// <summary>The position the player was at when he entered the room.</summary>
 		private Vector2F respawnPosition;
 		private int respawnDirection;
-		// The current player state.
-		private PlayerState state;
-		// The previous player state.
-		private PlayerState previousState;
-		// The current player state.
-		private PlayerState specialState;
-		// The previous player state.
-		private PlayerState previousSpecialState;
-		// The movement component for the player.
+		/// <summary>The movement component for the player.</summary>
 		private PlayerMoveComponent movement;
 
 		private PlayerStateMachine environmentStateMachine;
@@ -108,7 +65,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerToolVisual	toolVisual;
 
 		// Player States
-		private PlayerNormalState			stateNormal;
 		private PlayerBusyState				stateBusy;
 		private PlayerLedgeJumpState		stateLedgeJump;
 		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
@@ -210,7 +166,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			conditionStateMachines	= new List<PlayerStateMachine>();
 			
 			// Construct the basic player states
-			stateNormal			= new PlayerNormalState();
 			stateBusy			= new PlayerBusyState();
 			stateLedgeJump		= new PlayerLedgeJumpState();
 			stateLeapLedgeJump	= new PlayerLeapLedgeJumpState();
@@ -263,30 +218,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public void BeginEnvironmentState(PlayerState state) {
 			environmentStateMachine.BeginState(state);
-		}
-
-		// Begin the given player state.
-		public void BeginState(PlayerState newState) {
-			if (state != newState) {
-				if (state != null)
-					state.End(newState);
-				previousState = state;
-				state = newState;
-				state.Begin(this, previousState);
-			}
-		}
-
-		// Begin the given player state as a special state.
-		public void BeginSpecialState(PlayerState newState) {
-			if (specialState != null && !specialState.IsActive)
-				specialState = null;
-			if (specialState != newState) {
-				if (specialState != null)
-					specialState.End(newState);
-				previousSpecialState = specialState;
-				specialState = newState;
-				specialState.Begin(this, previousSpecialState);
-			}
 		}
 
 		// Return the player state that the player wants to be in based on his current position.
@@ -355,15 +286,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			});
 		}
 
-		// Begin the desired natural state.
-		public void BeginNormalState() {
-			Console.WriteLine("FIXME: BeginNormalState");
-			//BeginState(GetDesiredNaturalState());
-		}
-
 		// Jump to the given position using the special jump state.
-		public void JumpToPosition(Vector2F destinationPosition, float destinationZPosition,
-								   int duration, Action<PlayerJumpToState> endAction)
+		public void JumpToPosition(Vector2F destinationPosition,
+			float destinationZPosition, int duration,
+			Action<PlayerJumpToState> endAction)
 		{
 			stateJumpTo.JumpDuration			= duration;
 			stateJumpTo.DestinationPosition		= destinationPosition;
@@ -414,8 +340,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// For when the player needs to stop pushing, such as when reading text or opening a chest.
 		public void StopPushing() {
-			if (state == stateNormal)
-				stateNormal.StopPushing();
 			movement.IsMoving = false;
 			movement.StopMotion();
 			movement.ChooseAnimation();
@@ -600,7 +524,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			if (IsOnGround && Controls.A.IsPressed()) {
 				// TEMPORARY: Can't do actions while grabbing or carring.
-				if (state == stateGrab || state == stateCarry)
+				if (WeaponState == stateGrab || WeaponState == stateCarry)
 					return;
 
 				// First check entity interactions.
@@ -648,28 +572,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			syncAnimationWithDirection = true;
 			isFrozen			= false;
 
-			// Initialize tools.
+			// Initialize tools
 			toolShield.Initialize(this);
 			toolSword.Initialize(this);
 			toolVisual.Initialize(this);
-
-			// Begin the default player state.
-			BeginState(stateNormal);
-			previousState	= stateNormal;
-			specialState	= null;
-			previousSpecialState = null;
+			
 			stateParameters = new PlayerStateParameters();
 		}
 
 		public override void OnEnterRoom() {
-			// Update information about the tile we are standing on.
+			// Update information about the tile we are standing on
 			Physics.TopTile = RoomControl.TileManager
 				.GetSurfaceTileAtPosition(position, Physics.MovesWithPlatforms);
 
-			// Notify the state.
-			//if (specialState != null && specialState.IsActive)
-				//specialState.OnEnterRoom();
-			//state.OnEnterRoom();
+			// Notify the state
 			foreach (PlayerState state in ActiveStates)
 				state.OnEnterRoom();
 
@@ -682,20 +598,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void OnLeaveRoom() {
-			// Notify the state.
-			//if (specialState != null && specialState.IsActive)
-				//specialState.OnLeaveRoom();
-			//state.OnLeaveRoom();
+			// Notify the state
 			foreach (PlayerState state in ActiveStates)
 				state.OnLeaveRoom();
 
-			// Clear events.
+			// Clear events
 			eventJump = null;
 			eventLand = null;
 		}
 
 		public override void Knockback(int duration, float speed, Vector2F sourcePosition) {
-			// Don't apply knockback when doomed to fall in a hole.
+			// Don't apply knockback when doomed to fall in a hole
 			if (!movement.IsDoomedToFallInHole)
 				base.Knockback(duration, speed, sourcePosition);
 		}
@@ -703,7 +616,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void OnHurt(DamageInfo damage) {
 			base.OnHurt(damage);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
-			state.OnHurt(damage);
+			foreach (PlayerState state in ActiveStates)
+				state.OnHurt(damage);
 		}
 
 		public override void OnCrush(bool horizontal) {
@@ -784,7 +698,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement.CanJump				= !stateParameters.ProhibitJumping;
 			movement.CanLedgeJump			= !stateParameters.ProhibitLedgeJumping;
 			movement.CanPush				= !stateParameters.ProhibitPushing;
-			movement.OnlyFaceLeftOrRight	= stateParameters.AlwaysFaceLeftOrRight;
 			autoRoomTransition				= stateParameters.EnableAutomaticRoomTransitions;
 
 			// TODO: Check if movement is disabled
@@ -982,6 +895,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		// Player states
 
+		public PlayerStateParameters StateParameters {
+			get { return stateParameters; }
+		}
+
 		public IEnumerable<PlayerState> ActiveStates {
 			get {
 				if (controlStateMachine.IsActive)
@@ -995,10 +912,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 						yield return stateMachine.CurrentState;
 				}
 			}
-		}
-
-		public PlayerStateParameters StateParameters {
-			get { return stateParameters; }
 		}
 
 		public PlayerEnvironmentState EnvironmentState {
@@ -1022,18 +935,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-		public PlayerState CurrentState {
-			get { return state; }
-		}
-
-		public PlayerState PreviousState {
-			get { return previousState; }
-		}
-
-		public PlayerNormalState NormalState {
-			get { return stateNormal; }
-		}
-
 		public PlayerBusyState BusyState {
 			get { return stateBusy; }
 		}
@@ -1045,7 +946,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerSideScrollSwimEnvironmentState SideScrollSwimState {
 			get { return environmentStateSideScrollSwim; }
 		}
-
 
 		public PlayerUnderwaterEnvironmentState UnderwaterState {
 			get { return environmentStateUnderwater; }
@@ -1140,14 +1040,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public bool IsSwimmingUnderwater {
-			get { return (state == environmentStateUnderwater || state == environmentStateSideScrollSwim); }
+			get {
+				return (EnvironmentState == environmentStateUnderwater |
+					EnvironmentState == environmentStateSideScrollSwim);
+			}
 		}
 
 		public bool IsSwimming {
 			get {
-				return (state == environmentStateSwim ||
-					state == environmentStateUnderwater ||
-					state == environmentStateSideScrollSwim);
+				return (EnvironmentState == environmentStateSwim ||
+					EnvironmentState == environmentStateUnderwater ||
+					EnvironmentState == environmentStateSideScrollSwim);
 			}
 		}
 
