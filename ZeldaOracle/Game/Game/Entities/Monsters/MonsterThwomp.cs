@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			centerOffset				= new Point2I(0, 0);
 			Graphics.DrawOffset			= new Point2I(-16, -16);
 			Physics.CollisionBox		= new Rectangle2F(-15, -16, 30, 8);
-			Physics.SoftCollisionBox	= new Rectangle2F(-16, -14, 32, 30);//.Inflated(-2, -2);
+			Physics.SoftCollisionBox	= new Rectangle2F(-16, -12, 32, 28);//.Inflated(-2, -2);
 			Physics.HasGravity			= false;
 			Physics.IsSolid				= true;
 			Physics.CollideWithWorld	= false;

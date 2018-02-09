@@ -107,6 +107,8 @@ namespace ZeldaEditor.Control {
 		private BaseTileData	selectedTileData;
 		private string			tileSearchFilter;
 		private bool            playerPlaceMode;
+		private bool			startLocationMode;
+		private bool			showStartLocation;
 		private bool            showActions;
 
 		private DispatcherTimer             updateTimer;
@@ -179,6 +181,8 @@ namespace ZeldaEditor.Control {
 			this.selectedTileData			= null;
 			this.tileSearchFilter			= "";
 			this.playerPlaceMode            = false;
+			this.startLocationMode			= false;
+			this.showStartLocation			= true;
 
 		}
 
@@ -445,6 +449,17 @@ namespace ZeldaEditor.Control {
 				Process.Start(exePath, arguments);
 				editorWindow.FinishTestWorldFromLocation();
 			}
+		}
+
+		public void SetStartLocation(Point2I roomCoord, Point2I playerCoord) {
+			startLocationMode = false;
+			if (World.StartRoomLocation != roomCoord && World.StartTileLocation != playerCoord) {
+				World.StartLevelIndex = World.IndexOfLevel(Level);
+				World.StartRoomLocation = roomCoord;
+				World.StartTileLocation = playerCoord;
+				IsModified = true;
+			}
+			editorWindow.FinishStartLocation();
 		}
 
 		public void ChangeTileset(string name) {
@@ -981,6 +996,16 @@ namespace ZeldaEditor.Control {
 		public bool PlayerPlaceMode {
 			get { return playerPlaceMode; }
 			set { playerPlaceMode = value; }
+		}
+
+		public bool StartLocationMode {
+			get { return startLocationMode; }
+			set { startLocationMode = value; }
+		}
+
+		public bool ShowStartLocation {
+			get { return showStartLocation; }
+			set { showStartLocation = value; }
 		}
 
 		// Editing --------------------------------------------------------------------

@@ -243,8 +243,12 @@ namespace ZeldaEditor {
 			}
 		}
 
-		private void OnShowRewardsChecked(object sender, RoutedEventArgs e) {
-			editorControl.ShowRewards = dropDownItemShowRewards.IsChecked;
+		private void OnShowExtrasChecked(object sender, RoutedEventArgs e) {
+			editorControl.ShowRewards = dropDownItemShowExtras.IsChecked;
+		}
+
+		private void OnShowStartLocationChecked(object sender, RoutedEventArgs e) {
+			editorControl.ShowStartLocation = dropDownItemShowStartLocation.IsChecked;
 		}
 
 		private void OnShowRoomBordersChecked(object sender, RoutedEventArgs e) {
@@ -404,24 +408,35 @@ namespace ZeldaEditor {
 		private void OnTestWorldCommand(object sender, ExecutedRoutedEventArgs e) {
 			editorControl.TestWorld();
 		}
+
 		private void OnTestWorldFromLocationCommand(object sender, ExecutedRoutedEventArgs e) {
 			editorControl.PlayerPlaceMode = !editorControl.PlayerPlaceMode;
 			menuItemTestLevelPlace.IsChecked = editorControl.PlayerPlaceMode;
 			buttonTestLevelPlace.IsChecked = editorControl.PlayerPlaceMode;
 		}
+
+		private void OnStartLocationCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.StartLocationMode = !editorControl.StartLocationMode;
+			menuItemStartLocation.IsChecked = editorControl.StartLocationMode;
+			buttonStartLocation.IsChecked = editorControl.StartLocationMode;
+		}
+
 		private void OnShowGridCommand(object sender, ExecutedRoutedEventArgs e) {
 			editorControl.ShowGrid = !editorControl.ShowGrid;
 			menuItemShowGrid.IsChecked = editorControl.ShowGrid;
 			buttonShowGrid.IsChecked = editorControl.ShowGrid;
 		}
+
 		private void OnPlayAnimationsCommand(object sender, ExecutedRoutedEventArgs e) {
 			editorControl.PlayAnimations = !editorControl.PlayAnimations;
 			menuItemPlayAnimations.IsChecked = editorControl.PlayAnimations;
 			buttonPlayAnimations.IsChecked = editorControl.PlayAnimations;
 		}
+
 		private void OnDeselectCommand(object sender, ExecutedRoutedEventArgs e) {
 			editorControl.CurrentTool.Deselect();
 		}
+
 		private void CanExecuteDeselect(object sender, CanExecuteRoutedEventArgs e) {
 			if (!suppressEvents) return;
 			e.CanExecute = editorControl.CurrentTool.CanDeleteDeselect;
@@ -430,6 +445,11 @@ namespace ZeldaEditor {
 		public void FinishTestWorldFromLocation() {
 			menuItemTestLevelPlace.IsChecked = false;
 			buttonTestLevelPlace.IsChecked = false;
+		}
+
+		public void FinishStartLocation() {
+			menuItemStartLocation.IsChecked = false;
+			buttonStartLocation.IsChecked = false;
 		}
 
 		private void OnPreviewKeyDown(object sender, KeyEventArgs e) {

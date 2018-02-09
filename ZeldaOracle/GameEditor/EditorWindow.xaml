@@ -30,6 +30,7 @@
 
         <CommandBinding Command="cmd:EditorCommands.TestWorld" CanExecute="CanExecuteIsWorldOpen" Executed="OnTestWorldCommand"/>
         <CommandBinding Command="cmd:EditorCommands.TestWorldFromLocation" CanExecute="CanExecuteIsLevelOpen" Executed="OnTestWorldFromLocationCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.StartLocation" CanExecute="CanExecuteIsLevelOpen" Executed="OnStartLocationCommand"/>
 
         <CommandBinding Command="cmd:EditorCommands.ShowGrid" CanExecute="CanExecuteIsWorldOpen" Executed="OnShowGridCommand"/>
         <CommandBinding Command="cmd:EditorCommands.PlayAnimations" CanExecute="CanExecuteIsWorldOpen" Executed="OnPlayAnimationsCommand"/>
@@ -99,6 +100,7 @@
                 <local:ImageMenuItem x:Name="menuItemAddLevel" Header="Add Level..." Source="Resources/Icons/LevelAdd.png" Command="cmd:EditorCommands.AddNewLevel"/>
                 <local:ImageMenuItem x:Name="menuItemTestWorld" Header="Test World" Source="Resources/Icons/RunGame.png" IsCheckable="True"  Command="cmd:EditorCommands.TestWorld"/>
                 <local:ImageMenuItem x:Name="menuItemTestLevelPlace" Header="Test World From Location" Source="Resources/Icons/RunGameAtLocation.png" Command="cmd:EditorCommands.TestWorldFromLocation"/>
+                <local:ImageMenuItem x:Name="menuItemStartLocation" Header="Set Start Location" Source="Resources/Icons/StartLocation.png" Command="cmd:EditorCommands.StartLocation"/>
             </MenuItem>
             <MenuItem Header="_Debug">
                 <local:ImageMenuItem x:Name="menuItemDebugConsole" Header="Debug Console" Source="Resources/Icons/Console.png" Click="OnDebugConsole" IsCheckable="True" />
@@ -116,6 +118,7 @@
             <Separator/>
             <local:ImageButton x:Name="buttonTestLevel" Source="Resources/Icons/RunGame.png" ToolTip="Test World (F5)" Command="cmd:EditorCommands.TestWorld"/>
             <local:ImageToggleButton x:Name="buttonTestLevelPlace" Source="Resources/Icons/RunGameAtLocation.png" ToolTip="Test World From Location (Shift+F5)" Command="cmd:EditorCommands.TestWorldFromLocation"/>
+            <local:ImageToggleButton x:Name="buttonStartLocation" Source="Resources/Icons/StartLocation.png" ToolTip="Set Start Location" Command="cmd:EditorCommands.StartLocation"/>
             <Separator/>
             <local:ImageButton x:Name="buttonAddLevel" Source="Resources/Icons/LevelAdd.png" ToolTip="Add New Level (Ctrl+Shift+L)" Command="cmd:EditorCommands.AddNewLevel"/>
             <local:ImageButton x:Name="buttonAddDungeon" Source="Resources/Icons/DungeonAdd.png" ToolTip="Add New Dungeon (Ctrl+Shift+D)" Command="cmd:EditorCommands.AddNewDungeon"/>
@@ -155,7 +158,8 @@
                     <MenuItem x:Name="dropDownItemFadeAbove" Header="Fade Above" Tag="Fade" IsCheckable="True" IsChecked="True" Click="OnVisualsAboveChecked"/>
                     <MenuItem x:Name="dropDownItemShowAbove" Header="Show Above" Tag="Show" IsCheckable="True" Click="OnVisualsAboveChecked"/>
                     <Separator/>
-                    <MenuItem x:Name="dropDownItemShowRewards" Header="Show Rewards" IsCheckable="True" IsChecked="True" Click="OnShowRewardsChecked"/>
+                    <MenuItem x:Name="dropDownItemShowExtras" Header="Show Extras" IsCheckable="True" IsChecked="True" Click="OnShowExtrasChecked"/>
+                    <MenuItem x:Name="dropDownItemShowStartLocation" Header="Show Start Location" IsCheckable="True" IsChecked="True" Click="OnShowStartLocationChecked"/>
                     <MenuItem x:Name="dropDownItemShowRoomBorders" Header="Show Room Borders" IsCheckable="True" IsChecked="True" Click="OnShowRoomBordersChecked"/>
                     <MenuItem x:Name="dropDownItemShowModified" Header="Show Modified Tiles" IsCheckable="True" Click="OnShowModifiedTilesChecked"/>
                     <MenuItem x:Name="dropDownItemShowEvents" Header="Show Events" IsCheckable="True" Click="OnShowEventsChecked"/>

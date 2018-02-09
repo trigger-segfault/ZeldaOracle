@@ -514,10 +514,17 @@ namespace ZeldaEditor.WinForms {
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.White);
 				}
 
+				// Draw the player start location
+				if ((editorControl.ShowStartLocation || editorControl.StartLocationMode) && Level == World.StartLevel) {
+					Point2I levelTileCoord = World.StartRoomLocation * World.StartLevel.RoomSize + World.StartTileLocation;
+					Point2I position = GetLevelTileCoordDrawPosition(levelTileCoord);
+					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, position);
+				}
+
 				// Draw player sprite for 'Test At Position'
 				Point2I roomSize = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
 				Point2I tilePoint = highlightedRoom * roomSize + highlightedTile * GameSettings.TILE_SIZE;
-				if (editorControl.PlayerPlaceMode && highlightedTile >= Point2I.Zero) {
+				if ((editorControl.PlayerPlaceMode || editorControl.StartLocationMode) && highlightedTile >= Point2I.Zero) {
 					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, tilePoint);
 				}
 
@@ -577,6 +584,11 @@ namespace ZeldaEditor.WinForms {
 						editorControl.TestWorld(highlightedRoom, highlightedTile);
 					}
 				}
+				else if (editorControl.StartLocationMode) {
+					if (highlightedTile != -Point2I.One) {
+						editorControl.SetStartLocation(highlightedRoom, highlightedTile);
+					}
+				}
 				else {
 					// Notify the current tool.
 					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
@@ -593,7 +605,7 @@ namespace ZeldaEditor.WinForms {
 				Point2I mousePos = ScrollPosition + e.Location;
 
 				// Notify the current tool.
-				if (!editorControl.PlayerPlaceMode) {
+				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {
 					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
 					CurrentTool.MouseUp(e);
 				}
@@ -623,7 +635,7 @@ namespace ZeldaEditor.WinForms {
 				}
 
 				// Notify the current tool.
-				if (!editorControl.PlayerPlaceMode) {
+				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {
 					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
 					CurrentTool.MouseMove(e);
 				}
@@ -642,7 +654,7 @@ namespace ZeldaEditor.WinForms {
 				Point2I mousePos = ScrollPosition + e.Location;
 
 				// Notify the current tool.
-				if (!editorControl.PlayerPlaceMode) {
+				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {
 					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
 					CurrentTool.MouseDoubleClick(e);
 				}

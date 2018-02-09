@@ -414,6 +414,11 @@ namespace ZeldaOracle.Game.Worlds {
 			set { startLevelIndex = value; }
 		}
 
+		/// <summary>Gets the starting level for the world.</summary>
+		public Level StartLevel {
+			get { return levels[startLevelIndex]; }
+		}
+
 		/// <summary>Gets the starting location of the start room for the world.</summary>
 		public Point2I StartRoomLocation {
 			get { return startRoomLocation; }
