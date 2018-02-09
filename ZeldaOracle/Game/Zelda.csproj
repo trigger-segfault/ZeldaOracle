@@ -386,7 +386,6 @@
     <Compile Include="Game\Entities\Players\PlayerMoveComponent.cs" />
     <Compile Include="Game\Entities\Players\PlayerMovementMode.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerCarryState.cs" />
-    <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerNormalState.cs" />
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerSwimEnvironmentState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\SwingStates\PlayerSwingMagicRodState.cs" />

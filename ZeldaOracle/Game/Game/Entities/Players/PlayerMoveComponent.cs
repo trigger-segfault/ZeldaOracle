@@ -167,13 +167,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 				
 				player.OnJump();
 			}
-			else {
-				// NOTE: this was removed when revamping player state system
-				//if (player.CurrentState is PlayerNormalState)
-				//if (player.)
-				//if (moveCondition == PlayerMoveCondition.FreeMovement)
-					//player.Graphics.PlayAnimation(player.MoveAnimation);
-			}
 		}
 
 		// Deploy Roc's Cape.
