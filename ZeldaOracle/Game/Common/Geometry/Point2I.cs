@@ -159,6 +159,21 @@ namespace ZeldaOracle.Common.Geometry {
 
 
 		//-----------------------------------------------------------------------------
+		// Calculations
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns the dot product of this point with another.</summary>
+		public int Dot(int x, int y) {
+			return ((X * x) + (Y * y));
+		}
+
+		/// <summary>Returns the dot product of this point with another.</summary>
+		public int Dot(Point2I p) {
+			return ((X * p.X) + (Y * p.Y));
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Operators
 		//-----------------------------------------------------------------------------
 

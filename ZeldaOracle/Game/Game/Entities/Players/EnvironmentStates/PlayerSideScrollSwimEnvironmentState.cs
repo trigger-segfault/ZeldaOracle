@@ -61,7 +61,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// Jump out of the water, and create a splash effect
 			if (newState != player.SideScrollLadderState) {
+
 				player.Physics.ZVelocity = 1.5f;
+
 				CreateSplashEffect();
 			}
 		}

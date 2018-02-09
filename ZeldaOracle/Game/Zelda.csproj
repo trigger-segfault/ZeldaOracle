@@ -371,6 +371,7 @@
     <Compile Include="Game\Entities\Players\ControlStates\PlayerMinecartState.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerSideScrollSwimEnvironmentState.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerUnderwaterEnvironmentState.cs" />
+    <Compile Include="Game\Entities\Players\ControlStates\PlayerSwitcHookSwitchState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerRespawnDeathState.cs" />

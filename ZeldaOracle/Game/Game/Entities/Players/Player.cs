@@ -14,6 +14,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
+	// TODO: use this struct
 	public struct PlayerAnimationSet {
 		public Animation Swing;
 		public Animation Spin;
@@ -77,6 +78,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSpinSwordState		stateSpinSword;
 		private PlayerSeedShooterState		stateSeedShooter;
 		private PlayerSwitchHookState		stateSwitchHook;
+		private PlayerSwitchHookSwitchState	stateSwitchHookSwitch;
 		private PlayerMagicBoomerangState	stateMagicBoomerang;
 		private PlayerGrabState				stateGrab;
 		private PlayerCarryState			stateCarry;
@@ -167,8 +169,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Construct the basic player states
 			stateBusy			= new PlayerBusyState();
-			stateLedgeJump		= new PlayerLedgeJumpState();
-			stateLeapLedgeJump	= new PlayerLeapLedgeJumpState();
+			stateMagicBoomerang	= new PlayerMagicBoomerangState();
+
+			// Weapon states
 			stateSwingSword		= new PlayerSwingSwordState();
 			stateSwingBigSword	= new PlayerSwingBigSwordState();
 			stateSwingMagicRod	= new PlayerSwingMagicRodState();
@@ -178,14 +181,19 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSpinSword		= new PlayerSpinSwordState();
 			stateSeedShooter	= new PlayerSeedShooterState();
 			stateSwitchHook		= new PlayerSwitchHookState();
-			stateMagicBoomerang	= new PlayerMagicBoomerangState();
 			stateGrab			= new PlayerGrabState();
 			stateCarry			= new PlayerCarryState();
-			statePullHandle		= new PlayerPullHandleState();
-			stateRespawnDeath	= new PlayerRespawnDeathState();
-			stateMinecart		= new PlayerMinecartState();
-			stateJumpTo			= new PlayerJumpToState();
 
+			// Control states
+			stateLedgeJump			= new PlayerLedgeJumpState();
+			stateLeapLedgeJump		= new PlayerLeapLedgeJumpState();
+			statePullHandle			= new PlayerPullHandleState();
+			stateRespawnDeath		= new PlayerRespawnDeathState();
+			stateMinecart			= new PlayerMinecartState();
+			stateJumpTo				= new PlayerJumpToState();
+			stateSwitchHookSwitch	= new PlayerSwitchHookSwitchState();
+
+			// Environment states
 			environmentStateGrass				= new PlayerGrassEnvironmentState();
 			environmentStateStairs				= new PlayerStairsEnvironmentState();
 			environmentStateJump				= new PlayerJumpEnvironmentState();
@@ -1005,6 +1013,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerSwitchHookState SwitchHookState {
 			get { return stateSwitchHook; }
+		}
+
+		public PlayerSwitchHookSwitchState SwitchHookSwitchState {
+			get { return stateSwitchHookSwitch; }
 		}
 
 		public PlayerMagicBoomerangState MagicBoomerangState {

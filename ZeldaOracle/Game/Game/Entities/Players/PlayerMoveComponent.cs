@@ -47,6 +47,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F			velocityPrev;			// The player's velocity on the previous frame.
 		private int					moveAngle;				// The angle the player is moving in.
 		private int					moveDirection;			// The direction that the player wants to face.
+
+
 		private Point2I				jumpStartTile;			// The tile the player started jumping on. (Used for jump color tiles)
 		private bool				isCapeDeployed;
 		private Tile				holeTile;
@@ -105,14 +107,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			mode = moveModeNormal;
 		}
 		
+
+		//-----------------------------------------------------------------------------
+		// Movement Checks
+		//-----------------------------------------------------------------------------
+		
+		public bool IsMovingInDirection(int direction) {
+			return (IsMoving &&
+				Directions.ToPoint(direction).Dot(Angles.ToPoint(moveAngle)) > 0);
+		}
+		
 		
 		//-----------------------------------------------------------------------------
 		// Movement
 		//-----------------------------------------------------------------------------
-		
-		public bool IsMovingInDirection(int direction) {
-			return (isMoving && moveDirection == direction);
-		}
 
 		public void StopMotion() {
 			player.Physics.Velocity = Vector2F.Zero;
@@ -256,7 +264,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveDirection == Directions.Right);
 			else
 				canUpdateDirection = !player.StateParameters.EnableStrafing;
-			if (canUpdateDirection && allowMovementControl)
+			if (canUpdateDirection && allowMovementControl && isMoving)
 				player.Direction = moveDirection;
 
 			// Update movement or acceleration.

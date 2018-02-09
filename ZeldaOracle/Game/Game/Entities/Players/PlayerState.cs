@@ -52,6 +52,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				ProhibitWeaponUse = true;
 				ProhibitMovementControlOnGround = value;
 				ProhibitMovementControlInAir = value;
+				ProhibitJumping = value;
 			}
 		}
 

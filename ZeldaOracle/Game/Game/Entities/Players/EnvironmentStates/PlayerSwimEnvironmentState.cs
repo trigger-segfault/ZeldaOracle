@@ -72,8 +72,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnEnterRoom() {
-			if (isDiving)
-			{
+			if (isDiving) {
 				// Snap the player's position to the tile he is standing on.
 				player.Position = GMath.Floor(player.Position /
 					new Vector2F(GameSettings.TILE_SIZE)) *
