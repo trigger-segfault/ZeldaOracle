@@ -22,6 +22,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -344,6 +345,9 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dropEntity != null) {
 				if (dropEntity is Collectible)
 					(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+				else if (dropEntity is Monster)
+					(dropEntity as Monster).BeginSpawnState();
+
 				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
 			}
 
@@ -435,7 +439,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Spawn a drop entity based on the random drop-list.
 		public Entity SpawnDrop() {
 			Entity dropEntity = null;
-			
+
 			// Choose a random drop (or none) from the list.
 			if (dropList != null)
 				dropEntity = dropList.CreateDropEntity(GameControl);
@@ -444,7 +448,14 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dropEntity != null) {
 				dropEntity.SetPositionByCenter(Center);
 				dropEntity.Physics.ZVelocity = GameSettings.DROP_ENTITY_SPAWN_ZVELOCITY;
-				RoomControl.SpawnEntity(dropEntity);
+				if (dropEntity is Monster) {
+					RoomControl.ScheduleEvent(2, () => {
+						RoomControl.SpawnEntity(dropEntity);
+					});
+				}
+				else {
+					RoomControl.SpawnEntity(dropEntity);
+				}
 			}
 
 			return dropEntity;

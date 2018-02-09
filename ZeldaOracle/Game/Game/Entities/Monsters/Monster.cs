@@ -176,6 +176,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public virtual void UpdateAI() {
 
 		}
+
+		public void BeginSpawnState(int duration = GameSettings.MONSTER_SPAWN_STATE_DURATION) {
+			BeginState(new MonsterSpawnState(duration));
+		}
 		
 		
 		//-----------------------------------------------------------------------------

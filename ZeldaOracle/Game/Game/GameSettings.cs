@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game {
 		public const int				COLLECTIBLE_ALIVE_DURATION				= 513;
 		public const int				COLLECTIBLE_FADE_DELAY					= 400;
 		public const int				COLLECTIBLE_PICKUPABLE_DELAY			= 12;
-		public const int				COLLECTIBLE_DIG_PICKUPABLE_DELAY		= 16;
+		public const int				COLLECTIBLE_DIG_PICKUPABLE_DELAY		= 20;
 		public const int				COLLECTIBLE_FAIRY_ALIVE_DURATION		= 513;
 		public const int				COLLECTIBLE_FAIRY_FADE_DELAY			= 400;
 		public const int				COLLECTIBLE_FAIRY_HOVER_HEIGHT			= 8;
@@ -91,7 +91,9 @@ namespace ZeldaOracle.Game {
 		public const int				UNIT_HURT_INVINCIBLE_DURATION	= 32;
 		public const int				UNIT_HURT_FLICKER_DURATION		= 32;
 		public const int				UNIT_KNOCKBACK_ANGLE_SNAP_COUNT	= 16;
-		
+
+		public const int				MONSTER_SPAWN_STATE_DURATION		= 31;
+
 		public const float				MONSTER_KNOCKBACK_SPEED				= 2.0f; // 1.3 ??
 		public const int				MONSTER_HURT_KNOCKBACK_DURATION		= 11;
 		public const int				MONSTER_BUMP_KNOCKBACK_DURATION		= 8;
