@@ -69,6 +69,10 @@ namespace ZeldaEditor {
 			new InputGestureCollection() {
 				new KeyGesture(Key.F5, ModifierKeys.Shift) });
 
+		/// <summary>The command to set the player start location location.</summary>
+		public static readonly RoutedUICommand StartLocation = new RoutedUICommand(
+			"StartLocation", "StartLocation", typeof(EditorCommands));
+
 		/// <summary>The command to add a new level.</summary>
 		public static readonly RoutedUICommand AddNewLevel = new RoutedUICommand(
 			"AddNewLevel", "Add New Level", typeof(EditorCommands),
