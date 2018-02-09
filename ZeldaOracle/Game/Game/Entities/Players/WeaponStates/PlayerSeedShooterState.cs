@@ -101,34 +101,26 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			StateParameters.ProhibitMovementControlOnGround = true;
 
-			if (player.RoomControl.IsUnderwater)
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_AIM);
-			else
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_AIM);
-
-			player.Graphics.SubStripIndex = angle;
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
 			player.ToolVisual.AnimationPlayer.SubStripIndex = angle;
 
-			if (player.IsInMinecart) {
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_AIM);
-			}
+			player.Graphics.SubStripIndex = angle;
+			player.Graphics.PlayAnimation(
+				player.StateParameters.PlayerAnimations.Aim);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.UnequipTool(player.ToolVisual);
 			player.SyncAnimationWithDirection	= true;
-			//player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
-		}
-
-		public override void OnExitMinecart() {
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_AIM);
 		}
 
 		public override void Update() {
 			base.Update();
 			
+			player.Graphics.SetAnimation(
+				player.StateParameters.PlayerAnimations.Aim);
+
 			if (isShooting) {
 				shootTimer++;
 				if (shootTimer >= SHOOT_WAIT_TIME) {

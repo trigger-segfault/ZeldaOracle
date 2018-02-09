@@ -3,10 +3,11 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.GameStates.Transitions;
+using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerSwimEnvironmentState : PlayerJumpEnvironmentState {
+	public class PlayerSwimEnvironmentState : PlayerEnvironmentState {
 
 		private bool	isSubmerged;
 		private int		submergedTimer;
@@ -88,14 +89,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			StateParameters.ProhibitJumping		= true;
 			StateParameters.ProhibitWeaponUse	= true;
+			StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
 			//player.Movement.MoveSpeedScale = 1.0f;
-			player.Movement.AutoAccelerate = false;
+			//player.Movement.AutoAccelerate = false;
 
 			player.InterruptWeapons();
 
 			isDiving	= false;
 			isSubmerged	= false;
 
+			player.MoveAnimation = GameData.ANIM_PLAYER_SWIM;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
 
 			// Create a splash effect.
@@ -134,6 +137,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
+			//player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
 			
 			isDiving = false;
 			
@@ -147,7 +151,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// TODO: Code duplication with PlayerUnderwaterState
 			// TODO: magic numbers
-			/*
+			
 			// Update the submerge state.
 			if (isSubmerged) {
 				submergedTimer--;
@@ -155,15 +159,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
 					isSubmerged = false;
 					player.IsPassable = false;
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
+					//player.MoveAnimation = GameData.ANIM_PLAYER_SWIM;
+					//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
 					player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
+					StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
 				}
 			}
 			else if (Controls.B.IsPressed()) {
 				isSubmerged = true;
 				player.IsPassable = true;
 				submergedTimer = submergedDuration;
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
+				//player.MoveAnimation = GameData.ANIM_PLAYER_SUBMERGED;
+				//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
+				StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SUBMERGED;
 
 				// Create a splash effect.
 				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true);
@@ -181,7 +189,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					return;
 				}
 			}
-
+			/*
 			// Slow down movement over time from strokes
 			if (player.Movement.MoveSpeedScale > 1.0f)
 				player.Movement.MoveSpeedScale -= 0.025f;

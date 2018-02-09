@@ -4,17 +4,24 @@ using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerSideScrollSwimEnvironmentState : PlayerJumpEnvironmentState {
+	public class PlayerSideScrollSwimEnvironmentState : PlayerEnvironmentState {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public PlayerSideScrollSwimEnvironmentState() {
-			StateParameters.DisableGravity			= true;
-			StateParameters.EnableGroundOverride	= true;
-			StateParameters.AlwaysFaceLeftOrRight	= true;
-			StateParameters.ProhibitJumping			= true;
+			StateParameters.DisableGravity				= true;
+			StateParameters.EnableGroundOverride		= true;
+			StateParameters.AlwaysFaceLeftOrRight		= true;
+			StateParameters.ProhibitJumping				= true;
+			StateParameters.PlayerAnimations.Default		= GameData.ANIM_PLAYER_MERMAID_SWIM;
+			StateParameters.PlayerAnimations.Aim			= GameData.ANIM_PLAYER_MERMAID_AIM;
+			StateParameters.PlayerAnimations.Throw			= GameData.ANIM_PLAYER_MERMAID_THROW;
+			StateParameters.PlayerAnimations.Swing			= GameData.ANIM_PLAYER_MERMAID_SWING;
+			StateParameters.PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_MERMAID_SWING;
+			StateParameters.PlayerAnimations.Spin			= GameData.ANIM_PLAYER_MERMAID_SPIN;
+			StateParameters.PlayerAnimations.Stab			= GameData.ANIM_PLAYER_MERMAID_STAB;
 
 			MotionSettings = new PlayerMotionType() {
 				MovementSpeed			= 0.5f,

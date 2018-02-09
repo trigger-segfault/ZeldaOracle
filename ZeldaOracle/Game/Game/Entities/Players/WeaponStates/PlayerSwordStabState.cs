@@ -23,8 +23,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwordStabState() {
-			this.weapon = null;
-			this.continueHolding = true;
+			weapon = null;
+			continueHolding = true;
+
+			StateParameters.ProhibitMovementControl = true;
 		}
 		
 
@@ -33,23 +35,17 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			// TODO: allows sideways movement for stabbing when jumping.
-			StateParameters.ProhibitMovementControl = true;
-			//player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+			// TODO: allows sideways movement for stabbing when jumping
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SWORD_STAB);
 
-			if (player.RoomControl.IsUnderwater)
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_STAB);
-			else
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
+			player.Graphics.PlayAnimation(
+				player.StateParameters.PlayerAnimations.Stab);
 
 			player.ToolVisual.AnimationPlayer.SubStripIndex = player.Direction;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-			//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 			player.UnequipTool(player.ToolVisual);
 		}
 

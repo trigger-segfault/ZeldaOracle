@@ -361,6 +361,7 @@
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerJumpEnvironmentState.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerEnvironmentState.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerSideScrollLadderEnvironmentState.cs" />
+    <Compile Include="Game\Entities\Players\PlayerStateParameters.cs" />
     <Compile Include="Game\Entities\Players\PlayerStateMachine.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />

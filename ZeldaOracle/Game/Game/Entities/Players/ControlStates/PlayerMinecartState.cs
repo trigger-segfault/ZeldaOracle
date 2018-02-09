@@ -44,6 +44,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.EnableAutomaticRoomTransitions	= true;
 			StateParameters.DisableInteractionCollisions	= true;
 			StateParameters.DisableSolidCollisions			= true;
+			StateParameters.PlayerAnimations.Default		= GameData.ANIM_PLAYER_MINECART_IDLE;
+			StateParameters.PlayerAnimations.Aim			= GameData.ANIM_PLAYER_MINECART_AIM;
+			StateParameters.PlayerAnimations.Throw			= GameData.ANIM_PLAYER_MINECART_THROW;
+			StateParameters.PlayerAnimations.Swing			= GameData.ANIM_PLAYER_MINECART_SWING;
+			StateParameters.PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
+			StateParameters.PlayerAnimations.Carry			= GameData.ANIM_PLAYER_MINECART_CARRY;
 		}
 
 		

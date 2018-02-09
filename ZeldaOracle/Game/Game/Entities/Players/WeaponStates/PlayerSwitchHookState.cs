@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public PlayerSwitchHookState() {
 			StateParameters.ProhibitJumping			= true;
 			StateParameters.ProhibitMovementControl	= true;
+			StateParameters.ProhibitWeaponUse		= true;
 		}
 
 
@@ -39,11 +40,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			isSwitching = false;
 			direction = player.Direction;
-
-			if (player.RoomControl.IsUnderwater)
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_THROW);
-			else
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			player.Graphics.PlayAnimation(
+				player.StateParameters.PlayerAnimations.Throw);
 		}
 		
 		public override void OnEnd(PlayerState newState) {

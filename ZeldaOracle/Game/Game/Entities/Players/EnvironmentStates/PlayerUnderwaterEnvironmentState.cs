@@ -4,7 +4,7 @@ using ZeldaOracle.Game.GameStates.Transitions;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerUnderwaterEnvironmentState : PlayerJumpEnvironmentState {
+	public class PlayerUnderwaterEnvironmentState : PlayerEnvironmentState {
 
 		// Used in OnEnterRoom() to know if we resurfaced into the room
 		bool isResurfacing = false;

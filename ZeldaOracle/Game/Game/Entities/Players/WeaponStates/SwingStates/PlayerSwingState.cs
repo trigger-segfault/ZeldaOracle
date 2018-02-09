@@ -127,7 +127,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			this.playerSwingAnimation			= GameData.ANIM_PLAYER_MINECART_SWING;
 			this.playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
 			this.playerSwingAnimationUnderwater	= GameData.ANIM_PLAYER_MERMAID_SWING;
-			
+
 			this.swingWindingOrders = new WindingOrder[] {
 				WindingOrder.Clockwise,
 				WindingOrder.CounterClockwise,
@@ -160,24 +160,17 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			player.EquipTool(playerTool);
 			playerTool.AnimationPlayer.SubStripIndex = direction;
 			
-			if (player.IsInMinecart) {
-				playerTool.PlayAnimation(weaponSwingAnimation);
-				player.Graphics.PlayAnimation(playerSwingAnimationInMinecart);
-				swingCollisionBoxes = swingCollisionBoxesNoLunge;
-			}
-			else if (player.RoomControl.IsUnderwater) {
-				playerTool.PlayAnimation(weaponSwingAnimation);
-				player.Graphics.PlayAnimation(playerSwingAnimationUnderwater);
-				swingCollisionBoxes = swingCollisionBoxesNoLunge;
-			}
-			else if (lunge) {
+			// Do not lunge while in minecart
+			if (lunge && !player.IsInMinecart) {
+				player.Graphics.PlayAnimation(
+					player.StateParameters.PlayerAnimations.Swing);
 				playerTool.PlayAnimation(weaponSwingAnimationLunge);
-				player.Graphics.PlayAnimation(playerSwingAnimationLunge);
 				swingCollisionBoxes = swingCollisionBoxesLunge;
 			}
 			else {
+				player.Graphics.PlayAnimation(
+					player.StateParameters.PlayerAnimations.SwingNoLunge);
 				playerTool.PlayAnimation(weaponSwingAnimation);
-				player.Graphics.PlayAnimation(playerSwingAnimation);
 				swingCollisionBoxes = swingCollisionBoxesNoLunge;
 			}
 

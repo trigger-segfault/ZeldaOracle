@@ -75,17 +75,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public void DropObject(bool enterBusyState = true, bool playSound = true) {
+			StateParameters.PlayerAnimations.Default = null;
+
 			if (carryObject != null && carryObject.IsAlive) {
 				isObjectDropped = true;
 				player.RoomControl.SpawnEntity(carryObject, player.Position, 16);
 				if (enterBusyState) {
-					//player.BeginBusyState(throwDuration);
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+					player.Graphics.PlayAnimation(
+						player.StateParameters.PlayerAnimations.Throw);
 					StateMachine.BeginState(new PlayerBusyState(
-						throwDuration, GameData.ANIM_PLAYER_THROW));
+						throwDuration, player.StateParameters.PlayerAnimations.Throw));
 				}
 				else if (isPickingUp) {
-					//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 					StateParameters.ProhibitMovementControl = false;
 					isPickingUp = false;
 				}
@@ -128,7 +129,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.ProhibitJumping				= true;
 			StateParameters.ProhibitLedgeJumping		= true;
 			StateParameters.ProhibitWeaponUse			= true;
-			StateParameters.ProhibitEnteringMinecart	= true;
 			StateParameters.ProhibitWarping				= true;
 
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
@@ -136,23 +136,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.Movement.CanJump			= true;
-			//player.Movement.CanLedgeJump	= true;
-			//player.Movement.CanUseWarpPoint	= true;
-
-			if (!isObjectDropped) {
+			if (!isObjectDropped)
 				DropObject(false, false);
-			}
-		}
-
-		public override void OnEnterMinecart() {
-			if (player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY)
-				player.Graphics.SetAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
-		}
-
-		public override void OnExitMinecart() {
-			if (player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_CARRY)
-				player.Graphics.SetAnimation(GameData.ANIM_PLAYER_CARRY);
 		}
 
 		public override void OnHurt(DamageInfo damage) {
@@ -191,13 +176,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					isPickingUp = false;
 					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 					StateParameters.ProhibitMovementControl	= false;
-					if (player.IsInMinecart)
-						player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
-					else
-						player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
+					StateParameters.PlayerAnimations.Default =
+						player.StateParameters.PlayerAnimations.Carry;
 				}
 			}
 			else {
+				StateParameters.PlayerAnimations.Default =
+					player.StateParameters.PlayerAnimations.Carry;
+
 				// Update the carried object.
 				objectDrawOffset		= Point2I.Zero;
 				objectZOffset			= 13;

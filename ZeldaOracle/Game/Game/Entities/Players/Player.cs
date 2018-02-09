@@ -272,12 +272,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		// Begin the busy state with the specified duration.
-		public void BeginBusyState(int duration) {
-			BeginConditionState(new PlayerBusyState() {
+		public PlayerBusyState BeginBusyState(int duration) {
+			PlayerBusyState state = new PlayerBusyState() {
 				Duration			= duration,
 				Animation			= Graphics.Animation,
 				AnimationInMinecart	= Graphics.Animation,
-			});
+			};
+			BeginConditionState(state);
+			return state;
 		}
 		
 		// Begin the busy state with the specified duration and animation(s).
@@ -690,7 +692,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void IntegrateStateParameters() {
 			// Combine all state parameters from each active state
 			stateParameters = new PlayerStateParameters();
-			foreach (PlayerState state in ActiveStates)
+			stateParameters.PlayerAnimations.Default		= GameData.ANIM_PLAYER_DEFAULT;
+			stateParameters.PlayerAnimations.Aim			= GameData.ANIM_PLAYER_AIM;
+			stateParameters.PlayerAnimations.Throw			= GameData.ANIM_PLAYER_THROW;
+			stateParameters.PlayerAnimations.Swing			= GameData.ANIM_PLAYER_SWING;
+			stateParameters.PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_SWING_NOLUNGE;
+			stateParameters.PlayerAnimations.Spin			= GameData.ANIM_PLAYER_SPIN;
+			stateParameters.PlayerAnimations.Stab			= GameData.ANIM_PLAYER_STAB;
+			stateParameters.PlayerAnimations.Carry			= GameData.ANIM_PLAYER_CARRY;
+			stateParameters |= controlStateMachine.StateParameters;
+			stateParameters |= weaponStateMachine.StateParameters;
+			stateParameters |= environmentStateMachine.StateParameters;
+			foreach (PlayerState state in ConditionStates)
 				stateParameters |= state.StateParameters;
 
 			// Integrate the combined state parameters
@@ -856,8 +869,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { movement.CanUseWarpPoint = value; }
 		}
 
+		public PlayerStateParameters.PlayerStateAnimations Animations {
+			get { return stateParameters.PlayerAnimations; }
+		}
+
 		public Animation MoveAnimation {
-			get { return moveAnimation; }
+			//get { return moveAnimation; }
+			get { return stateParameters.PlayerAnimations.Default; }
 			set { moveAnimation = value; }
 		}
 

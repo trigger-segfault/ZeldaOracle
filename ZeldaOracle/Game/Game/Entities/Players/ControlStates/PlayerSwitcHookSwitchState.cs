@@ -94,11 +94,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			direction		= player.Direction;
 			isSwitched		= false;
 			raisedZPosition	= 0;
-
-			if (player.RoomControl.IsUnderwater)
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_THROW);
-			else
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			
+			player.Graphics.PlayAnimation(
+				player.StateParameters.PlayerAnimations.Throw);
 			
 			if (hookedObject is Entity) {
 				hookedEntity = (Entity) hookedObject;

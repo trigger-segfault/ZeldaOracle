@@ -102,7 +102,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Player.BusyState.SetEndAction(delegate(PlayerState playerState) {
 				playerState.Player.UnequipTool(playerState.Player.ToolVisual);
 			});
-			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
+			Player.BeginBusyState(10, Player.Animations.Throw);
 		}
 
 		// Draws the item inside the inventory.
