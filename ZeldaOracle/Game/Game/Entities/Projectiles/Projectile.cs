@@ -246,7 +246,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 				
 				// Collide with the player.
-				if (Physics.IsMeetingEntity(player, CollisionBoxType.Soft)) {
+				if (!player.IsPassable && Physics.IsMeetingEntity(player, CollisionBoxType.Soft)) {
 					OnCollidePlayer(player);
 					if (IsDestroyed)
 						return;
