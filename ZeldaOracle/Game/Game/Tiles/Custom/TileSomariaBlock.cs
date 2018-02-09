@@ -5,6 +5,10 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -20,7 +24,21 @@ namespace ZeldaOracle.Game.Tiles {
 			CancelBreakSound = true;
 			CheckSurfaceTile();
 			CancelBreakSound = false;
-			// TODO: Prevent spawning on top of entities
+			var settings = new CollisionTestSettings(typeof(Entity),
+				new Rectangle2F(GameSettings.TILE_SIZE), CollisionBoxType.Hard);
+			foreach (Entity entity in RoomControl.Entities) {
+				if (CollisionTest.PerformCollisionTest(Position, entity, settings).IsColliding) {
+					if (entity.Physics.IsSolid && !(entity is EffectCreateSomariaBlock)) {
+						CancelBreakSound = true;
+						Break(false);
+						break;
+					}
+					if (entity is Monster) {
+						Monster monster = (Monster) entity;
+						monster.TriggerInteraction(InteractionType.Block, new TileDummy(this));
+					}
+				}
+			}
 		}
 
 		public override void OnFallInHole() {
@@ -37,6 +55,25 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnFloating() {
 			Break(false);
+		}
+
+		public override void Update() {
+			base.Update();
+			
+			var settings = new CollisionTestSettings(typeof(Entity),
+				new Rectangle2F(GameSettings.TILE_SIZE), CollisionBoxType.Hard);
+			foreach (Entity entity in RoomControl.Entities) {
+				if (CollisionTest.PerformCollisionTest(Position, entity, settings).IsColliding) {
+					if (entity.Physics.IsSolid && !(entity is EffectCreateSomariaBlock)) {
+						Break(false);
+						break;
+					}
+					if (IsMoving && entity is Monster) {
+						Monster monster = (Monster) entity;
+						monster.TriggerInteraction(InteractionType.Block, new TileDummy(this));
+					}
+				}
+			}
 		}
 
 

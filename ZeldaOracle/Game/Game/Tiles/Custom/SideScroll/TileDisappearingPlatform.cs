@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 			IsSolid = IsPlatformSolid;
 			Graphics.IsVisible = IsPlatformVisible;
 
-			if (Time == appearTime && !AudioSystem.IsSoundPlaying(GameData.SOUND_MYSTERY_SEED)) {
+			if (Time == appearTime) {
 				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
 			}
 		}
