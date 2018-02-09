@@ -941,7 +941,7 @@ namespace ZeldaOracle.Game.Control {
 					!player.Physics.IsInWater &&
 					player.Movement.IsMovingInDirection(Directions.Up))
 				{
-					player.BeginEnvironmentState(player.SidescrollLadderState);
+					player.BeginEnvironmentState(player.SideScrollLadderState);
 					player.Physics.VelocityY = 0.0f;
 				}
 
@@ -957,7 +957,7 @@ namespace ZeldaOracle.Game.Control {
 						standingCollisionPrev.Tile == null ||
 						standingCollisionPrev.Tile.Bounds.Top != ladderBox.Top))
 				{
-					player.BeginEnvironmentState(player.SidescrollLadderState);
+					player.BeginEnvironmentState(player.SideScrollLadderState);
 					return;
 				}
 			}
@@ -1017,7 +1017,7 @@ namespace ZeldaOracle.Game.Control {
 			{
 				// If holding the [Down] button, then begin climbing the ladder instead
 				if (player.Movement.IsMovingInDirection(Directions.Down)) {
-					player.BeginEnvironmentState(player.SidescrollLadderState);
+					player.BeginEnvironmentState(player.SideScrollLadderState);
 				}
 				else {
 					// Collide with the top of the ladder

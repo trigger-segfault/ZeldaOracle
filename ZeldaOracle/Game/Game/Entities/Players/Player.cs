@@ -129,15 +129,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMinecartState			stateMinecart;
 		private PlayerJumpToState			stateJumpTo;
 
-		private PlayerEnvironmentStateGrass		environmentStateGrass;
-		private PlayerEnvironmentStateStairs	environmentStateStairs;
-		private PlayerEnvironmentStateJump		environmentStateJump;
-		private PlayerEnvironmentStateIce		environmentStateIce; 
-		private PlayerLadderState				environmentStateLadder;
-		private PlayerEnvironmentStateSidescrollLadder	environmentStateSidescrollLadder;
-		private PlayerSwimState					environmentStateSwim;
-		private PlayerUnderwaterState			environmentStateUnderwater;
-		private PlayerSidescrollSwimState		environmentStateSidescrollSwim;
+		private PlayerGrassEnvironmentState					environmentStateGrass;
+		private PlayerStairsEnvironmentState				environmentStateStairs;
+		private PlayerJumpEnvironmentState					environmentStateJump;
+		private PlayerIceEnvironmentState					environmentStateIce; 
+		private PlayerLadderEnvironmentState				environmentStateLadder;
+		private PlayerSideScrollLadderEnvironmentState		environmentStateSideScrollLadder;
+		private PlayerSwimEnvironmentState					environmentStateSwim;
+		private PlayerUnderwaterEnvironmentState			environmentStateUnderwater;
+		private PlayerSideScrollSwimEnvironmentState		environmentStateSideScrollSwim;
 
 
 		//-----------------------------------------------------------------------------
@@ -231,15 +231,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateMinecart		= new PlayerMinecartState();
 			stateJumpTo			= new PlayerJumpToState();
 
-			environmentStateGrass				= new PlayerEnvironmentStateGrass();
-			environmentStateStairs				= new PlayerEnvironmentStateStairs();
-			environmentStateJump				= new PlayerEnvironmentStateJump();
-			environmentStateIce					= new PlayerEnvironmentStateIce();
-			environmentStateSwim				= new PlayerSwimState();
-			environmentStateUnderwater			= new PlayerUnderwaterState();
-			environmentStateSidescrollSwim		= new PlayerSidescrollSwimState();
-			environmentStateLadder				= new PlayerLadderState();
-			environmentStateSidescrollLadder	= new PlayerEnvironmentStateSidescrollLadder();
+			environmentStateGrass				= new PlayerGrassEnvironmentState();
+			environmentStateStairs				= new PlayerStairsEnvironmentState();
+			environmentStateJump				= new PlayerJumpEnvironmentState();
+			environmentStateIce					= new PlayerIceEnvironmentState();
+			environmentStateSwim				= new PlayerSwimEnvironmentState();
+			environmentStateUnderwater			= new PlayerUnderwaterEnvironmentState();
+			environmentStateSideScrollSwim		= new PlayerSideScrollSwimEnvironmentState();
+			environmentStateLadder				= new PlayerLadderEnvironmentState();
+			environmentStateSideScrollLadder	= new PlayerSideScrollLadderEnvironmentState();
 		}
 
 
@@ -298,14 +298,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			if (RoomControl.IsSideScrolling) {
 				if (physics.IsInWater || RoomControl.IsUnderwater)
-					return environmentStateSidescrollSwim;
+					return environmentStateSideScrollSwim;
 				else if (physics.IsInLava)
 					return environmentStateSwim; // TODO: this is here to trigger player death
 				else if (physics.IsInAir)
 					return environmentStateJump;
-				//else if ((physics.IsOnLadder || (feetTile != null && feetTile.IsLadder)) &&
-				//environmentStateMachine.BeginState(environmentStateSidescrollLadder))
-					//return environmentStateSidescrollLadder;
 				else if (physics.IsInGrass)
 					return environmentStateGrass;
 				else if (physics.IsOnStairs)
@@ -1041,16 +1038,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return stateBusy; }
 		}
 
-		public PlayerSwimState SwimState {
+		public PlayerSwimEnvironmentState SwimState {
 			get { return environmentStateSwim; }
 		}
 
-		public PlayerSidescrollSwimState SidescrollSwimState {
-			get { return environmentStateSidescrollSwim; }
+		public PlayerSideScrollSwimEnvironmentState SideScrollSwimState {
+			get { return environmentStateSideScrollSwim; }
 		}
 
 
-		public PlayerUnderwaterState UnderwaterState {
+		public PlayerUnderwaterEnvironmentState UnderwaterState {
 			get { return environmentStateUnderwater; }
 		}
 
@@ -1062,16 +1059,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return stateLeapLedgeJump; }
 		}
 
-		public PlayerLadderState LadderState {
+		public PlayerLadderEnvironmentState LadderState {
 			get { return environmentStateLadder; }
 		}
 
-		public PlayerEnvironmentStateSidescrollLadder SidescrollLadderState {
-			get { return environmentStateSidescrollLadder; }
+		public PlayerSideScrollLadderEnvironmentState SideScrollLadderState {
+			get { return environmentStateSideScrollLadder; }
 		}
 
 		public bool IsOnSideScrollLadder {
-			get { return (EnvironmentState == environmentStateSidescrollLadder); }
+			get { return (EnvironmentState == environmentStateSideScrollLadder); }
 		}
 
 		public PlayerSwingSwordState SwingSwordState {
@@ -1138,23 +1135,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return stateJumpTo; }
 		}
 
-		public PlayerEnvironmentStateJump JumpState {
+		public PlayerJumpEnvironmentState JumpState {
 			get { return environmentStateJump; }
 		}
 
 		public bool IsSwimmingUnderwater {
-			get { return (state == environmentStateUnderwater || state == environmentStateSidescrollSwim); }
+			get { return (state == environmentStateUnderwater || state == environmentStateSideScrollSwim); }
 		}
 
 		public bool IsSwimming {
 			get {
 				return (state == environmentStateSwim ||
 					state == environmentStateUnderwater ||
-					state == environmentStateSidescrollSwim);
+					state == environmentStateSideScrollSwim);
 			}
 		}
 
-		// Tools.
+		// Tools
 
 		public PlayerToolSword ToolSword {
 			get { return toolSword; }

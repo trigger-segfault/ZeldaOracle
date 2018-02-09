@@ -30,14 +30,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		// Settings
 		private bool				autoAccelerate;			// Should the player still accelerate without holding down a movement key?
-		private float				moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
 		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
 		private bool				canLedgeJump;
 		private bool				canJump;
 		private bool				canPush;
 		private bool				canUseWarpPoint;		// Can the player go through warp points?
 		private bool				onlyFaceLeftOrRight;
-		private bool				isSprinting;
 		private int					sprintTimer;
 		private float				sprintSpeedScale;
 
@@ -77,14 +75,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Default settings.
 			autoAccelerate			= false;
-			moveSpeedScale			= 1.0f;
 			moveCondition			= PlayerMoveCondition.FreeMovement;
 			canLedgeJump			= true;
 			canJump					= true;
 			canPush					= true;
 			canUseWarpPoint			= true;
 			onlyFaceLeftOrRight		= false;
-			isSprinting				= false;
 			sprintTimer				= 0;
 			sprintSpeedScale		= 1.5f;
 
@@ -130,9 +126,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public void StartSprinting(int duration, float sprintSpeedScale) {
-			this.sprintTimer		= duration;
-			this.sprintSpeedScale	= sprintSpeedScale;
-			this.isSprinting		= true;
+			player.BeginConditionState(new PlayerSprintState(
+				duration, sprintSpeedScale));
 		}
 
 		public void Jump() {
@@ -143,9 +138,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Vector2F moveVector = PollMovementKeys(true);
 
 					if (isMoving) {
-						float scaledSpeed = mode.MovementSpeed * moveSpeedScale;
-						if (isSprinting)
-							scaledSpeed *= sprintSpeedScale;
+						float scaledSpeed = mode.MovementSpeed * player.StateParameters.MovementSpeedScale;
 						Vector2F keyMotion		= moveVector * scaledSpeed;
 						player.Physics.Velocity	= keyMotion;
 						motion					= keyMotion;
@@ -166,7 +159,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				
 				// Make sure we go to the environment state for jumping
 				if (player.IsOnSideScrollLadder)
-					player.SidescrollLadderState.End();
+					player.SideScrollLadderState.End();
 				player.IntegrateStateParameters();
 				player.RequestNaturalState();
 				
@@ -278,9 +271,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveAngle = Directions.ToAngle(player.Direction);
 
 				// Determine key-motion (the velocity we want to move at)
-				float scaledSpeed = mode.MovementSpeed * moveSpeedScale * player.StateParameters.MovementSpeedScale;
-				if (isSprinting && !player.IsSwimming)
-					scaledSpeed *= sprintSpeedScale;
+				float scaledSpeed = mode.MovementSpeed * player.StateParameters.MovementSpeedScale;
 				Vector2F keyMotion = keyMoveVector * scaledSpeed;
 
 				// Update acceleration-based motion.
@@ -352,8 +343,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_IDLE ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_MERMAID_SWIM))
 			{
-				// Play/stop the move animation.
-				if (isMoving || isSprinting) {
+				// Play/stop the move animation
+				if (isMoving || IsSprinting) {
 					if (!player.Graphics.IsAnimationPlaying)
 						player.Graphics.PlayAnimation();
 				}
@@ -507,21 +498,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			}
 
-			// Update sprinting.
-			if (isSprinting) {
-				// Create the sprint effect.
-				if (sprintTimer % GameSettings.PLAYER_SPRINT_EFFECT_INTERVAL == 0 &&
-					player.IsOnGround && player.IsSwimming)
-				{
-					AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
-					Effect sprintEffect = new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff, true);
-					player.RoomControl.SpawnEntity(sprintEffect, player.Position);
-				}
-				sprintTimer--;
-				if (sprintTimer <= 0)
-					isSprinting = false;
-			}
-
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && isMoving &&
@@ -606,11 +582,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { autoAccelerate = value; }
 		}
 		
-		public float MoveSpeedScale {
-			get { return moveSpeedScale; }
-			set { moveSpeedScale = value; }
-		}
-
 		public bool CanLedgeJump {
 			get { return canLedgeJump; }
 			set { canLedgeJump = value; }
@@ -642,7 +613,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 		
 		public bool IsSprinting {
-			get { return isSprinting; }
+			get {
+				return player.ConditionStates.Any(
+					s => s is PlayerSprintState);
+			}
 		}
 		
 		public int MoveDirection {

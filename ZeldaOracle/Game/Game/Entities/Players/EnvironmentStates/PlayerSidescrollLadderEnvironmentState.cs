@@ -3,13 +3,13 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerEnvironmentStateSidescrollLadder : PlayerEnvironmentState {
+	public class PlayerSideScrollLadderEnvironmentState : PlayerEnvironmentState {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
-		public PlayerEnvironmentStateSidescrollLadder() {
+		public PlayerSideScrollLadderEnvironmentState() {
 			StateParameters.DisableGravity			= true;
 			StateParameters.EnableGroundOverride	= true;
 			StateParameters.AlwaysFaceUp			= true;
@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override bool CanTransitionToState(PlayerState state) {
 			if (!RoomControl.IsSideScrolling)
 				return true;
-			if (state == player.SidescrollSwimState)
+			if (state == player.SideScrollSwimState)
 				return true;
 			// Do not allow automatic transitions to other environment states
 			return false;

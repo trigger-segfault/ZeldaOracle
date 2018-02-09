@@ -49,8 +49,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void Update() {
-			base.Update();
-			
 			// Check if we should stop controlling the boomerang
 			if (!weapon.IsEquipped || !weapon.IsButtonDown() ||
 				boomerang.IsDestroyed || boomerang.IsReturning)

@@ -4,14 +4,13 @@ using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerSidescrollSwimState : PlayerEnvironmentStateJump {
-
+	public class PlayerSideScrollSwimEnvironmentState : PlayerJumpEnvironmentState {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerSidescrollSwimState() {
+		public PlayerSideScrollSwimEnvironmentState() {
 			StateParameters.DisableGravity			= true;
 			StateParameters.EnableGroundOverride	= true;
 			StateParameters.AlwaysFaceLeftOrRight	= true;
@@ -46,7 +45,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.MoveSpeedScale	= 1.0f;
+			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
 			player.Graphics.PlayAnimation(player.MoveAnimation);
@@ -55,13 +54,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.MoveSpeedScale	= 1.0f;
+			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
 			
 			// Jump out of the water, and create a splash effect
-			if (newState != player.SidescrollLadderState) {
+			if (newState != player.SideScrollLadderState) {
 				player.Physics.ZVelocity = 1.5f;
 				CreateSplashEffect();
 			}
@@ -72,8 +71,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// TODO: Code duplication with PlayerSwimState
 			
 			// Slow down movement over time from strokes
-			if (player.Movement.MoveSpeedScale > 1.0f)
-				player.Movement.MoveSpeedScale -= 0.025f;
+			//if (player.Movement.MoveSpeedScale > 1.0f)
+				//player.Movement.MoveSpeedScale -= 0.025f;
 
 			// Stroking scales the movement speed.
 			// Press A to stroke, but this will not work if an item is usable
@@ -88,7 +87,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			//}
 
 			// Auto accelerate during the beginning of a stroke.
-			player.Movement.AutoAccelerate = IsStroking;
+			//player.Movement.AutoAccelerate = IsStroking;
 
 			base.Update();
 		}
@@ -99,9 +98,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		
 		// This is the threshhold of movement speed scale to be considered stroking.
-		public bool IsStroking {
-			get { return (player.Movement.MoveSpeedScale > 1.3f); }
-		}
+		//public bool IsStroking {
+			//get { return (player.Movement.MoveSpeedScale > 1.3f); }
+		//}
 
 	}
 }

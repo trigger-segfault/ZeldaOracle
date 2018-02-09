@@ -1,8 +1,8 @@
 ﻿
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerLadderState : PlayerEnvironmentState {
-		public PlayerLadderState() {
+	public class PlayerLadderEnvironmentState : PlayerEnvironmentState {
+		public PlayerLadderEnvironmentState() {
 			MotionSettings.MovementSpeed		= 0.5f;
 			StateParameters.ProhibitJumping		= true;
 			StateParameters.AlwaysFaceUp		= true;

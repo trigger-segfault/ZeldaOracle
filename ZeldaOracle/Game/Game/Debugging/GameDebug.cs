@@ -93,7 +93,7 @@ namespace ZeldaOracle.Game.Debug {
 				PlayerSwimmingSkills.CanSwimInWater |
 				PlayerSwimmingSkills.CanSwimInOcean;
 
-			// Equip weapons
+			// Equip starting weapons
 			EquipStartWeapon(DevSettings.Inventory.A, Inventory.SLOT_A);
 			EquipStartWeapon(DevSettings.Inventory.B, Inventory.SLOT_B);
 		}

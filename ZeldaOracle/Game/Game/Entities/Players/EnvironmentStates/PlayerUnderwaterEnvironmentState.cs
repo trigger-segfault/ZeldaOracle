@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Game.Main;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Game.Worlds;
+﻿using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.GameStates.Transitions;
-using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerUnderwaterState : PlayerEnvironmentStateJump {
+	public class PlayerUnderwaterEnvironmentState : PlayerJumpEnvironmentState {
 
 		// Used in OnEnterRoom() to know if we resurfaced into the room
 		bool isResurfacing = false;
@@ -22,7 +14,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerUnderwaterState() {
+		public PlayerUnderwaterEnvironmentState() {
 			MotionSettings = new PlayerMotionType() {
 				MovementSpeed			= 0.5f,
 				IsSlippery				= true,
@@ -88,7 +80,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			StateParameters.ProhibitJumping	= true;
 
-			player.Movement.MoveSpeedScale	= 1.0f;
+			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
 			player.Graphics.PlayAnimation(player.MoveAnimation);
@@ -97,7 +89,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.MoveSpeedScale	= 1.0f;
+			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
@@ -109,7 +101,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// TODO: Code duplication with PlayerSwimState
 			// TODO: magic numbers
-
+			/*
 			// Press B to attempt to resurface.
 			if (Controls.B.IsPressed() && CanResurface()) {
 				Resurface();
@@ -134,7 +126,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Auto accelerate during the beginning of a stroke.
 			player.Movement.AutoAccelerate = IsStroking;
-
+			*/
+			
 			base.Update();
 		}
 
@@ -142,11 +135,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		// This is the threshhold of movement speed scale to be considered stroking.
-		public bool IsStroking {
-			get { return (player.Movement.MoveSpeedScale > 1.3f); }
-		}
+		//public bool IsStroking {
+			//get { return (player.Movement.MoveSpeedScale > 1.3f); }
+		//}
 
 	}
 }

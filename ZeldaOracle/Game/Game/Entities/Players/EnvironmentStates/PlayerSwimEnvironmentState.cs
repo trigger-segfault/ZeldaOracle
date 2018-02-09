@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
-using ZeldaOracle.Game.Main;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Control;
-using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.GameStates.Transitions;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	public class PlayerSwimState : PlayerEnvironmentStateJump {
+	public class PlayerSwimEnvironmentState : PlayerJumpEnvironmentState {
 
 		private bool	isSubmerged;
 		private int		submergedTimer;
@@ -32,7 +18,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerSwimState() {
+		public PlayerSwimEnvironmentState() {
 			submergedDuration	= 128;
 			isSubmerged			= false;
 			submergedTimer		= 0;
@@ -103,7 +89,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			StateParameters.ProhibitJumping		= true;
 			StateParameters.ProhibitWeaponUse	= true;
-			player.Movement.MoveSpeedScale = 1.0f;
+			//player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
 
 			player.InterruptWeapons();
@@ -146,7 +132,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.CanJump			= true;
-			player.Movement.MoveSpeedScale	= 1.0f;
+			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
 			
@@ -162,7 +148,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// TODO: Code duplication with PlayerUnderwaterState
 			// TODO: magic numbers
-
+			/*
 			// Update the submerge state.
 			if (isSubmerged) {
 				submergedTimer--;
@@ -209,7 +195,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Auto accelerate during the beginning of a stroke.
 			player.Movement.AutoAccelerate = IsStroking;
-
+			*/
+			
 			base.Update();
 		}
 
@@ -219,9 +206,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		
 		// This is the threshhold of movement speed scale to be considered stroking.
-		public bool IsStroking {
-			get { return (player.Movement.MoveSpeedScale > 1.3f); }
-		}
+		//public bool IsStroking {
+		//	get { return (player.Movement.MoveSpeedScale > 1.3f); }
+		//}
 
 	}
 }

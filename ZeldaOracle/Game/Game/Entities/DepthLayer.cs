@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Entities {
 		ProjectileSwordBeam,
 		ProjectileBeam,
 		ProjectileBomb,
-		EffectSprintPuff,
+		EffectSprintDustParticle,
 		EffectCrackedFloorCrumble,
 		EffectSomariaBlockPoof,
 		ProjectileCarriedTile,
