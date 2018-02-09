@@ -61,7 +61,13 @@ namespace ZeldaOracle.Game {
 			//[DefaultPoint2IValue(0, 0)]
 			public Point2I Location { get; set; }
 		}
-
+		
+		public class InventorySection {
+			[DefaultValue("sword")]
+			public string A { get; set; }
+			[DefaultValue("feather")]
+			public string B { get; set; }
+		}
 
 		//-----------------------------------------------------------------------------
 		// Ini Properties
@@ -69,7 +75,9 @@ namespace ZeldaOracle.Game {
 
 		[Section]
 		public StartLocationSection StartLocation { get; } = new StartLocationSection();
-
+		
+		[Section]
+		public InventorySection Inventory { get; } = new InventorySection();
 
 	}
 }

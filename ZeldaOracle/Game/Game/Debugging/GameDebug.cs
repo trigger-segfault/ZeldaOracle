@@ -76,16 +76,26 @@ namespace ZeldaOracle.Game.Debug {
 			DevSettings.Load();
 		}
 
+		private static void EquipStartWeapon(string id, int slot) {
+			string weaponId = id;
+			if (!weaponId.StartsWith("item_"))
+				weaponId = "item_" + weaponId;
+			Inventory inventory = GameControl.RoomControl.Player.Inventory;
+			ItemWeapon weapon = inventory.GetItem(weaponId) as ItemWeapon;
+			inventory.EquipWeapon(weapon, slot);
+		}
+
 		public static void OnGameStart() {
 			Player player = GameControl.RoomControl.Player;
 
-			// Allow the player to swim in water and ocean.
+			// Allow the player to swim in water and ocean
 			player.SwimmingSkills =
 				PlayerSwimmingSkills.CanSwimInWater |
 				PlayerSwimmingSkills.CanSwimInOcean;
 
-			// Equip the sword and feather.
-			// TODO
+			// Equip weapons
+			EquipStartWeapon(DevSettings.Inventory.A, Inventory.SLOT_A);
+			EquipStartWeapon(DevSettings.Inventory.B, Inventory.SLOT_B);
 		}
 		
 		public static void UpdateRoomDebugKeys() {
