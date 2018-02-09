@@ -411,6 +411,7 @@
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seeds\Seed.cs" />
     <Compile Include="Game\Control\UnitSystem.cs" />
+    <Compile Include="Game\Entities\TileDummy.cs" />
     <Compile Include="Game\Entities\Units\UnitTool.cs" />
     <Compile Include="Game\GameData.Rewards.cs" />
     <Compile Include="Game\GameData.Sounds.cs" />
