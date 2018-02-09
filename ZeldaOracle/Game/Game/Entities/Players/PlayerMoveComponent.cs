@@ -36,7 +36,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				canJump;
 		private bool				canPush;
 		private bool				canUseWarpPoint;		// Can the player go through warp points?
-		private bool				isStrafing;
 		private bool				onlyFaceLeftOrRight;
 		private bool				isSprinting;
 		private int					sprintTimer;
@@ -62,7 +61,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Point2I				holeEnterQuadrent;
 		private bool				fallingInHole;
 		private bool				isOnColorBarrier;
-		private bool				isOnSideScrollLadder;
 		private Rectangle2F			climbCollisionBox;		// Used for checking if on a ladder in side-scroll mode.
 
 		// Movement modes
@@ -85,7 +83,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			canJump					= true;
 			canPush					= true;
 			canUseWarpPoint			= true;
-			isStrafing				= false;
 			onlyFaceLeftOrRight		= false;
 			isSprinting				= false;
 			sprintTimer				= 0;
@@ -107,7 +104,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			holeSlipVelocity		= Vector2F.Zero;
 			fallingInHole			= false;
 			isOnColorBarrier		= false;
-			isOnSideScrollLadder	= false;
 			climbCollisionBox		= new Rectangle2F(-1, -7, 2, 9);
 
 			// Controls.
@@ -124,6 +120,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Movement
 		//-----------------------------------------------------------------------------
 		
+		public bool IsMovingInDirection(int direction) {
+			return (isMoving && moveDirection == direction);
+		}
+
 		public void StopMotion() {
 			player.Physics.Velocity = Vector2F.Zero;
 			motion = Vector2F.Zero;
@@ -153,11 +153,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				
 				// Jump!
-				isOnSideScrollLadder	= false;
-				isCapeDeployed			= false;
-				jumpStartTile			= player.RoomControl.GetTileLocation(player.Position);
-				player.Physics.Gravity	= GameSettings.DEFAULT_GRAVITY;
-				player.Physics.OnGroundOverride = false;
+				isCapeDeployed = false;
+				jumpStartTile = player.RoomControl.GetTileLocation(player.Position);
+				player.Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
 				if (player.RoomControl.IsSideScrolling)
 					player.Physics.ZVelocity = GameSettings.PLAYER_SIDESCROLL_JUMP_SPEED;
 				else
@@ -167,8 +165,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
 				
 				// Make sure we go to the environment state for jumping
+				if (player.IsOnSideScrollLadder)
+					player.SidescrollLadderState.End();
+				player.IntegrateStateParameters();
 				player.RequestNaturalState();
-
+				
 				player.OnJump();
 			}
 			else {
@@ -223,9 +224,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveVector = Angles.ToVector(moveAngle);
 			}
 
-			// Clip Y velocity if side scrolling and not climbing.
-			if (player.RoomControl.IsSideScrolling &&
-				!isOnSideScrollLadder && player.Physics.HasGravity)
+			// Clip all Y velocity when sidescrolling with gravity enabled,
+			// so that we only move left or right
+			if (player.RoomControl.IsSideScrolling && player.Physics.HasGravity)
 			{
 				if (analogMode)
 					moveVector = new Vector2F(Controls.AnalogMovement.Position.X, 0.0f);
@@ -245,8 +246,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 				allowMovementControl = false;
 			else if (moveCondition == PlayerMoveCondition.OnlyInAir && player.IsOnGround)
 				allowMovementControl = false;
-			else if (player.IsInAir && player.Physics.ZVelocity >= 0.1f)
-				allowMovementControl = false;
+			else if (player.IsInAir) {
+				if (player.RoomControl.IsSideScrolling && player.Physics.Velocity.Y <= 0.1f)
+					allowMovementControl = false;
+				else if (!player.RoomControl.IsSideScrolling && player.Physics.ZVelocity >= 0.1f)
+					allowMovementControl = false;
+			}
 
 			// Player can ALWAYS change directions when in a minecart.
 			if (player.IsInMinecart)
@@ -255,10 +260,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Check movement input
 			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
 			
-			// Don't affect the facing direction when strafing
-			if (!isStrafing && isMoving &&
-				(!onlyFaceLeftOrRight || moveDirection == Directions.Left ||
-					moveDirection == Directions.Right))
+			// Update the players direction
+			bool canUpdateDirection = false;
+			if (player.StateParameters.AlwaysFaceUp)
+				canUpdateDirection = (moveDirection == Directions.Up);
+			else if (player.StateParameters.AlwaysFaceLeftOrRight)
+				canUpdateDirection = (moveDirection == Directions.Left ||
+					moveDirection == Directions.Right);
+			else
+				canUpdateDirection = !player.StateParameters.EnableStrafing;
+			if (canUpdateDirection && allowMovementControl)
 				player.Direction = moveDirection;
 
 			// Update movement or acceleration.
@@ -278,8 +289,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Vector2F velocity = player.Physics.Velocity;
 					if (Math.Abs(velocity.X) < Math.Abs(velocityPrev.X) || Math.Sign(velocity.X) != Math.Sign(velocityPrev.X))
 						motion.X = velocity.X;
-					if (Math.Abs(velocity.Y) < Math.Abs(velocityPrev.Y) || Math.Sign(velocity.Y) != Math.Sign(velocityPrev.Y))
-						motion.Y = velocity.Y;
+					if (!player.RoomControl.IsSideScrolling) {
+						if (Math.Abs(velocity.Y) < Math.Abs(velocityPrev.Y) || Math.Sign(velocity.Y) != Math.Sign(velocityPrev.Y))
+							motion.Y = velocity.Y;
+					}
 
 					// Apply acceleration and limit speed.
 					motion += keyMotion * mode.Acceleration;
@@ -295,7 +308,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					}
 
 					// Set the players velocity.
-					if (mode.DirectionSnapCount > 0) {
+					if (mode.DirectionSnapCount > 0 && !player.RoomControl.IsSideScrolling) {
 						// Snap velocity direction.
 						player.Physics.Velocity = Vector2F.SnapDirectionByCount(motion, mode.DirectionSnapCount);
 					}
@@ -530,15 +543,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			else if (player.IsOnGround)
 				IsOnColorBarrier = false;
-
-			// Face up if climbing a side-scroll ladder.
-			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder) {
-				bool faceUp = false;
-				if (HighestSideScrollLadderTile != null)
-					faceUp = (player.Y > HighestSideScrollLadderTile.Bounds.Top + 4.0f);
-				if (faceUp && allowMovementControl)
-					player.Direction = Directions.Up;
-			}
 		}
 
 		/// <summary>Try to perform a ledge jump if the path is clear.</summary>
@@ -622,11 +626,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { canPush = value; }
 		}
 		
-		public bool IsStrafing {
-			get { return isStrafing; }
-			set { isStrafing = value; }
-		}
-		
 		public bool OnlyFaceLeftOrRight {
 			get { return onlyFaceLeftOrRight; }
 			set { onlyFaceLeftOrRight = value; }
@@ -666,6 +665,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return mode; }
 		}
 		
+		public Vector2F Motion {
+			get { return motion; }
+		}
+		
 		public PlayerMoveCondition MoveCondition {
 			get { return moveCondition; }
 			set { moveCondition = value; }
@@ -690,17 +693,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return (fallingInHole && doomedToFallInHole); }
 		}
 
-		public bool IsOnSideScrollLadder {
-			get { return isOnSideScrollLadder; }
-			set { isOnSideScrollLadder = value; }
-		}
-
 		public Rectangle2F ClimbCollisionBox {
 			get { return climbCollisionBox; }
-		}
-
-		public Tile HighestSideScrollLadderTile {
-			get; set;
 		}
 	}
 }

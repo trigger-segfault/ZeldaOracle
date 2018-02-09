@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (player.Graphics.IsAnimationDone) {
 				if (weapon.IsEquipped && continueHolding && weapon.IsButtonDown()) {
 					// Continue holding sword
-					StateMachine.BeginState(Player.HoldSwordState);
+					StateMachine.BeginState(player.HoldSwordState);
 				}
 				else {
 					// Put sword away

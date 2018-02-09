@@ -44,11 +44,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			if (itemMagicRod.FireTracker.IsAvailable) {
 				// Spawn the fire projectile.
 				MagicRodFire fire = new MagicRodFire();
-				fire.Owner				= Player;
-				fire.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 16.0f);
-				fire.ZPosition			= Player.ZPosition;
-				fire.Direction			= Player.Direction;
-				fire.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_MAGIC_ROD_FIRE_SPEED;
+				fire.Owner				= player;
+				fire.Position			= player.Center + (Directions.ToVector(player.Direction) * 16.0f);
+				fire.ZPosition			= player.ZPosition;
+				fire.Direction			= player.Direction;
+				fire.Physics.Velocity	= Directions.ToVector(player.Direction) * GameSettings.PROJECTILE_MAGIC_ROD_FIRE_SPEED;
 				
 				// Adjust the projectile spawn position based on player direction.
 				if (Directions.IsHorizontal(player.Direction))

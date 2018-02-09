@@ -32,11 +32,28 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// States
 		//-----------------------------------------------------------------------------
 
+		public bool CanTransitionTo(PlayerState newState) {
+			if (newState != null) {
+				newState.Player = player;
+				newState.StateMachine = this;
+			}
+			if (CurrentState != null && !CurrentState.CanTransitionToState(newState))
+				return false;
+			if (newState != null && !newState.CanTransitionFromState(CurrentState))
+				return false;
+			return true;
+		}
+
 		/// <summary>Transition to the given player state if it is not already active
 		/// </summary>
-		public void BeginState(PlayerState newState) {
-			if (newState != state || (state != null && !state.IsActive))
-				ForceBeginState(newState);
+		public bool BeginState(PlayerState newState) {
+			if (CanTransitionTo(newState)) {
+				if (newState != CurrentState)
+					ForceBeginState(newState);
+				return true;
+			}
+			else
+				return false;
 		}
 
 		/// <summary>Transition to the given player state</summary>
@@ -44,9 +61,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			//Console.WriteLine("Begin State: {0}", newState.GetType().Name);
 
 			// End the current state
-			previousState = state;
-			if (state != null && state.IsActive)
-				state.End(newState);
+			previousState = CurrentState;
+			if (CurrentState != null)
+				CurrentState.End(newState);
 			
 			// Begin the new state
 			state = newState;
@@ -62,9 +79,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		/// <summary> Update the active state </summary>
 		public void Update() {
-			if (state != null && state.IsActive) {
-				state.Update();
-				if (!state.IsActive)
+			if (CurrentState != null) {
+				CurrentState.Update();
+				if (!IsActive)
 					state = null;
 			}
 			else

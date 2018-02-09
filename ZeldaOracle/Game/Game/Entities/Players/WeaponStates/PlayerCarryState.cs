@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public void ThrowObject(bool enterBusyState = true, bool playSound = true) {
 			if (carryObject != null && carryObject.IsAlive) {
 				carryObject.Physics.ZVelocity = 1.0f;
-				carryObject.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
+				carryObject.Physics.Velocity = Directions.ToVector(player.MoveDirection) * 1.5f;
 				DropObject(enterBusyState, playSound);
 			}
 		}
@@ -131,7 +131,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.ProhibitEnteringMinecart	= true;
 			StateParameters.ProhibitWarping				= true;
 
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_PICKUP);
 		}
 		
@@ -146,13 +146,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void OnEnterMinecart() {
-			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY)
-				Player.Graphics.SetAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
+			if (player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY)
+				player.Graphics.SetAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
 		}
 
 		public override void OnExitMinecart() {
-			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_CARRY)
-				Player.Graphics.SetAnimation(GameData.ANIM_PLAYER_CARRY);
+			if (player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_CARRY)
+				player.Graphics.SetAnimation(GameData.ANIM_PLAYER_CARRY);
 		}
 
 		public override void OnHurt(DamageInfo damage) {
@@ -176,14 +176,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					if (carryObject is CarriedTile)
 						objectDrawOffset.Y -= 2;
 					objectDrawOffset = Directions.ToPoint(player.Direction) * 8;
-					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				}
 				else if (pickupTimer < pickupFrame1Duration + pickupFrame2Duration) {
 					objectZOffset = 8;
 					if (carryObject is CarriedTile)
 						objectDrawOffset.Y -= 2;
 					objectDrawOffset = Directions.ToPoint(player.Direction) * 2;
-					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 				}
 				else {
 					objectDrawOffset	= Point2I.Zero;
@@ -192,9 +192,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 					StateParameters.ProhibitMovementControl	= false;
 					if (player.IsInMinecart)
-						Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
+						player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
 					else
-						Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
+						player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
 				}
 			}
 			else {

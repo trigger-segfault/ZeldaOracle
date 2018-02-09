@@ -52,11 +52,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			if (itemSword.BeamTracker.IsAvailable && player.IsAtFullHealth && itemSword.Level > Item.Level1) {
 				// Spawn a sword beam.
 				SwordBeam beam = new SwordBeam();
-				beam.Owner				= Player;
-				beam.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 12.0f);
-				beam.ZPosition			= Player.ZPosition;
-				beam.Direction			= Player.Direction;
-				beam.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_SWORD_BEAM_SPEED;
+				beam.Owner				= player;
+				beam.Position			= player.Center + (Directions.ToVector(player.Direction) * 12.0f);
+				beam.ZPosition			= player.ZPosition;
+				beam.Direction			= player.Direction;
+				beam.Physics.Velocity	= Directions.ToVector(player.Direction) * GameSettings.PROJECTILE_SWORD_BEAM_SPEED;
 
 				// Adjust the beam spawn position based on player direction.
 				if (Directions.IsHorizontal(player.Direction))

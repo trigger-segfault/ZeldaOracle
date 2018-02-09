@@ -49,7 +49,9 @@ namespace ZeldaOracle.Game.Debug {
 		private static GameControl gameControl;
 		private static bool showTileCursor = false;
 		private static Vector2F mousePosition;
-		private static Point2I mouseLocation;
+		private static Point2I mouseTileLocation;
+		private static string sampledTileName = "";
+
 
 		public static DevSettings DevSettings { get; set; } = new DevSettings();
 		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
@@ -91,6 +93,55 @@ namespace ZeldaOracle.Game.Debug {
 				Keyboard.IsKeyDown(Keys.RControl));
 			bool shift = (Keyboard.IsKeyDown(Keys.LShift) ||
 				Keyboard.IsKeyDown(Keys.RShift));
+			
+			if (GameManager.IsConsoleOpen) {
+				Player player = RoomControl.Player;
+			
+				string weaponStateName = "";
+				if (player.WeaponState != null)
+					weaponStateName = player.WeaponState.GetType().Name;
+				string controlStateName = "";
+				if (player.ControlState != null)
+					controlStateName = player.ControlState.GetType().Name;
+				string environmentStateName = "";
+				if (player.EnvironmentState != null)
+					environmentStateName = player.EnvironmentState.GetType().Name;
+
+				Console.SetCursorPosition(0, 0);
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.BackgroundColor = ConsoleColor.Black;
+
+				Console.WriteLine("Player.Velocity: {0,-40}", player.Physics.Velocity);
+				if (player.Physics.OnGroundOverride)
+					Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("Player.IsOnGround: {0,-40}", player.Physics.IsOnGround);
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.WriteLine("Player.Motion: {0,-40}", player.Movement.Motion);
+				
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.WriteLine("Ctl: {0,-40}", controlStateName);
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("Wpn: {0,-40}", weaponStateName);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("Env: {0,-40}", environmentStateName);
+				Console.ForegroundColor = ConsoleColor.Magenta;
+				Console.Write("Cnd: ");
+				int conditionStateCount = player.ConditionStates.Count();
+				for (int i = 0; i < 4; i++) {
+					if (i > 0)
+						Console.Write("     ");
+					if (i < conditionStateCount) {
+						PlayerState state = player.ConditionStates.ElementAt(i);
+						string stateName = state.GetType().Name;
+						Console.WriteLine("{0,-40}", stateName);
+					}
+					else
+						Console.WriteLine("{0,-40}", "");
+				}
+				Console.WriteLine("");
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.BackgroundColor = ConsoleColor.Black;
+			}
 
 			// CTRL+Q: Quit the game
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Q))
@@ -285,15 +336,47 @@ namespace ZeldaOracle.Game.Debug {
 			mousePosition.Y *= GameSettings.SCREEN_HEIGHT;
 			mousePosition.Y -= 16.0f; // HUD
 			mousePosition += RoomControl.ViewControl.Position;
-			mouseLocation = RoomControl.GetTileLocation(mousePosition);
+			Point2I mouseTileLocationPrev = mouseTileLocation;
+			mouseTileLocation = RoomControl.GetTileLocation(mousePosition);
 
 			if (ctrl)
 				showTileCursor = true;
 			else
 				showTileCursor = false;
 			
-			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
-				Vector2F spawnPosition = mouseLocation * GameSettings.TILE_SIZE;
+			// Middle mouse: sample the tile under the mouse
+			if (Mouse.IsButtonPressed(MouseButtons.Middle) ||
+				(Mouse.IsButtonDown(MouseButtons.Middle) &&
+					mouseTileLocation != mouseTileLocationPrev))
+			{
+				Tile newSampledTile = RoomControl.GetTopTile(mouseTileLocation);
+				if (newSampledTile != null && newSampledTile.TileData.BaseData != null) {
+					sampledTileName = newSampledTile.TileData.BaseData.Name;
+				}
+			}
+
+			// Ctrl + Shift + LeftMouse: place the sampled tile at the mouse location
+			if (ctrl && shift &&
+				(Mouse.IsButtonPressed(MouseButtons.Left) ||
+					(Mouse.IsButtonDown(MouseButtons.Left) &&
+					mouseTileLocation != mouseTileLocationPrev)))
+			{
+				// Replace the top-most tile with the sampled tile
+				int layer = 0;
+				Tile topTile = RoomControl.GetTopTile(mouseTileLocation);
+				if (topTile != null)
+					layer = topTile.Layer;
+				TileData tileData = Resources.GetResource<TileData>(sampledTileName);
+				if (tileData != null) {
+					Tile tile = Tile.CreateTile(tileData);
+					if (tile != null)
+						RoomControl.PlaceTile(tile, mouseTileLocation, layer);
+				}
+			}
+
+			// Ctrl + LeftMouse: place an entity at the mouse position
+			else if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
+				Vector2F spawnPosition = mouseTileLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
 				Monster monster = new MonsterGibdo();
 				//monster.Color = MonsterColor.Orange;
@@ -358,46 +441,76 @@ namespace ZeldaOracle.Game.Debug {
 		private static void DrawEntity(Graphics2D g, Entity entity) {
 			
 			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
-				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150));
-				g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150));
-				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0));
+				// Blue soft collision box
+				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position,
+					new Color(0, 0, 255, 150));
+				// Red hard collision box
+				g.FillRectangle(entity.Physics.CollisionBox + entity.Position,
+					new Color(255, 0, 0, 150));
+				// Yellow origin point
+				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One),
+					new Color(255, 255, 0));
 
+				// Draw collision boxes for unit tools
 				if (entity is Unit) {
 					Unit unit = (Unit) entity;
 					foreach (UnitTool tool in unit.EquippedTools) {
 						if (tool.IsPhysicsEnabled) {
-							g.FillRectangle(tool.PositionedCollisionBox, new Color(255, 0, 255, 150));
+							g.FillRectangle(tool.PositionedCollisionBox,
+								new Color(255, 0, 255, 150));
 						}
 					}
 				}
 			}
 			else if (EntityDebugInfoMode == EntityDrawInfo.CollisionTests) {
-				if (entity.Physics.IsEnabled && entity.Physics.CollideWithWorld || entity is Player) {
-					// Draw the hard collision box.
+				if (entity.Physics.IsEnabled &&
+					entity.Physics.CollideWithWorld || entity is Player)
+				{
 					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
-					Color collisionBoxColor = Color.Yellow;
-					if (entity is Player && ((Player) entity).Movement.IsOnSideScrollLadder)
-						collisionBoxColor = new Color(255, 160, 0);
 					collisionBox.X = GMath.Round(collisionBox.X + 0.001f);
 					collisionBox.Y = GMath.Round(collisionBox.Y + 0.001f);
-					//collisionBox.Point = GMath.Round(collisionBox.Point);
+					
+					// Outline the objects we are colliding with
+					for (int i = 0; i < 4; i++) {
+						Tile solidTile = entity.Physics.CollisionInfo[i].Tile;
+						Entity solidEntity = entity.Physics.CollisionInfo[i].Entity;
+						if (solidTile != null && solidTile.CollisionModel != null) {
+							foreach (Rectangle2F box in solidTile.CollisionModel.Boxes) {
+								Rectangle2F r = Rectangle2F.Translate(box, solidTile.Position);
+								g.DrawRectangle(r, 1, Color.White);
+							}
+						}
+						else if (solidEntity != null) {
+							g.DrawRectangle(solidEntity.Physics.PositionedCollisionBox,
+								1, Color.White);
+						}
+					}
+
+					// Draw the hard collision box
+					Color collisionBoxColor = Color.Yellow;
+					if (entity is Player && ((Player) entity).IsOnSideScrollLadder)
+						collisionBoxColor = new Color(255, 160, 0);
 					g.FillRectangle(collisionBox, collisionBoxColor);
 
-					for (int i = 0; i < 4; i++) {
-						CollisionInfoNew collisionInfo = entity.Physics.ClipCollisionInfo[i];
-						int axis = Directions.ToAxis(i);
+					for (int direction = 0; direction < Directions.Count; direction++) {
+						CollisionInfoNew collisionInfo =
+							entity.Physics.ClipCollisionInfo[direction];
+						int axis = Directions.ToAxis(direction);
 
-						if (entity.Physics.CollisionInfo[i].IsColliding) {
+						// Draw a magenta line representing a collision in this direction
+						if (entity.Physics.CollisionInfo[direction].IsColliding) {
 							Rectangle2F drawBox = collisionBox;
-							drawBox.ExtendEdge(i, 1);
-							drawBox.ExtendEdge(Directions.Reverse(i), -collisionBox.Size[axis]);
+							drawBox.ExtendEdge(direction, 1);
+							drawBox.ExtendEdge(Directions.Reverse(direction), -collisionBox.Size[axis]);
 							g.FillRectangle(drawBox, Color.Magenta);
 						}
 
+						// Draw a box representing the amount of clipping in this direction
+						// Blue is safe clipping, red is not
 						if (collisionInfo.IsColliding && !collisionInfo.IsResolved) {
 							Rectangle2F drawBox = collisionBox;
 							float penetration = Math.Max(1.0f, GMath.Round(collisionInfo.PenetrationDistance));
-							if (i == Directions.Down || i == Directions.Right)
+							if (direction == Directions.Down || direction == Directions.Right)
 								drawBox.Point[axis] += drawBox.Size[axis] - penetration;
 							drawBox.Size[axis] = penetration;
 							
@@ -408,10 +521,11 @@ namespace ZeldaOracle.Game.Debug {
 							g.FillRectangle(drawBox, penetrationColor);
 
 						}
+
 						if (collisionInfo.IsColliding && collisionInfo.IsResolved) {
 							Rectangle2F drawBox2 = collisionBox;
-							drawBox2.ExtendEdge(i, 2);
-							drawBox2.ExtendEdge(Directions.Reverse(i), -collisionBox.Size[axis] - 1);
+							drawBox2.ExtendEdge(direction, 2);
+							drawBox2.ExtendEdge(Directions.Reverse(direction), -collisionBox.Size[axis] - 1);
 							g.FillRectangle(drawBox2, Color.Maroon);
 						}
 					}
@@ -432,13 +546,16 @@ namespace ZeldaOracle.Game.Debug {
 
 		public static void DrawRoom(Graphics2D g, RoomControl roomControl) {
 			// Draw debug info for entities.
-			for (int i = roomControl.Entities.Count - 1; i >= 0; i--)
-				DrawEntity(g, roomControl.Entities[i]);
+			for (int i = roomControl.Entities.Count - 1; i >= 0; i--) {
+				if (roomControl.Entities[i] != roomControl.Player)
+					DrawEntity(g, roomControl.Entities[i]);
+			}
+			DrawEntity(g, roomControl.Player);
 
 			if (showTileCursor)
 			{
 				Rectangle2I mouseTileRec = new Rectangle2I(
-					mouseLocation * GameSettings.TILE_SIZE,
+					mouseTileLocation * GameSettings.TILE_SIZE,
 					new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE));
 				g.DrawRectangle(mouseTileRec, 1, Color.Red);
 			}
@@ -449,9 +566,8 @@ namespace ZeldaOracle.Game.Debug {
 				GameSettings.VIEW_WIDTH * GameManager.GameScale,
 				GameSettings.VIEW_HEIGHT * GameManager.GameScale);
 			
+			/*
 			Vector2F cursorPos = new Vector2F(16, bounds.Bottom - 24);
-
-
 			Player player = RoomControl.Player;
 			
 			string weaponStateName = "";
@@ -483,6 +599,7 @@ namespace ZeldaOracle.Game.Debug {
 			}
 
 			g.End();
+			*/
 		}
 	}
 }

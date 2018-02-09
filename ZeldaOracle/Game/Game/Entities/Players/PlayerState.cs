@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players.States;
 
 namespace ZeldaOracle.Game.Entities.Players {
@@ -91,20 +92,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 	public class PlayerState {
 
-		/// <summary> True if this state is currently active and being updated
+		/// <summary>True if this state is currently active and being updated
 		/// </summary>
 		private bool isActive;
 
-		/// <summary> Reference to the player </summary>
+		/// <summary>Reference to the player</summary>
 		protected Player player;
 
-		/// <summary> Reference to the state machine controlling this state </summary>
+		/// <summary>Reference to the state machine controlling this state</summary>
 		protected PlayerStateMachine stateMachine;
 
-		/// <summary> Is this a state that is caused by the environment? </summary>
-		private bool isNaturalState;
-
-		/// <summary> Player state parameters applied when this state is active
+		/// <summary>Player state parameters applied when this state is active
 		/// </summary>
 		private PlayerStateParameters stateParameters;
 
@@ -115,7 +113,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerState() {
 			isActive = false;
-			isNaturalState = false;
 			stateParameters = new PlayerStateParameters();
 			stateMachine = null;
 		}
@@ -144,6 +141,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public virtual void DrawUnder(RoomGraphics g) {}
 		
 		public virtual void DrawOver(RoomGraphics g) {}
+		
+		public virtual bool CanTransitionFromState(PlayerState state) {
+			return true;
+		}
+
+		public virtual bool CanTransitionToState(PlayerState state) {
+			return true;
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -151,8 +156,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public void Begin(Player player, PlayerState previousState) {
-			this.player = player;
 			this.isActive = true;
+			this.player = player;
 			OnBegin(previousState);
 		}
 
@@ -166,33 +171,32 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		/// <summary> Reference to the player </summary>
+		/// <summary>Reference to the player</summary>
 		public Player Player {
 			get { return player; }
 			set { player = value; }
 		}
+
+		/// <summary>Reference to the room control</summary>
+		public RoomControl RoomControl {
+			get { return player.RoomControl; }
+		}
 		
-		/// <summary> True if this state is currently active and being updated
+		/// <summary>True if this state is currently active and being updated
 		/// </summary>
 		public bool IsActive {
 			get { return isActive; }
 			set { isActive = value; }
 		}
 
-		/// <summary> Is this a state that is caused by the environment? </summary>
-		public bool IsNaturalState {
-			get { return isNaturalState; }
-			set { isNaturalState = value; }
-		}
-		
-		/// <summary> Player state parameters applied when this state is active
+		/// <summary>Player state parameters applied when this state is active
 		/// </summary>
 		public PlayerStateParameters StateParameters {
 			get { return stateParameters; }
 			set { stateParameters = value; }
 		}
 
-		/// <summary> Reference to the state machine controlling this state </summary>
+		/// <summary>Reference to the state machine controlling this state</summary>
 		public PlayerStateMachine StateMachine {
 			get { return stateMachine; }
 			set { stateMachine = value; }

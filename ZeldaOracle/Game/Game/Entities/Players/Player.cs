@@ -291,6 +291,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Return the player state that the player wants to be in based on his current position.
 		public PlayerState GetDesiredNaturalState() {
+			
+			// Find the surface tile underneath the entity
+			Tile feetTile = RoomControl.TileManager.GetSurfaceTileAtPosition(
+				position, true);
+
 			if (RoomControl.IsSideScrolling) {
 				if (physics.IsInWater || RoomControl.IsUnderwater)
 					return environmentStateSidescrollSwim;
@@ -298,8 +303,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 					return environmentStateSwim; // TODO: this is here to trigger player death
 				else if (physics.IsInAir)
 					return environmentStateJump;
-				else if (physics.IsOnLadder)
-					return environmentStateSidescrollLadder;
+				//else if ((physics.IsOnLadder || (feetTile != null && feetTile.IsLadder)) &&
+				//environmentStateMachine.BeginState(environmentStateSidescrollLadder))
+					//return environmentStateSidescrollLadder;
 				else if (physics.IsInGrass)
 					return environmentStateGrass;
 				else if (physics.IsOnStairs)
@@ -539,7 +545,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				controlAngle = Angles.Right;
 
 			// Determine use angle/direction.
-			if (movement.IsMoving && !movement.IsStrafing) {
+			if (movement.IsMoving && !StateParameters.EnableStrafing) {
 				useAngle		= movement.MoveAngle;
 				useDirection	= movement.MoveDirection;
 			}
@@ -625,6 +631,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void RequestNaturalState() {
 			PlayerState desiredNaturalState = GetDesiredNaturalState();
 			environmentStateMachine.BeginState(desiredNaturalState);
+			IntegrateStateParameters();
 		}
 
 
@@ -719,8 +726,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.OnBeginFalling();
 
 			if (RoomControl.IsSideScrolling) {
-				if (state == stateNormal)
-					Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+				Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 			}
 		}
 
@@ -762,7 +768,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-		private void IntegrateStateParameters() {
+		public void IntegrateStateParameters() {
 			// Combine all state parameters from each active state
 			stateParameters = new PlayerStateParameters();
 			foreach (PlayerState state in ActiveStates)
@@ -781,7 +787,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement.CanJump				= !stateParameters.ProhibitJumping;
 			movement.CanLedgeJump			= !stateParameters.ProhibitLedgeJumping;
 			movement.CanPush				= !stateParameters.ProhibitPushing;
-			movement.IsStrafing				= stateParameters.EnableStrafing;
 			movement.OnlyFaceLeftOrRight	= stateParameters.AlwaysFaceLeftOrRight;
 			autoRoomTransition				= stateParameters.EnableAutomaticRoomTransitions;
 
@@ -818,6 +823,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update the environment state
 			environmentStateMachine.Update();
+			RequestNaturalState();
 
 			// Update the control state
 			controlStateMachine.Update();
@@ -837,6 +843,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 				// Pre-state update.
 				if (!isStateControlled) {
+					RequestNaturalState();
 					movement.Update();
 					UpdateUseDirections();
 					CheckPressInteractions();
@@ -1038,6 +1045,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return environmentStateSwim; }
 		}
 
+		public PlayerSidescrollSwimState SidescrollSwimState {
+			get { return environmentStateSidescrollSwim; }
+		}
+
+
 		public PlayerUnderwaterState UnderwaterState {
 			get { return environmentStateUnderwater; }
 		}
@@ -1052,6 +1064,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerLadderState LadderState {
 			get { return environmentStateLadder; }
+		}
+
+		public PlayerEnvironmentStateSidescrollLadder SidescrollLadderState {
+			get { return environmentStateSidescrollLadder; }
+		}
+
+		public bool IsOnSideScrollLadder {
+			get { return (EnvironmentState == environmentStateSidescrollLadder); }
 		}
 
 		public PlayerSwingSwordState SwingSwordState {
@@ -1116,6 +1136,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerJumpToState JumpToState {
 			get { return stateJumpTo; }
+		}
+
+		public PlayerEnvironmentStateJump JumpState {
+			get { return environmentStateJump; }
 		}
 
 		public bool IsSwimmingUnderwater {

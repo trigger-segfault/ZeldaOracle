@@ -12,8 +12,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSidescrollSwimState() {
-			IsNaturalState = true;
-			
+			StateParameters.DisableGravity			= true;
+			StateParameters.EnableGroundOverride	= true;
+			StateParameters.AlwaysFaceLeftOrRight	= true;
+			StateParameters.ProhibitJumping			= true;
+
 			MotionSettings = new PlayerMotionType() {
 				MovementSpeed			= 0.5f,
 				IsSlippery				= true,
@@ -47,14 +50,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.AutoAccelerate	= false;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
 			player.Graphics.PlayAnimation(player.MoveAnimation);
-			
-			StateParameters.DisableGravity			= true;
-			StateParameters.EnableGroundOverride	= true;
-			StateParameters.AlwaysFaceLeftOrRight	= true;
-			StateParameters.ProhibitJumping			= true;
 
-			if (previousState == null || previousState is PlayerEnvironmentStateJump)
-				CreateSplashEffect();
+			CreateSplashEffect();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -63,10 +60,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
 			
-			if (!player.Movement.IsOnSideScrollLadder &&
-				(newState == null || newState is PlayerEnvironmentStateJump))
-			{
-				// Jump out of the water, and create a splash effect
+			// Jump out of the water, and create a splash effect
+			if (newState != player.SidescrollLadderState) {
 				player.Physics.ZVelocity = 1.5f;
 				CreateSplashEffect();
 			}

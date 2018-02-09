@@ -68,7 +68,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					spawnZPosition = 0;
 				}
 
-				Player.ShootFromAngle(seed, angle,
+				player.ShootFromAngle(seed, angle,
 					GameSettings.SEED_SHOOTER_SHOOT_SPEED,
 					spawnOffset, spawnZPosition);
 				weapon.SeedTracker.TrackEntity(seed);

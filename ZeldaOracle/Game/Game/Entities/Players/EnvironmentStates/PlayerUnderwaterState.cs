@@ -23,8 +23,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerUnderwaterState() {
-			IsNaturalState = true;
-			
 			MotionSettings = new PlayerMotionType() {
 				MovementSpeed			= 0.5f,
 				IsSlippery				= true,

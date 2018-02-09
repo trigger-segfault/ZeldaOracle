@@ -56,7 +56,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				boomerang.IsDestroyed || boomerang.IsReturning)
 			{
 				stateMachine.BeginState(new PlayerBusyState(
-					10, Player.Graphics.Animation));
+					10, player.Graphics.Animation));
 			}
 			else {
 				// Poll movement keys

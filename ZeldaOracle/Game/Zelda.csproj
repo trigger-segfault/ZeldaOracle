@@ -355,6 +355,7 @@
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerEnvironmentStates.cs" />
+    <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerSidescrollLadderState.cs" />
     <Compile Include="Game\Entities\Players\PlayerStateMachine.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />

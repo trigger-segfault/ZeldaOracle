@@ -13,12 +13,4 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.InterruptWeapons();
 		}
 	}
-
-	public class PlayerEnvironmentStateSidescrollLadder : PlayerEnvironmentState {
-		public PlayerEnvironmentStateSidescrollLadder() {
-			StateParameters.DisableGravity			= true;
-			StateParameters.EnableGroundOverride	= true;
-			StateParameters.AlwaysFaceUp			= true;
-		}
-	}
 }

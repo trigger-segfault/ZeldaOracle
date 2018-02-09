@@ -119,7 +119,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				
 				player.EquipTool(player.ToolSword);
 
-				direction = Player.Direction;
+				direction = player.Direction;
 				// TODO: Better way to keep sword equipped
 				if (!(previousState is PlayerLedgeJumpState))
 					player.ToolSword.PlayAnimation(weaponAnimation);
@@ -144,7 +144,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void Update() {
 			base.Update();
 
-			player.Direction = direction;
+			//player.Direction = direction;
+			direction = player.Direction;
 
 			Rectangle2I box = SWORD_COLLISION_BOXES[direction];
 			box.Point += (Point2I) player.CenterOffset;

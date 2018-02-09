@@ -36,7 +36,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			submergedDuration	= 128;
 			isSubmerged			= false;
 			submergedTimer		= 0;
-			IsNaturalState		= true;
 			
 			MotionSettings = new PlayerMotionType() {
 				MovementSpeed			= 0.5f,

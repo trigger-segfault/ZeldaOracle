@@ -26,8 +26,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerNormalState() {
-			IsNaturalState	= true;
-			pushTimer		= 0;
+			pushTimer = 0;
 		}
 		
 
@@ -47,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnBegin(PlayerState previousState) {
 			pushTimer = 0;
-			Player.Graphics.PlayAnimation(player.MoveAnimation);
+			player.Graphics.PlayAnimation(player.MoveAnimation);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
