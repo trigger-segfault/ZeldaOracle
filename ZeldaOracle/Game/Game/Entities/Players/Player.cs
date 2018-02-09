@@ -66,6 +66,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerToolVisual	toolVisual;
 
 		// Player States
+		private PlayerPushState				statePush;
 		private PlayerBusyState				stateBusy;
 		private PlayerLedgeJumpState		stateLedgeJump;
 		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
@@ -172,6 +173,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateMagicBoomerang	= new PlayerMagicBoomerangState();
 
 			// Weapon states
+			statePush			= new PlayerPushState();
 			stateSwingSword		= new PlayerSwingSwordState();
 			stateSwingBigSword	= new PlayerSwingBigSwordState();
 			stateSwingMagicRod	= new PlayerSwingMagicRodState();
@@ -734,19 +736,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private void UpdateStates() {
 			IntegrateStateParameters();
 
-			// Update depricated state
-			// TODO: remove when ready
-			//state.Update();
-
-			// Update depricated special state (minecart state)
-			// TODO: remove when ready
-			//if (specialState != null && specialState.IsActive)
-				//specialState.Update();
-				
-			if (IsOnGround &&
-				movement.MoveCondition == PlayerMoveCondition.FreeMovement)
+			// Check for beginning pushing
+			CollisionInfo collisionInfo = Physics.CollisionInfo[direction];
+			if (WeaponState == null && movement.IsMoving &&
+				!stateParameters.ProhibitPushing &&
+				collisionInfo.Type == CollisionType.Tile &&
+				!collisionInfo.Tile.IsMoving &&
+				!collisionInfo.Tile.IsNotPushable)
 			{
-				Graphics.SetAnimation(MoveAnimation);
+				BeginWeaponState(statePush);
 			}
 
 			// Update the weapon state
@@ -767,6 +765,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 
 			IntegrateStateParameters();
+				
+			if (IsOnGround &&
+				movement.MoveCondition == PlayerMoveCondition.FreeMovement)
+			{
+				Graphics.SetAnimation(Animations.Default);
+			}
 		}
 
 		public override void Update() {

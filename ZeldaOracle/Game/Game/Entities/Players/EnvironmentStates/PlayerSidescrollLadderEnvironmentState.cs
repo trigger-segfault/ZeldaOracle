@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.DisableGravity			= true;
 			StateParameters.EnableGroundOverride	= true;
 			StateParameters.AlwaysFaceUp			= true;
+			StateParameters.ProhibitPushing			= true;
 		}
 
 

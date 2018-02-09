@@ -15,14 +15,23 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerUnderwaterEnvironmentState() {
-			MotionSettings = new PlayerMotionType() {
-				MovementSpeed			= 0.5f,
-				IsSlippery				= true,
-				Acceleration			= 0.08f,
-				Deceleration			= 0.05f,
-				MinSpeed				= 0.05f,
-				DirectionSnapCount		= 32,
-			};
+			StateParameters.ProhibitJumping	= true;
+			StateParameters.ProhibitPushing	= true;
+
+			StateParameters.PlayerAnimations.Default		= GameData.ANIM_PLAYER_MERMAID_SWIM;
+			StateParameters.PlayerAnimations.Aim			= GameData.ANIM_PLAYER_MERMAID_AIM;
+			StateParameters.PlayerAnimations.Throw			= GameData.ANIM_PLAYER_MERMAID_THROW;
+			StateParameters.PlayerAnimations.Swing			= GameData.ANIM_PLAYER_MERMAID_SWING;
+			StateParameters.PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_MERMAID_SWING;
+			StateParameters.PlayerAnimations.Spin			= GameData.ANIM_PLAYER_MERMAID_SPIN;
+			StateParameters.PlayerAnimations.Stab			= GameData.ANIM_PLAYER_MERMAID_STAB;
+
+			MotionSettings.MovementSpeed		= 0.5f;
+			MotionSettings.IsSlippery			= true;
+			MotionSettings.Acceleration			= 0.08f;
+			MotionSettings.Deceleration			= 0.05f;
+			MotionSettings.MinSpeed				= 0.05f;
+			MotionSettings.DirectionSnapCount	= 32;
 		}
 		
 
@@ -78,8 +87,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void OnBegin(PlayerState previousState) {
-			StateParameters.ProhibitJumping	= true;
-
 			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;

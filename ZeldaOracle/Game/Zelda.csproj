@@ -376,6 +376,7 @@
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerRespawnDeathState.cs" />
+    <Compile Include="Game\Entities\Players\WeaponStates\PlayerPushState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerSwordStabState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerGrabState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerHoldSwordState.cs" />

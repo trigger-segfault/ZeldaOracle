@@ -88,6 +88,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin(PlayerState previousState) {
 			StateParameters.ProhibitJumping		= true;
+			StateParameters.ProhibitPushing		= true;
 			StateParameters.ProhibitWeaponUse	= true;
 			StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
 			//player.Movement.MoveSpeedScale = 1.0f;

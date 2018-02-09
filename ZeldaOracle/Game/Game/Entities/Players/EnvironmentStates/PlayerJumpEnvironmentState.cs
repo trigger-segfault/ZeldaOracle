@@ -7,6 +7,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.ProhibitLedgeJumping	= true;
 			StateParameters.ProhibitRoomTransitions	= true;
 			StateParameters.EnableStrafing			= true;
+			StateParameters.ProhibitPushing			= true;
 
 			MotionSettings.MovementSpeed		= 1.0f;
 			MotionSettings.IsSlippery			= true;
