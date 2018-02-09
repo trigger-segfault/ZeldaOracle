@@ -316,6 +316,7 @@
     <Compile Include="Game\Entities\Monsters\MonsterMovingWizzrobe.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterGopongaFlower.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterAntiFairy.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterSpawnState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterStateMachine.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterWaterTektike.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterWizzrobe.cs" />
