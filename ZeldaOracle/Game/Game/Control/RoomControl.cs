@@ -600,7 +600,7 @@ namespace ZeldaOracle.Game.Control {
 			UpdateObjects();
 
 			// Update view to follow player.
-			viewControl.PanTo(Player.Center + Player.ViewFocusOffset);
+			viewControl.PanTo(Player.DrawCenter + Player.ViewFocusOffset);
 			
 			if (requestedTransitionDirection >= 0) {
 				// Call the event RoomTransitioning.
@@ -642,7 +642,7 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(GameData.SPR_HUD_BACKGROUND, viewRect);
 			}
 
-			Vector2F viewTranslation = -GMath.Round(viewControl.ViewPosition);
+			Vector2F viewTranslation = -GameUtil.Bias(viewControl.ViewPosition);
 
 			g.PushTranslation(viewTranslation);
 

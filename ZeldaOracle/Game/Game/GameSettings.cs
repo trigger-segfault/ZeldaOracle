@@ -29,6 +29,12 @@ namespace ZeldaOracle.Game {
 		public static readonly Rectangle2I	SCREEN_BOUNDS			= new Rectangle2I(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		public const int					VIEW_PAN_SPEED			= 1;
 
+		/// <summary>The bias used to make sure 0.5 always rounds in the same direction when drawing.</summary>
+		public const float					BIAS					= 0.001f;
+
+		/// <summary>The epsilon value for velocity used in collision dodging.</summary>
+		public const float					EPSILON					= 0.001f;
+
 		// Properties
 		public const string				TEXT_UNDEFINED				= "<red>undefined<red>";
 

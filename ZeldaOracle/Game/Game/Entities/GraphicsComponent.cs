@@ -201,7 +201,7 @@ namespace ZeldaOracle.Game.Entities
 			if (isShadowVisible && entity.ZPosition >= 1 &&
 				entity.GameControl.RoomTicks % 2 == 0 && !entity.RoomControl.IsSideScrolling)
 			{
-				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, DepthLayer.Shadows);
+				g.DrawSprite(GameData.SPR_SHADOW, Entity.DrawPosition + shadowDrawOffset, DepthLayer.Shadows);
 			}
 
 			if (isFlickering && !flickerIsVisible)
@@ -215,29 +215,29 @@ namespace ZeldaOracle.Game.Entities
 			}
 
 			// Draw the sprite/animation.
-			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
+			Vector2F drawPosition = Entity.DrawPosition - new Vector2F(0, Entity.ZPosition);
 			if (unmapped) {
 				if (unmappedSprite != null)
-					g.DrawSprite(unmappedSprite, drawPosition + drawOffset, layer, entity.Position);
+					g.DrawSprite(unmappedSprite, drawPosition + drawOffset, layer, entity.DrawPosition);
 			}
 			else {
 				g.DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(
 					finalColorDefinitions, animationPlayer.PlaybackTime),
-					drawPosition + drawOffset, layer, entity.Position);
+					drawPosition + drawOffset, layer, entity.DrawPosition);
 			}
 
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle) {
 				g.DrawSprite(GameData.ANIM_EFFECT_RIPPLES,
-					new SpriteDrawSettings((float) entity.GameControl.RoomTicks), entity.Position +
-					ripplesDrawOffset, layer, entity.Position);
+					new SpriteDrawSettings((float) entity.GameControl.RoomTicks), entity.DrawPosition +
+					ripplesDrawOffset, layer, entity.DrawPosition);
 			}
 			
 			// Draw the grass effect.
 			if (isGrassEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInGrass) {
 				g.DrawSprite(GameData.ANIM_EFFECT_GRASS,
-					new SpriteDrawSettings((float) grassAnimationTicks), entity.Position +
-					grassDrawOffset, layer, entity.Position + new Vector2F(0, 1));
+					new SpriteDrawSettings((float) grassAnimationTicks), entity.DrawPosition +
+					grassDrawOffset, layer, entity.DrawPosition + new Vector2F(0, 1));
 			}
 		}
 
