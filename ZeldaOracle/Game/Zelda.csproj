@@ -415,6 +415,7 @@
     <Compile Include="Game\GameData.Sounds.cs" />
     <Compile Include="Game\GameData.Sprites.cs" />
     <Compile Include="Game\GameData.Animations.cs" />
+    <Compile Include="Game\GameUtil.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />

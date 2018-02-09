@@ -805,7 +805,7 @@ namespace ZeldaOracle.Game.Control {
 		private bool PerformCollisionDodge(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
 			// Only dodge if moving perpendicular to the edge.
 			int axis = Directions.ToAxis(direction);
-			if (Math.Abs(entity.Physics.Velocity[1 - axis]) > 0.001f)
+			if (Math.Abs(entity.Physics.Velocity[1 - axis]) > GameSettings.EPSILON)
 				return false;
 
 			// Can't dodge moving tiles.
@@ -1225,6 +1225,9 @@ namespace ZeldaOracle.Game.Control {
 		// Check the surface tile beneath the entity
 		private void CheckSurfaceTile(Entity entity) {
 
+			entity.Physics.SurfacePosition = Vector2F.Zero;
+			entity.Physics.SurfaceVelocity = Vector2F.Zero;
+
 			// Find the surface tile underneath the entity
 			entity.Physics.TopTile = roomControl.TileManager.GetSurfaceTileAtPosition(
 				entity.Position + entity.Physics.TopTilePointOffset,
@@ -1237,16 +1240,19 @@ namespace ZeldaOracle.Game.Control {
 				(surfaceCollision.Tile != null || surfaceCollision.Entity != null))
 			{
 				// Get the velocity of the surface tile or entity
-				Vector2F surfaceVelocity;
-				if (surfaceCollision.Tile != null)
-					surfaceVelocity = surfaceCollision.Tile.Velocity;
-				else
-					surfaceVelocity = surfaceCollision.Entity.Physics.Velocity;
+				if (surfaceCollision.Tile != null) {
+					entity.Physics.SurfacePosition = surfaceCollision.Tile.Position;
+					entity.Physics.SurfaceVelocity = surfaceCollision.Tile.Velocity;
+				}
+				else {
+					entity.Physics.SurfacePosition = surfaceCollision.Entity.Position;
+					entity.Physics.SurfaceVelocity = surfaceCollision.Entity.Physics.Velocity;
+				}
 
 				// Move with the surface
 				// NOTE: this really needs some checks before execution
-				entity.Y += surfaceVelocity.Y;
-				entity.Physics.VelocityX += surfaceVelocity.X;
+				entity.Y += entity.Physics.SurfaceVelocity.Y;
+				entity.Physics.VelocityX += entity.Physics.SurfaceVelocity.X;
 
 				// Move with conveyor tiles
 				if (surfaceCollision.Tile != null && entity.Physics.MovesWithConveyors)
@@ -1255,8 +1261,13 @@ namespace ZeldaOracle.Game.Control {
 
 			// Check if the surface is moving
 			if (entity.Physics.TopTile != null) {
-				if (entity.Physics.MovesWithPlatforms)
+				if (entity.Physics.MovesWithPlatforms) {
 					entity.Physics.Velocity += entity.Physics.TopTile.Velocity;
+					if (!roomControl.IsSideScrolling) {
+						entity.Physics.SurfacePosition = entity.Physics.TopTile.Position;
+						entity.Physics.SurfaceVelocity += entity.Physics.TopTile.Velocity;
+					}
+				}
 				if (entity.Physics.MovesWithConveyors && entity.Physics.IsOnGround)
 					entity.Physics.Velocity += entity.Physics.TopTile.ConveyorVelocity;
 			}

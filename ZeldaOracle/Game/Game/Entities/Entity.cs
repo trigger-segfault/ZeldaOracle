@@ -261,6 +261,22 @@ namespace ZeldaOracle.Game.Entities {
 			set { position = value; }
 		}
 
+		public Vector2F DrawPosition {
+			get {
+				bool horizontal = Math.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
+										(!Physics.CollisionInfo[Directions.Left].IsColliding &&
+										!Physics.CollisionInfo[Directions.Right].IsColliding);
+				bool vertical = Math.Abs(Physics.SurfaceVelocity.Y) > GameSettings.EPSILON &&
+										(!Physics.CollisionInfo[Directions.Up].IsColliding &&
+										!Physics.CollisionInfo[Directions.Down].IsColliding);
+				Vector2F surfacePosition = Vector2F.Zero;
+				if (horizontal)	surfacePosition.X = Physics.SurfacePosition.X;
+				if (vertical)	surfacePosition.Y = Physics.SurfacePosition.Y;
+				return GameUtil.Bias(surfacePosition) -
+					GameUtil.ReverseBias(surfacePosition - position);
+			}
+		}
+
 		// Gets or sets the x-position of the entity.
 		public float X {
 			get { return position.X; }
@@ -313,6 +329,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Vector2F Center {
 			get { return position + centerOffset; }
+		}
+
+		public Vector2F DrawCenter {
+			get { return DrawPosition + centerOffset; }
 		}
 
 		public Vector2F CenterOffset {

@@ -67,10 +67,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			// Wait for the view to pan to the player.
 			if (isWaitingForView) {
 				OldRoomControl.ViewControl.PanTo(
-					Player.Center + Player.ViewFocusOffset);
+					Player.DrawCenter + Player.ViewFocusOffset);
 
 				if (OldRoomControl.ViewControl.IsCenteredOnPosition(
-					Player.Center + Player.ViewFocusOffset))
+					Player.DrawCenter + Player.ViewFocusOffset))
 				{
 					// Convert the player's position from the old room to the
 					// new room.

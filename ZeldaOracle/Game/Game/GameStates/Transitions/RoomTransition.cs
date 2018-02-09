@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				eventSetupNewRoom.Invoke(roomNew);
 
 			NewRoomControl.ViewControl.CenterOn(
-				Player.Center + Player.ViewFocusOffset);
+				Player.DrawCenter + Player.ViewFocusOffset);
 
 			// Mark the player's respawn point in the new room.
 			Player.MarkRespawn();
