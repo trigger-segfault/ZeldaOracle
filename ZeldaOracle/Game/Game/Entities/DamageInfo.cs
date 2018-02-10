@@ -15,6 +15,7 @@ namespace ZeldaOracle.Game.Entities {
 		private bool		flicker;
 		private int			flickerDuration;
 		private int			invincibleDuration;
+		private bool        playSound;
 
 
 		//-----------------------------------------------------------------------------
@@ -29,6 +30,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.flicker			= true;
 			this.flickerDuration	= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 			this.invincibleDuration	= -1;
+			this.playSound			= true;
 		}
 
 		public DamageInfo(int amount, Vector2F sourcePosition) {
@@ -40,6 +42,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.flicker			= true;
 			this.flickerDuration	= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 			this.invincibleDuration	= -1;
+			this.playSound			= true;
 		}
 
 
@@ -85,6 +88,11 @@ namespace ZeldaOracle.Game.Entities {
 		public int FlickerDuration {
 			get { return flickerDuration; }
 			set { flickerDuration = value; }
+		}
+
+		public bool PlaySound {
+			get { return playSound; }
+			set { playSound = value; }
 		}
 	}
 

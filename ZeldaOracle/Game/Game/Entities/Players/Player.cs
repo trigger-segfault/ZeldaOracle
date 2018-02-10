@@ -600,8 +600,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void OnHurt(DamageInfo damage) {
-			base.OnHurt(damage);
-			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
+			if (damage.PlaySound)
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
 			state.OnHurt(damage);
 		}
 
