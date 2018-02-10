@@ -130,7 +130,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Pickup,			Reactions.None);
 			// Seed interations
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.Damage);
+			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.SilentDamage);
 			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept,	Reactions.Stun);
 			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
@@ -201,11 +201,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Kill();
 		}
 
-		public bool Stun() {
+		public bool Stun(int damage = 0) {
 			if (isStunnable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
 				OnStun();
 				AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 				BeginState(new MonsterStunState(GameSettings.MONSTER_STUN_DURATION));
+				if (damage > 0) {
+					DamageInfo damageInfo = new DamageInfo(damage);
+					damageInfo.ApplyKnockBack = false;
+					Hurt(damageInfo);
+				}
 				return true;
 			}
 			return false;
@@ -398,7 +403,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void OnHurt(DamageInfo damage) {
-			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
+			if (damage.PlaySound)
+				AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 		}
 
 		public override void OnFallInHole() {

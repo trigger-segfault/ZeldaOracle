@@ -67,7 +67,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(InteractionType.Boomerang, this);
+			monster.TriggerInteraction(InteractionType.Boomerang, this, new WeaponInteractionEventArgs() {
+				Weapon = itemBoomerang
+			});
 		}
 
 		public override void Update() {

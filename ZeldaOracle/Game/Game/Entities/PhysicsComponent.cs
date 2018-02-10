@@ -199,6 +199,22 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		// Return a list of solid tiles colliding with this entity.
+		public IEnumerable<Tile> GetSolidTilesMeeting(CollisionBoxType collisionBoxType) {
+			foreach (Tile tile in GetTilesMeeting(entity.Position, collisionBoxType)) {
+				if (CanCollideWithTile(tile))
+					yield return tile;
+			}
+		}
+
+		// Return a list of solid tiles colliding with this entity.
+		public IEnumerable<Tile> GetSolidTilesMeeting(Vector2F position, CollisionBoxType collisionBoxType) {
+			foreach (Tile tile in GetTilesMeeting(position, collisionBoxType)) {
+				if (CanCollideWithTile(tile))
+					yield return tile;
+			}
+		}
+
 		// Return a list of solid entities colliding with this entity.
 		public IEnumerable<T> GetSolidEntitiesMeeting<T>(CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity {
 			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), collisionBoxType, maxZDistance);

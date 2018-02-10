@@ -308,6 +308,8 @@
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterTektike.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolRed.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolGreen.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterArmosRed.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterArmosBlue.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBiri.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBari.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPeahat.cs" />
@@ -502,6 +504,7 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
+    <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterArmos.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileConveyorBelt.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />

@@ -75,6 +75,29 @@ TILE "monster_beamos";
 	ENTITYDRAW	true;
 END;
 
+TILE "monster_armos_red";
+	CLONE		"armos_stationary";
+	TYPE		TileMonsterArmos;
+	PREVIEW		"preview_monster_armos_red";
+	PROPERTIES	(boolean, blue, false, "Is Blue", "", "Monster", "The color of the Armos monster.", false);
+END;
+
+TILE "monster_armos_red_alt";
+	CLONE "monster_armos_red";
+	SPRITE "tile_armos_alt_stationary";
+END;
+
+TILE "monster_armos_blue";
+	CLONE		"monster_armos_red";
+	PREVIEW		"preview_monster_armos_blue";
+	PROPERTIES	(boolean, blue, true);
+END;
+
+TILE "monster_armos_blue_alt";
+	CLONE "monster_armos_blue";
+	SPRITE "tile_armos_alt_stationary";
+END;
+
 TILE "monster_flying_tile";
 	#TYPE		TileFlyingTile;
 	SAMESPRITE;

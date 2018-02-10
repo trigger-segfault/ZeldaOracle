@@ -115,14 +115,29 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			OnCrash();
 		}
-		
+
 		protected void CheckInitialCollision() {
-			if (physics.IsPlaceMeetingSolid(position, physics.CollisionBox)) {
+			Tile tile = physics.GetSolidTilesMeeting(CollisionBoxType.Hard).FirstOrDefault();
+			if (tile != null && tile != TileOwner) {
+				if (owner == RoomControl.Player) {
+					tile.OnHitByProjectile(this);
+					if (IsDestroyed)
+						return;
+				}
+				OnCollideTile(tile, true);
+			}
+			/*if (physics.IsPlaceMeetingSolid(position, physics.CollisionBox)) {
 				Point2I tileLocation = RoomControl.GetTileLocation(Position);
 				Tile tile = RoomControl.GetTopTile(tileLocation);
-				if (tile != TileOwner)
+				if (tile != TileOwner) {
+					if (owner == RoomControl.Player) {
+						tile.OnHitByProjectile(this);
+						if (IsDestroyed)
+							return;
+					}
 					OnCollideTile(tile, true);
-			}
+				}
+			}*/
 		}
 
 

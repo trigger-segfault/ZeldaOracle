@@ -276,6 +276,34 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				monster.Hurt(4, sender.Center);
 			}
 
+			/// <summary>Silently damage the monster for 1 damage.</summary>
+			public static void SilentDamage(Monster monster, Entity sender, EventArgs args) {
+				monster.Hurt(new DamageInfo(1, sender.Center) {
+					PlaySound = false
+				});
+			}
+
+			/// <summary>Silently damage the monster for 2 damage.</summary>
+			public static void SilentDamage2(Monster monster, Entity sender, EventArgs args) {
+				monster.Hurt(new DamageInfo(2, sender.Center) {
+					PlaySound = false
+				});
+			}
+
+			/// <summary>Silently damage the monster for 3 damage.</summary>
+			public static void SilentDamage3(Monster monster, Entity sender, EventArgs args) {
+				monster.Hurt(new DamageInfo(3, sender.Center) {
+					PlaySound = false
+				});
+			}
+
+			/// <summary>Silently damage the monster for 4 damage.</summary>
+			public static void SilentDamage4(Monster monster, Entity sender, EventArgs args) {
+				monster.Hurt(new DamageInfo(4, sender.Center) {
+					PlaySound = false
+				});
+			}
+
 			/// <summary>Bump the monster.</summary>
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
 				if (!monster.IsBeingKnockedBack) {
@@ -412,7 +440,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			/// <summary>Damage the monster for the given amount based on the used item's
 			/// level.</summary>
 			public static InteractionStaticDelegate DamageByLevel(
-				int amountLevel1, int amountLevel2, int amountLevel3)
+				int amountLevel1, int amountLevel2, int amountLevel3 = 0)
 			{
 				return delegate(Monster monster, Entity sender, EventArgs args) {
 					int level = (args as WeaponInteractionEventArgs).Weapon.Level;
@@ -424,6 +452,25 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					else if (level == Item.Level3)
 						amount = amountLevel3;
 					monster.Hurt(amount, sender.Center);
+				};
+			}
+
+			/// <summary>Silentyly damage the monster for the given amount based on the used item's
+			/// level.</summary>
+			public static InteractionStaticDelegate SilentDamageByLevel(
+				int amountLevel1, int amountLevel2, int amountLevel3 = 0) {
+				return delegate (Monster monster, Entity sender, EventArgs args) {
+					int level = (args as WeaponInteractionEventArgs).Weapon.Level;
+					int amount = 0;
+					if (level == Item.Level1)
+						amount = amountLevel1;
+					else if (level == Item.Level2)
+						amount = amountLevel2;
+					else if (level == Item.Level3)
+						amount = amountLevel3;
+					monster.Hurt(new DamageInfo(amount, sender.Center) {
+						PlaySound = false
+					});
 				};
 			}
 
