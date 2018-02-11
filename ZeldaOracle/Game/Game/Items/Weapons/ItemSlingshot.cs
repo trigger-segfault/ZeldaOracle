@@ -80,7 +80,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 						degrees += GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
 					else
 						degrees -= GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
-					Vector2F velocity = Vector2F.CreatePolar(GameSettings.SLINGSHOT_SEED_SPEED, degrees);
+					Vector2F velocity = Vector2F.FromPolar(GameSettings.SLINGSHOT_SEED_SPEED, degrees);
 					velocity.Y = -velocity.Y;
 					
 					// Spawn the seed.

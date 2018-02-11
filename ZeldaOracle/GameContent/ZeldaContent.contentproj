@@ -497,6 +497,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>monsters</Name>
     </None>
+    <None Include="Tiles\ActionTiles\monsters_base.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>monsters_base</Name>
+    </None>
     <None Include="Tiles\tiles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tiles</Name>

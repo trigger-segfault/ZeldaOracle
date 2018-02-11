@@ -164,9 +164,9 @@ TILE "ss_bombable_block";
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
 END;
-TILE "ss_bombable_block_underwater"; CLONE "ss_bombable_block"; SAMESPRITE; END;
+TILE "ss_bombable_block_underwater"; CLONE "ss_bombable_block"; SAMESPRITE; TILEBELOW "ss_water"; END;
 TILE "ss_block"; SAMESPRITE; SOLID block; END;
-TILE "ss_block_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_block_underwater"; SAMESPRITE; SOLID block; TILEBELOW "ss_water"; END;
 
 TILE "ss_fish_statue_left_closed"; SAMESPRITE; SOLID block; END;
 TILE "ss_fish_statue_right_closed"; SAMESPRITE; SOLID block; END;

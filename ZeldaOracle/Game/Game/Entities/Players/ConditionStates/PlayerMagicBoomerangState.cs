@@ -73,7 +73,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 						boomerangMotionDirection = GMath.Plusdir(boomerangMotionDirection);
 					}
 
-					Vector2F velocity = Vector2F.CreatePolar(boomerang.Speed, boomerangMotionDirection);
+					Vector2F velocity = Vector2F.FromPolar(boomerang.Speed, boomerangMotionDirection);
 					velocity.Y = -velocity.Y;
 					boomerang.Physics.Velocity = velocity;
 				}

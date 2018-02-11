@@ -11,8 +11,6 @@ using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 	public class TileMonsterArmos : TileMonster {
-
-		private const int BREATH_LIFE_DURATION = 60;
 		
 		private int spawnTimer;
 
@@ -32,7 +30,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 		public void BreathLife() {
 			if (spawnTimer == -1) {
-				spawnTimer = BREATH_LIFE_DURATION;
+				spawnTimer = GameSettings.MONSTER_ARMOS_BREATH_LIFE_DURATION;
 			}
 		}
 
@@ -62,14 +60,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			base.Update();
 
 			if (spawnTimer == 0) {
-				RoomControl.RemoveTile(this);
-				Monster armos;
-				if (!IsBlue)
-					armos = new MonsterArmosRed();
-				else
-					armos = new MonsterArmosBlue();
-				armos.Position = Center + new Vector2F(0, 6);
-				RoomControl.SpawnEntity(armos);
+				SpawnMonster();
 				return;
 			}
 
@@ -112,6 +103,17 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 					args.Color);
 			}
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the type of monster to spawn.</summary>
+		public override Type MonsterType {
+			get { return (IsBlue ? typeof(MonsterArmosBlue) : typeof(MonsterArmosRed)); }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

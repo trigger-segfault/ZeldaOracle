@@ -11,7 +11,7 @@ TILE "temp_roller";
 	PROPERTIES
 		(boolean, vertical, "false",
 			"Vertical", "", "Roller",
-			"The roller rolls vertically", true),
+			"The roller rolls vertically", false),
 		(boolean, first_roller, "false",
 			"First Roller", "", "Roller",
 			"This is the top left roller of a group. Any rollers before this won't be connected.");
@@ -20,7 +20,19 @@ END;
 # Spike Roller ------------------------------------------------
 
 TILE "temp_spike_roller";
-	#TYPE		TileSpikeRoller;
+	CLONE		"tile_monster";
+	TYPE		TileSpikeRoller;
+	PROPERTIES
+		(boolean, ignore_monster, true),
+		(boolean, vertical, false,
+			"Vertical", "", "Roller",
+			"True if the spike roller rolls, vertically.", false),
+		(integer, move_distance_1, 1,
+			"First Move Distance", "", "Roller",
+			"The distance to move from the starting position."),
+		(integer, move_distance_2, -1,
+			"Second Move Distance", "", "Roller",
+			"The distance to move from the starting position after moving the first distance.");
 END;
 
 # Arrow Cannon ------------------------------------------------
@@ -110,7 +122,7 @@ TILE "spike_roller_horizontal";
 	SPRITEINDEX 1, "tile_spike_roller_horizontal_top";
 	SPRITEINDEX 2, "tile_spike_roller_horizontal_mid";
 	SPRITEINDEX 3, "tile_spike_roller_horizontal_bottom";
-	# horizontal
+	PROPERTIES	(boolean, vertical, false);
 END;
 TILE "spike_roller_vertical";
 	CLONE		"temp_spike_roller";
@@ -118,7 +130,7 @@ TILE "spike_roller_vertical";
 	SPRITEINDEX 1, "tile_spike_roller_vertical_left";
 	SPRITEINDEX 2, "tile_spike_roller_vertical_mid";
 	SPRITEINDEX 3, "tile_spike_roller_vertical_right";
-	# vertical
+	PROPERTIES	(boolean, vertical, true);
 END;
 
 # Arrow Cannon ------------------------------------------------
