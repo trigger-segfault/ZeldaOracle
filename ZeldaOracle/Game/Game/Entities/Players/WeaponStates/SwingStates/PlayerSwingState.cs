@@ -176,8 +176,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			
 			// Perform an initial swing tile peak.
 			Vector2F hitPoint = player.Center + (Angles.ToVector(swingAngle, false) * 13);
-			Point2I hitTileLocation = player.RoomControl.GetTileLocation(hitPoint);
-			OnSwingTilePeak(swingAngle, hitTileLocation);
+			//Point2I hitTileLocation = player.RoomControl.GetTileLocation(hitPoint);
+			OnSwingTilePeak(swingAngle, hitPoint);
 			
 			// Invoke any actions set to occur at time 0.
 			if (timedActions.ContainsKey(0))
@@ -276,7 +276,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			// Check for a swing tile peak (tile peaks happen just as the angle is changed).
 			if (changedAngles) {
 				Vector2F hitPoint = player.Center + (Angles.ToVector(swingAngle, false) * 13);
-				Point2I hitTileLocation = player.RoomControl.GetTileLocation(hitPoint);
+				//Point2I hitTileLocation = player.RoomControl.GetTileLocation(hitPoint);
 				OnSwingTilePeak(swingAngle, hitPoint);
 			}
 				

@@ -99,23 +99,24 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("MONSTER", (int) Modes.Root,
-				"string name, string sprite, string monsterType, string monsterColor",
+				"string name, string sprite, string monsterType, string monsterColor, bool ignoreMonster = false",
 			delegate (CommandParam parameters) {
 				actionTileData = new ActionTileData();
 				actionTileData.Clone(GetResource<ActionTileData>("monster"));
 				actionTileData.Name = parameters.GetString(0);
 				baseTileData = actionTileData;
+				
+				actionTileData.Sprite = GetResource<ISprite>(parameters.GetString(1));
+				actionTileData.Properties.Set("monster_type", parameters.GetString(2));
+				actionTileData.Properties.Set("ignore_monster", parameters.GetBool(4));
 
-				if (parameters.ChildCount > 1)
-					actionTileData.Sprite = GetResource<ISprite>(parameters.GetString(1));
-				if (parameters.ChildCount > 2)
-					actionTileData.Properties.Set("monster_type", parameters.GetString(2));
-				if (parameters.ChildCount > 3) {
-					MonsterColor color;
-					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
-						ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
-					actionTileData.Properties.Set("color", (int) color);
-				}
+				// Make sure the monster type exists.
+				GameUtil.GetTypeWithBase<Monster>(parameters.GetString(2), true);
+
+				MonsterColor color;
+				if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
+					ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
+				actionTileData.Properties.Set("color", (int) color);
 				Mode = Modes.ActionTile;
 			});
 			//=====================================================================================
@@ -146,7 +147,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("TYPE", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"string type",
 			delegate (CommandParam parameters) {
-				baseTileData.Type = Tile.GetType(parameters.GetString(0), true);
+				string typeName = parameters.GetString(0);
+				if (tileData != null)
+					baseTileData.Type = GameUtil.GetTypeWithBase<Tile>(typeName, true);
+				else
+					baseTileData.Type = GameUtil.GetTypeWithBase<ActionTile>(typeName, true);
 			});
 			//=====================================================================================
 			AddCommand("FLAGS", (int) Modes.Tile,
@@ -398,6 +403,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				tileData.HurtDamage = parameters.GetInt(0);
 				tileData.HurtArea = parameters.GetRectangle(1);
+			});
+			//=====================================================================================
+			AddCommand("TILEBELOW", (int) Modes.Tile,
+				"const none", "const null",
+			delegate (CommandParam parameters) {
+				tileData.TileBelow = null;
+			});
+			//=====================================================================================
+			AddCommand("TILEBELOW", (int) Modes.Tile,
+				"string tileData",
+			delegate (CommandParam parameters) {
+				tileData.TileBelow = GetResource<TileData>(parameters.GetString(0));
 			});
 			//=====================================================================================
 			AddCommand("CLONE", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },

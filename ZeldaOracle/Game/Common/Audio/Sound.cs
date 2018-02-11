@@ -37,6 +37,10 @@ namespace ZeldaOracle.Common.Audio {
 		/// <summary>The list of sound instances currently active.</summary>
 		private List<SoundInstance> sounds;
 
+		// Playback
+		/// <summary>True if the sound was already played this frame.</summary>
+		private bool alreadyPlayed;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -61,6 +65,9 @@ namespace ZeldaOracle.Common.Audio {
 
 			// Sound Instances
 			this.sounds			= new List<SoundInstance>();
+
+			// Playback
+			this.alreadyPlayed	= false;
 		}
 
 
@@ -70,6 +77,8 @@ namespace ZeldaOracle.Common.Audio {
 
 		/// <summary>Updates the sound.</summary>
 		internal void Update() {
+			alreadyPlayed = false;
+
 			for (int i = 0; i < sounds.Count; i++) {
 				SoundInstance sound = sounds[i];
 
@@ -110,19 +119,35 @@ namespace ZeldaOracle.Common.Audio {
 
 		/// <summary>Plays the sound.</summary>
 		public SoundInstance Play(bool looped = false) {
+			if (!alreadyPlayed)
+				return ForcePlay(looped);
+			return null;
+		}
+
+		/// <summary>Forces the sound to play even if it was already played this frame.</summary>
+		public SoundInstance ForcePlay(bool looped = false) {
 			SoundInstance soundInstance = new SoundInstance(soundEffect.CreateInstance(), this, looped, volume, pitch, pan, muted);
 			soundInstance.Play();
 			sounds.Add(soundInstance);
 			RemoveExtraInstances();
+			alreadyPlayed = true;
 			return soundInstance;
 		}
 
 		/// <summary>Plays the sound.</summary>
 		public SoundInstance Play(bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+			if (!alreadyPlayed)
+				return ForcePlay(looped, volume, pitch, pan, muted);
+			return null;
+		}
+
+		/// <summary>Forces the sound to play even if it was already played this frame.</summary>
+		public SoundInstance ForcePlay(bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 			SoundInstance soundInstance = new SoundInstance(soundEffect.CreateInstance(), this, looped, volume, pitch, pan, muted);
 			soundInstance.Play();
 			sounds.Add(soundInstance);
 			RemoveExtraInstances();
+			alreadyPlayed = true;
 			return soundInstance;
 		}
 
@@ -138,7 +163,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 
 			if (sounds.Count == 0) {
-				SoundInstance soundInstance = Play(true);
+				SoundInstance soundInstance = ForcePlay(true);
 				soundInstance.LoopWhileActive = true;
 				soundInstance.IsActive = true;
 			}
@@ -223,7 +248,7 @@ namespace ZeldaOracle.Common.Audio {
 		public int MaxInstances {
 			get { return maxInstances; }
 			set {
-				maxInstances = Math.Max(0, value);
+				maxInstances = Math.Max(1, value);
 				while (sounds.Count > maxInstances) {
 					if (!sounds[0].IsStopped)
 						sounds[0].Stop();

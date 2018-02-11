@@ -12,9 +12,7 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 
 	public class FireShooterProjectile : Projectile {
-
-		private static readonly int[] PHASE_DURATIONS = { 10, 14 };
-
+		
 		private int phase;
 		private int damage;
 		private int timer;
@@ -31,8 +29,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
 
 			// Physics
-			Physics.CollisionBox		= new Rectangle2F(-2, 2, 4, 4);
-			Physics.SoftCollisionBox    = new Rectangle2F(-1, 1, 2, 2);
+			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
+			Physics.SoftCollisionBox    = new Rectangle2F(-2, -2, 4, 4);
 			EnablePhysics(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
@@ -57,31 +55,26 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-
-			Physics.Velocity = Directions.ToVector(direction) * 2f;
+			
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_SMALL);
 		}
 
 		public override void Update() {
 			base.Update();
-
-			if (phase < 2 && timer >= PHASE_DURATIONS[phase]) {
+			
+			if (phase < 2 && timer >= GameSettings.PROJECTILE_FIRE_SHOOTER_PHASE_DURATIONS[phase]) {
 				phase++;
 				timer = 0;
 				if (phase == 1) {
-					switch (direction) {
-					case Directions.Down:
-						Physics.CollisionBox = new Rectangle2F(-4, -4, 8, 8); break;
-					}
 					Physics.CollisionBox        = new Rectangle2F(-2, -2, 4, 4);
 					Physics.SoftCollisionBox    = new Rectangle2F(-4, -4, 8, 8);
-					Physics.Velocity = Directions.ToVector(direction) * 3f;
+					Physics.Velocity *= 1.5f;
 					Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_MEDIUM);
 				}
 				else {
 					Physics.CollisionBox        = new Rectangle2F(-4, -4, 8, 8);
 					Physics.SoftCollisionBox    = new Rectangle2F(-6, -6, 12, 12);
-					Physics.Velocity = Directions.ToVector(direction) * 1.5f;
+					Physics.Velocity *= 0.5f;
 					Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_LARGE);
 				}
 			}

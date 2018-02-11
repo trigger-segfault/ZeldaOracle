@@ -96,6 +96,7 @@ namespace ZeldaOracle.Game {
 		// Projectiles ----------------------------------------------------------------
 
 		public static Sound SOUND_LASER;
+		public static Sound SOUND_FIRE_SHOOTER;
 
 		// Tiles ----------------------------------------------------------------------
 

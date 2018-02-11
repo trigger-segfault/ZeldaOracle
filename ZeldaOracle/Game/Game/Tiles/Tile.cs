@@ -22,6 +22,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -331,7 +332,6 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData data = Resources.GetResource<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-				//Graphics.PlayAnimation(GameData.SPR_TILE_DUG);
 			}
 			else {
 				roomControl.RemoveTile(this);
@@ -345,6 +345,9 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dropEntity != null) {
 				if (dropEntity is Collectible)
 					(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+				else if (dropEntity is Monster)
+					(dropEntity as Monster).BeginSpawnState();
+
 				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
 			}
 
@@ -436,7 +439,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Spawn a drop entity based on the random drop-list.
 		public Entity SpawnDrop() {
 			Entity dropEntity = null;
-			
+
 			// Choose a random drop (or none) from the list.
 			if (dropList != null)
 				dropEntity = dropList.CreateDropEntity(GameControl);
@@ -445,7 +448,14 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dropEntity != null) {
 				dropEntity.SetPositionByCenter(Center);
 				dropEntity.Physics.ZVelocity = GameSettings.DROP_ENTITY_SPAWN_ZVELOCITY;
-				RoomControl.SpawnEntity(dropEntity);
+				if (dropEntity is Monster) {
+					RoomControl.ScheduleEvent(2, () => {
+						RoomControl.SpawnEntity(dropEntity);
+					});
+				}
+				else {
+					RoomControl.SpawnEntity(dropEntity);
+				}
 			}
 
 			return dropEntity;
@@ -590,6 +600,46 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Projectiles
+		//-----------------------------------------------------------------------------
+
+		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed) {
+			return ShootFromDirection(projectile, direction, speed, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed) {
+			return ShootFromAngle(projectile, angle, speed, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity) {
+			return ShootProjectile(projectile, velocity, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+			projectile.TileOwner	= this;
+			projectile.Direction	= direction;
+			projectile.Physics.Velocity = Directions.ToVector(direction) * speed;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			return projectile;
+		}
+
+		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+			projectile.TileOwner	= this;
+			projectile.Angle		= angle;
+			projectile.Physics.Velocity = Angles.ToVector(angle, true) * speed;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			return projectile;
+		}
+
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity, Vector2F positionOffset, int zPositionOffset) {
+			projectile.TileOwner	= this;
+			projectile.Physics.Velocity = velocity;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			return projectile;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
@@ -640,14 +690,14 @@ namespace ZeldaOracle.Game.Tiles {
 			return tile;
 		}
 
-		public static Type GetType(string typeName, bool ignoreCase) {
+		/*public static Type GetType(string typeName, bool ignoreCase) {
 			StringComparison comparision = StringComparison.Ordinal;
 			if (ignoreCase)
 				comparision = StringComparison.OrdinalIgnoreCase;
 
 			return Assembly.GetExecutingAssembly().GetTypes()
 				.FirstOrDefault(t => t.Name.Equals(typeName, comparision));
-		}
+		}*/
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
@@ -898,8 +948,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool DrawAsEntity {
 			get { return TileData.DrawAsEntity; }
-			set { TileData.DrawAsEntity = value; }
 		}
+
+		/// <summary>Gets the tile data to appear when
+		/// this one is removed while on layer 1.</summary>
+		public TileData TileBelow {
+			get { return TileData.TileBelow; }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Flag Properties

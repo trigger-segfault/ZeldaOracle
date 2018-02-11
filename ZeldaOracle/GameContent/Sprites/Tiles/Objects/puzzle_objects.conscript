@@ -121,30 +121,32 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 	
 	MAPPEDCOLORS	"tiles_default", ("plaque");
 	SINGLE BASIC	(3, 6); END;
-	
-	# Holes (Small) -----------------------------------------------
-	
-	MAPPEDCOLORS	"tiles_default", ("dirt");
-	SINGLE STYLE	"hole", (4, 6);
-		ADD "normal"		(4, 6);
-		ADD "indoors"		(6, 6);
-		ADD "maku_tree"		(8, 6);
-		END;
-	
-	MAPPEDCOLORS	"tiles_default", ("hole");
-	SINGLE COLORSTYLE "hole", "", ("hole", "hole_alt"), (5, 6);
-		ADD "normal"		(5, 6);
-		ADD "indoors"		(7, 6);
-		ADD "maku_tree"		(9, 6);
-		END;
 		
 	# Chest -------------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("chest");
-	MULTIPLE STYLE	"chest", (0, 7), (2, 1);
-		ADD "flat"		(0, 7);
-		ADD "curved"	(2, 7);
-		ADD "ornate"	(4, 7);
+	MULTIPLE STYLE	"chest", (4, 6), (2, 1);
+		ADD "flat"		(4, 6);
+		ADD "curved"	(6, 6);
+		ADD "ornate"	(8, 6);
+		END;
+	
+	# Holes (Small) -----------------------------------------------
+	
+	MAPPEDCOLORS	"tiles_default", ("dirt");
+	SINGLE STYLE	"hole", (0, 7);
+		ADD "normal"		(0, 7);
+		ADD "indoors"		(2, 7);
+		ADD "subrosia"		(4, 7);
+		ADD "maku_tree"		(6, 7);
+		END;
+	
+	MAPPEDCOLORS	"tiles_default", ("hole");
+	SINGLE COLORSTYLE "hole", "", ("hole", "hole_alt"), (1, 7);
+		ADD "normal"		(1, 7);
+		ADD "indoors"		(3, 7);
+		ADD "subrosia"		(5, 7);
+		ADD "maku_tree"		(7, 7);
 		END;
 END;
 
@@ -216,9 +218,9 @@ NAME "tile_hole_mid"						(9, 1);
 NAME "tile_hole_bottom"						(9, 2);
 NAME "tile_hole_both"						(9, 3);
 
-NAME "tile_hole"							((5, 6), "hole");
-NAME "tile_hole_alt"						((5, 6), "hole_alt");
-NAME "tile_dug"								(4, 6);
+NAME "tile_hole"							((1, 7), "hole");
+NAME "tile_hole_alt"						((1, 7), "hole_alt");
+NAME "tile_dug"								(0, 7);
 
 COMPOSITE "temp_preview_hole_style";
 	ADD "tile_dug", (0, 0); ADD "tile_hole", (16, 0); END;
@@ -342,8 +344,8 @@ NAME "tile_plaque"							(3, 6);
 
 # Chest -------------------------------------------------------
 
-NAME "tile_chest"							(0, 7);
-NAME "tile_chest_opened"					(1, 7);
+NAME "tile_chest"							(4, 6);
+NAME "tile_chest_opened"					(5, 6);
 
 COMPOSITE "temp_preview_chest_style";
 	ADD "tile_chest", (0, 0); ADD "tile_chest_opened", (16, 0); END;

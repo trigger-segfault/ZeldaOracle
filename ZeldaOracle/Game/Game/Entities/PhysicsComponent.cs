@@ -61,6 +61,8 @@ namespace ZeldaOracle.Game.Entities {
 		private float					maxFallSpeed;
 		private Vector2F				velocity;			// XY-Velocity in pixels per frame.
 		private float					zVelocity;			// Z-Velocity in pixels per frame.
+		private Vector2F				surfacePosition;	// Used for draw position rounding to prevent jittering.
+		private Vector2F				surfaceVelocity;	// Used for draw position rounding to prevent jittering.
 		
 		// Collision settings.
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
@@ -194,6 +196,22 @@ namespace ZeldaOracle.Game.Entities {
 				{
 					yield return t;
 				}
+			}
+		}
+
+		// Return a list of solid tiles colliding with this entity.
+		public IEnumerable<Tile> GetSolidTilesMeeting(CollisionBoxType collisionBoxType) {
+			foreach (Tile tile in GetTilesMeeting(entity.Position, collisionBoxType)) {
+				if (CanCollideWithTile(tile))
+					yield return tile;
+			}
+		}
+
+		// Return a list of solid tiles colliding with this entity.
+		public IEnumerable<Tile> GetSolidTilesMeeting(Vector2F position, CollisionBoxType collisionBoxType) {
+			foreach (Tile tile in GetTilesMeeting(position, collisionBoxType)) {
+				if (CanCollideWithTile(tile))
+					yield return tile;
 			}
 		}
 
@@ -452,7 +470,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool CanDodgeCollision(Rectangle2F block, int direction) {
-			if (Math.Abs(velocity.X) > 0.001f && Math.Abs(velocity.Y) > 0.001f)
+			if (GMath.Abs(velocity) > GameSettings.EPSILON)
 				return false; // Only dodge when moving horizontally or vertically.
 
 			float		dodgeDist	= autoDodgeDistance;
@@ -877,6 +895,16 @@ namespace ZeldaOracle.Game.Entities {
 		public float NetVelocityY {
 			get { return netVelocity.Y; }
 			set { netVelocity.Y = value; }
+		}
+
+		public Vector2F SurfacePosition {
+			get { return surfacePosition; }
+			set { surfacePosition = value; }
+		}
+
+		public Vector2F SurfaceVelocity {
+			get { return surfaceVelocity; }
+			set { surfaceVelocity = value; }
 		}
 	}
 }

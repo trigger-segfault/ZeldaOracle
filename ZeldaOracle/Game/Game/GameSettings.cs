@@ -29,6 +29,12 @@ namespace ZeldaOracle.Game {
 		public static readonly Rectangle2I	SCREEN_BOUNDS			= new Rectangle2I(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		public const int					VIEW_PAN_SPEED			= 1;
 
+		/// <summary>The bias used to make sure 0.5 always rounds in the same direction when drawing.</summary>
+		public const float					BIAS					= 0.001f;
+
+		/// <summary>The epsilon value for velocity used in collision dodging.</summary>
+		public const float					EPSILON					= 0.001f;
+
 		// Properties
 		public const string				TEXT_UNDEFINED				= "<red>undefined<red>";
 
@@ -51,7 +57,7 @@ namespace ZeldaOracle.Game {
 		public const int				COLLECTIBLE_ALIVE_DURATION				= 513;
 		public const int				COLLECTIBLE_FADE_DELAY					= 400;
 		public const int				COLLECTIBLE_PICKUPABLE_DELAY			= 12;
-		public const int				COLLECTIBLE_DIG_PICKUPABLE_DELAY		= 16;
+		public const int				COLLECTIBLE_DIG_PICKUPABLE_DELAY		= 20;
 		public const int				COLLECTIBLE_FAIRY_ALIVE_DURATION		= 513;
 		public const int				COLLECTIBLE_FAIRY_FADE_DELAY			= 400;
 		public const int				COLLECTIBLE_FAIRY_HOVER_HEIGHT			= 8;
@@ -66,6 +72,7 @@ namespace ZeldaOracle.Game {
 		public static readonly int[]	PROJECTILE_BOOMERANG_RETURN_DELAYS		= { 41, 100 };
 		public static readonly float[]	PROJECTILE_SWITCH_HOOK_SPEEDS			= { 2.0f, 3.0f };
 		public static readonly int[]	PROJECTILE_SWITCH_HOOK_LENGTHS			= { 82, 112 };
+		public static readonly int[]    PROJECTILE_FIRE_SHOOTER_PHASE_DURATIONS	= new int[] { 10, 14 };
 		public const int				SWITCH_HOOK_LATCH_DURATION				= 20;
 		public const float				SWITCH_HOOK_LIFT_SPEED					= 1.0f;
 		public const int				SWITCH_HOOK_LIFT_HEIGHT					= 16;
@@ -84,7 +91,9 @@ namespace ZeldaOracle.Game {
 		public const int				UNIT_HURT_INVINCIBLE_DURATION	= 32;
 		public const int				UNIT_HURT_FLICKER_DURATION		= 32;
 		public const int				UNIT_KNOCKBACK_ANGLE_SNAP_COUNT	= 16;
-		
+
+		public const int				MONSTER_SPAWN_STATE_DURATION		= 31;
+
 		public const float				MONSTER_KNOCKBACK_SPEED				= 2.0f; // 1.3 ??
 		public const int				MONSTER_HURT_KNOCKBACK_DURATION		= 11;
 		public const int				MONSTER_BUMP_KNOCKBACK_DURATION		= 8;
@@ -210,6 +219,13 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_STALFOS_ORANGE_JUMP_SPEED				= 2.25f;
 		public const float				MONSTER_STALFOS_ORANGE_JUMP_RANGE				= 48;
 		public const int				MONSTER_STALFOS_ORANGE_JUMP_RECHARGE_DELAY		= 0;
+		public const int				MONSTER_FLYING_TILE_LAUNCH_ANGLE_COUNT			= 16;
+		public const float				MONSTER_FLYING_TILE_LAUNCH_SPEED				= 1.75f;
+		public const int				MONSTER_FLYING_TILE_HOVER_DURATION				= 24;
+		public const float				MONSTER_FLYING_TILE_HOVER_ALTITUDE				= 4f;
+		public const float				MONSTER_FLYING_TILE_RISE_SPEED					= 0.5f;
+		public const int				MONSTER_FLYING_TILE_START_OFFSET				= 122;
+		public const int				MONSTER_FLYING_TILE_NEXT_OFFSET					= 60;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.
@@ -225,6 +241,12 @@ namespace ZeldaOracle.Game {
 		public const int				TILE_PULL_HANDLE_WALL_OFFSET			= 8;
 
 		public const int                TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION  = 30;
+
+		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_STARTS			= new int[] { 16, 32 };
+		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_INTERVALS		= new int[] { 32, 64, 96, 128 };
+		public const int				TILE_ARROW_SHOOTER_SHOOT_INTERVAL		= 33;
+		public const int				TILE_FIRE_SHOOTER_SHOOT_INVERVAL		= 16;
+		public const int                TILE_FIRE_SHOOTER_SHOOT_OFFSET			= 7;
 
 
 

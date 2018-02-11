@@ -297,6 +297,10 @@ namespace ZeldaOracle.Game.Control {
 
 		// Remove a tile from the room.
 		public void RemoveTile(Tile tile) {
+			bool isLayer1 = (tile.Layer == 0);
+			Point2I location = tile.Location;
+
+			// Find the tile in the grid so it can be removed
 			Rectangle2I area = tile.TileGridArea;
 			for (int x = area.Left; x < area.Right; x++) {
 				for (int y = area.Top; y < area.Bottom; y++) {
@@ -312,11 +316,21 @@ namespace ZeldaOracle.Game.Control {
 				t.OnUncoverBegin(tile);
 				t.OnUncoverComplete(tile);
 			}
+
+			// Place the determined tile underneath if on layer 1
+			if (isLayer1) {
+				TileData tileBelow = RoomControl.Zone.DefaultTileData;
+				if (tile.TileBelow != null)
+					tileBelow = tile.TileBelow;
+				if (tileBelow != null)
+					PlaceTile(Tile.CreateTile(tileBelow), location, 0);
+			}
 		}
 
 		// Move the given tile to a new location.
 		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
 			tile.Location = newLocation;
+			// TODO: Is this supposed to be like this?
 			/*
 			if (tile.Layer != newLayer) {
 				Rectangle2I area = tile.TileGridArea;

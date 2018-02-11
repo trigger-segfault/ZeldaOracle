@@ -289,7 +289,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			// Draw tools under.
 			foreach (UnitTool tool in tools) {
 				if (!tool.DrawAboveUnit) {
-					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
+					Vector2F drawPosition = DrawPosition - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
 					g.DrawAnimationPlayer(tool.AnimationPlayer, drawPosition, depthLayer, position);
 				}
 			}
@@ -300,7 +300,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			// Draw tools over.
 			foreach (UnitTool tool in tools) {
 				if (tool.DrawAboveUnit) {
-					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
+					Vector2F drawPosition = DrawPosition - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
 					g.DrawAnimationPlayer(tool.AnimationPlayer, drawPosition, depthLayer, position);
 				}
 			}

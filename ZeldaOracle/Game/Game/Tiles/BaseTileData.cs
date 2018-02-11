@@ -58,6 +58,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties			= new Properties(this);
 			properties.SetAll(copy.properties);
 			events              = new EventDocumentationCollection(copy.events);
+			previewSprite		= copy.previewSprite;
 		}
 
 		public virtual void Clone(BaseTileData copy) {
@@ -65,6 +66,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties	= new Properties(copy.properties);
 			events		= new EventDocumentationCollection(copy.events);
 			//properties.SetAll(copy.properties);
+			previewSprite		= copy.previewSprite;
 		}
 		
 		

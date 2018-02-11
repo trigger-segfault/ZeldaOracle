@@ -107,8 +107,11 @@ END;
 # Arrow Shooter -----------------------------------------------
 
 TILE "temp_arrow_shooter";
-	#Type		TileArrowShooter;
+	Type		TileArrowShooter;
 	SOLID		block;
+	PROPERTIES
+		(integer, direction, 0, "Direction", "direction",
+			"Arrow Shooter", "The direction arrows are shot in.", false);
 END;
 
 # Fire Shooter ------------------------------------------------
@@ -404,30 +407,30 @@ END;
 
 # Arrow Shooter -----------------------------------------------
 
-TILE "arrow_shooter_left";
+TILE "arrow_shooter_right";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# left
+	PROPERTIES (integer, direction, 0);
 END;
 TILE "arrow_shooter_up";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# up
+	PROPERTIES (integer, direction, 1);
 END;
-TILE "arrow_shooter_right";
+TILE "arrow_shooter_left";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# right
+	PROPERTIES (integer, direction, 2);
 END;
 TILE "arrow_shooter_down";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# down
+	PROPERTIES (integer, direction, 3);
 END;
 
 # Fire Shooter ------------------------------------------------
 
-TILE "fire_shooter_left";
+TILE "fire_shooter_right";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
 	PROPERTIES (integer, direction, 0);
@@ -437,7 +440,7 @@ TILE "fire_shooter_up";
 	SAMESPRITE;
 	PROPERTIES (integer, direction, 1);
 END;
-TILE "fire_shooter_right";
+TILE "fire_shooter_left";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
 	PROPERTIES (integer, direction, 2);
@@ -480,10 +483,26 @@ TILE "leap_ledge_down";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE 
 
 # Webbed Wall -------------------------------------------------
 
-TILE "wall_webbed_right";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
-TILE "wall_webbed_up";		CLONE "temp_wall_webbed"; SAMESPRITE; END;
-TILE "wall_webbed_left";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
-TILE "wall_webbed_down";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
+TILE "wall_webbed_down";
+	CLONE		"temp_wall_webbed";
+	TILEBELOW	"wall_tunnel_down";
+	SAMESPRITE;
+END;
+TILE "wall_webbed_up";
+	CLONE		"temp_wall_webbed";
+	TILEBELOW	"wall_tunnel_up";
+	SAMESPRITE;
+END;
+TILE "wall_webbed_left";
+	CLONE		"temp_wall_webbed";
+	TILEBELOW	"wall_tunnel_left";
+	SAMESPRITE;
+END;
+TILE "wall_webbed_right";
+	CLONE		"temp_wall_webbed";
+	TILEBELOW	"wall_tunnel_right";
+	SAMESPRITE;
+END;
 
 # Holes -------------------------------------------------------
 
@@ -501,7 +520,9 @@ TILE "hole_alt"; SAMESPRITE; ENVTYPE Hole; END;
 
 TILE "cracked_floor";
 	TYPE		TileCrackedFloor;
+	TILEBELOW	"hole";
 	SAMESPRITE;
+	PROPERTIES	(boolean, silent, false);
 END;
 
 TILE "dug"; SAMESPRITE; END;
@@ -576,6 +597,40 @@ TILE "reward";
 	FLAGS		NotCoverable;
 	MODEL		center;
 	RESETWHEN	Never;
+	PROPERTIES
+		(string, reward, "heart_piece",
+			"Reward", "reward", "Reward",
+			 "The reward to spawn."),
+		(boolean, looted, "false",
+			"Looted", "", "Reward",
+			"True if the item has been taken.");
+END;
+
+# Digable Reward ----------------------------------------------
+
+TILE "digable_reward";
+	TYPE		TileDigableReward;
+	FLAGS		Digable;
+	MODEL		center;
+	RESETWHEN	Never;
+	PREVIEW		"preview_digable_reward";
+	PROPERTIES
+		(string, reward, "heart_piece",
+			"Reward", "reward", "Reward",
+			 "The reward to spawn."),
+		(boolean, looted, "false",
+			"Looted", "", "Reward",
+			"True if the item has been taken.");
+END;
+
+# Divable Reward ----------------------------------------------
+
+TILE "divable_reward";
+	TYPE		TileDivableReward;
+	FLAGS		Digable;
+	MODEL		center;
+	RESETWHEN	Never;
+	PREVIEW		"preview_divable_reward";
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "Reward",

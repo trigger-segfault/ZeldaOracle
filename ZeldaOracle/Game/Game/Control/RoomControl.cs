@@ -26,6 +26,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles.Internal;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Tiles.Custom.Monsters;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -63,6 +64,8 @@ namespace ZeldaOracle.Game.Control {
 		private RoomVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
 		private int					currentRoomTicks;
+		/// <summary>Useful for keeping track of the current room through properties.</summary>
+		private int					roomNumber;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -311,6 +314,7 @@ namespace ZeldaOracle.Game.Control {
 			this.isSideScrolling	= room.Zone.IsSideScrolling;
 			this.isUnderwater		= room.Zone.IsUnderwater;
 			this.deathOutOfBounds	= room.DeathOutOfBounds;
+			this.roomNumber         = GameControl.NextRoomNumber();
 			if (this.isUnderwater)
 				visualEffect = visualEffectUnderwater;
 			else
@@ -338,12 +342,20 @@ namespace ZeldaOracle.Game.Control {
 					for (int i = 0; i < room.LayerCount; i++) {
 						TileDataInstance data = room.TileData[x, y, i];
 
-						if (data != null && data.IsAtLocation(x, y) &&
-							data.ModifiedProperties.GetBoolean("enabled", true))
-						{
-							// Place the tile.
-							Tile tile = Tile.CreateTile(data);
-							PlaceTile(tile, x, y, i, false);
+						if (data != null && data.IsAtLocation(x, y)) {
+							if (data.ModifiedProperties.GetBoolean("enabled", true)) {
+								// Place the tile.
+								Tile tile = Tile.CreateTile(data);
+								PlaceTile(tile, x, y, i, false);
+							}
+							else if (i == 0 && data.TileBelow != null) {
+								Tile tile = Tile.CreateTile(data.TileBelow);
+								PlaceTile(tile, x, y, i, false);
+							}
+							else if (i == 0 && Zone.DefaultTileData != null) {
+								Tile tile = Tile.CreateTile(Zone.DefaultTileData);
+								PlaceTile(tile, x, y, i, false);
+							}
 						}
 					}
 				}
@@ -599,7 +611,7 @@ namespace ZeldaOracle.Game.Control {
 			UpdateObjects();
 
 			// Update view to follow player.
-			viewControl.PanTo(Player.Center + Player.ViewFocusOffset);
+			viewControl.PanTo(Player.DrawCenter + Player.ViewFocusOffset);
 			
 			if (requestedTransitionDirection >= 0) {
 				// Call the event RoomTransitioning.
@@ -641,7 +653,7 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(GameData.SPR_HUD_BACKGROUND, viewRect);
 			}
 
-			Vector2F viewTranslation = -GMath.Round(viewControl.ViewPosition);
+			Vector2F viewTranslation = -GameUtil.Bias(viewControl.ViewPosition);
 
 			g.PushTranslation(viewTranslation);
 
@@ -791,7 +803,8 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		public bool AllMonstersDead() {
-			return !GetEntitiesOfType<Monster>().Any(m => m.IsAlive);
+			return	!GetEntitiesOfType<Monster>().Any(m => m.NeedsClearing) &&
+					!GetTilesOfType<TileMonster>().Any(t => t.NeedsClearing);
 		}
 
 		
@@ -917,6 +930,11 @@ namespace ZeldaOracle.Game.Control {
 		public bool DeathOutOfBounds {
 			get { return deathOutOfBounds; }
 			set { deathOutOfBounds = value; }
+		}
+
+		/// <summary>Useful for keeping track of the current room through properties.</summary>
+		public int RoomNumber {
+			get { return roomNumber; }
 		}
 	}
 }

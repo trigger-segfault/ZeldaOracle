@@ -44,14 +44,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	// - MonsterFallInHoleState
 
 	public partial class Monster : Unit, ZeldaAPI.Monster {
-		
+
 		private bool softKill;
 
 		private Properties properties;
 		private int contactDamage;
 		private InteractionHandler[] interactionHandlers;
 		private MonsterColor color;
-		
+
 		// The current monster state.
 		private MonsterState state;
 		// The previous monster state.
@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private MonsterStunState		stateStun;
 		private MonsterFallInHoleState	stateFallInHole;
 		private MonsterGaleState		stateGale;*/
-		
+
 
 
 		//-----------------------------------------------------------------------------
@@ -79,39 +79,39 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// - Top: 4 overlap
 			// - Bottom: 3 overlap?
 			// - Sides: 3 overlap	
-			
+
 			color = MonsterColor.Red;
 			properties = new Properties();
 
 			// Physics
-			Physics.CollisionBox		= new Rectangle2I(-5, -9, 10, 10);
-			Physics.SoftCollisionBox	= new Rectangle2I(-6, -11, 12, 11);
-			Physics.CollideWithWorld	= true;
-			Physics.CollideWithRoomEdge	= true;
-			Physics.AutoDodges			= true;
-			Physics.HasGravity			= true;
-			Physics.IsDestroyedInHoles	= true;
+			Physics.CollisionBox        = new Rectangle2I(-5, -9, 10, 10);
+			Physics.SoftCollisionBox    = new Rectangle2I(-6, -11, 12, 11);
+			Physics.CollideWithWorld    = true;
+			Physics.CollideWithRoomEdge = true;
+			Physics.AutoDodges          = true;
+			Physics.HasGravity          = true;
+			Physics.IsDestroyedInHoles  = true;
 
 			// Graphics
-			Graphics.DepthLayer			= DepthLayer.Monsters;
-			Graphics.DepthLayerInAir	= DepthLayer.InAirMonsters;
-			Graphics.DrawOffset			= new Point2I(-8, -14);
-			centerOffset				= new Point2I(0, -6);
+			Graphics.DepthLayer         = DepthLayer.Monsters;
+			Graphics.DepthLayerInAir    = DepthLayer.InAirMonsters;
+			Graphics.DrawOffset         = new Point2I(-8, -14);
+			centerOffset                = new Point2I(0, -6);
 
 			// Monster & unit settings
-			knockbackSpeed			= GameSettings.MONSTER_KNOCKBACK_SPEED;
-			hurtKnockbackDuration	= GameSettings.MONSTER_HURT_KNOCKBACK_DURATION;
-			bumpKnockbackDuration	= GameSettings.MONSTER_BUMP_KNOCKBACK_DURATION;
-			hurtInvincibleDuration	= GameSettings.MONSTER_HURT_INVINCIBLE_DURATION;
-			hurtFlickerDuration		= GameSettings.MONSTER_HURT_FLICKER_DURATION;
-			contactDamage			= 1;
-			isGaleable				= true;
-			isBurnable				= true;
-			isStunnable				= true;
-			isKnockbackable			= true;
-			isFlying				= false;
-			softKill				= false;
-			
+			knockbackSpeed          = GameSettings.MONSTER_KNOCKBACK_SPEED;
+			hurtKnockbackDuration   = GameSettings.MONSTER_HURT_KNOCKBACK_DURATION;
+			bumpKnockbackDuration   = GameSettings.MONSTER_BUMP_KNOCKBACK_DURATION;
+			hurtInvincibleDuration  = GameSettings.MONSTER_HURT_INVINCIBLE_DURATION;
+			hurtFlickerDuration     = GameSettings.MONSTER_HURT_FLICKER_DURATION;
+			contactDamage           = 1;
+			isGaleable              = true;
+			isBurnable              = true;
+			isStunnable             = true;
+			isKnockbackable         = true;
+			isFlying                = false;
+			softKill                = false;
+
 			// Setup default interactions.
 			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
 			for (int i = 0; i < (int) InteractionType.Count; i++)
@@ -121,42 +121,42 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		protected void SetDefaultReactions() {
 			// Weapon interations
-			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
-			SetReaction(InteractionType.SwordSpin,		Reactions.Damage2);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
-			SetReaction(InteractionType.Shield,			SenderReactions.Bump, Reactions.Bump);
-			SetReaction(InteractionType.Shovel,			Reactions.Bump);
-			SetReaction(InteractionType.Parry,			Reactions.Parry);
-			SetReaction(InteractionType.Pickup,			Reactions.None);
+			SetReaction(InteractionType.Sword, SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
+			SetReaction(InteractionType.SwordSpin, Reactions.Damage2);
+			SetReaction(InteractionType.BiggoronSword, Reactions.Damage3);
+			SetReaction(InteractionType.Shield, SenderReactions.Bump, Reactions.Bump);
+			SetReaction(InteractionType.Shovel, Reactions.Bump);
+			SetReaction(InteractionType.Parry, Reactions.Parry);
+			SetReaction(InteractionType.Pickup, Reactions.None);
 			// Seed interations
-			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.Damage);
-			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept,	Reactions.Stun);
-			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
+			SetReaction(InteractionType.EmberSeed, SenderReactions.Intercept);
+			SetReaction(InteractionType.ScentSeed, SenderReactions.Intercept, Reactions.SilentDamage);
+			SetReaction(InteractionType.PegasusSeed, SenderReactions.Intercept, Reactions.Stun);
+			SetReaction(InteractionType.GaleSeed, SenderReactions.Intercept);
+			SetReaction(InteractionType.MysterySeed, Reactions.MysterySeed);
 			// Projectile interations
-			SetReaction(InteractionType.Arrow,			SenderReactions.Destroy,	Reactions.Damage);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy,	Reactions.Damage);
-			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Stun);
-			SetReaction(InteractionType.SwitchHook,		Reactions.SwitchHook);
+			SetReaction(InteractionType.Arrow, SenderReactions.Destroy, Reactions.Damage);
+			SetReaction(InteractionType.SwordBeam, SenderReactions.Destroy, Reactions.Damage);
+			SetReaction(InteractionType.RodFire, SenderReactions.Intercept);
+			SetReaction(InteractionType.Boomerang, SenderReactions.Intercept, Reactions.Stun);
+			SetReaction(InteractionType.SwitchHook, Reactions.SwitchHook);
 			// Environment interations
-			SetReaction(InteractionType.Fire,			Reactions.Burn);
-			SetReaction(InteractionType.Gale,			Reactions.Gale);
-			SetReaction(InteractionType.BombExplosion,	Reactions.Damage);
-			SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
-			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
-			SetReaction(InteractionType.Block,			Reactions.Damage);
+			SetReaction(InteractionType.Fire, Reactions.Burn);
+			SetReaction(InteractionType.Gale, Reactions.Gale);
+			SetReaction(InteractionType.BombExplosion, Reactions.Damage);
+			SetReaction(InteractionType.ThrownObject, Reactions.Damage);
+			SetReaction(InteractionType.MineCart, Reactions.SoftKill);
+			SetReaction(InteractionType.Block, Reactions.Damage);
 			// Player interations
-			SetReaction(InteractionType.ButtonAction,	Reactions.None);
-			SetReaction(InteractionType.PlayerContact,	OnTouchPlayer);
+			SetReaction(InteractionType.ButtonAction, Reactions.None);
+			SetReaction(InteractionType.PlayerContact, OnTouchPlayer);
 		}
-		
-		
+
+
 		//-----------------------------------------------------------------------------
 		// Monster States and Behavior
 		//-----------------------------------------------------------------------------
-				
+
 		// Begin the given monster state.
 		public void BeginState(MonsterState newState) {
 			if (state != newState) {
@@ -168,7 +168,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				newState.Begin(this, previousState);
 			}
 		}
-		
+
 		public void BeginNormalState() {
 			BeginState(new MonsterNormalState());
 		}
@@ -176,32 +176,41 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public virtual void UpdateAI() {
 
 		}
-		
-		
+
+		public void BeginSpawnState(int duration = GameSettings.MONSTER_SPAWN_STATE_DURATION) {
+			BeginState(new MonsterSpawnState(duration));
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Monster Reactions
 		//-----------------------------------------------------------------------------
 
-		public virtual void OnStun() {}
+		public virtual void OnStun() { }
 
-		public virtual void OnBurn() {}
+		public virtual void OnBurn() { }
 
-		public virtual void OnBurnComplete() {}
+		public virtual void OnBurnComplete() { }
 
-		public virtual void OnElectrocute() {}
+		public virtual void OnElectrocute() { }
 
-		public virtual void OnElectrocuteComplete() {}
+		public virtual void OnElectrocuteComplete() { }
 
 		public void SoftKill() {
 			softKill = true;
 			Kill();
 		}
 
-		public bool Stun() {
+		public bool Stun(int damage = 0) {
 			if (isStunnable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
 				OnStun();
 				AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 				BeginState(new MonsterStunState(GameSettings.MONSTER_STUN_DURATION));
+				if (damage > 0) {
+					DamageInfo damageInfo = new DamageInfo(damage);
+					damageInfo.ApplyKnockBack = false;
+					Hurt(damageInfo);
+				}
 				return true;
 			}
 			return false;
@@ -217,8 +226,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public virtual bool Burn(int damage) {
 			if (!IsInvincible && isBurnable &&
-				((state is MonsterNormalState) || (state is MonsterStunState)))
-			{
+				((state is MonsterNormalState) || (state is MonsterStunState))) {
 				OnBurn();
 				BeginState(new MonsterBurnState(damage));
 				return true;
@@ -235,11 +243,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			seed.TriggerMonsterReaction(this);
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Interactions & Reactions
 		//-----------------------------------------------------------------------------
-		
+
 		// Trigger an interaction.
 		public void TriggerInteraction(InteractionType type, Entity sender) {
 			TriggerInteraction(type, sender, EventArgs.Empty);
@@ -255,7 +263,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected InteractionHandler GetInteraction(InteractionType type) {
 			return interactionHandlers[(int) type];
 		}
-		
+
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
 		protected void SetReaction(InteractionType type, params InteractionStaticDelegate[] reactions) {
@@ -264,7 +272,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			for (int i = 0; i < reactions.Length; i++)
 				handler.Add(reactions[i]);
 		}
-		
+
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
 		protected void SetReaction(InteractionType type, params InteractionMemberDelegate[] reactions) {
@@ -273,23 +281,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			for (int i = 0; i < reactions.Length; i++)
 				handler.Add(reactions[i]);
 		}
-		
+
 		protected void SetReaction(InteractionType type,
 			InteractionStaticDelegate staticReaction,
-			params InteractionMemberDelegate[] memberReactions)
-		{
+			params InteractionMemberDelegate[] memberReactions) {
 			InteractionHandler handler = GetInteraction(type);
 			handler.Clear();
 			handler.Add(staticReaction);
 			for (int i = 0; i < memberReactions.Length; i++)
 				handler.Add(memberReactions[i]);
 		}
-		
+
 		protected void SetReaction(InteractionType type,
 			InteractionStaticDelegate staticReaction1,
 			InteractionStaticDelegate staticReaction2,
-			params InteractionMemberDelegate[] memberReactions)
-		{
+			params InteractionMemberDelegate[] memberReactions) {
 			InteractionHandler handler = GetInteraction(type);
 			handler.Clear();
 			handler.Add(staticReaction1);
@@ -297,13 +303,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			for (int i = 0; i < memberReactions.Length; i++)
 				handler.Add(memberReactions[i]);
 		}
-		
+
 		protected void SetReaction(InteractionType type,
 			InteractionStaticDelegate staticReaction1,
 			InteractionStaticDelegate staticReaction2,
 			InteractionStaticDelegate staticReaction3,
-			params InteractionMemberDelegate[] memberReactions)
-		{
+			params InteractionMemberDelegate[] memberReactions) {
 			InteractionHandler handler = GetInteraction(type);
 			handler.Clear();
 			handler.Add(staticReaction1);
@@ -313,18 +318,18 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				handler.Add(memberReactions[i]);
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
-		
+
 		protected virtual void FacePlayer() {
 			Vector2F lookVector = RoomControl.Player.Center - Center;
 			direction = Directions.NearestFromVector(lookVector);
 		}
 
 		public virtual bool CanSpawnAtLocation(Point2I location) {
-			Vector2F spawnPosition = 
+			Vector2F spawnPosition =
 				(location * GameSettings.TILE_SIZE) +
 				new Vector2F(8, 8) - centerOffset;
 
@@ -347,7 +352,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			for (int x = 0; x < RoomControl.Room.Width; x++) {
 				for (int y = 0; y < RoomControl.Room.Height; y++) {
-					Vector2F spawnPosition = 
+					Vector2F spawnPosition =
 						(new Point2I(x, y) * GameSettings.TILE_SIZE) +
 						new Vector2F(8, 8) - centerOffset;
 					if (CanSpawnAtLocation(new Point2I(x, y)))
@@ -367,20 +372,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
 			RoomControl.SpawnEntity(explosion, Center);
 		}
-		
-		
+
+
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
 			base.Initialize();
-			
+
 			color = (MonsterColor) Properties.GetInteger("color", (int) color);
 
 			health = healthMax;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
-			
+
 			// Begin the default monster state
 			BeginNormalState();
 			previousState = state;
@@ -394,7 +399,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void OnHurt(DamageInfo damage) {
-			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
+			if (damage.PlaySound)
+				AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 		}
 
 		public override void OnFallInHole() {
@@ -419,8 +425,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Check for minecart interactions
 			if (!isPassable && player.IsInMinecart &&
-				physics.IsCollidingWith(player, CollisionBoxType.Soft))
-			{
+				physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
 				TriggerInteraction(InteractionType.MineCart, player);
 				if (IsDestroyed)
 					return;
@@ -431,7 +436,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
 			IEnumerable<UnitTool> playerTools = player.EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
-			
+
 			// 1. (M-M) MonsterTools to PlayerTools
 			// 2. (M-1) MonsterTools to Player
 			// 4. (M-1) PlayerTools to Monster
@@ -445,13 +450,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 							Vector2F contactPoint = playerTool.PositionedCollisionBox.Center;
 
 							TriggerInteraction(InteractionType.Parry, player, new ParryInteractionArgs() {
-								ContactPoint	= contactPoint,
-								MonsterTool		= monsterTool,
-								SenderTool		= playerTool
+								ContactPoint    = contactPoint,
+								MonsterTool     = monsterTool,
+								SenderTool      = playerTool
 							});
 
 							playerTool.OnParry(this, contactPoint);
-				
+
 							RoomControl.SpawnEntity(new EffectCling(), contactPoint);
 
 							return;
@@ -483,8 +488,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Check collisions with player
 			if (!parry && !IsStunned &&
-				physics.IsCollidingWith(player, CollisionBoxType.Soft))
-			{
+				physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
 				TriggerInteraction(InteractionType.PlayerContact, player);
 			}
 		}
@@ -505,7 +509,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			state.DrawOver(g);
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -523,7 +527,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public bool IsStunned {
 			get { return (state is MonsterStunState); }
 		}
-		
+
 		public MonsterState CurrentState {
 			get { return state; }
 		}
@@ -535,6 +539,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				Graphics.ColorDefinitions.SetAll(
 					GameData.MONSTER_COLOR_DEFINITION_MAP[(int) color]);
 			}
+		}
+
+		/// <summary>True if this monster is not counted towards clearing a room.</summary>
+		public bool IgnoreMonster {
+			get { return Properties.Get("ignore_monster", false); }
+		}
+
+		/// <summary>True if this monster needs to be killed in order to clear the room.</summary>
+		public bool NeedsClearing {
+			get { return !IgnoreMonster && IsAlive; }
 		}
 	}
 }

@@ -41,6 +41,22 @@ ANIMATION "effect_dirt";
 	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -6); ADD part, 1, (5, 0), ( -8,  -8); # down
 	END;
 	
+COMPOSITE "tile_digable_reward_dirt";
+	ADD (4, 0), (0, 4), clipping: (0, 0, 16, 12);
+	ADD (5, 0), (0, 4), clipping: (0, 0, 16, 12); END;
+	
+COMPOSITE "preview_digable_reward";
+	ADD "reward_heart_piece";
+	COMBINE "tile_digable_reward_dirt"; END;
+	
+COMPOSITE "tile_divable_reward_water";
+	ADD (6, 0), (0, 6), clipping: (0, 0, 16, 10);
+	ADD (7, 0), (0, 6), clipping: (0, 0, 16, 10); END;
+	
+COMPOSITE "preview_divable_reward";
+	ADD "reward_heart_piece";
+	COMBINE "tile_divable_reward_water"; END;
+	
 ANIMATION "effect_water_splash"; SUBSTRIP reset;
 	ADD frame, 4, (6,0), ( -8, -11); ADD part, 4, (7, 0), ( -8, -11);
 	ADD frame, 4, (6,0), (-10, -13); ADD part, 4, (7, 0), ( -6, -13);

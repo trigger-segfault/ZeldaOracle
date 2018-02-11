@@ -135,7 +135,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
-			//player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
 			
 			isDiving = false;
 			
@@ -211,5 +210,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//	get { return (player.Movement.MoveSpeedScale > 1.3f); }
 		//}
 
+		public bool IsSubmerged {
+			get { return isSubmerged; }
+		}
 	}
 }

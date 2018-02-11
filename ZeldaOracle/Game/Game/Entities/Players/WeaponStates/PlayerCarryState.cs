@@ -209,6 +209,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 			}
 			carryObject.Graphics.Update();
+			carryObject.Physics.SurfacePosition = player.Physics.SurfacePosition;
 		}
 		
 		public override void DrawOver(RoomGraphics g) {
@@ -226,6 +227,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			// Draw the object.
+			carryObject.Physics.SurfacePosition = player.Physics.SurfacePosition;
 			carryObject.Graphics.Draw(g, DepthLayer.ProjectileCarriedTile);
 		}
 

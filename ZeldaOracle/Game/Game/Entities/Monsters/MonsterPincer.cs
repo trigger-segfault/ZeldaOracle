@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			base.Initialize();
 
 			// Begin hiding
-			isPassable = true;
+			IsPassable = true;
 			holePosition = position;
 			Graphics.IsVisible = false;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_PINCER_EYES);
@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				// Check if returned to hole
 				if (vectorToHole.Length < GameSettings.MONSTER_PINCER_RETURN_SPEED) {
 					timer = 0;
-					isPassable = true;
+					IsPassable = true;
 					position = holePosition;
 					physics.Velocity = Vector2F.Zero;
 					Graphics.IsVisible = false;
@@ -110,7 +110,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					Angle = Angles.NearestFromVector(vectorToPlayer);
 					strikeVelocity = Angles.ToVector(Angle) *
 						GameSettings.MONSTER_PINCER_STRIKE_SPEED;
-					isPassable = false;
+					IsPassable = false;
 					Graphics.PlayAnimation(GameData.ANIM_MONSTER_PINCER_HEAD);
 					pincerState = PincerState.Strike;
 				}

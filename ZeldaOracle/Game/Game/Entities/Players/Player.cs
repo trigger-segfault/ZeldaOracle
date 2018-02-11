@@ -617,8 +617,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void OnHurt(DamageInfo damage) {
-			base.OnHurt(damage);
-			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
+			if (damage.PlaySound)
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
 			foreach (PlayerState state in ActiveStates)
 				state.OnHurt(damage);
 		}
@@ -1093,6 +1093,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool IsFrozen {
 			get { return isFrozen; }
 			set { isFrozen = value; }
+		}
+
+		/// <summary>Used to check if the player is currently swimming and submerged
+		/// in order to collect divable rewards.</summary>
+		public bool IsSubmerged {
+			get {
+				return (EnvironmentState == environmentStateSwim &&
+					environmentStateSwim.IsSubmerged);
+			}
 		}
 	}
 }

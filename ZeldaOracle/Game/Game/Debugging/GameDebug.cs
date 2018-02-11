@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Debug {
 		private static Vector2F mousePosition;
 		private static Point2I mouseTileLocation;
 		private static string sampledTileName = "";
-
+		private static Action printDebugInfoFunction = PrintPlayerDebugInfo;
 
 		public static DevSettings DevSettings { get; set; } = new DevSettings();
 		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
@@ -98,6 +98,59 @@ namespace ZeldaOracle.Game.Debug {
 			EquipStartWeapon(DevSettings.Inventory.A, Inventory.SLOT_A);
 			EquipStartWeapon(DevSettings.Inventory.B, Inventory.SLOT_B);
 		}
+
+		public static void PrintPlayerDebugInfo() {
+			Player player = RoomControl.Player;
+			
+			string weaponStateName = "";
+			if (player.WeaponState != null)
+				weaponStateName = player.WeaponState.GetType().Name;
+			string controlStateName = "";
+			if (player.ControlState != null)
+				controlStateName = player.ControlState.GetType().Name;
+			string environmentStateName = "";
+			if (player.EnvironmentState != null)
+				environmentStateName = player.EnvironmentState.GetType().Name;
+
+			Console.SetCursorPosition(0, 0);
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.BackgroundColor = ConsoleColor.Black;
+
+			Console.WriteLine("Player.Velocity: {0,-40}", player.Physics.Velocity);
+			if (player.Physics.OnGroundOverride)
+				Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine("Player.IsOnGround: {0,-40}", player.Physics.IsOnGround);
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine("Player.Motion: {0,-40}", player.Movement.Motion);
+			Console.WriteLine("Player.Direction:     {0,-40}", Directions.ToString(player.Direction));
+			Console.WriteLine("Player.UseDirection:  {0,-40}", Directions.ToString(player.UseDirection));
+			Console.WriteLine("Player.MoveDirection: {0,-40}", Directions.ToString(player.MoveDirection));
+			Console.WriteLine("Player.MoveAngle:     {0,-40}", Angles.ToPoint(player.MoveAngle));
+			Console.WriteLine("Player.IsMoving:      {0,-40}", player.Movement.IsMoving);
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.WriteLine("Ctl: {0,-40}", controlStateName);
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine("Wpn: {0,-40}", weaponStateName);
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Env: {0,-40}", environmentStateName);
+			Console.ForegroundColor = ConsoleColor.Magenta;
+			Console.Write("Cnd: ");
+			int conditionStateCount = player.ConditionStates.Count();
+			for (int i = 0; i < 4; i++) {
+				if (i > 0)
+					Console.Write("     ");
+				if (i < conditionStateCount) {
+					PlayerState state = player.ConditionStates.ElementAt(i);
+					string stateName = state.GetType().Name;
+					Console.WriteLine("{0,-40}", stateName);
+				}
+				else
+					Console.WriteLine("{0,-40}", "");
+			}
+			Console.WriteLine("");
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.BackgroundColor = ConsoleColor.Black;
+		}
 		
 		public static void UpdateRoomDebugKeys() {
 			bool ctrl = (Keyboard.IsKeyDown(Keys.LControl) ||
@@ -105,54 +158,12 @@ namespace ZeldaOracle.Game.Debug {
 			bool shift = (Keyboard.IsKeyDown(Keys.LShift) ||
 				Keyboard.IsKeyDown(Keys.RShift));
 			
-			if (GameManager.IsConsoleOpen) {
-				Player player = RoomControl.Player;
-			
-				string weaponStateName = "";
-				if (player.WeaponState != null)
-					weaponStateName = player.WeaponState.GetType().Name;
-				string controlStateName = "";
-				if (player.ControlState != null)
-					controlStateName = player.ControlState.GetType().Name;
-				string environmentStateName = "";
-				if (player.EnvironmentState != null)
-					environmentStateName = player.EnvironmentState.GetType().Name;
-
+			// Print debug info to the console window
+			if (GameManager.IsConsoleOpen && printDebugInfoFunction != null) {
 				Console.SetCursorPosition(0, 0);
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.BackgroundColor = ConsoleColor.Black;
-
-				Console.WriteLine("Player.Velocity: {0,-40}", player.Physics.Velocity);
-				if (player.Physics.OnGroundOverride)
-					Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine("Player.IsOnGround: {0,-40}", player.Physics.IsOnGround);
-				Console.ForegroundColor = ConsoleColor.White;
-				Console.WriteLine("Player.Motion: {0,-40}", player.Movement.Motion);
-				Console.WriteLine("Player.Direction:     {0,-40}", Directions.ToString(player.Direction));
-				Console.WriteLine("Player.UseDirection:  {0,-40}", Directions.ToString(player.UseDirection));
-				Console.WriteLine("Player.MoveDirection: {0,-40}", Directions.ToString(player.MoveDirection));
-				Console.WriteLine("Player.MoveAngle:     {0,-40}", Angles.ToPoint(player.MoveAngle));
-				Console.WriteLine("Player.IsMoving:      {0,-40}", player.Movement.IsMoving);
-				Console.ForegroundColor = ConsoleColor.Cyan;
-				Console.WriteLine("Ctl: {0,-40}", controlStateName);
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine("Wpn: {0,-40}", weaponStateName);
-				Console.ForegroundColor = ConsoleColor.Green;
-				Console.WriteLine("Env: {0,-40}", environmentStateName);
-				Console.ForegroundColor = ConsoleColor.Magenta;
-				Console.Write("Cnd: ");
-				int conditionStateCount = player.ConditionStates.Count();
-				for (int i = 0; i < 4; i++) {
-					if (i > 0)
-						Console.Write("     ");
-					if (i < conditionStateCount) {
-						PlayerState state = player.ConditionStates.ElementAt(i);
-						string stateName = state.GetType().Name;
-						Console.WriteLine("{0,-40}", stateName);
-					}
-					else
-						Console.WriteLine("{0,-40}", "");
-				}
+				printDebugInfoFunction();
 				Console.WriteLine("");
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.BackgroundColor = ConsoleColor.Black;
@@ -505,6 +516,7 @@ namespace ZeldaOracle.Game.Debug {
 					Color collisionBoxColor = Color.Yellow;
 					if (entity is Player && ((Player) entity).IsOnSideScrollLadder)
 						collisionBoxColor = new Color(255, 160, 0);
+					collisionBox.Point = GameUtil.Bias(collisionBox.Point);
 					g.FillRectangle(collisionBox, collisionBoxColor);
 
 					for (int direction = 0; direction < Directions.Count; direction++) {

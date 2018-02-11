@@ -25,17 +25,17 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			
 			//=====================================================================================
 			// Begin creating music.
-			AddCommand("Music", "", delegate(CommandParam parameters) {
+			/*AddCommand("Music", "", delegate(CommandParam parameters) {
 				//isCreatingMusic = true;
-			});
+			});*/
 			//=====================================================================================
 			// Finish creating music.
-			AddCommand("End", "", delegate(CommandParam parameters) {
+			/*AddCommand("End", "", delegate(CommandParam parameters) {
 				//isCreatingMusic = false;
-			});
+			});*/
 			//=====================================================================================
 			// Load a song.
-			AddCommand("Song", "string songName, float volume = 1, float pitch = 0, float pan = 0",
+			AddCommand("SONG", "string songName, float volume = 1, float pitch = 0, float pan = 0",
 			delegate(CommandParam parameters) {
 				string path = parameters.GetString(0);
 				Song song	= Resources.LoadSong(Resources.MusicDirectory + path);

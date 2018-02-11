@@ -236,7 +236,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			settings.Styles = StyleDefinitions;
 
-			position = RoundPosition(position);
+			position = GameUtil.Bias(position);
 
 			DrawingInstruction instruction = new DrawingInstruction(
 					sprite, settings, position, depthOrigin);
@@ -285,7 +285,7 @@ namespace ZeldaOracle.Game.Entities {
 			if (font == null || text.IsNull)
 				return;
 			
-			position = RoundPosition(position);
+			position = GameUtil.Bias(position);
 
 			DrawingInstruction instruction = new DrawingInstruction(font, text,
 				position, color, alignment, area, depthOrigin);
@@ -298,12 +298,6 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Internal Drawing
 		//-----------------------------------------------------------------------------
-
-		/// <summary>There's a bias of 0.001f to account for rounding
-		/// inconsistancies with the value 0.5f.</summary>
-		private Vector2F RoundPosition(Vector2F position) {
-			return GMath.Round(position + 0.001f);
-		}
 
 		/// <summary>Add the instruction to the end of the linked list for its layer.</summary>
 		private void AddInstruction(DrawingInstruction instruction, DepthLayer depth) {
