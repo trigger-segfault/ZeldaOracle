@@ -17,6 +17,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private int timer;
 		private int duration;
 		private ItemBracelet bracelet;
+		private Tile tile;
 
 
 		//-----------------------------------------------------------------------------
@@ -26,6 +27,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public PlayerGrabState() {
 			bracelet	= null;
 			duration	= 10;
+			tile		= null;
 		}
 		
 
@@ -58,11 +60,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			//player.Movement.CanJump = false;
-			//player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
-
-			StateParameters.ProhibitMovementControl = true;
-			StateParameters.ProhibitJumping = true;
+			StateParameters.ProhibitMovementControl	= true;
+			StateParameters.ProhibitJumping			= true;
 
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
@@ -70,17 +69,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			player.Movement.StopMotion();
 			
-			// Check if grabbing an instantly pickupable tile.
-			Tile grabTile = player.Physics.GetFacingSolidTile(player.Direction);
-			if (grabTile.HasFlag(TileFlags.Pickupable | TileFlags.InstantPickup)) {
+			// Check if grabbing an instantly pickupable tile
+			if (tile.HasFlag(TileFlags.Pickupable | TileFlags.InstantPickup)) {
 				if (AttemptPickup())
 					return;
 			}
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.Movement.CanJump = true;
-			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 		
 		public override void OnHurt(DamageInfo damage) {
@@ -94,7 +90,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			InputControl grabButton = player.Inventory.GetSlotButton(bracelet.CurrentEquipSlot);
 			InputControl pullButton = Controls.Arrows[Directions.Reverse(player.Direction)];
 
-			if (!grabButton.IsDown()) {
+			if (!grabButton.IsDown() ||
+				!player.Physics.IsFacingSolidTile(tile, player.Direction))
+			{
 				End();
 			}
 			else if (pullButton.IsDown()) {
@@ -119,6 +117,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public ItemBracelet Bracelet {
 			get { return bracelet; }
 			set { bracelet = value; }
+		}
+
+		public Tile Tile {
+			get { return tile; }
+			set { tile = value; }
 		}
 	}
 }

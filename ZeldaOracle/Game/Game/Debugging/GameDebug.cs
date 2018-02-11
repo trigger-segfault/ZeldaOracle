@@ -466,6 +466,17 @@ namespace ZeldaOracle.Game.Debug {
 
 		private static void DrawEntity(Graphics2D g, Entity entity) {
 			
+			if (entity is Player) {
+				Player player = (Player) entity;
+				Tile facingTile = player.Physics.GetFacingSolidTile(player.Direction);
+				if (facingTile != null) {
+					foreach (Rectangle2F box in facingTile.CollisionModel.Boxes) {
+						Rectangle2F r = Rectangle2F.Translate(box, facingTile.Position);
+						g.DrawRectangle(r, 1, Color.Cyan);
+					}
+				}
+			}
+
 			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
 				// Blue soft collision box
 				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position,

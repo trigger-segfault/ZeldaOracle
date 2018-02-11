@@ -344,6 +344,7 @@ namespace ZeldaOracle.Game.Entities {
 		public Tile GetFacingSolidTile(int direction, float distance = 1.0f) { // TODO: return closest tile.
 			Rectangle2F entityBox = PositionedCollisionBox;
 			entityBox.ExtendEdge(direction, distance);
+			Vector2F directionVector = Directions.ToVector(direction);
 
 			Tile closestTile = null;
 			int alignAxis = 1 - Directions.ToAxis(direction);
@@ -359,7 +360,8 @@ namespace ZeldaOracle.Game.Entities {
 							!IsSafeClippingInDirection(solidBox, (direction + 1) % 4) &&
 							!IsSafeClippingInDirection(solidBox, (direction + 2) % 4) &&
 							!IsSafeClippingInDirection(solidBox, (direction + 3) % 4) &&
-							!CanDodgeCollision(solidBox, direction))
+							!CanDodgeCollision(solidBox, direction) && 
+							(solidBox.Center - entityBox.Center).Dot(directionVector) > 0.0f)
 						{
 							float distToEdge = Math.Max(
 								entityBox.TopLeft[alignAxis] - solidBox.BottomRight[alignAxis],
@@ -374,6 +376,33 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 			return closestTile;
+		}
+				
+		/// <summary>Check if the given tile is directly in front of the entity.
+		/// </summary>
+		public bool IsFacingSolidTile(Tile tile, int direction,
+			float distance = 1.0f)
+		{
+			Rectangle2F entityBox = PositionedCollisionBox;
+			entityBox.ExtendEdge(direction, distance);
+			Vector2F directionVector = Directions.ToVector(direction);
+			int alignAxis = 1 - Directions.ToAxis(direction);
+
+			foreach (Rectangle2I box in tile.CollisionModel.Boxes) {
+				Rectangle2F solidBox = box;
+				solidBox.Point += tile.Position;
+
+				if (entityBox.Intersects(solidBox) &&
+					!IsSafeClippingInDirection(solidBox, (direction + 1) % 4) &&
+					!IsSafeClippingInDirection(solidBox, (direction + 2) % 4) &&
+					!IsSafeClippingInDirection(solidBox, (direction + 3) % 4) &&
+					!CanDodgeCollision(solidBox, direction) && 
+					(solidBox.Center - entityBox.Center).Dot(directionVector) > 0.0f)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		
@@ -470,8 +499,10 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool CanDodgeCollision(Rectangle2F block, int direction) {
-			if (GMath.Abs(velocity) > GameSettings.EPSILON)
-				return false; // Only dodge when moving horizontally or vertically.
+			// Only dodge when moving horizontally or vertically.
+			if (GMath.Abs(velocity.X) > GameSettings.EPSILON &&
+				GMath.Abs(velocity.Y) > GameSettings.EPSILON)
+				return false;
 
 			float		dodgeDist	= autoDodgeDistance;
 			Rectangle2F	objBox		= PositionedCollisionBox;
@@ -483,8 +514,9 @@ namespace ZeldaOracle.Game.Entities {
 				float distance	= Math.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
 
 				if (distance <= dodgeDist) {
-					Vector2F checkPos	= pos + dirVect + (Directions.ToVector(moveDir) * distance);
-					Vector2F gotoPos	= GMath.Round(pos) + Directions.ToVector(moveDir);
+					Vector2F checkPos = pos + (dirVect * 1.0f) +
+						(Directions.ToVector(moveDir) * distance);
+					Vector2F gotoPos = GMath.Round(pos) + Directions.ToVector(moveDir);
 
 					if (!IsPlaceMeetingSolid(checkPos, collisionBox) &&
 						!IsPlaceMeetingSolid(gotoPos, collisionBox))

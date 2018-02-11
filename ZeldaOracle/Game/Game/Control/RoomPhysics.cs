@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			
-			// Process physics for the player
+			// Process physics for the player last
 			if (roomControl.Player.Physics != null &&
 				roomControl.Player.Physics.IsEnabled)
 			{
@@ -60,11 +60,11 @@ namespace ZeldaOracle.Game.Control {
 			// Initialize the collision state for this frame
 			InitPhysicsState(entity);
 
-			// Check the surface tile beneath the entity.
+			// Check the surface tile beneath the entity
 			CheckSurfaceTile(entity);
-			// Resolve collisions with solid objects.
+			// Resolve collisions with solid objects
 			CheckSolidCollisions(entity);
-			// Resolve collisions with the room edge.
+			// Resolve collisions with the room edge
 			CheckRoomEdgeCollisions(entity);
 			// Integrate velocity.
 			entity.Position += entity.Physics.Velocity;
@@ -124,7 +124,7 @@ namespace ZeldaOracle.Game.Control {
 		private void CheckSolidCollisions(Entity entity) {
 			if (entity.Physics.CollideWithWorld || entity.Physics.CollideWithEntities) {
 				
-				// Handle circular tile collisions.
+				// Handle circular tile collisions
 				if (entity.Physics.CollideWithWorld && entity.Physics.CheckRadialCollisions) {
 					Rectangle2F checkArea = Rectangle2F.Union(
 						Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
@@ -136,26 +136,26 @@ namespace ZeldaOracle.Game.Control {
 					}
 				}
 
-				// 1. Resolve unresolved collisions from the previous frame.
+				// 1. Resolve unresolved collisions from the previous frame
 				ResolvePreviousClipCollisions(entity);
-				// 2. Detect collisions.
+				// 2. Detect collisions
 				DetectClipCollisions(entity);
-				// 3. Resolve collisions.
+				// 3. Resolve collisions
 				ResolveClipCollisions(entity);
-				// 4. Detect any new unresolved collisions.
+				// 4. Detect any new unresolved collisions
 				DetectClipCollisions(entity);
-				// 5. Clip velocity for all detected collisions.
+				// 5. Clip velocity for all detected collisions
 				ClipVelocity(entity);
-				// 6. Check if the entity is being crushed.
+				// 6. Check if the entity is being crushed
 				CheckCrush(entity);
-				// 7. Detect and resolve collisions with movement.
+				// 7. Detect and resolve collisions with movement
 				ResolveMovementCollisions(entity);
 				
-				// Check the player's side-scrolling ladder collisions.
+				// Check the player's side-scrolling ladder collisions
 				if (entity is Player)
 					CheckPlayerLadderClimbing((Player) entity);
 
-				// Set the entity's collision info.
+				// Set the entity's collision info
 				for (int i = 0; i < Directions.Count; i++) {
 					CollisionInfoNew clipCollision = entity.Physics.ClipCollisionInfo[i];
 
@@ -642,7 +642,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
-		// Restrict the entity's velocity in the given direction.
+		/// <summary>Restrict the entity's velocity in the given direction.</summary>
 		private void ClipEntityVelocity(Entity entity, int direction) {
 			if (direction == Directions.Right && entity.Physics.VelocityX > 0.0f)
 				entity.Physics.VelocityX = 0.0f;
@@ -654,7 +654,7 @@ namespace ZeldaOracle.Game.Control {
 				entity.Physics.VelocityY = 0.0f;
 		}
 
-		// Check if the entity is being crushed.
+		/// <summary>Check if the entity is being crushed.</summary>
 		private void CheckCrush(Entity entity) {
 			if (!entity.Physics.IsCrushable)
 				return;
@@ -713,11 +713,11 @@ namespace ZeldaOracle.Game.Control {
 					entity.Physics.CollisionBox, entity.Position + entity.Physics.Velocity);
 			}
 			
-			// Check if there actually is a collision.
+			// Check if there actually is a collision
 			if (!entityBox.Intersects(solidBox))
 				return;
 
-			// Determine clipping direction.
+			// Determine clipping direction
 			int clipDirection = -1;
 			if (axis == Axes.X) {
 				if (entityBox.Center.X < solidBox.Center.X)
@@ -754,7 +754,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			// Resolve the collision.
+			// Resolve the collision
 			if (!entity.Physics.IsColliding && !entity.Physics.ClipCollisionInfo[clipDirection].IsColliding) {
 				// Determine the penetration.
 				float penetrationDistance = GetClipPenetration(entityBox, solidBox, clipDirection);
@@ -1119,18 +1119,19 @@ namespace ZeldaOracle.Game.Control {
 				
 				if (entity.Physics.HasGravity && !entity.Physics.OnGroundOverride) {
 					// Zero jump speed if the entity is colliding below.
-					if (entity.Physics.ZVelocity < 0.0f && entity.Physics.CollisionInfo[Directions.Down].IsColliding)
+					if (entity.Physics.ZVelocity < 0.0f &&
+						entity.Physics.CollisionInfo[Directions.Down].IsColliding)
 						entity.Physics.ZVelocity = 0.0f;
 					// Zero jump speed if the entity is colliding above.
 					// NOTE: this doesn't actually happen in the real game, which is strange.
 					//else if (entity.Physics.ZVelocity > 0.0f && entity.Physics.CollisionInfo[Directions.Up].IsColliding)
 						//entity.Physics.ZVelocity = 0.0f;
-					// Integrate gravity.
+					// Integrate acceleration due to gravity
 					entity.Physics.ZVelocity -= entity.Physics.Gravity;
-					// Limit to maximum fall speed.
+					// Limit to maximum fall speed
 					if (entity.Physics.ZVelocity < -entity.Physics.MaxFallSpeed && entity.Physics.MaxFallSpeed >= 0.0f)
 						entity.Physics.ZVelocity = -entity.Physics.MaxFallSpeed;
-					// Convert Z-velocity to Y-velocity.
+					// Convert the Z-velocity to Y-velocity
 					entity.Physics.VelocityY = -entity.Physics.ZVelocity;
 				}
 				else {

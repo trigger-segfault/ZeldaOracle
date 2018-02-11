@@ -121,6 +121,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 						GameControl.Inventory.EquippedWeapons[otherEquipSlot];
 				GameControl.Inventory.EquippedWeapons[1 - equipSlot] = equippedWeapon;
 			}
+
+			equippedWeapon.CurrentEquipSlot = equipSlot;
 		}
 
 

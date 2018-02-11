@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.Items {
 		// Equip a weapon into the given slot (slot 0 (A) or 1 (B)).
 		public void EquipWeapon(Item item, int slot) {
 			ItemWeapon weapon = item as ItemWeapon;
-			if (weapon != null && weapon.HasFlag(ItemFlags.TwoHanded)) {
+			if (weapon != null && weapon.IsTwoHanded) {
 				// Unequip the current items.
 				if (equippedWeapons[0] != null)
 					equippedWeapons[0].Unequip();

@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
-using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Entities.Players.States;
+﻿using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 
@@ -45,7 +34,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			// Check for a tile to grab.
 			if (!Player.IsBeingKnockedBack) {
 				Tile grabTile = Player.Physics.GetFacingSolidTile(Player.Direction);
-				if (grabTile != null)
+				if (grabTile != null && !grabTile.IsMoving)
 					grabTile.OnGrab(Player.Direction, this);
 			}
 		}
