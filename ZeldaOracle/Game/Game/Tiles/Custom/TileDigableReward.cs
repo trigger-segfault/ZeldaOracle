@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			base.OnInitialize();
 
 			if (IsLooted) {
-				DropList = null;
+				RoomControl.RemoveTile(this);
 			}
 			else {
 				string rewardName = Properties.GetString("reward", "rupees_1");

@@ -196,6 +196,23 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return TileData.DrawAsEntity; }
 		}
 
+		public Rectangle2I HurtArea {
+			get {
+				return new Rectangle2I(
+					properties.GetPoint("hurt_area_point", new Point2I(-1, -1)),
+					properties.GetPoint("hurt_area_size", new Point2I(18, 18)));
+			}
+			set {
+				properties.Set("hurt_area_point", value.Point);
+				properties.Set("hurt_area_size", value.Size);
+			}
+		}
+
+		public int HurtDamage {
+			get { return properties.GetInteger("hurt_damage", 0); }
+			set { properties.Set("hurt_damage", value); }
+		}
+
 		/// <summary>Gets the tile to appear when
 		/// this one is removed while on layer 1.</summary>
 		public TileData TileBelow {

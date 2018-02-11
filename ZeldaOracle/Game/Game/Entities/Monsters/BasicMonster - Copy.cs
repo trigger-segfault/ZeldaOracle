@@ -151,7 +151,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Graphics.PlayAnimation(animationMove);
 			
 			float dir = (moveAngleIndex / (float) numMoveAngles) * GMath.FullAngle;
-			Physics.Velocity = Vector2F.CreatePolar(moveSpeed, dir) * new Vector2F(1.0f, -1.0f);
+			Physics.Velocity = Vector2F.FromPolar(moveSpeed, dir) * new Vector2F(1.0f, -1.0f);
 		}
 
 		protected void StopMoving() {
@@ -218,7 +218,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			speed = Math.Min(chargeSpeed, speed + chargeAcceleration);
 			
 			float dir = (moveAngleIndex / (float) numMoveAngles) * GMath.FullAngle;
-			Physics.Velocity = Vector2F.CreatePolar(speed, dir) * new Vector2F(1.0f, -1.0f);
+			Physics.Velocity = Vector2F.FromPolar(speed, dir) * new Vector2F(1.0f, -1.0f);
 
 			if (chargeType == ChargeType.ChargeForDuration) {
 				if (moveTimer <= 0) {
@@ -238,7 +238,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		protected void UpdateMovingState() {
 			float dir = (moveAngleIndex / (float) numMoveAngles) * GMath.FullAngle;
-			Physics.Velocity = Vector2F.CreatePolar(speed, dir) * new Vector2F(1.0f, -1.0f);
+			Physics.Velocity = Vector2F.FromPolar(speed, dir) * new Vector2F(1.0f, -1.0f);
 			
 			// Stop moving after a duration.
 			if (moveTimer <= 0) {

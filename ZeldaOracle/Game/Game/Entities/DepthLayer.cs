@@ -21,9 +21,10 @@ namespace ZeldaOracle.Game.Entities {
 		EffectDirt,
 		EffectTileBreak,
 		EffectScentSeedPod,
+		Traps,
 		EffectSeed,
 		EffectGale,
-
+		
 		// Used by crossing gate.
 		// Draws above player/monsters when player is above and vice-versa.
 		DynamicDepthBelowTileLayer2,

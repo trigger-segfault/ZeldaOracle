@@ -205,6 +205,17 @@ namespace ZeldaOracle.Game {
 		// Monster items.
 		public static Animation ANIM_MONSTER_SWORD_HOLD;
 
+		// Traps
+		public static Animation ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_BOTH;
+		public static Animation ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_TOP;
+		public static Animation ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_MID;
+		public static Animation ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_BOTTOM;
+		public static Animation ANIM_TILE_SPIKE_ROLLER_VERTICAL_BOTH;
+		public static Animation ANIM_TILE_SPIKE_ROLLER_VERTICAL_LEFT;
+		public static Animation ANIM_TILE_SPIKE_ROLLER_VERTICAL_MID;
+		public static Animation ANIM_TILE_SPIKE_ROLLER_VERTICAL_RIGHT;
+		public static Animation[][] ANIM_TRAP_SPIKE_ROLLERS;
+
 		// Colllectible animations.
 		public static Animation ANIM_COLLECTIBLE_FAIRY;
 
@@ -319,6 +330,20 @@ namespace ZeldaOracle.Game {
 			ANIM_EFFECT_SEEDS[(int) SeedType.Gale]		= ANIM_EFFECT_SEED_GALE;
 			ANIM_EFFECT_SEEDS[(int) SeedType.Pegasus]	= ANIM_EFFECT_SEED_PEGASUS;
 			ANIM_EFFECT_SEEDS[(int) SeedType.Mystery]	= ANIM_EFFECT_SEED_MYSTERY;
+
+			ANIM_TRAP_SPIKE_ROLLERS = new Animation[2][];
+			ANIM_TRAP_SPIKE_ROLLERS[0] = new Animation[4] {
+				ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_BOTH,
+				ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_TOP,
+				ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_MID,
+				ANIM_TILE_SPIKE_ROLLER_HORIZONTAL_BOTTOM
+			};
+			ANIM_TRAP_SPIKE_ROLLERS[1] = new Animation[4] {
+				ANIM_TILE_SPIKE_ROLLER_VERTICAL_BOTH,
+				ANIM_TILE_SPIKE_ROLLER_VERTICAL_LEFT,
+				ANIM_TILE_SPIKE_ROLLER_VERTICAL_MID,
+				ANIM_TILE_SPIKE_ROLLER_VERTICAL_RIGHT
+			};
 		}
 
 	}

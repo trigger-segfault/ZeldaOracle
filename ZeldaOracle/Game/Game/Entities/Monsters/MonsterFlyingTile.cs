@@ -40,6 +40,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isStunnable				= false;
 			isGaleable				= false;
 			isBurnable				= false;
+			ignoreZPosition			= true;
 
 			// Weapon interations
 			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.Kill);

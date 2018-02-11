@@ -13,6 +13,7 @@ using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Game {
 	
@@ -83,8 +84,6 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Zones");
 			LoadZonesPostTileData();
-
-			//Resources.LoadScript("Palettes/dungeon_ages_1_converter.conscript", new PaletteConverterSR());
 		}
 
 
@@ -190,6 +189,11 @@ namespace ZeldaOracle.Game {
 
 		private static void LoadTiles() {
 			Resources.LoadTiles("Tiles/tiles.conscript");
+
+			Resources.RemoveResource<BaseTileData>("monster");
+			Resources.RemoveResource<ActionTileData>("monster");
+			Resources.RemoveResource<BaseTileData>("tile_monster");
+			Resources.RemoveResource<TileData>("tile_monster");
 		}
 		/*
 		private static ActionTileData CreateMonsterAction(int sx, int sy, string id, string animation, Type monsterType, MonsterColor color) {
@@ -225,9 +229,6 @@ namespace ZeldaOracle.Game {
 			Resources.LoadGameFonts("Fonts/fonts.conscript");
 
 			IntegrateResources<GameFont>("FONT_");
-
-			//FONT_LARGE = Resources.GetGameFont("Fonts/font_large");
-			//FONT_SMALL = Resources.GetGameFont("Fonts/font_small");
 		}
 
 		//-----------------------------------------------------------------------------
@@ -300,17 +301,17 @@ namespace ZeldaOracle.Game {
 			PaletteShader = new PaletteShader(PALETTE_LERP_SHADER);
 			PaletteShader.TilePalette = PAL_TILES_DEFAULT;
 			PaletteShader.EntityPalette = PAL_ENTITIES_DEFAULT;
-			//PaletteShader.EntityPalette = PAL_ENTITIES_ELECTROCUTED;
 		}
 
 		public static Effect PALETTE_SHADER;
 		public static Effect PALETTE_LERP_SHADER;
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Collision Models
 		//-----------------------------------------------------------------------------
 
+		public static CollisionModel MODEL_EMPTY;
 		public static CollisionModel MODEL_BLOCK;
 		public static CollisionModel MODEL_EDGE_E;
 		public static CollisionModel MODEL_EDGE_N;
@@ -347,16 +348,6 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public static Zone ZONE_DEFAULT;
-		public static Zone ZONE_SUMMER;
-		public static Zone ZONE_FOREST;
-		public static Zone ZONE_GRAVEYARD;
-		public static Zone ZONE_INTERIOR;
-		public static Zone ZONE_PRESENT;
-		public static Zone ZONE_INTERIOR_PRESENT;
-		public static Zone ZONE_AGES_DUNGEON_1; // Spirit's Grave
-		public static Zone ZONE_AGES_DUNGEON_4; // Skull Dungeon
-		public static Zone ZONE_SIDESCROLL_AGES_DUNGEON_1;
-		public static Zone ZONE_UNDERWATER_PRESENT;
 
 
 		//-----------------------------------------------------------------------------

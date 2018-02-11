@@ -174,5 +174,15 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 					args.Color);
 			}
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the type of monster to spawn.</summary>
+		public override Type MonsterType {
+			get { return null; }
+		}
 	}
 }

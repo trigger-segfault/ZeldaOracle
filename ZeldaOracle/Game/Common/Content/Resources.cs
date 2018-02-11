@@ -382,6 +382,14 @@ namespace ZeldaOracle.Common.Content {
 				animations.Add(assetName, resource as Animation);
 		}
 
+		/// <summary>Remove the resource under the given name from the database.</summary>
+		public static void RemoveResource<T>(string assetName) {
+			if (!ContainsResourceType<T>())
+				return; // This type of resource doesn't exist!
+			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+			dictionary.Remove(assetName);
+		}
+
 		/// <summary>Add the given resource under the given name.</summary>
 		public static void SetResource<T>(string assetName, T resource) {
 			if (!ContainsResourceType<T>())

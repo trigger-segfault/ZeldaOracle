@@ -61,6 +61,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected bool isGaleable;
 		protected bool isStunnable;
 		protected bool isFlying;
+		/// <summary>True if the player will always check collisions
+		/// as if the monsters z position was at zero.</summary>
+		protected bool ignoreZPosition;
 
 		// States.
 		/*private MonsterBurnState		stateBurn;
@@ -111,6 +114,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isKnockbackable         = true;
 			isFlying                = false;
 			softKill                = false;
+			ignoreZPosition			= false;
 
 			// Setup default interactions.
 			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
@@ -121,35 +125,35 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		protected void SetDefaultReactions() {
 			// Weapon interations
-			SetReaction(InteractionType.Sword, SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
-			SetReaction(InteractionType.SwordSpin, Reactions.Damage2);
-			SetReaction(InteractionType.BiggoronSword, Reactions.Damage3);
-			SetReaction(InteractionType.Shield, SenderReactions.Bump, Reactions.Bump);
-			SetReaction(InteractionType.Shovel, Reactions.Bump);
-			SetReaction(InteractionType.Parry, Reactions.Parry);
-			SetReaction(InteractionType.Pickup, Reactions.None);
+			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
+			SetReaction(InteractionType.SwordSpin,		Reactions.Damage2);
+			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
+			SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
+			SetReaction(InteractionType.Shovel,			Reactions.Bump);
+			SetReaction(InteractionType.Parry,			Reactions.Parry);
+			SetReaction(InteractionType.Pickup,			Reactions.None);
 			// Seed interations
-			SetReaction(InteractionType.EmberSeed, SenderReactions.Intercept);
-			SetReaction(InteractionType.ScentSeed, SenderReactions.Intercept, Reactions.SilentDamage);
-			SetReaction(InteractionType.PegasusSeed, SenderReactions.Intercept, Reactions.Stun);
-			SetReaction(InteractionType.GaleSeed, SenderReactions.Intercept);
-			SetReaction(InteractionType.MysterySeed, Reactions.MysterySeed);
+			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
+			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.SilentDamage);
+			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept,	Reactions.Stun);
+			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
+			SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
 			// Projectile interations
-			SetReaction(InteractionType.Arrow, SenderReactions.Destroy, Reactions.Damage);
-			SetReaction(InteractionType.SwordBeam, SenderReactions.Destroy, Reactions.Damage);
-			SetReaction(InteractionType.RodFire, SenderReactions.Intercept);
-			SetReaction(InteractionType.Boomerang, SenderReactions.Intercept, Reactions.Stun);
-			SetReaction(InteractionType.SwitchHook, Reactions.SwitchHook);
+			SetReaction(InteractionType.Arrow,			SenderReactions.Destroy,	Reactions.Damage);
+			SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy,	Reactions.Damage);
+			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
+			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Stun);
+			SetReaction(InteractionType.SwitchHook,		Reactions.SwitchHook);
 			// Environment interations
-			SetReaction(InteractionType.Fire, Reactions.Burn);
-			SetReaction(InteractionType.Gale, Reactions.Gale);
-			SetReaction(InteractionType.BombExplosion, Reactions.Damage);
-			SetReaction(InteractionType.ThrownObject, Reactions.Damage);
-			SetReaction(InteractionType.MineCart, Reactions.SoftKill);
-			SetReaction(InteractionType.Block, Reactions.Damage);
+			SetReaction(InteractionType.Fire,			Reactions.Burn);
+			SetReaction(InteractionType.Gale,			Reactions.Gale);
+			SetReaction(InteractionType.BombExplosion,	Reactions.Damage);
+			SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
+			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
+			SetReaction(InteractionType.Block,			Reactions.Damage);
 			// Player interations
-			SetReaction(InteractionType.ButtonAction, Reactions.None);
-			SetReaction(InteractionType.PlayerContact, OnTouchPlayer);
+			SetReaction(InteractionType.ButtonAction,	Reactions.None);
+			SetReaction(InteractionType.PlayerContact,	OnTouchPlayer);
 		}
 
 
@@ -208,7 +212,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				BeginState(new MonsterStunState(GameSettings.MONSTER_STUN_DURATION));
 				if (damage > 0) {
 					DamageInfo damageInfo = new DamageInfo(damage);
-					damageInfo.ApplyKnockBack = false;
+					damageInfo.ApplyKnockback = false;
 					Hurt(damageInfo);
 				}
 				return true;
@@ -423,6 +427,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private void CollideMonsterAndPlayer() {
 			Player player = RoomControl.Player;
 
+			float tempZPosition = ZPosition;
+			if (ignoreZPosition)
+				ZPosition = 0;
+
 			// Check for minecart interactions
 			if (!isPassable && player.IsInMinecart &&
 				physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
@@ -491,6 +499,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
 				TriggerInteraction(InteractionType.PlayerContact, player);
 			}
+
+			if (ignoreZPosition)
+				ZPosition = tempZPosition;
 		}
 
 		public override void Update() {
@@ -544,6 +555,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		/// <summary>True if this monster is not counted towards clearing a room.</summary>
 		public bool IgnoreMonster {
 			get { return Properties.Get("ignore_monster", false); }
+			set { Properties.Set("ignore_monster", value); }
 		}
 
 		/// <summary>True if this monster needs to be killed in order to clear the room.</summary>

@@ -2,6 +2,7 @@
 # Loading
 #==============================================================
 
+LOAD "ActionTiles/monsters_base.conscript", true;
 LOAD "Tiles/overworld.conscript", true;
 LOAD "Tiles/indoors.conscript", true;
 LOAD "Tiles/sidescroll.conscript", true;

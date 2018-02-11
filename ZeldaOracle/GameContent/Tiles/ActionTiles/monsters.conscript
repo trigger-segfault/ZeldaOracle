@@ -2,19 +2,6 @@
 # Action Monsters
 #==============================================================================
 
-ACTIONTILE "monster";
-	TYPE		MonsterAction;
-	SPRITE		"monster_octorok";
-	PROPERTIES	(integer, color,		0, "Color", ("enum", "MonsterColor"), "Monster", "The color of the monster."),
-				(integer, respawn_type,	0, "Respawn Type", ("enum", "MonsterRespawnType"), "Monster", "How a monster respawns."),
-				(string,  monster_type, MonsterOctorok, "Monster Type", "", "Monster", "The type of monster."),
-				(boolean, dead, false),
-				(boolean, ignore_monster, false, "Ignore Monster", "",
-					"Monster", "True if the monster is not counted towards clearing the room.");
-
-	EVENT		die, "Die", "Monster", "Occurs when the monster dies.", (Monster, monster);
-END;
-
 # MONSTER (string name, string sprite, string type, string color) 
 MONSTER "monster_octorok_red",			"monster_octorok",				MonsterOctorok,			red;	END;
 MONSTER "monster_octorok_blue",			"monster_octorok",				MonsterOctorok,			blue;	END;
@@ -72,17 +59,10 @@ MONSTER "monster_biri",					"monster_biri",					MonsterBiri,			blue;	END;
 
 #==============================================================================
 # Tile Monsters
-#==============================================================================
-
-TILE "temp_tile_monster";
-	PROPERTIES
-		(boolean, ignore_monster, false, "Ignore Monster", "",
-			"Monster", "True if the monster is not counted towards clearing the room.");
-END;
-			
+#==============================================================================		
 
 TILE "monster_beamos";
-	CLONE		"temp_tile_monster";
+	CLONE		"tile_monster";
 	TYPE		TileMonsterBeamos;
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
@@ -92,7 +72,7 @@ TILE "monster_beamos";
 END;
 
 TILE "monster_armos_red";
-	CLONE		"temp_tile_monster";
+	CLONE		"tile_monster";
 	TYPE		TileMonsterArmos;
 	SOLID		block;
 	PREVIEW		"preview_monster_armos_red";
@@ -117,7 +97,7 @@ TILE "monster_armos_blue_alt";
 END;
 
 TILE "monster_flying_tile";
-	CLONE		"temp_tile_monster";
+	CLONE		"tile_monster";
 	TYPE		TileMonsterFlyingTile;
 	SAMESPRITE;
 	PROPERTIES

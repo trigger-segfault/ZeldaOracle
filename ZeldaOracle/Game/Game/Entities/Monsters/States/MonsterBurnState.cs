@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 
 			// Apply damage (make monster invincible for burn duration).
 			DamageInfo damageInfo = new DamageInfo(burnDamage);
-			damageInfo.ApplyKnockBack		= false;
+			damageInfo.ApplyKnockback		= false;
 			damageInfo.Flicker				= false;
 			damageInfo.InvincibleDuration	= burnDuration;
 			monster.Hurt(damageInfo);

@@ -8,18 +8,16 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Tiles.Custom.Monsters;
 
-namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
-	public class TileMonsterFlyingTile : TileMonster {
+namespace ZeldaOracle.Game.Tiles {
+	public class TileSpikeRoller : TileMonster {
 		
-		private int order;
-
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileMonsterFlyingTile() {
+		public TileSpikeRoller() {
 		}
 
 
@@ -28,15 +26,12 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
-			order = Properties.GetInteger("order", 0);
+			SpawnMonster();
 		}
 
-		public override void Update() {
-			base.Update();
-
-			if (RoomControl.CurrentRoomTicks == StartTime) {
-				SpawnMonster();
-			}
+		/// <summary>Constructs the monster associated with the tile.</summary>
+		public override Monster ConstructMonster() {
+			return new MonsterSpikeRoller(this);
 		}
 
 
@@ -46,7 +41,27 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+			bool vertical = args.Properties.GetBoolean("vertical", false);
+			int length = Math.Max(1, args.Properties.GetPoint("size", Point2I.One)[!vertical]);
+			for (int i = 0; i < length; i++) {
+				int spriteIndex = 0;
+				if (i == 0) {
+					if (i + 1 < length)
+						spriteIndex = 1;
+				}
+				else if (i + 1 < length)
+					spriteIndex = 2;
+				else
+					spriteIndex = 3;
+				ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
+				if (sprite != null) {
+					g.DrawSprite(
+						sprite,
+						args.SpriteDrawSettings,
+						args.Position + Point2I.FromBoolean(!vertical, i * GameSettings.TILE_SIZE),
+						args.Color);
+				}
+			}
 		}
 
 
@@ -56,19 +71,12 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 		/// <summary>Gets the type of monster to spawn.</summary>
 		public override Type MonsterType {
-			get { return typeof(MonsterFlyingTile); }
+			get { return typeof(MonsterSpikeRoller); }
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public int StartTime {
-			get {
-				return GameSettings.MONSTER_FLYING_TILE_START_OFFSET +
-					GameSettings.MONSTER_FLYING_TILE_NEXT_OFFSET * order;
-			}
+		/// <summary>Gets the spawn position for the monster.</summary>
+		public override Vector2F SpawnPosition {
+			get { return Position; }
 		}
 	}
 }

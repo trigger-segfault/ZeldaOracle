@@ -67,6 +67,25 @@ namespace ZeldaOracle.Common.Geometry {
 
 
 		//-----------------------------------------------------------------------------
+		// Static Constructors
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Constructs a vector from a single axis based on the index.</summary>
+		public static Point2I FromIndex(int index, int value, int otherValue = 0) {
+			return new Point2I(
+				(index == 0 ? value : otherValue),
+				(index == 1 ? value : otherValue));
+		}
+
+		/// <summary>Constructs a vector from a single axis based on the boolean.</summary>
+		public static Point2I FromBoolean(bool yaxis, int value, int otherValue = 0) {
+			return new Point2I(
+				(!yaxis ? value : otherValue),
+				( yaxis ? value : otherValue));
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// General
 		//-----------------------------------------------------------------------------
 
@@ -394,22 +413,39 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Gets or sets the x or y coordinate from the index.</summary>
 		[ContentSerializerIgnore]
-		public int this[int coordinate] {
+		public int this[int index] {
 			get {
-				if (coordinate == 0)
+				if (index == 0)
 					return X;
-				else if (coordinate == 1)
+				else if (index == 1)
 					return Y;
 				else
 					throw new IndexOutOfRangeException("Point2I[coordinateIndex] must be either 0 or 1.");
 			}
 			set {
-				if (coordinate == 0)
+				if (index == 0)
 					X = value;
-				else if (coordinate == 1)
+				else if (index == 1)
 					Y = value;
 				else
 					throw new IndexOutOfRangeException("Point2I[coordinateIndex] must be either 0 or 1.");
+			}
+		}
+
+		/// <summary>Gets or sets the x or y coordinate from the boolean.</summary>
+		[ContentSerializerIgnore]
+		public int this[bool yaxis] {
+			get {
+				if (yaxis)
+					return Y;
+				else
+					return X;
+			}
+			set {
+				if (yaxis)
+					Y = value;
+				else
+					X = value;
 			}
 		}
 
