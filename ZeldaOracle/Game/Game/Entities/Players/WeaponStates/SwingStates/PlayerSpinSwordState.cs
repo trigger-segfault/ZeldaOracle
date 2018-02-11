@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
@@ -49,12 +50,14 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			playerSwingAnimation			= GameData.ANIM_PLAYER_SPIN;
 			playerSwingAnimationUnderwater	= GameData.ANIM_PLAYER_MERMAID_SPIN;
 			
+			//StateParameters.PlayerAnimations.Spin
+
 			// Will always spin clockwise.
 			swingWindingOrders = new WindingOrder[] {
 				WindingOrder.Clockwise,
 				WindingOrder.Clockwise,
 				WindingOrder.Clockwise,
-				WindingOrder.Clockwise
+				WindingOrder.Clockwise,
 			};
 
 			swingCollisionBoxesNoLunge = new Rectangle2I[4, 9];
@@ -81,6 +84,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
+		
+		public override Animation GetPlayerSwingAnimation(bool lunge) {
+			return player.Animations.Spin;
+		}
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();

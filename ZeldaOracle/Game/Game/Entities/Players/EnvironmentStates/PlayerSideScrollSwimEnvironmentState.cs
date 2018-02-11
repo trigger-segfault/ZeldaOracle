@@ -17,13 +17,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.ProhibitJumping				= true;
 			StateParameters.ProhibitPushing				= true;
 
-			StateParameters.PlayerAnimations.Default		= GameData.ANIM_PLAYER_MERMAID_SWIM;
-			StateParameters.PlayerAnimations.Aim			= GameData.ANIM_PLAYER_MERMAID_AIM;
-			StateParameters.PlayerAnimations.Throw			= GameData.ANIM_PLAYER_MERMAID_THROW;
-			StateParameters.PlayerAnimations.Swing			= GameData.ANIM_PLAYER_MERMAID_SWING;
-			StateParameters.PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_MERMAID_SWING;
-			StateParameters.PlayerAnimations.Spin			= GameData.ANIM_PLAYER_MERMAID_SPIN;
-			StateParameters.PlayerAnimations.Stab			= GameData.ANIM_PLAYER_MERMAID_STAB;
+			PlayerAnimations.Default		= GameData.ANIM_PLAYER_MERMAID_SWIM;
+			PlayerAnimations.Aim			= GameData.ANIM_PLAYER_MERMAID_AIM;
+			PlayerAnimations.Throw			= GameData.ANIM_PLAYER_MERMAID_THROW;
+			PlayerAnimations.Swing			= GameData.ANIM_PLAYER_MERMAID_SWING;
+			//PlayerAnimations.SwingBig		= GameData.ANIM_PLAYER_MERMAID_SWING_BIG; // TODO
+			PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_MERMAID_SWING; // TODO
+			PlayerAnimations.Spin			= GameData.ANIM_PLAYER_MERMAID_SPIN;
+			PlayerAnimations.Stab			= GameData.ANIM_PLAYER_MERMAID_STAB;
 			
 			MotionSettings.MovementSpeed		= 0.5f;
 			MotionSettings.IsSlippery			= true;

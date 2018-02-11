@@ -169,7 +169,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-		// Deploy Roc's Cape.
+		// Deploy Roc's Cape
 		public void DeployCape() {
 			if (player.IsInAir && !isCapeDeployed && player.Physics.ZVelocity -
 				GameSettings.DEFAULT_GRAVITY <= -GameSettings.PLAYER_CAPE_REQUIRED_FALLSPEED)

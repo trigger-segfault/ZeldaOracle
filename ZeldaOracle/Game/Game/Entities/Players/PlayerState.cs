@@ -22,15 +22,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// </summary>
 		private PlayerStateParameters stateParameters;
 
+		private AnimationPlayer playerAnimation;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public PlayerState() {
-			isActive = false;
-			stateParameters = new PlayerStateParameters();
-			stateMachine = null;
+			isActive		= false;
+			stateParameters	= new PlayerStateParameters();
+			stateMachine	= null;
+			playerAnimation	= new AnimationPlayer();
 		}
 
 
@@ -68,7 +71,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 
 		//-----------------------------------------------------------------------------
-		// Begin/end
+		// Begin and End
 		//-----------------------------------------------------------------------------
 
 		public void Begin(Player player, PlayerState previousState) {
@@ -81,6 +84,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			this.isActive = false;
 			OnEnd(newState);
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Player Animations
+		//-----------------------------------------------------------------------------
 
 
 		//-----------------------------------------------------------------------------
@@ -109,7 +117,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// </summary>
 		public PlayerStateParameters StateParameters {
 			get { return stateParameters; }
-			set { stateParameters = value; }
+		}
+
+		/// <summary>Player state animations applied when this state is active
+		/// </summary>
+		public PlayerStateAnimations PlayerAnimations {
+			get { return stateParameters.PlayerAnimations; }
 		}
 
 		/// <summary>Reference to the state machine controlling this state</summary>

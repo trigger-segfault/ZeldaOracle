@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
@@ -69,6 +70,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
+		
+		public override Animation GetPlayerSwingAnimation(bool lunge) {
+			return player.Animations.SwingBig;
+		}
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();

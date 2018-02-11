@@ -1,19 +1,143 @@
 ﻿using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players {
-	
-	public class PlayerStateParameters {
 
-		public class PlayerStateAnimations {
-			public Animation Swing { get; set; } = null;
-			public Animation SwingNoLunge { get; set; } = null;
-			public Animation Spin { get; set; } = null;
-			public Animation Stab { get; set; } = null;
-			public Animation Aim { get; set; } = null;
-			public Animation Throw { get; set; } = null;
-			public Animation Default { get; set; } = null;
-			public Animation Carry { get; set; } = null;
+	public enum PlayerAnimationTypes {
+		Swing,
+		SwingNoLunge,
+		SwingBig,
+		Spin,
+		Stab,
+		Aim,
+		Throw,
+		Default,
+		Carry,
+
+		Count,
+	}
+
+	public class PlayerStateAnimations {
+
+		private Animation[] animations;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		public PlayerStateAnimations() {
+			animations = new Animation[(int) PlayerAnimationTypes.Count];
+			for (int i = 0; i < animations.Length; i++)
+				animations[i] = null;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Indexing
+		//-----------------------------------------------------------------------------
+
+		public Animation GetAnimation(PlayerAnimationTypes type) {
+			return animations[(int) type];
+		}
+
+		public void SetAnimation(PlayerAnimationTypes type, Animation value) {
+			animations[(int) type] = value;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public Animation this[PlayerAnimationTypes type] {
+			get { return animations[(int) type]; }
+			set { animations[(int) type] = value; }
+		}
+
+		public Animation[] Animations {
+			get { return animations; }
+		}
+
+		public Animation Default {
+			get { return GetAnimation(PlayerAnimationTypes.Default); }
+			set { SetAnimation(PlayerAnimationTypes.Default, value); }
+		}
+
+		public Animation Swing {
+			get { return GetAnimation(PlayerAnimationTypes.Swing); }
+			set { SetAnimation(PlayerAnimationTypes.Swing, value); }
+		}
+
+		public Animation SwingNoLunge {
+			get { return GetAnimation(PlayerAnimationTypes.SwingNoLunge); }
+			set { SetAnimation(PlayerAnimationTypes.SwingNoLunge, value); }
+		}
+
+		public Animation SwingBig {
+			get { return GetAnimation(PlayerAnimationTypes.SwingBig); }
+			set { SetAnimation(PlayerAnimationTypes.SwingBig, value); }
+		}
+
+		public Animation Spin {
+			get { return GetAnimation(PlayerAnimationTypes.Spin); }
+			set { SetAnimation(PlayerAnimationTypes.Spin, value); }
+		}
+
+		public Animation Stab {
+			get { return GetAnimation(PlayerAnimationTypes.Stab); }
+			set { SetAnimation(PlayerAnimationTypes.Stab, value); }
+		}
+
+		public Animation Aim {
+			get { return GetAnimation(PlayerAnimationTypes.Aim); }
+			set { SetAnimation(PlayerAnimationTypes.Aim, value); }
+		}
+
+		public Animation Throw {
+			get { return GetAnimation(PlayerAnimationTypes.Throw); }
+			set { SetAnimation(PlayerAnimationTypes.Throw, value); }
+		}
+
+		public Animation Carry {
+			get { return GetAnimation(PlayerAnimationTypes.Carry); }
+			set { SetAnimation(PlayerAnimationTypes.Carry, value); }
+		}
+	}
+	
+	public enum PlayerStateParameterTypes {
+		DisableGravity,
+		EnableGroundOverride,
+		DisableSolidCollisions,
+	
+		DisableInteractionCollisions,
+
+		ProhibitJumping,
+		ProhibitLedgeJumping,
+		ProhibitWarping,
+		ProhibitMovementControlOnGround,
+		ProhibitMovementControlInAir,
+		ProhibitPushing,
+		ProhibitWeaponUse,
+		ProhibitEnteringMinecart,
+		ProhibitRoomTransitions,
+	
+		EnableStrafing,
+		AlwaysFaceRight,
+		AlwaysFaceUp,
+		AlwaysFaceLeftOrRight,
+		AlwaysFaceDown,
+		EnableAutomaticRoomTransitions,
+		DisableMovement,
+		DisableAutomaticStateTransitions,
+		DisableUpdateMethod,
+		DisablePlatformMovement,
+
+		MovementSpeedScale,
+
+		Count,
+	}
+
+	public class PlayerStateParameters {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -21,15 +145,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public PlayerStateParameters() {
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Operators
+		//-----------------------------------------------------------------------------
 
 		public static PlayerStateParameters operator |(PlayerStateParameters a, PlayerStateParameters b) {
 			PlayerStateParameters result = new PlayerStateParameters() {
+				// Physics
 				DisableGravity = a.DisableGravity || b.DisableGravity,
 				EnableGroundOverride = a.EnableGroundOverride || b.EnableGroundOverride,
 				DisableSolidCollisions = a.DisableSolidCollisions || b.DisableSolidCollisions,
 
+				// Unit
 				DisableInteractionCollisions = a.DisableInteractionCollisions || b.DisableInteractionCollisions,
 
+				// Player
 				ProhibitJumping = a.ProhibitJumping || b.ProhibitJumping,
 				ProhibitLedgeJumping = a.ProhibitLedgeJumping || b.ProhibitLedgeJumping,
 				ProhibitWarping = a.ProhibitWarping || b.ProhibitWarping,
@@ -39,7 +171,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 				ProhibitWeaponUse = a.ProhibitWeaponUse || b.ProhibitWeaponUse,
 				ProhibitEnteringMinecart = a.ProhibitEnteringMinecart || b.ProhibitEnteringMinecart,
 				ProhibitRoomTransitions = a.ProhibitRoomTransitions || b.ProhibitRoomTransitions,
-
 				EnableStrafing = a.EnableStrafing || b.EnableStrafing,
 				//AlwaysFaceRight = a.AlwaysFaceRight || b.AlwaysFaceRight,
 				AlwaysFaceUp = a.AlwaysFaceUp || b.AlwaysFaceUp,
@@ -51,36 +182,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 				DisableMovement = a.DisableMovement || b.DisableMovement,
 				DisableAutomaticStateTransitions = a.DisableAutomaticStateTransitions || b.DisableAutomaticStateTransitions,
 				DisableUpdateMethod = a.DisableUpdateMethod || b.DisableUpdateMethod,
-
 				MovementSpeedScale = a.MovementSpeedScale * b.MovementSpeedScale,
-
 			};
 
-			result.PlayerAnimations.Swing			= a.PlayerAnimations.Swing;
-			result.PlayerAnimations.SwingNoLunge	= a.PlayerAnimations.SwingNoLunge;
-			result.PlayerAnimations.Spin			= a.PlayerAnimations.Spin;
-			result.PlayerAnimations.Stab			= a.PlayerAnimations.Stab;
-			result.PlayerAnimations.Throw			= a.PlayerAnimations.Throw;
-			result.PlayerAnimations.Aim				= a.PlayerAnimations.Aim;
-			result.PlayerAnimations.Default			= a.PlayerAnimations.Default;
-			result.PlayerAnimations.Carry			= a.PlayerAnimations.Carry;
-
-			if (b.PlayerAnimations.Swing != null)
-				result.PlayerAnimations.Swing = b.PlayerAnimations.Swing;
-			if (b.PlayerAnimations.SwingNoLunge != null)
-				result.PlayerAnimations.SwingNoLunge = b.PlayerAnimations.SwingNoLunge;
-			if (b.PlayerAnimations.Spin != null)
-				result.PlayerAnimations.Spin = b.PlayerAnimations.Spin;
-			if (b.PlayerAnimations.Stab != null)
-				result.PlayerAnimations.Stab = b.PlayerAnimations.Stab;
-			if (b.PlayerAnimations.Throw != null)
-				result.PlayerAnimations.Throw = b.PlayerAnimations.Throw;
-			if (b.PlayerAnimations.Aim != null)
-				result.PlayerAnimations.Aim  = b.PlayerAnimations.Aim;
-			if (b.PlayerAnimations.Default != null)
-				result.PlayerAnimations.Default = b.PlayerAnimations.Default;
-			if (b.PlayerAnimations.Carry != null)
-				result.PlayerAnimations.Carry = b.PlayerAnimations.Carry;
+			// Prefer the right side's animations if they are non-null.
+			for (int i = 0; i < (int) PlayerAnimationTypes.Count; i++) {
+				PlayerAnimationTypes type = (PlayerAnimationTypes) i;
+				result.PlayerAnimations[type] = b.PlayerAnimations[type] ??
+					a.PlayerAnimations[type];
+			}
 
 			return result;
 		}
@@ -108,7 +218,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool ProhibitWeaponUse { get; set; } = false;
 		public bool ProhibitEnteringMinecart { get; set; } = false;
 		public bool ProhibitRoomTransitions { get; set; } = false;
-
 		public bool EnableStrafing { get; set; } = false;
 		//public bool AlwaysFaceRight { get; set; } = false;
 		public bool AlwaysFaceUp { get; set; } = false;
@@ -122,6 +231,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public float MovementSpeedScale { get; set; } = 1.0f;
 		
 		public PlayerStateAnimations PlayerAnimations { set; get; } = new PlayerStateAnimations();
+		
+
+		//-----------------------------------------------------------------------------
+		// Compound Parameter Properties
+		//----------------------------------------------------------------------------
 
 		public bool ProhibitMovementControl {
 			set {
@@ -129,6 +243,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				ProhibitMovementControlInAir = value;
 			}
 		}
+
 		public bool DisablePlayerControl {
 			set {
 				DisableMovement = true;

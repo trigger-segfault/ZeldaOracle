@@ -162,14 +162,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			
 			// Do not lunge while in minecart
 			if (lunge && !player.IsInMinecart) {
-				player.Graphics.PlayAnimation(
-					player.StateParameters.PlayerAnimations.Swing);
+				player.Graphics.PlayAnimation(GetPlayerSwingAnimation(true));
 				playerTool.PlayAnimation(weaponSwingAnimationLunge);
 				swingCollisionBoxes = swingCollisionBoxesLunge;
 			}
 			else {
-				player.Graphics.PlayAnimation(
-					player.StateParameters.PlayerAnimations.SwingNoLunge);
+				player.Graphics.PlayAnimation(GetPlayerSwingAnimation(false));
 				playerTool.PlayAnimation(weaponSwingAnimation);
 				swingCollisionBoxes = swingCollisionBoxesNoLunge;
 			}
@@ -194,6 +192,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
+		
+		public virtual Animation GetPlayerSwingAnimation(bool lunge) {
+			if (lunge)
+				return player.Animations.Swing;
+			return player.Animations.SwingNoLunge;
+		}
 		
 		public virtual UnitTool GetSwingTool() {
 			return player.ToolVisual;

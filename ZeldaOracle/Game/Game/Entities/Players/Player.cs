@@ -699,6 +699,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateParameters.PlayerAnimations.Throw			= GameData.ANIM_PLAYER_THROW;
 			stateParameters.PlayerAnimations.Swing			= GameData.ANIM_PLAYER_SWING;
 			stateParameters.PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_SWING_NOLUNGE;
+			stateParameters.PlayerAnimations.SwingBig		= GameData.ANIM_PLAYER_SWING_BIG;
 			stateParameters.PlayerAnimations.Spin			= GameData.ANIM_PLAYER_SPIN;
 			stateParameters.PlayerAnimations.Stab			= GameData.ANIM_PLAYER_STAB;
 			stateParameters.PlayerAnimations.Carry			= GameData.ANIM_PLAYER_CARRY;
@@ -873,7 +874,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { movement.CanUseWarpPoint = value; }
 		}
 
-		public PlayerStateParameters.PlayerStateAnimations Animations {
+		public PlayerStateAnimations Animations {
 			get { return stateParameters.PlayerAnimations; }
 		}
 

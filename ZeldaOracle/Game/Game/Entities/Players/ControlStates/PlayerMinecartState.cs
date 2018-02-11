@@ -49,6 +49,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.PlayerAnimations.Throw			= GameData.ANIM_PLAYER_MINECART_THROW;
 			StateParameters.PlayerAnimations.Swing			= GameData.ANIM_PLAYER_MINECART_SWING;
 			StateParameters.PlayerAnimations.SwingNoLunge	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
+			StateParameters.PlayerAnimations.SwingBig		= GameData.ANIM_PLAYER_MINECART_SWING_BIG;
 			StateParameters.PlayerAnimations.Carry			= GameData.ANIM_PLAYER_MINECART_CARRY;
 		}
 
