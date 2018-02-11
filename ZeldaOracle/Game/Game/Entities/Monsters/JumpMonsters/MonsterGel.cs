@@ -1,6 +1,7 @@
 ﻿using System;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Players.States;
 
 namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 
@@ -8,6 +9,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 
 		private bool isAttached;
 		private int attachTimer;
+		private PlayerDisarmedState disarmedPlayerState;
 
 
 		//-----------------------------------------------------------------------------
@@ -69,10 +71,15 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			IsPassable					= true;
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_GEL_ATTACH);
+
+			// Give the player the disarmed condition
+			disarmedPlayerState = new PlayerDisarmedState(
+				GameSettings.MONSTER_GEL_ATTACH_TIME);
+			RoomControl.Player.BeginConditionState(disarmedPlayerState);
 		}
 		
 		private void Detach() {
-			attachTimer					= 60;
+			attachTimer					= 60; // Used to give a short delay before attaching again
 			isAttached					= false;
 			Physics.HasGravity			= true;
 			Physics.CollideWithWorld	= true;
@@ -106,6 +113,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			base.Initialize();
 			isAttached = false;
 			attachTimer = 0;
+			disarmedPlayerState = null;
 		}
 
 		public override void OnFallInHole() {
@@ -124,8 +132,11 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		}
 
 		public override void OnTouchPlayer(Entity sender, EventArgs args) {
-			if (!isAttached && attachTimer == 0) {
-				Player player = (Player) sender;
+			Player player = (Player) sender;
+
+			if (!isAttached && attachTimer == 0 &&
+				!player.HasCondition<PlayerDisarmedState>())
+			{
 				Attach();
 			}
 		}
@@ -136,10 +147,9 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 				attachTimer++;
 				position = player.Position;
 				zPosition = 0;
-				if (attachTimer > GameSettings.MONSTER_GEL_ATTACH_TIME)
+
+				if (!player.HasCondition<PlayerDisarmedState>())
 					Detach();
-				//else if (player.CurrentState != player.DisarmedState)
-				// Detach();
 			}
 			else {
 				if (attachTimer > 0)

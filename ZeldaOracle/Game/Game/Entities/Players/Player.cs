@@ -216,6 +216,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateMachine.BeginState(state);
 		}
 
+		public bool HasCondition<T>() where T : PlayerState {
+			foreach (PlayerState state in ConditionStates) {
+				if (state is T)
+					return true;
+			}
+			return false;
+		}
+
 		public void BeginWeaponState(PlayerState weaponState) {
 			weaponStateMachine.BeginState(weaponState);
 		}

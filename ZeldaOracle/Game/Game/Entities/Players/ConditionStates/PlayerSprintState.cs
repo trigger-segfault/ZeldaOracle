@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
