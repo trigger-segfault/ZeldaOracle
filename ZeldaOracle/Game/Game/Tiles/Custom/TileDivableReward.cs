@@ -10,7 +10,7 @@ using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
-	public class TileDivableReward : Tile, ZeldaAPI.Reward {
+	public class TileDivableReward : TileEntitySpawnOnce, ZeldaAPI.Reward {
 		
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -23,37 +23,39 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		// Reward Methods
 		//-----------------------------------------------------------------------------
 
-		public void SpawnReward() {
-			if (!IsLooted && RoomControl.RoomNumber != Properties.GetInteger("last_room_number", -1)) {
-				string rewardName = Properties.GetString("reward", "rupees_1");
-				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+		protected override void OnSpawnEntity() {
+			string rewardName = Properties.GetString("reward", "rupees_1");
+			Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 
-				CollectibleReward collectible = new CollectibleReward(reward, isSubmergable: true);
-				collectible.Collected += delegate () {
-					Properties.Set("looted", true);
-					IsEnabled = false;
-				};
+			CollectibleReward collectible = new CollectibleReward(reward, isSubmergable: true);
+			collectible.Collected += delegate () {
+				Properties.Set("looted", true);
+				IsEnabled = false;
+			};
 
-				// Spawn the reward collectible.
-				collectible.SetPositionByCenter(Center);
-				RoomControl.SpawnEntity(collectible);
+			// Spawn the reward collectible.
+			collectible.SetPositionByCenter(Center);
+			RoomControl.SpawnEntity(collectible);
 
-				if (Properties.GetBoolean("spawn_from_ceiling", false)) {
-					collectible.ZPosition                       = Center.Y + 8;
-					collectible.Physics.HasGravity              = true;
-					collectible.Physics.CollideWithWorld        = RoomControl.IsSideScrolling;
-				}
-				else {
-					collectible.Physics.CollideWithWorld        = false;
-					collectible.Physics.HasGravity              = false;
-					collectible.Physics.IsDestroyedInHoles      = false;
-					collectible.Physics.IsDestroyedOutsideRoom  = false;
-				}
-
-				// Keep track of this so that the reward cannot
-				// be spawned a second time in the current room.
-				Properties.Set("last_room_number", RoomControl.RoomNumber);
+			if (Properties.GetBoolean("spawn_from_ceiling", false)) {
+				collectible.ZPosition                       = Center.Y + 8;
+				collectible.Physics.HasGravity              = true;
+				collectible.Physics.CollideWithWorld        = RoomControl.IsSideScrolling;
 			}
+			else {
+				collectible.Physics.CollideWithWorld        = false;
+				collectible.Physics.HasGravity              = false;
+				collectible.Physics.IsDestroyedInHoles      = false;
+				collectible.Physics.IsDestroyedOutsideRoom  = false;
+			}
+
+			// Keep track of this so that the reward cannot
+			// be spawned a second time in the current room.
+			Properties.Set("last_room_number", RoomControl.RoomNumber);
+		}
+
+		public void SpawnReward() {
+			SpawnEntity();
 		}
 
 
@@ -90,6 +92,13 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			}
 		}
 
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		public override bool CanSpawn {
+			get { return base.CanSpawn && !IsLooted; }
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties

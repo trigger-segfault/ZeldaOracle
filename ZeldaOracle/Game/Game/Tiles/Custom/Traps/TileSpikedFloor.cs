@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Tiles {
 			// Hurt the player if he is standing on this tile.
 			if (player.IsOnGround && !player.IsInvincible && player.IsDamageable && player.Physics.TopTile == this) {
 				DamageInfo damage = new DamageInfo(2) {
-					ApplyKnockBack		= true,
+					ApplyKnockback		= true,
 					KnockbackDuration	= 9,
 					InvincibleDuration	= 35,
 					FlickerDuration		= 35,

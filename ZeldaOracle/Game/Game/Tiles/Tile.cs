@@ -61,6 +61,8 @@ namespace ZeldaOracle.Game.Tiles {
 		private Vector2F			velocity;
 		protected Sound				soundMove;
 		private Vector2F			conveyorVelocity;
+		private Rectangle2I         hurtArea;
+		private int                 hurtDamage;
 
 		// Settings
 		private TileDataInstance	tileData;			// The tile data used to create this tile.
@@ -477,13 +479,15 @@ namespace ZeldaOracle.Game.Tiles {
 			UpdateMovement();
 
 			// Check if hurting the player.
-			if (HasFlag(TileFlags.HurtPlayer) && roomControl.Player.IsOnGround) {
+			if (HasFlag(TileFlags.HurtPlayer) && roomControl.Player.IsOnGround &&
+				(!roomControl.Player.IsPassable || IsSolid))
+			{
 				Rectangle2F playerBox = roomControl.Player.Physics.PositionedCollisionBox;
-				Rectangle2F hurtBox = tileData.TileData.HurtArea;
+				Rectangle2F hurtBox = hurtArea;
 				hurtBox.Point += Position;
 				if (hurtBox.Intersects(playerBox)) {
-					roomControl.Player.Hurt(new DamageInfo(tileData.TileData.HurtDamage) {
-						ApplyKnockBack		= true,
+					roomControl.Player.Hurt(new DamageInfo(hurtDamage) {
+						ApplyKnockback		= true,
 						KnockbackDuration	= 14,
 						InvincibleDuration	= 35,
 						FlickerDuration		= 35,
@@ -669,6 +673,9 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.breakSound			= data.BreakSound;
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
+
+			tile.hurtArea			= data.HurtArea;
+			tile.hurtDamage			= data.HurtDamage;
 
 			if (tile.collisionModel == null)
 				tile.collisionModel = GameData.MODEL_BLOCK;
@@ -1129,6 +1136,16 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 				return false;
 			}
+		}
+
+		public Rectangle2I HurtArea {
+			get { return hurtArea; }
+			set { hurtArea = value; }
+		}
+
+		public int HurtDamage {
+			get { return hurtDamage; }
+			set { hurtDamage = value; }
 		}
 
 

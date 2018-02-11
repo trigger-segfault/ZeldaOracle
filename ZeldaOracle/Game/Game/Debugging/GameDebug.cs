@@ -296,7 +296,7 @@ namespace ZeldaOracle.Game.Debug {
 			// H: Hurt the player in a random direction.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.H)) {
 				float angle = GRandom.NextFloat(GMath.FullAngle);
-				Vector2F source = gameControl.Player.Center +  new Vector2F(5.0f, angle, true);
+				Vector2F source = gameControl.Player.Center + Vector2F.FromPolar(5.0f, angle);
 				gameControl.Player.Hurt(new DamageInfo(0, source));
 			}
 			// M: Play music.

@@ -2,6 +2,7 @@
 # Collision Models
 #==============================================================
 
+MODEL empty;				END;
 MODEL block;				ADD ( 0,  0, 16, 16); END;
 MODEL block_2x2;			ADD ( 0,  0, 32, 32); END;
 MODEL block_2x1;			ADD ( 0,  0, 32, 16); END;

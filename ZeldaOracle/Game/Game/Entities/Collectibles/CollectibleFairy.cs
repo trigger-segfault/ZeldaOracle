@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.Entities {
 			directionSpeed += 0.05f * GRandom.NextFloat(-30.0f, 30.0f);
 			directionSpeed = GMath.Clamp(directionSpeed, -6.0f, 6.0f);
 			direction += directionSpeed;
-			physics.Velocity = Vector2F.CreatePolar(moveSpeed, direction);
+			physics.Velocity = Vector2F.FromPolar(moveSpeed, direction);
 
 			// Syncronize facing direction with velocity.
 			if (Physics.Velocity.X > 0.0f)

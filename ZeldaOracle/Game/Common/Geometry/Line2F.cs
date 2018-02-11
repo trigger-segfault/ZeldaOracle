@@ -256,7 +256,7 @@ namespace ZeldaOracle.Common.Geometry {
 				return End1.DirectionTo(End2);
 			}
 			set {
-				End2 = End1 + new Vector2F(Length, value, true);
+				End2 = End1 + Vector2F.FromPolar(Length, value);
 			}
 		}
 		/// <summary>Gets or sets the length of the line.</summary>
@@ -267,7 +267,7 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 			set {
 				float oldLength = End1.DistanceTo(End2);
-				End2 = End1 + new Vector2F(value, Direction, true);
+				End2 = End1 + Vector2F.FromPolar(value, Direction);
 			}
 		}
 		/// <summary>Returns true if the line is horizontal.</summary>

@@ -226,6 +226,8 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_FLYING_TILE_RISE_SPEED					= 0.5f;
 		public const int				MONSTER_FLYING_TILE_START_OFFSET				= 122;
 		public const int				MONSTER_FLYING_TILE_NEXT_OFFSET					= 60;
+		public const int				MONSTER_ARMOS_BREATH_LIFE_DURATION				= 60;
+		public const float				MONSTER_SPIKE_ROLLER_MOVE_SPEED					= 0.75f;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

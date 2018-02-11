@@ -319,6 +319,7 @@
     <Compile Include="Game\Entities\Monsters\MonsterMovingWizzrobe.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterGopongaFlower.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterAntiFairy.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterSpikeRoller.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterSpawnState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterStateMachine.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterWaterTektike.cs" />
@@ -522,11 +523,13 @@
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterFlyingTile.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileConveyorBelt.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />
-    <Compile Include="Game\Tiles\Custom\TileArrowCannon.cs" />
-    <Compile Include="Game\Tiles\Custom\TileArrowShooter.cs" />
+    <Compile Include="Game\Tiles\Custom\Traps\TileArrowCannon.cs" />
+    <Compile Include="Game\Tiles\Custom\Traps\TileArrowShooter.cs" />
     <Compile Include="Game\Tiles\Custom\TileDigableReward.cs" />
     <Compile Include="Game\Tiles\Custom\TileDivableReward.cs" />
-    <Compile Include="Game\Tiles\Custom\TileFireShooter.cs" />
+    <Compile Include="Game\Tiles\Custom\TileEntitySpawnOnce.cs" />
+    <Compile Include="Game\Tiles\Custom\Traps\TileFireShooter.cs" />
+    <Compile Include="Game\Tiles\Custom\Traps\TileSpikeRoller.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
@@ -555,9 +558,9 @@
     <Compile Include="Game\Tiles\Custom\TileLever.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorLantern.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCubeSlot.cs" />
-    <Compile Include="Game\Tiles\Custom\TileCrackedFloor.cs" />
+    <Compile Include="Game\Tiles\Custom\Traps\TileCrackedFloor.cs" />
     <Compile Include="Game\Tiles\Custom\TileBridge.cs" />
-    <Compile Include="Game\Tiles\Custom\TileSpikedFloor.cs" />
+    <Compile Include="Game\Tiles\Custom\Traps\TileSpikedFloor.cs" />
     <Compile Include="Game\Tiles\Custom\TileTurnstile.cs" />
     <Compile Include="Game\Tiles\Custom\TileRegrowableBush.cs" />
     <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />

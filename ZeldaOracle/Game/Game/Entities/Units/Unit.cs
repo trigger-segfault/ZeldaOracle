@@ -194,7 +194,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 				return;
 
 			// Apply knockback
-			if (damage.ApplyKnockBack) {
+			if (damage.ApplyKnockback) {
 				Vector2F damageSourcePos = Center;
 				int duration = hurtKnockbackDuration;
 				if (damage.HasSource)
