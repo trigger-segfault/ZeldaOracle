@@ -1,5 +1,5 @@
 ﻿#==============================================================================
-# Monsters
+# Action Monsters
 #==============================================================================
 
 ACTIONTILE "monster";
@@ -8,7 +8,9 @@ ACTIONTILE "monster";
 	PROPERTIES	(integer, color,		0, "Color", ("enum", "MonsterColor"), "Monster", "The color of the monster."),
 				(integer, respawn_type,	0, "Respawn Type", ("enum", "MonsterRespawnType"), "Monster", "How a monster respawns."),
 				(string,  monster_type, MonsterOctorok, "Monster Type", "", "Monster", "The type of monster."),
-				(boolean, dead, false);
+				(boolean, dead, false),
+				(boolean, ignore_monster, false, "Ignore Monster", "",
+					"Monster", "True if the monster is not counted towards clearing the room.");
 
 	EVENT		die, "Die", "Monster", "Occurs when the monster dies.", (Monster, monster);
 END;
@@ -27,18 +29,18 @@ MONSTER "monster_lynel_blue",			"monster_lynel",				MonsterLynel,			blue;	END;
 MONSTER "monster_gibdo",				"monster_gibdo",				MonsterGibdo,			red;	END;
 MONSTER "monster_rope",					"monster_rope",					MonsterRope,			green;	END;
 MONSTER "monster_beetle",				"monster_beetle",				MonsterBeetle,			green;	END;
-MONSTER "monster_blade_trap_red",		"monster_blade_trap",			MonsterBladeTrap,		red;	END;
-MONSTER "monster_blade_trap_blue",		"monster_blade_trap",			MonsterBladeTrap,		blue;	END;
-MONSTER "monster_blade_trap_green",		"monster_blade_trap",			MonsterBladeTrap,		green;	END;
-MONSTER "monster_blade_trap_orange",	"monster_blade_trap",			MonsterBladeTrap,		orange;	END;
+MONSTER "monster_blade_trap_red",		"monster_blade_trap",			MonsterBladeTrap,		red,	true;	END;
+MONSTER "monster_blade_trap_blue",		"monster_blade_trap",			MonsterBladeTrap,		blue,	true;	END;
+MONSTER "monster_blade_trap_green",		"monster_blade_trap",			MonsterBladeTrap,		green,	true;	END;
+MONSTER "monster_blade_trap_orange",	"monster_blade_trap",			MonsterBladeTrap,		orange,	true;	END;
 MONSTER "monster_spiked_beetle",		"monster_spiked_beetle",		MonsterSpikedBeetle,	blue;	END;
 MONSTER "monster_sand_crab",			"monster_sand_crab",			MonsterSandCrab,		orange;	END;
 MONSTER "monster_shrouded_stalfos",		"monster_shrouded_stalfos",		MonsterShroudedStalfos,	green;	END;
 MONSTER "monster_ghini",				"monster_ghini",				MonsterGhini,			red;	END;
 MONSTER "monster_zol_green",			"monster_zol",					MonsterZolGreen,		green;	END;
 MONSTER "monster_zol_red",				"monster_zol",					MonsterZolRed,			red;	END;
-MONSTER "monster_thwomp",				"monster_thwomp",				MonsterThwomp,			darkBlue;	PREVIEW "preview_monster_thwomp"; SIZE (2, 2); END;
-MONSTER "monster_thwimp",				"monster_thwimp",				MonsterThwomp,			blue;	END;
+MONSTER "monster_thwomp",				"monster_thwomp",				MonsterThwomp,			darkBlue,	true;	PREVIEW "preview_monster_thwomp"; SIZE (2, 2); END;
+MONSTER "monster_thwimp",				"monster_thwimp",				MonsterThwomp,			blue,	true;	END;
 MONSTER "monster_buzz_blob",			"monster_buzz_blob",			MonsterBuzzBlob,		green;	END;
 MONSTER "monster_cukeman",				"monster_cukeman",				MonsterCukeman,			green;	END;
 MONSTER "monster_keese",				"monster_keese",				MonsterKeese,			green;	END;
@@ -58,33 +60,49 @@ MONSTER "monster_hardhat_beetle",		"monster_hardhat_beetle",		MonsterHardhatBeet
 MONSTER "monster_leever_red",			"monster_leever",				MonsterLeever,			red;	END;
 MONSTER "monster_leever_blue",			"monster_leever",				MonsterLeever,			blue;	END;
 MONSTER "monster_leever_orange",		"monster_leever",				MonsterLeever,			orange;	END;
-MONSTER "monster_spinning_blade_trap",	"monster_spinning_blade_trap",	MonsterSpinningBladeTrap, red;	END;
-MONSTER "monster_goponga_flower",		"monster_goponga_flower_open",	MonsterGopongaFlower,	red;	END;
-MONSTER "monster_anti_fairy",			"monster_anti_fairy",			MonsterAntiFairy,		gold;	END;
+MONSTER "monster_spinning_blade_trap",	"monster_spinning_blade_trap",	MonsterSpinningBladeTrap, red,	true;	END;
+MONSTER "monster_goponga_flower",		"monster_goponga_flower_open",	MonsterGopongaFlower,	red,	true;	END;
+MONSTER "monster_anti_fairy",			"monster_anti_fairy",			MonsterAntiFairy,		gold,	true;	END;
 MONSTER "monster_river_zora",			"monster_river_zora",			MonsterRiverZora,		red;	END;
 MONSTER "monster_pokey",				"monster_pokey_head",			MonsterPokey,			green;	END;
 MONSTER "monster_peahat",				"monster_peahat",				MonsterPeahat,			red;	END;
 MONSTER "monster_bari",					"monster_bari",					MonsterBari,			blue;	END;
 MONSTER "monster_biri",					"monster_biri",					MonsterBiri,			blue;	END;
 
+
+#==============================================================================
+# Tile Monsters
+#==============================================================================
+
+TILE "temp_tile_monster";
+	PROPERTIES
+		(boolean, ignore_monster, false, "Ignore Monster", "",
+			"Monster", "True if the monster is not counted towards clearing the room.");
+END;
+			
+
 TILE "monster_beamos";
+	CLONE		"temp_tile_monster";
 	TYPE		TileMonsterBeamos;
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
 	SPRITE		"monster_beamos";
 	ENTITYDRAW	true;
+	PROPERTIES	(boolean, ignore_monster, true);
 END;
 
 TILE "monster_armos_red";
-	CLONE		"armos_stationary";
+	CLONE		"temp_tile_monster";
 	TYPE		TileMonsterArmos;
+	SOLID		block;
 	PREVIEW		"preview_monster_armos_red";
+	SPRITE		"tile_armos_stationary";
 	PROPERTIES	(boolean, blue, false, "Is Blue", "", "Monster", "The color of the Armos monster.", false);
 END;
 
 TILE "monster_armos_red_alt";
-	CLONE "monster_armos_red";
-	SPRITE "tile_armos_alt_stationary";
+	CLONE		"monster_armos_red";
+	SPRITE		"tile_armos_alt_stationary";
 END;
 
 TILE "monster_armos_blue";
@@ -94,11 +112,15 @@ TILE "monster_armos_blue";
 END;
 
 TILE "monster_armos_blue_alt";
-	CLONE "monster_armos_blue";
-	SPRITE "tile_armos_alt_stationary";
+	CLONE		"monster_armos_blue";
+	SPRITE		"tile_armos_alt_stationary";
 END;
 
 TILE "monster_flying_tile";
-	#TYPE		TileFlyingTile;
+	CLONE		"temp_tile_monster";
+	TYPE		TileMonsterFlyingTile;
 	SAMESPRITE;
+	PROPERTIES
+		(integer, order, 0, "Launch Order", "",
+			"Flying Tile", "The order in which to launch each flying tile in the room.");
 END;

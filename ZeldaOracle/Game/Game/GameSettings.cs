@@ -219,6 +219,13 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_STALFOS_ORANGE_JUMP_SPEED				= 2.25f;
 		public const float				MONSTER_STALFOS_ORANGE_JUMP_RANGE				= 48;
 		public const int				MONSTER_STALFOS_ORANGE_JUMP_RECHARGE_DELAY		= 0;
+		public const int				MONSTER_FLYING_TILE_LAUNCH_ANGLE_COUNT			= 16;
+		public const float				MONSTER_FLYING_TILE_LAUNCH_SPEED				= 1.75f;
+		public const int				MONSTER_FLYING_TILE_HOVER_DURATION				= 24;
+		public const float				MONSTER_FLYING_TILE_HOVER_ALTITUDE				= 4f;
+		public const float				MONSTER_FLYING_TILE_RISE_SPEED					= 0.5f;
+		public const int				MONSTER_FLYING_TILE_START_OFFSET				= 122;
+		public const int				MONSTER_FLYING_TILE_NEXT_OFFSET					= 60;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

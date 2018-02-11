@@ -16,9 +16,10 @@ SOURCE "temp_sheet_monsters";
 
 # Color groups found in the source image file 
 MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "hurt");
+CHUNKSIZE		(8, 16);
 
 SPRITESET "units_monsters" (16, 16);
-	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "inverse_red", "hurt"), (0, 0); END;
+	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "inverse_red", "inverse_blue", "hurt"), (0, 0); END;
 END;
 
 PALETTEDICTIONARY none;
@@ -36,9 +37,9 @@ PALETTEDICTIONARY none;
 
 SOURCE "units_monsters";
 
-OFFSET monster_pincer_body_segment, (8, 4), (-8, -8); END;
-OFFSET monster_mini_moldorm_body_segment_large, (8, 5), (-8, -8); END;
-OFFSET monster_mini_moldorm_body_segment_small, (9, 5), (-8, -8); END;
+OFFSET "monster_pincer_body_segment", (8, 4), (-8, -8); END;
+OFFSET "monster_mini_moldorm_body_segment_large", (8, 5), (-8, -8); END;
+OFFSET "monster_mini_moldorm_body_segment_small", (9, 5), (-8, -8); END;
 
 
 #==============================================================
@@ -127,10 +128,10 @@ ANIMATION "monster_biri"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 8); END;
 ANIMATION "monster_bari"; SUBSTRIP repeat;
 	ADD strip, 24, 2, (2, 8); END;
-ANIMATION "monster_bari_electrocute_1"; SUBSTRIP repeat;
+ANIMATION "monster_bari_electrocute"; SUBSTRIP repeat;
 	ADD frame, 4, (4, 8); END;
-ANIMATION "monster_bari_electrocute_2"; SUBSTRIP repeat;
-	ADD frame, 4, (15, 15); END;
+#ANIMATION "monster_bari_electrocute_2"; SUBSTRIP repeat;
+#	ADD frame, 4, (15, 15); END;
 ANIMATION "monster_gibdo"; SUBSTRIP repeat;
 	ADD strip, 16, 2, (12, 9); END;
 ANIMATION "monster_sand_crab"; SUBSTRIP repeat;
@@ -184,12 +185,12 @@ ANIMATION "monster_spinning_blade_trap_sleep"; SUBSTRIP repeat;
 	ADD frame, 1, (8, 9); END;
 ANIMATION "monster_spinning_blade_trap"; SUBSTRIP repeat;
 	ADD strip, 2, 3, (9, 9); END;
-ANIMATION monster_leever; SUBSTRIP repeat;
+ANIMATION "monster_leever"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (2, 10); END;
-ANIMATION monster_leever_burrow; SUBSTRIP reset;
+ANIMATION "monster_leever_burrow"; SUBSTRIP reset;
 	ADD frame,  8, (4, 10);
 	ADD frame, 17, (5, 10); END;
-ANIMATION monster_leever_unburrow; SUBSTRIP reset;
+ANIMATION "monster_leever_unburrow"; SUBSTRIP reset;
 	ADD frame, 18, (5, 10);
 	ADD frame,  9, (4, 10); END;
 ANIMATION "monster_ball_and_chain_trooper"; SUBSTRIP repeat;
@@ -314,6 +315,9 @@ ANIMATION "monster_pokey_body_wiggle_fast"; SUBSTRIP repeat;
 	ADD frame, 4, (7, 9), (-1, 0);
 	ADD frame, 4, (7, 9), (-2, 0);
 	ADD frame, 4, (7, 9), (-1, 0); END;
+	
+ANIMATION "monster_flying_tile"; SUBSTRIP repeat;
+	ADD frame, 4, (14, 15); ADD frame, 4, (15, 15); END;
 
 
 ANIMATION "monster_sword_hold";

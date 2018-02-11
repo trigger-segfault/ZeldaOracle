@@ -136,7 +136,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private void OnBeginElectrecuteState() {
 			stateTimer = 0;
 			Physics.Velocity = Vector2F.Zero;
-			Graphics.PlayAnimation(GameData.ANIM_MONSTER_BARI_ELECTROCUTE_1);
+			Graphics.PlayAnimation(GameData.ANIM_MONSTER_BARI_ELECTROCUTE);
 			Color = MonsterColor.Blue;
 		}
 		
@@ -149,13 +149,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Update electrecution sprite
 			stateTimer++;
+			Graphics.SetAnimation(GameData.ANIM_MONSTER_BARI_ELECTROCUTE);
 			if ((stateTimer / 4) % 2 == 0) {
 				Color = MonsterColor.Blue;
-				Graphics.SetAnimation(GameData.ANIM_MONSTER_BARI_ELECTROCUTE_1);
 			}
 			else {
-				Color = MonsterColor.DarkBlue;
-				Graphics.SetAnimation(GameData.ANIM_MONSTER_BARI_ELECTROCUTE_2);
+				Color = MonsterColor.InverseBlue;
+				Graphics.ColorDefinitions.SetAll("inverse_blue");
 			}
 		}
 

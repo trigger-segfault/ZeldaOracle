@@ -529,7 +529,7 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int i = 0; i < typeCount; i++) {
 				int index	= reader.ReadInt32();
 				string name	= strings[index];
-				Type type	= Tile.GetType(name, false);
+				Type type	= GameUtil.GetTypeWithBase<Tile>(name, false);
 				tileTypes.Add(new ResourceInfo<Type>(type, index));
 			}
 		}

@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
-	public class TileMonsterArmos : Tile {
+	public class TileMonsterArmos : TileMonster {
 
 		private const int BREATH_LIFE_DURATION = 60;
 		
@@ -68,7 +68,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 					armos = new MonsterArmosRed();
 				else
 					armos = new MonsterArmosBlue();
-				armos.Position = Position + new Vector2F(8, 15);
+				armos.Position = Center + new Vector2F(0, 6);
 				RoomControl.SpawnEntity(armos);
 				return;
 			}

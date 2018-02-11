@@ -13,9 +13,9 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
-namespace ZeldaOracle.Game.Tiles {
+namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
-	public class TileMonsterBeamos : Tile {
+	public class TileMonsterBeamos : TileMonster {
 
 		private int shootTimer;
 		private bool shooting;
