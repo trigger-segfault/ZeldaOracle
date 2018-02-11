@@ -690,14 +690,14 @@ namespace ZeldaOracle.Game.Tiles {
 			return tile;
 		}
 
-		public static Type GetType(string typeName, bool ignoreCase) {
+		/*public static Type GetType(string typeName, bool ignoreCase) {
 			StringComparison comparision = StringComparison.Ordinal;
 			if (ignoreCase)
 				comparision = StringComparison.OrdinalIgnoreCase;
 
 			return Assembly.GetExecutingAssembly().GetTypes()
 				.FirstOrDefault(t => t.Name.Equals(typeName, comparision));
-		}
+		}*/
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {

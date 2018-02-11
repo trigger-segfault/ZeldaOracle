@@ -26,6 +26,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles.Internal;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Tiles.Custom.Monsters;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -792,7 +793,8 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		public bool AllMonstersDead() {
-			return !GetEntitiesOfType<Monster>().Any(m => m.IsAlive);
+			return	!GetEntitiesOfType<Monster>().Any(m => m.NeedsClearing) &&
+					!GetTilesOfType<TileMonster>().Any(t => t.NeedsClearing);
 		}
 
 		

@@ -312,6 +312,7 @@
     <Compile Include="Game\Entities\Monsters\MonsterArmosBlue.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBiri.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBari.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterFlyingTile.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPeahat.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPokey.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterRiverZora.cs" />
@@ -504,8 +505,10 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
+    <Compile Include="Game\Tiles\Custom\Monsters\TileMonster.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterArmos.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
+    <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterFlyingTile.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileConveyorBelt.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />
     <Compile Include="Game\Tiles\Custom\TileArrowCannon.cs" />
