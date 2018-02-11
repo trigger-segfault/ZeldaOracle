@@ -143,15 +143,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 			base.Update();
-
-			//player.Direction = direction;
+			
 			direction = player.Direction;
 
 			Rectangle2I box = SWORD_COLLISION_BOXES[direction];
 			box.Point += (Point2I) player.CenterOffset;
 			player.ToolSword.CollisionBox = box;
 
-			// Charge up the sword.
+			// Charge up the sword
 			chargeTimer++;
 			if (chargeTimer == ChargeTime) {
 				player.ToolSword.AnimationPlayer.SetAnimation(GameData.ANIM_SWORD_CHARGED);
@@ -159,7 +158,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			// Release the sword button (spin if charged)
-			if (!weapon.IsEquipped || !weapon.IsButtonDown()) {
+			if ((!weapon.IsEquipped || !weapon.IsButtonDown()) && 
+				!player.StateParameters.ProhibitReleasingSword)
+			{
 				OnStopHolding();
 			}
 			

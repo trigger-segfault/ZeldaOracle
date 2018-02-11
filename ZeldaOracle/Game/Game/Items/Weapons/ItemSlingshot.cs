@@ -99,10 +99,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Player.ToolVisual.AnimationPlayer.SubStripIndex = direction;
 
 			// Begin the player busy state.
-			Player.BusyState.SetEndAction(delegate(PlayerState playerState) {
+			Player.BeginBusyState(10, Player.Animations.Throw)
+				.SetEndAction(delegate(PlayerState playerState)
+			{
 				playerState.Player.UnequipTool(playerState.Player.ToolVisual);
 			});
-			Player.BeginBusyState(10, Player.Animations.Throw);
 		}
 
 		// Draws the item inside the inventory.

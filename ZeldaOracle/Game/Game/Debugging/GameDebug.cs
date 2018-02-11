@@ -82,7 +82,8 @@ namespace ZeldaOracle.Game.Debug {
 				weaponId = "item_" + weaponId;
 			Inventory inventory = GameControl.RoomControl.Player.Inventory;
 			ItemWeapon weapon = inventory.GetItem(weaponId) as ItemWeapon;
-			inventory.EquipWeapon(weapon, slot);
+			if (weapon != null)
+				gameControl.MenuWeapons.EquipWeapon(weapon, slot);
 		}
 
 		public static void OnGameStart() {

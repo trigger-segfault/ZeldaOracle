@@ -15,20 +15,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private Dictionary<int, Action<PlayerState>> actions;
 		private Action<PlayerState> endAction;
 		private Animation animation;
-		private Animation animationInMinecart;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerBusyState() {
-			this.timer		= 0;
-			this.duration	= 0;
-			this.actions	= new Dictionary<int,Action<PlayerState>>();
-			this.endAction	= null;
-			this.animation	= null;
-			this.animationInMinecart = null;
+		public PlayerBusyState() :
+			this(0, null)
+		{
 		}
 		
 		public PlayerBusyState(int duration, Animation animation) {
@@ -37,7 +32,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			this.actions	= new Dictionary<int,Action<PlayerState>>();
 			this.endAction	= null;
 			this.animation	= animation;
-			this.animationInMinecart = animation;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -75,12 +69,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				endAction(this);
 		}
 
-		public override void OnExitMinecart() {
-			base.OnExitMinecart();
-			if (player.Graphics.Animation == animation && animationInMinecart != null)
-				player.Graphics.SetAnimation(animationInMinecart);
-		}
-
 		public override void Update() {
 			base.Update();
 
@@ -94,6 +82,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -106,11 +95,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public Animation Animation {
 			get { return animation; }
 			set { animation = value; }
-		}
-		
-		public Animation AnimationInMinecart {
-			get { return animationInMinecart; }
-			set { animationInMinecart = value; }
 		}
 	}
 }

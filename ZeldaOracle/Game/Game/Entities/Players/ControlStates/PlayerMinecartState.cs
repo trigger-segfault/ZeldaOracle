@@ -84,33 +84,26 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				return;
 			}
 
-			// Play the animations.
-			player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;
-			if (player.WeaponState != player.CarryState)
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_IDLE);
+			// Play the animations
 			minecartAnimationPlayer.Play(GameData.ANIM_MINECART);
 
-			// Setup position.
+			// Setup position
 			moveDistance = 0.0f;
 			UpdatePlayerPosition();
 						
-			// Destroy the minecart.
+			// Destroy the minecart
 			minecart.Destroy();
 			
-			// Notify the current player state we have entered a minecart.
+			// Notify the current player state we have entered a minecart
 			foreach (PlayerState state in player.ActiveStates)
 				state.OnEnterMinecart();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			// Reset changed player state variables.
+			// Reset changed player state variables
 			player.ViewFocusOffset = Vector2F.Zero;
-			
-			// Revert to default player animation.
-			if (player.MoveAnimation == GameData.ANIM_PLAYER_MINECART_IDLE)
-				player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
 
-			// Notify the current player state we have exited the minecart.
+			// Notify the current player state we have exited the minecart
 			foreach (PlayerState state in player.ActiveStates)
 				state.OnExitMinecart();
 		}
@@ -138,17 +131,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			AudioSystem.LoopSoundWhileActive(GameData.SOUND_MINECART_LOOP);
 
-			// Update minecart animation.
+			// Update minecart animation
 			minecartAnimationPlayer.Update();
-			
-			// Keep the default player animation to be in a minecart.
-			if (player.MoveAnimation == GameData.ANIM_PLAYER_DEFAULT)
-				player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;
 
-			// Update movement.
+			// Update movement
 			moveDistance += minecartSpeed;
 			if (moveDistance >= GameSettings.TILE_SIZE) {
-				// Move to the next tile.
+				// Move to the next tile
 				if (!MoveToNextTile()) {
 					ExitMinecart(direction);
 					return;

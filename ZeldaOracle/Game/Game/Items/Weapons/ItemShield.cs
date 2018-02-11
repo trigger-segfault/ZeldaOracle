@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		private void StartBlocking() {
 			isShieldBlocking		= true;
 			Player.Movement.CanPush	= false;
-			Player.MoveAnimation	= shieldBlockAnimation;
+			//Player.MoveAnimation	= shieldBlockAnimation;
 			if (Player.WeaponState == null && Player.IsOnGround)
 				AudioSystem.PlaySound(GameData.SOUND_SHIELD);
 		}
@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		private void StopBlocking() {
 			isShieldBlocking		= false;
 			Player.Movement.CanPush	= true;
-			Player.MoveAnimation	= shieldAnimation;
+			//Player.MoveAnimation	= shieldAnimation;
 		}
 
 
@@ -70,30 +70,30 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				shieldBlockAnimation	= GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK;
 			}
 
-			if (isEquipped) {
-				if (isShieldBlocking)
-					Player.MoveAnimation = shieldBlockAnimation;
-				else
-					Player.MoveAnimation = shieldAnimation;
-			}
+			//if (isEquipped) {
+			//	if (isShieldBlocking)
+			//		Player.MoveAnimation = shieldBlockAnimation;
+			//	else
+			//		Player.MoveAnimation = shieldAnimation;
+			//}
 		}
 
 		// Called when the item is switched to.
 		public override void OnEquip() {
 			isShieldBlocking = false;
-			Player.MoveAnimation = shieldAnimation;
+			//Player.MoveAnimation = shieldAnimation;
 		}
 
 		// Called when the item is put away.
 		public override void OnUnequip() {
 			StopBlocking();
-			Player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
+			//Player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
 		}
 
 		// Immediately interrupt this item (ex: if the player falls in a hole).
 		public override void Interrupt() {
 			StopBlocking();
-			Player.MoveAnimation = shieldAnimation;
+			//Player.MoveAnimation = shieldAnimation;
 		}
 
 		// Update the item.

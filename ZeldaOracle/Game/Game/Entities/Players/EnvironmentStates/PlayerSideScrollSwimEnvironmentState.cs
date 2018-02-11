@@ -55,8 +55,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
-			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
-			player.Graphics.PlayAnimation(player.MoveAnimation);
+			PlayerAnimations.Default		= GameData.ANIM_PLAYER_MERMAID_SWIM;
 
 			CreateSplashEffect();
 		}
@@ -65,7 +64,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			//player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
-			player.MoveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
 			
 			// Jump out of the water, and create a splash effect
 			if (newState != player.SideScrollLadderState) {

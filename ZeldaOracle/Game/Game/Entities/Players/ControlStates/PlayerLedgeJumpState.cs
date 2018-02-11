@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
+
 	public class PlayerLedgeJumpState : PlayerState {
 
 		protected Vector2F	velocity;
 		protected bool		ledgeExtendsToNextRoom;
 		protected bool		hasRoomChanged;
 		protected int		direction;
-		protected bool		isHoldingSword;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,8 +18,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerLedgeJumpState() {
-			ledgeExtendsToNextRoom = false;
-			isHoldingSword = false;
+			StateParameters.ProhibitReleasingSword			= true;
+			StateParameters.EnableAutomaticRoomTransitions	= true;
+			StateParameters.EnableStrafing					= true;
+			StateParameters.DisableSolidCollisions			= true;
+			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisablePlayerControl			= true;
 		}
 
 		private bool CanLandAtPosition(Vector2F position) {
@@ -43,14 +41,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			StateParameters.EnableAutomaticRoomTransitions	= true;
-			StateParameters.EnableStrafing					= true;
-			StateParameters.DisableSolidCollisions			= true;
-			StateParameters.DisableInteractionCollisions	= true;
-			StateParameters.DisablePlayerControl			= true;
-
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
-
 			// Play the jump animation
 			if (player.WeaponState == null)
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);

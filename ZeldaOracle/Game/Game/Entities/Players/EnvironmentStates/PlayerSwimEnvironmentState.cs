@@ -99,9 +99,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			isDiving	= false;
 			isSubmerged	= false;
 
-			player.MoveAnimation = GameData.ANIM_PLAYER_SWIM;
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
-
 			// Create a splash effect.
 			if (player.Physics.IsInLava) {
 				Effect splash = new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash, true);
@@ -160,8 +157,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
 					isSubmerged = false;
 					player.IsPassable = false;
-					//player.MoveAnimation = GameData.ANIM_PLAYER_SWIM;
-					//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
 					player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 					StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
 				}
@@ -170,8 +165,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				isSubmerged = true;
 				player.IsPassable = true;
 				submergedTimer = submergedDuration;
-				//player.MoveAnimation = GameData.ANIM_PLAYER_SUBMERGED;
-				//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
 				StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SUBMERGED;
 
 				// Create a splash effect.

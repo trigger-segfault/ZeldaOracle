@@ -68,14 +68,15 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		private Seed ThrowSeed(SeedType type) {
 			Seed seed = new Seed(type);
 
+			// Spawn the seed
 			Vector2F velocity = Directions.ToVector(Player.Direction);
 			Vector2F pos = Player.Position + (velocity * 4.0f);
 			seed.Physics.Velocity = velocity * 0.75f;
 			Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 6);
-			
-			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
-
 			UseAmmo();
+			
+			// Play the throw animation
+			Player.BeginBusyState(10, Player.Animations.Throw);
 
 			return seed;
 		}

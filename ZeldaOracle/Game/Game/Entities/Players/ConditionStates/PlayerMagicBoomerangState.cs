@@ -35,17 +35,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.ProhibitJumping = true;
 			StateParameters.ProhibitMovementControlInAir = true;
 			StateParameters.ProhibitMovementControlOnGround = true;
-
-			boomerangMotionDirection = boomerang.Angle * GMath.QuarterAngle * 0.5f;
+			if (player.WeaponState == null)
+				player.Graphics.PlayAnimation(player.Animations.Throw);
 			
-			if (player.IsInMinecart)
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_THROW);
-			else
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-		}
-
-		public override void OnExitMinecart() {
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			boomerangMotionDirection = boomerang.Angle * GMath.QuarterAngle * 0.5f;
 		}
 		
 		public override void Update() {

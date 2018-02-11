@@ -61,16 +61,17 @@ namespace ZeldaOracle.Game.Control.Menus {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the number of slots.
+		/// <summary>Gets the number of slots.</summary>
 		public int NumSlots {
 			get { return slots.Count; }
 		}
 
-		// Gets the currently selected slot.
+		/// <summary>Gets the currently selected slot.</summary>
 		public Slot CurrentSlot {
 			get { return currentSlot; }
 		}
-		// Gets the index of the currently selected slot.
+
+		/// <summary>Gets the index of the currently selected slot.</summary>
 		public int CurrentSlotIndex {
 			get {
 				for (int i = 0; i < slots.Count; i++) {
@@ -79,6 +80,11 @@ namespace ZeldaOracle.Game.Control.Menus {
 				}
 				return -1;
 			}
+		}
+
+		/// <summary>Get the slot at the given index.</summary>
+		public Slot this[int index] {
+			get { return slots[index]; }
 		}
 	}
 }

@@ -26,13 +26,17 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		public ItemBow() {
-			this.id				= "item_bow";
-			this.name			= new string[] { "Wooden Bow", "Wooden Bow", "Wooden Bow" };
-			this.description	= new string[] { "Weapon of a marksman.", "Weapon of a marksman.", "Weapon of a marksman." };
-			this.maxLevel		= Item.Level3;
-			this.currentAmmo	= 0;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
-			this.arrowTracker	= new EntityTracker<Arrow>(2);
+			id			= "item_bow";
+			name		= new string[] { "Wooden Bow", "Wooden Bow", "Wooden Bow" };
+			description	= new string[] { "Weapon of a marksman.", "Weapon of a marksman.", "Weapon of a marksman." };
+			maxLevel	= Item.Level3;
+			currentAmmo	= 0;
+			flags		=
+				ItemFlags.UsableInMinecart |
+				ItemFlags.UsableWhileJumping |
+				ItemFlags.UsableWhileInHole;
+
+			arrowTracker = new EntityTracker<Arrow>(2);
 
 			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_BOW,
@@ -63,8 +67,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			AudioSystem.PlaySound(GameData.SOUND_SHOOT_PROJECTILE);
 
-			// Begin the busy state.
-			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
+			// Begin the busy state
+			Player.BeginBusyState(10, Player.Animations.Throw);
 		}
 
 		// Called when the item is added to the inventory list.

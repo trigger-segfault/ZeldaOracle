@@ -69,10 +69,65 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Weapon Equipping
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Equip the given weapon for the desired equip slot (A or B). This
+		/// will first find the item in the inventory, then swap it with the item
+		/// currently equipped in the slot.</summary>
+		public void EquipWeapon(ItemWeapon equippedWeapon, int equipSlot) {
+			int otherEquipSlot = 1 - equipSlot;
 
+			// Do nothing if this weapon type is already equipped in the correct slot
+			if (GameControl.Inventory.EquippedWeapons[equipSlot] == equippedWeapon)
+				return;
+
+			// If the weapon is equipped but in the wrong slot, then swap the slots of
+			// the two equipped weapons
+			if (GameControl.Inventory.EquippedWeapons[otherEquipSlot] ==
+				equippedWeapon)
+			{
+				ItemWeapon placeholder =
+					GameControl.Inventory.EquippedWeapons[equipSlot];
+				GameControl.Inventory.EquippedWeapons[equipSlot] = 
+					GameControl.Inventory.EquippedWeapons[otherEquipSlot];
+				GameControl.Inventory.EquippedWeapons[otherEquipSlot] = placeholder;
+			}
+
+			// Find the inventory slot which contains the weapon of this type
+			Slot swapSlot = null;
+			SlotGroup slotGroup = slotGroups[0];
+			for (int i = 0; i < slotGroup.NumSlots; i++) {
+				if (slotGroup[i].SlotItem == equippedWeapon)
+					swapSlot = slotGroup[i];
+			}
+			if (swapSlot == null)
+				return;
+
+			// Swap the weapon between the equip slot and the inventory slot
+			//ItemWeapon equippedWeapon = (ItemWeapon) swapSlot.SlotItem;
+			ItemWeapon unequippedWeapon = GameControl.Inventory.EquippedWeapons[equipSlot];
+			swapSlot.SlotItem = unequippedWeapon;
+			GameControl.Inventory.EquippedWeapons[equipSlot] = equippedWeapon;
+
+			// Handle unequipping two handed weapons by nullifying the other slot
+			if (unequippedWeapon.IsTwoHanded)
+				GameControl.Inventory.EquippedWeapons[otherEquipSlot] = null;
+
+			// Handle equipping two handed weapons by replacing the other equip slot
+			if (equippedWeapon.IsTwoHanded) {
+				if (GameControl.Inventory.EquippedWeapons[1 - equipSlot] != null)
+					NextAvailableSlot.SlotItem =
+						GameControl.Inventory.EquippedWeapons[otherEquipSlot];
+				GameControl.Inventory.EquippedWeapons[1 - equipSlot] = equippedWeapon;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------
+		
 		public override void OnOpen() {
 			// Remember the equipped items from before opening the menu.
 			for (int i = 0; i < Inventory.NumEquipSlots; i++)
@@ -141,7 +196,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 						ammoSlotGroup.SetCurrentSlot(ammoSlotGroup.GetSlotAt(currentAmmoIndex));
 					}
 					else {
-						EquipWeapon(slot);
+						EquipWeaponFromCursor(slot);
 					}
 				}
 			}
@@ -165,7 +220,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 						if (weapon.GetAmmoAt(i) == selectedAmmo)
 							weapon.CurrentAmmo = i;
 					}
-					EquipWeapon(ammoSlot);
+					EquipWeaponFromCursor(ammoSlot);
 					inSubMenu = false;
 					ammoSlotGroup = null;
 					currentSlotGroup = slotGroups[0];
@@ -199,7 +254,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			}
 		}
 
-		private void EquipWeapon(int slot) {
+		private void EquipWeaponFromCursor(int slot) {
 			ItemWeapon weapon = slotGroups[0].CurrentSlot.SlotItem as ItemWeapon;
 			AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
 			

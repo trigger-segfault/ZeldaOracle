@@ -120,7 +120,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		ProhibitWeaponUse,
 		ProhibitEnteringMinecart,
 		ProhibitRoomTransitions,
-	
+		ProhibitReleasingSword,
+
 		EnableStrafing,
 		AlwaysFaceRight,
 		AlwaysFaceUp,
@@ -171,6 +172,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				ProhibitWeaponUse = a.ProhibitWeaponUse || b.ProhibitWeaponUse,
 				ProhibitEnteringMinecart = a.ProhibitEnteringMinecart || b.ProhibitEnteringMinecart,
 				ProhibitRoomTransitions = a.ProhibitRoomTransitions || b.ProhibitRoomTransitions,
+				ProhibitReleasingSword = a.ProhibitReleasingSword || b.ProhibitReleasingSword,
 				EnableStrafing = a.EnableStrafing || b.EnableStrafing,
 				//AlwaysFaceRight = a.AlwaysFaceRight || b.AlwaysFaceRight,
 				AlwaysFaceUp = a.AlwaysFaceUp || b.AlwaysFaceUp,
@@ -218,6 +220,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool ProhibitWeaponUse { get; set; } = false;
 		public bool ProhibitEnteringMinecart { get; set; } = false;
 		public bool ProhibitRoomTransitions { get; set; } = false;
+		public bool ProhibitReleasingSword { get; set; } = false;
 		public bool EnableStrafing { get; set; } = false;
 		//public bool AlwaysFaceRight { get; set; } = false;
 		public bool AlwaysFaceUp { get; set; } = false;

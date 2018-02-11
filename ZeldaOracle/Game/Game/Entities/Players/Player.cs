@@ -67,7 +67,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Player States
 		private PlayerPushState				statePush;
-		private PlayerBusyState				stateBusy;
 		private PlayerLedgeJumpState		stateLedgeJump;
 		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
 		private PlayerSwingSwordState		stateSwingSword;
@@ -169,7 +168,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			conditionStateMachines	= new List<PlayerStateMachine>();
 			
 			// Construct the basic player states
-			stateBusy			= new PlayerBusyState();
 			stateMagicBoomerang	= new PlayerMagicBoomerangState();
 
 			// Weapon states
@@ -249,12 +247,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 				else if (physics.IsOnStairs)
 					return environmentStateStairs;
 				else if (physics.IsOnIce)
-					return environmentStateIce;
+					return environmentStateIce; // TODO: sidescroll ice
 				else 
 					return null;
 			}
 			else {
-				//if (RoomControl.IsUnderwater)
+				//if (RoomControl.IsUnderwater) // TODO
 					//return stateUnderwater;
 				if (physics.IsInAir)
 					return environmentStateJump;
@@ -273,32 +271,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-		// Begin the busy state with the specified duration.
+		/// <summary>Begin a new busy condition state with the specified duration.</summary>
 		public PlayerBusyState BeginBusyState(int duration) {
-			PlayerBusyState state = new PlayerBusyState() {
-				Duration			= duration,
-				Animation			= Graphics.Animation,
-				AnimationInMinecart	= Graphics.Animation,
-			};
+			return BeginBusyState(duration, graphics.Animation);
+		}
+		
+		/// <summary>Begin a new busy condition state with the specified duration and
+		/// animation(s).</summary>
+		public PlayerBusyState BeginBusyState(int duration, Animation animation) {
+			if (WeaponState == null)
+				Graphics.PlayAnimation(animation);
+			PlayerBusyState state = new PlayerBusyState(duration, animation);
 			BeginConditionState(state);
 			return state;
 		}
-		
-		// Begin the busy state with the specified duration and animation(s).
-		public void BeginBusyState(int duration, Animation animation, Animation animationInMinecart = null) {
-			if (IsInMinecart && animationInMinecart != null)
-				Graphics.PlayAnimation(animationInMinecart);
-			else
-				Graphics.PlayAnimation(animation);
-			
-			BeginConditionState(new PlayerBusyState() {
-				Duration			= duration,
-				Animation			= animation,
-				AnimationInMinecart	= animationInMinecart,
-			});
-		}
 
-		// Jump to the given position using the special jump state.
+		/// <summary>Jump to the given position using the special jump state.</summary>
 		public void JumpToPosition(Vector2F destinationPosition,
 			float destinationZPosition, int duration,
 			Action<PlayerJumpToState> endAction)
@@ -312,7 +300,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Hop into a minecart.
 		public void JumpIntoMinecart(Minecart minecart) {
-			JumpToPosition(minecart.Center, 4.0f, 26, delegate(PlayerJumpToState state) {
+			JumpToPosition(minecart.Center, 4.0f, 26,
+				delegate(PlayerJumpToState state)
+			{
 				stateMinecart.Minecart = minecart;
 				BeginControlState(stateMinecart);
 			});
@@ -336,8 +326,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Interactions
 		//-----------------------------------------------------------------------------
 		
-		// Land on the given surface, breaking any obstructions.
-		// This is used for when the player begins colliding with the world again in a new position.
+		/// <summary>Land on the given surface, breaking any obstructions. This is used
+		/// for when the player begins colliding with the world again in a new
+		/// position.</summary>
 		public void LandOnSurface() {
 			// Break tiles in the way, not if on a color barrier.
 			foreach (Tile tile in Physics.GetTilesMeeting(position, CollisionBoxType.Hard)) {
@@ -881,7 +872,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Animation MoveAnimation {
 			//get { return moveAnimation; }
 			get { return stateParameters.PlayerAnimations.Default; }
-			set { moveAnimation = value; }
+			//set { moveAnimation = value; }
 		}
 
 		public bool IsStateControlled {
@@ -964,10 +955,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 						yield return stateMachine.CurrentState;
 				}
 			}
-		}
-
-		public PlayerBusyState BusyState {
-			get { return stateBusy; }
 		}
 
 		public PlayerSwimEnvironmentState SwimState {

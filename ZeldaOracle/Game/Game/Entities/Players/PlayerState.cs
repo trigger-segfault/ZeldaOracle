@@ -22,18 +22,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// </summary>
 		private PlayerStateParameters stateParameters;
 
-		private AnimationPlayer playerAnimation;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public PlayerState() {
-			isActive		= false;
-			stateParameters	= new PlayerStateParameters();
-			stateMachine	= null;
-			playerAnimation	= new AnimationPlayer();
+			isActive				= false;
+			stateParameters			= new PlayerStateParameters();
+			stateMachine			= null;
 		}
 
 
@@ -87,11 +84,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 
 		//-----------------------------------------------------------------------------
-		// Player Animations
-		//-----------------------------------------------------------------------------
-
-
-		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 		
@@ -117,6 +109,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// </summary>
 		public PlayerStateParameters StateParameters {
 			get { return stateParameters; }
+			set { stateParameters = value; }
 		}
 
 		/// <summary>Player state animations applied when this state is active
