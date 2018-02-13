@@ -72,9 +72,9 @@ namespace ZeldaOracle.Game.Control {
 			// Restore the entity's velocity before collision checks.
 			Vector2F newVelocity = entity.Physics.PreviousVelocity;
 			for (int axis = 0; axis < 2; axis++) {
-				if (Math.Sign(newVelocity[axis]) > 0 && entity.Physics.Velocity[axis] <= newVelocity[axis])
+				if (GMath.Sign(newVelocity[axis]) > 0 && entity.Physics.Velocity[axis] <= newVelocity[axis])
 					newVelocity[axis] = entity.Physics.Velocity[axis];
-				else if (Math.Sign(newVelocity[axis]) < 0 && entity.Physics.Velocity[axis] >= newVelocity[axis])
+				else if (GMath.Sign(newVelocity[axis]) < 0 && entity.Physics.Velocity[axis] >= newVelocity[axis])
 					newVelocity[axis] = entity.Physics.Velocity[axis];
 			}
 			entity.Physics.Velocity = newVelocity;
@@ -239,7 +239,7 @@ namespace ZeldaOracle.Game.Control {
 					entity.Position = newPos;
 					
 					Vector2F newVelocity = entity.Physics.Velocity;
-					if (Math.Abs(entity.Physics.Velocity[1 - axis]) < 0.1f) {
+					if (GMath.Abs(entity.Physics.Velocity[1 - axis]) < 0.1f) {
 						// Slightly push away from the center of the solid object.
 						Vector2F distance = entity.Physics.PositionedCollisionBox.Center - solidBox.Center;
 						//Vector2F correction = (entity.Position - solidBox.Center).Normalized;
@@ -427,7 +427,7 @@ namespace ZeldaOracle.Game.Control {
 				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
 
 				if (!collision.IsResolved && CanResolveCollision(entity, collision)) {
-					float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
+					float resolveDistance = GMath.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
 					entity.Position -= Directions.ToVector(collision.PenetrationDirection) * resolveDistance;
 				}
 				collision.Reset();
@@ -456,7 +456,7 @@ namespace ZeldaOracle.Game.Control {
 
 					// Add to the penetration distance of the opposite collision.
 					CollisionInfoNew otherCollision = entity.Physics.ClipCollisionInfo[Directions.Reverse(collision.PenetrationDirection)];
-					float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
+					float resolveDistance = GMath.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
 					otherCollision.PenetrationDistance += resolveDistance;
 				}
 			}
@@ -474,7 +474,7 @@ namespace ZeldaOracle.Game.Control {
 
 					// Add to the penetration distance of the opposite collision.
 					CollisionInfoNew otherCollision = entity.Physics.ClipCollisionInfo[Directions.Reverse(collision.PenetrationDirection)];
-					float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
+					float resolveDistance = GMath.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
 					otherCollision.PenetrationDistance += resolveDistance;
 				}
 			}
@@ -541,7 +541,7 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Get the positional correction needed to resolve a collision.
 		private Vector2F GetPositionalCorrection(CollisionInfoNew collision) {
-			float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
+			float resolveDistance = GMath.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
 			return -Directions.ToVector(collision.PenetrationDirection) * resolveDistance;
 		}
 		
@@ -805,7 +805,7 @@ namespace ZeldaOracle.Game.Control {
 		private bool PerformCollisionDodge(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
 			// Only dodge if moving perpendicular to the edge.
 			int axis = Directions.ToAxis(direction);
-			if (Math.Abs(entity.Physics.Velocity[1 - axis]) > GameSettings.EPSILON)
+			if (GMath.Abs(entity.Physics.Velocity[1 - axis]) > GameSettings.EPSILON)
 				return false;
 
 			// Can't dodge moving tiles.
@@ -819,12 +819,12 @@ namespace ZeldaOracle.Game.Control {
 			// Check dodging for both edges of the solid object.
 			for (int side = 0; side < 2; side++) {
 				int moveDirection = (direction + (side == 0 ? 1 : 3)) % 4;
-				float distanceToEdge = Math.Abs(entityBox.GetEdge(
+				float distanceToEdge = GMath.Abs(entityBox.GetEdge(
 					Directions.Reverse(moveDirection)) - solidBox.GetEdge(moveDirection));
 				
 				// Check if the distance to the edge is within dodge range.
 				if (distanceToEdge <= entity.Physics.AutoDodgeDistance) {
-					float moveAmount = Math.Min(entity.Physics.AutoDodgeSpeed, distanceToEdge);
+					float moveAmount = GMath.Min(entity.Physics.AutoDodgeSpeed, distanceToEdge);
 
 					Vector2F nextPosition = GMath.Round(entity.Position) +
 						(Directions.ToVector(moveDirection) * moveAmount);
@@ -876,7 +876,7 @@ namespace ZeldaOracle.Game.Control {
 		private bool IsSafeClipping(Entity entity, int axis, Rectangle2F entityBox, object other, Rectangle2F solidBox) {
 			if (entity.Physics.AllowEdgeClipping) {
 				float allowedEdgeClipAmount = GetAllowedEdgeClipAmount(entity, other);
-				float penetration = Math.Min(
+				float penetration = GMath.Min(
 					solidBox.BottomRight[axis] - entityBox.TopLeft[axis],
 					entityBox.BottomRight[axis] - solidBox.TopLeft[axis]);
 				return (penetration <= allowedEdgeClipAmount);
@@ -899,7 +899,7 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Returns true if two rectangles share an edge in the given direction.
 		public static bool AreEdgesAligned(Rectangle2F box1, Rectangle2F box2, int edgeDirection) {
-			return Math.Abs(box1.GetEdge(edgeDirection) - box2.GetEdge(edgeDirection)) < 0.1f;
+			return GMath.Abs(box1.GetEdge(edgeDirection) - box2.GetEdge(edgeDirection)) < 0.1f;
 		}
 		
 

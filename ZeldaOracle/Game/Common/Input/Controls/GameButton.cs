@@ -5,11 +5,16 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Input.Controls {
+	/// <summary>An accessor for key, mouse button, and gamepad button controls.</summary>
 	public class GameButton {
 
+		/// <summary>The key this game button represents.</summary>
 		private Keys keyCode;
+		/// <summary>The mouse button this game button represents.</summary>
 		private MouseButtons mouseCode;
+		/// <summary>The gamepad button this game button represents.</summary>
 		private Buttons buttonCode;
+		/// <summary>The type of input control this game button represents.</summary>
 		private InputType inputType;
 
 
@@ -17,24 +22,31 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs an unassigned game button.</summary>
 		public GameButton() {
 			this.keyCode = Keys.None;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.None;
 		}
+
+		/// <summary>Constructs a key game button.</summary>
 		public GameButton(Keys keyCode) {
 			this.keyCode = keyCode;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.Key;
 		}
+
+		/// <summary>Constructs a mouse game button.</summary>
 		public GameButton(MouseButtons mouseCode) {
 			this.keyCode = Keys.None;
 			this.mouseCode = mouseCode;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.MouseButton;
 		}
+
+		/// <summary>Constructs a gamepad game button.</summary>
 		public GameButton(Buttons buttonCode) {
 			this.keyCode = Keys.None;
 			this.mouseCode = MouseButtons.None;
@@ -47,7 +59,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the button if it is the active control
+		/// <summary>Gets the button if it is the active control.</summary>
 		public InputControl Button {
 			get {
 				switch (inputType) {
@@ -74,6 +86,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 			}
 			return false;
 		}
+
 		public static bool operator !=(GameButton c1, GameButton c2) {
 			if (c1.inputType == c2.inputType) {
 				switch (c1.inputType) {
@@ -85,16 +98,24 @@ namespace ZeldaOracle.Common.Input.Controls {
 			return true;
 		}
 
-		// The compiler throws a warning if you define an == operator and 
-		// don't override Object.Equals(Object o) and Object.GetHashCode()
+
+		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the game button is equal to the other game button.</summary>
 		public override bool Equals(object obj) {
 			if (obj.GetType() == GetType())
 				return (this == ((GameButton) obj));
 			return false;
 		}
 
+		/// <summary>Gets the hash code for the game button.</summary>
 		public override int GetHashCode() {
-			return base.GetHashCode();
+			unchecked {
+				return (int) keyCode ^ (int) mouseCode ^
+					(int) buttonCode ^ (int) inputType;
+			}
 		}
 	}
 }

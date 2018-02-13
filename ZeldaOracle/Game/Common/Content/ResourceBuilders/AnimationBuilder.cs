@@ -280,8 +280,8 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 					if (frame.StartTime < t + alternateDelayTicks && frame.EndTime > t) {
 						AnimationFrame newFrame = new AnimationFrame(frame);
 						//newFrame.Sprite		= frame.Sprite;
-						newFrame.StartTime	= Math.Max(frame.StartTime, t);
-						newFrame.Duration	= Math.Min(frame.EndTime, t + alternateDelayTicks) - newFrame.StartTime;
+						newFrame.StartTime	= GMath.Max(frame.StartTime, t);
+						newFrame.Duration	= GMath.Min(frame.EndTime, t + alternateDelayTicks) - newFrame.StartTime;
 						newAnimation.AddFrame(newFrame);
 					}
 				}

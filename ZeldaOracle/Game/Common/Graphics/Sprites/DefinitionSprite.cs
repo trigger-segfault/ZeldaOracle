@@ -7,16 +7,21 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics.Sprites {
 
+	/// <summary>A structure representing a defined sprite in a definition sprite.</summary>
 	public struct DefinedSprite {
+		/// <summary>The definition of the defined sprite.</summary>
 		public string Definition { get; set; }
+		/// <summary>The actual sprite of the defined sprite.</summary>
 		public ISprite Sprite { get; set; }
 
+		/// <summary>Constructs the defined sprite.</summary>
 		public DefinedSprite(string definition, ISprite sprite) {
 			this.Definition = definition;
 			this.Sprite     = sprite;
 		}
 	}
 
+	/// <summary>A sprite that defines the base for sprites with named lookups.</summary>
 	public abstract class DefinitionSprite : ISprite {
 		/// <summary>The group for this sprite's definitions.</summary>
 		private string group;
@@ -31,12 +36,15 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs a definition sprite with the specified group name.</summary>
 		public DefinitionSprite(string group) {
 			this.group          = group;
 			this.definitions    = new Dictionary<string, ISprite>();
 			this.defaultSprite  = null;
 		}
 
+		/// <summary>Constructs a definition sprite with the specified group name and
+		/// first sprite.</summary>
 		public DefinitionSprite(string group, ISprite firstSprite, string firstDefinition) {
 			this.group          = group;
 			this.definitions    = new Dictionary<string, ISprite>();
@@ -44,6 +52,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.definitions.Add(firstDefinition, firstSprite);
 		}
 
+		/// <summary>Constructs a copy of the definition sprite.</summary>
 		public DefinitionSprite(DefinitionSprite copy) {
 			this.group          = copy.group;
 			this.definitions    = new Dictionary<string, ISprite>(copy.definitions);
@@ -56,7 +65,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the definition for this sprite from the draw settings.</summary>
-		public abstract string GetDefinition(SpriteDrawSettings settings);
+		public abstract string GetDefinition(SpriteSettings settings);
 
 
 		//-----------------------------------------------------------------------------
@@ -64,7 +73,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public SpritePart GetParts(SpriteDrawSettings settings) {
+		public SpritePart GetParts(SpriteSettings settings) {
 			string definition = GetDefinition(settings);
 			if (definition != null) {
 				ISprite sprite;
@@ -81,7 +90,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public abstract ISprite Clone();
 
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
-		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
+		public Rectangle2I GetBounds(SpriteSettings settings) {
 			string definition = GetDefinition(settings);
 			if (definition != null) {
 				ISprite sprite;
@@ -108,12 +117,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the list of definitions in this sprite.</summary>
 		public IEnumerable<DefinedSprite> GetDefinitions() {
 			foreach (var pair in definitions) {
 				yield return new DefinedSprite(pair.Key, pair.Value);
 			}
 		}
 
+		/// <summary>Gets the defined sprite with the specified name.</summary>
 		public ISprite Get(string definition) {
 			if (definition == null)
 				throw new ArgumentNullException("Definition cannot be null!");
@@ -122,6 +133,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			return sprite;
 		}
 
+		/// <summary>Returns true if the specified definition exists in the sprite.</summary>
 		public bool Contains(string definition) {
 			if (definition == null)
 				throw new ArgumentNullException("Definition cannot be null!");
@@ -133,6 +145,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Adds the sprite definition to the sprite.</summary>
 		public void Add(string definintion, ISprite sprite) {
 			if (definintion == null)
 				throw new ArgumentNullException("Definition cannot be null!");
@@ -143,6 +156,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			definitions.Add(definintion, sprite);
 		}
 
+		/// <summary>Sets the sprite definition for the sprite.</summary>
 		public void Set(string definintion, ISprite sprite) {
 			if (definintion == null)
 				throw new ArgumentNullException("Definition cannot be null!");
@@ -153,6 +167,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			definitions[definintion] = sprite;
 		}
 
+		/// <summary>Removes the definition from the sprite.</summary>
 		public void Remove(string definintion) {
 			if (definintion == null)
 				throw new ArgumentNullException("Definition cannot be null!");
@@ -178,18 +193,23 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 	}
 
+	/// <summary>A sprite with lookups for different color groups.</summary>
 	public class ColorSprite : DefinitionSprite {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs a color sprite with the specified group name.</summary>
 		public ColorSprite(string group) :
 			base(group) { }
 
+		/// <summary>Constructs a color sprite with the specified group name and
+		/// first sprite.</summary>
 		public ColorSprite(string group, ISprite firstSprite, string firstDefinition) :
 			base(group, firstSprite, firstDefinition) { }
 
+		/// <summary>Constructs a copy of the color sprite.</summary>
 		public ColorSprite(ColorSprite copy) :
 			base(copy) { }
 
@@ -199,7 +219,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the definition for this sprite from the draw settings.</summary>
-		public override string GetDefinition(SpriteDrawSettings settings) {
+		public override string GetDefinition(SpriteSettings settings) {
 			if (settings.Colors != null) {
 				// 'all' overrides all color groups
 				return settings.Colors.Get("all") ?? settings.Colors.Get(Group);
@@ -239,18 +259,23 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 	}
 
+	/// <summary>A sprite with lookups for different styles.</summary>
 	public class StyleSprite : DefinitionSprite {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs a style sprite with the specified group name.</summary>
 		public StyleSprite(string group) :
 			base(group) { }
 
+		/// <summary>Constructs a style sprite with the specified group name and
+		/// first sprite.</summary>
 		public StyleSprite(string group, ISprite firstSprite, string firstDefinition) :
 			base(group, firstSprite, firstDefinition) { }
 
+		/// <summary>Constructs a copy of the style sprite.</summary>
 		public StyleSprite(StyleSprite copy) :
 			base(copy) { }
 
@@ -260,7 +285,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the definition for this sprite from the draw settings.</summary>
-		public override string GetDefinition(SpriteDrawSettings settings) {
+		public override string GetDefinition(SpriteSettings settings) {
 			if (settings.Styles != null) {
 				return settings.Styles.Get(Group);
 			}

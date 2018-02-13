@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 					sprite = SpriteList[2];
 				else
 					sprite = SpriteList[3];
-				g.DrawSprite(sprite, new SpriteDrawSettings(RoomControl.CurrentRoomTicks),
+				g.DrawSprite(sprite, new SpriteSettings(RoomControl.CurrentRoomTicks),
 					Position + new Point2I(x, 0) * GameSettings.TILE_SIZE, DepthLayer.TileLayer1 + Layer);
 			}
 		}
@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int width = Math.Max(1, args.Properties.GetPoint("size", Point2I.One).X);
+			int width = GMath.Max(1, args.Properties.GetPoint("size", Point2I.One).X);
 			for (int x = 0; x < width; x++) {
 				int spriteIndex = 0;
 				if (x == 0) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Scripts.Commands {
 	
@@ -155,7 +156,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				CommandParam userChild = userParams.Children;
 				int count = reference.ChildCount;
 				if (isVariadic)
-					count = Math.Max(count, userParams.ChildCount);
+					count = GMath.Max(count, userParams.ChildCount);
 				for (int i = 0; i < count; i++) {
 					CommandParam newChild;
 					if (i < userParams.ChildCount || namedParamMode) {

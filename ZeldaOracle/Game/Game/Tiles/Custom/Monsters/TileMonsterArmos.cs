@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 				var color = ColorDefinitions.All(IsBlue ? "shaded_blue" : "shaded_red");
 				g.DrawSprite(
 					GameData.ANIM_MONSTER_ARMOS,
-					new SpriteDrawSettings(color),
+					new SpriteSettings(color),
 					Position,
 					DepthLayer.Monsters);
 			}
@@ -98,7 +98,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 				var color = ColorDefinitions.All(blue ? "shaded_blue" : "shaded_red");
 				g.DrawSprite(
 					GameData.ANIM_MONSTER_ARMOS,
-					new SpriteDrawSettings(color),
+					new SpriteSettings(color),
 					args.Position,
 					args.Color);
 			}

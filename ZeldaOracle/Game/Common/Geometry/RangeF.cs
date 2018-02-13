@@ -15,8 +15,12 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>A range positioned at (0 to 0).</summary>
 		public static readonly RangeF Zero = new RangeF(0f, 0f);
-		/// <summary>Returns a range positioned at (Float.Min - Float.Max).</summary>
+		/// <summary>Returns a range positioned at (float.Min to float.Max).</summary>
 		public static readonly RangeF Full = new RangeF(float.NegativeInfinity, float.PositiveInfinity);
+		/// <summary>Returns a range positioned at (0 to float.Max).</summary>
+		public static readonly RangeF Positive = new RangeF(0f, float.PositiveInfinity);
+		/// <summary>Returns a range positioned at (float.Min to 0).</summary>
+		public static readonly RangeF Negative = new RangeF(float.NegativeInfinity, 0f);
 
 
 		//-----------------------------------------------------------------------------
@@ -38,11 +42,13 @@ namespace ZeldaOracle.Common.Geometry {
 			this.Min	= min;
 			this.Max	= max;
 		}
+
 		/// <summary>Constructs a range with a single value.</summary>
 		public RangeF(float single) {
 			this.Min	= single;
 			this.Max	= single;
 		}
+
 		/// <summary>Constructs a copy of the specified range.</summary>
 		public RangeF(RangeF r) {
 			this.Min	= r.Min;
@@ -213,4 +219,4 @@ namespace ZeldaOracle.Common.Geometry {
 
 	}
 
-} // End namespace
+}

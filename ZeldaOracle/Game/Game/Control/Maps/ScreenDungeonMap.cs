@@ -175,9 +175,9 @@ namespace ZeldaOracle.Game.Control.Maps {
 				// Update changing of floor view position.
 				int nextFloorViewPosition = viewFloorIndex * 80;
 				if (floorViewPosition < nextFloorViewPosition)
-					floorViewPosition = Math.Min(floorViewPosition + floorViewSpeed, nextFloorViewPosition);
+					floorViewPosition = GMath.Min(floorViewPosition + floorViewSpeed, nextFloorViewPosition);
 				else if (floorViewPosition > nextFloorViewPosition)
-					floorViewPosition = Math.Max(floorViewPosition - floorViewSpeed, nextFloorViewPosition);
+					floorViewPosition = GMath.Max(floorViewPosition - floorViewSpeed, nextFloorViewPosition);
 				if (floorViewPosition == nextFloorViewPosition)
 					isChangingFloors = false;
 			}

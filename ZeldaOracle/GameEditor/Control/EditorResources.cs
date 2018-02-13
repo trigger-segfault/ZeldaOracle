@@ -51,18 +51,18 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 		
 		public static Canvas UnmapSprite(ISprite sprite) {
-			return UnmapSprite(sprite, SpriteDrawSettings.Default, GameData.PAL_TILES_DEFAULT, GameData.PAL_ENTITIES_DEFAULT);
+			return UnmapSprite(sprite, SpriteSettings.Default, GameData.PAL_TILES_DEFAULT, GameData.PAL_ENTITIES_DEFAULT);
 		}
 
-		public static Canvas UnmapSprite(ISprite sprite, SpriteDrawSettings settings) {
+		public static Canvas UnmapSprite(ISprite sprite, SpriteSettings settings) {
 			return UnmapSprite(sprite, settings, GameData.PAL_TILES_DEFAULT, GameData.PAL_ENTITIES_DEFAULT);
 		}
 
 		public static Canvas UnmapSprite(ISprite sprite, Palette tilePalette, Palette entityPalette) {
-			return UnmapSprite(sprite, SpriteDrawSettings.Default, tilePalette, entityPalette);
+			return UnmapSprite(sprite, SpriteSettings.Default, tilePalette, entityPalette);
 		}
 
-		public static Canvas UnmapSprite(ISprite sprite, SpriteDrawSettings settings, Palette tilePalette, Palette entityPalette) {
+		public static Canvas UnmapSprite(ISprite sprite, SpriteSettings settings, Palette tilePalette, Palette entityPalette) {
 			UnmappedSpriteLookup lookup = new UnmappedSpriteLookup(sprite, settings, tilePalette, entityPalette);
 			UnmappedWpfSprite unmappedSprite = null;
 			if (!unmappedSprites.TryGetValue(lookup, out unmappedSprite)) {

@@ -63,11 +63,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		public override void Update() {
 			// Adjust Z-position and velocity to hover at a certain height.
-			if (Math.Abs(zPosition - GameSettings.COLLECTIBLE_FAIRY_HOVER_HEIGHT) > 2.0f) {
+			if (GMath.Abs(zPosition - GameSettings.COLLECTIBLE_FAIRY_HOVER_HEIGHT) > 2.0f) {
 				if (zPosition < GameSettings.COLLECTIBLE_FAIRY_HOVER_HEIGHT)
-					Physics.ZVelocity = Math.Min(0.5f, Physics.ZVelocity + 0.05f);
+					Physics.ZVelocity = GMath.Min(0.5f, Physics.ZVelocity + 0.05f);
 				if (zPosition > GameSettings.COLLECTIBLE_FAIRY_HOVER_HEIGHT)
-					Physics.ZVelocity = Math.Max(-0.5f, Physics.ZVelocity - GameSettings.DEFAULT_GRAVITY);
+					Physics.ZVelocity = GMath.Max(-0.5f, Physics.ZVelocity - GameSettings.DEFAULT_GRAVITY);
 			}
 			else {
 				Physics.ZVelocity = 0.0f;
@@ -82,15 +82,15 @@ namespace ZeldaOracle.Game.Entities {
 				direction = Physics.Velocity.Direction;
 
 			// Adjust velocity.
-			if (Math.Abs(moveSpeed - maxMoveSpeed) > 0.01f) {
-				moveSpeed += 0.04f * Math.Sign(maxMoveSpeed - moveSpeed);
+			if (GMath.Abs(moveSpeed - maxMoveSpeed) > 0.01f) {
+				moveSpeed += 0.04f * GMath.Sign(maxMoveSpeed - moveSpeed);
 			}
 			else
 				moveSpeed = maxMoveSpeed;
 
 			// Update random motion.
-			directionSpeed += 0.05f * GRandom.NextFloat(-30.0f, 30.0f);
-			directionSpeed = GMath.Clamp(directionSpeed, -6.0f, 6.0f);
+			directionSpeed += 0.05f * GRandom.NextFloat(-GMath.FullAngle / 12f, GMath.FullAngle / 12f);
+			directionSpeed = GMath.Clamp(directionSpeed, -GMath.FullAngle / 60f, GMath.FullAngle / 60f);
 			direction += directionSpeed;
 			physics.Velocity = Vector2F.FromPolar(moveSpeed, direction);
 

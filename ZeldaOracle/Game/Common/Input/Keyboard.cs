@@ -5,26 +5,29 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
-using XnaKeyboard	= Microsoft.Xna.Framework.Input.Keyboard;
-using XnaKeys		= Microsoft.Xna.Framework.Input.Keys;
+using XnaKeyboard = Microsoft.Xna.Framework.Input.Keyboard;
+using XnaKeys = Microsoft.Xna.Framework.Input.Keys;
 
 using ZeldaOracle.Common.Geometry;
-using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
-using Keys			= ZeldaOracle.Common.Input.Keys;
+using Keyboard = ZeldaOracle.Common.Input.Keyboard;
+using Keys = ZeldaOracle.Common.Input.Keys;
+using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Common.Input {
 	/// <summary>A static class for keeping track of key states.</summary>
 	public static class Keyboard {
 
-		//========== CONSTANTS ===========
-		#region Constants
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
 
 		/// <summary>The number of key states in the list.</summary>
 		private const int NumKeys		= 256;
 
-		#endregion
-		//========== VARIABLES ===========
-		#region Variables
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
 		// States
 		/// <summary>The list of keys.</summary>
@@ -40,9 +43,10 @@ namespace ZeldaOracle.Common.Input {
 		/// <summary>True if the keyboard is disabled.</summary>
 		private static bool disabled;
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the keyboard listener.</summary>
 		public static void Initialize() {
@@ -67,8 +71,8 @@ namespace ZeldaOracle.Common.Input {
 			EventInput.KeyDown += delegate(object sender, KeyEventArgs e) {
 				rawKeyTyped[(int)e.KeyCode] = true;
 			};
-
 		}
+
 		/// <summary>Uninitializes the keyboard listener.</summary>
 		public static void Uninitialize() {
 			// States
@@ -77,9 +81,10 @@ namespace ZeldaOracle.Common.Input {
 			rawKeyTyped		= null;
 		}
 
-		#endregion
-		//=========== UPDATING ===========
-		#region Updating
+
+		//-----------------------------------------------------------------------------
+		// Updating
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Called every step to update the key states.</summary>
 		public static void Update(GameTime gameTime) {
@@ -94,6 +99,7 @@ namespace ZeldaOracle.Common.Input {
 			charTyped		= rawCharTyped;
 			rawCharTyped	= '\0';
 		}
+
 		/// <summary>Resets all the key states.</summary>
 		public static void Reset(bool release) {
 			// Reset each of the keys
@@ -105,6 +111,7 @@ namespace ZeldaOracle.Common.Input {
 			charTyped		= '\0';
 			rawCharTyped	= '\0';
 		}
+
 		/// <summary>Enables all the keys.</summary>
 		public static void Enable() {
 			// Reset each of the keys
@@ -114,6 +121,7 @@ namespace ZeldaOracle.Common.Input {
 
 			disabled = false;
 		}
+
 		/// <summary>Disables all the keys.</summary>
 		public static void Disable(bool untilRelease) {
 			// Reset each of the keys
@@ -129,50 +137,64 @@ namespace ZeldaOracle.Common.Input {
 				disabled = true;
 		}
 
-		#endregion
-		//========== KEY STATES ==========
-		#region Key States
+
+		//-----------------------------------------------------------------------------
+		// Key States
+		//-----------------------------------------------------------------------------
+		
+		// Single Key States ----------------------------------------------------------
 
 		/// <summary>Returns true if the specified key was pressed.</summary>
 		public static bool IsKeyPressed(Keys keyCode) {
 			return keys[(int)keyCode].IsPressed();
 		}
+
 		/// <summary>Returns true if the specified key was pressed.</summary>
 		public static bool IsKeyPressed(int keyCode) {
 			return keys[keyCode].IsPressed();
 		}
+
 		/// <summary>Returns true if the specified key is down.</summary>
 		public static bool IsKeyDown(Keys keyCode) {
 			return keys[(int)keyCode].IsDown();
 		}
+
 		/// <summary>Returns true if the specified key is down.</summary>
 		public static bool IsKeyDown(int keyCode) {
 			return keys[keyCode].IsDown();
 		}
+
 		/// <summary>Returns true if the specified key was released.</summary>
 		public static bool IsKeyReleased(Keys keyCode) {
 			return keys[(int)keyCode].IsReleased();
 		}
+
 		/// <summary>Returns true if the specified key was released.</summary>
 		public static bool IsKeyReleased(int keyCode) {
 			return keys[keyCode].IsReleased();
 		}
+
 		/// <summary>Returns true if the specified key is up.</summary>
 		public static bool IsKeyUp(Keys keyCode) {
 			return keys[(int)keyCode].IsUp();
 		}
+
 		/// <summary>Returns true if the specified key is up.</summary>
 		public static bool IsKeyUp(int keyCode) {
 			return keys[keyCode].IsUp();
 		}
+
 		/// <summary>Returns true if the specified key was typed.</summary>
 		public static bool IsKeyTyped(Keys keyCode) {
 			return keys[(int)keyCode].IsTyped();
 		}
+
 		/// <summary>Returns true if the specified key was typed.</summary>
 		public static bool IsKeyTyped(int keyCode) {
 			return keys[keyCode].IsTyped();
 		}
+		
+		// Any Key States -------------------------------------------------------------
 
 		/// <summary>Returns true if any key was pressed.</summary>
 		public static bool IsAnyKeyPressed() {
@@ -182,6 +204,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any key is down.</summary>
 		public static bool IsAnyKeyDown() {
 			for (int i = 0; i < NumKeys; i++) {
@@ -190,6 +213,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any key was released.</summary>
 		public static bool IsAnyKeyReleased() {
 			for (int i = 0; i < NumKeys; i++) {
@@ -198,6 +222,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any key is up.</summary>
 		public static bool IsAnyKeyUp() {
 			for (int i = 0; i < NumKeys; i++) {
@@ -206,6 +231,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any key was typed.</summary>
 		public static bool IsAnyKeyTyped() {
 			for (int i = 0; i < NumKeys; i++) {
@@ -215,10 +241,13 @@ namespace ZeldaOracle.Common.Input {
 			return false;
 		}
 
+		// Typing Key States ----------------------------------------------------------
+
 		/// <summary>Returns true if a character was typed.</summary>
 		public static bool IsCharTyped() {
 			return (charTyped != '\0' && !disabled);
 		}
+
 		/// <summary>Gets the character that was typed.</summary>
 		public static char GetCharTyped() {
 			if (disabled)
@@ -226,18 +255,21 @@ namespace ZeldaOracle.Common.Input {
 			return charTyped;
 		}
 
-		#endregion
-		//=========== KEY INFO ===========
-		#region Key Info
+
+		//-----------------------------------------------------------------------------
+		// Key Information
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the specified key.</summary>
 		public static InputControl GetKey(Keys keyCode) {
 			return keys[(int)keyCode];
 		}
+
 		/// <summary>Gets the specified key.</summary>
 		public static InputControl GetKey(int keyCode) {
 			return keys[keyCode];
 		}
+
 		/// <summary>Gets the name of the specified key.</summary>
 		public static string GetKeyName(Keys keyCode) {
 			string name = Enum.GetName(typeof(Keys), keyCode);
@@ -245,6 +277,7 @@ namespace ZeldaOracle.Common.Input {
 				return name[1].ToString();
 			return name;
 		}
+
 		/// <summary>Gets the name of the specified key.</summary>
 		public static string GetKeyName(int keyCode) {
 			string name = Enum.GetName(typeof(Keys), keyCode);
@@ -252,7 +285,5 @@ namespace ZeldaOracle.Common.Input {
 				return name[1].ToString();
 			return name;
 		}
-
-		#endregion
 	}
-} // End namespace
+}

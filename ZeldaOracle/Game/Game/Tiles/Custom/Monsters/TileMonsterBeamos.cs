@@ -44,10 +44,10 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			// Determine shoot vector
 			Vector2F vectorToPlayer = RoomControl.Player.Position - Center;
 			int shootAngleCount = GameSettings.MONSTER_BEAMOS_SHOOT_ANGLE_COUNT;
-			float radians = (float) Math.Atan2((double) -vectorToPlayer.Y, (double) vectorToPlayer.X);
+			float radians = GMath.Atan2(-vectorToPlayer.Y, vectorToPlayer.X);
 			if (radians < 0.0f)
-				radians += GMath.TwoPi;
-			shootAngle = (int) GMath.Round((radians * shootAngleCount) / GMath.TwoPi);
+				radians += GMath.FullAngle;
+			shootAngle = (int) GMath.Round((radians * shootAngleCount) / GMath.FullAngle);
 			shootAngle = GMath.Wrap(shootAngle, shootAngleCount);
 		}
 
@@ -62,10 +62,8 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			int angleToPlayer = Angles.NearestFromVector(vectorToPlayer);
 			
 			int shootAngleCount = GameSettings.MONSTER_BEAMOS_SHOOT_ANGLE_COUNT;
-			float shootRadians = (shootAngle * GMath.TwoPi) / (float) shootAngleCount;
-			Vector2F shootVector = new Vector2F(
-				(float) Math.Cos((double) shootRadians),
-				(float) -Math.Sin((double) shootRadians));
+			float shootRadians = (shootAngle * GMath.FullAngle) / (float) shootAngleCount;
+			Vector2F shootVector = Vector2F.FromPolar(shootRadians);
 			
 			// Create the projectile
 			BeamProjectile projectile = new BeamProjectile();
@@ -165,7 +163,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions,
 					ColorDefinitions.All("blue"), args.Time);
 				g.DrawSprite(
 					sprite,

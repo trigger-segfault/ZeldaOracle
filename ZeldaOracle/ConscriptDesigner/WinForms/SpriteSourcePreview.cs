@@ -85,7 +85,7 @@ namespace ConscriptDesigner.WinForms {
 			return point < source.Dimensions;
 		}
 
-		protected override void Draw(Graphics2D g, SpriteDrawSettings settings, Zone zone) {
+		protected override void Draw(Graphics2D g, SpriteSettings settings, Zone zone) {
 			if (source == null)
 				return;
 			for (int indexX = 0; indexX < source.Width; indexX++) {

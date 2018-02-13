@@ -109,7 +109,7 @@ namespace ZeldaOracle.Game.Entities {
 			if (!facePlayer && flags.HasFlag(NPCFlags.FacePlayerWhenNear)) {
 				Point2I a = RoomControl.GetTileLocation(Center);
 				Point2I b = RoomControl.GetTileLocation(RoomControl.Player.Center);
-				if (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) <= sightDistance)
+				if (GMath.Abs(a.X - b.X) + GMath.Abs(a.Y - b.Y) <= sightDistance)
 					facePlayer = true;
 			}
 
@@ -129,9 +129,7 @@ namespace ZeldaOracle.Game.Entities {
 				else {
 					// Face the player in all directions.
 					Vector2F lookVector = RoomControl.Player.Center - Center;
-					lookVector.Y *= -1;
-					faceDirection = Directions.RoundFromRadians(
-						GMath.ConvertToRadians(lookVector.Direction));
+					faceDirection = Directions.RoundFromRadians(lookVector.Direction);
 				}
 			}
 			

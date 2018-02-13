@@ -84,15 +84,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Target the player
 			Vector2F vectorToPlayer = RoomControl.Player.Position - Center;
 			int launchAngleCount = GameSettings.MONSTER_FLYING_TILE_LAUNCH_ANGLE_COUNT;
-			float radians = (float) Math.Atan2((double) -vectorToPlayer.Y, (double) vectorToPlayer.X);
+			float radians = GMath.Atan2(-vectorToPlayer.Y, vectorToPlayer.X);
 			if (radians < 0.0f)
-				radians += GMath.TwoPi;
-			int launchAngle = (int) GMath.Round((radians * launchAngleCount) / GMath.TwoPi);
-			float launchRadians = (launchAngle * GMath.TwoPi) / (float) launchAngleCount;
-			launchVector = new Vector2F(
-				(float) Math.Cos((double) launchRadians),
-				(float) -Math.Sin((double) launchRadians));
-			launchVector *= GameSettings.MONSTER_FLYING_TILE_LAUNCH_SPEED;
+				radians += GMath.FullAngle;
+			int launchAngle = (int) GMath.Round((radians * launchAngleCount) / GMath.FullAngle);
+			float launchRadians = (launchAngle * GMath.FullAngle) / (float) launchAngleCount;
+			launchVector = Vector2F.FromPolar(
+				GameSettings.MONSTER_FLYING_TILE_LAUNCH_SPEED, launchRadians);
 
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_FLYING_TILE);
 		}

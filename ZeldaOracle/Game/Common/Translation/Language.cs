@@ -81,4 +81,4 @@ namespace ZeldaOracle.Common.Translation {
 
 		#endregion
 	}
-} // end namespace
+}

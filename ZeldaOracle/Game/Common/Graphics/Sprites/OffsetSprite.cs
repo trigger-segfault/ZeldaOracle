@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Graphics.Sprites {
 	/// <summary>A sprite with an additional offset and flip effects.</summary>
 	public class OffsetSprite : ISprite {
+
 		/// <summary>The sprite for this offset sprite.</summary>
 		private ISprite sprite;
 		/// <summary>The draw offset for this offset sprite.</summary>
@@ -70,7 +71,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public SpritePart GetParts(SpriteDrawSettings settings) {
+		public SpritePart GetParts(SpriteSettings settings) {
 			if (sprite == null)
 				return null;
 			SpritePart firstPart = sprite.GetParts(settings);
@@ -88,7 +89,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 		
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
-		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
+		public Rectangle2I GetBounds(SpriteSettings settings) {
 			if (sprite == null)
 				return Rectangle2I.Zero;
 			Rectangle2I bounds = sprite.GetBounds(settings);

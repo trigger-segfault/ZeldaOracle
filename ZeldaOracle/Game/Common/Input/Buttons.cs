@@ -1,6 +1,27 @@
 using System;
 
 namespace ZeldaOracle.Common.Input {
+	/// <summary>The control codes for each of the analog stick on a gamepad.</summary>
+	public enum AnalogSticks {
+
+		None = 0,
+
+		// Analog Sticks
+		LeftStick = 1,
+		RightStick = 2,
+		DPad = 3
+	}
+
+	/// <summary>The control codes for each of the trigger on a gamepad.</summary>
+	public enum Triggers {
+
+		None = 0,
+
+		// Triggers
+		LeftTrigger = 1,
+		RightTrigger = 2
+	}
+
 	/// <summary>The control codes for each of the buttons on a gamepad.</summary>
 	public enum Buttons {
 		
@@ -42,4 +63,4 @@ namespace ZeldaOracle.Common.Input {
 		RightTriggerButton	= 25
 
 	}
-} // End namespace
+}

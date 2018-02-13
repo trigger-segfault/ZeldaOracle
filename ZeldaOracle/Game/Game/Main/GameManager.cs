@@ -57,9 +57,9 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>True if the game is hard-paused (not in a pause menu).</summary>
 		private bool			isGamePaused;
 		/// <summary>True if a console window as been allocated for this game.</summary>
-		private bool            isConsoleOpen;
+		private bool			isConsoleOpen;
 		/// <summary>The user settings for the game.</summary>
-		private UserSettings userSettings;
+		private UserSettings	userSettings;
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -285,7 +285,7 @@ namespace ZeldaOracle.Game.Main {
 			g.SetRenderTarget(null);
 			//g.ResetTranslation();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, new Vector2F(gameScale, gameScale), 0.0);
+			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, gameScale);
 			g.End();
 
 			// Draw the debug overlay
@@ -318,22 +318,12 @@ namespace ZeldaOracle.Game.Main {
 		public GameState CurrentGameState {
 			get { return gameStateStack.CurrentGameState; }
 		}
-
-		/// <summary>Returns true if the game is running in windows.</summary>
-		public bool IsWindows {
-			get { return gameBase.IsWindows; }
-		}
-
-		/// <summary>Returns true if the game is running on the Xbox 360.</summary>
-		public bool IsXbox {
-			get { return gameBase.IsXbox; }
-		}
 		
 		// Information ----------------------------------------------------------------
 
 		/// <summary>Gets the current framerate of the game.</summary>
-		public double FPS {
-			get { return gameBase.FPS; }
+		public float FPS {
+			get { return (float) gameBase.FPS; }
 		}
 
 		/// <summary>Gets or sets if the game is in fullscreen mode.</summary>
@@ -419,6 +409,5 @@ namespace ZeldaOracle.Game.Main {
 				}
 			}
 		}
-
 	}
-} // End namespace
+}

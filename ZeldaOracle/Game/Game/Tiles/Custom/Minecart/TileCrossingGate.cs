@@ -101,7 +101,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (animation != null) {
 				g.DrawSprite(
 					animation.GetSubstrip(faceLeft ? 1 : 0),
-					new SpriteDrawSettings(args.Zone.StyleDefinitions, 0f),
+					new SpriteSettings(args.Zone.StyleDefinitions, 0f),
 					args.Position,
 					args.Color);
 			}

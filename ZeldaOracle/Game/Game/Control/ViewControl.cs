@@ -62,8 +62,8 @@ namespace ZeldaOracle.Game.Control {
 			// Pan on each axis seperately
 			for (int i = 0; i < 2; i++) {
 				float diff = goalPosition[i] - position[i];
-				if (Math.Abs(diff) > panSpeed)
-					position[i] += Math.Sign(diff) * panSpeed;
+				if (GMath.Abs(diff) > panSpeed)
+					position[i] += GMath.Sign(diff) * panSpeed;
 				else
 					position[i] = goalPosition[i];
 			}

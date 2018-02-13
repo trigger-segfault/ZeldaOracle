@@ -319,7 +319,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Hop out of a minecart and land at the given tile location.
 		public void JumpOutOfMinecart(Point2I landingTileLocation) {
 			Vector2F landingPoint = (landingTileLocation +
-				new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE;
+				Vector2F.Half) * GameSettings.TILE_SIZE;
 			landingPoint -= centerOffset + new Vector2F(0, 2.0f);
 			JumpToPosition(landingPoint, 0.0f, 26, null);
 		}

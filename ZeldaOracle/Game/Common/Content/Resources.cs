@@ -870,4 +870,4 @@ namespace ZeldaOracle.Common.Content {
 			get { return resourceDictionaries != null; }
 		}
 	}
-} // end namespace
+}

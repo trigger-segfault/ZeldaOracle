@@ -319,7 +319,7 @@ namespace ZeldaOracle.Game.Worlds {
 		internal void ResizeLayerCount(int newLayerCount) {
 			TileDataInstance[,,] oldTileData = tileData;
 			tileData = new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, newLayerCount];
-			int minLayerCount = Math.Min(LayerCount, newLayerCount);
+			int minLayerCount = GMath.Min(LayerCount, newLayerCount);
 			for (int x = 0; x < level.RoomSize.X; x++) {
 				for (int y = 0; y < level.RoomSize.Y; y++) {
 					for (int layer = 0; layer < minLayerCount; layer++) {

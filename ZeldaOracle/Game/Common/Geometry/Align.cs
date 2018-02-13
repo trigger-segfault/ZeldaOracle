@@ -70,4 +70,4 @@ namespace ZeldaOracle.Common.Geometry {
 			return position;
 		}
 	}
-} // end namespace
+}

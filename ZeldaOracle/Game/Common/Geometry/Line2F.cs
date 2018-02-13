@@ -31,21 +31,25 @@ namespace ZeldaOracle.Common.Geometry {
 			this.End1	= new Vector2F(x1, y1);
 			this.End2	= new Vector2F(x2, y2);
 		}
+
 		/// <summary>Constructs a line with the specified endpoints.</summary>
 		public Line2F(Vector2F end1, float x2, float y2) {
 			this.End1	= end1;
 			this.End2	= new Vector2F(x2, y2);
 		}
+
 		/// <summary>Constructs a line with the specified endpoints.</summary>
 		public Line2F(float x1, float y1, Vector2F end2) {
 			this.End1	= new Vector2F(x1, y1);
 			this.End2	= end2;
 		}
+
 		/// <summary>Constructs a line with the specified endpoints.</summary>
 		public Line2F(Vector2F end1, Vector2F end2) {
 			this.End1	= end1;
 			this.End2	= end2;
 		}
+
 		/// <summary>Constructs a line with the specified position and size.</summary>
 		public Line2F(float x, float y, float width, float height, bool asSize) {
 			if (!asSize) {
@@ -57,6 +61,7 @@ namespace ZeldaOracle.Common.Geometry {
 				this.End2	= new Vector2F(width, height);
 			}
 		}
+
 		/// <summary>Constructs a line with the specified position and size.</summary>
 		public Line2F(Vector2F point, float width, float height, bool asSize) {
 			if (!asSize) {
@@ -68,6 +73,7 @@ namespace ZeldaOracle.Common.Geometry {
 				this.End2	= new Vector2F(width, height);
 			}
 		}
+
 		/// <summary>Constructs a line with the specified position and size.</summary>
 		public Line2F(float x, float y, Vector2F size, bool asSize) {
 			if (!asSize) {
@@ -79,6 +85,7 @@ namespace ZeldaOracle.Common.Geometry {
 				this.End2	= size;
 			}
 		}
+
 		/// <summary>Constructs a line with the specified position and size.</summary>
 		public Line2F(Vector2F point, Vector2F size, bool asSize) {
 			if (!asSize) {
@@ -90,16 +97,19 @@ namespace ZeldaOracle.Common.Geometry {
 				this.End2	= size;
 			}
 		}
+
 		/// <summary>Constructs a line with the specified size.</summary>
 		public Line2F(float width, float height) {
 			this.End1	= Vector2F.Zero;
 			this.End2	= new Vector2F(width, height);
 		}
+
 		/// <summary>Constructs a line with the specified size.</summary>
 		public Line2F(Vector2F size) {
 			this.End1	= Vector2F.Zero;
 			this.End2	= size;
 		}
+
 		/// <summary>Constructs a copy of the specified line.</summary>
 		public Line2F(Line2F l) {
 			this.End1	= l.End1;
@@ -112,27 +122,34 @@ namespace ZeldaOracle.Common.Geometry {
 		public override string ToString() {
 			return "(" + End1 + ", " + End2 + ")";
 		}
+
 		/// <summary>Outputs a string representing this line as ((x1, y1), (x2, y2)).</summary>
 		public string ToString(IFormatProvider provider) {
 			return "(" + End1.ToString(provider) + ", " + End2.ToString(provider) + ")";
 		}
+
 		/// <summary>Outputs a string representing this line as ((x1, y1), (x2, y2)).</summary>
 		public string ToString(string format, IFormatProvider provider) {
 			return "(" + End1.ToString(format, provider) + ", " + End2.ToString(format, provider) + ")";
 		}
+
 		/// <summary>Outputs a string representing this line as ((x1, y1), (x2, y2)).</summary>
 		public string ToString(string format) {
 			return "(" + End1.ToString(format) + ", " + End2.ToString(format) + ")";
 		}
+
 		/// <summary>Returns true if the specified line has the same endpoints.</summary>
 		public override bool Equals(object obj) {
 			if (obj is Line2F)
-				return (End1 == ((Line2F)obj).End1 && End2 == ((Line2F)obj).End2);
+				return (End1 == ((Line2F) obj).End1 && End2 == ((Line2F) obj).End2);
 			return false;
 		}
+
 		/// <summary>Returns the hash code of this line.</summary>
 		public override int GetHashCode() {
-			return base.GetHashCode();
+			unchecked {
+				return End1.GetHashCode() * byte.MaxValue ^ End2.GetHashCode();
+			}
 		}
 
 		//========== OPERATORS ===========
@@ -140,16 +157,10 @@ namespace ZeldaOracle.Common.Geometry {
 		public static Line2F operator +(Line2F l) {
 			return l;
 		}
+
 		public static Line2F operator -(Line2F l) {
 			return new Line2F(l.End1, l.End1 - l.Size);
 		}
-		/*
-		public static Line2F operator ++(Line2F l) {
-			return new Line2F(++l.End1, ++l.End2);
-		}
-		public static Line2F operator --(Line2F l) {
-			return new Line2F(--l.End1, --l.End2);
-		}*/
 
 		//--------------------------------
 
@@ -195,39 +206,46 @@ namespace ZeldaOracle.Common.Geometry {
 			get { return End1.X; }
 			set { End1.X = value; }
 		}
+
 		/// <summary>Gets or sets the y position of the first endpoint.</summary>
 		public float Y1 {
 			get { return End1.Y; }
 			set { End1.Y = value; }
 		}
+
 		/// <summary>Gets or sets the x position of the second endpoint.</summary>
 		public float X2 {
 			get { return End2.X; }
 			set { End2.X = value; }
 		}
+
 		/// <summary>Gets or sets the y position of the second endpoint.</summary>
 		public float Y2 {
 			get { return End2.Y; }
 			set { End2.Y = value; }
 		}
+
 		/// <summary>Gets or sets the size of the line.</summary>
 		[ContentSerializerIgnore]
 		public Vector2F Size {
 			get { return End2 - End1; }
 			set { End2 = End1 + value; }
 		}
+
 		/// <summary>Gets or sets the width of the line.</summary>
 		[ContentSerializerIgnore]
 		public float Width {
 			get { return End2.X - End1.X; }
 			set { End2.X = End1.X + value; }
 		}
+
 		/// <summary>Gets or sets the height of the line.</summary>
 		[ContentSerializerIgnore]
 		public float Height {
 			get { return End2.Y - End1.Y; }
 			set { End2.Y = End1.Y + value; }
 		}
+
 		/// <summary>Gets or sets the first or second endpoint from the index.</summary>
 		[ContentSerializerIgnore]
 		public Vector2F this[int endpoint] {
@@ -252,36 +270,32 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Gets or sets the direction of the line.</summary>
 		[ContentSerializerIgnore]
 		public float Direction {
-			get {
-				return End1.DirectionTo(End2);
-			}
-			set {
-				End2 = End1 + Vector2F.FromPolar(Length, value);
-			}
+			get { return End1.DirectionTo(End2); }
+			set { End2 = End1 + Vector2F.FromPolar(Length, value); }
 		}
+
 		/// <summary>Gets or sets the length of the line.</summary>
 		[ContentSerializerIgnore]
 		public float Length {
-			get {
-				return End1.DistanceTo(End2);
-			}
-			set {
-				float oldLength = End1.DistanceTo(End2);
-				End2 = End1 + Vector2F.FromPolar(value, Direction);
-			}
+			get { return End1.DistanceTo(End2); }
+			set { End2 = End1 + Vector2F.FromPolar(value, Direction); }
 		}
+
 		/// <summary>Returns true if the line is horizontal.</summary>
 		public bool IsHorizontal {
 			get { return End2.Y - End1.Y == 0; }
 		}
+
 		/// <summary>Returns true if the line is vertical.</summary>
 		public bool IsVertical {
 			get { return End2.X - End1.X == 0; }
 		}
+
 		/// <summary>Returns true if the line is straight.</summary>
 		public bool IsStraight {
 			get { return (End2.Y - End1.Y == 0) || (End2.X - End1.X == 0); }
 		}
+
 		/// <summary>Returns the perpendicular line.</summary>
 		public Line2F Perpendicular {
 			get { return new Line2F(End1, End1 + Size.Perpendicular); }
@@ -293,18 +307,22 @@ namespace ZeldaOracle.Common.Geometry {
 		public bool IsEmpty {
 			get { return (End2 - End1).IsZero; }
 		}
+
 		/// <summary>Gets the midpoint of the line.</summary>
 		public Vector2F Center {
 			get { return (End1 + End2) / 2; }
 		}
+
 		/// <summary>Gets the bounding box of the line.</summary>
 		public Rectangle2F Bounds {
 			get { return new Rectangle2F(End1, End2 - End1); }
 		}
+
 		/// <summary>Gets the maximum point of the line.</summary>
 		public Vector2F Max {
 			get { return GMath.Max(End1, End2); }
 		}
+
 		/// <summary>Gets the minimum point of the line.</summary>
 		public Vector2F Min {
 			get { return GMath.Min(End1, End2); }
@@ -314,6 +332,7 @@ namespace ZeldaOracle.Common.Geometry {
 		public float Area {
 			get { return 0.0f; }
 		}
+
 		/// <summary>Gets the perimeter of the line.</summary>
 		public float Perimeter {
 			get { return End1.DistanceTo(End2); }
@@ -323,14 +342,17 @@ namespace ZeldaOracle.Common.Geometry {
 		public int NumPoints {
 			get { return 2; }
 		}
+
 		/// <summary>Gets the number of lines in the line.</summary>
 		public int NumLines {
 			get { return 1; }
 		}
+
 		/// <summary>Gets the list of points in the line.</summary>
 		public Vector2F[] Points {
 			get { return new Vector2F[] { End1, End2 }; }
 		}
+
 		/// <summary>Gets the list of lines in the line.</summary>
 		public Line2F[] Lines {
 			get { return new Line2F[] { this }; }
@@ -342,6 +364,7 @@ namespace ZeldaOracle.Common.Geometry {
 		public Vector2F PositionAt(float length, bool asRatio = false) {
 			return End1 + Size * (asRatio ? length : (length / Length));
 		}
+
 		/// <summary>Returns the line with swapped endpoints.</summary>
 		public Line2F SwapEnds() {
 			return new Line2F(End2, End1);
@@ -355,10 +378,12 @@ namespace ZeldaOracle.Common.Geometry {
 			double b = Y1 - (a * X1);
 			return GMath.Abs(v.Y - (a * v.X + b)) == 0;
 		}
+
 		/// <summary>Returns true if the specified line is parallel.</summary>
 		public bool IsParallel(Line2F l) {
 			return ((Width * l.Height) - (Height * l.Width) == 0);
 		}
+
 		/// <summary>Returns true if the line is collinear with the specified point.</summary>
 		public bool IsPointCollinear(Vector2F v) {
 			if (IsEmpty)
@@ -368,6 +393,7 @@ namespace ZeldaOracle.Common.Geometry {
 			else
 				return IsParallel(new Line2F(End2, v));
 		}
+
 		/// <summary>Returns true if the line is collinear with the specified line.</summary>
 		public bool IsLineCollinear(Line2F l) {
 			if (IsParallel(l)) {
@@ -380,6 +406,7 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 			return false;
 		}
+
 		/// <summary>Gets the point of endless intersection between the two lines.</summary>
 		public Vector2F? PointOfIntersectionEndless(Line2F l) {
 			if (IsEmpty) {
@@ -426,6 +453,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Vector2F(-((d1 *  l.Width) - (d2 *  this.Width)) / det,
 								-((d1 * l.Height) - (d2 * this.Height)) / det);
 		}
+
 		/// <summary>Gets the point of intersection between the two lines.</summary>
 		public Vector2F? PointOfIntersection(Line2F l) {
 			Vector2F? point = PointOfIntersectionEndless(l);
@@ -448,10 +476,12 @@ namespace ZeldaOracle.Common.Geometry {
 		public bool Contains(Vector2F point) {
 			return false;
 		}
+
 		/// <summary>Returns true if the specified line is inside this line.</summary>
 		public bool Contains(Line2F line) {
 			return false;
 		}
+
 		/// <summary>Returns true if the specified rectangle is inside this line.</summary>
 		public bool Contains(Rectangle2F rect) {
 			return false;
@@ -463,6 +493,7 @@ namespace ZeldaOracle.Common.Geometry {
 		public bool Colliding(Vector2F point) {
 			return IsPointOnLine(point);
 		}
+
 		/// <summary>Returns true if the specified line is colliding with this line.</summary>
 		public bool Colliding(Line2F line) {
 			if (IsEmpty || line.IsEmpty)
@@ -473,6 +504,7 @@ namespace ZeldaOracle.Common.Geometry {
 				return true;
 			return IsLineCollinear(line);
 		}
+
 		/// <summary>Returns true if the specified rectangle is colliding with this line.</summary>
 		public bool Colliding(Rectangle2F rect) {
 			if (IsEmpty || rect.IsEmpty)
@@ -489,4 +521,4 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 	}
-} // End namespace
+}

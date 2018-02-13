@@ -166,4 +166,4 @@ namespace ZeldaOracle.Common.Audio {
 			get { return soundInstance.State == SoundState.Stopped; }
 		}
 	}
-} // End namespace
+}

@@ -14,4 +14,4 @@ namespace ZeldaOracle.Common.Input {
 		XButton2			= 5
 
 	}
-} // End namespace
+}

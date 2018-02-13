@@ -121,7 +121,7 @@ namespace ZeldaOracle.Game.Tiles {
 			// Determine the depth layer based on the tile grid layer.
 			if (useDynamicDepth) {
 				float playerY = Tile.RoomControl.Player.Position.Y;
-				if (Math.Round(playerY) < Math.Round(drawPosition.Y + dynamicOriginY)) {
+				if (GMath.Round(playerY) < GMath.Round(drawPosition.Y + dynamicOriginY)) {
 					if (tile.Layer == 2)
 						depthLayer = DepthLayer.DynamicDepthAboveTileLayer3;
 					else
@@ -145,7 +145,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// Draw the tile's as-object sprite.
 			if (tile.IsMoving && tile.SpriteAsObject != null) {
-				g.DrawSprite(tile.SpriteAsObject, new SpriteDrawSettings(colors,
+				g.DrawSprite(tile.SpriteAsObject, new SpriteSettings(colors,
 					tile.RoomControl.GameControl.RoomTicks), drawPosition, depthLayer, tile.Position);
 			}
 			// Draw the animation player.
@@ -157,7 +157,7 @@ namespace ZeldaOracle.Game.Tiles {
 					playbackTime = animationPlayer.PlaybackTime;
 				
 				g.DrawAnimationPlayer(animationPlayer, playbackTime,
-					new SpriteDrawSettings(colors), drawPosition, depthLayer, tile.Position);
+					new SpriteSettings(colors), drawPosition, depthLayer, tile.Position);
 			}
 
 		}
@@ -181,7 +181,7 @@ namespace ZeldaOracle.Game.Tiles {
 				drawPosition += (raisedDrawOffset + drawOffset);
 
 				g.DrawSprite(tile.TileData.TileData.SpriteAbove,
-					new SpriteDrawSettings(colors,
+					new SpriteSettings(colors,
 						tile.RoomControl.GameControl.RoomTicks),
 						drawPosition, DepthLayer.TileAbove, tile.Position);
 			}

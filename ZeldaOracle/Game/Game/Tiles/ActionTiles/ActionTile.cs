@@ -113,7 +113,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Time);
+				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions, args.Time);
 				g.DrawSprite(
 					sprite,
 					settings,
@@ -134,7 +134,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions,
 					colorDefinitions, args.Time);
 				g.DrawSprite(
 					sprite,
@@ -158,7 +158,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			if (sprite != null) {
 				g.DrawSprite(
 					sprite,
-					new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Time),
+					new SpriteSettings(args.Zone.StyleDefinitions, args.Time),
 					args.Position,
 					args.Color);
 			}
@@ -177,7 +177,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Time);
+				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions, args.Time);
 				if (colorDefinitions != null)
 					settings.Colors = colorDefinitions;
 				g.DrawSprite(

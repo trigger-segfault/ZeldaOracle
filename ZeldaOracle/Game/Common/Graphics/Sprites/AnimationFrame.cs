@@ -13,17 +13,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		private int duration;
 		/// <summary>The offset sprite containing the sprite used in the frame.</summary>
 		private OffsetSprite sprite;
-		//private ISprite sprite;
-		/// <summary>The draw offset of the frame.</summary>
-		//private Point2I drawOffset;
-		/// <summary>The flipping applied to the sprite.</summary>
-		//private Flip flipEffects;
-		/// <summary>The number of 90-degree rotations for the sprite.</summary>
-		//private Rotation rotation;
 		/// <summary>The source of the sprite.</summary>
 		private ISpriteSource source;
-		/// <summary>The source of the definition.</summary>
-		//private DefinitionSprite definitionSprite;
 		/// <summary>The source index of the sprite.</summary>
 		private Point2I sourceIndex;
 		/// <summary>The definition used for the source.</summary>
@@ -36,6 +27,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs an empty animation frame.</summary>
 		public AnimationFrame() {
 			this.startTime		= 0;
 			this.duration		= 0;
@@ -46,12 +38,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.depth			= 0;
 		}
 
+		/// <summary>Constructs an animation frame with the specified settings.</summary>
 		public AnimationFrame(int startTime, int duration, ISprite sprite, Rectangle2I? clipping = null,
 			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
 			this(startTime, duration, sprite, Point2I.Zero, clipping, flip, rotation, depth)
 		{
 		}
 
+		/// <summary>Constructs an animation frame with the specified settings.</summary>
 		public AnimationFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset,
 			Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
 		{
@@ -64,12 +58,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.depth			= depth;
 		}
 
+		/// <summary>Constructs an animation frame with the specified settings.</summary>
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
 			Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
 			this(startTime, duration, source, sourceIndex, null, Point2I.Zero, clipping, flip, rotation, depth)
 		{
 		}
 
+		/// <summary>Constructs an animation frame with the specified settings.</summary>
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
 			string sourceDefinition, Rectangle2I? clipping = null, Flip flip = Flip.None,
 			Rotation rotation = Rotation.None, int depth = 0) :
@@ -77,12 +73,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		{
 		}
 
+		/// <summary>Constructs an animation frame with the specified settings.</summary>
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
 			Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
 			this(startTime, duration, source, sourceIndex, null, drawOffset, clipping, flip, rotation, depth)
 		{
 		}
 
+		/// <summary>Constructs an animation frame with the specified settings.</summary>
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
 			string sourceDefinition, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None,
 			int depth = 0)
@@ -97,6 +95,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			UpdateSource();
 		}
 
+		/// <summary>Constructs a copy of the specified animation frame.</summary>
 		public AnimationFrame(AnimationFrame copy) {
 			this.startTime		= copy.startTime;
 			this.duration		= copy.duration;
@@ -106,6 +105,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.sourceDefinition = copy.sourceDefinition;
 			this.depth          = copy.depth;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Mutators

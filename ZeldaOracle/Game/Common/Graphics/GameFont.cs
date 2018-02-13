@@ -260,17 +260,17 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the size of a single character.</summary>
 		public Point2I CharacterSize {
-			get { return SpriteSheet.CellSize; }
+			get { return spriteSheet.CellSize; }
 		}
 
 		/// <summary>Gets the width of a single character.</summary>
 		public int CharacterWidth {
-			get { return SpriteSheet.CellSize.X; }
+			get { return spriteSheet.CellSize.X; }
 		}
 
 		/// <summary>Gets the height of a single character.</summary>
 		public int CharacterHeight {
-			get { return SpriteSheet.CellSize.Y; }
+			get { return spriteSheet.CellSize.Y; }
 		}
 	}
 }

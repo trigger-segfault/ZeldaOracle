@@ -9,4 +9,4 @@ namespace ZeldaOracle.Common.Input {
 		DisabledUntilRelease	= 2,
 
 	}
-} // End namespace
+}

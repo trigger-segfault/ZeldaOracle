@@ -17,8 +17,9 @@ namespace ZeldaOracle.Common.Input {
 	/// <summary>A static class for keeping track of gamepad button states.</summary>
 	public static class GamePad {
 
-		//========== CONSTANTS ===========
-		#region Constants
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
 
 		/// <summary>The number of button states in the list.</summary>
 		private const int NumButtons	= 26;
@@ -27,9 +28,10 @@ namespace ZeldaOracle.Common.Input {
 		/// <summary>The number of triggers in the list.</summary>
 		private const int NumTriggers	= 3;
 
-		#endregion
-		//========== VARIABLES ===========
-		#region Variables
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
 		// States
 		/// <summary>The list of buttons for each gamepad.</summary>
@@ -42,9 +44,10 @@ namespace ZeldaOracle.Common.Input {
 		/// <summary>True if the gamepad is disabled.</summary>
 		//private static bool disabled; // I commented 'disabled' out because it is unused.
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
+		
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the gamepad listener.</summary>
 		public static void Initialize() {
@@ -83,6 +86,7 @@ namespace ZeldaOracle.Common.Input {
 				buttons[i, (int)Buttons.RightTriggerButton]	= triggers[i, (int)Triggers.RightTrigger].Button;
 			}
 		}
+
 		/// <summary>Uninitializes the keyboard listener.</summary>
 		public static void Uninitialize() {
 			// States
@@ -91,9 +95,10 @@ namespace ZeldaOracle.Common.Input {
 			triggers		= null;
 		}
 
-		#endregion
-		//=========== UPDATING ===========
-		#region Updating
+
+		//-----------------------------------------------------------------------------
+		// Updating
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Called every step to update the button states.</summary>
 		public static void Update(GameTime gameTime) {
@@ -146,6 +151,7 @@ namespace ZeldaOracle.Common.Input {
 				triggers[i, (int) Triggers.RightTrigger].Update(1, trigger);
 			}
 		}
+
 		/// <summary>Resets all the button states.</summary>
 		public static void Reset(bool release) {
 			// Reset each of the buttons
@@ -158,6 +164,7 @@ namespace ZeldaOracle.Common.Input {
 					triggers[i, j].Reset(release);
 			}
 		}
+
 		/// <summary>Enables all the buttons.</summary>
 		public static void Enable() {
 			// Reset each of the buttons
@@ -172,6 +179,7 @@ namespace ZeldaOracle.Common.Input {
 
 			//disabled = false;
 		}
+
 		/// <summary>Disables all the buttons.</summary>
 		public static void Disable(bool untilRelease) {
 			// Reset each of the buttons
@@ -188,48 +196,54 @@ namespace ZeldaOracle.Common.Input {
 				//disabled = true;
 		}
 
-		#endregion
-		//======== GAMEPAD EVENTS ========
-		#region GamePad Events
-		//--------------------------------
-		#region Single Button Events
+
+		//-----------------------------------------------------------------------------
+		// GamePad Events
+		//-----------------------------------------------------------------------------
+
+		// Single Button Events -------------------------------------------------------
 
 		/// <summary>Returns true if the specified button was pressed.</summary>
 		public static bool IsButtonPressed(Buttons buttonCode, int player = 0) {
 			return buttons[player, (int)buttonCode].IsPressed();
 		}
+
 		/// <summary>Returns true if the specified button was pressed.</summary>
 		public static bool IsButtonPressed(int buttonCode, int player = 0) {
 			return buttons[player, buttonCode].IsPressed();
 		}
+
 		/// <summary>Returns true if the specified button is down.</summary>
 		public static bool IsButtonDown(Buttons buttonCode, int player = 0) {
 			return buttons[player, (int)buttonCode].IsDown();
 		}
+
 		/// <summary>Returns true if the specified button is down.</summary>
 		public static bool IsButtonDown(int buttonCode, int player = 0) {
 			return buttons[player, buttonCode].IsDown();
 		}
+
 		/// <summary>Returns true if the specified button was released.</summary>
 		public static bool IsButtonReleased(Buttons buttonCode, int player = 0) {
 			return buttons[player, (int)buttonCode].IsReleased();
 		}
+
 		/// <summary>Returns true if the specified button was released.</summary>
 		public static bool IsButtonReleased(int buttonCode, int player = 0) {
 			return buttons[player, buttonCode].IsReleased();
 		}
+
 		/// <summary>Returns true if the specified button is up.</summary>
 		public static bool IsButtonUp(Buttons buttonCode, int player = 0) {
 			return buttons[player, (int)buttonCode].IsUp();
 		}
+
 		/// <summary>Returns true if the specified button is up.</summary>
 		public static bool IsButtonUp(int buttonCode, int player = 0) {
 			return buttons[player, buttonCode].IsUp();
 		}
-
-		#endregion
-		//--------------------------------
-		#region Any Button Events
+		
+		// Any Button Events ----------------------------------------------------------
 
 		/// <summary>Returns true if any button was pressed.</summary>
 		public static bool IsAnyButtonPressed(int player = 0) {
@@ -239,6 +253,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any button is down.</summary>
 		public static bool IsAnyButtonDown(int player = 0) {
 			for (int i = 1; i < NumButtons; i++) {
@@ -247,6 +262,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any button was released.</summary>
 		public static bool IsAnyButtonReleased(int player = 0) {
 			for (int i = 1; i < NumButtons; i++) {
@@ -255,6 +271,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any button is up.</summary>
 		public static bool IsAnyButtonUp(int player = 0) {
 			for (int i = 1; i < NumButtons; i++) {
@@ -263,36 +280,39 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
-
-		#endregion
-		//--------------------------------
-		#region Special Control Events
+		
+		// Special Control Events -----------------------------------------------------
 
 		/// <summary>Gets the position of the specified analog stick.</summary>
 		public static Vector2F GetStickPosition(AnalogSticks buttonCode, int player = 0) {
 			return sticks[player, (int)buttonCode].Position;
 		}
+
 		/// <summary>Gets the position of the specified analog stick.</summary>
 		public static Vector2F GetStickPosition(int buttonCode, int player = 0) {
 			return sticks[player, buttonCode].Position;
 		}
+
 		/// <summary>Gets the position of the specified trigger.</summary>
-		public static double GetTriggerPressure(Triggers buttonCode, int player = 0) {
+		public static float GetTriggerPressure(Triggers buttonCode, int player = 0) {
 			return triggers[player, (int)buttonCode].Pressure;
 		}
+
 		/// <summary>Gets the position of the specified trigger.</summary>
-		public static double GetTriggerPressure(int buttonCode, int player = 0) {
+		public static float GetTriggerPressure(int buttonCode, int player = 0) {
 			return triggers[player, buttonCode].Pressure;
 		}
 
-		#endregion
-		//--------------------------------
-		#region GamePad Information
+
+		//-----------------------------------------------------------------------------
+		// GamePad Information
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the control for the specified gamepad button.</summary>
 		public static InputControl GetButton(Buttons buttonCode, int player = 0) {
 			return buttons[player, (int)buttonCode];
 		}
+
 		/// <summary>Gets the control for the specified gamepad button.</summary>
 		public static InputControl GetButton(int buttonCode, int player = 0) {
 			return buttons[player, buttonCode];
@@ -301,29 +321,30 @@ namespace ZeldaOracle.Common.Input {
 		public static AnalogStick GetStick(AnalogSticks buttonCode, int player = 0) {
 			return sticks[player, (int)buttonCode];
 		}
+
 		/// <summary>Gets the control for the specified gamepad analog stick.</summary>
 		public static AnalogStick GetStick(int buttonCode, int player = 0) {
 			return sticks[player, buttonCode];
 		}
+
 		/// <summary>Gets the control for the specified gamepad trigger.</summary>
 		public static Trigger GetTrigger(Triggers buttonCode, int player = 0) {
 			return triggers[player, (int)buttonCode];
 		}
+
 		/// <summary>Gets the control for the specified gamepad trigger.</summary>
 		public static Trigger GetTrigger(int buttonCode, int player = 0) {
 			return triggers[player, buttonCode];
 		}
+
 		/// <summary>Gets the name of the specified gamepad button.</summary>
 		public static string GetButtonName(Buttons buttonCode) {
 			return Enum.GetName(typeof(Buttons), buttonCode);
 		}
+
 		/// <summary>Gets the name of the specified gamepad button.</summary>
 		public static string GetButtonName(int buttonCode) {
 			return Enum.GetName(typeof(Buttons), (Buttons)buttonCode);
 		}
-
-		#endregion
-		//--------------------------------
-		#endregion
 	}
-} // End namespace
+}

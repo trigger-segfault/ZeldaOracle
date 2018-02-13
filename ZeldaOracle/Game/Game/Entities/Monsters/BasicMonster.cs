@@ -274,7 +274,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected void UpdateChargingState() {
-			speed = Math.Min(chargeSpeed, speed + chargeAcceleration);
+			speed = GMath.Min(chargeSpeed, speed + chargeAcceleration);
 			
 			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 
@@ -346,10 +346,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected Vector2F GetMovementVelocity(int moveAngle, float speed) {
-			float radians = ((float) moveAngle / (float) numMoveAngles) * GMath.TwoPi;
-			return new Vector2F(
-				(float) Math.Cos(radians) * speed,
-				(float) -Math.Sin(radians) * speed);
+			float radians = ((float) moveAngle / (float) numMoveAngles) * GMath.FullAngle;
+			return Vector2F.FromPolar(speed, radians);
 		}
 
 

@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles.Puzzles {
 		//-----------------------------------------------------------------------------
 
 		private PuzzleColor GetTileColorAtLocation(Point2I location) {
-			foreach (Tile tile in RoomControl.TileManager.GetTilesAtLocation(location, TileLayerOrder.HighestToLowest)) {
+			foreach (Tile tile in RoomControl.TileManager.GetTilesAtLocation(location)) {
 				if (!tile.IsMoving && (tile is IColoredTile))
 					return ((IColoredTile) tile).Color;
 			}

@@ -10,4 +10,4 @@ namespace ZeldaOracle.Common.Input {
 		Pressed					= 3
 
 	}
-} // End namespace
+}
