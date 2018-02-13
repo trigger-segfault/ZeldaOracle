@@ -491,4 +491,4 @@ namespace ZeldaOracle.Common.Input {
 
 		#endregion
 	}
-} // end namespace
+}

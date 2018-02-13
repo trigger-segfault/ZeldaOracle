@@ -13,10 +13,14 @@ namespace ZeldaOracle.Common.Geometry {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Returns a range positioned between (0 - 0).</summary>
-		public static RangeI Zero = new RangeI(0, 0);
-		/// <summary>Returns a range positioned between (Int.Min - Int.Max).</summary>
+		/// <summary>Returns a range positioned between (0 to 0).</summary>
+		public static readonly RangeI Zero = new RangeI(0, 0);
+		/// <summary>Returns a range positioned between (int.Min to int.Max).</summary>
 		public static readonly RangeI Full = new RangeI(int.MinValue, int.MaxValue);
+		/// <summary>Returns a range positioned between (0 to int.Max).</summary>
+		public static readonly RangeI Positive = new RangeI(0, int.MaxValue);
+		/// <summary>Returns a range positioned between (int.Min to 0).</summary>
+		public static readonly RangeI Negative = new RangeI(int.MinValue, 0);
 
 
 		//-----------------------------------------------------------------------------
@@ -186,4 +190,4 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 	}
-} // End namespace
+}

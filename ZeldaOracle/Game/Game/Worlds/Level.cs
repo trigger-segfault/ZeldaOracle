@@ -432,7 +432,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public void ResizeLayerCount(int newLayerCount) {
-			newLayerCount = Math.Max(1, newLayerCount);
+			newLayerCount = GMath.Max(1, newLayerCount);
 			if (newLayerCount != roomLayerCount) {
 				roomLayerCount = newLayerCount;
 				foreach (Room room in rooms) {

@@ -361,7 +361,7 @@ namespace ZeldaOracle.Game.Entities {
 							!IsSafeClippingInDirection(solidBox, (direction + 3) % 4) &&
 							!CanDodgeCollision(solidBox, direction))
 						{
-							float distToEdge = Math.Max(
+							float distToEdge = GMath.Max(
 								entityBox.TopLeft[alignAxis] - solidBox.BottomRight[alignAxis],
 								solidBox.TopLeft[alignAxis] - entityBox.BottomRight[alignAxis]);
 							if (closestTile == null || distToEdge < closestDistance) {
@@ -480,7 +480,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			for (int side = 0; side < 2; side++) {
 				int moveDir		= (direction + (side == 0 ? 1 : 3)) % 4;
-				float distance	= Math.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
+				float distance	= GMath.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
 
 				if (distance <= dodgeDist) {
 					Vector2F checkPos	= pos + dirVect + (Directions.ToVector(moveDir) * distance);

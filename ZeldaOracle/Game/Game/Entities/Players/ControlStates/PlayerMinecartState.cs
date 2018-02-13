@@ -120,7 +120,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			Vector2F center = player.Center - playerOffset;
 			Point2I startLoc = tileLocation - Directions.ToPoint(direction);
-			Vector2F startPosCenter = (startLoc + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE;
+			Vector2F startPosCenter = (startLoc + Vector2F.Half) * GameSettings.TILE_SIZE;
 			Vector2F directionVector = Directions.ToVector(direction);
 
 			moveDistance = directionVector.Dot(center - startPosCenter);
@@ -198,10 +198,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.ViewFocusOffset = -playerOffset;
 			
 			// Set the player position.
-			Vector2F nextTileCenter = (tileLocation + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE;
+			Vector2F nextTileCenter = (tileLocation + Vector2F.Half) * GameSettings.TILE_SIZE;
 			player.SetPositionByCenter(
 				nextTileCenter - (Directions.ToVector(direction) * GameSettings.TILE_SIZE)
-				+ (Directions.ToVector(direction) * Math.Min(moveDistance, GameSettings.TILE_SIZE)));
+				+ (Directions.ToVector(direction) * GMath.Min(moveDistance, GameSettings.TILE_SIZE)));
 			player.Position += playerOffset;
 		}
 

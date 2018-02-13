@@ -187,7 +187,7 @@ namespace ConscriptDesigner.WinForms {
 			columns = 1;
 		}
 
-		protected virtual void Draw(Graphics2D g, SpriteDrawSettings settings, Zone zone) { }
+		protected virtual void Draw(Graphics2D g, SpriteSettings settings, Zone zone) { }
 
 		//-----------------------------------------------------------------------------
 		// Updating
@@ -206,7 +206,7 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected sealed override void Draw() {
-			SpriteDrawSettings settings = new SpriteDrawSettings(DesignerControl.PlaybackTime);
+			SpriteSettings settings = new SpriteSettings(DesignerControl.PlaybackTime);
 			Zone zone = DesignerControl.PreviewZone ?? defaultZone;
 			Graphics2D g = new Graphics2D(spriteBatch);
 
@@ -251,7 +251,7 @@ namespace ConscriptDesigner.WinForms {
 			if (DesignerControl.PreviewScale > 1) {
 				g.SetRenderTarget(null);
 				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-				g.DrawImage(renderTarget, Vector2F.Zero, Vector2F.Zero, new Vector2F(DesignerControl.PreviewScale), 0.0);
+				g.DrawImage(renderTarget, Vector2F.Zero, DesignerControl.PreviewScale);
 				g.End();
 			}
 		}

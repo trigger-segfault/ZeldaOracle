@@ -13,16 +13,18 @@ using Mouse			= ZeldaOracle.Common.Input.Mouse;
 namespace ZeldaOracle.Common.Input {
 	/// <summary>A static class for keeping track of mouse button states.</summary>
 	public static class Mouse {
-
-		//========== CONSTANTS ===========
-		#region Constants
+		
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
 
 		/// <summary>The number of mouse button states in the list.</summary>
 		private const int NumButtons	= 6;
 
-		#endregion
-		//========== VARIABLES ===========
-		#region Variables
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
 		// States
 		/// <summary>The list of mouse buttons.</summary>
@@ -46,9 +48,10 @@ namespace ZeldaOracle.Common.Input {
 		/// <summary>The scale used to multiply the mouse position by.</summary>
 		private static double gameScale;
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the mouse listener.</summary>
 		public static void Initialize() {
@@ -72,6 +75,7 @@ namespace ZeldaOracle.Common.Input {
 				rawButtonClick[i]		= false;
 			}
 		}
+
 		/// <summary>Uninitializes the mouse listener.</summary>
 		public static void Uninitialize() {
 			// States
@@ -81,14 +85,16 @@ namespace ZeldaOracle.Common.Input {
 			rawButtonClick			= null;
 		}
 
-		#endregion
-		//=========== UPDATING ===========
-		#region Updating
+
+		//-----------------------------------------------------------------------------
+		// Updating
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Simplifies the updating procedure for each button.</summary>
 		private static void UpdateButton(int time, MouseButtons mouseButton, ButtonState buttonState) {
 			buttons[(int)mouseButton].Update(time, buttonState == ButtonState.Pressed, false, rawButtonDoubleClick[(int)mouseButton], rawButtonClick[(int)mouseButton]);
 		}
+
 		/// <summary>Called every step to update the mouse button states.</summary>
 		public static void Update(GameTime gameTime, Vector2F mouseOffset) {
 			// Update each of the buttons
@@ -115,6 +121,7 @@ namespace ZeldaOracle.Common.Input {
 				mousePos			= (new Vector2F(XnaMouse.GetState().X, XnaMouse.GetState().Y) - mouseOffset) / (float)gameScale;
 			}
 		}
+
 		/// <summary>Resets all the button states.</summary>
 		public static void Reset(bool release) {
 			// Reset each of the buttons
@@ -127,6 +134,7 @@ namespace ZeldaOracle.Common.Input {
 
 			wheelDelta	= 0;
 		}
+
 		/// <summary>Enables all the mouse buttons.</summary>
 		public static void Enable() {
 			// Reset each of the buttons
@@ -136,6 +144,7 @@ namespace ZeldaOracle.Common.Input {
 
 			disabled = false;
 		}
+
 		/// <summary>Disables all the mouse buttons.</summary>
 		public static void Disable(bool untilRelease) {
 			// Reset each of the buttons
@@ -149,64 +158,74 @@ namespace ZeldaOracle.Common.Input {
 				disabled = true;
 		}
 
-		#endregion
-		//========= MOUSE EVENTS =========
-		#region Mouse Events
-		//--------------------------------
-		#region Single Button States
+
+		//-----------------------------------------------------------------------------
+		// Mouse Events
+		//-----------------------------------------------------------------------------
+		
+		// Single Button States -------------------------------------------------------
 
 		/// <summary>Returns true if the specified mouse button was double clicked.</summary>
 		public static bool IsButtonDoubleClicked(MouseButtons buttonCode) {
 			return buttons[(int)buttonCode].IsDoubleClicked();
 		}
+
 		/// <summary>Returns true if the specified mouse button was double clicked.</summary>
 		public static bool IsButtonDoubleClicked(int buttonCode) {
 			return buttons[buttonCode].IsDoubleClicked();
 		}
+
 		/// <summary>Returns true if the specified mouse button was clicked.</summary>
 		public static bool IsButtonClicked(MouseButtons buttonCode) {
 			return buttons[(int)buttonCode].IsClicked();
 		}
+
 		/// <summary>Returns true if the specified mouse button was clicked.</summary>
 		public static bool IsButtonClicked(int buttonCode) {
 			return buttons[buttonCode].IsClicked();
 		}
+
 		/// <summary>Returns true if the specified mouse button was pressed.</summary>
 		public static bool IsButtonPressed(MouseButtons buttonCode) {
 			return buttons[(int)buttonCode].IsPressed();
 		}
+
 		/// <summary>Returns true if the specified mouse button was pressed.</summary>
 		public static bool IsButtonPressed(int buttonCode) {
 			return buttons[buttonCode].IsPressed();
 		}
+
 		/// <summary>Returns true if the specified mouse button is down.</summary>
 		public static bool IsButtonDown(MouseButtons buttonCode) {
 			return buttons[(int)buttonCode].IsDown();
 		}
+
 		/// <summary>Returns true if the specified mouse button is down.</summary>
 		public static bool IsButtonDown(int buttonCode) {
 			return buttons[buttonCode].IsDown();
 		}
+
 		/// <summary>Returns true if the specified mouse button was released.</summary>
 		public static bool IsButtonReleased(MouseButtons buttonCode) {
 			return buttons[(int)buttonCode].IsReleased();
 		}
+
 		/// <summary>Returns true if the specified mouse button was released.</summary>
 		public static bool IsButtonReleased(int buttonCode) {
 			return buttons[buttonCode].IsReleased();
 		}
+
 		/// <summary>Returns true if the specified mouse button is up.</summary>
 		public static bool IsButtonUp(MouseButtons buttonCode) {
 			return buttons[(int)buttonCode].IsUp();
 		}
+
 		/// <summary>Returns true if the specified mouse button is up.</summary>
 		public static bool IsButtonUp(int buttonCode) {
 			return buttons[buttonCode].IsUp();
 		}
-
-		#endregion
-		//--------------------------------
-		#region Any Button State
+		
+		// Any Button States ----------------------------------------------------------
 
 		/// <summary>Returns true if any mouse button was double clicked.</summary>
 		public static bool IsAnyButtonDoubleClicked() {
@@ -216,6 +235,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any mouse button was clicked.</summary>
 		public static bool IsAnyButtonClicked() {
 			for (int i = 1; i < NumButtons; i++) {
@@ -224,6 +244,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any mouse button was pressed.</summary>
 		public static bool IsAnyButtonPressed() {
 			for (int i = 1; i < NumButtons; i++) {
@@ -232,6 +253,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any mouse button is down.</summary>
 		public static bool IsAnyButtonDown() {
 			for (int i = 1; i < NumButtons; i++) {
@@ -240,6 +262,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any mouse button was released.</summary>
 		public static bool IsAnyButtonReleased() {
 			for (int i = 1; i < NumButtons; i++) {
@@ -248,6 +271,7 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
+
 		/// <summary>Returns true if any mouse button is up.</summary>
 		public static bool IsAnyButtonUp() {
 			for (int i = 1; i < NumButtons; i++) {
@@ -256,10 +280,8 @@ namespace ZeldaOracle.Common.Input {
 			}
 			return false;
 		}
-
-		#endregion
-		//--------------------------------
-		#region Mouse Wheel
+		
+		// Mouse Wheel ----------------------------------------------------------------
 
 		/// <summary>Returns true if the mouse wheel was scrolled up.</summary>
 		public static bool IsWheelUp() {
@@ -277,70 +299,69 @@ namespace ZeldaOracle.Common.Input {
 		public static int GetWheelDelta() {
 			return wheelDelta;
 		}
-	
-		#endregion
-		//--------------------------------
-		#region Mouse Position
+		
+		// Mouse Position -------------------------------------------------------------
 
 		/// <summary>Gets the mouse position.</summary>
 		public static Vector2F GetPosition() {
-			return mousePos / (float)gameScale;
+			return mousePos / (float) gameScale;
 		}
+
 		/// <summary>Gets the last mouse position.</summary>
 		public static Vector2F GetPositionLast() {
-			return mousePosLast / (float)gameScale;
+			return mousePosLast / (float) gameScale;
 		}
+
 		/// <summary>Gets the distance the mouse moved.</summary>
 		public static Vector2F GetDistance() {
-			return (mousePos - mousePosLast) / (float)gameScale;
+			return (mousePos - mousePosLast) / (float) gameScale;
 		}
+
 		/// <summary>Sets the mouse position.</summary>
 		public static void SetPosition(Vector2F position) {
-			XnaMouse.SetPosition((int)(position.X * gameScale), (int)(position.Y * (float)gameScale));
-			mousePosLast = (position - (mousePos - mousePosLast)) * (float)gameScale;
-			mousePos = position * (float)gameScale;
+			XnaMouse.SetPosition((int) (position.X * gameScale), (int) (position.Y * (float) gameScale));
+			mousePosLast = (position - (mousePos - mousePosLast)) * (float) gameScale;
+			mousePos = position * (float) gameScale;
 		}
+
 		/// <summary>Returns true if the mouse was moved.</summary>
 		public static bool IsMouseMoved() {
 			return (mousePos != mousePosLast);
 		}
 
-		#endregion
-		//--------------------------------
-		#region Mouse Information
+
+		//-----------------------------------------------------------------------------
+		// Mouse Information
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns true if the mouse is visible.</summary>
 		/*public static bool IsMouseVisible() {
 			return gameBase.IsMouseVisible;
 		}*/
+
 		/// <summary>Sets the mouse visibility.</summary>
 		/*public static void SetMouseVisible(bool visible) {
 			gameBase.IsMouseVisible = visible;
 		}*/
 
-		#endregion
-		//--------------------------------
-		#region Button Information
-
 		/// <summary>Gets the control for the specified mouse button.</summary>
 		public static InputControl GetButton(MouseButtons buttonCode) {
 			return buttons[(int)buttonCode];
 		}
+
 		/// <summary>Gets the control for the specified mouse button.</summary>
 		public static InputControl GetButton(int buttonCode) {
 			return buttons[buttonCode];
 		}
+
 		/// <summary>Gets the name of the specified mouse button.</summary>
 		public static string GetButtonName(MouseButtons buttonCode) {
 			return Enum.GetName(typeof(MouseButtons), buttonCode);
 		}
+
 		/// <summary>Gets the name of the specified mouse button.</summary>
 		public static string GetButtonName(int buttonCode) {
 			return Enum.GetName(typeof(MouseButtons), (MouseButtons)buttonCode);
 		}
-
-		#endregion
-		//--------------------------------
-		#endregion
 	}
-} // End namespace
+}

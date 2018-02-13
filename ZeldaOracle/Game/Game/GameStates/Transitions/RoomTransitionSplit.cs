@@ -72,15 +72,12 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		}
 
 		public override void Draw(Graphics2D g) {
-			//g.ResetTranslation();
-
 			if (timer < TRANSITION_SPLIT_BEGIN_DELAY) {
 				OldRoomControl.Draw(g);
 			}
 			else {
 				NewRoomControl.Draw(g);
-
-				//g.ResetTranslation();
+				
 				g.PushTranslation(0, GameSettings.HUD_HEIGHT);
 				g.FillRectangle(new Rectangle2F(0, 0, sideWidths[0], GameSettings.VIEW_HEIGHT), splitColor);
 				g.FillRectangle(new Rectangle2F(GameSettings.VIEW_WIDTH - sideWidths[1], 0, sideWidths[1], GameSettings.VIEW_HEIGHT), splitColor);

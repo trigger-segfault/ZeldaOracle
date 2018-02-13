@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using XnaColor		= Microsoft.Xna.Framework.Color;
 
 using GdiColor		= System.Drawing.Color;
@@ -365,6 +359,7 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return R + G + B; }
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Management
 		//-----------------------------------------------------------------------------
@@ -443,4 +438,4 @@ namespace ZeldaOracle.Common.Graphics {
 			return new Color(color.R & 0xF8, color.G & 0xF8, color.B & 0xF8);
 		}
 	}
-} // End namespace
+}

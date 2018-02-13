@@ -4,9 +4,9 @@
 
 PALETTE "tile_dictionary", "tiles_electrocuted";
 
-COLOR	default, light		(248,248,248);
-COLOR	default, medium		( 16, 32, 48);
-COLOR	default, dark		(248,248,120);
+COLOR	default, light					(248,248,248);
+COLOR	default, medium					( 16, 32, 48);
+COLOR	default, dark					(248,248,120);
 
 END;
 
@@ -17,14 +17,26 @@ END;
 
 PALETTE "entity_dictionary", "entities_electrocuted";
 
-COLOR	default, light		(248,248,248);
-COLOR	default, dark		(248,248,120);
+COLOR	default, light					(248,248,248);
+COLOR	default, dark					(248,248,120);
+
+#==============================================================
+# Palettes that are always inverted in-game
+#==============================================================
+
+LOOKUP	shaded_red, light				default, black;
+LOOKUP	shaded_red, dark				default, dark;
+LOOKUP	shaded_red, black				default, light;
+
+LOOKUP	shaded_blue, light				default, black;
+LOOKUP	shaded_blue, dark				default, dark;
+LOOKUP	shaded_blue, black				default, light;
 
 #==============================================================
 # UI elements that are colored as tiles in-game
 #==============================================================
 
-COLOR	ui_red, dark		( 16, 32, 48);
+COLOR	ui_red, dark					( 16, 32, 48);
 
 #==============================================================
 

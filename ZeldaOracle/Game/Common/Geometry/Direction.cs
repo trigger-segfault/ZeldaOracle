@@ -95,18 +95,17 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static Vector2F ToVector(int angle, int numAngles) {
-			float radians = (angle / (float) numAngles) * GMath.TwoPi;
-			return new Vector2F((float) Math.Cos(radians),
-				(float) -Math.Sin(radians));
+			float radians = (angle / (float) numAngles) * GMath.FullAngle;
+			return Vector2F.FromPolar(radians);
 		}
 
 		public static int RoundFromRadians(float radians, int numAngles) {
-			int angle = (int) GMath.Round((radians * numAngles) / GMath.TwoPi);
+			int angle = (int) GMath.Round((radians * numAngles) / GMath.FullAngle);
 			return GMath.Wrap(angle, numAngles);
 		}
 
 		public static int NearestFromVector(Vector2F vector, int numAngles) {
-			float radians = (float) Math.Atan2((double) -vector.Y, (double) vector.X);
+			float radians = GMath.Atan2(-vector.Y, vector.X);
 			return RoundFromRadians(radians, numAngles);
 		}
 		
@@ -146,6 +145,8 @@ namespace ZeldaOracle.Common.Geometry {
 		public static int GetAngleDistance(int startAngle, int endAngle,
 			WindingOrder windingOrder, int numAngles)
 		{
+			startAngle = GMath.Wrap(startAngle, numAngles);
+			endAngle = GMath.Wrap(endAngle, numAngles);
 			if (windingOrder == WindingOrder.Clockwise) {
 				if (endAngle > startAngle)
 					return (startAngle + numAngles - endAngle);
@@ -277,7 +278,7 @@ namespace ZeldaOracle.Common.Geometry {
 		public static int NearestFromVector(Vector2F vector) {
 			// Cheap algorithm for turning a vector into an axis-aligned direction.
 			if (vector.X > 0) {
-				if (vector.X >= Math.Abs(vector.Y))
+				if (vector.X >= GMath.Abs(vector.Y))
 					return Directions.Right;
 				else if (vector.Y < 0)
 					return Directions.Up;
@@ -285,7 +286,7 @@ namespace ZeldaOracle.Common.Geometry {
 					return Directions.Down;
 			}
 			else {
-				if (-vector.X >= Math.Abs(vector.Y))
+				if (-vector.X >= GMath.Abs(vector.Y))
 					return Directions.Left;
 				else if (vector.Y < 0)
 					return Directions.Up;
@@ -295,7 +296,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static int RoundFromRadians(float radians) {
-			int dir = (int) Math.Round(radians / GMath.HalfPi);
+			int dir = (int) GMath.Round(radians / GMath.QuarterAngle);
 			return GMath.Wrap(dir, Directions.Count);
 		}
 

@@ -89,7 +89,7 @@ namespace ZeldaOracle.Game.Entities
 
 			Graphics2D g2d = new Graphics2D(Resources.SpriteBatch);
 			unmappedSprite = Unmapping.UnmapSprite(g2d, animationPlayer.SpriteOrSubStrip,
-				new SpriteDrawSettings(colorDefinitions, animationPlayer.PlaybackTime),
+				new SpriteSettings(colorDefinitions, animationPlayer.PlaybackTime),
 				palette, Entity.RoomControl.EntityPalette);
 		}
 
@@ -170,7 +170,7 @@ namespace ZeldaOracle.Game.Entities
 
 				Graphics2D g2d = new Graphics2D(Resources.SpriteBatch);
 				unmappedSprite = Unmapping.UnmapSprite(g2d, animationPlayer.SpriteOrSubStrip,
-					new SpriteDrawSettings(finalColorDefinitions, animationPlayer.PlaybackTime),
+					new SpriteSettings(finalColorDefinitions, animationPlayer.PlaybackTime),
 					palette, Entity.RoomControl.EntityPalette);
 			}
 		}
@@ -187,7 +187,7 @@ namespace ZeldaOracle.Game.Entities
 
 			if (layer == CurrentDepthLayer && useDynamicDepth) {
 				float playerY = Entity.RoomControl.Player.Position.Y;
-				if (Math.Round(playerY) < Math.Round(Entity.Position.Y + dynamicOriginY))
+				if (GMath.Round(playerY) < GMath.Round(Entity.Position.Y + dynamicOriginY))
 					depthLayer = DepthLayer.DynamicDepthAboveEntity;
 				else
 					depthLayer = DepthLayer.DynamicDepthBelowEntity;
@@ -217,7 +217,7 @@ namespace ZeldaOracle.Game.Entities
 					g.DrawSprite(unmappedSprite, drawPosition + drawOffset, layer, entity.DrawPosition);
 			}
 			else {
-				g.DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(
+				g.DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteSettings(
 					finalColorDefinitions, animationPlayer.PlaybackTime),
 					drawPosition + drawOffset, layer, entity.DrawPosition);
 			}
@@ -225,14 +225,14 @@ namespace ZeldaOracle.Game.Entities
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle) {
 				g.DrawSprite(GameData.ANIM_EFFECT_RIPPLES,
-					new SpriteDrawSettings((float) entity.GameControl.RoomTicks), entity.DrawPosition +
+					new SpriteSettings((float) entity.GameControl.RoomTicks), entity.DrawPosition +
 					ripplesDrawOffset, layer, entity.DrawPosition);
 			}
 			
 			// Draw the grass effect.
 			if (isGrassEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInGrass) {
 				g.DrawSprite(GameData.ANIM_EFFECT_GRASS,
-					new SpriteDrawSettings((float) grassAnimationTicks), entity.DrawPosition +
+					new SpriteSettings((float) grassAnimationTicks), entity.DrawPosition +
 					grassDrawOffset, layer, entity.DrawPosition + new Vector2F(0, 1));
 			}
 		}

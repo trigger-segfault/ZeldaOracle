@@ -75,13 +75,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					int sideDirection = direction + (i == 0 ? 1 : 3);
 					
 					// Calculate the velocity based on a degree offset.
-					float degrees = direction * GMath.QuarterAngle;
+					float radians = direction * GMath.QuarterAngle;
 					if (i == 0)
-						degrees += GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
+						radians += GameSettings.SLINGSHOT_SEED_RADIAN_OFFSET;
 					else
-						degrees -= GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
-					Vector2F velocity = Vector2F.FromPolar(GameSettings.SLINGSHOT_SEED_SPEED, degrees);
-					velocity.Y = -velocity.Y;
+						radians -= GameSettings.SLINGSHOT_SEED_RADIAN_OFFSET;
+					Vector2F velocity = Vector2F.FromPolar(GameSettings.SLINGSHOT_SEED_SPEED, radians);
 					
 					// Spawn the seed.
 					seed = new SeedProjectile(seedType, false);

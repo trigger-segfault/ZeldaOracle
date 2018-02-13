@@ -3,7 +3,6 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Main {
-	#if WINDOWS || XBOX
 	/// <summary>A static class for the entry point of the program.</summary>
 	static class Program {
 		/// <summary>The entry point of the program.</summary>
@@ -15,6 +14,4 @@ namespace ZeldaOracle.Game.Main {
 			}
 		}
 	}
-	#endif
-
-} // End namespace
+}

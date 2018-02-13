@@ -22,13 +22,16 @@ namespace ZeldaOracle.Common.Graphics {
 		// Constants
 		//-----------------------------------------------------------------------------
 
+		/// <summary>The number of colors in a palette color group.</summary>
 		public const int ColorGroupSize = 4;
 
+		/// <summary>The alpha value used to identify a mapped color.</summary>
 		public const byte AlphaIdentifier = 254;
 
+		/// <summary>The maximum available color groups per palette.</summary>
 		public const int MaxColorGroups = 256*256 / ColorGroupSize;
 
-		/// <summary>The dimensions of the palette.</summary>
+		/// <summary>The dimensions of the palette image.</summary>
 		public static readonly Point2I Dimensions = new Point2I(256, 256);
 
 		/// <summary>The blue color identifying the use of the tile palette.</summary>
@@ -52,15 +55,18 @@ namespace ZeldaOracle.Common.Graphics {
 			Color.Black
 		};
 
+
 		//-----------------------------------------------------------------------------
 		// Members
 		//-----------------------------------------------------------------------------
 
+		/// <summary>The parent palette dictionary.</summary>
 		private PaletteDictionary parentDictionary;
 		/// <summary>Index is a multiple of four.</summary>
 		private Dictionary<string, int> indexMap;
 		/// <summary>The type of object supported by the palette and palette dictionary.</summary>
 		private PaletteTypes type;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors

@@ -23,6 +23,8 @@ namespace ZeldaOracle.Common.Graphics {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs a sprite sheet from the specified image with no cell
+		/// settings.</summary>
 		public SpriteSheet(Image image) {
 			this.image		= image;
 			this.cellSize	= image.Size;
@@ -30,6 +32,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.spacing	= Point2I.Zero;
 		}
 
+		/// <summary>Constructs a sprite sheet with the specified settings.</summary>
 		public SpriteSheet(Image image, Point2I cellSize, Point2I offset, Point2I spacing) {
 			this.image		= image;
 			this.cellSize	= cellSize;
@@ -37,11 +40,13 @@ namespace ZeldaOracle.Common.Graphics {
 			this.spacing	= spacing;
 		}
 
+		/// <summary>Constructs a sprite sheet with the specified settings.</summary>
 		public SpriteSheet(Image image, int cellWidth, int cellHeight, int offsetX, int offsetY, int spacing) :
 			this(image, cellWidth, cellHeight, offsetX, offsetY, spacing, spacing)
 		{
 		}
 
+		/// <summary>Constructs a sprite sheet with the specified settings.</summary>
 		public SpriteSheet(Image image, int cellWidth, int cellHeight, int offsetX, int offsetY, int spacingX, int spacingY) {
 			this.image		= image;
 			this.cellSize	= new Point2I(cellWidth, cellHeight);
@@ -69,26 +74,31 @@ namespace ZeldaOracle.Common.Graphics {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the source rect of the sprite at the specified index.</summary>
 		public Rectangle2I GetSourceRect(int indexX, int indexY) {
 			return new Rectangle2I(
 				offset + (cellSize + spacing) * new Point2I(indexX, indexY),
 				cellSize);
 		}
 
+		/// <summary>Gets the source rect of the sprite at the specified index.</summary>
 		public Rectangle2I GetSourceRect(Point2I index) {
 			return new Rectangle2I(
 				offset + (cellSize + spacing) * index,
 				cellSize);
 		}
 
+		/// <summary>Gets the sprite at the specified index.</summary>
 		public BasicSprite GetSprite(int indexX, int indexY) {
 			return new BasicSprite(image, GetSourceRect(indexX, indexY));
 		}
 
+		/// <summary>Gets the sprite at the specified index.</summary>
 		public BasicSprite GetSprite(Point2I index) {
 			return new BasicSprite(image, GetSourceRect(index));
 		}
 
+		/// <summary>Gets the sprite at the specified index with an offset.</summary>
 		public BasicSprite GetSprite(int indexX, int indexY, int drawOffsetX, int drawOffsetY,
 			Flip flip = Flip.None, Rotation rotation = Rotation.None)
 		{
@@ -96,6 +106,7 @@ namespace ZeldaOracle.Common.Graphics {
 				new Point2I(drawOffsetX, drawOffsetY), flip, rotation);
 		}
 
+		/// <summary>Gets the sprite at the specified index with an offset.</summary>
 		public BasicSprite GetSprite(Point2I index, Point2I drawOffset, Flip flip = Flip.None,
 			Rotation rotation = Rotation.None)
 		{

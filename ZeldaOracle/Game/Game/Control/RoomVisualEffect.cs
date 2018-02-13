@@ -77,7 +77,7 @@ namespace ZeldaOracle.Game.Control {
 				destRect.Y -= GameSettings.VIEW_HEIGHT;
 			}
 
-			g.DrawImage(roomImage, destRect, sourceRect, Vector2F.Zero, 0.0);
+			g.DrawImage(roomImage, destRect, sourceRect);
 
 			// If the slice is slit between the bottom and top of the screen,
 			// then draw it a second time at the top.
@@ -85,7 +85,7 @@ namespace ZeldaOracle.Game.Control {
 			{
 				sourceRect.Y -= GameSettings.VIEW_HEIGHT;
 				destRect.Y -= GameSettings.VIEW_HEIGHT;
-				g.DrawImage(roomImage, destRect, sourceRect, Vector2F.Zero, 0.0);
+				g.DrawImage(roomImage, destRect, sourceRect);
 			}
 		}
 		

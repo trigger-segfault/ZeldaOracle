@@ -274,12 +274,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 					// If player velocity has been halted by collisions, then
 					// represent that in the motion vector
 					Vector2F velocity = player.Physics.Velocity;
-					if (Math.Abs(velocity.X) < Math.Abs(velocityPrev.X) ||
-						Math.Sign(velocity.X) != Math.Sign(velocityPrev.X))
+					if (GMath.Abs(velocity.X) < GMath.Abs(velocityPrev.X) ||
+						GMath.Sign(velocity.X) != GMath.Sign(velocityPrev.X))
 						motion.X = velocity.X;
 					if (!player.RoomControl.IsSideScrolling) {
-						if (Math.Abs(velocity.Y) < Math.Abs(velocityPrev.Y) ||
-							Math.Sign(velocity.Y) != Math.Sign(velocityPrev.Y))
+						if (GMath.Abs(velocity.Y) < GMath.Abs(velocityPrev.Y) ||
+							GMath.Sign(velocity.Y) != GMath.Sign(velocityPrev.Y))
 							motion.Y = velocity.Y;
 					}
 
@@ -386,8 +386,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			moveAxes[0]		= true;
 			moveAxes[1]		= true;
-			moveDirection	= (int) GMath.Round(analogAngle / 90.0f) % Directions.Count;
-			moveDirection	= Directions.FlipVertical(moveDirection);
+			moveDirection   = Directions.RoundFromRadians(analogAngle);
 		}
 
 		private void UpdateFallingInHoles() {
@@ -425,7 +424,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				// Move toward the hole's center on each axis seperately.
 				for (int i = 0; i < 2; i++) {
 					float diff = holeTile.Center[i] - player.Center[i];
-					if (Math.Abs(diff) > 0.6f) {
+					if (GMath.Abs(diff) > 0.6f) {
 						float dist = 0.25f;
 						
 						// Pull the player in more if he's moving away from the hole.
@@ -436,7 +435,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 						if (!(diff < 0.0f && player.Physics.Velocity[i] < -0.25f) &&
 							!(diff > 0.0f && player.Physics.Velocity[i] > 0.25f))
 						{
-							holeSlipVelocity[i] = Math.Sign(diff) * dist;
+							holeSlipVelocity[i] = GMath.Sign(diff) * dist;
 						}
 					}
 				}

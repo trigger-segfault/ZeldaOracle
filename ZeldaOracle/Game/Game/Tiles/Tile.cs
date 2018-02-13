@@ -347,8 +347,6 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dropEntity != null) {
 				if (dropEntity is Collectible)
 					(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-				else if (dropEntity is Monster)
-					(dropEntity as Monster).BeginSpawnState();
 
 				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
 			}
@@ -453,6 +451,7 @@ namespace ZeldaOracle.Game.Tiles {
 				if (dropEntity is Monster) {
 					RoomControl.ScheduleEvent(2, () => {
 						RoomControl.SpawnEntity(dropEntity);
+						((Monster) dropEntity).BeginSpawnState();
 					});
 				}
 				else {
@@ -563,7 +562,7 @@ namespace ZeldaOracle.Game.Tiles {
 			// Find the surface tile (tile below this one).
 			Tile newSurfaceTile = null;
 			foreach (Tile tile in roomControl.TileManager
-				.GetTilesAtLocation(location, TileLayerOrder.HighestToLowest))
+				.GetTilesAtLocation(location))
 			{
 				if (tile != this && tile.IsSurface) {
 					newSurfaceTile = tile;
@@ -778,7 +777,7 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions,
 					colorDefinitions, args.Time);
 				g.DrawSprite(
 					sprite,
@@ -1030,7 +1029,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public virtual bool IsSurface {
-			get { return ((!isSolid || IsHalfSolid) && !IsPlatform); }
+			get { return (!flags.HasFlag(TileFlags.NotSurface) && !IsPlatform); }
 		}
 		
 		public bool IsPlatform {

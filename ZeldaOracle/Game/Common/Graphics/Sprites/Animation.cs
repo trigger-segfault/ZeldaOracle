@@ -19,6 +19,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 	}
 
 
+	/// <summary>A sprite with different combinations of smaller sprites for each frame.</summary>
 	public class Animation : ISprite {
 
 		/// <summary>The list of frames.</summary>
@@ -35,6 +36,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs an empty animation.</summary>
 		public Animation() {
 			this.frames		= new List<AnimationFrame>();
 			this.duration	= 0;
@@ -42,15 +44,17 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.loopMode	= LoopMode.Repeat;
 		}
 
+		/// <summary>Constructs an animation with a single sprite as a frame.</summary>
 		public Animation(ISprite sprite) {
 			this.frames		= new List<AnimationFrame>();
 			this.duration	= 0;
 			this.nextStrip	= null;
 			this.loopMode	= LoopMode.Repeat;
 
-			this.frames.Add(new AnimationFrame(0, 0, sprite));
+			this.frames.Add(new AnimationFrame(0, 1, sprite));
 		}
-		
+
+		/// <summary>Constructs an animation with the specified loop mode.</summary>
 		public Animation(LoopMode loopMode) {
 			this.frames		= new List<AnimationFrame>();
 			this.duration	= 0;
@@ -58,6 +62,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.loopMode	= loopMode;
 		}
 
+		/// <summary>Constructs a copy of the specified animation.</summary>
 		public Animation(Animation copy) {
 			this.frames		= new List<AnimationFrame>();
 			this.nextStrip	= null;
@@ -76,7 +81,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public SpritePart GetParts(SpriteDrawSettings settings) {
+		public SpritePart GetParts(SpriteSettings settings) {
 			float time = settings.PlaybackTime;
 			if (loopMode == LoopMode.Repeat) {
 				if (duration == 0)
@@ -111,7 +116,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
-		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
+		public Rectangle2I GetBounds(SpriteSettings settings) {
 			Rectangle2I bounds = Rectangle2I.Zero;
 			// Bounds is based on the entire duration of the animation
 			foreach (AnimationFrame frame in frames) {
@@ -146,18 +151,22 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the collection of frames in the animation.</summary>
 		public IEnumerable<AnimationFrame> GetFrames() {
 			return frames;
 		}
 
+		/// <summary>Gets the frame at the specified index in the list.</summary>
 		public AnimationFrame GetFrameAt(int index) {
 			return frames[index];
 		}
 
+		/// <summary>Gets the last frame in the list.</summary>
 		public AnimationFrame LastFrame() {
 			return frames[frames.Count - 1];
 		}
 
+		/// <summary>Gets the last frame in the list or returns null if the list is empty.</summary>
 		public AnimationFrame LastFrameOrDefault() {
 			if (frames.Count == 0)
 				return new AnimationFrame();
@@ -169,17 +178,20 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Clears the frames from the list.</summary>
 		public void ClearFrames() {
 			frames.Clear();
 			duration = 0;
 		}
 
+		/// <summary>Adds a range of frames.</summary>
 		public void AddFrameRange(IEnumerable<AnimationFrame> frames) {
 			foreach (AnimationFrame frame in frames) {
 				AddFrame(new AnimationFrame(frame));
 			}
 		}
 
+		/// <summary>Adds a frame.</summary>
 		public void AddFrame(AnimationFrame frame) {
 			int index = 0;
 			while (index < frames.Count && frame.Depth >= frames[index].Depth) {
@@ -188,15 +200,17 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				index++;
 			}
 			frames.Insert(index, frame);
-			duration = Math.Max(duration, frame.EndTime);
+			duration = GMath.Max(duration, frame.EndTime);
 		}
 
+		/// <summary>Adds a frame with the specified settings.</summary>
 		public void AddFrame(int startTime, int duration, ISprite sprite, Rectangle2I? clipping = null,
 			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
 		{
 			AddFrame(new AnimationFrame(startTime, duration, sprite, clipping, flip, rotation, depth));
 		}
 
+		/// <summary>Adds a frame with the specified settings.</summary>
 		public void AddFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset,
 			Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
 		{
@@ -209,6 +223,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			AddFrame(new AnimationFrame(startTime, duration, source, index, clipping, flip, rotation, depth));
 		}
 
+		/// <summary>Adds a frame with the specified settings.</summary>
 		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
 			string definition, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None,
 			int depth = 0)
@@ -216,6 +231,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, clipping, flip, rotation, depth));
 		}
 
+		/// <summary>Adds a frame with the specified settings.</summary>
 		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
 			Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None,
 			int depth = 0)
@@ -223,6 +239,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			AddFrame(new AnimationFrame(startTime, duration, source, index, drawOffset, clipping, flip, rotation, depth));
 		}
 
+		/// <summary>Adds a frame with the specified settings.</summary>
 		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
 			string definition, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None,
 			Rotation rotation = Rotation.None, int depth = 0)
@@ -230,15 +247,17 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, drawOffset, clipping, flip, rotation, depth));
 		}
 
+		/// <summary>Removes the frame at the specified index.</summary>
 		public void RemoveFrameAt(int index) {
 			frames.RemoveAt(index);
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Sprites
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets a snapshot of the animation in time as a composite sprite.</summary>
 		public CompositeSprite GetFrameAsCompositeSprite(int time) {
 			CompositeSprite sprite = new CompositeSprite();
 			for (int i = 0; i < frames.Count; i++) {
@@ -249,6 +268,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			return sprite;
 		}
 
+		/// <summary>Gets the substrip of the animation.</summary>
 		public Animation GetSubstrip(int index) {
 			Animation substrip = this;
 			for (int i = 0; i < index; i++) {
@@ -263,30 +283,36 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
+		/// <summary>Gets or sets the total duration of the animation.</summary>
 		public int Duration {
 			get { return duration; }
 			set { duration = value; }
 		}
 
+		/// <summary>Gets or sets the next substrip in the animation's linked list.</summary>
 		public Animation NextStrip {
 			get { return nextStrip; }
 			set { nextStrip = value; }
 		}
 
+		/// <summary>Gets or sets the loop mode of the animation.</summary>
 		public LoopMode LoopMode {
 			get { return loopMode; }
 			set { loopMode = value; }
 		}
 
+		/// <summary>Gets the frame count of the animation.</summary>
 		public int FrameCount {
 			get { return frames.Count; }
 		}
 
+		/// <summary>Returns true if the animation has substrips.</summary>
 		public bool HasSubstrips {
 			get { return nextStrip != null; }
 		}
 
+		/// <summary>Gets the number of substrips in teh animation.</summary>
 		public int SubstripCount {
 			get {
 				Animation substrip = this;

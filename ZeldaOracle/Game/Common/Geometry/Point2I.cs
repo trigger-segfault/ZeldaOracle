@@ -25,6 +25,10 @@ namespace ZeldaOracle.Common.Geometry {
 		public static readonly Point2I Zero = new Point2I(0, 0);
 		/// <summary>Returns a point positioned at (1, 1).</summary>
 		public static readonly Point2I One = new Point2I(1, 1);
+		/// <summary>Returns a point positioned at (1, 0).</summary>
+		public static readonly Point2I OneX = new Point2I(1, 0);
+		/// <summary>Returns a point positioned at (0, 1).</summary>
+		public static readonly Point2I OneY = new Point2I(0, 1);
 
 
 		//-----------------------------------------------------------------------------
@@ -61,8 +65,8 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Constructs a copy of the specified point.</summary>
 		public Point2I(Vector2F v) {
-			this.X	= (int)v.X;
-			this.Y	= (int)v.Y;
+			this.X	= (int) v.X;
+			this.Y	= (int) v.Y;
 		}
 
 
@@ -73,8 +77,8 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Constructs a vector from a single axis based on the index.</summary>
 		public static Point2I FromIndex(int index, int value, int otherValue = 0) {
 			return new Point2I(
-				(index == 0 ? value : otherValue),
-				(index == 1 ? value : otherValue));
+				(index == Axes.X ? value : otherValue),
+				(index == Axes.Y ? value : otherValue));
 		}
 
 		/// <summary>Constructs a vector from a single axis based on the boolean.</summary>
@@ -114,7 +118,7 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Returns true if the specified point has the same x and y coordinates.</summary>
 		public override bool Equals(object obj) {
 			if (obj is Point2I)
-				return (X == ((Point2I)obj).X && Y == ((Point2I)obj).Y);
+				return (X == ((Point2I) obj).X && Y == ((Point2I) obj).Y);
 			return false;
 		}
 
@@ -376,19 +380,19 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Gets or sets the direction of the point.</summary>
 		[ContentSerializerIgnore]
 		public float Direction {
 			get {
 				if (X == 0 && Y == 0)
-					return 0.0f;
-				return GMath.Plusdir(GMath.Atan2(Y, X));
+					return 0f;
+				return GMath.Plusdir(GMath.Atan2(-Y, X));
 			}
 			set {
 				float length = GMath.Sqrt((X * X) + (Y * Y));
-				X = (int)(length * GMath.Cos(value));
-				Y = (int)(length * GMath.Sin(value));
+				X = (int) (length * GMath.Cos(value));
+				Y = (int) (length * -GMath.Sin(value));
 			}
 		}
 
@@ -401,11 +405,11 @@ namespace ZeldaOracle.Common.Geometry {
 			set {
 				float oldLength = GMath.Sqrt((X * X) + (Y * Y));
 				if (oldLength > 0) {
-					X = (int)(X * (value / oldLength));
-					Y = (int)(Y * (value / oldLength));
+					X = (int) (X * (value / oldLength));
+					Y = (int) (Y * (value / oldLength));
 				}
 				else {
-					X = (int)value;
+					X = (int) value;
 					Y = 0;
 				}
 			}
@@ -415,17 +419,17 @@ namespace ZeldaOracle.Common.Geometry {
 		[ContentSerializerIgnore]
 		public int this[int index] {
 			get {
-				if (index == 0)
+				if (index == Axes.X)
 					return X;
-				else if (index == 1)
+				else if (index == Axes.Y)
 					return Y;
 				else
 					throw new IndexOutOfRangeException("Point2I[coordinateIndex] must be either 0 or 1.");
 			}
 			set {
-				if (index == 0)
+				if (index == Axes.X)
 					X = value;
-				else if (index == 1)
+				else if (index == Axes.Y)
 					Y = value;
 				else
 					throw new IndexOutOfRangeException("Point2I[coordinateIndex] must be either 0 or 1.");
@@ -462,4 +466,4 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 	}
-} // End namespace
+}

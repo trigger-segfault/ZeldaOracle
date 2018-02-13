@@ -45,7 +45,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				return false;
 
 			foreach (Tile t in RoomControl.TileManager.GetTilesAtPosition(Center)) {
-				if (!t.IsSurface || !t.IsCoverableByBlock || t.IsHoleWaterOrLava)
+				if (!t.IsCoverableByBlock || t.IsHoleWaterOrLava)
 					return false;
 			}
 			/*

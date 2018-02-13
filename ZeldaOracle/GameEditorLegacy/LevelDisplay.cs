@@ -455,7 +455,7 @@ namespace ZeldaEditor {
 							Point2I drawPos = position +
 								(new Point2I(x, y) * GameSettings.TILE_SIZE);
 							g.DrawSprite(tile.CurrentSprite,
-								new SpriteDrawSettings((float)editorControl.Ticks),
+								new SpriteSettings((float)editorControl.Ticks),
 								position, drawColor);
 						}
 					}

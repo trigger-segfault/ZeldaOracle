@@ -10,6 +10,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 	/// <summary>A sprite created directly from an image and draw offset.
 	/// Used for unmapping paletted sprites.</summary>
 	public class UnmappedSprite : ISprite {
+
 		/// <summary>The image data for the unmapped sprite.</summary>
 		public Image Image { get; }
 		/// <summary>The draw offset for the texture.</summary>
@@ -37,7 +38,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public SpritePart GetParts(SpriteDrawSettings settings) {
+		public SpritePart GetParts(SpriteSettings settings) {
 			return new SpritePart(Image, Image.Bounds, DrawOffset/*, flipEffects, rotation*/);
 		}
 
@@ -47,7 +48,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
-		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
+		public Rectangle2I GetBounds(SpriteSettings settings) {
 			return new Rectangle2I(DrawOffset, Image.Size);
 		}
 

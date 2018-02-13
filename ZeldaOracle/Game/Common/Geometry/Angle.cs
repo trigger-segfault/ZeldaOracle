@@ -153,11 +153,11 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 				
 		public static int NearestFromVector(Vector2F vector) {
-			return RoundFromRadians((float) Math.Atan2((double) -vector.Y, (double) vector.X));
+			return RoundFromRadians(GMath.Atan2(-vector.Y, vector.X));
 		}
 
 		public static int RoundFromRadians(float radians) {
-			int angle = (int) GMath.Round(radians / GMath.QuarterPi);
+			int angle = (int) GMath.Round(radians / GMath.EighthAngle);
 			return GMath.Wrap(angle, Angles.AngleCount);
 		}
 		

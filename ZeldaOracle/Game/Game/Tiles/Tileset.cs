@@ -116,7 +116,7 @@ namespace ZeldaOracle.Game.Tiles {
 					return -Point2I.One;
 
 				// Scan for the tile data in an outward pattern centered at the location.
-				int max = Math.Max(location.X, location.Y);
+				int max = GMath.Max(location.X, location.Y);
 				for (int i = 1; i < max; i++) {
 					if (i <= location.Y) {
 						for (int x = 0; x < i && x <= location.X; x++) {
@@ -230,8 +230,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 			count = 0;
 			BaseTileData[,] newTileDataGrid = new BaseTileData[newDimensions.X, newDimensions.Y];
-			for (int x = 0; x < Math.Min(Width, newDimensions.X); x++) {
-				for (int y = 0; y < Math.Min(Height, newDimensions.Y); y++) {
+			for (int x = 0; x < GMath.Min(Width, newDimensions.X); x++) {
+				for (int y = 0; y < GMath.Min(Height, newDimensions.Y); y++) {
 					newTileDataGrid[x, y] = tileDataGrid[x, y];
 					if (tileDataGrid[x, y] != null)
 						count++;

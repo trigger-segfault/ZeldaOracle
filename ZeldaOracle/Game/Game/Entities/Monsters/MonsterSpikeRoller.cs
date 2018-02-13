@@ -145,7 +145,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					sprite = spriteList[2];
 				else
 					sprite = spriteList[3];
-				g.DrawSprite(sprite, new SpriteDrawSettings(RoomControl.CurrentRoomTicks),
+				g.DrawSprite(sprite, new SpriteSettings(RoomControl.CurrentRoomTicks),
 					DrawPosition + Point2I.FromBoolean(!vertical, i * GameSettings.TILE_SIZE),
 					DepthLayer.Traps);
 			}

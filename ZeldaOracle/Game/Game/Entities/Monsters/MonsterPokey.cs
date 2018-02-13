@@ -185,7 +185,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
-			SpriteDrawSettings drawSettings = new SpriteDrawSettings() {
+			SpriteSettings drawSettings = new SpriteSettings() {
 				Colors = Graphics.ModifiedColorDefinitions
 			};
 			for (int i = 1; i < bodyHeight; i++) {
@@ -193,7 +193,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				Vector2F drawPosition = position;
 				drawPosition.Y -= zPosition;
 				drawPosition.Y -=  i * GameSettings.MONSTER_POKEY_BODY_SEPARATION;
-				g.DrawSprite(bodyAnimationPlayers[i].SpriteOrSubStrip, new SpriteDrawSettings(
+				g.DrawSprite(bodyAnimationPlayers[i].SpriteOrSubStrip, new SpriteSettings(
 					Graphics.ModifiedColorDefinitions, bodyAnimationPlayers[i].PlaybackTime),
 					drawPosition + Graphics.DrawOffset, DepthLayer.InAirCollectibles, position);
 			}

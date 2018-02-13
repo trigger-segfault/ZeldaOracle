@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
 
+using Microsoft.Xna.Framework.Graphics;
 using XnaColor = Microsoft.Xna.Framework.Color;
-using Color = ZeldaOracle.Common.Graphics.Color;
+
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
-	public struct Palette4C {
-		Color[] colors;
-
-		public Palette4C(Color[] colors) {
-			this.colors = colors;
-		}
-
-		public Color this[int index] {
-			get { return colors[index]; }
-		}
-	}
-
 	/// <summary>The subtypes to use for looking up colors in color groups.</summary>
 	public enum LookupSubtypes {
 		/// <summary>Used for tile and entities.</summary>
@@ -38,18 +26,36 @@ namespace ZeldaOracle.Common.Graphics {
 		All
 	}
 
+	/// <summary>A nullable palette color.</summary>
 	public struct PaletteColor {
-		public static readonly PaletteColor Undefined = new PaletteColor();
 
+		/// <summary>An undefined palette color.</summary>
+		public static readonly PaletteColor Undefined = new PaletteColor();
+		
+		/// <summary>The internal nullable color.</summary>
 		private Color? color;
 
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the palette color.</summary>
 		public PaletteColor(Color color) {
 			this.color      = color;
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the palette color is undefined.</summary>
 		public bool IsUndefined {
 			get { return !color.HasValue; }
 		}
+
+		/// <summary>Gets the palette color.</summary>
 		public Color Color {
 			get {
 				if (color.HasValue)
@@ -60,30 +66,43 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 	}
 
+	/// <summary>A nullable lookup color group and subtype.</summary>
 	public struct LookupPair {
+
+		/// <summary>An undefined lookup pair.</summary>
 		public static readonly LookupPair Undefined = new LookupPair();
 
+		/// <summary>The name of the lookup color group.</summary>
 		public string Name { get; set; }
+		/// <summary>The subtype of the lookup color group.</summary>
 		public LookupSubtypes Subtype { get; set; }
 
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the lookup pair.</summary>
 		public LookupPair(string name, LookupSubtypes subtype) {
 			this.Name       = name;
 			this.Subtype    = subtype;
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the lookup pair is undefined.</summary>
 		public bool IsUndefined {
 			get { return Name == null; }
 		}
 	}
 
+	/// <summary>A class mapping colors from a palette dictionary to an image for use
+	/// with the palette shader.</summary>
 	public class Palette {
-
-		//-----------------------------------------------------------------------------
-		// Classes
-		//-----------------------------------------------------------------------------
 		
-
-
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
@@ -114,10 +133,15 @@ namespace ZeldaOracle.Common.Graphics {
 		// Members
 		//-----------------------------------------------------------------------------
 
+		/// <summary>The palette dictionary used for this palette.</summary>
 		private PaletteDictionary dictionary;
+		/// <summary>The texture storing the lookup information for the palette shader.</summary>
 		private Texture2D paletteTexture;
+		/// <summary>The defined colors for color groups.</summary>
 		private Dictionary<string, PaletteColor[]> colorGroups;
+		/// <summary>The defined colors for constants.</summary>
 		private Dictionary<string, PaletteColor[]> constColorGroups;
+		/// <summary>The defined lookups for color groups.</summary>
 		private Dictionary<string, LookupPair[]> lookupGroups;
 
 

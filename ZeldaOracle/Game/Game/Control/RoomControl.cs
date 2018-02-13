@@ -238,7 +238,7 @@ namespace ZeldaOracle.Game.Control {
 							for (int y = 0; y < size.Y; y++) {
 								Effect effect = new Effect(GameData.ANIM_EFFECT_BLOCK_POOF,
 									DepthLayer.EffectSomariaBlockPoof);
-								Vector2F pos = (tile.Location + new Point2I(x, y) + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE;
+								Vector2F pos = (tile.Location + new Point2I(x, y) + Vector2F.Half) * GameSettings.TILE_SIZE;
 								SpawnEntity(effect, pos);
 							}
 						}

@@ -13,11 +13,16 @@ using XnaRectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace ZeldaOracle.Common.Graphics.Sprites {
 
+	/// <summary>A pre-looked up mapped color for a color group's subtype.</summary>
 	public struct ColorGroupSubtypePair {
+		/// <summary>The color group for the mapping.</summary>
 		public string ColorGroup { get; set; }
+		/// <summary>The color group's subtype for the mapping.</summary>
 		public LookupSubtypes Subtype { get; set; }
+		/// <summary>The output mapped color.</summary>
 		public Color MappedColor { get; set; }
 
+		/// <summary>Constructs the color group subtype pair.</summary>
 		public ColorGroupSubtypePair(string colorGroup, LookupSubtypes subtype, PaletteDictionary dictionary) {
 			this.ColorGroup     = colorGroup;
 			this.Subtype        = subtype;
@@ -26,19 +31,29 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 	}
 
+	/// <summary>Arguments used for palettizing a portion of an image.</summary>
 	public struct SpritePaletteArgs {
+		/// <summary>The image to get the sprite from.</summary>
 		public Image Image { get; set; }
+		/// <summary>The source rect for the sprite in the image.</summary>
 		public Rectangle2I SourceRect { get; set; }
-		public Point2I DrawOffset { get; set; }
+		/// <summary>The color group mappings available for each color.</summary>
 		public Dictionary<Color, Dictionary<int, ColorGroupSubtypePair>> ColorMapping { get; set; }
+		/// <summary>An array with the index of each color group.</summary>
 		public int[] IndexedPossibleColorGroups { get; set; }
+		/// <summary>The names of each available color group.</summary>
 		public string[] PossibleColorGroups { get; set; }
+		/// <summary>Colors to ignore and keep unmapped.</summary>
 		public HashSet<Color> IgnoreColors { get; set; }
+		/// <summary>The palette dictionary to reference color groups from.</summary>
 		public PaletteDictionary Dictionary { get; set; }
+		/// <summary>The size of chunks when palettizing a sprite. Use zero for full size.</summary>
 		public Point2I ChunkSize { get; set; }
+		/// <summary>The color mapping the sprite will be forced to after determining its palette.</summary>
 		public Color[] DefaultMapping { get; set; }
 	}
 
+	/// <summary>An exception thrown when a color is not recognized for the palettizer.</summary>
 	public class UnspecifiedColorException : Exception {
 		public Color Color { get; set; }
 		public Point2I Point { get; set; }
@@ -51,6 +66,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 	}
 
+	/// <summary>An exception thrown when no color group was listed that uses the discovered colors.</summary>
 	public class NoMatchingColorGroupsException : Exception {
 		public HashSet<Color> Colors { get; set; }
 
@@ -73,8 +89,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 	}
 
+	/// <summary>A database for palettizing and storing sprites in image grids.</summary>
 	public class PalettedSpriteDatabase {
 
+		//-----------------------------------------------------------------------------
+		// Classes
+		//-----------------------------------------------------------------------------
+
+		/// <summary>A collection of palettized sprites of a single size.</summary>
 		private class PalettedSpriteDatabaseImage {
 
 			/// <summary>The maximum allowed size of an image. Except when a single cell is larger.</summary>
@@ -89,14 +111,36 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			/// <summary>The collection of images.</summary>
 			private List<Image> images;
 
+			//-----------------------------------------------------------------------------
+			// Constructor
+			//-----------------------------------------------------------------------------
 
+			/// <summary>Constructs the paletted sprite database image.</summary>
 			public PalettedSpriteDatabaseImage(Point2I size) {
 				this.spriteIndex	= 0;
 				this.size           = size;
 				this.images         = new List<Image>();
 				this.dimensions     = GMath.Max(Point2I.One, MaxImageSize / size);
 			}
+			
 
+			//-----------------------------------------------------------------------------
+			// Disposing
+			//-----------------------------------------------------------------------------
+
+			/// <summary>Disposes of the images used for storing palettized sprites.</summary>
+			public void Dispose() {
+				foreach (Image image in images) {
+					image.Dispose();
+				}
+			}
+
+
+			//-----------------------------------------------------------------------------
+			// Palettizing
+			//-----------------------------------------------------------------------------
+
+			/// <summary>Repalettes the already-paletted sprite.</summary>
 			public BasicSprite RepaletteSprite(BasicSprite originalSprite, SpritePaletteArgs args) {
 				// Do we need to create a new image
 				Image currentImage;
@@ -133,12 +177,13 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				currentImage.Texture.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				// Create a new sprite from the database
-				BasicSprite sprite = new BasicSprite(currentImage, CurrentSourceRect, args.DrawOffset);
+				BasicSprite sprite = new BasicSprite(currentImage, CurrentSourceRect);
 
 				spriteIndex++;
 				return sprite;
 			}
 
+			/// <summary>Palettizes a new sprite.</summary>
 			public BasicSprite AddSprite(SpritePaletteArgs args) {
 				// Do we need to create a new image
 				Image currentImage;
@@ -283,38 +328,73 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				currentImage.Texture.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				// Create a new sprite from the database
-				BasicSprite sprite = new BasicSprite(currentImage, CurrentSourceRect, args.DrawOffset);
+				BasicSprite sprite = new BasicSprite(currentImage, CurrentSourceRect);
 
 				spriteIndex++;
 				return sprite;
 			}
 
-			public void Dispose() {
-				foreach (Image image in images) {
-					image.Dispose();
-				}
-			}
 
+			//-----------------------------------------------------------------------------
+			// Properties
+			//-----------------------------------------------------------------------------
+
+			/// <summary>The number of indecies to assign before making a new image.</summary>
 			private int IndeciesPerImage {
 				get { return dimensions.X * dimensions.Y; }
 			}
+
+			/// <summary>The current image to assign sprites to.</summary>
 			private Image CurrentImage {
 				get { return images.Last(); }
 			}
+
+			/// <summary>The index of the current image to assign sprites to.</summary>
 			private int ImageIndex {
 				get { return spriteIndex % IndeciesPerImage; }
 			}
+
+			/// <summary>The current source rect to assign sprites to in the image.</summary>
 			private Rectangle2I CurrentSourceRect {
 				get { return new Rectangle2I((ImageIndex % dimensions.X) * size.X, (ImageIndex / dimensions.X) * size.Y, size); }
 			}
 		}
 
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The collection of different paletted sprite size groups.</summary>
 		private Dictionary<Point2I, PalettedSpriteDatabaseImage> spriteImages;
 
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the paletted sprite database.</summary>
 		public PalettedSpriteDatabase() {
 			this.spriteImages   = new Dictionary<Point2I, PalettedSpriteDatabaseImage>();
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Disposing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Disposes of the images in the paletted sprite database.</summary>
+		public void Dispose() {
+			foreach (var pair in spriteImages) {
+				pair.Value.Dispose();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Palettizing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Palettizes the sprite and adds it to the database.</summary>
 		public BasicSprite AddSprite(SpritePaletteArgs args) {
 			PalettedSpriteDatabaseImage databaseImage;
 			if (spriteImages.ContainsKey(args.SourceRect.Size)) {
@@ -327,6 +407,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			return databaseImage.AddSprite(args);
 		}
 
+		/// <summary>Repalettes the already-paletted sprite and adds it to the database.</summary>
 		public BasicSprite RepaletteSprite(BasicSprite originalSprite, SpritePaletteArgs args) {
 			PalettedSpriteDatabaseImage databaseImage;
 			if (spriteImages.ContainsKey(args.SourceRect.Size)) {
@@ -337,12 +418,6 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				spriteImages[args.SourceRect.Size] = databaseImage;
 			}
 			return databaseImage.RepaletteSprite(originalSprite, args);
-		}
-
-		public void Dispose() {
-			foreach (var pair in spriteImages) {
-				pair.Value.Dispose();
-			}
 		}
 	}
 }

@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 			// Find the center position of the hole tile.
 			Point2I location = RoomControl.GetTileLocation(position);
-			holeCenterPosition = (Vector2F) location + new Vector2F(0.5f, 0.5f);
+			holeCenterPosition = (Vector2F) location + Vector2F.Half;
 			holeCenterPosition *= GameSettings.TILE_SIZE;
 		}
 
@@ -46,10 +46,10 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base.Update();
 
 			// Move towards the center of the hole.
-			if (Math.Abs(position.X - holeCenterPosition.X) > 0.5f)
-				position.X += 0.5f * Math.Sign(holeCenterPosition.X - position.X);
-			if (Math.Abs(position.Y - holeCenterPosition.Y) > 0.5f)
-				position.Y += 0.5f * Math.Sign(holeCenterPosition.Y - position.Y);
+			if (GMath.Abs(position.X - holeCenterPosition.X) > 0.5f)
+				position.X += 0.5f * GMath.Sign(holeCenterPosition.X - position.X);
+			if (GMath.Abs(position.Y - holeCenterPosition.Y) > 0.5f)
+				position.Y += 0.5f * GMath.Sign(holeCenterPosition.Y - position.Y);
 		}
 	}
 }
