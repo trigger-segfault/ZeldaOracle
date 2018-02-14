@@ -54,6 +54,7 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 
 		private bool isInitialized;
+		private bool isActive;
 
 		// Control
 		private EditorWindow        editorWindow;
@@ -139,6 +140,7 @@ namespace ZeldaEditor.Control {
 
 		public EditorControl(EditorWindow editorWindow) {
 			this.editorWindow       = editorWindow;
+			this.isActive           = true;
 
 			this.worldFilePath  = string.Empty;
 			this.world          = null;
@@ -1249,6 +1251,11 @@ namespace ZeldaEditor.Control {
 		public bool DebugConsole {
 			get { return debugConsole; }
 			set { debugConsole = value; }
+		}
+
+		public bool IsActive {
+			get { return isActive; }
+			set { isActive = value; }
 		}
 	}
 }

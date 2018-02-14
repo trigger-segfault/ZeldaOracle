@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Xceed.Wpf.Toolkit.Primitives;
 using ZeldaEditor.Util;
 
 namespace ZeldaEditor.WinForms {
@@ -41,7 +43,7 @@ namespace ZeldaEditor.WinForms {
 				bool isDescendant = WpfHelper.IsDescendant(focusScope, focusElement as DependencyObject);
 				if (element.IsMouseOver && !element.IsFocused &&
 					((!ignoreMouseButtons && focusElement != element) ||
-					focusElement == null))
+					focusElement == null || !(focusElement is ComboBoxItem || focusElement is SelectorItem)))
 				{
 					element.Focus();
 					HwndSource hwndSource = (HwndSource)HwndSource.FromDependencyObject(element);

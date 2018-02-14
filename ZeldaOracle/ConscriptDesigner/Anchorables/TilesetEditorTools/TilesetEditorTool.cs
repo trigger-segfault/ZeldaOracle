@@ -17,6 +17,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
 using ZeldaOracle.Game;
+using ConscriptDesigner.Windows;
 
 namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 	public abstract class TilesetEditorTool {
@@ -44,21 +45,33 @@ namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 		//-----------------------------------------------------------------------------
 
 		protected static Cursor LoadCursor(string name) {
-			ResourceManager rm = new ResourceManager("ConscriptDesigner.g", Assembly.GetExecutingAssembly());
-			var input = (Stream)rm.GetObject("resources/cursors/" + name.ToLower() + "cursor.cur");
-			input.Position = 0;
-			string path = "CustomCursor.cur";
-			using (Stream output = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write)) {
-				output.SetLength(0);
-				byte[] buffer = new byte[8 * 1024];
-				int len;
-				while ((len = input.Read(buffer, 0, buffer.Length)) > 0) {
-					output.Write(buffer, 0, len);
+			int retryCount = 0;
+			while (retryCount < 4) {
+				try {
+					ResourceManager rm = new ResourceManager("ConscriptDesigner.g", Assembly.GetExecutingAssembly());
+					var input = (Stream)rm.GetObject("resources/cursors/" + name.ToLower() + "cursor.cur");
+					input.Position = 0;
+					string path = "CustomCursor.cur";
+					using (Stream output = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write)) {
+						output.SetLength(0);
+						byte[] buffer = new byte[8 * 1024];
+						int len;
+						while ((len = input.Read(buffer, 0, buffer.Length)) > 0) {
+							output.Write(buffer, 0, len);
+						}
+					}
+					Cursor cursor = NativeMethods.LoadCustomCursor(path);
+					File.Delete("CustomCursor.cur");
+					return cursor;
+				}
+				catch (Exception ex) {
+					retryCount++;
+					if (retryCount == 4) {
+						ErrorMessageBox.Show(ex, true);
+					}
 				}
 			}
-			Cursor cursor = NativeMethods.LoadCustomCursor(path);
-			File.Delete("CustomCursor.cur");
-			return cursor;
+			return null;
 		}
 
 		protected void StopDragging() {

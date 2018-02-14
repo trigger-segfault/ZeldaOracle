@@ -155,9 +155,11 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected virtual void TimerUpdate() {
-			if (DesignerControl.PlayAnimations || needsToInvalidate) {
-				needsToInvalidate = false;
-				Invalidate();
+			if (DesignerControl.IsActive) {
+				if (DesignerControl.PlayAnimations || needsToInvalidate) {
+					needsToInvalidate = false;
+					Invalidate();
+				}
 			}
 		}
 

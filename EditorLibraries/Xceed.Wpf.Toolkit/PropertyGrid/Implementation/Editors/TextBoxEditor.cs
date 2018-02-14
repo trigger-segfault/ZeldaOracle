@@ -16,6 +16,9 @@
 
 using System.Windows.Controls;
 using System.Windows;
+using System;
+using Xceed.Wpf.Toolkit.Primitives;
+using System.Windows.Data;
 #if !VS2008
 using System.ComponentModel.DataAnnotations;
 #endif
@@ -34,6 +37,15 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors {
 			}
 		}
 #endif
+
+		protected override void ResolveValueBinding(PropertyItem propertyItem) {
+			var _binding = new Binding( "Value" );
+			_binding.Source = propertyItem;
+			_binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+			_binding.Mode = propertyItem.IsReadOnly ? BindingMode.OneWay : BindingMode.TwoWay;
+			_binding.Converter = CreateValueConverter();
+			BindingOperations.SetBinding(Editor, ValueProperty, _binding);
+		}
 
 		protected override void SetValueDependencyProperty() {
 			ValueProperty = TextBox.TextProperty;

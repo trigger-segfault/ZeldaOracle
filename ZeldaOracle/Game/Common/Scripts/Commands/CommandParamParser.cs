@@ -186,6 +186,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				// Parameter array end.
 				else if (c == ')') {
 					CompleteToken(parseData);
+					CompleteDefaultValue(parseData);
 					if (parseData.IsParsingValue)
 						parseData.ValParamStack.Pop();
 					if (!parseData.IsParsingValue || (parseData.IsParsingValue && parseData.IsParsingDefaultValue)) {

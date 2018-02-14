@@ -46,13 +46,16 @@ namespace ZeldaEditor.Undo {
 		public IPropertyObject PropertyObject {
 			get { return propertyObject; }
 		}
+
 		public string PropertyName {
 			get { return propertyName; }
 		}
+
 		public object OldValue {
 			get { return oldValue; }
 			set { oldValue = value; }
 		}
+
 		public object NewValue {
 			get { return newValue; }
 			set { newValue = value; }

@@ -71,7 +71,25 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Tile Accessors
 		//-----------------------------------------------------------------------------
-		
+
+		public Tile GetTileBelow(Tile tile) {
+			for (int i = tile.Layer - 1; i >= 0; i--) {
+				Tile tileBelow = tiles[tile.Location.X, tile.Location.Y, i];
+				if (tileBelow != null)
+					return tileBelow;
+			}
+			return null;
+		}
+
+		public Tile GetSurfaceTileBelow(Tile tile) {
+			for (int i = tile.Layer - 1; i >= 0; i--) {
+				Tile tileBelow = tiles[tile.Location.X, tile.Location.Y, i];
+				if (tileBelow != null && tileBelow.IsSurface)
+					return tileBelow;
+			}
+			return null;
+		}
+
 		// Return an enumerable list of tiles at the given location.
 		public IEnumerable<Tile> GetTilesAtLocation(Point2I location) {
 			if (IsTileInBounds(location)) {

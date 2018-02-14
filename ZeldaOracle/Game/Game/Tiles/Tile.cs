@@ -560,15 +560,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		protected void CheckSurfaceTile() {
 			// Find the surface tile (tile below this one).
-			Tile newSurfaceTile = null;
-			foreach (Tile tile in roomControl.TileManager
-				.GetTilesAtLocation(location))
-			{
-				if (tile != this && tile.IsSurface) {
-					newSurfaceTile = tile;
-					break;
-				}
-			}
+			Tile newSurfaceTile = roomControl.TileManager.GetSurfaceTileBelow(this);
 
 			// Check if the surface tile has changed.
 			if (surfaceTile != newSurfaceTile) {
@@ -1144,6 +1136,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public int HurtDamage {
 			get { return hurtDamage; }
 			set { hurtDamage = value; }
+		}
+
+		public bool HasMoved {
+			get { return hasMoved; }
 		}
 
 
