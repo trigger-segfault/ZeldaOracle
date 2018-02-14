@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Worlds;
 
@@ -207,11 +208,24 @@ namespace ZeldaOracle.Game.Entities {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		public static bool AreEntitiesAligned(Entity a, Entity b, int direction, float threshold) {
-			return ((Directions.IsVertical(direction) && GMath.Abs(a.Center.X - b.Center.X) <= threshold) ||
-				(Directions.IsHorizontal(direction) && GMath.Abs(a.Center.Y - b.Center.Y) <= threshold));
+		public static bool AreEntitiesAligned(Entity a, Entity b, int direction,
+			float threshold)
+		{
+			return (GMath.Abs(a.Center - b.Center)[!Directions.IsVertical(direction)] <=
+				threshold);
 		}
-	
+
+		public static bool AreEntitiesCollisionAligned(Entity a, Entity b, int direction,
+			CollisionBoxType collisionType)
+		{
+			Rectangle2F aBox = a.Physics.GetCollisionBox(collisionType) + a.Position;
+			Rectangle2F bBox = b.Physics.GetCollisionBox(collisionType) + b.Position;
+			if (Directions.IsVertical(direction))
+				return aBox.LeftRight.Intersects(bBox.LeftRight);
+			else
+				return aBox.TopBottom.Intersects(bBox.TopBottom);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

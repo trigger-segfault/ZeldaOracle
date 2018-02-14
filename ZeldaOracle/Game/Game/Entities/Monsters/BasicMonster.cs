@@ -50,6 +50,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected float		chargeAcceleration;
 		protected int		chargeMinAlignment;
 		protected RangeI	chargeDuration;
+		protected int		chargeCooldown;
+		protected int		chargeCooldownTimer;
 
 		// Chasing
 		protected float		chaseSpeed;
@@ -117,6 +119,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			chargeType			= ChargeType.None;
 			chargeDuration		= RangeI.Zero;
+			chargeCooldown		= 66;
+			chargeCooldownTimer	= 0;
 
 			shootType			= ShootType.None;
 			aimType				= AimType.Forward;
@@ -266,27 +270,34 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		protected void StartCharging(int chargeDirection) {
 			direction	= chargeDirection;
+			moveAngle	= direction * 4 / numMoveAngles;
 			isCharging	= true;
+			chargeCooldownTimer = chargeCooldown;
 
 			if (chargeType == ChargeType.ChargeForDuration) {
 				moveTimer = GRandom.NextInt(chargeDuration.Min, chargeDuration.Max);
 			}
 		}
 
+		protected void EndCharging() {
+			isCharging = false;
+			speed = GMath.Min(speed, moveSpeed);
+		}
+
 		protected void UpdateChargingState() {
 			speed = GMath.Min(chargeSpeed, speed + chargeAcceleration);
-			
+
 			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 
 			if (chargeType == ChargeType.ChargeForDuration) {
 				if (moveTimer <= 0) {
-					isCharging = false;
+					EndCharging();
 					return;
 				}
 			}
 			else {
 				if (Physics.IsColliding) {
-					isCharging = false;
+					EndCharging();
 					return;
 				}
 			}
@@ -346,8 +357,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected Vector2F GetMovementVelocity(int moveAngle, float speed) {
-			float radians = ((float) moveAngle / (float) numMoveAngles) * GMath.FullAngle;
-			return Vector2F.FromPolar(speed, radians);
+			return Orientations.ToVector(moveAngle, numMoveAngles) * speed;
 		}
 
 
@@ -417,11 +427,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 				else {
 					// Check for charging.
-					if (chargeType != ChargeType.None) {
+					if (chargeCooldownTimer > 0) {
+						chargeCooldownTimer--;
+					}
+					else if (chargeType != ChargeType.None) {
 						int directionToPlayer = Directions.NearestFromVector(
 							RoomControl.Player.Center - Center);
-						if (Entity.AreEntitiesAligned(this, RoomControl.Player,
-							directionToPlayer, chargeMinAlignment))
+						if (Entity.AreEntitiesCollisionAligned(this, RoomControl.Player,
+							directionToPlayer, CollisionBoxType.Hard))
 						{
 							StartCharging(directionToPlayer);
 							return;
