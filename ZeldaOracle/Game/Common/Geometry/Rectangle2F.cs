@@ -517,6 +517,9 @@ namespace ZeldaOracle.Common.Geometry {
 		public Vector2F	TopLeft		{ get { return new Vector2F(Left,  Top); } }
 		public Vector2F	BottomRight	{ get { return new Vector2F(Right, Bottom); } }
 		public Vector2F	BottomLeft	{ get { return new Vector2F(Left,  Bottom); } }
+		
+		public RangeF	LeftRight	{ get { return new RangeF(Left, Right); } }
+		public RangeF	TopBottom	{ get { return new RangeF(Top, Bottom); } }
 
 	}
 }

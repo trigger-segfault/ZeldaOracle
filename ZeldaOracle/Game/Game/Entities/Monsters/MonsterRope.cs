@@ -29,6 +29,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isAnimationHorizontal		= true;
 			syncAnimationWithDirection	= true;
 			
+			// Charging.
+			chargeType			= ChargeType.ChargeUntilCollision;
+			chargeSpeed			= 1.25f;
+			chargeAcceleration	= 1.25f;
+			chargeMinAlignment	= 5;
+
 			// Interactions.
 			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
 		}
