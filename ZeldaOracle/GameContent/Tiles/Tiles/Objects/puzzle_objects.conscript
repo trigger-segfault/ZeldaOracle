@@ -158,25 +158,25 @@ END;
 
 # Doors -------------------------------------------------------
 
-TILE "door_right";	CLONE "temp_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "door_up";		CLONE "temp_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "door_left";	CLONE "temp_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "door_down";	CLONE "temp_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+TILE "door_down";	CLONE "temp_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); BASICLEDGE block, down; END;
+TILE "door_up";		CLONE "temp_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); BASICLEDGE block, up; END;
+TILE "door_left";	CLONE "temp_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); BASICLEDGE block, left; END;
+TILE "door_right";	CLONE "temp_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); BASICLEDGE block, right; END;
 
-TILE "small_key_door_right";	CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "small_key_door_up";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "small_key_door_left";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "small_key_door_down";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+TILE "small_key_door_down";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); BASICLEDGE block, down; END;
+TILE "small_key_door_up";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); BASICLEDGE block, up; END;
+TILE "small_key_door_left";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); BASICLEDGE block, left; END;
+TILE "small_key_door_right";	CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); BASICLEDGE block, right; END;
 
-TILE "boss_key_door_right";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "boss_key_door_up";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "boss_key_door_left";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "boss_key_door_down";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+TILE "boss_key_door_down";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); BASICLEDGE block, down; END;
+TILE "boss_key_door_up";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); BASICLEDGE block, up; END;
+TILE "boss_key_door_left";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); BASICLEDGE block, left; END;
+TILE "boss_key_door_right";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); BASICLEDGE block, right; END;
 
-TILE "minecart_door_right";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "minecart_door_up";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "minecart_door_left";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "minecart_door_down";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+TILE "minecart_door_down";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); BASICLEDGE block, down; END;
+TILE "minecart_door_up";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); BASICLEDGE block, up; END;
+TILE "minecart_door_left";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); BASICLEDGE block, left; END;
+TILE "minecart_door_right";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); BASICLEDGE block, right; END;
 
 # Locked Block ------------------------------------------------
 
@@ -390,122 +390,142 @@ END;
 
 # Lava Mouth --------------------------------------------------
 
-TILE "lava_mouth_left";
-	CLONE		"temp_lava_mouth";
-	SAMESPRITE;
-	SPRITEINDEX 1, "tile_lava_mouth_closed_left";
-END;
-TILE "lava_mouth_up";
-	CLONE		"temp_lava_mouth";
-	SAMESPRITE;
-	SPRITEINDEX 1, "tile_lava_mouth_closed_up";
-END;
 TILE "lava_mouth_down";
 	CLONE		"temp_lava_mouth";
+	LEDGE		block, down;
 	SAMESPRITE;
 	SPRITEINDEX 1, "tile_lava_mouth_closed_down";
 END;
+TILE "lava_mouth_up";
+	CLONE		"temp_lava_mouth";
+	LEDGE		block, up;
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_lava_mouth_closed_up";
+END;
+TILE "lava_mouth_left";
+	CLONE		"temp_lava_mouth";
+	LEDGE		block, left;
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_lava_mouth_closed_left";
+END;
 TILE "lava_mouth_right";
 	CLONE		"temp_lava_mouth";
+	LEDGE		block, right;
 	SAMESPRITE;
 	SPRITEINDEX 1, "tile_lava_mouth_closed_right";
 END;
 
 # Arrow Shooter -----------------------------------------------
 
-TILE "arrow_shooter_right";
+TILE "arrow_shooter_down";
 	CLONE		"temp_arrow_shooter";
+	BASICLEDGE	block, down;
 	SAMESPRITE;
-	PROPERTY	(direction, 0);
+	PROPERTY	(direction, 3);
 END;
 TILE "arrow_shooter_up";
 	CLONE		"temp_arrow_shooter";
+	BASICLEDGE	block, up;
 	SAMESPRITE;
 	PROPERTY	(direction, 1);
 END;
 TILE "arrow_shooter_left";
 	CLONE		"temp_arrow_shooter";
+	BASICLEDGE	block, left;
 	SAMESPRITE;
 	PROPERTY	(direction, 2);
 END;
-TILE "arrow_shooter_down";
+TILE "arrow_shooter_right";
 	CLONE		"temp_arrow_shooter";
+	BASICLEDGE	block, right;
 	SAMESPRITE;
-	PROPERTY	(direction, 3);
+	PROPERTY	(direction, 0);
 END;
 
 # Fire Shooter ------------------------------------------------
 
-TILE "fire_shooter_right";
+TILE "fire_shooter_down";
 	CLONE		"temp_fire_shooter";
+	BASICLEDGE	block, down;
 	SAMESPRITE;
-	PROPERTY	(direction, 0);
+	PROPERTY	(direction, 3);
 END;
 TILE "fire_shooter_up";
 	CLONE		"temp_fire_shooter";
+	BASICLEDGE	block, up;
 	SAMESPRITE;
 	PROPERTY	(direction, 1);
 END;
 TILE "fire_shooter_left";
 	CLONE		"temp_fire_shooter";
+	BASICLEDGE	block, left;
 	SAMESPRITE;
 	PROPERTY	(direction, 2);
 END;
-TILE "fire_shooter_down";
+TILE "fire_shooter_right";
 	CLONE		"temp_fire_shooter";
+	BASICLEDGE	block, right;
 	SAMESPRITE;
-	PROPERTY	(direction, 3);
+	PROPERTY	(direction, 0);
 END;
 
 # Tablet Slot -------------------------------------------------
 
-TILE "tablet_slot_left";
-	CLONE		"temp_tablet_slot";
-	SAMESPRITE;
-	SPRITEINDEX 1, "tile_tablet_slot_placed_left";
-END;
-TILE "tablet_slot_up";
-	CLONE		"temp_tablet_slot";
-	SAMESPRITE;
-	SPRITEINDEX 1, "tile_tablet_slot_placed_up";
-END;
 TILE "tablet_slot_down";
 	CLONE		"temp_tablet_slot";
+	BASICLEDGE	block, down;
 	SAMESPRITE;
 	SPRITEINDEX 1, "tile_tablet_slot_placed_down";
 END;
+TILE "tablet_slot_up";
+	CLONE		"temp_tablet_slot";
+	BASICLEDGE	block, up;
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_tablet_slot_placed_up";
+END;
+TILE "tablet_slot_left";
+	CLONE		"temp_tablet_slot";
+	BASICLEDGE	block, left;
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_tablet_slot_placed_left";
+END;
 TILE "tablet_slot_right";
 	CLONE		"temp_tablet_slot";
+	BASICLEDGE	block, right;
 	SAMESPRITE;
 	SPRITEINDEX 1, "tile_tablet_slot_placed_right";
 END;
 
 # Jump Ledge --------------------------------------------------
 
-TILE "leap_ledge_right";	FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE right; END;
+TILE "leap_ledge_down";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE down; END;
 TILE "leap_ledge_up";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE up; END;
 TILE "leap_ledge_left";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE left; END;
-TILE "leap_ledge_down";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE down; END;
+TILE "leap_ledge_right";	FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE right; END;
 
 # Webbed Wall -------------------------------------------------
 
 TILE "wall_webbed_down";
 	CLONE		"temp_wall_webbed";
+	BASICLEDGE	block, down;
 	TILEBELOW	"wall_tunnel_down";
 	SAMESPRITE;
 END;
 TILE "wall_webbed_up";
 	CLONE		"temp_wall_webbed";
+	BASICLEDGE	block, up;
 	TILEBELOW	"wall_tunnel_up";
 	SAMESPRITE;
 END;
 TILE "wall_webbed_left";
 	CLONE		"temp_wall_webbed";
+	BASICLEDGE	block, left;
 	TILEBELOW	"wall_tunnel_left";
 	SAMESPRITE;
 END;
 TILE "wall_webbed_right";
 	CLONE		"temp_wall_webbed";
+	BASICLEDGE	block, right;
 	TILEBELOW	"wall_tunnel_right";
 	SAMESPRITE;
 END;

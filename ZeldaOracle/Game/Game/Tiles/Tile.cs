@@ -1032,6 +1032,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return (SolidType == TileSolidType.HalfSolid); }
 		}
 
+		public bool IsBasicLedge {
+			get { return (SolidType == TileSolidType.BasicLedge); }
+		}
+
 		public bool IsLedge {
 			get { return (SolidType == TileSolidType.Ledge); }
 		}
@@ -1042,7 +1046,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsAnyLedge {
 			get {
-				return (SolidType == TileSolidType.Ledge ||
+				return (SolidType == TileSolidType.BasicLedge ||
+						SolidType == TileSolidType.Ledge ||
 						SolidType == TileSolidType.LeapLedge);
 			}
 		}
