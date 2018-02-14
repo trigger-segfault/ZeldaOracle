@@ -58,10 +58,10 @@ TILE "table_mid"; SAMESPRITE; SOLID block; END;
 TILE "table_right"; SAMESPRITE; SOLID block; END;
 TILE "table_both"; SAMESPRITE; SOLID block; END;
 
-TILE "wall_fireplace_column_left"; SAMESPRITE; SOLID block; END;
-TILE "wall_fireplace_column_right"; SAMESPRITE; SOLID block; END;
-TILE "wall_clock"; SAMESPRITE; SOLID block; END;
-TILE "wall_masks"; SAMESPRITE; SOLID block; END;
+TILE "wall_fireplace_column_left"; SAMESPRITE; BASICLEDGE block, down; END;
+TILE "wall_fireplace_column_right"; SAMESPRITE; BASICLEDGE block, down; END;
+TILE "wall_clock"; SAMESPRITE; LEDGE block, down; END;
+TILE "wall_masks"; SAMESPRITE; LEDGE block, down; END;
 
 TILE "pitcher_left"; SAMESPRITE; SOLID edge_e; END;
 TILE "pitcher_right"; SAMESPRITE; SOLID edge_w; END;

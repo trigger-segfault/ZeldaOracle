@@ -26,7 +26,7 @@ TILE "vertical_brick_wall_bottom_right"; SAMESPRITE; SOLID block; END;
 TILE "vertical_brick_wall_bottom_both"; SAMESPRITE; SOLID block; END;
 
 TILE "vertical_brick_wall_bottom_entrance_left"; SAMESPRITE; LEDGE block, down; END;
-TILE "vertical_brick_wall_bottom_entrance_mid"; SAMESPRITE; SOLID doorway; END;
+TILE "vertical_brick_wall_bottom_entrance_mid"; SAMESPRITE; BASICLEDGE doorway, down; END;
 TILE "vertical_brick_wall_bottom_entrance_right"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_brick_wall_bottom_left_entrance_left"; SAMESPRITE; SOLID block; END;
 TILE "vertical_brick_wall_bottom_right_entrance_right"; SAMESPRITE; SOLID block; END;
@@ -39,19 +39,19 @@ TILE "vertical_brick_wall_bottom_left_cracked_right"; SAMESPRITE; SOLID block; E
 TILE "vertical_brick_wall_bottom_cracked_right"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_brick_wall_bottom_cracked_left"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_brick_wall_bottom_right_cracked_left"; SAMESPRITE; SOLID block; END;
-TILE "vertical_brick_wall_doorway"; SAMESPRITE; SOLID doorway; END;
-TILE "vertical_brick_wall_tunnel"; SAMESPRITE; SOLID doorway; END;
+TILE "vertical_brick_wall_doorway"; SAMESPRITE; BASICLEDGE doorway, down; END;
+TILE "vertical_brick_wall_tunnel"; SAMESPRITE; BASICLEDGE doorway, down; END;
 TILE "vertical_brick_wall_keyhole";
 	RESETWHEN	Never;
-	SOLID		block;
+	BASICLEDGE	block, down;
 	TILEBELOW	"vertical_brick_wall_tunnel";
 	SAMESPRITE;
 END;
-TILE "vertical_brick_wall_hole"; SAMESPRITE; SOLID doorway; END;
+TILE "vertical_brick_wall_hole"; SAMESPRITE; BASICLEDGE doorway, down; END;
 TILE "vertical_brick_wall_bombable";
 	FLAGS		Bombable;
 	RESETWHEN	Never;
-	SOLID		block;
+	BASICLEDGE	block, down;
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
 	TILEBELOW	"vertical_brick_wall_hole";
@@ -72,17 +72,17 @@ TILE "vertical_palace_wall_bottom_right"; SAMESPRITE; SOLID block; END;
 TILE "vertical_palace_wall_bottom_both"; SAMESPRITE; SOLID block; END;
 
 TILE "vertical_palace_wall_entrance_left"; SAMESPRITE; LEDGE block, down; END;
-TILE "vertical_palace_wall_entrance_mid"; SAMESPRITE; SOLID block; END;
+TILE "vertical_palace_wall_entrance_mid"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_palace_wall_entrance_right"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_palace_wall_bottom_entrance_left"; SAMESPRITE; LEDGE block, down; END;
-TILE "vertical_palace_wall_bottom_entrance_mid"; SAMESPRITE; SOLID doorway; END;
+TILE "vertical_palace_wall_bottom_entrance_mid"; SAMESPRITE; BASICLEDGE doorway, down; END;
 TILE "vertical_palace_wall_bottom_entrance_right"; SAMESPRITE; LEDGE block, down; END;
 
 TILE "vertical_palace_wall_left_entrance_left"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_palace_wall_right_entrance_right"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_palace_wall_bottom_left_entrance_left"; SAMESPRITE; LEDGE block, down; END;
-TILE "vertical_palace_wall_bottom_entrance_wide_left"; SAMESPRITE; SOLID doorway_half_left; END;
-TILE "vertical_palace_wall_bottom_entrance_wide_right"; SAMESPRITE; SOLID doorway_half_right; END;
+TILE "vertical_palace_wall_bottom_entrance_wide_left"; SAMESPRITE; BASICLEDGE doorway_half_left, down; END;
+TILE "vertical_palace_wall_bottom_entrance_wide_right"; SAMESPRITE; BASICLEDGE doorway_half_right, down; END;
 TILE "vertical_palace_wall_bottom_right_entrance_right"; SAMESPRITE; LEDGE block, down; END;
 
 TILE "queen_statue_light"; SAMESPRITE; SOLID block; END;

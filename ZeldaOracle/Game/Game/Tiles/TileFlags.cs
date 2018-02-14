@@ -9,9 +9,14 @@ namespace ZeldaOracle.Game.Tiles {
 	public enum TileSolidType {
 		NotSolid = 0,
 		Solid,
-		HalfSolid,	// Not solid to units, and certain projectiles can pass over half solids. Half solids include railings.
+		/// <summary>Not solid to units, and certain projectiles can pass over half solids. Half solids include railings.</summary>
+		HalfSolid,
+		/// <summary>A ledge the player can jump off of.</summary>
 		Ledge,
-		LeapLedge,  // Specifically for dungeon leap ledges
+		/// <summary>A ledge where the player can leap to an opposite leap ledge.</summary>
+		LeapLedge,
+		/// <summary>A ledge that affects altitude but cannot be jumped off of by the player.</summary>
+		BasicLedge,
 	}
 	
 	public enum TileEnvironmentType {

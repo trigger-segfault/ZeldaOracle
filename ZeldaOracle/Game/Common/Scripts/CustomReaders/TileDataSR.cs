@@ -410,6 +410,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowParseError("Unknown value for ledge direction: " + dirName);
 			});
 			//=====================================================================================
+			AddCommand("BASICLEDGE", (int) Modes.Tile,
+				"string collisionModelName, string ledgeDirection",
+			delegate (CommandParam parameters) {
+				tileData.SolidType = TileSolidType.BasicLedge;
+				tileData.CollisionModel = GetResource<CollisionModel>(parameters.GetString(0));
+				string dirName = parameters.GetString(1);
+				int direction;
+				if (Directions.TryParse(dirName, true, out direction))
+					tileData.LedgeDirection = direction;
+				else
+					ThrowParseError("Unknown value for ledge direction: " + dirName);
+			});
+			//=====================================================================================
 			AddCommand("LEAPLEDGE", (int) Modes.Tile,
 				"string ledgeDirection",
 			delegate (CommandParam parameters) {

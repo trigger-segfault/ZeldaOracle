@@ -88,10 +88,10 @@ namespace ZeldaOracle.Game.Control.Maps {
 				bool freeOnLeft = true;
 				for (int i = 0; i < room.LayerCount; i++) {
 					TileDataInstance left = room.GetTile(0, y, i);
-					if (left != null && left.SolidType != TileSolidType.NotSolid && !typeof(TileDoor).IsAssignableFrom(left.Type))
+					if (left != null && left.IsSolid && !typeof(TileDoor).IsAssignableFrom(left.Type))
 						freeOnLeft = false;
 					TileDataInstance right = room.GetTile(room.Width - 1, y, i);
-					if (right != null && right.SolidType != TileSolidType.NotSolid && !typeof(TileDoor).IsAssignableFrom(right.Type))
+					if (right != null && right.IsSolid && !typeof(TileDoor).IsAssignableFrom(right.Type))
 						freeOnRight = false;;
 				}
 				if (freeOnRight)
@@ -105,9 +105,9 @@ namespace ZeldaOracle.Game.Control.Maps {
 				for (int i = 0; i < room.LayerCount; i++) {
 					TileDataInstance up = room.GetTile(x, 0, i);
 					TileDataInstance down = room.GetTile(x, room.Height - 1, i);
-					if (up != null && up.SolidType != TileSolidType.NotSolid && !typeof(TileDoor).IsAssignableFrom(up.Type))
+					if (up != null && up.IsSolid && !typeof(TileDoor).IsAssignableFrom(up.Type))
 						freeOnUp = false;
-					if (down != null && down.SolidType != TileSolidType.NotSolid && !typeof(TileDoor).IsAssignableFrom(down.Type))
+					if (down != null && down.IsSolid && !typeof(TileDoor).IsAssignableFrom(down.Type))
 						freeOnDown = false;
 				}
 				if (freeOnUp)

@@ -1268,16 +1268,16 @@ namespace ZeldaOracle.Game.Control {
 			if (!entity.Physics.PassOverLedges)
 				return;
 
-			Point2I prevLocation = entity.RoomControl.GetTileLocation(entity.PreviousPosition + entity.Physics.CollisionBox.Center);
-			Point2I location = entity.RoomControl.GetTileLocation(entity.Position + entity.Physics.CollisionBox.Center);
+			Point2I prevLocation = entity.RoomControl.GetTileLocation(
+				entity.PreviousPosition + entity.Physics.CollisionBox.Center);
+			Point2I location = entity.RoomControl.GetTileLocation(
+				entity.Position + entity.Physics.CollisionBox.Center);
 
 			// When moving over a new tile, check its ledge state.
 			if (location != prevLocation) {
-				entity.Physics.LedgeTileLocation = new Point2I(-1, -1);
-
 				if (entity.RoomControl.IsTileInBounds(location)) {
 					Tile tile = entity.RoomControl.GetTopTile(location);
-					
+
 					if (tile != null && tile.IsAnyLedge) {
 						entity.Physics.LedgeTileLocation = location;
 						// Adjust ledge altitude.
@@ -1286,6 +1286,16 @@ namespace ZeldaOracle.Game.Control {
 						else if (IsMovingDownLedge(entity, tile))
 							entity.Physics.LedgeAltitude++;
 					}
+				}
+				else {
+					// Keep the currently ledge tile location if we're still colliding with it.
+					Tile oldLedgeTile = entity.RoomControl.GetTopTile(
+											entity.Physics.LedgeTileLocation);
+					if (oldLedgeTile != null && CanCollideWithTile(entity, oldLedgeTile) &&
+						IsMovingDownLedge(entity, oldLedgeTile))
+						entity.Physics.LedgeTileLocation = oldLedgeTile.Location;
+					else
+						entity.Physics.LedgeTileLocation = -Point2I.One;
 				}
 			}
 		}

@@ -184,13 +184,13 @@ NAME "tile_fire_shooter_right"				(3, 3);
 # Tablet Slot -------------------------------------------------
 
 NAME "tile_tablet_slot_up"					(4, 0);
-NAME "tile_tablet_slot_down"				(5, 1);
-NAME "tile_tablet_slot_left"				(4, 0);
+NAME "tile_tablet_slot_down"				(4, 1);
+NAME "tile_tablet_slot_left"				(5, 0);
 NAME "tile_tablet_slot_right"				(5, 1);
 
 NAME "tile_tablet_slot_placed_up"			(4, 2);
-NAME "tile_tablet_slot_placed_down"			(5, 3);
-NAME "tile_tablet_slot_placed_left"			(4, 2);
+NAME "tile_tablet_slot_placed_down"			(4, 3);
+NAME "tile_tablet_slot_placed_left"			(5, 2);
 NAME "tile_tablet_slot_placed_right"		(5, 3);
 
 # Jump Ledge --------------------------------------------------

@@ -84,14 +84,14 @@ TILE "wall_right_column_bottom_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID e
 TILE "wall_up_corner_left_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_w; END;
 TILE "wall_up_corner_right_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_w; END;
 
-TILE "wall_down_column_left"; SAMESPRITE; SOLID block; END;
-TILE "wall_down_column_right"; SAMESPRITE; SOLID block; END;
-TILE "wall_up_column_left"; SAMESPRITE; SOLID block; END;
-TILE "wall_up_column_right"; SAMESPRITE; SOLID block; END;
-TILE "wall_left_column_top"; SAMESPRITE; SOLID block; END;
-TILE "wall_left_column_bottom"; SAMESPRITE; SOLID block; END;
-TILE "wall_right_column_top"; SAMESPRITE; SOLID block; END;
-TILE "wall_right_column_bottom"; SAMESPRITE; SOLID block; END;
+TILE "wall_down_column_left"; SAMESPRITE; BASICLEDGE block, down; END;
+TILE "wall_down_column_right"; SAMESPRITE; BASICLEDGE block, down; END;
+TILE "wall_up_column_left"; SAMESPRITE; BASICLEDGE block, up; END;
+TILE "wall_up_column_right"; SAMESPRITE; BASICLEDGE block, up; END;
+TILE "wall_left_column_top"; SAMESPRITE; BASICLEDGE block, left; END;
+TILE "wall_left_column_bottom"; SAMESPRITE; BASICLEDGE block, left; END;
+TILE "wall_right_column_top"; SAMESPRITE; BASICLEDGE block, right; END;
+TILE "wall_right_column_bottom"; SAMESPRITE; BASICLEDGE block, right; END;
 
 TILE "wall_up_corner_left_entrance"; SAMESPRITE; SOLID block; END;
 TILE "wall_up_corner_right_entrance"; SAMESPRITE; SOLID block; END;

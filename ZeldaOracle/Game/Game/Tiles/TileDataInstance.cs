@@ -159,8 +159,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public CollisionModel CollisionModel {
 			get { return TileData.CollisionModel; }
 			set { TileData.CollisionModel = value; }
-			//get { return properties.GetResource<CollisionModel>("collision_model", null); }
-			//set { properties.SetAsResource<CollisionModel>("collision_model", value); }
 		}
 
 		public TileSpawnOptions SpawnOptions {
@@ -175,6 +173,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileSolidType SolidType {
 			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
 			set { properties.Set("solidity", (int) value); }
+		}
+
+		public bool IsSolid {
+			get { return SolidType != TileSolidType.NotSolid; }
 		}
 
 		public TileResetCondition ResetCondition {
