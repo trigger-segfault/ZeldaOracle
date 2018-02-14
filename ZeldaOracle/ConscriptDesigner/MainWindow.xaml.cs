@@ -86,6 +86,9 @@ namespace ConscriptDesigner {
 					checkOutdatedTimer.Stop();
 				}, Dispatcher);
 			this.checkOutdatedTimer.Stop();
+
+			Application.Current.Activated += OnApplicationActivated;
+			Application.Current.Deactivated += OnApplicationDeactivated;
 		}
 
 
@@ -167,8 +170,13 @@ namespace ConscriptDesigner {
 		}
 
 		private void OnApplicationActivated(object sender, EventArgs e) {
+			DesignerControl.IsActive = true;
 			// HACK: Prevent text editor keeping mouse down focus after closing any dialogs.
 			checkOutdatedTimer.Start();
+		}
+
+		private void OnApplicationDeactivated(object sender, EventArgs e) {
+			DesignerControl.IsActive = false;
 		}
 
 		private void OnClosing(object sender, CancelEventArgs e) {

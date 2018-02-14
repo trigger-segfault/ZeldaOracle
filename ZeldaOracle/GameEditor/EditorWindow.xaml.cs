@@ -123,8 +123,11 @@ namespace ZeldaEditor {
 				DispatcherPriority.ApplicationIdle,
 				delegate { Update(); },
 				Dispatcher);
-		}
 
+			Application.Current.Activated += OnApplicationActivated;
+			Application.Current.Deactivated += OnApplicationDeactivated;
+		}
+		
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
@@ -211,6 +214,14 @@ namespace ZeldaEditor {
 		private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if (PromptSaveChanges() == MessageBoxResult.Cancel)
 				e.Cancel = true;
+		}
+
+		private void OnApplicationActivated(object sender, EventArgs e) {
+			editorControl.IsActive = true;
+		}
+
+		private void OnApplicationDeactivated(object sender, EventArgs e) {
+			editorControl.IsActive = false;
 		}
 
 		//-----------------------------------------------------------------------------

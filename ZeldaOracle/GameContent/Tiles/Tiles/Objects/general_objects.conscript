@@ -148,8 +148,8 @@ TILE "pot";
 	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
-	PROPERTIES	(integer, cuttable_sword_level, 1),
-				(boolean, raised_on_buttons, true);
+	PROPERTY	(cuttable_sword_level, 1);
+	PROPERTY	(raised_on_buttons, true);
 END;
 
 # Sign --------------------------------------------------------
@@ -161,8 +161,8 @@ TILE "sign";
 	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	"effect_red_brick_break";
 	BREAKSOUND	"rock_shatter";
+	PROPERTY	(cuttable_sword_level, 1);
 	PROPERTIES
-		(integer, cuttable_sword_level, 1),
 		(string, text, "Hello World!",
 			"Text", "text_message", "Sign",
 			"The text to display when the sign is read from the front.");
@@ -258,6 +258,8 @@ END;
 # Ice ---------------------------------------------------------
 
 TILE "ice_block";
-	CLONE		"temp_movable_block";
+	TYPE		TileIceBlock;
+	FLAGS		Movable;
+	SOLID		block;
 	SAMESPRITE; SAMESPRITEOBJ;
 END;

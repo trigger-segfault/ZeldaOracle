@@ -509,6 +509,7 @@
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterFlyingTile.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileConveyorBelt.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />
+    <Compile Include="Game\Tiles\Custom\TileIceBlock.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileArrowCannon.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileArrowShooter.cs" />
     <Compile Include="Game\Tiles\Custom\TileDigableReward.cs" />
@@ -516,6 +517,7 @@
     <Compile Include="Game\Tiles\Custom\TileEntitySpawnOnce.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileFireShooter.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileSpikeRoller.cs" />
+    <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
@@ -562,7 +564,6 @@
     <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
     <Compile Include="Game\Tiles\TileGraphicsComponent.cs" />
     <Compile Include="Game\Tiles\TilePath.cs" />
-    <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCube.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorJumpPad.cs" />
     <Compile Include="Game\Tiles\Custom\TileReward.cs" />

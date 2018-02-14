@@ -56,6 +56,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"(string sourceName, Point sourceIndex, string definition)"
 			);
 			//=====================================================================================
+			AddType("Property",
+				"(string type, string name, string value)",
+				/*"(string type, string name, string value, string readableName, string editorType, " +
+					"string category, string description)",
+				"(string type, string name, string value, string readableName, (string editorType, " +
+					"string editorSubtype), string category, string description)",*/
+				"(string type, string name, string value, string readableName, string editorType, " +
+					"string category, string description, bool browsable = true)",
+				"(string type, string name, string value, string readableName, (string editorType, " +
+					"string editorSubtype), string category, string description, bool browsable = true)"
+			);
+			//=====================================================================================
 			// SOURCE
 			//=====================================================================================
 			AddCommand("SOURCE",
@@ -205,8 +217,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// (string type, string name, var value, string readableName, string editorType, string category, string description)...
 			// (string type, string name, var value, string readableName, (string editorType, string editorSubType), string category, string description, bool isHidden = false)...
 			AddCommand("PROPERTIES", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
-				"(string type, string name, var otherData...)...",
+				"Property properties...",
+				//"(string type, string name, var otherData...)...",
 				CommandProperties);
+			//=====================================================================================
+			AddCommand("PROPERTY", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+				"(string name, string value)",
+				CommandProperty);
+			//=====================================================================================
+			AddCommand("DOCUMENTS", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+				"(string name, string readableName, string editorType, string category, " +
+					"string description, bool browsable = true)",
+				"(string name, string readableName, (string editorType, string editorSubtype), " +
+					"string category, string description, bool browsable = true)",
+				CommandDocumentation);
 			//=====================================================================================
 			AddCommand("EVENT", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"string name, string readableName, string category, string description",
@@ -477,9 +501,30 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Script Commands
 		//-----------------------------------------------------------------------------
 
-		private void CommandProperties(CommandParam parameters) {
-			foreach (CommandParam child in parameters.GetChildren())
+		private void CommandProperties(CommandParam param) {
+			foreach (CommandParam child in param.GetChildren())
 				ParseProperty(child);
+		}
+
+		private void CommandProperty(CommandParam param) {
+			param = param.GetParam(0);
+			string name = param.GetString(0);
+			Property property = baseTileData.Properties.GetProperty(name, true);
+			if (property == null)
+				ThrowCommandParseError("Property with name '" + name + "' does not exist!");
+
+			object value = ParsePropertyValue(param[1], property.Type);
+			baseTileData.Properties.SetGeneric(name, value);
+		}
+
+		private void CommandDocumentation(CommandParam param) {
+			param = param.GetParam(0);
+			string name = param.GetString(0);
+			Property property = baseTileData.Properties.GetProperty(name, true);
+			if (property == null)
+				ThrowCommandParseError("Property with name '" + name + "' does not exist!");
+
+			ParsePropertyDocumentation(param, property, 1);
 		}
 
 		private void ParseProperty(CommandParam param) {
@@ -496,7 +541,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 			// Set the property's documentation.
 			if (param.ChildCount > 3 && property != null) {
-				string editorType = "";
+				ParsePropertyDocumentation(param, property, 3);
+				/*string editorType = "";
 				string editorSubType = "";
 				if (param[4].Type == CommandParamType.Array) {
 					editorType = param[4].GetString(0);
@@ -514,8 +560,30 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					description: param.GetString(6),
 					isReadOnly: false,
 					isBrowsable: param.GetBool(7, true)
-				);
+				);*/
 			}
+		}
+
+		private void ParsePropertyDocumentation(CommandParam param, Property property, int index) {
+			string editorType = "";
+			string editorSubType = "";
+			if (param[index + 1].Type == CommandParamType.Array) {
+				editorType = param[index + 1].GetString(0);
+				editorSubType = param[index + 1].GetString(1);
+			}
+			else {
+				editorType = param.GetString(index + 1);
+			}
+
+			property.SetDocumentation(
+				readableName: param.GetString(index),
+				editorType: editorType,
+				editorSubType: editorSubType,
+				category: param.GetString(index + 2),
+				description: param.GetString(index + 3),
+				isReadOnly: false,
+				isBrowsable: param.GetBool(index + 4, true)
+			);
 		}
 
 		private object ParsePropertyValue(CommandParam param, PropertyType type) {

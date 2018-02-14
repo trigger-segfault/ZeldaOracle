@@ -105,8 +105,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static int NearestFromVector(Vector2F vector, int numAngles) {
-			float radians = GMath.Atan2(-vector.Y, vector.X);
-			return RoundFromRadians(radians, numAngles);
+			return RoundFromRadians(vector.Direction, numAngles);
 		}
 		
 		public static int Add(int angle, int addAmount, WindingOrder windingOrder, int numAngles) {
@@ -197,7 +196,7 @@ namespace ZeldaOracle.Common.Geometry {
 		
 		// Return the opposite of the given direction.
 		public static int Reverse(int direction) {
-			return ((direction + 2) % 4);
+			return ((direction + Directions.Count / 2) % Directions.Count);
 		}
 		
 		// Return true if the given direction is horizontal (left or right).
@@ -208,15 +207,6 @@ namespace ZeldaOracle.Common.Geometry {
 		// Return true if the given direction is vertical (up or down).
 		public static bool IsVertical(int direction) {
 			return (direction % 2 == 1);
-		}
-
-		/// <summary>Return the given direction flipped horizontally over the x and y axis.</summary>
-		public static int Flip(int direction) {
-			if (IsHorizontal(direction))
-				return FlipHorizontal(direction);
-			else if (IsVertical(direction))
-				return FlipVertical(direction);
-			return direction;
 		}
 
 		// Return the given direction flipped horizontally over the y-axis.
@@ -231,7 +221,7 @@ namespace ZeldaOracle.Common.Geometry {
 		
 		// Return a unit vector as a point in the given direction.
 		public static Point2I ToPoint(int direction) {
-			direction = direction % 4;
+			direction = direction % Directions.Count;
 			if (direction == Right)
 				return new Point2I(1, 0);
 			else if (direction == Up)
@@ -243,7 +233,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		// Return a unit vector in the given direction.
 		public static Vector2F ToVector(int direction) {
-			direction = direction % 4;
+			direction = direction % Directions.Count;
 			if (direction == Right)
 				return new Vector2F(1.0f, 0.0f);
 			else if (direction == Up)
@@ -277,22 +267,18 @@ namespace ZeldaOracle.Common.Geometry {
 		
 		public static int NearestFromVector(Vector2F vector) {
 			// Cheap algorithm for turning a vector into an axis-aligned direction.
-			if (vector.X > 0) {
-				if (vector.X >= GMath.Abs(vector.Y))
-					return Directions.Right;
-				else if (vector.Y < 0)
-					return Directions.Up;
-				else
-					return Directions.Down;
-			}
-			else {
-				if (-vector.X >= GMath.Abs(vector.Y))
+			if (GMath.Abs(vector.X) >= GMath.Abs(vector.Y)) {
+				if (vector.X < 0)
 					return Directions.Left;
-				else if (vector.Y < 0)
-					return Directions.Up;
+				else if (vector.X > 0)
+					return Directions.Right;
 				else
-					return Directions.Down;
+					return -1;
 			}
+			else if (vector.Y < 0)
+				return Directions.Up;
+			else
+				return Directions.Down;
 		}
 
 		public static int RoundFromRadians(float radians) {

@@ -100,6 +100,10 @@ namespace ZeldaEditor.Tools {
 			isDragging = false;
 		}
 
+		public void Update() {
+			OnUpdate();
+		}
+
 		// Called when the current layer is changed (or switched to actions).
 		public virtual void LayerChanged() {
 			if (CancelOnLayerChange)
@@ -186,6 +190,8 @@ namespace ZeldaEditor.Tools {
 		protected virtual void OnCancel() { }
 
 		protected virtual void OnFinish() { }
+
+		protected virtual void OnUpdate() { }
 
 		
 		//-----------------------------------------------------------------------------

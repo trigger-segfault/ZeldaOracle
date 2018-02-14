@@ -40,16 +40,21 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		static TilesetEditorDisplay() {
-			tools = new List<TilesetEditorTool>();
+			try {
+				tools = new List<TilesetEditorTool>();
 
-			tools = new List<TilesetEditorTool>();
-			tools.Add(toolPlace = new ToolPlace());
-			tools.Add(toolSelection = new ToolSelection());
-			tools.Add(toolEyedrop = new ToolEyedrop());
+				tools = new List<TilesetEditorTool>();
+				tools.Add(toolPlace = new ToolPlace());
+				tools.Add(toolSelection = new ToolSelection());
+				tools.Add(toolEyedrop = new ToolEyedrop());
 
-			currentToolIndex = 0;
+				currentToolIndex = 0;
 
-			overwrite = false;
+				overwrite = false;
+			}
+			catch (Exception) {
+
+			}
 		}
 
 		public TilesetEditorDisplay() {

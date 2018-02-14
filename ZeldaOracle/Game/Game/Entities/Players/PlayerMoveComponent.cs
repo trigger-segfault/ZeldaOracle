@@ -554,7 +554,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Tile landingTile = player.RoomControl.TileManager.GetTopTile(
 				startingTile.Location + Directions.ToPoint(ledgeDirection) * 2);
 			if (landingTile == null || !landingTile.IsLeapLedge ||
-				landingTile.LedgeDirection != Directions.Flip(ledgeDirection))
+				landingTile.LedgeDirection != Directions.Reverse(ledgeDirection))
 			{
 				return false;
 			}

@@ -68,7 +68,10 @@ namespace ZeldaEditor.WinForms {
 			dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
-				delegate { TimerUpdate(); },
+				delegate {
+					if (editorControl.IsActive)
+						TimerUpdate();
+				},
 				System.Windows.Application.Current.Dispatcher);
 		}
 

@@ -68,6 +68,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			AddEditor<WarpPropertyEditor>("warp");
 			AddEditor<DirectionPropertyEditor>("direction");
 			AddEditor<AnglePropertyEditor>("angle");
+			AddEditor<Point2ISingleAxisPropertyEditor>("single_axis");
 		}
 
 		public void AddEditor<Editor>(string typeName) where Editor : ITypeEditor {

@@ -81,7 +81,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static int Reverse(int angle) {
-			return ((angle + 4) % 8);
+			return ((angle + Angles.AngleCount / 2) % Angles.AngleCount);
 		}
 
 		// Return the modular distance from one angle to another using the given winding order.
@@ -115,33 +115,35 @@ namespace ZeldaOracle.Common.Geometry {
 		
 		// Return the given direction flipped vertically over the x-axis.
 		public static int FlipVertical(int angle) {
-			return (AngleCount - angle) % AngleCount;
+			return (Angles.AngleCount - angle) % Angles.AngleCount;
 		}
 
 		// Return a normalized vector representing the given angle.
 		public static Vector2F ToVector(int angle, bool normalize = true) {
+			angle %= Angles.AngleCount;
 			Vector2F vec = Vector2F.Zero;
-			if (angle % 8 == SouthEast || angle % 8 == East || angle % 8 == NorthEast)
+			if (angle == SouthEast || angle == East || angle == NorthEast)
 				vec.X = 1;
-			else if (angle % 8 >= NorthWest && angle % 8 <= SouthWest)
+			else if (angle >= NorthWest && angle <= SouthWest)
 				vec.X = -1;
-			if (angle % 8 >= NorthEast && angle % 8 <= NorthWest)
+			if (angle >= NorthEast && angle <= NorthWest)
 				vec.Y = -1;
-			else if (angle % 8 >= SouthWest && angle % 8 <= SouthEast)
+			else if (angle >= SouthWest && angle <= SouthEast)
 				vec.Y = 1;
 			return (normalize ? vec.Normalized : vec);
 		}
 
 		// Return a point the given angle.
 		public static Point2I ToPoint(int angle) {
+			angle %= Angles.AngleCount;
 			Point2I point = Point2I.Zero;
-			if (angle % 8 == SouthEast || angle % 8 == East || angle % 8 == NorthEast)
+			if (angle == SouthEast || angle == East || angle == NorthEast)
 				point.X = 1;
-			else if (angle % 8 >= NorthWest && angle % 8 <= SouthWest)
+			else if (angle >= NorthWest && angle <= SouthWest)
 				point.X = -1;
-			if (angle % 8 >= NorthEast && angle % 8 <= NorthWest)
+			if (angle >= NorthEast && angle <= NorthWest)
 				point.Y = -1;
-			else if (angle % 8 >= SouthWest && angle % 8 <= SouthEast)
+			else if (angle >= SouthWest && angle <= SouthEast)
 				point.Y = 1;
 			return point;
 		}
@@ -153,7 +155,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 				
 		public static int NearestFromVector(Vector2F vector) {
-			return RoundFromRadians(GMath.Atan2(-vector.Y, vector.X));
+			return RoundFromRadians(vector.Direction);
 		}
 
 		public static int RoundFromRadians(float radians) {

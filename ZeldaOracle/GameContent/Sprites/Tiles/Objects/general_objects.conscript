@@ -13,7 +13,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_general_objects";
-SPRITESET "tiles_general_objects" (13, 5);
+SPRITESET "tiles_general_objects" (14, 5);
 	
 	# Leaves/Grass ------------------------------------------------
 
@@ -163,7 +163,7 @@ SPRITESET "tiles_general_objects" (13, 5);
 	# Ice ---------------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("ice", "cracked_ice");
-	MULTIPLE BASIC	(10, 4), (10, 4), (3, 1); END;
+	MULTIPLE BASIC	(10, 4), (10, 4), (4, 1); END;
 END;
 
 #==============================================================
@@ -299,6 +299,6 @@ STYLEPREVIEW "block", "temp_preview_block_style";
 # Ice ---------------------------------------------------------
 
 NAME "tile_ice_block"					(10, 4);
-NAME "tile_ice_block_asobject"			(10, 4);
-NAME "tile_ice"							(11, 4);
-NAME "tile_cracked_ice"					(12, 4);
+NAME "tile_ice_block_asobject"			(11, 4);
+NAME "tile_ice"							(12, 4);
+NAME "tile_cracked_ice"					(13, 4);

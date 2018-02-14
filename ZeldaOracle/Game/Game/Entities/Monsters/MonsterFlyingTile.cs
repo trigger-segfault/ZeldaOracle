@@ -9,9 +9,9 @@ using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	public class MonsterFlyingTile : Monster {
-		
+
+		private int launchTimer;
 		private Vector2F launchVector;
-		private int timer;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -76,7 +76,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
-			timer = 0;
+			launchTimer = 0;
 
 			// Begin rising
 			Physics.ZVelocity = GameSettings.MONSTER_FLYING_TILE_RISE_SPEED;
@@ -84,14 +84,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Target the player
 			Vector2F vectorToPlayer = RoomControl.Player.Position - Center;
 			int launchAngleCount = GameSettings.MONSTER_FLYING_TILE_LAUNCH_ANGLE_COUNT;
-			float radians = GMath.Atan2(-vectorToPlayer.Y, vectorToPlayer.X);
-			if (radians < 0.0f)
-				radians += GMath.FullAngle;
-			int launchAngle = (int) GMath.Round((radians * launchAngleCount) / GMath.FullAngle);
-			float launchRadians = (launchAngle * GMath.FullAngle) / (float) launchAngleCount;
-			launchVector = Vector2F.FromPolar(
-				GameSettings.MONSTER_FLYING_TILE_LAUNCH_SPEED, launchRadians);
-
+			int launchAngle = Orientations.NearestFromVector(vectorToPlayer, launchAngleCount);
+			launchVector = Orientations.ToVector(launchAngle, launchAngleCount);
+			launchVector *= GameSettings.MONSTER_FLYING_TILE_LAUNCH_SPEED;
+			
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_FLYING_TILE);
 		}
 
@@ -102,7 +98,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			else {
 				Physics.ZVelocity = 0f;
 			}
-			if (timer >= GameSettings.MONSTER_FLYING_TILE_HOVER_DURATION) {
+			if (launchTimer >= GameSettings.MONSTER_FLYING_TILE_HOVER_DURATION) {
 				Physics.Velocity = launchVector;
 
 				// Kill when colliding with solid objects
@@ -111,7 +107,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					return;
 				}
 			}
-			timer++;
+			launchTimer++;
 		}
 
 		public override void OnTouchPlayer(Entity sender, EventArgs args) {

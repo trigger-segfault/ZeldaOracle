@@ -15,7 +15,7 @@ using Key = System.Windows.Input.Key;
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
 		private TileDataInstance selectedTile;
-		private ActionTileDataInstance selectedActionTileData;
+		private ActionTileDataInstance selectedActionTile;
 		private Room selectedRoom;
 
 
@@ -47,19 +47,19 @@ namespace ZeldaEditor.Tools {
 		}
 		
 		public override void Delete() {
-			if (selectedTile != null) {
+			if (selectedTile != null && selectedTile.Room.ContainsTile(selectedTile)) {
 				ActionPlace action = ActionPlace.CreatePlaceAction(selectedTile.Room.Level, selectedTile.Layer, null);
 				action.AddOverwrittenTile(selectedTile.Location + selectedTile.Room.Location * selectedTile.Room.Size, selectedTile);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
-			else if (selectedActionTileData != null) {
-				ActionPlaceAction action = new ActionPlaceAction(selectedActionTileData.Room.Level);
-				action.AddOverwrittenActionTile(selectedActionTileData);
+			else if (selectedActionTile != null && selectedActionTile.Room.ContainsActionTile(selectedActionTile)) {
+				ActionPlaceAction action = new ActionPlaceAction(selectedActionTile.Room.Level);
+				action.AddOverwrittenActionTile(selectedActionTile);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
-			selectedActionTileData   = null;
-			selectedTile        = null;
-			selectedRoom        = null;
+			selectedActionTile	= null;
+			selectedTile		= null;
+			selectedRoom		= null;
 			UpdateCommands();
 		}
 
@@ -68,7 +68,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void Deselect() {
-			selectedActionTileData	= null;
+			selectedActionTile	= null;
 			selectedTile		= null;
 			selectedRoom        = null;
 			UpdateCommands();
@@ -81,13 +81,38 @@ namespace ZeldaEditor.Tools {
 
 		protected override void OnBegin() {
 			selectedTile		= null;
-			selectedActionTileData	= null;
+			selectedActionTile	= null;
 			selectedRoom        = null;
 			EditorControl.HighlightMouseTile = false;
 		}
 
 		protected override void OnEnd() {
 			LevelDisplay.ClearSelectionBox();
+		}
+
+		protected override void OnUpdate() {
+			if (selectedTile != null) {
+				if (selectedTile.Room.ContainsTile(selectedTile))
+					LevelDisplay.SetSelectionBox(selectedTile);
+				else {
+					selectedTile = null;
+					LevelDisplay.ClearSelectionBox();
+				}
+			}
+			else if (selectedActionTile != null) {
+				if (selectedActionTile.Room.ContainsActionTile(selectedActionTile))
+					LevelDisplay.SetSelectionBox(selectedActionTile);
+				else {
+					selectedActionTile = null;
+					LevelDisplay.ClearSelectionBox();
+				}
+			}
+			else if (selectedRoom != null) {
+				if (!(selectedRoom.Location < Level.Dimensions)) {
+					selectedRoom = null;
+					LevelDisplay.ClearSelectionBox();
+				}
+			}
 		}
 
 
@@ -126,7 +151,7 @@ namespace ZeldaEditor.Tools {
 					if (baseTile is TileDataInstance)
 						selectedTile = baseTile as TileDataInstance;
 					else if (baseTile is ActionTileDataInstance)
-						selectedActionTileData = baseTile as ActionTileDataInstance;
+						selectedActionTile = baseTile as ActionTileDataInstance;
 
 					LevelDisplay.SetSelectionBox(baseTile);
 					EditorControl.PropertyGrid.OpenProperties(baseTile);
@@ -145,6 +170,10 @@ namespace ZeldaEditor.Tools {
 				// Highlight tiles.
 				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 				EditorControl.HighlightMouseTile = (tile != null);
+				if (tile != null) {
+					LevelDisplay.CursorTileLocation = tile.Room.Location * Level.RoomSize +
+						tile.Location;
+				}
 				LevelDisplay.CursorTileSize = (tile != null ? tile.Size : Point2I.One);
 			}
 			else {
@@ -169,7 +198,7 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override bool CanDeleteDeselect {
-			get { return selectedTile != null || selectedActionTileData != null || selectedRoom != null; }
+			get { return selectedTile != null || selectedActionTile != null || selectedRoom != null; }
 		}
 
 
@@ -179,7 +208,7 @@ namespace ZeldaEditor.Tools {
 
 		public void GotoTile(BaseTileDataInstance baseTile) {
 			selectedTile = null;
-			selectedActionTileData = null;
+			selectedActionTile = null;
 			selectedRoom = null;
 			Point2I pixelPosition = Point2I.Zero;
 			if (baseTile is TileDataInstance) {
@@ -188,9 +217,9 @@ namespace ZeldaEditor.Tools {
 					(selectedTile.Location * GameSettings.TILE_SIZE) + selectedTile.GetBounds().Size / 2;
 			}
 			else if (baseTile is ActionTileDataInstance) {
-				selectedActionTileData = baseTile as ActionTileDataInstance;
-				pixelPosition = LevelDisplay.GetRoomDrawPosition(selectedActionTileData.Room) +
-					selectedActionTileData.Position + selectedActionTileData.GetBounds().Size / 2;
+				selectedActionTile = baseTile as ActionTileDataInstance;
+				pixelPosition = LevelDisplay.GetRoomDrawPosition(selectedActionTile.Room) +
+					selectedActionTile.Position + selectedActionTile.GetBounds().Size / 2;
 			}
 
 			LevelDisplay.SetSelectionBox(baseTile);
@@ -199,7 +228,7 @@ namespace ZeldaEditor.Tools {
 
 		public void GotoRoom(Room room) {
 			selectedTile = null;
-			selectedActionTileData = null;
+			selectedActionTile = null;
 			selectedRoom = room;
 
 			Point2I pixelPosition = LevelDisplay.GetRoomDrawPosition(room) + room.Size * GameSettings.TILE_SIZE / 2;

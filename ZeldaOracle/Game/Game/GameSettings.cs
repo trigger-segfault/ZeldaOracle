@@ -242,13 +242,15 @@ namespace ZeldaOracle.Game {
 		public const int				TILE_PULL_HANDLE_EXTEND_LENGTH			= 64;
 		public const int				TILE_PULL_HANDLE_WALL_OFFSET			= 8;
 
-		public const int                TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION  = 30;
+		public const int				TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION	= 30;
 
 		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_STARTS			= new int[] { 16, 32 };
 		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_INTERVALS		= new int[] { 32, 64, 96, 128 };
 		public const int				TILE_ARROW_SHOOTER_SHOOT_INTERVAL		= 33;
 		public const int				TILE_FIRE_SHOOTER_SHOOT_INVERVAL		= 16;
-		public const int                TILE_FIRE_SHOOTER_SHOOT_OFFSET			= 7;
+		public const int				TILE_FIRE_SHOOTER_SHOOT_OFFSET			= 7;
+
+		public const float				TILE_ICE_BLOCK_MOVEMENT_SPEED			= 1.75f;
 
 
 

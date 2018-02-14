@@ -37,7 +37,8 @@ namespace ZeldaOracle.Game.Tiles {
 			path.AddMove(Directions.Up,		4, 0.5f, 0);
 			path.AddMove(Directions.Down,	3, 0.5f, 0);
 			*/
-			
+			CollisionModel = new CollisionModel(
+				new Rectangle2I(Size * GameSettings.TILE_SIZE));
 		}
 
 		public override void Update() {

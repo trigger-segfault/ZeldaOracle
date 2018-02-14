@@ -140,7 +140,7 @@ TILE "temp_wall_webbed";
 	FLAGS		Burnable;
 	SOLID		block;
 	RESETWHEN	Never;
-	PROPERTIES	(boolean, disable_on_destroy, true);
+	PROPERTY	(disable_on_destroy, true);
 END;
 
 # Bridge ------------------------------------------------------
@@ -258,30 +258,36 @@ END;
 
 TILE "color_jump_pad_red";
 	CLONE		"temp_color_jump_pad";
-	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
+	PROPERTY	(color, 0);
+	PROPERTY	(sprite_index, 0);
 END;
 TILE "color_jump_pad_yellow";
 	CLONE		"temp_color_jump_pad";
-	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
+	PROPERTY	(color, 1);
+	PROPERTY	(sprite_index, 1);
 END;
 TILE "color_jump_pad_blue";
 	CLONE		"temp_color_jump_pad";
-	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
+	PROPERTY	(color, 2);
+	PROPERTY	(sprite_index, 2);
 END;
 
 # Color Tile --------------------------------------------------
 
 TILE "color_tile_red";
 	CLONE		"temp_color_tile";
-	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
+	PROPERTY	(color, 0);
+	PROPERTY	(sprite_index, 0);
 END;
 TILE "color_tile_yellow";
 	CLONE		"temp_color_tile";
-	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
+	PROPERTY	(color, 1);
+	PROPERTY	(sprite_index, 1);
 END;
 TILE "color_tile_blue";
 	CLONE		"temp_color_tile";
-	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
+	PROPERTY	(color, 2);
+	PROPERTY	(sprite_index, 2);
 END;
 
 # Color Barrier -----------------------------------------------
@@ -289,12 +295,12 @@ END;
 TILE "color_barrier_red";
 	CLONE		"temp_color_barrier";
 	SPRITE		tile_color_barrier_red_lowered;
-	PROPERTIES	(integer, color, 0);
+	PROPERTY	(color, 0);
 END;
 TILE "color_barrier_blue";
 	CLONE		"temp_color_barrier";
 	SPRITE		tile_color_barrier_blue_raised;
-	PROPERTIES	(integer, color, 2);
+	PROPERTY	(color, 2);
 END;
 
 # Color Statue ------------------------------------------------
@@ -302,17 +308,17 @@ END;
 TILE "color_statue_red";
 	CLONE		"temp_color_statue";
 	SAMESPRITE;
-	PROPERTIES	(integer, color, 0);
+	PROPERTY	(color, 0);
 END;
 TILE "color_statue_yellow";
 	CLONE		"temp_color_statue";
 	SAMESPRITE;
-	PROPERTIES	(integer, color, 1);
+	PROPERTY	(color, 1);
 END;
 TILE "color_statue_blue";
 	CLONE		"temp_color_statue";
 	SAMESPRITE;
-	PROPERTIES	(integer, color, 2);
+	PROPERTY	(color, 2);
 END;
 
 # Color Block -------------------------------------------------
@@ -320,17 +326,17 @@ END;
 TILE "color_block_red";
 	CLONE		"temp_color_block";
 	SAMESPRITE;
-	PROPERTIES	(integer, color, 0);
+	PROPERTY	(color, 0);
 END;
 TILE "color_block_yellow";
 	CLONE		"temp_color_block";
 	SAMESPRITE;
-	PROPERTIES	(integer, color, 1);
+	PROPERTY	(color, 1);
 END;
 TILE "color_block_blue";
 	CLONE		"temp_color_block";
 	SAMESPRITE;
-	PROPERTIES	(integer, color, 2);
+	PROPERTY	(color, 2);
 END;
 
 # Color Lantern -----------------------------------------------
@@ -354,27 +360,27 @@ END;
 
 TILE "minecart_track_horizontal";
 	CLONE		"temp_minecart_track";
-	PROPERTIES	(integer, track_orientation, 0);
+	PROPERTY	(track_orientation, 0);
 END;
 TILE "minecart_track_vertical";
 	CLONE		"temp_minecart_track";
-	PROPERTIES	(integer, track_orientation, 1);
+	PROPERTY	(track_orientation, 1);
 END;
 TILE "minecart_track_corner_down_right";
 	CLONE		"temp_minecart_track";
-	PROPERTIES	(integer, track_orientation, 5);
+	PROPERTY	(track_orientation, 5);
 END;
 TILE "minecart_track_corner_down_left";
 	CLONE		"temp_minecart_track";
-	PROPERTIES	(integer, track_orientation, 4);
+	PROPERTY	(track_orientation, 4);
 END;
 TILE "minecart_track_corner_up_right";
 	CLONE		"temp_minecart_track";
-	PROPERTIES	(integer, track_orientation, 2);
+	PROPERTY	(track_orientation, 2);
 END;
 TILE "minecart_track_corner_up_left";
 	CLONE		"temp_minecart_track";
-	PROPERTIES	(integer, track_orientation, 3);
+	PROPERTY	(track_orientation, 3);
 END;
 TILE "minecart_track_stop";
 	TYPE	TileMinecartStop;
@@ -410,22 +416,22 @@ END;
 TILE "arrow_shooter_right";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 0);
+	PROPERTY	(direction, 0);
 END;
 TILE "arrow_shooter_up";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 1);
+	PROPERTY	(direction, 1);
 END;
 TILE "arrow_shooter_left";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 2);
+	PROPERTY	(direction, 2);
 END;
 TILE "arrow_shooter_down";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 3);
+	PROPERTY	(direction, 3);
 END;
 
 # Fire Shooter ------------------------------------------------
@@ -433,22 +439,22 @@ END;
 TILE "fire_shooter_right";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 0);
+	PROPERTY	(direction, 0);
 END;
 TILE "fire_shooter_up";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 1);
+	PROPERTY	(direction, 1);
 END;
 TILE "fire_shooter_left";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 2);
+	PROPERTY	(direction, 2);
 END;
 TILE "fire_shooter_down";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 3);
+	PROPERTY	(direction, 3);
 END;
 
 # Tablet Slot -------------------------------------------------
@@ -522,7 +528,8 @@ TILE "cracked_floor";
 	TYPE		TileCrackedFloor;
 	TILEBELOW	"hole";
 	SAMESPRITE;
-	PROPERTIES	(boolean, silent, false);
+	PROPERTIES	(boolean, silent, false, "Silent", "",
+		"Cracked Floor", "True if the floor does not make a noise or animation upon crumbling.", false);
 END;
 
 TILE "dug"; SAMESPRITE; END;
@@ -543,14 +550,14 @@ END;
 TILE "bridge_horizontal";
 	CLONE		"temp_bridge";
 	SAMESPRITE;
-	PROPERTIES	(boolean, vertical, false),
-				(integer, bridge_direction, 0);
+	PROPERTY	(vertical, false);
+	PROPERTY	(bridge_direction, 0);
 END;
 TILE "bridge_vertical";
 	CLONE		"temp_bridge";
 	SAMESPRITE;
-	PROPERTIES	(boolean, vertical, true),
-				(integer, bridge_direction, 3);
+	PROPERTY	(vertical, true);
+	PROPERTY	(bridge_direction, 3);
 END;
 
 # Ice Crystal Pit ---------------------------------------------
@@ -578,10 +585,10 @@ TILE "chest";
 	TYPE		TileChest;
 	SOLID		block;
 	RESETWHEN	Never;
-	SPRITEINDEX		0, "tile_chest";
-	SPRITEINDEX		1, "tile_chest_opened";
+	SPRITEINDEX	0, "tile_chest";
+	SPRITEINDEX	1, "tile_chest_opened";
+	PROPERTY	(spawn_delay_after_poof, 16);
 	PROPERTIES
-		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
 			"Reward", "reward", "Chest",
 			 "The reward contained inside the chest."),
