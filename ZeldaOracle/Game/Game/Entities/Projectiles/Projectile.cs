@@ -189,11 +189,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (physics.IsColliding) {
 				CollisionType type = CollisionType.RoomEdge;
 				Tile tile = null;
-				
-				foreach (CollisionInfo collision in Physics.GetCollisions()) {
-					type = collision.Type;
+
+				foreach (Collision collision in Physics.ActualCollisions) {
+					type = collision.Source.Type;
 					tile = collision.Tile;
-					break;
 				}
 
 				if (tile != null && tile != TileOwner) {

@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Worlds;
 
@@ -117,8 +118,11 @@ namespace ZeldaOracle.Game.Entities {
 				AudioSystem.PlaySound(soundBounce);
 		}
 
-		// Occurs when the entity is crushed between tiles.
-		public virtual void OnCrush(bool horizontal) {}
+		/// <summary>Occurs when the entity is crushed between two collisions.
+		/// The 'rock' collision is what causes the crushing penetration into
+		/// the 'hardPlace' collision.
+		/// </summary>
+		public virtual void OnCrush(Collision rock, Collision hardPlace) {}
 
 		// Called when the entity falls in a hole.
 		public virtual void OnFallInHole() {

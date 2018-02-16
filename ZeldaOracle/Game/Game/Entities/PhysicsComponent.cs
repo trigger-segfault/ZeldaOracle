@@ -87,6 +87,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Tile				topTile;			// The top-most tile the entity is located over.
 		private int					ledgeAltitude;		// How many ledges the entity has passed over.
 		private Point2I				ledgeTileLocation;	// The tile location of the ledge we are currently passing over, or (-1, -1) if not passing over ledge.
+		private List<Collision>		potentialCollisions;
 
 
 		//-----------------------------------------------------------------------------
@@ -117,6 +118,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.ledgeTileLocation	= new Point2I(-1, -1);
 			this.roomEdgeCollisionBoxType = CollisionBoxType.Hard;
 			this.customTileIsSolidCondition = null;
+			this.potentialCollisions = new List<Collision>();
 
 			this.crushMaxGapSize	= 0;
 			this.edgeClipAmount		= 1;
@@ -124,7 +126,9 @@ namespace ZeldaOracle.Game.Entities {
 			this.collisionInfo = new CollisionInfo[Directions.Count];
 			this.previousCollisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++) {
+				collisionInfo[i] = new CollisionInfo();
 				collisionInfo[i].Clear();
+				previousCollisionInfo[i] = new CollisionInfo();
 				previousCollisionInfo[i].Clear();
 			}
 
@@ -908,8 +912,29 @@ namespace ZeldaOracle.Game.Entities {
 			set { hasLanded = value; }
 		}
 		
+		public List<Collision> PotentialCollisions {
+			get { return potentialCollisions; }
+		}
+				
+		public IEnumerable<Collision> ActualCollisions {
+			get {
+				return potentialCollisions.Where(
+				c => c.IsColliding || c.IsResolved);
+			}
+		}
+
+		public IEnumerable<Collision> GetCollisionsOnAxis(int axis) {
+			return potentialCollisions.Where(c => c.Axis == axis);
+		}
+
+		public IEnumerable<Collision> GetCollisionsInDirection(int direction) {
+			return potentialCollisions.Where(c => c.Direction == direction);
+		}
+
 		public bool[] MovementCollisions { get; set; }
 		public CollisionInfoNew[] ClipCollisionInfo { get; set; }
+		public List<CollisionInfoNew> AllClipCollisionInfo { get; set; } = new List<CollisionInfoNew>();
+		public List<CollisionInfo> AllMovementCollisionInfo { get; set; } = new List<CollisionInfo>();
 		public bool IsDeadlocked { get; set; }
 
 		private Vector2F netVelocity;

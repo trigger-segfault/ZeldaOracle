@@ -27,6 +27,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>R:255 G:255 B:255 A:255.</summary>
 		public static readonly Color White      = new Color(255, 255, 255, 255);
+		/// <summary>R:128 G:128 B:128 A:255.</summary>
+		public static readonly Color Gray       = new Color(128, 128, 128, 255);
 		/// <summary>R:0 G:0 B:0 A:255.</summary>
 		public static readonly Color Black      = new Color(0, 0, 0, 255);
 

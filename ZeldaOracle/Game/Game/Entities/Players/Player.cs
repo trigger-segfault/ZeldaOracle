@@ -512,18 +512,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (StateParameters.ProhibitRoomTransitions || IsOnHazardTile())
 				return;
 
-			// Check for room edge collisions.
-			int transitionDirection = -1;
-			foreach (CollisionInfo info in Physics.GetCollisions()) {
-				if (info.Type == CollisionType.RoomEdge && CanRoomTransition(info.Direction)) {
-					transitionDirection = info.Direction;
-					break;
+			// Check for room edge collisions
+			foreach (Collision collision in Physics.ActualCollisions) {
+				if (collision.IsRoomEdge && CanRoomTransition(collision.Direction)) {
+					physics.Velocity = Vector2F.Zero;
+					RoomControl.RequestRoomTransition(collision.Direction);
 				}
-			}
-			// Request a transition on the room edge.
-			if (transitionDirection >= 0) {
-				physics.Velocity = Vector2F.Zero;
-				RoomControl.RequestRoomTransition(transitionDirection);
 			}
 		}
 
@@ -631,10 +625,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 				state.OnHurt(damage);
 		}
 
-		public override void OnCrush(bool horizontal) {
+		public override void OnCrush(Collision rock, Collision hardPlace) {
 			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 			RespawnDeath();
-			if (horizontal)
+			if (rock.IsHorizontal)
 				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_HORIZONTAL);
 			else
 				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_VERTICAL);

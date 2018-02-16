@@ -28,6 +28,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			bracelet	= null;
 			duration	= 10;
 			tile		= null;
+			
+			StateParameters.ProhibitMovementControl	= true;
+			StateParameters.ProhibitJumping			= true;
 		}
 		
 
@@ -60,13 +63,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			StateParameters.ProhibitMovementControl	= true;
-			StateParameters.ProhibitJumping			= true;
-
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 			player.Graphics.PauseAnimation();
-			
 			player.Movement.StopMotion();
 			
 			// Check if grabbing an instantly pickupable tile
@@ -85,12 +84,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void Update() {
-			base.Update();
+			InputControl grabButton = player.Inventory
+				.GetSlotButton(bracelet.CurrentEquipSlot);
+			InputControl pullButton = Controls.Arrows[
+				Directions.Reverse(player.Direction)];
 
-			InputControl grabButton = player.Inventory.GetSlotButton(bracelet.CurrentEquipSlot);
-			InputControl pullButton = Controls.Arrows[Directions.Reverse(player.Direction)];
-
-			if (!grabButton.IsDown() ||
+			if (!grabButton.IsDown() || tile.IsMoving ||
 				!player.Physics.IsFacingSolidTile(tile, player.Direction))
 			{
 				End();
@@ -98,9 +97,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			else if (pullButton.IsDown()) {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				timer++;
-				if (timer > duration) {
+				if (timer > duration)
 					AttemptPickup();
-				}
 			}
 			else {
 				timer = 0;
