@@ -1,6 +1,7 @@
 ﻿using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBracelet : ItemWeapon {
@@ -29,12 +30,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		// Grab, pull, and pickup objects.
+		/// <summary>Grab, pull, and pickup objects.</summary>
 		public override void OnButtonDown() {
-			// Check for a tile to grab.
+			// Check for a tile to grab
 			if (!Player.IsBeingKnockedBack) {
-				Tile grabTile = Player.Physics.GetFacingSolidTile(Player.Direction);
-				if (grabTile != null && !grabTile.IsMoving)
+				Tile grabTile = Player.GrabState.GetGrabTile();
+				if (grabTile != null)
 					grabTile.OnGrab(Player.Direction, this);
 			}
 		}

@@ -290,8 +290,11 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Find an entity's nearby collisions.</summary>
 		private void DetectPotentialCollisions(Entity entity) {
 			// Create a list of all potential collisions
-			Rectangle2F checkArea = entity.Physics.PositionedCollisionBox;
-			checkArea.Inflate(entity.Physics.PositionedCollisionBox.Size);
+			Rectangle2F checkArea = Rectangle2F.Union(
+				Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
+				Rectangle2F.Translate(entity.Physics.CollisionBox,
+					entity.Position + entity.Physics.Velocity));
+			checkArea.Inflate(10, 10);
 			foreach (CollisionCheck check in
 				GetPotentialCollisions(entity, checkArea))
 			{

@@ -169,6 +169,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Weapon states
 			statePush			= new PlayerPushState();
+			stateGrab			= new PlayerGrabState();
 			stateSwingSword		= new PlayerSwingSwordState();
 			stateSwingBigSword	= new PlayerSwingBigSwordState();
 			stateSwingMagicRod	= new PlayerSwingMagicRodState();
@@ -178,8 +179,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSpinSword		= new PlayerSpinSwordState();
 			stateSeedShooter	= new PlayerSeedShooterState();
 			stateSwitchHook		= new PlayerSwitchHookState();
-			stateGrab			= new PlayerGrabState();
 			stateCarry			= new PlayerCarryState();
+
+			statePush.Player = this; // Necessary to call statePush.GetPushTile()
+			stateGrab.Player = this; // Necessary to call stateGrab.GetGrabTile()
 
 			// Control states
 			stateLedgeJump			= new PlayerLedgeJumpState();
@@ -732,14 +735,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			IntegrateStateParameters();
 
 			// Check for beginning pushing
-			Collision collision = Physics.GetCenteredCollisionInDirection(direction);
-			if (WeaponState == null && movement.IsMoving &&
-				!stateParameters.ProhibitPushing &&
-				collision != null &&
-				collision.IsTile && 
-				!collision.Tile.IsMoving &&
-				!collision.Tile.IsNotPushable)
-			{
+			if (WeaponState != statePush && statePush.GetPushTile() != null) {
 				BeginWeaponState(statePush);
 				IntegrateStateParameters();
 			}

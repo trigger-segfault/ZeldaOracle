@@ -499,46 +499,61 @@ namespace ZeldaOracle.Game.Debug {
 
 		private static void DrawEntity(Graphics2D g, Entity entity) {
 			
-			// Draw all collisions
-			foreach (Collision collision in entity.Physics.PotentialCollisions) {
-				Color color = Color.Red;
-				float penetrationEdgeWidth = 1.0f;
+			if (EntityDebugInfoMode != EntityDrawInfo.None) {
+				// Draw all collisions
+				foreach (Collision collision in entity.Physics.PotentialCollisions) {
+					Color color = Color.Red;
+					float penetrationEdgeWidth = 1.0f;
 
-				if (collision.IsSafeColliding) {
-					if (collision.IsColliding)
-						color = Color.Red;
+					// Colorize collision
+					if (collision.IsSafeColliding) {
+						if (collision.IsColliding)
+							color = Color.Red;
+						else
+							color = Color.Blue;
+						penetrationEdgeWidth = Math.Max(1.0f,
+							GMath.Abs(collision.Penetration));
+					}
+					else if (collision.IsAutoDodged)
+						color = Color.Green;
+					else if (collision.IsResolved)
+						color = Color.Cyan;
 					else
-						color = Color.Blue;
-					penetrationEdgeWidth = Math.Max(1.0f,
-						GMath.Abs(collision.Penetration));
-				}
-				else if (collision.IsAutoDodged)
-					color = Color.Green;
-				else if (collision.IsResolved)
-					color = Color.Cyan;
-				else
-					color = Color.White;
-				
-				if (collision.IsTile &&
-					entity.Physics.StandingCollision == collision)
-				{
-					FillCollisionModel(g, collision.Tile.CollisionModel,
-						collision.Tile.Position, Color.Magenta * 0.3f);
-					DrawCollisionModel(g, collision.Tile.CollisionModel,
-						collision.Tile.Position, Color.Magenta);
-				}
+						color = Color.White;
+					
+					// Color standing and centered collisions
+					if (entity.Physics.StandingCollision == collision)
+					{
+						if (collision.IsTile) {
+							FillCollisionModel(g, collision.Tile.CollisionModel,
+								collision.Tile.Position, Color.Magenta * 0.3f);
+							DrawCollisionModel(g, collision.Tile.CollisionModel,
+								collision.Tile.Position, Color.Magenta);
+						}
+					}
+					else if (entity.Physics.GetCenteredCollisionInDirection(
+							collision.Direction) == collision)
+					{
+						if (collision.IsTile) {
+							FillCollisionModel(g, collision.Tile.CollisionModel,
+								collision.Tile.Position, Color.Yellow * 0.3f);
+							DrawCollisionModel(g, collision.Tile.CollisionModel,
+								collision.Tile.Position, Color.Yellow);
+						}
+					}
 
-				// Draw the collision edge
-				int edgeDirection = Directions.Reverse(collision.Direction);
-				int axis = Directions.ToAxis(edgeDirection);
-				Rectangle2F r = collision.SolidBox;
-				r.Point = GameUtil.Bias(r.Point);
-				if (collision.Source.IsInsideCollision)
-					r.ExtendEdge(edgeDirection, -r.Size[axis] + 1);
-				else
-					r.ExtendEdge(Directions.Reverse(edgeDirection), -r.Size[axis]);
-				r.ExtendEdge(Directions.Reverse(edgeDirection), penetrationEdgeWidth);
-				g.FillRectangle(r, color);
+					// Draw the collision edge
+					int edgeDirection = Directions.Reverse(collision.Direction);
+					int axis = Directions.ToAxis(edgeDirection);
+					Rectangle2F r = collision.SolidBox;
+					r.Point = GameUtil.Bias(r.Point);
+					if (collision.Source.IsInsideCollision)
+						r.ExtendEdge(edgeDirection, -r.Size[axis] + 1);
+					else
+						r.ExtendEdge(Directions.Reverse(edgeDirection), -r.Size[axis]);
+					r.ExtendEdge(Directions.Reverse(edgeDirection), penetrationEdgeWidth);
+					g.FillRectangle(r, color);
+				}
 			}
 
 			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {

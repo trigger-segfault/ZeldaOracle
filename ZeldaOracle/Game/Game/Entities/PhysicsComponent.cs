@@ -948,6 +948,26 @@ namespace ZeldaOracle.Game.Entities {
 			return best;
 		}
 
+		public Collision GetCenteredPotentialCollisionInDirection(int direction,
+			float minPenetration = 0.0f)
+		{
+			Collision best = null;
+			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			
+			foreach (Collision collision in PotentialCollisions) {
+				if (collision.Direction == direction) {
+					if (collision.Penetration >= minPenetration - GameSettings.EPSILON &&
+						entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
+						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
+					{
+						if (best == null)
+							best = collision;
+					}
+				}
+			}
+			return best;
+		}
+
 		public Collision PreviousStandingCollision { get; set; } = null;
 		public Collision StandingCollision { get; set; } = null;
 

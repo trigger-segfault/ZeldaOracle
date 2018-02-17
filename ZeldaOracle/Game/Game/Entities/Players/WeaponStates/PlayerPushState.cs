@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Main;
+﻿using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
@@ -14,6 +6,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerPushState : PlayerState {
 
 		private int pushTimer;
+		private Tile pushTile;
 
 
 		//-----------------------------------------------------------------------------
@@ -23,48 +16,67 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public PlayerPushState() {
 			StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_PUSH;
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Get the tile the player is currently pushing.</summary>
+		public Tile GetPushTile() {
+			// Make sure the player is in the proper state
+			if (player.IsInAir ||
+				player.StateParameters.ProhibitPushing ||
+				!player.Movement.IsMoving)
+				return null;
+
+			// Make sure the player is colliding with a pushable tile
+			Collision collision =
+				player.Physics.GetCenteredCollisionInDirection(player.Direction);
+			if (collision == null || !collision.IsTile || 
+				collision.Tile.IsMoving || collision.Tile.IsNotPushable)
+				return null;
+
+			return collision.Tile;
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 		
 		public override void OnBegin(PlayerState previousState) {
 			pushTimer = 0;
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PUSH);
+			pushTile = null;
 		}
 		
-		public override void OnEnd(PlayerState newState) {
-		}
-
 		public override void Update() {
 			base.Update();
 			
-			Tile actionTile = player.Physics.GetFacingSolidTile(player.Direction);
-			Collision collision = player.Physics.GetCenteredCollisionInDirection(player.Direction);
-			bool isColliding = (collision != null && collision.IsTile && 
-				!collision.Tile.IsMoving && !collision.Tile.IsNotPushable);
-			
-			if (!player.IsInAir &&
-				!player.StateParameters.ProhibitPushing &&
-				actionTile != null &&
-				player.Movement.IsMoving &&
-				isColliding)
-			{
-				pushTimer++;
+			// Get the tile the player is currently pushing
+			Tile newPushTile = GetPushTile();
 
-				if (pushTimer > actionTile.PushDelay) {
-					if (actionTile.OnPush(player.Direction, player.PushSpeed))
+			if (newPushTile == null) {
+				End();
+			}
+			else {
+				// Reset push timer if the player is pushing a different tile
+				if (newPushTile != pushTile && pushTile != null)
+					pushTimer = 0;
+				pushTile = newPushTile;
+
+				pushTimer++;
+				if (pushTimer > pushTile.PushDelay) {
+					// Attempt to move the tile
+					if (pushTile.OnPush(player.Direction, player.PushSpeed))
 						pushTimer = 0;
 					else
-						actionTile.OnPushing(player.Direction);
+						pushTile.OnPushing(player.Direction);
 				}
 				else {
-					actionTile.OnPushing(player.Direction);
+					pushTile.OnPushing(player.Direction);
 				}
 			}
-			else
-				End();
 		}
 	}
 }
