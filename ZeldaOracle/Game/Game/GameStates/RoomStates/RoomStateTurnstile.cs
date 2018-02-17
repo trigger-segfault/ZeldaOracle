@@ -78,10 +78,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			// Setup the player.
 			Player player = RoomControl.Player;
 			player.InterruptWeapons();
+			player.IntegrateStateParameters();
+			player.Graphics.PlayAnimation(player.MoveAnimation);
 			player.SetPositionByCenter(turnstile.Center +
 				(Directions.ToVector(enterDirection) * PLAYER_ROTATE_OFFSETS[0]));
 			player.Direction = exitDirection;
-			player.Graphics.PlayAnimation(player.MoveAnimation);
 		}
 
 		public override void Update() {

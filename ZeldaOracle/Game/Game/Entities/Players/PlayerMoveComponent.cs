@@ -6,14 +6,12 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Items;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class PlayerMoveComponent {
 		
-		// Settings
-		private bool				autoAccelerate;			// Should the player still accelerate without holding down a movement key?
-
 		// Internal state
 		private Player				player;
 		private float				analogAngle;
@@ -25,6 +23,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				isMoving;				// Is the player holding down a movement key?
 		private int					moveAngle;				// The angle the player is moving in.
 		private int					moveDirection;			// The direction that the player wants to face.
+		private float				strokeSpeedScale;
+		private bool				isStroking;
 
 		private Point2I				jumpStartTile;			// The tile the player started jumping on. (Used for jump color tiles)
 		private bool				isCapeDeployed;
@@ -49,11 +49,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerMoveComponent(Player player) {
 			this.player = player;
 
-			// Default settings
-			autoAccelerate			= false;
-
 			// Internal
 			allowMovementControl	= true;
+			strokeSpeedScale		= 1.0f;
 			moveAxes				= new bool[] { false, false };
 			motion					= Vector2F.Zero;
 			isMoving				= false;
@@ -77,6 +75,95 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Normal movement
 			moveModeNormal = new PlayerMotionType();
 			mode = moveModeNormal;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Update
+		//-----------------------------------------------------------------------------
+
+		public void Update() {
+			// Get the movement mode for the current environment state
+			if (player.EnvironmentState != null)
+				mode = player.EnvironmentState.MotionSettings;
+			else
+				mode = moveModeNormal;
+
+			// Update movement
+			UpdateMoveControls();
+			UpdateStroking();
+			UpdateFallingInHoles();
+			velocityPrev = player.Physics.Velocity;
+
+			// Restrict player direction
+			if (allowMovementControl) {
+				if (player.StateParameters.AlwaysFaceUp)
+					player.Direction = Directions.Up;
+				else if (player.StateParameters.AlwaysFaceLeftOrRight) {
+					if (player.Direction == Directions.Up)
+						player.Direction = Directions.Right;
+					if (player.Direction == Directions.Down)
+						player.Direction = Directions.Left;
+				}
+			}
+
+			// Check for ledge jumping (ledges/waterfalls)
+			if (!player.StateParameters.ProhibitLedgeJumping &&
+				isMoving && !player.RoomControl.IsSideScrolling)
+			{
+				foreach (Collision collision in
+					player.Physics.GetCollisionsInDirection(moveDirection))
+				{
+					if (collision.IsTile && !collision.IsDodged) {
+						Tile tile = collision.Tile;
+						if (moveDirection == tile.LedgeDirection && !tile.IsInMotion) {
+							if (tile.IsLedge)
+								TryLedgeJump(tile.LedgeDirection);
+							else if (tile.IsLeapLedge)
+								TryLeapLedgeJump(tile.LedgeDirection, tile);
+						}
+					}
+				}
+			}
+			
+			// Check for walking on color barriers.
+			if (player.IsOnGround && (player.Physics.TopTile is TileColorBarrier) &&
+				((TileColorBarrier) player.Physics.TopTile).IsRaised)
+			{
+				IsOnColorBarrier = true;
+			}
+			else if (player.IsOnGround)
+				IsOnColorBarrier = false;
+		}
+
+		/// <summary>Update the ability to stroke while swimming.</summary>
+		private void UpdateStroking() {
+			if (player.IsSwimming) {
+				// Slow down movement over time from strokes
+				if (strokeSpeedScale > 1.0f)
+					strokeSpeedScale -= 0.025f;
+
+				// Stroking scales the movement speed
+				// Press A/B to stroke as long as a usable item is not in that slot
+				if (strokeSpeedScale <= 1.4f && allowMovementControl &&
+					((Controls.A.IsPressed() && 
+						(player.EquippedUsableItems[Inventory.SLOT_A] == null || 
+						!player.EquippedUsableItems[Inventory.SLOT_A].IsUsable())) ||
+					(Controls.B.IsPressed() && 
+						(player.EquippedUsableItems[Inventory.SLOT_B] == null || 
+						!player.EquippedUsableItems[Inventory.SLOT_B].IsUsable()))))
+				{
+					strokeSpeedScale = 2.0f;
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
+				}
+
+				// Auto accelerate during the beginning of a stroke
+				isStroking = (strokeSpeedScale > 1.3f);
+			}
+			else {
+				strokeSpeedScale = 1.0f;
+				isStroking = false;
+			}
 		}
 		
 
@@ -180,7 +267,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 
 			// Update movement or acceleration.
-			if (allowMovementControl && (isMoving || autoAccelerate)) {
+			if (allowMovementControl && (isMoving || isStroking)) {
 				if (analogMode)
 					moveVector = Controls.AnalogMovement.Position;
 				else
@@ -238,7 +325,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Direction = moveDirection;
 
 			// Update movement or acceleration
-			if (allowMovementControl && (isMoving || autoAccelerate) && !player.IsInMinecart) {
+			if (allowMovementControl && (isMoving || isStroking) && !player.IsInMinecart) {
 				if (!isMoving)
 					moveAngle = Directions.ToAngle(player.Direction);
 
@@ -440,64 +527,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Update
-		//-----------------------------------------------------------------------------
-
-		public void Update() {
-			// Get the movement mode for the current environment state
-			if (player.EnvironmentState != null)
-				mode = player.EnvironmentState.MotionSettings;
-			else
-				mode = moveModeNormal;
-			
-			// Update movement
-			UpdateMoveControls();
-			UpdateFallingInHoles();
-			velocityPrev = player.Physics.Velocity;
-
-			// Restrict player direction
-			if (allowMovementControl) {
-				if (player.StateParameters.AlwaysFaceUp)
-					player.Direction = Directions.Up;
-				else if (player.StateParameters.AlwaysFaceLeftOrRight) {
-					if (player.Direction == Directions.Up)
-						player.Direction = Directions.Right;
-					if (player.Direction == Directions.Down)
-						player.Direction = Directions.Left;
-				}
-			}
-
-			// Check for ledge jumping (ledges/waterfalls)
-			if (!player.StateParameters.ProhibitLedgeJumping &&
-				isMoving && !player.RoomControl.IsSideScrolling)
-			{
-				foreach (Collision collision in
-					player.Physics.GetCollisionsInDirection(moveDirection))
-				{
-					if (collision.IsTile && !collision.IsDodged) {
-						Tile tile = collision.Tile;
-						if (moveDirection == tile.LedgeDirection && !tile.IsInMotion) {
-							if (tile.IsLedge)
-								TryLedgeJump(tile.LedgeDirection);
-							else if (tile.IsLeapLedge)
-								TryLeapLedgeJump(tile.LedgeDirection, tile);
-						}
-					}
-				}
-			}
-			
-			// Check for walking on color barriers.
-			if (player.IsOnGround && (player.Physics.TopTile is TileColorBarrier) &&
-				((TileColorBarrier) player.Physics.TopTile).IsRaised)
-			{
-				IsOnColorBarrier = true;
-			}
-			else if (player.IsOnGround)
-				IsOnColorBarrier = false;
-		}
-
 		/// <summary>Try to perform a ledge jump if the path is clear.</summary>
 		private bool TryLedgeJump(int ledgeDirection) {
 			// Check if there any obstructions to the side of the ledge
@@ -540,12 +569,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public bool AutoAccelerate {
-			get { return autoAccelerate; }
-			set { autoAccelerate = value; }
-		}
-				
+						
 		public bool IsMoving {
 			get {
 				if (player.StateParameters.ProhibitMovementControlOnGround &&

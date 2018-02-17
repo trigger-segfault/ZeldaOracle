@@ -91,8 +91,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.ProhibitPushing		= true;
 			StateParameters.ProhibitWeaponUse	= true;
 			StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
-			//player.Movement.MoveSpeedScale = 1.0f;
-			//player.Movement.AutoAccelerate = false;
 
 			player.InterruptWeapons();
 
@@ -131,9 +129,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.Movement.MoveSpeedScale	= 1.0f;
-			player.Movement.AutoAccelerate	= false;
-			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
+			player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 			
 			isDiving = false;
 			
@@ -145,9 +141,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 
-			// TODO: Code duplication with PlayerUnderwaterState
-			// TODO: magic numbers
-			
 			// Update the submerge state.
 			if (isSubmerged) {
 				submergedTimer--;
@@ -165,38 +158,20 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				submergedTimer = submergedDuration;
 				StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SUBMERGED;
 
-				// Create a splash effect.
+				// Create a splash effect
 				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true);
 				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
-				
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 
-				// Change player depth to lowest.
+				// Change player depth to lowest
 				player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;
 
-				if (player.Physics.IsInOcean && CanDive())
-				{
+				if (player.Physics.IsInOcean && CanDive()) {
 					Dive();
 					return;
 				}
 			}
-			/*
-			// Slow down movement over time from strokes
-			if (player.Movement.MoveSpeedScale > 1.0f)
-				player.Movement.MoveSpeedScale -= 0.025f;
-			
-			// Stroking scales the movement speed.
-			if (player.Movement.MoveSpeedScale <= 1.4f && Controls.A.IsPressed()) {
-				AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
-				player.Movement.MoveSpeedScale = 2.0f;
-			}
-
-			// Auto accelerate during the beginning of a stroke.
-			player.Movement.AutoAccelerate = IsStroking;
-			*/
-			
-			base.Update();
 		}
 
 
@@ -204,11 +179,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		// This is the threshhold of movement speed scale to be considered stroking.
-		//public bool IsStroking {
-		//	get { return (player.Movement.MoveSpeedScale > 1.3f); }
-		//}
-
 		public bool IsSubmerged {
 			get { return isSubmerged; }
 		}

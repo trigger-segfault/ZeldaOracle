@@ -375,9 +375,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// <summary>For when the player needs to stop pushing, such as when reading
 		/// text or opening a chest.</summary>
 		public void StopPushing() {
+			if (WeaponState == statePush)
+				statePush.End();
+			IntegrateStateParameters();
 			movement.IsMoving = false;
 			movement.StopMotion();
 			movement.ChooseAnimation();
+			if (IsOnGround && !stateParameters.ProhibitMovementControlOnGround)
+				Graphics.SetAnimation(Animations.Default);
 		}
 
 		public void Freeze() {
@@ -445,6 +450,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			if (weaponStateMachine.IsActive)
 				weaponStateMachine.CurrentState.End();
+			IntegrateStateParameters();
 		}
 
 		/// <summary>Update items by checking if their buttons are pressed.<summary>

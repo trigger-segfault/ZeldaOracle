@@ -63,6 +63,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin(PlayerState previousState) {
 			// Play the jump animation
+			player.StopPushing();
 			if (player.WeaponState == null)
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 			else
