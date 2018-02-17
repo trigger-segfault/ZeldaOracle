@@ -133,11 +133,11 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		private bool isAutoDodged;
 		private bool isMovementCollision;
 		private bool isResolved;
-		private bool isColliding;
-		private bool isResolvable;
+		private bool isRebound;
 		private float penetration;
-		private float lateralPenetration;
 		private float allowedPenetration;
+		private float lateralPenetration;
+		private float allowedLateralPenetration;
 		private bool[] connections;
 		private bool[] allowableDirections;
 		private bool isDynamic;
@@ -154,12 +154,12 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			direction			= 0;
 			isAutoDodged		= false;
 			isMovementCollision	= false;
+			isRebound			= false;
 			isResolved			= false;
-			isColliding			= false;
 			penetration			= 0.0f;
 			lateralPenetration	= 0.0f;
+			allowedLateralPenetration = 0.0f;
 			allowedPenetration	= 0.0f;
-			isResolvable		= true;
 			connections			= new bool[] { false, false, false, false };
 			allowableDirections = new bool[] { false, false, false, false };
 			isDynamic			= false;
@@ -184,24 +184,31 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			return (CalcPenetration(position) >
 					allowedPenetration + GameSettings.EPSILON &&
 				CalcLateralPenetration(position) >
-					allowedPenetration + GameSettings.EPSILON);
+					allowedLateralPenetration + GameSettings.EPSILON);
 		}
 		
 
 		public void CalcPenetration() {
+			bool prevIsColliding = IsColliding;
 			penetration = CalcPenetration(physicsEntity.Position);
 			lateralPenetration = CalcLateralPenetration(physicsEntity.Position);
+			if (prevIsColliding && !IsColliding)
+				isResolved = true;
 		}
 
 		public void CalcLateralPenetration() {
+			bool prevIsColliding = IsColliding;
 			lateralPenetration = CalcLateralPenetration(physicsEntity.Position);
+			if (prevIsColliding && !IsColliding)
+				isResolved = true;
 		}
 
 		public void CalcIsColliding() {
-			isColliding = (penetration > allowedPenetration + GameSettings.EPSILON &&
-				lateralPenetration > allowedPenetration + GameSettings.EPSILON);
-			//isColliding = (penetration > GameSettings.EPSILON &&
-			//lateralPenetration > allowedPenetration + GameSettings.EPSILON);
+			//bool newIsColliding = (penetration > allowedPenetration + GameSettings.EPSILON &&
+			//	lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON);
+			//if (isColliding && !newIsColliding)
+			//	isResolved = true;
+			//isColliding = newIsColliding;
 		}
 
 		public float CalcLateralPenetration(Vector2F entityPosition) {
@@ -227,11 +234,6 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		public bool IsResolvable {
-			get { return isResolvable; }
-			set { isResolvable = value; }
-		}
-
 		public CollisionCheck Source {
 			get { return source; }
 			set { source = value; }
@@ -257,20 +259,13 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		}
 
 		public bool IsColliding {
-			/*get {
-				// Check for separation on both axes
-				return (penetration > GameSettings.EPSILON &&
-					CalcLateralPenetration(physicsEntity.Position) >
-						allowedPenetration + GameSettings.EPSILON);
-			}*/
 			get { return (penetration > allowedPenetration + GameSettings.EPSILON &&
-				lateralPenetration > allowedPenetration + GameSettings.EPSILON); }
-			//get { return isColliding; }
+				lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
 		}
 
 		public bool IsSafeColliding {
 			get { return (penetration > GameSettings.EPSILON &&
-				lateralPenetration > allowedPenetration + GameSettings.EPSILON); }
+				lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
 		}
 
 		public bool IsAutoDodged {
@@ -288,6 +283,12 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			set { isResolved = value; }
 		}
 		
+		/// <summary>Get whether this collision was rebounded off of.</summary>
+		public bool IsRebound {
+			get { return isRebound; }
+			set { isRebound = value; }
+		}
+		
 		public bool IsMovementCollision {
 			get { return isMovementCollision; }
 			set { isMovementCollision = value; }
@@ -301,6 +302,11 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		public float AllowedPenetration {
 			get { return allowedPenetration; }
 			set { allowedPenetration = value; }
+		}
+		
+		public float AllowedLateralPenetration {
+			get { return allowedLateralPenetration; }
+			set { allowedLateralPenetration = value; }
 		}
 		
 		public bool[] Connections {

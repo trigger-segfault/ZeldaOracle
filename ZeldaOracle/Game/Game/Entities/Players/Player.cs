@@ -254,8 +254,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					return environmentStateGrass;
 				else if (physics.IsOnStairs)
 					return environmentStateStairs;
-				else if (physics.IsOnIce)
-					return environmentStateIce; // TODO: sidescroll ice
+				else if (physics.IsOnSideScrollingIce)
+					return environmentStateIce;
 				else 
 					return null;
 			}
@@ -513,7 +513,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				return;
 
 			// Check for room edge collisions
-			foreach (Collision collision in Physics.ActualCollisions) {
+			foreach (Collision collision in Physics.Collisions) {
 				if (collision.IsRoomEdge && CanRoomTransition(collision.Direction)) {
 					physics.Velocity = Vector2F.Zero;
 					RoomControl.RequestRoomTransition(collision.Direction);
@@ -731,14 +731,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			IntegrateStateParameters();
 
 			// Check for beginning pushing
-			CollisionInfo collisionInfo = Physics.CollisionInfo[direction];
+			Collision collision = Physics.GetCollisionInDirection(direction);
 			if (WeaponState == null && movement.IsMoving &&
 				!stateParameters.ProhibitPushing &&
-				collisionInfo.Type == CollisionType.Tile &&
-				!collisionInfo.Tile.IsMoving &&
-				!collisionInfo.Tile.IsNotPushable)
+				collision != null &&
+				collision.IsTile && 
+				!collision.Tile.IsMoving &&
+				!collision.Tile.IsNotPushable)
 			{
 				BeginWeaponState(statePush);
+				IntegrateStateParameters();
 			}
 
 			// Update the weapon state

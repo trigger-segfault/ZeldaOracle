@@ -221,35 +221,36 @@ namespace ZeldaOracle.Game.Entities {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Returns the game control this entity belongs to.
+		/// <summary>Returns the game control this entity belongs to.</summary>
 		public GameControl GameControl {
 			get { return roomControl.GameControl; }
 		}
 
-		// Returns the room control this entity belongs to.
+		/// <summary>Returns the room control this entity belongs to.</summary>
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set { roomControl = value; }
 		}
 
-		// Returns true if the entity has been initialized.
+		/// <summary>Returns true if the entity has been initialized.</summary>
 		public bool IsInitialized {
 			get { return (roomControl != null); }
 		}
 
-		// Returns true if the entity is not alive.
+		/// <summary>Returns true if the entity is not alive.</summary>
 		public bool IsDestroyed {
 			get { return !isAlive; }
 			set { isAlive = !value; }
 		}
 
-		// Returns true if the entity is still alive.
+		/// <summary>Returns true if the entity is still alive.</summary>
 		public bool IsAlive {
 			get { return isAlive; }
 			set { isAlive = value; }
 		}
 
-		// Returns true if the entity is being handled by RoomControl.
+		/// <summary>Returns true if the entity is being handled by RoomControl.
+		/// </summary>
 		public bool IsInRoom {
 			get { return isInRoom; }
 		}
@@ -259,7 +260,7 @@ namespace ZeldaOracle.Game.Entities {
 			set { entityIndex = value; }
 		}
 
-		// Gets or sets the position of the entity.
+		/// <summary>Gets or sets the position of the entity.</summary>
 		public Vector2F Position {
 			get { return position; }
 			set { position = value; }
@@ -268,11 +269,11 @@ namespace ZeldaOracle.Game.Entities {
 		public Vector2F DrawPosition {
 			get {
 				bool horizontal = Math.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
-										(!Physics.CollisionInfo[Directions.Left].IsColliding &&
-										!Physics.CollisionInfo[Directions.Right].IsColliding);
+										(!Physics.IsCollidingInDirection(Directions.Left) &&
+										!Physics.IsCollidingInDirection(Directions.Right));
 				bool vertical = Math.Abs(Physics.SurfaceVelocity.Y) > GameSettings.EPSILON &&
-										(!Physics.CollisionInfo[Directions.Up].IsColliding &&
-										!Physics.CollisionInfo[Directions.Down].IsColliding);
+										(!Physics.IsCollidingInDirection(Directions.Up) &&
+										!Physics.IsCollidingInDirection(Directions.Down));
 				Vector2F surfacePosition = Vector2F.Zero;
 				if (horizontal)	surfacePosition.X = Physics.SurfacePosition.X;
 				if (vertical)	surfacePosition.Y = Physics.SurfacePosition.Y;
@@ -281,19 +282,19 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
-		// Gets or sets the x-position of the entity.
+		/// <summary>Gets or sets the x-position of the entity.</summary>
 		public float X {
 			get { return position.X; }
 			set { position.X = value; }
 		}
 
-		// Gets or sets the y-position of the entity.
+		/// <summary>Gets or sets the y-position of the entity.</summary>
 		public float Y {
 			get { return position.Y; }
 			set { position.Y = value; }
 		}
 	
-		// Gets or sets the entity's z-position.
+		/// <summary>Gets or sets the entity's z-position.</summary>
 		public float ZPosition {
 			get { return zPosition; }
 			set { zPosition = value; }
@@ -307,13 +308,13 @@ namespace ZeldaOracle.Game.Entities {
 			get { return previousZPosition; }
 		}
 	
-		// Gets or sets the entity's physics component.
+		/// <summary>Gets or sets the entity's physics component.</summary>
 		public PhysicsComponent Physics {
 			get { return physics; }
 			set { physics = value; physics.Entity = this; }
 		}
 	
-		// Gets or sets the entity's graphics component.
+		/// <summary>Gets or sets the entity's graphics component.</summary>
 		public GraphicsComponent Graphics {
 			get { return graphics; }
 			set { graphics = value; graphics.Entity = this; }

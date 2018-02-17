@@ -493,16 +493,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 
 			// Check for ledge jumping (ledges/waterfalls)
-			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && isMoving &&
-				collisionInfo.Type == CollisionType.Tile &&
 				!player.RoomControl.IsSideScrolling)
 			{
-				Tile tile = collisionInfo.Tile;
-				if (tile.IsLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
-					TryLedgeJump(tile.LedgeDirection);
-				else if (tile.IsLeapLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
-					TryLeapLedgeJump(tile.LedgeDirection, tile);
+				foreach (Collision collision in
+					player.Physics.GetCollisionsInDirection(moveDirection))
+				{
+					if (collision.IsTile) {
+						Tile tile = collision.Tile;
+						if (moveDirection == tile.LedgeDirection && !tile.IsInMotion) {
+							if (tile.IsLedge)
+								TryLedgeJump(tile.LedgeDirection);
+							else if (tile.IsLeapLedge)
+								TryLeapLedgeJump(tile.LedgeDirection, tile);
+						}
+					}
+				}
 			}
 			
 			// Check for walking on color barriers.
@@ -592,7 +598,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 		
 		public bool IsMoving {
-			get { return isMoving; }
+			get {
+				if (player.StateParameters.ProhibitMovementControlOnGround &&
+					player.StateParameters.ProhibitMovementControlInAir)
+					return false;
+				return isMoving;
+			}
 			set { isMoving = value; }
 		}
 		

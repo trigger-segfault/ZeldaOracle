@@ -65,18 +65,14 @@ namespace ZeldaOracle.Game.Entities {
 		public override void Update() {
 			Player player = RoomControl.Player;
 
+			// Check if the player is colliding with this minecart
 			if (player.IsOnGround && player.Movement.IsMoving &&
 				!player.StateParameters.ProhibitEnteringMinecart &&
-				!player.StateParameters.ProhibitMovementControlOnGround)
+				!player.StateParameters.ProhibitMovementControlOnGround &&
+				player.Physics.Collisions.Any(c => c.Entity == this &&
+					player.Movement.IsMovingInDirection(c.Direction)))
 			{
-				foreach (CollisionInfo collision in player.Physics.GetCollisions()) {
-					if (collision.Entity == this &&
-						player.Movement.IsMovingInDirection(collision.Direction))
-					{
-						player.JumpIntoMinecart(this);
-						break;
-					}
-				}
+				player.JumpIntoMinecart(this);
 			}
 
 			base.Update();

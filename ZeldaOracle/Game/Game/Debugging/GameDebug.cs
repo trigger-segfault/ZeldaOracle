@@ -404,8 +404,8 @@ namespace ZeldaOracle.Game.Debug {
 			else if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseTileLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				Monster monster = new MonsterGel();
-				monster.Color = MonsterColor.Red;
+				Monster monster = new MonsterMiniMoldorm();
+				//monster.Color = MonsterColor.Red;
 				monster.SetPositionByCenter(spawnPosition);
 				RoomControl.SpawnEntity(monster);
 
@@ -464,6 +464,16 @@ namespace ZeldaOracle.Game.Debug {
 			}
 		}
 
+		private static void FillCollisionModel(Graphics2D g, CollisionModel model,
+			Vector2F position, Color color)
+		{
+			foreach (Rectangle2F box in model.Boxes) {
+				Rectangle2F r = Rectangle2F.Translate(box, position);
+				r.Point = GameUtil.Bias(r.Point);
+				g.FillRectangle(r, color);
+			}
+		}
+
 		private static void DrawCollisionModel(Graphics2D g, CollisionModel model,
 			Vector2F position, Color color)
 		{
@@ -505,6 +515,15 @@ namespace ZeldaOracle.Game.Debug {
 					color = Color.Cyan;
 				else
 					color = Color.White;
+					
+				if (entity.Physics.GetCollisionInDirection(
+					collision.Direction) == collision && collision.IsTile)
+				{
+					FillCollisionModel(g, collision.Tile.CollisionModel,
+						collision.Tile.Position, Color.Magenta * 0.3f);
+					DrawCollisionModel(g, collision.Tile.CollisionModel,
+						collision.Tile.Position, Color.Magenta);
+				}
 				
 				for (int i = 0; i < 4; i++) {
 
@@ -522,7 +541,8 @@ namespace ZeldaOracle.Game.Debug {
 						edgeColor = color;
 						edgeWidth = penetrationEdgeWidth;
 					}
-					
+
+
 					int edgeDirection = Directions.Reverse(i);
 					int axis = Directions.ToAxis(edgeDirection);
 					Rectangle2F r = collision.SolidBox;
@@ -566,65 +586,12 @@ namespace ZeldaOracle.Game.Debug {
 					collisionBox.X = GMath.Round(collisionBox.X + 0.001f);
 					collisionBox.Y = GMath.Round(collisionBox.Y + 0.001f);
 					
-					// Outline the objects we are colliding with
-					/*for (int i = 0; i < 4; i++) {
-						Tile solidTile = entity.Physics.CollisionInfo[i].Tile;
-						Entity solidEntity = entity.Physics.CollisionInfo[i].Entity;
-						if (solidTile != null && solidTile.CollisionModel != null) {
-							foreach (Rectangle2F box in solidTile.CollisionModel.Boxes) {
-								Rectangle2F r = Rectangle2F.Translate(box, solidTile.Position);
-								g.DrawRectangle(r, 1, Color.White);
-							}
-						}
-						else if (solidEntity != null) {
-							g.DrawRectangle(solidEntity.Physics.PositionedCollisionBox,
-								1, Color.White);
-						}
-					}*/
-
 					// Draw the hard collision box
 					Color collisionBoxColor = Color.Yellow;
 					if (entity is Player && ((Player) entity).IsOnSideScrollLadder)
 						collisionBoxColor = new Color(255, 160, 0);
 					collisionBox.Point = GameUtil.Bias(collisionBox.Point);
 					g.FillRectangle(collisionBox, collisionBoxColor);
-
-					for (int direction = 0; direction < Directions.Count; direction++) {
-						CollisionInfoNew collisionInfo =
-							entity.Physics.ClipCollisionInfo[direction];
-						int axis = Directions.ToAxis(direction);
-
-						// Draw a magenta line representing a collision in this direction
-						if (entity.Physics.CollisionInfo[direction].IsColliding) {
-							Rectangle2F drawBox = collisionBox;
-							drawBox.ExtendEdge(direction, 1);
-							drawBox.ExtendEdge(Directions.Reverse(direction), -collisionBox.Size[axis]);
-							g.FillRectangle(drawBox, Color.Magenta);
-						}
-
-						// Draw a box representing the amount of clipping in this direction
-						// Blue is safe clipping, red is not
-						if (collisionInfo.IsColliding && !collisionInfo.IsResolved) {
-							Rectangle2F drawBox = collisionBox;
-							float penetration = Math.Max(1.0f, GMath.Round(collisionInfo.PenetrationDistance));
-							if (direction == Directions.Down || direction == Directions.Right)
-								drawBox.Point[axis] += drawBox.Size[axis] - penetration;
-							drawBox.Size[axis] = penetration;
-							
-							// Draw the strip of penetration
-							Color penetrationColor = Color.Red;
-							if (entity.Physics.AllowEdgeClipping && collisionInfo.IsAllowedClipping)
-								penetrationColor = Color.Blue;
-							g.FillRectangle(drawBox, penetrationColor);
-						}
-
-						if (collisionInfo.IsColliding && collisionInfo.IsResolved) {
-							Rectangle2F drawBox2 = collisionBox;
-							drawBox2.ExtendEdge(direction, 2);
-							drawBox2.ExtendEdge(Directions.Reverse(direction), -collisionBox.Size[axis] - 1);
-							g.FillRectangle(drawBox2, Color.Maroon);
-						}
-					}
 				}
 				else if (entity.Physics.IsEnabled && entity.Physics.IsSolid) {
 					// Draw the hard collision box.

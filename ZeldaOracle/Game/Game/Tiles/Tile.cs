@@ -1065,6 +1065,10 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
+		public bool IsIce {
+			get { return EnvironmentType == TileEnvironmentType.Ice; }
+		}
+
 		public bool IsStairs {
 			get { return EnvironmentType == TileEnvironmentType.Stairs; }
 		}

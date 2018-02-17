@@ -96,13 +96,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// We cannot rely on using Physics.Velocity because facing direction does 
 			// not always sync with physics velocity.
 			for (int i = 0; i < 4; i++) {
-				if (physics.CollisionInfo[i].IsColliding) {
-					// Mirror velocity on the collision axis.
-					if (Directions.IsHorizontal(i))
-						moveVector.X *= -1.0f;
-					else
-						moveVector.Y *= -1.0f;
-				}
+				int axis = Directions.ToAxis(i);
+				if (physics.IsCollidingInDirection(i))
+					moveVector[axis] = -moveVector[axis];
 			}
 
 			// Rotate velocity

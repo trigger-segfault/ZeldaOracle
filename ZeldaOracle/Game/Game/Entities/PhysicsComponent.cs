@@ -81,13 +81,12 @@ namespace ZeldaOracle.Game.Entities {
 		private float				previousZVelocity;	// Z-Velocity before physics update is called.
 		private Vector2F			reboundVelocity;
 		private bool				isColliding;
-		private CollisionInfo[]		collisionInfo;
-		private CollisionInfo[]		previousCollisionInfo;
 		private bool				hasLanded;
 		private Tile				topTile;			// The top-most tile the entity is located over.
 		private int					ledgeAltitude;		// How many ledges the entity has passed over.
 		private Point2I				ledgeTileLocation;	// The tile location of the ledge we are currently passing over, or (-1, -1) if not passing over ledge.
 		private List<Collision>		potentialCollisions;
+		private List<Collision>		previousPotentialCollisions;
 
 
 		//-----------------------------------------------------------------------------
@@ -119,23 +118,10 @@ namespace ZeldaOracle.Game.Entities {
 			this.roomEdgeCollisionBoxType = CollisionBoxType.Hard;
 			this.customTileIsSolidCondition = null;
 			this.potentialCollisions = new List<Collision>();
+			this.previousPotentialCollisions = new List<Collision>();
 
 			this.crushMaxGapSize	= 0;
 			this.edgeClipAmount		= 1;
-
-			this.collisionInfo = new CollisionInfo[Directions.Count];
-			this.previousCollisionInfo = new CollisionInfo[Directions.Count];
-			for (int i = 0; i < Directions.Count; i++) {
-				collisionInfo[i] = new CollisionInfo();
-				collisionInfo[i].Clear();
-				previousCollisionInfo[i] = new CollisionInfo();
-				previousCollisionInfo[i].Clear();
-			}
-
-			this.MovementCollisions = new bool[4];
-			this.ClipCollisionInfo = new CollisionInfoNew[4];
-			for (int i = 0; i < 4; i++)
-				ClipCollisionInfo[i] = new CollisionInfoNew();
 		}
 		
 
@@ -533,12 +519,13 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 		public bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
-			return (ClipCollisionInfo[direction].IsAllowedClipping &&
-				RoomPhysics.AreEdgesAligned(solidBox,
-				ClipCollisionInfo[direction].CollisionBox, direction));
+			return false; // TODO
+			//return (ClipCollisionInfo[direction].IsAllowedClipping &&
+				//RoomPhysics.AreEdgesAligned(solidBox,
+				//ClipCollisionInfo[direction].CollisionBox, direction));
 		}
 
-		private bool IsSafeClippingTileInDirection(Tile tile, int direction) { // TODO!!!!
+		/*private bool IsSafeClippingTileInDirection(Tile tile, int direction) { // TODO!!!!
 			if (!ClipCollisionInfo[direction].IsAllowedClipping)
 				return false;
 			if (ClipCollisionInfo[direction].CollidedObject == tile)
@@ -555,7 +542,7 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 			return false;
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -569,17 +556,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsEnabled {
 			get { return isEnabled; }
-			set {
-				isEnabled = value;
-				if (!isEnabled) {
-					// Clear the collision state.
-					for (int i = 0; i < Directions.Count; i++) {
-						ClipCollisionInfo[i].Reset();
-						ClipCollisionInfo[i].PenetrationDirection = i;
-						collisionInfo[i].Clear();
-					}
-				}
-			}
+			set { isEnabled = value; }
 		}
 
 		public Vector2F Velocity {
@@ -627,7 +604,7 @@ namespace ZeldaOracle.Game.Entities {
 				if (flags.HasFlag(PhysicsFlags.OnGroundOverride))
 					return false;
 				if (entity.RoomControl.IsSideScrolling)
-					return !collisionInfo[Directions.Down].IsColliding;
+					return !IsCollidingInDirection(Directions.Down);
 				return (entity.ZPosition > 0.0f || zVelocity > 0.0f || IsFlying);
 			}
 		}
@@ -661,7 +638,7 @@ namespace ZeldaOracle.Game.Entities {
 			set { crushMaxGapSize = value; }
 		}
 
-		// Collision info.
+		// Collision info
 
 		public Rectangle2F CollisionBox {
 			get { return collisionBox; }
@@ -689,21 +666,6 @@ namespace ZeldaOracle.Game.Entities {
 		public TileCollisionCondition CustomTileIsNotSolidCondition {
 			get { return customTileIsNotSolidCondition; }
 			set { customTileIsNotSolidCondition = value; }
-		}
-		
-		public CollisionInfo[] CollisionInfo {
-			get { return collisionInfo; }
-		}
-		
-		public CollisionInfo[] PreviousCollisionInfo {
-			get { return previousCollisionInfo; }
-		}
-
-		public IEnumerable<CollisionInfo> GetCollisions() {
-			for (int i = 0; i < collisionInfo.Length; i++) {
-				if (collisionInfo[i].IsColliding)
-					yield return collisionInfo[i];
-			}
 		}
 		
 		public bool IsColliding {
@@ -757,8 +719,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsOnSideScrollingIce {
 			get {
-				return IsOnGround && collisionInfo[Directions.Down].Tile != null &&
-					collisionInfo[Directions.Down].Tile.EnvironmentType == TileEnvironmentType.Ice;
+				Collision standingCollision =
+					GetCollisionInDirection(Directions.Down);
+				return (standingCollision != null &&
+					standingCollision.IsTile &&
+					standingCollision.Tile.IsIce);
 			}
 		}
 
@@ -914,13 +879,28 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public List<Collision> PotentialCollisions {
 			get { return potentialCollisions; }
+			set { potentialCollisions = value; }
+		}
+		
+		public List<Collision> PreviousPotentialCollisions {
+			get { return previousPotentialCollisions; }
+			set { previousPotentialCollisions = value; }
+		}
+		
+		public IEnumerable<Collision> PreviousCollisions {
+			get { return previousPotentialCollisions.Where(
+					c => c.IsColliding || c.IsResolved); }
 		}
 				
-		public IEnumerable<Collision> ActualCollisions {
+		public IEnumerable<Collision> Collisions {
 			get {
 				return potentialCollisions.Where(
-				c => c.IsColliding || c.IsResolved);
+					c => c.IsColliding || c.IsResolved);
 			}
+		}
+
+		public bool IsCollidingInDirection(int direction) {
+			return  Collisions.Any(c => c.Direction == direction);
 		}
 
 		public IEnumerable<Collision> GetCollisionsOnAxis(int axis) {
@@ -928,15 +908,35 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public IEnumerable<Collision> GetCollisionsInDirection(int direction) {
-			return potentialCollisions.Where(c => c.Direction == direction);
+			return Collisions.Where(c => c.Direction == direction);
 		}
 
-		public bool[] MovementCollisions { get; set; }
-		public CollisionInfoNew[] ClipCollisionInfo { get; set; }
-		public List<CollisionInfoNew> AllClipCollisionInfo { get; set; } = new List<CollisionInfoNew>();
-		public List<CollisionInfo> AllMovementCollisionInfo { get; set; } = new List<CollisionInfo>();
-		public bool IsDeadlocked { get; set; }
+		public IEnumerable<Collision> GetPreviousCollisionsInDirection(int direction) {
+			return PreviousCollisions.Where(c => c.Direction == direction);
+		}
 
+		public Collision GetCollisionInDirection(int direction) {
+			Collision best = null;
+			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+
+			foreach (Collision collision in
+				Collisions.Where(c => c.Direction == direction))
+			{
+				// TODO: if no collisions are centered, then at least one collision should be returned
+				if (entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
+					entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
+				{
+					if (best == null)
+						best = collision;
+				}
+			}
+			return best;
+		}
+
+		/// <summary>Only used by RoomPhysics to detect landing in side scrolling mode.
+		/// </summary>
+		public bool IsOnGroundPrevious { get; set; }  = true;
+		
 		private Vector2F netVelocity;
 
 		public Vector2F NetVelocity {

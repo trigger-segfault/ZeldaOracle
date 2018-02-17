@@ -52,22 +52,14 @@ namespace ZeldaOracle.Game.Control {
 		
 		/// <summary>Process physics for a single entity</summary>
 		public void ProcessEntityPhysics(Entity entity) {
-			bool startedOnGround = entity.IsOnGround;
-
 			// Update Z dynamics
 			UpdateEntityZPosition(entity);
-			
 			// Initialize the collision state for this frame
 			InitPhysicsState(entity);
-
 			// Check the surface tile beneath the entity
 			CheckSurfaceTile(entity);
-			// Resolve collisions with solid objects
+			// Resolve collisions with solid objects while integrating velocity
 			CheckSolidCollisions(entity);
-			// Resolve collisions with the room edge
-			//CheckRoomEdgeCollisions(entity);
-			// Integrate velocity.
-			//entity.Position += entity.Physics.Velocity;
 			
 			// Restore the entity's velocity before collision checks.
 			Vector2F newVelocity = entity.Physics.PreviousVelocity;
@@ -80,26 +72,21 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.Velocity = newVelocity;
 			
 			// Check for landing and falling in side-scrolling mode.
-			if (IsSideScrolling) {
-				if (!startedOnGround && entity.IsOnGround && entity.Physics.HasGravity)
+			if (IsSideScrolling && entity.Physics.HasGravity) {
+				if (!entity.Physics.IsOnGroundPrevious && entity.IsOnGround)
 					LandEntity(entity);
-				if (startedOnGround && !entity.IsOnGround && entity.Physics.HasGravity)
+				if (entity.Physics.IsOnGroundPrevious && !entity.IsOnGround)
 					entity.OnBeginFalling();
 			}
 
-			// Change velocity if rebounded.
-			CheckRebound(entity);
-			
-			//entity.Physics.IsColliding = false;
-			//for (int i = 0; i < Directions.Count; i++) {
-			//	if (entity.Physics.CollisionInfo[i].IsColliding)
-			//		entity.Physics.IsColliding = true;
-			//}
-
-			// Update ledge passing.
+			// Change velocity if rebounded
+			//CheckRebound(entity);
+			// Update ledge passing
 			CheckLedges(entity);
-			// Check if destroyed outside room.
+			// Check if destroyed outside room
 			CheckOutsideRoomBounds(entity);
+
+			entity.Physics.IsOnGroundPrevious = entity.Physics.IsOnGround;
 		}
 
 		// Initialize an entity's physics state for the frame.
@@ -107,15 +94,13 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.PreviousVelocity		= entity.Physics.Velocity;
 			entity.Physics.PreviousZVelocity	= entity.Physics.ZVelocity;
 			entity.Physics.IsColliding			= false;
-			entity.Physics.AllClipCollisionInfo.Clear();
-			entity.Physics.AllMovementCollisionInfo.Clear();
+			
+			// Swap the current and previous collision lists
+			List<Collision> temp = entity.Physics.PreviousPotentialCollisions;
+			entity.Physics.PreviousPotentialCollisions =
+				entity.Physics.PotentialCollisions;
+			entity.Physics.PotentialCollisions = temp;
 			entity.Physics.PotentialCollisions.Clear();
-
-			for (int i = 0; i < Directions.Count; i++) {
-				entity.Physics.PreviousCollisionInfo[i] = entity.Physics.CollisionInfo[i];
-				entity.Physics.CollisionInfo[i].Clear();
-				entity.Physics.MovementCollisions[i] = false;
-			}
 		}
 
 		
@@ -125,9 +110,9 @@ namespace ZeldaOracle.Game.Control {
 
 		// Check collisions with solid objects (entities and/or tiles).
 		private void CheckSolidCollisions(Entity entity) {
-			if (entity.Physics.CollideWithWorld || entity.Physics.CollideWithEntities) {
-				
-				// Handle circular tile collisions
+
+			// Handle circular tile collisions
+			if (entity.Physics.CollideWithWorld) {
 				if (entity.Physics.CollideWithWorld && entity.Physics.CheckRadialCollisions) {
 					Rectangle2F checkArea = Rectangle2F.Union(
 						Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
@@ -140,71 +125,51 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			if (entity.Physics.CollideWithWorld)
-				DetectPotentialCollisions(entity);
+			// Detect all potential collisions with nearby solid objects
+			DetectPotentialCollisions(entity);
+
+			// Resolve all penetrating collisions
 			ResolveCollisions(entity);
+
+			// Check if the entity is being crushed between two collisions
 			CheckCrush(entity);
 
-				/*
-				// Resolve unresolved collisions from the previous frame
-				ResolvePreviousClipCollisions(entity);
-				// Detect clip collisions
-				DetectClipCollisions(entity);
-				// Resolve clip collisions
-				ResolveClipCollisions(entity);
-				// Detect any new unresolved clip collisions
-				//DetectClipCollisions(entity);
-				// Clip velocity for all detected collisions
-				ClipVelocity(entity);
-				// Check if the entity is being crushed
-				CheckCrush(entity);
-				// Detect and resolve collisions caused by movement
-				ResolveMovementCollisions(entity);
-				*/
-				
-				// Check the player's side-scrolling ladder collisions
-				//if (entity is Player)
-				//	CheckPlayerLadderClimbing((Player) entity);
-
-				// Set the entity's collision info
-				/*for (int i = 0; i < Directions.Count; i++) {
-					CollisionInfoNew clipCollision = entity.Physics.ClipCollisionInfo[i];
-
-					if (clipCollision.IsCollidingAndNotAllowedClipping) {
-						if (!entity.Physics.CollisionInfo[i].IsColliding)
-							entity.Physics.CollisionInfo[i].SetCollision(clipCollision.CollidedObject, i);
-					}
-					else if (!entity.Physics.MovementCollisions[i])
-						entity.Physics.CollisionInfo[i].Clear();
-
-					if (entity.Physics.CollisionInfo[i].IsColliding)
-						entity.Physics.IsColliding = true;
-				}
-			}*/
+			// Check the player's side-scrolling ladder collisions
+			if (entity.Physics.CollideWithWorld && (entity is Player))
+				CheckPlayerLadderClimbing((Player) entity);
 		}
 		
 		// Check if the entity should rebound off of its collisions.
 		private void CheckRebound(Entity entity) {
 			if (!entity.Physics.ReboundSolid && !entity.Physics.ReboundRoomEdge)
 				return;
+			
+			bool[] rebounded = new bool[4] { false, false, false, false };
+			Vector2F newVelocity = entity.Physics.Velocity;
 
-			Vector2F newEntityVelocity = entity.Physics.Velocity;
-
-			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfo collision = entity.Physics.CollisionInfo[i];
-
-				if (collision.IsColliding &&
-					((entity.Physics.ReboundSolid && (collision.Type == CollisionType.Tile || collision.Type == CollisionType.Entity)) ||
-					(entity.Physics.ReboundRoomEdge && collision.Type == CollisionType.RoomEdge)) &&
-					entity.Physics.PreviousVelocity.Dot(Directions.ToVector(i)) > 0.0f)
-				{
-					int axis = Directions.ToAxis(i);
-					newEntityVelocity[axis] = -entity.Physics.PreviousVelocity[axis];
+			foreach (Collision collision in entity.Physics.Collisions) {
+				if (CanReboundColliison(entity, collision)) {
+					collision.IsRebound = true;
+					if (!rebounded[collision.Direction]) {
+						rebounded[collision.Direction] = true;
+						newVelocity[collision.Axis] *= -1.0f;
+					}
 				}
 			}
-			entity.Physics.Velocity = newEntityVelocity;
+
+			entity.Physics.Velocity = newVelocity;
 		}
 		
+		private bool CanReboundColliison(Entity entity, Collision collision) {
+			if (entity.Physics.PreviousVelocity.Dot(Directions.ToVector(collision.Direction)) <= 0.0f)
+				return false;
+			if (entity.Physics.ReboundRoomEdge && collision.IsRoomEdge)
+				return true;
+			if (entity.Physics.ReboundSolid && (collision.IsTile || collision.IsEntity))
+				return true;
+			return false;
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Circular Collisions
@@ -261,7 +226,7 @@ namespace ZeldaOracle.Game.Control {
 							//newVelocity[1 - axis] += distance[1 - axis] * 0.015f;
 							newPos = entity.Position;
 							newPos[1 - axis] += distance[1 - axis] * 0.015f;
-							if (!IsCollidingAt(entity, newPos, false))
+							//if (!IsCollidingAt(entity, newPos, false)) // TODO
 								entity.Position = newPos;
 						}
 					}
@@ -281,16 +246,15 @@ namespace ZeldaOracle.Game.Control {
 		private IEnumerable<CollisionCheck> GetCollisions(Entity entity,
 			Rectangle2F area)
 		{
-			// Find nearby solid entities
-			if (entity.Physics.CollideWithEntities) {
+			if (entity.Physics.CollideWithWorld) {
+				// Find nearby solid entities
 				foreach (Entity other in RoomControl.Entities) {
 					if (other != entity && CanCollideWithEntity(entity, other)) {
 						yield return CollisionCheck.CreateEntityCollision(other);
 					}
 				}
-			}
-			// Find nearby solid tiles
-			if (entity.Physics.CollideWithWorld) {
+
+				// Find nearby solid tiles
 				foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(area)) {
 					if (CanCollideWithTile(entity, tile) &&
 						tile.CollisionStyle == CollisionStyle.Rectangular)
@@ -301,6 +265,23 @@ namespace ZeldaOracle.Game.Control {
 							tileBox.Point += tile.Position;
 							yield return CollisionCheck.CreateTileCollision(tile, i);
 						}
+					}
+					// Collide with ladder tops
+					else if (RoomControl.IsSideScrolling &&
+						tile.IsLadder && (entity is Player) &&
+						entity.Physics.HasGravity &&
+						entity.Physics.VelocityY >= 0.0f &&
+						entity.Physics.PositionedCollisionBox.Bottom <= tile.Bounds.Top)
+					{
+						Player player = (Player) entity;
+						if (player.Movement.IsMoving && player.Movement.IsMovingInDirection(Directions.Down))
+							continue;
+						// Check if this tile is a top-most ladder
+						Tile checkAboveTile = RoomControl.TileManager
+							.GetSurfaceTile(tile.Location - new Point2I(0, 1));
+						if (checkAboveTile != null && checkAboveTile.IsLadder)
+							continue;
+						yield return CollisionCheck.CreateTileCollision(tile, 0);
 					}
 				}
 			}
@@ -337,32 +318,7 @@ namespace ZeldaOracle.Game.Control {
 			return (checkEntity != entity && checkEntity.Physics.IsEnabled &&
 				checkEntity.Physics.IsSolid);
 		}
-
-		/// <summary>Detect clip collisions for an entity, optionally restricting clip
-		/// direction to a given axis.</summary>
-		private void DetectClipCollisions(Entity entity) {
-			Rectangle2F checkArea = entity.Physics.PositionedCollisionBox;
-			foreach (CollisionCheck check in GetCollisions(entity, checkArea))
-				DetectClipCollision(entity, check);
-			
-			// Determine which collisions can be resolved later
-			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
-				if (collision.IsColliding) {
-					collision.IsResolvable = CanResolveCollision(entity, collision);
-					if (!collision.IsAllowedClipping)
-						entity.Physics.IsColliding = true;
-				}
-			}
-		}
-
-
-
-
-
-
-
-		
+				
 
 		//-----------------------------------------------------------------------------
 		// Collision Detection
@@ -413,6 +369,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Determine the allowed edge clipping amount
 			collision.AllowedPenetration = GetAllowedPenetration(entity, source);
+			collision.AllowedLateralPenetration = collision.AllowedPenetration;
 
 			// Determine if this collision is dynamic rather than static
 			collision.IsDynamic = (source.IsEntity ||
@@ -427,6 +384,11 @@ namespace ZeldaOracle.Game.Control {
 				Collision a = entity.Physics.PotentialCollisions[i];
 				if (a.IsDynamic)
 					continue;
+				if (a.IsTile && a.Tile.IsLadder) {
+					a.Connections[Directions.Right] = true;
+					a.Connections[Directions.Left] = true;
+					a.Connections[Directions.Down] = true;
+				}
 				for (int j = i + 1; j < entity.Physics.PotentialCollisions.Count; j++) {
 					Collision b = entity.Physics.PotentialCollisions[j];
 					if (!b.IsDynamic)
@@ -539,11 +501,11 @@ namespace ZeldaOracle.Game.Control {
 
 				// Adjust and recalculate collision penetrations
 				AdjustCollisionPenetrations(entity, entity.Physics.Velocity[axis],
-					axis == Axes.X ? Directions.Right : Directions.Down);
+					axis == Axes.X ? Directions.Right : Directions.Down, true);
 
 				// Resolve the collisions on this axis
 				Collision collision = GetPriorityCollision(entity, axis);
-				if (collision != null && collision.IsResolvable)
+				if (collision != null)
 					ResolveCollision(entity, velocity, collision);
 			}
 		}
@@ -558,13 +520,14 @@ namespace ZeldaOracle.Game.Control {
 		{
 			int oppositeDirection = Directions.Reverse(collision.Direction);
 
+			// NOTE: Moved to AdjustCollisionPenetrations
 			// Determine the maximum allowed penetration distance.
 			// Do not allow any additional penetration due to velocity.
-			float velocityPenetration = entity.Physics.Velocity.Dot(
-				Directions.ToVector(collision.Direction));
-			float originalPenetration = collision.Penetration - velocityPenetration;
-			collision.AllowedPenetration = GMath.Clamp(collision.AllowedPenetration,
-				0.0f, originalPenetration);
+			//float velocityPenetration = entity.Physics.Velocity.Dot(
+			//	Directions.ToVector(collision.Direction));
+			//float originalPenetration = collision.Penetration - velocityPenetration;
+			//collision.AllowedPenetration = GMath.Clamp(collision.AllowedPenetration,
+			//	0.0f, originalPenetration);
 
 			// Now calculate the positional correction distance that would resolve
 			// this collision
@@ -581,9 +544,10 @@ namespace ZeldaOracle.Game.Control {
 			// collisions that would be created by resolving this collision
 			// Make sure we do not resolve into another, higher priority collision
 			foreach (Collision oppositeCollision in
-				entity.Physics.GetCollisionsInDirection(oppositeDirection))
+				entity.Physics.PotentialCollisions)
 			{
-				if (oppositeCollision.Penetration <= 0.0f &&
+				if (oppositeCollision.Direction == oppositeDirection &&
+					oppositeCollision.Penetration <= 0.0f &&
 					GetPriorityCollision(collision, oppositeCollision) ==
 						oppositeCollision)
 				{
@@ -604,14 +568,21 @@ namespace ZeldaOracle.Game.Control {
 			AdjustCollisionPenetrations(entity, positionalCorrection,
 				Directions.Reverse(collision.Direction));
 			
-			// Clip velocity in the collision direction
+			// Apply impulse to update velocity in the collision direction
 			if (entity.Physics.Velocity.Dot(
 				Directions.ToVector(collision.Direction)) > 0.0f)
 			{
-				if (Directions.IsHorizontal(collision.Direction))
-					entity.Physics.VelocityX = 0.0f;
-				else
-					entity.Physics.VelocityY = 0.0f;
+				Vector2F newVelocity = entity.Physics.Velocity;
+
+				if (CanReboundColliison(entity, collision)) {
+					collision.IsRebound = true;
+					newVelocity[collision.Axis] *= -1.0f;
+				}
+				else {
+					newVelocity[collision.Axis] = 0.0f;
+				}
+
+				entity.Physics.Velocity = newVelocity;
 			}
 			
 			// Perform collision dodging
@@ -621,12 +592,15 @@ namespace ZeldaOracle.Game.Control {
 				Player player = (Player) entity;
 				canDodge = (player.Movement.IsMoving &&
 					player.Movement.MoveDirection == collision.Direction);
+
 			}
 			if (entity.Physics.AutoDodges && canDodge) {
-				if (roomControl.IsSideScrolling && collision.Axis == Axes.X && entity.IsOnGround)
+				if (roomControl.IsSideScrolling && entity.Physics.HasGravity &&
+					collision.Axis == Axes.X)
 				{
 					// Step up onto blocks if it is a small enough distance
-					//PerformSideScrollCollisionSnap(entity, clipDirection, other, solidBox);
+					if (entity.Physics.GetPreviousCollisionsInDirection(Directions.Down).Any())
+						PerformSideScrollCollisionSnap(entity, collision);
 				}
 				else {
 					// Auto dodging
@@ -691,13 +665,66 @@ namespace ZeldaOracle.Game.Control {
 			return false; // Not close enough to collision edge
 		}
 
+		// Attempt to snap a collision.
+		private bool PerformSideScrollCollisionSnap(Entity entity, Collision collision) {
+			// Only dodge if moving perpendicular to the edge
+			int axis = collision.Axis;
+			int lateralAxis = Axes.GetOpposite(axis);
+			Rectangle2F entityBox = Rectangle2F.Translate(
+				collision.CollisionBox, entity.Position);
+
+			// Check dodging for both edges of the solid object
+			int dodgeDirection = Directions.Up;
+			Vector2F dodgeVector = Directions.ToVector(dodgeDirection);
+			float distanceToEdge = Math.Abs(entityBox.GetEdge(
+				Directions.Reverse(dodgeDirection)) -
+				collision.SolidBox.GetEdge(dodgeDirection));
+				
+			// Check if the distance to the edge is within dodge range
+			if (distanceToEdge <= entity.Physics.AutoDodgeDistance) {
+				Vector2F nextPosition = GMath.Round(entity.Position) +
+					(dodgeVector * 1);
+				Vector2F goalPosition = entity.Position +
+					Directions.ToVector(collision.Direction) * 2 +
+					(dodgeVector * distanceToEdge);
+
+				// Make sure the entity is not colliding when placed at the solid
+				// object's edge
+				if (!IsCollidingAtNew(entity, nextPosition, dodgeDirection) &&
+					!IsCollidingAtNew(entity, goalPosition, collision.Direction)) // TODO: safe clipping
+				{
+					entity.Position = goalPosition;
+					collision.IsAutoDodged = true;
+
+					// Change this collision into a downward collision
+					collision.Direction = Directions.Down;
+					collision.CalcPenetration();
+
+					// Adjust and recalculate penetration for all collisions
+					AdjustCollisionPenetrations(entity, distanceToEdge, dodgeDirection);
+					AdjustCollisionPenetrations(entity, 2, Directions.Reverse(collision.Direction));
+					return true; // Dodged successfully
+				}
+			}
+
+			return false; // Not close enough to collision edge
+		}
+
 		private void AdjustCollisionPenetrations(Entity entity, float amount,
-			int direction)
+			int direction, bool movement = false)
 		{
 			int axis = Directions.ToAxis(direction);
 			foreach (Collision collision in entity.Physics.PotentialCollisions)
 			{
+				bool prevIsColliding = collision.IsColliding;
+
 				if (collision.Axis == axis) {
+					if (movement) {
+						collision.AllowedPenetration = GMath.Clamp(
+							collision.AllowedPenetration,
+							0.0f, collision.Penetration);
+					}
+					
 					// The entity moved perpendicular to this collision face, so
 					// adjust the penetration distance
 					if (collision.Direction == direction)
@@ -712,7 +739,9 @@ namespace ZeldaOracle.Game.Control {
 				}
 
 				// Recalculate whether this is colliding
-				collision.CalcIsColliding();
+				//collision.CalcIsColliding();
+				if (!collision.IsColliding && prevIsColliding)
+					collision.IsResolved = true;
 			}
 		}
 
@@ -796,377 +825,23 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-		/// <summary>Detect a clip collision between the entity and a solid object.</summary>
-		private void DetectClipCollision(Entity entity, CollisionCheck source) {
-			object other = source.SolidObject;
-			Rectangle2F solidBox = source.SolidBox;
-
-			// Check if there actually is a collision
-			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
-			if (entityBox.Intersects(solidBox)) {
-				// Determine the direction the entity is clipping into the solid object
-				int clipDirection = GetCollisionClipDirection(entity, other, solidBox);
-				int oppositeAxis = 1 - Directions.ToAxis(clipDirection);
-
-				// Replace the collision info for this clip direction, but not if already
-				// colliding and clipping in this direction with greater penetration.
-				if (clipDirection >= 0) {
-					CollisionInfoNew oldCollisionInfo =
-						entity.Physics.ClipCollisionInfo[clipDirection];
-
-					CollisionInfoNew newCollisionInfo =
-						CreateCollisionInfo(entity, other, solidBox, clipDirection);
-					newCollisionInfo.Source = source;
-					entity.Physics.AllClipCollisionInfo.Add(newCollisionInfo);
-
-					if (!oldCollisionInfo.IsColliding ||
-						(newCollisionInfo.PenetrationDistance >
-							oldCollisionInfo.PenetrationDistance ||
-							Rectangle2F.Intersect(entityBox, newCollisionInfo.CollisionBox).Size[oppositeAxis] > 
-							Rectangle2F.Intersect(entityBox, oldCollisionInfo.CollisionBox).Size[oppositeAxis]))
-						entity.Physics.ClipCollisionInfo[clipDirection] = newCollisionInfo;
-				}
-			}
-		}
-
-		/// <summary>Determine the clipping direction for a collision.</summary>
-		private int GetCollisionClipDirection(Entity entity, object other, Rectangle2F solidBox) {
-			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
-
-			// For moving tiles which are moving toward the entity, use the tile's
-			// move direction to determine clip direction.
-			Tile tile = other as Tile;
-			if (tile != null && tile.IsMoving) {
-				if ((solidBox.Center - entityBox.Center).Dot(
-					Directions.ToVector(tile.MoveDirection)) < 0.0f)
-					return Directions.Reverse(tile.MoveDirection);
-			}
-
-			// Get the nearest direction from the collision intersection to the center
-			// of the solid box.
-			Vector2F intersectionCenter =
-				Rectangle2F.Intersect(entityBox, solidBox).Center;
-			int clipDirection =
-				Directions.NearestFromVector(solidBox.Center - intersectionCenter);
-
-			// If the collision can't be resolved, then try to use a direction on the
-			// opposite axis.
-			CollisionInfoNew testCollision = 
-				CreateCollisionInfo(entity, other, solidBox, clipDirection);
-			if (!testCollision.IsAllowedClipping &&
-				!CanResolveCollision(entity, testCollision))
-			{
-				int newClipDirection;
-				int oppositeAxis = 1 - Directions.ToAxis(clipDirection);
-				if (entityBox.Center[oppositeAxis] < solidBox.Center[oppositeAxis])
-					newClipDirection = (oppositeAxis == Axes.X ? Directions.Right : Directions.Down);
-				else
-					newClipDirection = (oppositeAxis == Axes.X ? Directions.Left : Directions.Up);
-				testCollision = CreateCollisionInfo(entity, other, solidBox, newClipDirection);
-				if (testCollision.IsAllowedClipping || CanResolveCollision(entity, testCollision))
-					clipDirection = newClipDirection;
-			}
-			
-			return clipDirection;
-		}
-		
-		// Create a clip collision info between an entity and solid object with a specified clip direction.
-		private CollisionInfoNew CreateCollisionInfo(Entity entity, object other, Rectangle2F solidBox, int clipDirection) {
-			return new CollisionInfoNew() {
-				IsColliding						= true,
-				Entity							= entity,
-				CollidedObject					= other,
-				CollisionBox					= solidBox,
-				PenetrationDirection			= clipDirection,
-				PenetrationDistance				= GetClipPenetration(entity.Physics.PositionedCollisionBox, solidBox, clipDirection),
-				MaxAllowedPenetrationDistance	= GetAllowedEdgeClipAmount(entity, other)
-			};
-		}
-		
 		private float GetAllowedPenetration(Entity entity, CollisionCheck collision) {
 			if (!entity.Physics.AllowEdgeClipping)
 				return 0.0f;
-			if (collision.IsTile && collision.Tile.IsInMotion)
+			if (collision.IsTile && (collision.Tile.IsInMotion ||
+				collision.Tile.IsLadder))
 				return 0.0f;
 			if (collision.IsRoomEdge)
 				return 0.0f;
 			return entity.Physics.EdgeClipAmount;
 		}
 
-		// Returns the allowable edge clip amount between an entity and solid object.
-		private float GetAllowedEdgeClipAmount(Entity entity, object solidObject) {
-			if (!entity.Physics.AllowEdgeClipping)
-				return 0.0f;
-			if ((solidObject is Tile) && ((Tile) solidObject).IsInMotion)
-				return 0.0f;
-			return entity.Physics.EdgeClipAmount;
-		}
-
-		
-		//-----------------------------------------------------------------------------
-		// Clip Collision Resolution
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Resolve clip collisions that were not resolved from the previous
-		/// frame.</summary>
-		private void ResolvePreviousClipCollisions(Entity entity) {
-			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
-				/*
-				if (!collision.IsResolved && CanResolveCollision(entity, collision)) {
-					float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
-					entity.Position -= Directions.ToVector(collision.PenetrationDirection) * resolveDistance;
-				}*/
-				if (!collision.IsResolved) {
-					collision.PenetrationDistance =
-						GetClipPenetration(entity.Physics.PositionedCollisionBox,
-						collision.CollisionBox, collision.PenetrationDirection);
-				}
-				else {
-					collision.Reset();
-					collision.Entity = entity;
-					collision.PenetrationDirection = i;
-				}
-			}
-		}
-		
-		/// <summary>Resolve the clip collisions for each axis.</summary>
-		private void ResolveClipCollisions(Entity entity) {
-			// For each axis, determine which collisions take priority
-			CollisionInfoNew[] collisions = new CollisionInfoNew[2];
-			collisions[Axes.X] = GetPriorityCollision(entity,
-				entity.Physics.ClipCollisionInfo[Directions.Right],
-				entity.Physics.ClipCollisionInfo[Directions.Left]);
-			collisions[Axes.Y] = GetPriorityCollision(entity,
-				entity.Physics.ClipCollisionInfo[Directions.Up],
-				entity.Physics.ClipCollisionInfo[Directions.Down]);
-
-			// Try to resolve each collision individually
-			for (int i = 0; i < 2; i++) {
-				CollisionInfoNew collision = collisions[i];
-				if (collision != null && collision.IsResolvable)
-					ResolveClipCollision(entity, collisions[i]);
-			}
-
-			// Check if the collisions can be only resolved together and NOT separately
-			// For example, if an entity is penetrating the inside corner of a wall,
-			// then it is colliding in two directions and can only stop colliding with
-			// either if it is moved diagonally.
-			if (collisions[0] != null && collisions[1] != null &&
-				!collisions[0].IsResolvable && !collisions[1].IsResolvable &&
-				CanResolveCollisionPair(entity, collisions[0], collisions[1]))
-			{
-				for (int i = 0; i < 2; i++)
-					ResolveClipCollision(entity, collisions[i]);
-			}
-		}
-		
-		/// <summary>Resolve a single clip collisions.</summary>
-		private void ResolveClipCollision(Entity entity, CollisionInfoNew collision) {
-			// Resolve the collision
-			entity.Position += GetPositionalCorrection(collision);
-			collision.IsResolved = true;
-
-			// Add to the penetration distance of the opposite collision
-			CollisionInfoNew otherCollision = entity.Physics.ClipCollisionInfo[
-				Directions.Reverse(collision.PenetrationDirection)];
-			if (otherCollision.IsColliding) {
-				float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance -
-					collision.MaxAllowedPenetrationDistance);
-				otherCollision.PenetrationDistance += resolveDistance;
-			}
-		}
-
-		// Returns the clip collision that has resolution priority (or null if neither are colliding).
-		private CollisionInfoNew GetPriorityCollision(Entity entity, CollisionInfoNew collision1, CollisionInfoNew collision2) {
-			if (!collision1.IsCollidingAndNotAllowedClipping && !collision2.IsCollidingAndNotAllowedClipping)
-				return null;
-			else if (collision1.IsCollidingAndNotAllowedClipping && !collision2.IsCollidingAndNotAllowedClipping)
-				return collision1;
-			else if (collision2.IsCollidingAndNotAllowedClipping && !collision1.IsCollidingAndNotAllowedClipping)
-				return collision2;
-
-			// Resolvable collisions over non resolvable collisions
-			if (collision1.IsResolvable && !collision2.IsResolvable)
-				return collision1;
-			else if (collision2.IsResolvable && !collision1.IsResolvable)
-				return collision2;
-
-			// Dynamic collisions over static collisions
-			if (IsSolidObjectDynamic(collision1.CollidedObject) && !IsSolidObjectDynamic(collision2.CollidedObject))
-				return collision1;
-			if (IsSolidObjectDynamic(collision2.CollidedObject) && !IsSolidObjectDynamic(collision1.CollidedObject))
-				return collision2;
-
-			Tile tile1 = collision1.CollidedObject as Tile;
-			Tile tile2 = collision2.CollidedObject as Tile;
-			Entity entity1 = collision1.CollidedObject as Entity;
-			Entity entity2 = collision2.CollidedObject as Entity;
-
-			// Entities over tiles.
-			if (entity1 != null && tile2 != null)
-				return collision1;
-			if (entity2 != null && tile1 != null)
-				return collision2;
-
-			// Compare two entities.
-			if (entity1 != null && entity2 != null) {
-				if (entity1.EntityIndex < entity2.EntityIndex)
-					return collision1;
-				if (entity2.EntityIndex < entity1.EntityIndex)
-					return collision2;
-			}
-
-			// Compare two tiles.
-			if (tile1 != null && tile2 != null) {
-				if (tile1.Position.Y > tile2.Position.Y)
-					return collision1;
-				else if (tile2.Position.Y > tile1.Position.Y)
-					return collision2;
-				else if (tile1.Position.X > tile2.Position.X)
-					return collision1;
-				else if (tile2.Position.X > tile1.Position.X)
-					return collision2;
-				else if (tile1.Layer > tile2.Layer)
-					return collision1;
-				else if (tile2.Layer > tile1.Layer)
-					return collision2;
-			}
-
-			return collision1;
-		}
-		
-		// Get the positional correction needed to resolve a collision.
-		private Vector2F GetPositionalCorrection(CollisionInfoNew collision) {
-			float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
-			return -Directions.ToVector(collision.PenetrationDirection) * resolveDistance;
-		}
-		
-		// Returns true if the given collision needs resolution.
-		private bool CanResolveCollision(Entity entity, CollisionInfoNew collision) {
-			if (!collision.IsColliding || collision.IsAllowedClipping)
-				return false;
-			
-			// Don't resolve collisions if they are within the allowable edge clip amount.
-			if (IsSafeClipping(entity, 1 - Directions.ToAxis(collision.PenetrationDirection), entity.Physics.PositionedCollisionBox, collision.CollidedObject, collision.CollisionBox))
-				return false;
-
-			// Static collisions cannot resolve into colliding with other static objects.
-			Tile tile = collision.CollidedObject as Tile;
-			if (tile != null && !tile.IsInMotion) {
-				Vector2F newPosition = entity.Position + GetPositionalCorrection(collision);
-				if (IsCollidingAt(entity, newPosition, true))
-					return false;
-			}
-
-			if ((collision.CollidedObject is Tile) && !entity.Physics.CollideWithWorld)
-				return false;
-			if ((collision.CollidedObject is Entity) && !entity.Physics.CollideWithEntities)
-				return false;
-
-			return true;
-		}
-
-		// Returns true if the given clip collision needs resolution.
-		private bool CanResolveCollisionPair(Entity entity, CollisionInfoNew collision1, CollisionInfoNew collision2) {
-			// Static collisions cannot resolve into colliding with other static objects.
-			Tile tile1 = collision1.CollidedObject as Tile;
-			Tile tile2 = collision2.CollidedObject as Tile;
-			if ((tile1 != null && !tile1.IsInMotion) || (tile2 != null && !tile2.IsInMotion)) {
-				Vector2F newPosition = entity.Position;
-				newPosition += GetPositionalCorrection(collision1);
-				newPosition += GetPositionalCorrection(collision2);
-				if (IsCollidingAt(entity, newPosition, true))
-					return false;
-			}
-			return true;
-		}
-
-		// Returns true if the entity would be clipping if it were placed at the given position.
-		private bool IsCollidingAt(Entity entity, Vector2F position, bool onlyStatic, int clipDirection = -1, float clipDistance = 0.0f) {
-			Rectangle2F entityBox = entity.Physics.CollisionBox;
-			entityBox.Point += position;
-			if (entity.Physics.CollideWithRoomEdge && !((Rectangle2F) roomControl.RoomBounds).Contains(entityBox))
-				return true;
-			foreach (CollisionCheck check in GetCollisions(entity, entityBox)) {
-				if (onlyStatic && IsSolidObjectDynamic(check.SolidObject))
-					continue;
-				float allowedClipAmount = GetAllowedEdgeClipAmount(entity, check.SolidObject);
-				Rectangle2F insetSolidBox = check.SolidBox.Inflated(-allowedClipAmount, -allowedClipAmount);
-				if (clipDirection >= 0)
-					insetSolidBox.ExtendEdge(Directions.Reverse(clipDirection), allowedClipAmount - clipDistance);
-				if (entityBox.Intersects(insetSolidBox))
-					return true;
-			}
-			return false;
-		}
-
-		// Returns whether a solid object is considered dynamic (moving tiles or entities).
-		private bool IsSolidObjectDynamic(object solidObject) {
-			if (solidObject is Tile)
-				return ((Tile) solidObject).IsInMotion;
-			return (solidObject is Entity);
-		}
 
 		
 		//-----------------------------------------------------------------------------
 		// Post-Clip Collision Stage
 		//-----------------------------------------------------------------------------
 		
-		// Restrict an entity's velocity based on its clip collisions.
-		private void ClipVelocity(Entity entity) {
-			// Check if the entity is in a deadlock (has collisions but cannot resolve any of them).
-			/*entity.Physics.IsDeadlocked = false;
-			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfoNew collision = entity.Physics.CollisionInfoNew[i];
-				if (collision.IsColliding) {
-					if (collision.IsResolvable) {
-						entity.Physics.IsDeadlocked = false;
-						break;
-					}
-					else
-						entity.Physics.IsDeadlocked = true;
-				}
-			}
-			if (entity.Physics.IsDeadlocked)
-				entity.Physics.Velocity = Vector2F.Zero;*/
-
-			// Clip velocities for collisions.
-			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
-				if (collision.IsCollidingAndNotAllowedClipping)
-					ClipEntityVelocity(entity, collision.PenetrationDirection);
-			}
-		}
-		
-		/// <summary>Restrict the entity's velocity in the given direction.</summary>
-		private void ClipEntityVelocity(Entity entity, int direction) {
-			if (direction == Directions.Right && entity.Physics.VelocityX > 0.0f)
-				entity.Physics.VelocityX = 0.0f;
-			if (direction == Directions.Down && entity.Physics.VelocityY > 0.0f)
-				entity.Physics.VelocityY = 0.0f;
-			if (direction == Directions.Left && entity.Physics.VelocityX < 0.0f)
-				entity.Physics.VelocityX = 0.0f;
-			if (direction == Directions.Up && entity.Physics.VelocityY < 0.0f)
-				entity.Physics.VelocityY = 0.0f;
-		}
-
 		/// <summary>Check if the entity is being crushed between two collisions.
 		/// </summary>
 		private void CheckCrush(Entity entity) {
@@ -1174,7 +849,7 @@ namespace ZeldaOracle.Game.Control {
 				return;
 			
 			// Iterate collisions which are able to crush the entity
-			foreach (Collision rock in entity.Physics.ActualCollisions) {
+			foreach (Collision rock in entity.Physics.Collisions) {
 				if (rock.IsTile && rock.Tile.IsMoving &&
 					rock.Tile.MoveDirection == Directions.Reverse(rock.Direction))
 				{
@@ -1182,7 +857,7 @@ namespace ZeldaOracle.Game.Control {
 					int crushAxis = Directions.ToAxis(crushDirection);
 
 					// Iterate collisions which are caused by the crushing collision
-					foreach (Collision hardPlace in entity.Physics.ActualCollisions) {
+					foreach (Collision hardPlace in entity.Physics.Collisions) {
 						if (hardPlace.Direction == crushDirection) {
 							float gap = entity.Physics.CollisionBox.Size[crushAxis] -
 								hardPlace.Penetration;
@@ -1193,305 +868,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 		}
-		
-
-		//-----------------------------------------------------------------------------
-		// Movement Collisions
-		//-----------------------------------------------------------------------------
-		
-		/// <summary>Resolve any movement collisions caused by an entity's velocity.
-		/// </summary>
-		private void ResolveMovementCollisions(Entity entity) {
-			
-			Rectangle2F checkArea = Rectangle2F.Union(
-				Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
-				Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position + entity.Physics.Velocity));
-
-			for (int axis = 0; axis < 2; axis++) {
 				
-				// Setup the entity's translated collision box based on which axis we're checking.
-				Rectangle2F entityBox;
-				if (axis == Axes.X) {
-					entityBox = Rectangle2F.Translate(entity.Physics.CollisionBox,
-						entity.X + entity.Physics.Velocity.X, entity.Y);
-				}
-				else {
-					entityBox = Rectangle2F.Translate(entity.Physics.CollisionBox,
-						entity.Position + entity.Physics.Velocity);
-				}
-				
-				// Find all collisions
-				foreach (CollisionCheck check in GetCollisions(entity, checkArea)) {
-					if (entityBox.Intersects(check.SolidBox)) {
-						// Determine clipping direction
-						int clipDirection = -1;
-						if (axis == Axes.X) {
-							if (entityBox.Center.X < check.SolidBox.Center.X)
-								clipDirection = Directions.Right;
-							else
-								clipDirection = Directions.Left;
-						}
-						else {
-							if (entityBox.Center.Y < check.SolidBox.Center.Y)
-								clipDirection = Directions.Down;
-							else
-								clipDirection = Directions.Up;
-						}
-
-						CollisionInfo info = new CollisionInfo();
-						info.SetCollision(check.SolidObject, clipDirection);
-						info.IsMovementCollision = true;
-						info.SolidBox = check.SolidBox;
-						
-						// Determine the penetration
-						float penetrationDistance = GetClipPenetration(entityBox, info.SolidBox, clipDirection);
-						float maxAllowedPenetration = 0.0f;
-						if (entity.Physics.Velocity[axis] == 0.0f)
-							maxAllowedPenetration = GetAllowedEdgeClipAmount(entity, check.SolidObject);
-						info.Penetration = penetrationDistance;
-
-						// Ignore collisions that are within the allowed clipping range
-						if (IsSafeClipping(entity, 1 - axis, entityBox, info.SolidObject, info.SolidBox))
-							continue;
-						entity.Physics.AllMovementCollisionInfo.Add(info);
-					}
-				}
-				
-				for (int i = 0; i < entity.Physics.AllMovementCollisionInfo.Count; i++) {
-					CollisionInfo info = entity.Physics.AllMovementCollisionInfo[i];
-					if (Directions.ToAxis(info.Direction) == axis) {
-						if (!ResolveMovementCollision(entity, info))
-							entity.Physics.AllMovementCollisionInfo.RemoveAt(i--);
-					}
-				}
-			}
-
-			//for (int i = 0; i < entity.Physics.AllMovementCollisionInfo.Count; i++) {
-			//	CollisionInfo info = entity.Physics.AllMovementCollisionInfo[i];
-			//	if (ResolveMovementCollision(entity, Directions.ToAxis(info.Direction),
-			//		info.SolidObject, info.SolidBox))
-			//		info.IsResolved = true;
-			//}
-						
-			//Rectangle2F checkArea = Rectangle2F.Union(
-				//Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
-				//Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position + entity.Physics.Velocity));
-
-			/*for (int axis = 0; axis < 2; axis++) {
-				foreach (CollisionCheck check in GetCollisions(entity, checkArea)) {
-					ResolveMovementCollision(entity, axis,
-						check.SolidObject, check.SolidBox);
-				}
-			}*/
-		}
-		
-		/// <summary>Resolve any movement collision between the entity and a solid
-		/// object.</summary>
-		private bool ResolveMovementCollision(Entity entity, CollisionInfo info) {
-			int axis = info.Axis;
-			object other = info.SolidObject;
-			Rectangle2F solidBox = info.SolidBox;
-			int clipDirection = info.Direction;
-
-			// Setup the entity's translated collision box based on which axis we're checking.
-			Rectangle2F entityBox;
-			if (axis == Axes.X) {
-				entityBox = Rectangle2F.Translate(entity.Physics.CollisionBox,
-					entity.X + entity.Physics.Velocity.X, entity.Y);
-			}
-			else {
-				entityBox = Rectangle2F.Translate(entity.Physics.CollisionBox,
-					entity.Position + entity.Physics.Velocity);
-			}
-
-
-			// Check if this collision was resolved due to resolving another collision
-			if (!entityBox.Intersects(solidBox)) {
-				info.IsResolved = true;
-				return true;
-			}
-
-			// Determine the unresolved penetration
-			float penetrationDistance = GetClipPenetration(entityBox, solidBox, clipDirection);
-			float maxAllowedPenetration = 0.0f;
-			if (entity.Physics.Velocity[axis] == 0.0f)
-				maxAllowedPenetration = GetAllowedEdgeClipAmount(entity, other);
-
-			// Ignore collisions that are within the allowed clipping range
-			if (IsSafeClipping(entity, 1 - axis, entityBox, other, solidBox) || 
-				penetrationDistance <= maxAllowedPenetration)
-			{
-				info.IsResolved = true;
-				return true;
-			}
-
-			// Ignore collision if the entity is already colliding in the opposite
-			// direction or if the entity is not moving in the clip direction.
-			if (entity.Physics.ClipCollisionInfo[Directions.Reverse(clipDirection)].IsCollidingAndNotAllowedClipping ||
-				entity.Physics.Velocity.Dot(Directions.ToVector(clipDirection)) <= 0.0f)
-				return true;
-			
-			// Ignore the collision if the entity is clipped into a solid object that shares
-			// a clip edge with this object and the entity is also moving parallel with that edge.
-			for (int i = 0; i < 2; i++) {
-				int dir = Axes.GetOpposite(axis) + (i * 2);
-				CollisionInfoNew checkCollision = entity.Physics.ClipCollisionInfo[dir];
-				if (checkCollision.IsColliding && AreEdgesAligned(
-					checkCollision.CollisionBox, solidBox, Directions.Reverse(dir)))
-				{
-					return true;
-				}
-			}
-
-			// Resolve the collision
-			if (!entity.Physics.IsColliding &&
-				!entity.Physics.ClipCollisionInfo[clipDirection].IsColliding)
-			{
-				// Snap the entity's position to the edge of the solid object
-				Vector2F resolvedEntityPosition = entity.Position;
-				resolvedEntityPosition[axis] += entity.Physics.Velocity[axis];
-				resolvedEntityPosition -= Directions.ToVector(clipDirection) * penetrationDistance;
-				if (penetrationDistance <= maxAllowedPenetration)
-					resolvedEntityPosition += Directions.ToVector(clipDirection) * penetrationDistance;
-				entity.Position = resolvedEntityPosition;
-				entity.Physics.CollisionInfo[clipDirection].SetCollision(other, clipDirection);
-			}
-			
-			// Zero the entity's velocity for this axis
-			Vector2F velocity = entity.Physics.Velocity;
-			velocity[axis] = 0.0f;
-			entity.Physics.Velocity = velocity;
-			
-			entity.Physics.MovementCollisions[clipDirection] = true;
-			if (!entity.Physics.CollisionInfo[clipDirection].IsColliding)
-				entity.Physics.CollisionInfo[clipDirection].SetCollision(other, clipDirection);
-			
-			// Perform collision dodging
-			bool canDodge = true;
-			if (entity is Player) {
-				// TODO: this won't work for when player is knocked back
-				canDodge = ((Player)entity).Movement.AllowMovementControl && Controls.Arrows[clipDirection].IsDown();
-			}
-			if (entity.Physics.AutoDodges && canDodge) { 
-				if (roomControl.IsSideScrolling && axis == Axes.X &&
-					(!(entity is Player) || !((Player) entity).IsOnSideScrollLadder || ((other is Tile) && ((Tile) other).IsInMotion)) &&
-					(entity.IsOnGround || entity.Physics.PreviousCollisionInfo[Directions.Down].IsColliding))
-				{
-					// Step up onto blocks if it is a small enough distance.
-					PerformSideScrollCollisionSnap(entity, clipDirection, other, solidBox);
-				}
-				else {
-					// Auto dodging
-					if (PerformCollisionDodge(entity, clipDirection, other, solidBox))
-						info.IsAutoDodged = true;
-				}
-			}
-
-			info.IsResolved = true;
-			return true;
-		}
-
-		// Attempt to dodge a collision.
-		private bool PerformCollisionDodge(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
-			// Only dodge if moving perpendicular to the edge.
-			int axis = Directions.ToAxis(direction);
-			if (Math.Abs(entity.Physics.Velocity[1 - axis]) > GameSettings.EPSILON)
-				return false;
-
-			// Can't dodge moving tiles.
-			if ((solidObject is Tile) && ((Tile) solidObject).IsMoving)
-				return false;
-
-			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
-			float penetrationDistance = GetClipPenetration(
-				entity.Physics.PositionedCollisionBox, solidBox, direction);
-
-			// Check dodging for both edges of the solid object.
-			for (int side = 0; side < 2; side++) {
-				int moveDirection = (direction + (side == 0 ? 1 : 3)) % 4;
-				float distanceToEdge = Math.Abs(entityBox.GetEdge(
-					Directions.Reverse(moveDirection)) - solidBox.GetEdge(moveDirection));
-				
-				// Check if the distance to the edge is within dodge range.
-				if (distanceToEdge <= entity.Physics.AutoDodgeDistance) {
-					float moveAmount = Math.Min(entity.Physics.AutoDodgeSpeed, distanceToEdge);
-
-					Vector2F nextPosition = GMath.Round(entity.Position) +
-						(Directions.ToVector(moveDirection) * moveAmount);
-					Vector2F goalPosition = entity.Position + Directions.ToVector(direction) +
-						(Directions.ToVector(moveDirection) * distanceToEdge);
-					
-					// Make sure the entity is not colliding when placed at the solid object's edge.
-					if (!IsCollidingAt(entity, nextPosition, false, direction, penetrationDistance) &&
-						!IsCollidingAt(entity, goalPosition, false, direction, penetrationDistance))
-					{
-						entity.Position += Directions.ToVector(moveDirection) * moveAmount;
-						entity.Physics.CollisionInfo[direction].IsAutoDodged = true;
-						//entity.Physics.MovementCollisions[direction] = false; // TODO: Figure out complications for removing this.
-						return true;
-					}
-				}
-			}
-
-			return false;
-		}
-		
-		// Attempt to snap a collision.
-		private bool PerformSideScrollCollisionSnap(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
-			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
-			float penetrationDistance = GetClipPenetration(
-				entity.Physics.PositionedCollisionBox, solidBox, direction);
-			float distanceToEdge = entityBox.Bottom - solidBox.Top;
-			//Vector2F goalPosition = entity.Position + Directions.ToVector(direction) +
-				//(Directions.ToVector(Directions.Up) * distanceToEdge);
-			
-			Vector2F goalPosition = entity.Position +
-				Directions.ToVector(direction) -
-				new Vector2F(0.0f, distanceToEdge);
-
-			// Check if the distance to the edge is within dodge range.
-			// Make sure the entity is not colliding when placed at the solid object's edge.
-			if (distanceToEdge <= entity.Physics.AutoDodgeDistance &&
-				!IsCollidingAt(entity, goalPosition, false, direction, penetrationDistance))
-			{
-				entity.Position = goalPosition;
-				entity.Physics.MovementCollisions[Directions.Down] = true;
-				entity.Physics.CollisionInfo[Directions.Down].SetCollision(solidObject, Directions.Down);
-				return true;
-			}
-			return false;
-		}
-		
-		// Returns true if the entity allowably clipping the given collision.
-		private bool IsSafeClipping(Entity entity, int axis, Rectangle2F entityBox, object other, Rectangle2F solidBox) {
-			if (entity.Physics.AllowEdgeClipping) {
-				float allowedEdgeClipAmount = GetAllowedEdgeClipAmount(entity, other);
-				float penetration = Math.Min(
-					solidBox.BottomRight[axis] - entityBox.TopLeft[axis],
-					entityBox.BottomRight[axis] - solidBox.TopLeft[axis]);
-				return (penetration <= allowedEdgeClipAmount);
-			}
-			return false;
-		}
-
-		// Calculate a collision's penetration distance in the given direction.
-		public float GetClipPenetration(Rectangle2F entityBox, Rectangle2F solidBox, int clipDirection) {
-			if (clipDirection == Directions.Right)
-				return entityBox.Right - solidBox.Left;
-			else if (clipDirection == Directions.Up)
-				return solidBox.Bottom - entityBox.Top;
-			else if (clipDirection == Directions.Left)
-				return solidBox.Right - entityBox.Left;
-			else if (clipDirection == Directions.Down)
-				return entityBox.Bottom - solidBox.Top;
-			return 0.0f;
-		}
-		
-		// Returns true if two rectangles share an edge in the given direction.
-		public static bool AreEdgesAligned(Rectangle2F box1, Rectangle2F box2, int edgeDirection) {
-			return Math.Abs(box1.GetEdge(edgeDirection) - box2.GetEdge(edgeDirection)) < 0.1f;
-		}
-		
 
 		//-----------------------------------------------------------------------------
 		// Side Scrolling Ladder Collisions
@@ -1504,7 +881,8 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Get the highest ladder the player is touching
 			Rectangle2F climbBoxPrev = Rectangle2F.Translate(
-				player.Movement.ClimbCollisionBox, player.PreviousPosition);
+				player.Movement.ClimbCollisionBox, player.Position);
+				//player.Movement.ClimbCollisionBox, player.PreviousPosition);
 			Tile ladder = GetHighestLadder(climbBoxPrev, player.PreviousPosition);
 			
 			// Check for beginning climbing
@@ -1515,11 +893,11 @@ namespace ZeldaOracle.Game.Control {
 				Rectangle2F climbBoxNext = Rectangle2F.Translate(
 					player.Movement.ClimbCollisionBox,
 					player.Position + player.Physics.Velocity);
-				CollisionInfo standingCollisionPrev =
-					player.Physics.PreviousCollisionInfo[Directions.Down];
-				CollisionInfo standingCollision =
-					player.Physics.CollisionInfo[Directions.Down];
-				
+				Collision standingCollisionPrev =
+					player.Physics.GetPreviousCollisionsInDirection(Directions.Down).FirstOrDefault();
+				Collision standingCollision =
+					player.Physics.GetCollisionsInDirection(Directions.Down).FirstOrDefault();
+
 				// Check if this ladder is a ladder-top
 				Tile checkAboveTile = player.RoomControl.TileManager
 					.GetSurfaceTile(ladder.Location - new Point2I(0, 1));
@@ -1529,9 +907,12 @@ namespace ZeldaOracle.Game.Control {
 				// Check for beginning climbing by moving up while falling
 				if ((player.Physics.VelocityY >= 0.0f || !player.Physics.HasGravity) &&
 					!player.Physics.IsInWater &&
-					player.Movement.IsMovingInDirection(Directions.Up))
+					player.Movement.IsMovingInDirection(Directions.Up) ||
+					(player.Movement.IsMovingInDirection(Directions.Down) &&
+						isTopLadder && player.Center.Y < ladderBox.Top))
 				{
 					player.BeginEnvironmentState(player.SideScrollLadderState);
+					player.IntegrateStateParameters();
 					player.Physics.VelocityY = 0.0f;
 				}
 
@@ -1539,30 +920,16 @@ namespace ZeldaOracle.Game.Control {
 				// onto the ladder. Make sure the player is not on a flat surface
 				// aligned with the ladder-top.  <--FIXME: safe clipping makes this false
 				else if (climbBoxNext.Intersects(ladderBox) &&
-					standingCollisionPrev.IsColliding &&
-					standingCollisionPrev.Tile != ladder &&
-					!standingCollision.IsColliding &&
+					standingCollisionPrev != null &&
+					standingCollision == null &&
 					player.Physics.VelocityY >= 0.0f &&
 					(!isTopLadder || collisionBox.Bottom > ladderBox.Top ||
-						standingCollisionPrev.Tile == null ||
-						standingCollisionPrev.Tile.Bounds.Top != ladderBox.Top))
+						standingCollisionPrev.GetEdge(Directions.Down) != ladderBox.Top))
 				{
 					player.BeginEnvironmentState(player.SideScrollLadderState);
+					player.IntegrateStateParameters();
 					return;
 				}
-			}
-
-			// Collide with ladder tops
-			Rectangle2F ladderCheckArea = Rectangle2F.Union(
-				Rectangle2F.Translate(player.Physics.CollisionBox,
-					player.Position),
-				Rectangle2F.Translate(player.Physics.CollisionBox,
-					player.Position + player.Physics.Velocity));
-			foreach (Tile tile in
-				RoomControl.TileManager.GetTilesTouching(ladderCheckArea))
-			{
-				if (tile.IsLadder)
-					CheckLadderCollision(player, tile);
 			}
 		}
 		
@@ -1579,111 +946,13 @@ namespace ZeldaOracle.Game.Control {
 			}
 			return highestLadder;
 		}
-
-		/// <summary>Check collisions with ladder-tops</summary>
-		private void CheckLadderCollision(Player player, Tile ladder) {
-			Rectangle2F ladderBox		= ladder.Bounds;
-			Rectangle2F entityBoxPrev	= player.Physics.PositionedCollisionBox;
-			Rectangle2F entityBox		= Rectangle2F.Translate(entityBoxPrev, player.Physics.Velocity);
-			Rectangle2F climbBox		= player.Movement.ClimbCollisionBox;
-			Rectangle2F climbBoxPrev	= climbBox;
-			climbBox.Point		+= player.Position + player.Physics.Velocity;
-			climbBoxPrev.Point	+= player.Position;
-			
-			// Check if this tile is a top-most ladder
-			Tile checkAboveTile = player.RoomControl.TileManager
-				.GetSurfaceTile(ladder.Location - new Point2I(0, 1));
-			bool isTopLadder = (checkAboveTile == null || !checkAboveTile.IsLadder);
-			
-			// The player can collide with the top of a ladder if he...
-			//  - is not climbing
-			//  - is touching the ladder
-			//  - was previously above the ladder
-			//  - is not standing on something else with clipping
-			if (isTopLadder && !player.IsOnSideScrollLadder &&
-				entityBox.Intersects(ladderBox) &&
-				entityBoxPrev.Bottom <= ladderBox.Top &&
-				!player.Physics.ClipCollisionInfo[Directions.Down].IsColliding)
-			{
-				// If holding the [Down] button, then begin climbing the ladder instead
-				if (player.Movement.IsMovingInDirection(Directions.Down)) {
-					player.BeginEnvironmentState(player.SideScrollLadderState);
-				}
-				else {
-					// Collide with the top of the ladder
-					player.Physics.VelocityY = 0.0f;
-					player.Y = ladderBox.Top - player.Physics.CollisionBox.Bottom;
-					player.Physics.MovementCollisions[Directions.Down] = true;
-					if (!player.Physics.CollisionInfo[Directions.Down].IsColliding)
-						player.Physics.CollisionInfo[Directions.Down].SetCollision(ladder, Directions.Down);
-				}
-			}
-		}
 		
 		
 		//-----------------------------------------------------------------------------
 		// Room Boundaries
 		//-----------------------------------------------------------------------------
 
-		// Check collisions with the room's edges.
-		private void CheckRoomEdgeCollisions(Entity entity) {
-			if (!entity.Physics.CollideWithRoomEdge && !entity.Physics.ReboundRoomEdge)
-				return;
-			
-			Rectangle2F collisionBox = entity.Physics.CollisionBox;
-			Rectangle2F entityBox = entity.Physics.CollisionBox;
-			entityBox.Point += entity.Position + entity.Physics.Velocity;
-			Rectangle2F roomBounds = roomControl.RoomBounds;
-
-			/*
-			for (int i = 0; i < Directions.Count; i++) {
-				int axis = Directions.ToAxis(i);
-				float penetration = GetClipPenetration(roomBounds, entityBox, i);
-				float distanceOutside = entityBox.Size[axis] - penetration;
-
-				if (distanceOutside > 0.0f) {
-					entity.Position -= Directions.ToVector(i) * distanceOutside;
-
-					entity.Physics.IsColliding = true;
-					entity.Physics.CollisionInfo[i].SetRoomEdgeCollision(i);
-				}
-			}*/
-
-			if (entityBox.Left < roomBounds.Left) {
-				entity.Physics.IsColliding = true;
-				entity.X = roomBounds.Left - collisionBox.Left;
-				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.X == 0.0f)
-					entity.Physics.ReboundVelocity = new Vector2F(-entity.Physics.VelocityX, entity.Physics.ReboundVelocity.Y);
-				entity.Physics.VelocityX = 0;
-				entity.Physics.CollisionInfo[Directions.Left].SetRoomEdgeCollision(Directions.Left);
-			}
-			else if (entityBox.Right > roomBounds.Right) {
-				entity.Physics.IsColliding = true;
-				entity.X = roomBounds.Right - collisionBox.Right;
-				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.X == 0.0f)
-					entity.Physics.ReboundVelocity = new Vector2F(-entity.Physics.VelocityX, entity.Physics.ReboundVelocity.Y);
-				entity.Physics.VelocityX = 0;
-				entity.Physics.CollisionInfo[Directions.Right].SetRoomEdgeCollision(Directions.Right);
-			}
-			if (entityBox.Top < roomBounds.Top) {
-				entity.Physics.IsColliding = true;
-				entity.Y = roomBounds.Top - collisionBox.Top;
-				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.Y == 0.0f)
-					entity.Physics.ReboundVelocity = new Vector2F(entity.Physics.ReboundVelocity.X, -entity.Physics.VelocityY);
-				entity.Physics.VelocityY = 0;
-				entity.Physics.CollisionInfo[Directions.Up].SetRoomEdgeCollision(Directions.Up);
-			}
-			else if (entityBox.Bottom > roomBounds.Bottom) {
-				entity.Physics.IsColliding = true;
-				entity.Y = roomBounds.Bottom - collisionBox.Bottom;
-				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.Y == 0.0f)
-					entity.Physics.ReboundVelocity = new Vector2F(entity.Physics.ReboundVelocity.X, -entity.Physics.VelocityY);
-				entity.Physics.VelocityY = 0;
-				entity.Physics.CollisionInfo[Directions.Down].SetRoomEdgeCollision(Directions.Down);
-			}
-		}
-
-		// Check if destroyed outside room.
+		/// <summary>Check if destroyed outside room.</summary>
 		private void CheckOutsideRoomBounds(Entity entity) {
 			if (entity.Physics.IsDestroyedOutsideRoom &&
 				!entity.RoomControl.RoomBounds.Contains(entity.Position))
@@ -1701,21 +970,17 @@ namespace ZeldaOracle.Game.Control {
 		public void UpdateEntityZPosition(Entity entity) {
 
 			if (IsSideScrolling) {
-				// Convert any nonzero Z-position into Y-position.
+				// Convert any nonzero Z-position into Y-position
 				if (entity.ZPosition != 0.0f) {
 					entity.Y -= entity.ZPosition;
 					entity.ZPosition = 0.0f;
 				}
 				
 				if (entity.Physics.HasGravity && !entity.Physics.OnGroundOverride) {
-					// Zero jump speed if the entity is colliding below.
+					// Zero jump speed if the entity is colliding below
 					if (entity.Physics.ZVelocity < 0.0f &&
-						entity.Physics.CollisionInfo[Directions.Down].IsColliding)
+						entity.Physics.IsCollidingInDirection(Directions.Down))
 						entity.Physics.ZVelocity = 0.0f;
-					// Zero jump speed if the entity is colliding above.
-					// NOTE: this doesn't actually happen in the real game, which is strange.
-					//else if (entity.Physics.ZVelocity > 0.0f && entity.Physics.CollisionInfo[Directions.Up].IsColliding)
-						//entity.Physics.ZVelocity = 0.0f;
 					// Integrate acceleration due to gravity
 					entity.Physics.ZVelocity -= entity.Physics.Gravity;
 					// Limit to maximum fall speed
@@ -1729,17 +994,17 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			else if (entity.ZPosition > 0.0f || entity.Physics.ZVelocity != 0.0f) {
-				// Integrate gravity acceleration.
+				// Integrate gravity acceleration
 				if (entity.Physics.HasGravity && !entity.Physics.OnGroundOverride) {
 					entity.Physics.ZVelocity -= entity.Physics.Gravity;
 					if (entity.Physics.ZVelocity < -entity.Physics.MaxFallSpeed && entity.Physics.MaxFallSpeed >= 0.0f)
 						entity.Physics.ZVelocity = -entity.Physics.MaxFallSpeed;
 				}
 
-				// Integrate z-velocity.
+				// Integrate z-velocity
 				entity.ZPosition += entity.Physics.ZVelocity;
 
-				// Check if landed on the ground.
+				// Check if landed on the ground
 				if (entity.ZPosition <= 0.0f)
 					LandEntity(entity);
 			}
@@ -1797,9 +1062,9 @@ namespace ZeldaOracle.Game.Control {
 				entity.Physics.MovesWithPlatforms);
 			
 			// Check for moving platforms in side scrolling mode
-			CollisionInfo surfaceCollision = entity.Physics
-				.PreviousCollisionInfo[Directions.Down];
-			if (roomControl.IsSideScrolling &&
+			Collision surfaceCollision = entity.Physics
+				.PreviousCollisions.FirstOrDefault(c => c.Direction == Directions.Down);
+			if (roomControl.IsSideScrolling && surfaceCollision != null &&
 				(surfaceCollision.Tile != null || surfaceCollision.Entity != null))
 			{
 				// Get the velocity of the surface tile or entity
@@ -1809,7 +1074,8 @@ namespace ZeldaOracle.Game.Control {
 				}
 				else {
 					entity.Physics.SurfacePosition = surfaceCollision.Entity.Position;
-					entity.Physics.SurfaceVelocity = surfaceCollision.Entity.Physics.Velocity;
+					entity.Physics.SurfaceVelocity =
+						surfaceCollision.Entity.Physics.Velocity;
 				}
 
 				// Move with the surface
@@ -1859,8 +1125,10 @@ namespace ZeldaOracle.Game.Control {
 			if (!entity.Physics.PassOverLedges)
 				return;
 
-			Point2I prevLocation = entity.RoomControl.GetTileLocation(entity.PreviousPosition + entity.Physics.CollisionBox.Center);
-			Point2I location = entity.RoomControl.GetTileLocation(entity.Position + entity.Physics.CollisionBox.Center);
+			Point2I prevLocation = entity.RoomControl.GetTileLocation(
+				entity.PreviousPosition + entity.Physics.CollisionBox.Center);
+			Point2I location = entity.RoomControl.GetTileLocation(
+				entity.Position + entity.Physics.CollisionBox.Center);
 
 			// When moving over a new tile, check its ledge state.
 			if (location != prevLocation) {

@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			return highestLadder;
 		}
 
-		/// <summary>Check for climbing off the top of the ladder</summary>
+		/// <summary>Check for climbing off the top of the ladder.</summary>
 		private bool CheckClimbingToLadderTop(Player player, Tile ladderTile) {
 			Rectangle2F collisionBox = player.Physics.PositionedCollisionBox;
 			Rectangle2F collisionBoxNext = Rectangle2F.Translate(
@@ -49,9 +49,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			{
 				player.Physics.VelocityY = 0.0f;
 				player.Y = ladderBox.Top - player.Physics.CollisionBox.Bottom;
-				player.Physics.MovementCollisions[Directions.Down] = true;
-				if (!player.Physics.CollisionInfo[Directions.Down].IsColliding)
-					player.Physics.CollisionInfo[Directions.Down].SetCollision(ladderTile, Directions.Down);
 				End();
 				return true;
 			}
@@ -67,16 +64,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void OnEnd(PlayerState newState) {
-			// Any downwards safe clipping should be turned into an actual collision
-			// now that gravity is affecting the player again.
-			if (player.Physics.ClipCollisionInfo[Directions.Down].IsAllowedClipping &&
-				!player.Physics.CollisionInfo[Directions.Down].IsColliding)
-			{
-				player.Physics.MovementCollisions[Directions.Down] = true;
-				player.Physics.CollisionInfo[Directions.Down].SetCollision(
-					player.Physics.ClipCollisionInfo[Directions.Down].CollidedObject,
-					Directions.Down);
-			}
 			// TODO: play jump animation if falling?
 		}
 
@@ -93,6 +80,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Get the ladder the player is touching
 			Tile ladder = GetHighestLadder(player.Position);
 
+			StateParameters.AlwaysFaceUp = (ladder != null &&
+				player.Center.Y >= ladder.Bounds.Top);
+
 			// Check if not on a ladder anymore
 			if (ladder == null) {
 				End();
@@ -104,8 +94,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				return;
 
 			// Check for climbing to the bottom of a ladder
-			if (player.Physics.CollisionInfo[Directions.Down].IsCollidingAndNotAutoDodged &&
-				player.Movement.IsMoving && player.Movement.MoveDirection == Directions.Down)
+			if (player.Physics.IsCollidingInDirection(Directions.Down) &&
+				player.Movement.IsMovingInDirection(Directions.Down))
 			{
 				End();
 				return;
