@@ -1,21 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players.States;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Common.Input.Controls;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players {

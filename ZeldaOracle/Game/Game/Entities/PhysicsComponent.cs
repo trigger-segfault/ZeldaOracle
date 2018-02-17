@@ -17,7 +17,6 @@ namespace ZeldaOracle.Game.Entities {
 		Solid					= 0x1,		// The entity is solid (other entities can collide with this one).
 		HasGravity				= 0x2,		// The entity is affected by gravity.
 		CollideWorld			= 0x4,		// Collide with solid tiles.
-		CollideEntities			= 0x8,		// Collide with solid entities.
 		CollideRoomEdge			= 0x10,		// Colide with the edges of the room.
 		ReboundSolid			= 0x20,		// Rebound off of solids.
 		ReboundRoomEdge			= 0x40,		// Rebound off of room edges.
@@ -519,7 +518,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 		public bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
-			return false; // TODO
+			return false; // TODO: IsSafeClippingInDirection
 			//return (ClipCollisionInfo[direction].IsAllowedClipping &&
 				//RoomPhysics.AreEdgesAligned(solidBox,
 				//ClipCollisionInfo[direction].CollisionBox, direction));
@@ -766,11 +765,6 @@ namespace ZeldaOracle.Game.Entities {
 			set { SetFlags(PhysicsFlags.CollideWorld, value); }
 		}
 		
-		public bool CollideWithEntities {
-			get { return HasFlags(PhysicsFlags.CollideEntities); }
-			set { SetFlags(PhysicsFlags.CollideEntities, value); }
-		}
-
 		public bool CollideWithRoomEdge {
 			get { return HasFlags(PhysicsFlags.CollideRoomEdge); }
 			set { SetFlags(PhysicsFlags.CollideRoomEdge, value); }

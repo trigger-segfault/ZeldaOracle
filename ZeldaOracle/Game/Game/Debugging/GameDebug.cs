@@ -309,8 +309,7 @@ namespace ZeldaOracle.Game.Debug {
 			}*/
 			// N: Noclip mode.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.N)) {
-				RoomControl.Player.Physics.CollideWithEntities	= !RoomControl.Player.Physics.CollideWithEntities;
-				RoomControl.Player.Physics.CollideWithWorld		= !RoomControl.Player.Physics.CollideWithWorld;
+				RoomControl.Player.Physics.CollideWithWorld = !RoomControl.Player.Physics.CollideWithWorld;
 			}
 			// Q: Spawn a random rupees collectible.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.Q)) {

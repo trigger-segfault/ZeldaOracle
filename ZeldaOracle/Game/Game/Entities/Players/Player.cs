@@ -128,7 +128,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.CollisionBox			= new Rectangle2F(-4, -10 + 3, 8, 9);
 			Physics.SoftCollisionBox		= new Rectangle2F(-6, -14 + 3, 12, 13);
 			Physics.CollideWithWorld		= true;
-			Physics.CollideWithEntities		= true;
 			Physics.CollideWithRoomEdge		= true;
 			Physics.CheckRadialCollisions	= true;
 			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
@@ -722,7 +721,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			physics.HasGravity				= !stateParameters.DisableGravity;
 			physics.OnGroundOverride		= stateParameters.EnableGroundOverride;
 			physics.CollideWithWorld		= !stateParameters.DisableSolidCollisions;
-			physics.CollideWithEntities		= !stateParameters.DisableSolidCollisions;
 
 			IsPassable						= stateParameters.DisableInteractionCollisions;
 		}

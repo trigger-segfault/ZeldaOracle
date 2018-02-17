@@ -55,9 +55,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.SoftCollisionBox = new Rectangle2F(
 				2, 3,
 				Point2I.FromBoolean(!vertical, length, 1) * GameSettings.TILE_SIZE - 4);
-			Physics.Flags =
-				PhysicsFlags.CollideEntities |
-				PhysicsFlags.DestroyedOutsideRoom;
+			Physics.Flags =	PhysicsFlags.DestroyedOutsideRoom;
 
 			// Weapon interations
 			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.ParryWithClingEffect);
