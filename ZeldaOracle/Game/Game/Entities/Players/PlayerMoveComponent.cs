@@ -402,7 +402,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.Animation == GameData.ANIM_PLAYER_MERMAID_SWIM))
 			{
 				// Play/stop the move animation
-				if (isMoving || IsSprinting) {
+				if (isMoving || IsSprinting ||
+					(player.IsSwimming && !player.IsUnderwater))
+				{
 					if (!player.Graphics.IsAnimationPlaying)
 						player.Graphics.PlayAnimation();
 				}

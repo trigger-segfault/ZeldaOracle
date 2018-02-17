@@ -197,7 +197,7 @@ ANIMATION "player_minecart_swing_big";
 ## Player in Mermaid form
 
 ANIMATION "player_mermaid_swim"; SUBSTRIP repeat;
-	ADD strip, 6, 2, (0, 25);
+	ADD strip, 9, 2, (0, 25);
 	MAKEDYNAMIC 4, (2, 0); END;
 ANIMATION "player_mermaid_throw"; SUBSTRIP repeat;
 	ADD frame, 1, (0, 26);
