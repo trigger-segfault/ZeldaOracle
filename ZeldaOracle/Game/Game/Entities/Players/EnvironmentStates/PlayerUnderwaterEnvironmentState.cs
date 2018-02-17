@@ -1,6 +1,7 @@
 ﻿using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.GameStates.Transitions;
+using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
@@ -62,8 +63,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Movement.StopMotion();
 			player.RoomControl.TransitionToRoom(
-				connectedRoom,
-				new RoomTransitionFade());
+				connectedRoom, new RoomTransitionFade());
 		}
 
 
@@ -80,7 +80,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					new Vector2F(GameSettings.TILE_SIZE / 2) - player.CenterOffset;
 
 				// Change to standing animation and face downwards
+				player.InterruptWeapons();
 				player.Direction = Directions.Down;
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 				End();
 			}
 		}
@@ -105,13 +107,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// TODO: Code duplication with PlayerSwimState
 			// TODO: magic numbers
-			/*
+			
 			// Press B to attempt to resurface.
 			if (Controls.B.IsPressed() && CanResurface()) {
 				Resurface();
 				return;
 			}
 
+			/*
 			// Slow down movement over time from strokes
 			if (player.Movement.MoveSpeedScale > 1.0f)
 				player.Movement.MoveSpeedScale -= 0.025f;

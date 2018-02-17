@@ -279,8 +279,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					return null;
 			}
 			else {
-				//if (RoomControl.IsUnderwater) // TODO: underwater environment state
-					//return stateUnderwater;
+				if (RoomControl.IsUnderwater) // TODO: underwater environment state.
+					return environmentStateUnderwater;
 				if (physics.IsInAir)
 					return environmentStateJump;
 				else if (physics.IsInWater || physics.IsInLava)
