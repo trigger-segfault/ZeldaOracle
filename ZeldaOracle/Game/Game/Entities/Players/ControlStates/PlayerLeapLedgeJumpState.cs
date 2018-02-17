@@ -18,6 +18,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.EnableStrafing					= true;
 			StateParameters.DisableSolidCollisions			= true;
 			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisablePlatformMovement			= true;
 			StateParameters.DisablePlayerControl			= true;
 		}
 

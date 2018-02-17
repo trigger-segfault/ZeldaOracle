@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		protected bool		ledgeExtendsToNextRoom;
 		protected bool		hasRoomChanged;
 		protected int		direction;
-
+		protected Vector2F	landingPosition;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -26,9 +26,30 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.DisablePlayerControl			= true;
 		}
 
+		private Vector2F GetLandingPosition(Vector2F position) {
+			Vector2F moveVector = Directions.ToVector(direction);
+			Vector2F landingPosition = position + (moveVector * 4);
+			while (!CanLandAtPosition(landingPosition))
+				landingPosition += Directions.ToVector(direction);
+			landingPosition += moveVector;
+			return landingPosition;
+		}
+
 		private bool CanLandAtPosition(Vector2F position) {
-			foreach (Tile tile in player.Physics.GetTilesMeeting(position, CollisionBoxType.Hard)) {
-				if (tile.IsSolid && tile.CollisionStyle == CollisionStyle.Rectangular && !(tile is TileColorBarrier) && !tile.IsBreakable) {
+			Rectangle2F collisionBox = player.Physics.CollisionBox;
+
+			// Inset the sides of the collision box to allow edge clipping
+			Vector2F edgeClipping = Vector2F.Zero;
+			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			edgeClipping[lateralAxis] = player.Physics.EdgeClipAmount;
+			collisionBox.Inflate(-edgeClipping);
+
+			foreach (Tile tile in
+				player.Physics.GetSolidTilesMeeting(position, collisionBox))
+			{
+				if (tile.CollisionStyle == CollisionStyle.Rectangular &&
+					!(tile is TileColorBarrier) && !tile.IsBreakable)
+				{
 					return false;
 				}
 			}
@@ -51,23 +72,22 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (!player.StateParameters.EnableStrafing)
 				player.Direction = direction;
 
-			// Find the landing position, calculating the move distance in pixels
-			Vector2F pos = player.Position + Directions.ToVector(direction);
-			int distance = 0;
-			while (!CanLandAtPosition(pos)) {
-				distance += 1;
-				pos += Directions.ToVector(direction);
-			}
+			// Find the landing position
+			landingPosition = GetLandingPosition(player.Position);
 			
-			if (!player.RoomControl.RoomBounds.Contains(pos)) {
-				// Fake jumping by using the xy-velocity instead of the z-velocity.
+			if (!player.RoomControl.RoomBounds.Contains(landingPosition)) {
+				// The ledge extends into the next room
+				// Fake jumping by using the y-velocity instead of the z-velocity
+				ledgeExtendsToNextRoom = true;
 				hasRoomChanged = false;
 				velocity = new Vector2F(0.0f, -1.0f);
 				player.Physics.ZVelocity = 0;
-				ledgeExtendsToNextRoom = true;
 			}
 			else {
-				// Small ledge distances have special jump speeds.
+				// Determine the jump speed based on the distance needed to move
+				// Smaller ledge distances have slower jump speeds
+				float distance = (landingPosition - player.Position).Dot(
+					Directions.ToVector(direction));
 				float jumpSpeed = 1.5f;
 				if (distance >= 28)
 					jumpSpeed = 2.0f;
@@ -77,10 +97,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Calculate the movement speed based on jump speed, knowing
 				// they should take the same amount of time to perform.
 				float jumpTime = (2.0f * jumpSpeed) / GameSettings.DEFAULT_GRAVITY;
-				float speed    = distance / jumpTime;//  GMath.Clamp((float) distance / jumpTime, 0.7f, 2.5f);//5.0f);
+				float speed = distance / jumpTime;
 
-				// For larger ledges, calculate the speed so that both
-				// the movement speed and the jump speed equal eachother.
+				// For longer ledge distances, calculate the speed so that both
+				// the movement speed and the jump speed equal each other.
 				if (speed > 1.5f) {
 					speed = GMath.Sqrt(0.5f * distance * GameSettings.DEFAULT_GRAVITY);
 					jumpSpeed = speed;
@@ -95,41 +115,40 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Position += velocity;
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
 		}
-		
+
 		public override void OnEnd(PlayerState newState) {
+			player.Physics.Velocity = Vector2F.Zero;
+
+			// If we landed on a tile, then break it
+			player.LandOnSurface();
+
+			if (ledgeExtendsToNextRoom)
+				player.MarkRespawn();
 		}
 
 		public override void OnEnterRoom() {
 			if (ledgeExtendsToNextRoom) {
 				hasRoomChanged = true;
 
-				// Find the landing position, calculating the movement
-				// distance in pixels.
-				Vector2F pos = player.Position;
-				int distance = 0;
-				while (!CanLandAtPosition(pos)) {
-					distance += 1;
-					pos += Directions.ToVector(direction);
-				}
-
-				// Move the player to be on the landing spot, with a z-position
-				// of the movement distance.
-				player.ZPosition = pos.Y - player.Position.Y;
-				player.Position = pos;
+				// Find the landing position in this room
+				landingPosition = GetLandingPosition(player.Position);
+				
+				// Move the player to be at the landing spot, and raise its z-position
+				// so that it falls onto the landing spot
+				player.ZPosition = landingPosition.Y - player.Position.Y;
+				player.Position = landingPosition;
 				player.Physics.ZVelocity = -velocity.Y;
 				player.Physics.Velocity = Vector2F.Zero;
 			}
 		}
 
 		public override void Update() {
-			base.Update();
-
-			bool isDone = false;
-			
-			// Update velocity while checking we've reached the landing spot.
+			// Update velocity while checking we've reached the landing spot
 			if (ledgeExtendsToNextRoom) {
 				if (hasRoomChanged) {
-					isDone = player.IsOnGround;
+					// End once the player has fallen to the ground
+					if (player.IsOnGround)
+						End();
 				}
 				else {
 					velocity.Y += GameSettings.DEFAULT_GRAVITY;
@@ -138,19 +157,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				player.Physics.Velocity = velocity;
-				isDone = CanLandAtPosition(player.Position);
-			}
 
-			if (isDone) {
-				player.Physics.Velocity = Vector2F.Zero;
-
-				// If we landed on a tile, then break it
-				player.LandOnSurface();
-
-				if (ledgeExtendsToNextRoom)
-					player.MarkRespawn();
-
-				End();
+				// End once the player has reached the landing position
+				if ((player.Position + velocity - landingPosition).Dot(
+					Directions.ToVector(direction)) >= 0.0f)
+				{
+					player.Position = landingPosition;
+					End();
+				}
 			}
 		}
 

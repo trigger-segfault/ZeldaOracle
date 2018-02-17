@@ -162,66 +162,84 @@ namespace ZeldaOracle.Game.Entities {
 				flags &= ~flagsToSet;
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Update methods
-		//-----------------------------------------------------------------------------
-
-		public void Update() {
-			// Nothing left here....
-			// All moved to RoomPhysics.
-		}
-
 		
 		//-----------------------------------------------------------------------------
 		// Collision Iteration
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>Iterate the tiles currently touching this entity.</summary>
 		public IEnumerable<Tile> GetTilesMeeting(CollisionBoxType collisionBoxType) {
 			return GetTilesMeeting(entity.Position, collisionBoxType);
 		}
 		
-		// Return a list of tiles colliding with this entity (solidity is ignored).
-		public IEnumerable<Tile> GetTilesMeeting(Vector2F position, CollisionBoxType collisionBoxType) {
-			// Find the rectangular area of nearby tiles to collide with.
-			Rectangle2F myBox = GetCollisionBox(collisionBoxType);
+		/// <summary>Iterate the tiles the would be touching this entity if it were
+		/// placed at the given position.</summary>
+		public IEnumerable<Tile> GetTilesMeeting(Vector2F position,
+			CollisionBoxType collisionBoxType)
+		{
+			return GetTilesMeeting(position, GetCollisionBox(collisionBoxType));
+		}
+		
+		/// <summary>Iterate the tiles the would be touching this entity if it were
+		/// placed at the given position.</summary>
+		public IEnumerable<Tile> GetTilesMeeting(Vector2F position,
+			Rectangle2F collisionBox)
+		{
+			// Create rectangular area of nearby tiles to collide with
+			Rectangle2F myBox = collisionBox;
 			myBox.Point += position;
 			myBox.Inflate(2, 2);
 			Rectangle2I area = entity.RoomControl.GetTileAreaFromRect(myBox, 1);
-			
-			// Iterate the tiles in the area.
+
+			// Check intersection with the tiles in that area
 			foreach (Tile t in entity.RoomControl.GetTopTilesInArea(area)) {
 				if (t.CollisionModel != null &&
 					CollisionModel.Intersecting(t.CollisionModel, t.Position,
-					GetCollisionBox(collisionBoxType), position))
+						collisionBox, position))
 				{
 					yield return t;
 				}
 			}
 		}
 
-		// Return a list of solid tiles colliding with this entity.
-		public IEnumerable<Tile> GetSolidTilesMeeting(CollisionBoxType collisionBoxType) {
-			foreach (Tile tile in GetTilesMeeting(entity.Position, collisionBoxType)) {
-				if (CanCollideWithTile(tile))
-					yield return tile;
-			}
+		/// <summary>Iterate the solid tiles currently touching this entity.</summary>
+		public IEnumerable<Tile> GetSolidTilesMeeting(
+			CollisionBoxType collisionBoxType)
+		{
+			return GetSolidTilesMeeting(entity.Position,
+				GetCollisionBox(collisionBoxType));
 		}
-
-		// Return a list of solid tiles colliding with this entity.
-		public IEnumerable<Tile> GetSolidTilesMeeting(Vector2F position, CollisionBoxType collisionBoxType) {
-			foreach (Tile tile in GetTilesMeeting(position, collisionBoxType)) {
+		
+		/// <summary>Iterate the solid tiles the would be touching this entity if it
+		/// were placed at the given position.</summary>
+		public IEnumerable<Tile> GetSolidTilesMeeting(Vector2F position,
+			CollisionBoxType collisionBoxType)
+		{
+			return GetSolidTilesMeeting(position,
+				GetCollisionBox(collisionBoxType));
+		}
+		
+		/// <summary>Iterate the solid tiles the would be touching this entity if it
+		/// were placed at the given position.</summary>
+		public IEnumerable<Tile> GetSolidTilesMeeting(Vector2F position,
+			Rectangle2F collisonBox)
+		{
+			foreach (Tile tile in GetTilesMeeting(position, collisonBox)) {
 				if (CanCollideWithTile(tile))
 					yield return tile;
 			}
 		}
 
 		// Return a list of solid entities colliding with this entity.
-		public IEnumerable<T> GetSolidEntitiesMeeting<T>(CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity {
-			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), collisionBoxType, maxZDistance);
+		public IEnumerable<T> GetSolidEntitiesMeeting<T>(
+			CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity
+		{
+			CollisionTestSettings settings = new CollisionTestSettings(
+				typeof(T), collisionBoxType, maxZDistance);
 			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
 				T other = entity.RoomControl.Entities[i] as T;
-				if (other != null && other.Physics.IsSolid && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
+				if (other != null && other.Physics.IsSolid &&
+					CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
 					yield return other;
 			}
 		}
@@ -250,30 +268,6 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Collision polls
 		//-----------------------------------------------------------------------------
-
-		// Is it possible for the entity to collide with the given tile?
-		public bool CanCollideWithTile(Tile tile) {
-			if (tile == null || tile.CollisionModel == null || !tile.IsSolid)
-				return false;
-			if (tile.IsHalfSolid && flags.HasFlag(PhysicsFlags.HalfSolidPassable))
-				return false;
-			if (tile.IsAnyLedge && PassOverLedges) {
-				if (ledgeAltitude > 0 ||
-					ledgeTileLocation == tile.Location ||
-					IsMovingDownLedge(tile))
-					return false;
-			}
-			if (customTileIsNotSolidCondition != null)
-				return customTileIsNotSolidCondition(tile);
-			return true;
-		}
-
-		// Is it possible for the entity to collide with the given tile?
-		public bool CanCollideWithEntity(Entity other) {
-			if (other == null)// || !other.Physics.IsEnabled)
-				return false;
-			return true;
-		}
 		
 		// Return true if the entity would collide with a solid object using the
 		// given collision box if it were placed at the given position.
@@ -411,13 +405,44 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Internal Collision Tests
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the entity is able to collide with the given tile.
+		/// </summary>
+		public bool CanCollideWithTile(Tile checkTile) {
+			if (checkTile.CollisionModel == null)
+				return false;
+			if (customTileIsSolidCondition != null && 
+				customTileIsSolidCondition(checkTile))
+				return true;
+			if (!checkTile.IsSolid ||
+				(checkTile.IsHalfSolid && PassOverHalfSolids))
+				return false;
+			if (checkTile.IsAnyLedge && PassOverLedges &&
+				((ledgePassState != LedgePassState.None &&
+					ledgePassTile == checkTile) ||
+				IsMovingDownLedge(checkTile) ||
+				IsMovingUpLedge(checkTile) && ledgeAltitude > 0))
+			{
+				return false;
+			}
+			if (customTileIsSolidCondition != null)
+				return customTileIsSolidCondition(checkTile);
+			return true;
+		}
 		
-		// Returns true if the entity moving down the ledge.
+		/// <summary>Returns true if the entity is able to collide with the given
+		/// entity.</summary>
+		public bool CanCollideWithEntity(Entity other) {
+			return (other != entity && other.Physics.IsEnabled &&
+				other.Physics.IsSolid);
+		}
+		
+		/// <summary>Returns true if the entity is moving down the ledge.</summary>
 		public bool IsMovingDownLedge(Tile ledgeTile) {
 			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
 		}
 
-		// Returns true if the entity moving up the ledge.
+		/// <summary>Returns true if the entity is moving up the ledge.</summary>
 		public bool IsMovingUpLedge(Tile ledgeTile) {
 			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
 		}

@@ -526,8 +526,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Leap if there is an opposite leap ledge to land onto
 			Tile landingTile = player.RoomControl.TileManager.GetTopTile(
 				startingTile.Location + Directions.ToPoint(ledgeDirection) * 2);
-			if (landingTile == null || !landingTile.IsLeapLedge ||
-				landingTile.LedgeDirection != Directions.Reverse(ledgeDirection))
+			if (landingTile != null && landingTile.IsLeapLedge &&
+				landingTile.LedgeDirection == Directions.Reverse(ledgeDirection))
 			{
 				player.LeapLedgeJumpState.LedgeJumpDirection = ledgeDirection;
 				player.BeginControlState(player.LeapLedgeJumpState);

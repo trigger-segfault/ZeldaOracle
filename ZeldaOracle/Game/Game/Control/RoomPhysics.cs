@@ -114,7 +114,7 @@ namespace ZeldaOracle.Game.Control {
 					foreach (Tile tile in
 						roomControl.TileManager.GetTilesTouching(checkArea))
 					{
-						if (CanCollideWithTile(entity, tile) &&
+						if (entity.Physics.CanCollideWithTile(tile) &&
 							tile.CollisionStyle == CollisionStyle.Circular)
 						{
 							ResolveCircularCollision(entity, tile,
@@ -216,37 +216,6 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
-
-		// Returns true if the entity is able to collide with a tile.
-		private bool CanCollideWithTile(Entity entity, Tile checkTile) {
-			if (checkTile.CollisionModel == null)
-				return false;
-			if (entity.Physics.CustomTileIsSolidCondition != null && 
-				entity.Physics.CustomTileIsSolidCondition(checkTile))
-				return true;
-			if (!checkTile.IsSolid ||
-				(checkTile.IsHalfSolid && entity.Physics.PassOverHalfSolids))
-				return false;
-			if (checkTile.IsAnyLedge && entity.Physics.PassOverLedges &&
-				((entity.Physics.LedgePassState != LedgePassState.None &&
-					entity.Physics.LedgePassTile == checkTile) ||
-				IsMovingDownLedge(entity, checkTile) ||
-				IsMovingUpLedge(entity, checkTile) && entity.Physics.LedgeAltitude > 0))
-			{
-				return false;
-			}
-			if (entity.Physics.CustomTileIsNotSolidCondition != null)
-				return entity.Physics.CustomTileIsNotSolidCondition(checkTile);
-			return true;
-		}
-		
-		/// <summary>Returns true if the entity is able to collide with another entity.
-		/// </summary>
-		private bool CanCollideWithEntity(Entity entity, Entity checkEntity) {
-			return (checkEntity != entity && checkEntity.Physics.IsEnabled &&
-				checkEntity.Physics.IsSolid);
-		}
-		
 		/// <summary>Returns true if the entity should rebound off of a collision.
 		/// </summary>
 		private bool CanReboundColliison(Entity entity, Collision collision) {
@@ -332,14 +301,14 @@ namespace ZeldaOracle.Game.Control {
 			if (entity.Physics.CollideWithWorld) {
 				// Find nearby solid entities
 				foreach (Entity other in RoomControl.Entities) {
-					if (other != entity && CanCollideWithEntity(entity, other)) {
+					if (other != entity && entity.Physics.CanCollideWithEntity(other)) {
 						yield return CollisionCheck.CreateEntityCollision(other);
 					}
 				}
 
 				// Find nearby solid tiles
 				foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(area)) {
-					if (CanCollideWithTile(entity, tile) &&
+					if (entity.Physics.CanCollideWithTile(tile) &&
 						tile.CollisionStyle == CollisionStyle.Rectangular)
 					{
 						for (int i = 0; i < tile.CollisionModel.Boxes.Count; i++) {
@@ -1067,20 +1036,25 @@ namespace ZeldaOracle.Game.Control {
 
 				// Move with the surface
 				// TODO: this really needs some checks before execution
-				entity.Y += entity.Physics.SurfaceVelocity.Y;
-				entity.Physics.VelocityX += entity.Physics.SurfaceVelocity.X;
+				if (entity.Physics.MovesWithPlatforms) {
+					entity.Y += entity.Physics.SurfaceVelocity.Y;
+					entity.X += entity.Physics.SurfaceVelocity.X;
+				}
+				//entity.Physics.VelocityX += entity.Physics.SurfaceVelocity.X;
 
 				// Move with conveyor tiles
 				if (entity.Physics.StandingCollision.IsTile &&
 					entity.Physics.MovesWithConveyors)
 				{
-					entity.Physics.VelocityX +=
+					entity.X +=
 						entity.Physics.StandingCollision.Tile.ConveyorVelocity.X;
+					//entity.Physics.VelocityX +=
+						//entity.Physics.StandingCollision.Tile.ConveyorVelocity.X;
 				}
 			}
 
 			// Check if the surface is moving
-			if (entity.Physics.TopTile != null) {
+			if (entity.Physics.TopTile != null & !IsSideScrolling) {
 				if (entity.Physics.MovesWithPlatforms) {
 					entity.Physics.Velocity += entity.Physics.TopTile.Velocity;
 					if (!IsSideScrolling) {
@@ -1134,14 +1108,14 @@ namespace ZeldaOracle.Game.Control {
 					
 					if (tile != null && tile.IsAnyLedge) {
 						// Adjust ledge altitude
-						if (IsMovingUpLedge(entity, tile) &&
+						if (entity.Physics.IsMovingUpLedge(tile) &&
 							entity.Physics.LedgeAltitude > 0)
 						{
 							entity.Physics.LedgeAltitude--;
 							entity.Physics.LedgePassTile = tile;
 							entity.Physics.LedgePassState = LedgePassState.PassingUp;
 						}
-						else if (IsMovingDownLedge(entity, tile)) {
+						else if (entity.Physics.IsMovingDownLedge(tile)) {
 							entity.Physics.LedgeAltitude++;
 							entity.Physics.LedgePassTile = tile;
 							entity.Physics.LedgePassState = LedgePassState.PassingDown;
@@ -1151,9 +1125,9 @@ namespace ZeldaOracle.Game.Control {
 				else {
 					// Keep the currently ledge tile location if we're still colliding with it.
 					Tile oldLedgeTile = entity.RoomControl.GetTopTile(
-											entity.Physics.LedgeTileLocation);
-					if (oldLedgeTile != null && CanCollideWithTile(entity, oldLedgeTile) &&
-						IsMovingDownLedge(entity, oldLedgeTile))
+						entity.Physics.LedgeTileLocation);
+					if (oldLedgeTile != null && entity.Physics.CanCollideWithTile(oldLedgeTile) &&
+						entity.Physics.IsMovingDownLedge(oldLedgeTile))
 						entity.Physics.LedgeTileLocation = oldLedgeTile.Location;
 					else
 						entity.Physics.LedgeTileLocation = -Point2I.One;
@@ -1161,19 +1135,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
-		/// <summary>Returns true if the entity moving down the ledge.</summary>
-		private bool IsMovingDownLedge(Entity entity, Tile ledgeTile) {
-			return entity.Physics.Velocity.Dot(
-				Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
-		}
 
-		/// <summary>Returns true if the entity moving up the ledge.</summary>
-		private bool IsMovingUpLedge(Entity entity, Tile ledgeTile) {
-			return entity.Physics.Velocity.Dot(
-				Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
-		}
-
-		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

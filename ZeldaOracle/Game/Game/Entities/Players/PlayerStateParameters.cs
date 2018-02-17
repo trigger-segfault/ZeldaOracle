@@ -158,6 +158,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				DisableGravity = a.DisableGravity || b.DisableGravity,
 				EnableGroundOverride = a.EnableGroundOverride || b.EnableGroundOverride,
 				DisableSolidCollisions = a.DisableSolidCollisions || b.DisableSolidCollisions,
+				DisablePlatformMovement = a.DisablePlatformMovement || b.DisablePlatformMovement,
 
 				// Unit
 				DisableInteractionCollisions = a.DisableInteractionCollisions || b.DisableInteractionCollisions,
@@ -178,7 +179,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 				AlwaysFaceUp = a.AlwaysFaceUp || b.AlwaysFaceUp,
 				//AlwaysFaceLeft = a.AlwaysFaceLeft || b.AlwaysFaceLeft,
 				//AlwaysFaceDown = a.AlwaysFaceDown || b.AlwaysFaceDown,
-				DisablePlatformMovement = a.DisablePlatformMovement || b.DisablePlatformMovement,
 				AlwaysFaceLeftOrRight = a.AlwaysFaceLeftOrRight || b.AlwaysFaceLeftOrRight,
 				EnableAutomaticRoomTransitions = a.EnableAutomaticRoomTransitions || b.EnableAutomaticRoomTransitions,
 				DisableMovement = a.DisableMovement || b.DisableMovement,
@@ -206,6 +206,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool DisableGravity { get; set; } = false;
 		public bool EnableGroundOverride { get; set; } = false;
 		public bool DisableSolidCollisions { get; set; } = false;
+		public bool DisablePlatformMovement { get; set; } = false;
 
 		// Unit
 		public bool DisableInteractionCollisions { get; set; } = false;
@@ -233,7 +234,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool DisableMovement { get; set; } = false;
 		public bool DisableAutomaticStateTransitions { get; set; } = false;
 		public bool DisableUpdateMethod { get; set; } = false;
-		public bool DisablePlatformMovement { get; set; } = false;
 		public float MovementSpeedScale { get; set; } = 1.0f;
 		
 		public PlayerStateAnimations PlayerAnimations { set; get; } = new PlayerStateAnimations();

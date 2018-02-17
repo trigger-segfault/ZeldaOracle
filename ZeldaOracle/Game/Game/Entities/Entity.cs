@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities {
 
@@ -68,51 +62,45 @@ namespace ZeldaOracle.Game.Entities {
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 
-		// Initializes the entity and sets up containment variables.
+		/// <summary>Initializes the entity and sets up containment variables.
+		/// </summary>
 		public virtual void Initialize() {}
 
-		// Uninitializes the entity and removes all containment variables.
+		/// <summary>Uninitializes the entity and removes all containment variables.
+		/// </summary>
 		public virtual void Uninitialize() {}
 	
-		// Called every step to update the entity.
+		/// <summary>Called every step to update the entity.</summary>
 		public virtual void Update() {
-			Vector2F tempPos = position;
-			float tempZPos = zPosition;
-
-			// Update the physics component
-			if (physics.IsEnabled)
-				physics.Update();
-
-			previousPosition  = tempPos;
-			previousZPosition = tempZPos;
+			previousPosition  = position;
+			previousZPosition = zPosition;
 		}
 
-		// Called every step to update the entity's gaphics.
+		/// <summary>Called every step to update the entity's gaphics.</summary>
 		public virtual void UpdateGraphics() {
-
-			// Update the graphics component.
 			graphics.Update();
 		}
 
-		// Called every step to draw the entity.
+		/// <summary>Called every step to draw the entity.</summary>
 		public virtual void Draw(RoomGraphics g) {
 			graphics.Draw(g);
 		}
 
-		// Called when the entity enters the room.
-		// FIXME: this is never actually called for entities, but it is called for the player
+		/// <summary>Called when the entity enters the room. FIXME: this is never
+		/// actually called for entities, but it is called for the player</summary>
 		public virtual void OnEnterRoom() {}
 
-		// Called when the entity leaves the room.
+		/// <summary>Called when the entity leaves the room.</summary>
 		public virtual void OnLeaveRoom() {}
 
-		// Called when the entity lands on the ground.
+		/// <summary>Called when the entity lands on the ground.</summary>
 		public virtual void OnLand() {}
 		
-		// Called when the entity begins falling (used in side-scrolling mode).
+		/// <summary>Called when the entity begins falling (used in side-scrolling
+		/// mode).</summary>
 		public virtual void OnBeginFalling() {}
 
-		// Called when the entity bounces off of the ground.
+		/// <summary>Called when the entity bounces off of the ground.</summary>
 		public virtual void OnBounce() {
 			if (soundBounce != null)
 				AudioSystem.PlaySound(soundBounce);
@@ -120,11 +108,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Occurs when the entity is crushed between two collisions.
 		/// The 'rock' collision is what causes the crushing penetration into
-		/// the 'hardPlace' collision.
-		/// </summary>
+		/// the 'hardPlace' collision.</summary>
 		public virtual void OnCrush(Collision rock, Collision hardPlace) {}
 
-		// Called when the entity falls in a hole.
+		/// <summary>Called when the entity falls in a hole.</summary>
 		public virtual void OnFallInHole() {
 			if (physics.IsDestroyedInHoles) {
 				RoomControl.SpawnEntity(new EffectFallingObject(), position);
@@ -133,28 +120,33 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 		
-		// Called when the entity falls in water.
+		/// <summary>Called when the entity falls in water.</summary>
 		public virtual void OnFallInWater() {
 			if (physics.IsDestroyedInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true), position);
+				RoomControl.SpawnEntity(new Effect(
+					GameData.ANIM_EFFECT_WATER_SPLASH,
+					DepthLayer.EffectSplash, true), position);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				Destroy();
 			}
 		}
 		
-		// Called when the entity falls in lava.
+		/// <summary>Called when the entity falls in lava.</summary>
 		public virtual void OnFallInLava() {
 			if (physics.IsDestroyedInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash, true), position);
+				RoomControl.SpawnEntity(new Effect(
+					GameData.ANIM_EFFECT_LAVA_SPLASH,
+					DepthLayer.EffectSplash, true), position);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				Destroy();
 			}
 		}
 
-		// Special update method for when the entity is being carried.
+		/// <summary>Special update method for when the entity is being carried.
+		/// </summary>
 		public virtual void UpdateCarrying() {}
 
-		// Called immediately after the entity is destroyed.
+		/// <summary>Called immediately after the entity is destroyed.</summary>
 		public virtual void OnDestroy() {}
 		
 	
@@ -162,7 +154,8 @@ namespace ZeldaOracle.Game.Entities {
 		// Management
 		//-----------------------------------------------------------------------------
 
-		// Initializes the entity and sets up containment variables.
+		/// <summary>Initializes the entity and sets up containment variables.
+		/// </summary>
 		public void Initialize(RoomControl control) {
 			this.roomControl	= control;
 			this.isAlive		= true;
@@ -193,11 +186,13 @@ namespace ZeldaOracle.Game.Entities {
 			this.transformedEntity = transformedEntity;
 		}
 
+		/// <summary>Enable physics with the given physics flags.</summary>
 		public void EnablePhysics(PhysicsFlags flags = PhysicsFlags.None) {
 			physics.IsEnabled = true;
 			physics.Flags |= flags;
 		}
 
+		/// <summary>Disable physics for this entity.</summary>
 		public void DisablePhysics() {
 			physics.IsEnabled = false;
 		}
