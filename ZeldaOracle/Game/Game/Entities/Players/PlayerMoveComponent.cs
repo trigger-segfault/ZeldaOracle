@@ -9,34 +9,22 @@ using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
-	public enum PlayerMoveCondition {
-		FreeMovement,	// Freely control movement
-		OnlyInAir,		// Only control his movement in air.
-		NoControl,		// No movement control.
-	}
-	
 	public class PlayerMoveComponent {
 		
 		// Settings
 		private bool				autoAccelerate;			// Should the player still accelerate without holding down a movement key?
-		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
-		private bool				canLedgeJump;
-		private bool				canJump;
-		private bool				canPush;
-		private bool				canUseWarpPoint;		// Can the player go through warp points?
 
-		// Internal
+		// Internal state
 		private Player				player;
 		private float				analogAngle;
-		private bool				allowMovementControl;	// Is the player allowed to control his movement?
 		private bool				analogMode;				// True if the analog stick is active.
 		private bool[]				moveAxes;				// Which axes the player is moving on.
-		private bool				isMoving;				// Is the player holding down a movement key?
 		private Vector2F			motion;					// The vector that's driving the player's velocity.
 		private Vector2F			velocityPrev;			// The player's velocity on the previous frame.
+		private bool				allowMovementControl;	// Is the player allowed to control his movement?
+		private bool				isMoving;				// Is the player holding down a movement key?
 		private int					moveAngle;				// The angle the player is moving in.
 		private int					moveDirection;			// The direction that the player wants to face.
-
 
 		private Point2I				jumpStartTile;			// The tile the player started jumping on. (Used for jump color tiles)
 		private bool				isCapeDeployed;
@@ -61,15 +49,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerMoveComponent(Player player) {
 			this.player = player;
 
-			// Default settings.
+			// Default settings
 			autoAccelerate			= false;
-			moveCondition			= PlayerMoveCondition.FreeMovement;
-			canLedgeJump			= true;
-			canJump					= true;
-			canPush					= true;
-			canUseWarpPoint			= true;
 
-			// Internal.
+			// Internal
 			allowMovementControl	= true;
 			moveAxes				= new bool[] { false, false };
 			motion					= Vector2F.Zero;
@@ -87,11 +70,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			isOnColorBarrier		= false;
 			climbCollisionBox		= new Rectangle2F(-1, -7, 2, 9);
 
-			// Controls.
+			// Controls
 			analogMode		= false;
 			analogAngle		= 0.0f;
 
-			// Normal movement.
+			// Normal movement
 			moveModeNormal = new PlayerMotionType();
 			mode = moveModeNormal;
 		}
@@ -125,7 +108,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			if (player.IsOnGround) {
 				// Allow initial jump movement if only can move in air.
-				if (moveCondition != PlayerMoveCondition.NoControl && !mode.IsSlippery) {
+				
+				if (!player.StateParameters.ProhibitMovementControlOnGround &&
+					!mode.IsSlippery)
+				{
 					Vector2F moveVector = PollMovementKeys(true);
 
 					if (isMoving) {
@@ -215,29 +201,31 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		private void UpdateMoveControls() {
-			// Check if the player is allowed to control his motion.
-			allowMovementControl = true;
-			if (moveCondition == PlayerMoveCondition.NoControl)
-				allowMovementControl = false;
-			else if (player.IsOnGround && player.IsBeingKnockedBack)
-				allowMovementControl = false;
-			else if (moveCondition == PlayerMoveCondition.OnlyInAir && player.IsOnGround)
-				allowMovementControl = false;
+			// Check if the player is allowed to move
+			if (player.IsInMinecart) {
+				// Player can ALWAYS change directions when in a minecart
+				allowMovementControl = true;
+			}
 			else if (player.IsInAir) {
-				if (player.RoomControl.IsSideScrolling && player.Physics.Velocity.Y <= 0.1f)
+				if (player.StateParameters.ProhibitMovementControlInAir)
+					allowMovementControl = false;
+				// Don't allow moving in air if still moving upwards
+				else if (player.RoomControl.IsSideScrolling && player.Physics.Velocity.Y <= 0.1f)
 					allowMovementControl = false;
 				else if (!player.RoomControl.IsSideScrolling && player.Physics.ZVelocity >= 0.1f)
 					allowMovementControl = false;
+				else
+					allowMovementControl = true;
 			}
-
-			// Player can ALWAYS change directions when in a minecart.
-			if (player.IsInMinecart)
-				allowMovementControl = true;
+			else {
+				allowMovementControl = (!player.IsBeingKnockedBack &&
+					!player.StateParameters.ProhibitMovementControlOnGround);
+			}
 
 			// Check movement input
 			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
 			
-			// Update the players direction
+			// Update the player's facing direction
 			bool canUpdateDirection = false;
 			if (player.StateParameters.AlwaysFaceUp)
 				canUpdateDirection = (moveDirection == Directions.Up);
@@ -249,7 +237,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (canUpdateDirection && allowMovementControl && isMoving)
 				player.Direction = moveDirection;
 
-			// Update movement or acceleration.
+			// Update movement or acceleration
 			if (allowMovementControl && (isMoving || autoAccelerate) && !player.IsInMinecart) {
 				if (!isMoving)
 					moveAngle = Directions.ToAngle(player.Direction);
@@ -258,7 +246,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				float scaledSpeed = mode.MovementSpeed * player.StateParameters.MovementSpeedScale;
 				Vector2F keyMotion = keyMoveVector * scaledSpeed;
 
-				// Update acceleration-based motion.
+				// Update acceleration-based motion
 				if (mode.IsSlippery) {
 					// If player velocity has been halted by collisions, then
 					// represent that in the motion vector
@@ -287,7 +275,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 							motion, mode.DirectionSnapCount);
 					}
 					else {
-						// Don't snap velocity direction.
+						// Don't snap velocity direction
 						player.Physics.Velocity = motion;
 					}
 				}
@@ -317,9 +305,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public void ChooseAnimation() {
-			// Update movement animation.
+			// Update movement animation
 			if (player.IsOnGround && !player.IsInMinecart &&
-				moveCondition != PlayerMoveCondition.NoControl && 
+				allowMovementControl &&
 				(player.Graphics.Animation == player.MoveAnimation ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY ||
@@ -465,11 +453,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else
 				mode = moveModeNormal;
 			
-			// Update movement.
+			// Update movement
 			UpdateMoveControls();
 			UpdateFallingInHoles();
 			velocityPrev = player.Physics.Velocity;
 
+			// Restrict player direction
 			if (allowMovementControl) {
 				if (player.StateParameters.AlwaysFaceUp)
 					player.Direction = Directions.Up;
@@ -482,13 +471,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 
 			// Check for ledge jumping (ledges/waterfalls)
-			if (canLedgeJump && isMoving &&
-				!player.RoomControl.IsSideScrolling)
+			if (!player.StateParameters.ProhibitLedgeJumping &&
+				isMoving && !player.RoomControl.IsSideScrolling)
 			{
 				foreach (Collision collision in
 					player.Physics.GetCollisionsInDirection(moveDirection))
 				{
-					if (collision.IsTile) {
+					if (collision.IsTile && !collision.IsAutoDodged) {
 						Tile tile = collision.Tile;
 						if (moveDirection == tile.LedgeDirection && !tile.IsInMotion) {
 							if (tile.IsLedge)
@@ -512,53 +501,40 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		/// <summary>Try to perform a ledge jump if the path is clear.</summary>
 		private bool TryLedgeJump(int ledgeDirection) {
-			Rectangle2F entityBox = player.Physics.PositionedCollisionBox;
-			entityBox.Point += Directions.ToVector(ledgeDirection) * 1.0f;
-
-			// Check if there any obstructions in front of the player.
-			foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(entityBox)) {
-				if ((!tile.IsLedge || tile.LedgeDirection != ledgeDirection) &&
-					tile.IsSolid && tile.CollisionModel != null)
+			// Check if there any obstructions to the side of the ledge
+			int ledgeAxis = Directions.ToAxis(ledgeDirection);
+			foreach (Collision collision in player.Physics.Collisions) {
+				if (collision.Direction == ledgeDirection &&
+					collision.IsLaterallyColliding && 
+					!(collision.IsTile && collision.Tile.IsLedge))
 				{
-					// Check collisions with the tile's collision box.
-					// Account for any safe edge-clipping.
-					foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
-						Rectangle2F solidBox = box;
-						solidBox.Point += tile.Position;
-
-						if (entityBox.Intersects(solidBox) &&
-							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 1) % 4) &&
-							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 2) % 4) &&
-							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 3) % 4) &&
-							!player.Physics.CanDodgeCollision(solidBox, ledgeDirection))
-						{
-							return false;
-						}
-					}
+					return false;
 				}
+				else if (collision.Axis != ledgeAxis && !collision.IsResolved)
+					return false;
 			}
 
-			// No obstructions: begin ledge jump!
+			// If no obstructions, then begin ledge jumping!
 			player.LedgeJumpState.LedgeJumpDirection = ledgeDirection;
 			player.BeginControlState(player.LedgeJumpState);
+			player.IntegrateStateParameters();
 			return true;
 		}
 
-		/// <summary>Try to perform a leap ledge jump to the opposite leap ledge.</summary>
+		/// <summary>Try to perform a leap ledge jump to the opposite leap ledge.
+		/// </summary>
 		private bool TryLeapLedgeJump(int ledgeDirection, Tile startingTile) {
-			// Check if there is an opposite leap ledge for landing on in our trajectory
+			// Leap if there is an opposite leap ledge to land onto
 			Tile landingTile = player.RoomControl.TileManager.GetTopTile(
 				startingTile.Location + Directions.ToPoint(ledgeDirection) * 2);
-			if (landingTile == null || !landingTile.IsLeapLedge ||
-				landingTile.LedgeDirection != Directions.Flip(ledgeDirection))
+			if (landingTile != null && landingTile.IsLeapLedge &&
+				landingTile.LedgeDirection == Directions.Flip(ledgeDirection))
 			{
-				return false;
+				player.LeapLedgeJumpState.LedgeJumpDirection = ledgeDirection;
+				player.BeginControlState(player.LeapLedgeJumpState);
+				return true;
 			}
-
-			// Landing tile present: begin leap ledge jump!
-			player.LeapLedgeJumpState.LedgeJumpDirection = ledgeDirection;
-			player.BeginControlState(player.LeapLedgeJumpState);
-			return true;
+			return false;
 		}
 
 
@@ -570,22 +546,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return autoAccelerate; }
 			set { autoAccelerate = value; }
 		}
-		
-		public bool CanLedgeJump {
-			get { return canLedgeJump; }
-			set { canLedgeJump = value; }
-		}
-		
-		public bool CanJump {
-			get { return canJump; }
-			set { canJump = value; }
-		}
-		
-		public bool CanPush {
-			get { return canPush; }
-			set { canPush = value; }
-		}
-		
+				
 		public bool IsMoving {
 			get {
 				if (player.StateParameters.ProhibitMovementControlOnGround &&
@@ -595,12 +556,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			set { isMoving = value; }
 		}
-		
-		public bool CanUseWarpPoint {
-			get { return canUseWarpPoint; }
-			set { canUseWarpPoint = value; }
-		}
-		
+				
 		public bool IsSprinting {
 			get {
 				return player.ConditionStates.Any(
@@ -632,11 +588,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return motion; }
 		}
 		
-		public PlayerMoveCondition MoveCondition {
-			get { return moveCondition; }
-			set { moveCondition = value; }
-		}
-
 		public Point2I JumpStartTile {
 			get { return jumpStartTile; }
 			set { jumpStartTile = value; }

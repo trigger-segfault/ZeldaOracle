@@ -226,7 +226,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool AlwaysFaceUp { get; set; } = false;
 		public bool AlwaysFaceLeftOrRight { get; set; } = false;
 		//public bool AlwaysFaceDown { get; set; } = false;
+
+		/// <summary>The player doesn't need to be moving to transition.</summary>
 		public bool EnableAutomaticRoomTransitions { get; set; } = false;
+
 		public bool DisableMovement { get; set; } = false;
 		public bool DisableAutomaticStateTransitions { get; set; } = false;
 		public bool DisableUpdateMethod { get; set; } = false;

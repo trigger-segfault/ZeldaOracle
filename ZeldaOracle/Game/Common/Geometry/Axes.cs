@@ -18,6 +18,12 @@ namespace ZeldaOracle.Common.Geometry {
 			return (1 - axis);
 		}
 
+		public static int GetDirection(int axis, float positionOnAxis) {
+			if (axis == Axes.X)
+				return (positionOnAxis >= 0.0f ? Directions.Right : Directions.Left);
+			else
+				return (positionOnAxis >= 0.0f ? Directions.Down : Directions.Up);
+		}
 
 	}
 }

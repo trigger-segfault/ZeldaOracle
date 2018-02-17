@@ -139,7 +139,6 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		private float lateralPenetration;
 		private float allowedLateralPenetration;
 		private bool[] connections;
-		private bool[] allowableDirections;
 		private bool isDynamic;
 
 
@@ -161,7 +160,6 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			allowedLateralPenetration = 0.0f;
 			allowedPenetration	= 0.0f;
 			connections			= new bool[] { false, false, false, false };
-			allowableDirections = new bool[] { false, false, false, false };
 			isDynamic			= false;
 		}
 
@@ -263,6 +261,10 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 				lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
 		}
 
+		public bool IsLaterallyColliding {
+			get { return (lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
+		}
+
 		public bool IsSafeColliding {
 			get { return (penetration > GameSettings.EPSILON &&
 				lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
@@ -312,11 +314,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		public bool[] Connections {
 			get { return connections; }
 		}
-		
-		public bool[] AllowableDirections {
-			get { return allowableDirections; }
-		}
-		
+				
 		public object SolidObject {
 			get { return source.SolidObject; }
 		}
@@ -359,10 +357,6 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		
 		public bool IsCollidingAndNotAllowedClipping {
 			get { return (IsColliding && penetration > allowedPenetration); }
-		}
-		
-		public bool IsAllowedClipping {
-			get { return (IsColliding && penetration <= allowedPenetration); }
 		}
 	}
 

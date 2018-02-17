@@ -174,7 +174,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					objectDrawOffset	= Point2I.Zero;
 					objectZOffset		= 13;
 					isPickingUp = false;
-					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 					StateParameters.ProhibitMovementControl	= false;
 					StateParameters.PlayerAnimations.Default =
 						player.StateParameters.PlayerAnimations.Carry;

@@ -898,7 +898,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public IEnumerable<Collision> GetCollisionsOnAxis(int axis) {
-			return potentialCollisions.Where(c => c.Axis == axis);
+			return Collisions.Where(c => c.Axis == axis);
 		}
 
 		public IEnumerable<Collision> GetCollisionsInDirection(int direction) {

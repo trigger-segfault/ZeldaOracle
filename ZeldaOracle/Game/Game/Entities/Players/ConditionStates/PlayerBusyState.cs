@@ -52,7 +52,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			//player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 			StateParameters.ProhibitMovementControlOnGround = true;
 			timer = 0;
 			
@@ -61,7 +60,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			timer = 0;
 			duration = 0;
 			actions.Clear();

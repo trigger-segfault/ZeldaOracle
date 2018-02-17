@@ -109,8 +109,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (weapon.IsEquipped && weapon.IsButtonDown()) {
 				StateParameters.EnableStrafing = true;
-				//player.Movement.IsStrafing		= true;
-				//player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
 
 				if (player.RoomControl.IsUnderwater)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_SWIM);
@@ -132,9 +130,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.Movement.IsStrafing		= false;
-			//player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
-			
 			// The player can hold his sword while ledge jumping.
 			// TODO: Better way to keep sword equipped
 			if (!(newState is PlayerLedgeJumpState))

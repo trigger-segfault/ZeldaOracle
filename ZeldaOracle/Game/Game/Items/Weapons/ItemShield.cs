@@ -43,7 +43,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		private void StartBlocking() {
 			isShieldBlocking		= true;
-			Player.Movement.CanPush	= false;
 			//Player.MoveAnimation	= shieldBlockAnimation;
 			if (Player.WeaponState == null && Player.IsOnGround)
 				AudioSystem.PlaySound(GameData.SOUND_SHIELD);
@@ -51,7 +50,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		
 		private void StopBlocking() {
 			isShieldBlocking		= false;
-			Player.Movement.CanPush	= true;
 			//Player.MoveAnimation	= shieldAnimation;
 		}
 

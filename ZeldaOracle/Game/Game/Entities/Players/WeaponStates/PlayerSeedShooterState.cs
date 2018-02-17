@@ -97,7 +97,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			returnDirection	= player.UseDirection;
 
 			player.SyncAnimationWithDirection = false;
-			//player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 
 			StateParameters.ProhibitMovementControlOnGround = true;
 

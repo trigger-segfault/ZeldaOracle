@@ -504,17 +504,21 @@ namespace ZeldaOracle.Game.Debug {
 				Color color = Color.Red;
 				float penetrationEdgeWidth = 1.0f;
 
-				if (collision.IsColliding) {
-					if (collision.IsAllowedClipping)
-						color = Color.Blue;
+				if (collision.IsSafeColliding) {
+					if (collision.IsColliding)
+						color = Color.Red;
 					else
-						penetrationEdgeWidth = GMath.Abs(collision.Penetration);
+						color = Color.Blue;
+					penetrationEdgeWidth = Math.Max(1.0f,
+						GMath.Abs(collision.Penetration));
 				}
+				else if (collision.IsAutoDodged)
+					color = Color.Green;
 				else if (collision.IsResolved)
 					color = Color.Cyan;
 				else
 					color = Color.White;
-					
+				
 				if (entity.Physics.GetCollisionInDirection(
 					collision.Direction) == collision && collision.IsTile)
 				{
@@ -523,36 +527,18 @@ namespace ZeldaOracle.Game.Debug {
 					DrawCollisionModel(g, collision.Tile.CollisionModel,
 						collision.Tile.Position, Color.Magenta);
 				}
-				
-				for (int i = 0; i < 4; i++) {
 
-					float edgeWidth = 1.0f;
-					Color edgeColor = Color.Gray;
-					if (collision.Connections[Directions.Reverse(i)])
-						//edgeColor = Color.Black;
-						edgeColor = Color.Transparent;
-					else if (!collision.AllowableDirections[i])
-						edgeColor = Color.Transparent;
-
-					if (i == collision.Direction &&
-						collision.AllowableDirections[collision.Direction])
-					{
-						edgeColor = color;
-						edgeWidth = penetrationEdgeWidth;
-					}
-
-
-					int edgeDirection = Directions.Reverse(i);
-					int axis = Directions.ToAxis(edgeDirection);
-					Rectangle2F r = collision.SolidBox;
-					r.Point = GameUtil.Bias(r.Point);
-					if (collision.Source.IsInsideCollision)
-						r.ExtendEdge(edgeDirection, -r.Size[axis] + 1);
-					else
-						r.ExtendEdge(Directions.Reverse(edgeDirection), -r.Size[axis]);
-					r.ExtendEdge(Directions.Reverse(edgeDirection), edgeWidth);
-					g.FillRectangle(r, edgeColor);
-				}
+				// Draw the collision edge
+				int edgeDirection = Directions.Reverse(collision.Direction);
+				int axis = Directions.ToAxis(edgeDirection);
+				Rectangle2F r = collision.SolidBox;
+				r.Point = GameUtil.Bias(r.Point);
+				if (collision.Source.IsInsideCollision)
+					r.ExtendEdge(edgeDirection, -r.Size[axis] + 1);
+				else
+					r.ExtendEdge(Directions.Reverse(edgeDirection), -r.Size[axis]);
+				r.ExtendEdge(Directions.Reverse(edgeDirection), penetrationEdgeWidth);
+				g.FillRectangle(r, color);
 			}
 
 			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {

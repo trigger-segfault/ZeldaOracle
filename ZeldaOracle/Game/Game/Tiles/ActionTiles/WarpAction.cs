@@ -174,7 +174,9 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				warpEnabled = true;
 			}
 			else if (IsTouchingPlayer()) {
-				if (RoomControl.Player.CanUseWarpPoint && warpEnabled && RoomControl.Player.IsOnGround) {
+				if (!RoomControl.Player.StateParameters.ProhibitWarping &&
+					warpEnabled && RoomControl.Player.IsOnGround)
+				{
 					Warp(RoomControl.Player.Direction);
 					warpEnabled = false;
 				}
