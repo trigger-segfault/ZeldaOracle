@@ -564,10 +564,11 @@ namespace ZeldaOracle.Game.Debug {
 				}
 			}
 			else if (EntityDebugInfoMode == EntityDrawInfo.CollisionTests) {
+				Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
+
 				if (entity.Physics.IsEnabled &&
 					entity.Physics.CollideWithWorld || entity is Player)
 				{
-					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
 					collisionBox.X = GMath.Round(collisionBox.X + 0.001f);
 					collisionBox.Y = GMath.Round(collisionBox.Y + 0.001f);
 					
@@ -580,20 +581,28 @@ namespace ZeldaOracle.Game.Debug {
 				}
 				else if (entity.Physics.IsEnabled && entity.Physics.IsSolid) {
 					// Draw the hard collision box.
-					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
 					g.FillRectangle(collisionBox, Color.Olive);
+				}
+
+				// Draw ledge altitude number
+				if (entity.Physics.PassOverLedges) {
+					string altitudeString = String.Format("{0}",
+						entity.Physics.LedgeAltitude);
+					g.DrawString(GameData.FONT_SMALL, altitudeString, 
+						collisionBox.TopRight + new Vector2F(1, (collisionBox.Height * 0.5f) - 4),
+						Color.White);
 				}
 			}
 		}
 
 		public static void DrawRoomTiles(Graphics2D g, RoomControl roomControl) {
-			// Draw debug info for tiles.
+			// Draw debug info for tiles
 			foreach (Tile tile in roomControl.GetTiles())
 				DrawTile(g, tile);
 		}
 
 		public static void DrawRoom(Graphics2D g, RoomControl roomControl) {
-			// Draw debug info for entities.
+			// Draw debug info for entities
 			for (int i = roomControl.Entities.Count - 1; i >= 0; i--) {
 				if (roomControl.Entities[i] != roomControl.Player)
 					DrawEntity(g, roomControl.Entities[i]);

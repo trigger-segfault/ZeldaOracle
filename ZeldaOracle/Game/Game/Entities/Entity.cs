@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Entities {
 			Vector2F tempPos = position;
 			float tempZPos = zPosition;
 
-			// Update the physics component.
+			// Update the physics component
 			if (physics.IsEnabled)
 				physics.Update();
 

@@ -47,12 +47,20 @@ namespace ZeldaOracle.Game.Entities {
 		Soft	= 1,
 		Custom	= 2,
 	}
+
+	public enum LedgePassState {
+		None,
+		PassingDown,
+		PassingUp,
+	}
 	
 	public class PhysicsComponent {
 
+
+
 		public delegate bool TileCollisionCondition(Tile tile);
 
-		// General.
+		// General
 		private Entity					entity;				// The entity this component belongs to.
 		private bool					isEnabled;			// Are physics enabled for the entity?
 		private PhysicsFlags			flags;
@@ -63,7 +71,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F				surfacePosition;	// Used for draw position rounding to prevent jittering.
 		private Vector2F				surfaceVelocity;	// Used for draw position rounding to prevent jittering.
 		
-		// Collision settings.
+		// Collision settings
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F				softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
 		private TileCollisionCondition	customTileIsSolidCondition;
@@ -75,7 +83,7 @@ namespace ZeldaOracle.Game.Entities {
 		private int						crushMaxGapSize;
 		private Vector2F				topTilePointOffset;
 
-		// Internal physics state.
+		// Internal physics state
 		private Vector2F			previousVelocity;	// XY-Velocity before physics update is called.
 		private float				previousZVelocity;	// Z-Velocity before physics update is called.
 		private Vector2F			reboundVelocity;
@@ -84,6 +92,8 @@ namespace ZeldaOracle.Game.Entities {
 		private Tile				topTile;			// The top-most tile the entity is located over.
 		private int					ledgeAltitude;		// How many ledges the entity has passed over.
 		private Point2I				ledgeTileLocation;	// The tile location of the ledge we are currently passing over, or (-1, -1) if not passing over ledge.
+		private LedgePassState		ledgePassState;
+		private Tile				ledgePassTile;
 		private List<Collision>		potentialCollisions;
 		private List<Collision>		previousPotentialCollisions;
 
@@ -114,10 +124,12 @@ namespace ZeldaOracle.Game.Entities {
 			this.reboundVelocity	= Vector2F.Zero;
 			this.ledgeAltitude		= 0;
 			this.ledgeTileLocation	= new Point2I(-1, -1);
-			this.roomEdgeCollisionBoxType = CollisionBoxType.Hard;
-			this.customTileIsSolidCondition = null;
-			this.potentialCollisions = new List<Collision>();
-			this.previousPotentialCollisions = new List<Collision>();
+			this.ledgePassState		= LedgePassState.None;
+			this.ledgePassTile		= null;
+			this.roomEdgeCollisionBoxType		= CollisionBoxType.Hard;
+			this.customTileIsSolidCondition		= null;
+			this.potentialCollisions			= new List<Collision>();
+			this.previousPotentialCollisions	= new List<Collision>();
 
 			this.crushMaxGapSize	= 0;
 			this.edgeClipAmount		= 1;
@@ -859,6 +871,16 @@ namespace ZeldaOracle.Game.Entities {
 		public int LedgeAltitude {
 			get { return ledgeAltitude; }
 			set { ledgeAltitude = value; }
+		}
+
+		public LedgePassState LedgePassState {
+			get { return ledgePassState; }
+			set { ledgePassState = value; }
+		}
+
+		public Tile LedgePassTile {
+			get { return ledgePassTile; }
+			set { ledgePassTile = value; }
 		}
 
 		public Point2I LedgeTileLocation {
