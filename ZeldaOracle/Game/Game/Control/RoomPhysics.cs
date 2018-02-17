@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Collisions;
@@ -60,8 +59,8 @@ namespace ZeldaOracle.Game.Control {
 
 			// Resolve collisions with solid objects while integrating velocity
 			CheckSolidCollisions(entity);
-			
-			// Check for landing and falling in side-scrolling mode.
+
+			// Check for landing and falling in side-scrolling mode
 			if (IsSideScrolling && entity.Physics.HasGravity) {
 				if (!entity.Physics.IsOnGroundPrevious && entity.IsOnGround)
 					LandEntity(entity);
@@ -663,7 +662,7 @@ namespace ZeldaOracle.Game.Control {
 						!IsCollidingAt(entity, goalPosition, collision.Direction))
 					{
 						entity.Position += dodgeVector * moveAmount;
-						collision.IsAutoDodged = true;
+						collision.IsDodged = true;
 
 						// Adjust and recalculate penetration for all collisions
 						AdjustCollisionPenetrations(entity, moveAmount, dodgeDirection);
@@ -707,7 +706,7 @@ namespace ZeldaOracle.Game.Control {
 					!IsCollidingAt(entity, goalPosition, collision.Direction))
 				{
 					entity.Position = goalPosition;
-					collision.IsAutoDodged = true;
+					collision.IsDodged = true;
 
 					// Change this collision into a downward collision
 					collision.Direction = Directions.Down;

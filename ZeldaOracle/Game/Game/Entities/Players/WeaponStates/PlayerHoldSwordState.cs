@@ -24,8 +24,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			new Rectangle2I(-1, 8, 8, 14)
 		};
 
-
-		private PlayerState nextState;
 		private Animation weaponAnimation;
 		private ItemWeapon weapon;
 		private int chargeTimer;
@@ -46,11 +44,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public PlayerHoldSwordState() {
 			weaponAnimation	= GameData.ANIM_SWORD_HOLD;
-			nextState		= null;
 			weapon			= null;
 			chargeTimer		= 0;
 			direction		= Directions.Right;
 			playerTool		= null;
+
+			StateParameters.ProhibitEnteringMinecart	= true;
+			StateParameters.EnableStrafing				= true;
+			StateParameters.ProhibitPushing				= true;
 		}
 		
 		
@@ -68,7 +69,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (player.IsOnGround) {
 				tile.OnSwordHit(weapon);
 
-				// Create cling effect.
+				// Create cling effect
 				if (!tile.IsDestroyed && tile.ClingWhenStabbed) {
 					Effect clingEffect = new EffectCling(true);
 					Vector2F pos = player.Center + (13 * Directions.ToVector(direction));
@@ -77,7 +78,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 			}
 
-			// Begin the player stab state.
+			// Begin the player stab state
 			player.SwordStabState.Weapon = weapon;
 			player.SwordStabState.ContinueHoldingSword = true;
 			player.BeginWeaponState(player.SwordStabState);
@@ -98,42 +99,17 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
+			// Equip the sword tool
+			player.EquipTool(player.ToolSword);
+			player.ToolSword.AnimationPlayer.SubStripIndex = direction;
 
-			// The player can hold his sword while ledge jumping.
-
-			// TODO: Better way to keep sword equipped
-			if (!(previousState is PlayerLedgeJumpState))
-				chargeTimer = 0;
-
-			StateParameters.ProhibitEnteringMinecart = true;
-
-			if (weapon.IsEquipped && weapon.IsButtonDown()) {
-				StateParameters.EnableStrafing = true;
-
-				if (player.RoomControl.IsUnderwater)
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_SWIM);
-				else
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-				
-				player.EquipTool(player.ToolSword);
-
-				direction = player.Direction;
-				// TODO: Better way to keep sword equipped
-				if (!(previousState is PlayerLedgeJumpState))
-					player.ToolSword.PlayAnimation(weaponAnimation);
-
-				player.ToolSword.AnimationPlayer.SubStripIndex = direction;
-			}
-			else {
-				OnStopHolding();
-			}
+			chargeTimer = 0;
+			direction = player.Direction;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			// The player can hold his sword while ledge jumping.
-			// TODO: Better way to keep sword equipped
-			if (!(newState is PlayerLedgeJumpState))
-				player.UnequipTool(player.ToolSword);
+			// Unequip the sword tool
+			player.UnequipTool(player.ToolSword);
 		}
 
 		public override void Update() {
@@ -148,7 +124,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Charge up the sword
 			chargeTimer++;
 			if (chargeTimer == ChargeTime) {
-				player.ToolSword.AnimationPlayer.SetAnimation(GameData.ANIM_SWORD_CHARGED);
+				player.ToolSword.AnimationPlayer.SetAnimation(
+					GameData.ANIM_SWORD_CHARGED);
 				AudioSystem.PlaySound(GameData.SOUND_SWORD_CHARGE);
 			}
 
@@ -172,11 +149,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public PlayerState NextState {
-			get { return nextState; }
-			set { nextState = value; }
-		}
 
 		public Animation WeaponAnimation {
 			get { return weaponAnimation; }

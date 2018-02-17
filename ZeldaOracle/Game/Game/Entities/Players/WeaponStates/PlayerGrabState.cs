@@ -48,22 +48,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			return null;
 		}
 
-		/// <summary>Attempt to pickup the grabbed tile.</summary>
-		private bool AttemptPickup() {
-			Tile grabTile = player.Physics.GetFacingSolidTile(player.Direction);
-			
-			if (grabTile != null) {
-				int minLevel = grabTile.Properties.GetInteger(
-					"pickupable_bracelet_level", Item.Level1);
-				Item item = player.Inventory.GetItem("item_bracelet");
+		/// <summary>Attempt to pickup a tile.</summary>
+		private bool AttemptPickup(Tile tile) {
+			int minLevel = tile.Properties.GetInteger(
+				"pickupable_bracelet_level", Item.Level1);
+			Item item = player.Inventory.GetItem("item_bracelet");
 
-				if (grabTile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
-					player.CarryState.SetCarryObject(grabTile);
-					player.BeginWeaponState(player.CarryState);
-					grabTile.SpawnDrop();
-					player.RoomControl.RemoveTile(grabTile);
-					return true;
-				}
+			if (tile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
+				player.CarryState.SetCarryObject(tile);
+				player.BeginWeaponState(player.CarryState);
+				tile.SpawnDrop();
+				player.RoomControl.RemoveTile(tile);
+				return true;
 			}
 
 			return false;
@@ -83,7 +79,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// Attempt to pickup instantly pickupable tiles
 			if (tile.HasFlag(TileFlags.Pickupable | TileFlags.InstantPickup))
-				AttemptPickup();
+				AttemptPickup(tile);
 		}
 		
 		public override void OnHurt(DamageInfo damage) {
@@ -104,7 +100,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				pullTimer++;
 				if (pullTimer > duration)
-					AttemptPickup();
+					AttemptPickup(tile);
 			}
 			else {
 				pullTimer = 0;

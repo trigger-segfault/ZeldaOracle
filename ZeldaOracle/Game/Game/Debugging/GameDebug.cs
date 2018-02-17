@@ -59,8 +59,8 @@ namespace ZeldaOracle.Game.Debug {
 
 		private enum EntityDrawInfo {
 			None = 0,
-			CollisionBoxes,
 			CollisionTests,
+			CollisionBoxes,
 			Count,
 		}
 
@@ -514,7 +514,7 @@ namespace ZeldaOracle.Game.Debug {
 						penetrationEdgeWidth = Math.Max(1.0f,
 							GMath.Abs(collision.Penetration));
 					}
-					else if (collision.IsAutoDodged)
+					else if (collision.IsDodged)
 						color = Color.Green;
 					else if (collision.IsResolved)
 						color = Color.Cyan;

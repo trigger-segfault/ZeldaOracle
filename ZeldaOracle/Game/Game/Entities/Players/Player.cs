@@ -560,7 +560,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (WeaponState == stateGrab || WeaponState == stateCarry)
 					return;
 
-				// First check entity interactions.
+				// First check entity interactions
 				for (int i = 0; i < RoomControl.EntityCount; i++) {
 					Entity e = RoomControl.Entities[i];
 					if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
@@ -572,8 +572,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					}
 				}
 
-				// Then check tile interactions.
-				Tile actionTile = physics.GetFacingSolidTile(direction);
+				// Then check tile interactions
+				Tile actionTile = stateGrab.GetGrabTile();
 				if (actionTile != null && actionTile.OnAction(direction)) {
 					Controls.A.Disable(true);
 					StopPushing();

@@ -477,7 +477,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				foreach (Collision collision in
 					player.Physics.GetCollisionsInDirection(moveDirection))
 				{
-					if (collision.IsTile && !collision.IsAutoDodged) {
+					if (collision.IsTile && !collision.IsDodged) {
 						Tile tile = collision.Tile;
 						if (moveDirection == tile.LedgeDirection && !tile.IsInMotion) {
 							if (tile.IsLedge)

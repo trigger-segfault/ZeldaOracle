@@ -178,14 +178,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Update() {
 
-			// Check if collided.
+			// Check if collided
 			if (physics.IsColliding && eventCollision != null) {
 				eventCollision();
 				if (IsDestroyed)
 					return;
 			}
 
-			// Collide with tiles.
+			// Collide with tiles
 			if (physics.IsColliding) {
 				CollisionType type = CollisionType.RoomEdge;
 				Tile tile = null;

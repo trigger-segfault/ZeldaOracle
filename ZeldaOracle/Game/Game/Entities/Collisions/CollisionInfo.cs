@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Collisions {
 
+	/// <summary>
+	/// Types of solid objects that can cause collisions.
+	/// </summary>
+	public enum CollisionType {
+		None,
+		Tile,
+		Entity,
+		RoomEdge,
+	}
+
+	/// <summary>
+	/// Stores the colliding features.
+	/// </summary>
 	public struct CollisionCheck {
 
 		private CollisionType type;
@@ -120,7 +129,9 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 
 	
-
+	/// <summary>
+	/// Information about a collision between an entity and a solid object.
+	/// </summary>
 	public class Collision {
 
 		private Entity physicsEntity;
@@ -128,18 +139,18 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 		private CollisionCheck source;
 		private Rectangle2F solidBox;
+		private bool isDynamic;
+		private bool[] connections;
 
 		private int direction;
-		private bool isAutoDodged;
-		private bool isMovementCollision;
-		private bool isResolved;
-		private bool isRebound;
 		private float penetration;
 		private float allowedPenetration;
 		private float lateralPenetration;
 		private float allowedLateralPenetration;
-		private bool[] connections;
-		private bool isDynamic;
+
+		private bool isResolved;
+		private bool isDodged;
+		private bool isRebound;
 
 
 		//-----------------------------------------------------------------------------
@@ -151,8 +162,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			this.physicsEntity	= physicsEntity;
 			this.collisionBox	= physicsEntity.Physics.CollisionBox;
 			direction			= 0;
-			isAutoDodged		= false;
-			isMovementCollision	= false;
+			isDodged			= false;
 			isRebound			= false;
 			isResolved			= false;
 			penetration			= 0.0f;
@@ -168,13 +178,44 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		// Calculations
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Return the position along the axis of the collision-face for a
+		/// collision with this solid object in the given direction.</summary>
 		public float GetEdge(int direction) {
 			if (source.IsInsideCollision)
 				return SolidBox.GetEdge(direction);
 			else
 				return SolidBox.GetEdge(Directions.Reverse(direction));
 		}
+		
+		/// <summary>Calculate the perpendicular and latera penetration distances.
+		/// </summary>
+		public void CalcPenetration() {
+			bool prevIsColliding = IsColliding;
+			penetration = CalcPenetration(physicsEntity.Position);
+			lateralPenetration = CalcLateralPenetration(physicsEntity.Position);
+			if (prevIsColliding && !IsColliding)
+				isResolved = true;
+		}
+		
+		/// <summary>Calculate the lateral penetration distance.</summary>
+		public void CalcLateralPenetration() {
+			bool prevIsColliding = IsColliding;
+			lateralPenetration = CalcLateralPenetration(physicsEntity.Position);
+			if (prevIsColliding && !IsColliding)
+				isResolved = true;
+		}
 
+		public void CalcIsColliding() {
+			//bool newIsColliding = (penetration >
+			//	allowedPenetration + GameSettings.EPSILON &&
+			//	lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON);
+			//if (isColliding && !newIsColliding)
+			//	isResolved = true;
+			//isColliding = newIsColliding;
+		}
+		
+		/// <summary>Returns true if this collision would be penetrating if the physics
+		/// entity were placed at the given position.</summary>
 		public bool IsCollidingAt(Vector2F position) {
 			// Check for penetration on both axes
 			float p = CalcPenetration(position);
@@ -185,30 +226,8 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 					allowedLateralPenetration + GameSettings.EPSILON);
 		}
 		
-
-		public void CalcPenetration() {
-			bool prevIsColliding = IsColliding;
-			penetration = CalcPenetration(physicsEntity.Position);
-			lateralPenetration = CalcLateralPenetration(physicsEntity.Position);
-			if (prevIsColliding && !IsColliding)
-				isResolved = true;
-		}
-
-		public void CalcLateralPenetration() {
-			bool prevIsColliding = IsColliding;
-			lateralPenetration = CalcLateralPenetration(physicsEntity.Position);
-			if (prevIsColliding && !IsColliding)
-				isResolved = true;
-		}
-
-		public void CalcIsColliding() {
-			//bool newIsColliding = (penetration > allowedPenetration + GameSettings.EPSILON &&
-			//	lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON);
-			//if (isColliding && !newIsColliding)
-			//	isResolved = true;
-			//isColliding = newIsColliding;
-		}
-
+		/// <summary>Calculate the lateral penetration distance if the physics entity
+		/// were placed at the given position.</summary>
 		public float CalcLateralPenetration(Vector2F entityPosition) {
 			// Check for separation on the lateral axis
 			int lateralAxis = Axes.GetOpposite(Axis);
@@ -220,6 +239,8 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			return lateralPenetration;
 		}
 
+		/// <summary>Calculate the penetration distance if the physics entity were
+		/// placed at the given position.</summary>
 		public float CalcPenetration(Vector2F entityPosition) {
 			Rectangle2F entityBox = Rectangle2F.Translate(
 				collisionBox, entityPosition);
@@ -232,54 +253,135 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>The colliding features.</summary>
 		public CollisionCheck Source {
 			get { return source; }
 			set { source = value; }
 		}
 
+		/// <summary>The type of collision.</summary>
 		public CollisionType Type {
 			get { return source.Type; }
 		}
 		
+		/// <summary>True if this collision is with a solid tile.</summary>
+		public bool IsTile {
+			get { return (source.Type == CollisionType.Tile); }
+		}
+		
+		/// <summary>True if this collision is with a solid entity.</summary>
+		public bool IsEntity {
+			get { return (source.Type == CollisionType.Entity); }
+		}
+		
+		/// <summary>True if this collision is with a solid tile or entity.</summary>
+		public bool IsTileOrEntity {
+			get {
+				return (source.Type == CollisionType.Tile ||
+					source.Type == CollisionType.Entity);
+			}
+		}
+		
+		/// <summary>True if this collision is with the edge of the room.</summary>
+		public bool IsRoomEdge {
+			get { return (source.Type == CollisionType.RoomEdge); }
+		}
+		
+		/// <summary>Get the solid object that the physics entity is colliding with.
+		/// </summary>
+		public object SolidObject {
+			get { return source.SolidObject; }
+		}
+		
+		/// <summary>The solid tile that the entity is colliding with. If this is not a
+		/// tile collision, than this will return null.</summary>
+		public Tile Tile {
+			get { return source.Tile; }
+		}
+		
+		/// <summary>The solid entity that the entity is colliding with. If this is not
+		/// a entity collision, than this will return null.</summary>
+		public Entity Entity {
+			get { return source.Entity; }
+		}
+		
+		/// <summary>True if the entity is colliding with a dynamic object, such as a
+		/// moving tile.</summary>
+		public bool IsDynamic {
+			get { return isDynamic; }
+			set { isDynamic = value; }
+		}
+		
+		/// <summary>The solid objects positioned collision box.<summary>
 		public Rectangle2F SolidBox {
 			get { return solidBox; }
 			set { solidBox = value; }
 		}
 		
+		/// <summary>The physics entity's collision box that is used to check
+		/// penetration.</summary>
 		public Rectangle2F CollisionBox {
 			get { return collisionBox; }
 			set { collisionBox = value; }
 		}
-		
-		public bool IsDynamic {
-			get { return isDynamic; }
-			set { isDynamic = value; }
-		}
 
-		public bool IsColliding {
-			get { return (penetration > allowedPenetration + GameSettings.EPSILON &&
-				lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
-		}
-
-		public bool IsLaterallyColliding {
-			get { return (lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
-		}
-
-		public bool IsSafeColliding {
-			get { return (penetration > GameSettings.EPSILON &&
-				lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON); }
-		}
-
-		public bool IsAutoDodged {
-			get { return isAutoDodged; }
-			set { isAutoDodged = value; }
-		}
-		
+		/// <summary>The direction of penetration, which is typically the nearest
+		/// direction from the player to the solid object.</summary>
 		public int Direction {
 			get { return direction; }
 			set { direction = value; }
 		}
 		
+		/// <summary>The axis of collision.</summary>
+		public int Axis {
+			get { return Directions.ToAxis(direction); }
+		}
+		
+		/// <summary>True if the collision is happening on the X-axis.</summary>
+		public bool IsHorizontal {
+			get { return Directions.IsHorizontal(direction); }
+		}
+		
+		/// <summary>True if the collision is happening on the Y-axis.</summary>
+		public bool IsVertical {
+			get { return Directions.IsVertical(direction); }
+		}
+
+		/// <summary>True if this collision is penetrating beyond the allowed
+		/// penetration distance.</summary>
+		public bool IsColliding {
+			get {
+				return (penetration > allowedPenetration + GameSettings.EPSILON &&
+					IsLaterallyColliding);
+			}
+		}
+
+		/// <summary>True if this collision is penetrating at all.</summary>
+		public bool IsSafeColliding {
+			get {
+				return (penetration > GameSettings.EPSILON &&
+					IsLaterallyColliding);
+			}
+		}
+
+		/// <summary>True if the physics entity's collision box is overlapping the
+		/// solid objects collision box on the axes parallel to the collision.
+		/// </summary>
+		public bool IsLaterallyColliding {
+			get {
+				return (lateralPenetration >
+					allowedLateralPenetration + GameSettings.EPSILON);
+			}
+		}
+
+		/// <summary>True if this collision was dodged.</summary>
+		public bool IsDodged {
+			get { return isDodged; }
+			set { isDodged = value; }
+		}
+		
+		/// <summary>True if this collision was resolved during physics processing.
+		/// </summary>
 		public bool IsResolved {
 			get { return isResolved; }
 			set { isResolved = value; }
@@ -291,80 +393,30 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			set { isRebound = value; }
 		}
 		
-		public bool IsMovementCollision {
-			get { return isMovementCollision; }
-			set { isMovementCollision = value; }
-		}
-		
+		/// <summary>The penetration distance perpendicular to the collision.</summary>
 		public float Penetration {
 			get { return penetration; }
 			set { penetration = value; }
 		}
 		
+		/// <summary>The maximum allowable perpendicular penetration distance.
+		/// </summary>
 		public float AllowedPenetration {
 			get { return allowedPenetration; }
 			set { allowedPenetration = value; }
 		}
-		
+				
+		/// <summary>The maximum allowable parallel penetration distance.</summary>
 		public float AllowedLateralPenetration {
 			get { return allowedLateralPenetration; }
 			set { allowedLateralPenetration = value; }
 		}
 		
+		/// <summary>Array of connections in each direction, where true represents that
+		/// this solid object shares an edge with an adjacent solid objects.</summary>
 		public bool[] Connections {
 			get { return connections; }
 		}
-				
-		public object SolidObject {
-			get { return source.SolidObject; }
-		}
-		
-		public Entity Entity {
-			get { return source.Entity; }
-		}
-		
-		public Tile Tile {
-			get { return source.Tile; }
-		}
-		
-		public bool IsTile {
-			get { return (source.Type == CollisionType.Tile); }
-		}
-		
-		public bool IsTileOrEntity {
-			get {
-				return (source.Type == CollisionType.Tile ||
-					source.Type == CollisionType.Entity);
-			}
-		}
-		
-		public bool IsEntity {
-			get { return (source.Type == CollisionType.Entity); }
-		}
-		
-		public bool IsRoomEdge {
-			get { return (source.Type == CollisionType.RoomEdge); }
-		}
-		
-		public int Axis {
-			get { return Directions.ToAxis(direction); }
-		}
-		
-		public bool IsHorizontal {
-			get { return Directions.IsHorizontal(direction); }
-		}
-		
-		public bool IsVertical {
-			get { return Directions.IsVertical(direction); }
-		}
-
-		public bool IsCollidingAndNotAutoDodged {
-			get { return (IsColliding && !isAutoDodged); }
-		}
-		
-		public bool IsCollidingAndNotAllowedClipping {
-			get { return (IsColliding && penetration > allowedPenetration); }
-		}
 	}
 
 
@@ -374,61 +426,9 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 
 
-
-
-	public class CollisionInfoNew {
-
-		public Entity Entity { get; set; }
-
-		public int PenetrationDirection { get; set; }
-		public float PenetrationDistance { get; set; }
-		public Rectangle2F CollisionBox { get; set; }
-		public object CollidedObject { get; set; }
-		public bool IsColliding { get; set; }
-		public bool IsResolved { get; set; }
-		public bool IsResolvable { get; set; }
-		public bool IsValidCollisionInfo { get; set; }
-		public float MaxAllowedPenetrationDistance { get; set; }
-		public CollisionCheck Source { get; set; }
-
-		public bool IsAllowedClipping {
-			get { return (IsColliding && PenetrationDistance <= MaxAllowedPenetrationDistance); }
-		}
-		
-		public bool IsCollidingAndNotAllowedClipping {
-			get { return (IsColliding && PenetrationDistance > MaxAllowedPenetrationDistance); }
-		}
-
-		public CollisionInfoNew() {
-			Reset();
-		}
-
-		public CollisionInfoNew(CollisionInfoNew copy) {
-			this.CollisionBox = copy.CollisionBox;
-			this.Entity = copy.Entity;
-			this.CollidedObject = copy.CollidedObject;
-		}
-
-		public void Reset() {
-			Entity					= null;
-			IsColliding				= false;
-			IsResolved				= false;
-			PenetrationDistance		= 0.0f;
-			CollidedObject			= null;
-			CollisionBox			= Rectangle2F.Zero;
-			PenetrationDirection	= -1;
-			MaxAllowedPenetrationDistance	= 0.0f;
-			IsValidCollisionInfo	= false;
-		}
-	}
-
-	public enum CollisionType {
-		None,
-		Tile,
-		Entity,
-		RoomEdge,
-	}
-
+	/// <summary>
+	/// TODO: Remove this old collision info
+	/// </summary>
 	public class CollisionInfo {
 
 		// The type of collision if not None (entity, tile or room-edge)
