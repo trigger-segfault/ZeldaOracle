@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Update dynamic rupees.
 			if (dynamicRupees != rupees) {
-				dynamicRupees += Math.Sign(rupees - dynamicRupees);
+				dynamicRupees += GMath.Sign(rupees - dynamicRupees);
 				if (dynamicRupees == rupees)
 					AudioSystem.PlaySound(GameData.SOUND_GET_RUPEE);
 				else

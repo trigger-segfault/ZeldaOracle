@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Graphics.Sprites {
 	/// <summary>The base sprite that all sprites are composed of.</summary>
 	public class BasicSprite : ISprite {
+
 		/// <summary>The image used by the sprite.</summary>
 		private Image image;
 		/// <summary>The source rectangle of the sprite.</summary>
@@ -24,6 +25,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs an unassigned basic sprite.</summary>
 		public BasicSprite() {
 			this.image			= null;
 			this.sourceRect		= Rectangle2I.Zero;
@@ -32,12 +34,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.rotation		= Rotation.None;
 		}
 
+		/// <summary>Constructs a basic sprite from a sprite sheet.</summary>
 		public BasicSprite(SpriteSheet sheet, Point2I index, Flip flip = Flip.None,
 			Rotation rotation = Rotation.None) :
 			this(sheet, index, Point2I.Zero, flip)
 		{
 		}
 
+		/// <summary>Constructs a basic sprite from a sprite sheet.</summary>
 		public BasicSprite(SpriteSheet sheet, Point2I index, Point2I drawOffset,
 			Flip flip = Flip.None, Rotation rotation = Rotation.None)
 		{
@@ -48,12 +52,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.rotation		= rotation;
 		}
 
+		/// <summary>Constructs a basic sprite from an image and source rect.</summary>
 		public BasicSprite(Image image, Rectangle2I sourceRect, Flip flip = Flip.None,
 			Rotation rotation = Rotation.None) :
 			this(image, sourceRect, Point2I.Zero, flip)
 		{
 		}
 
+		/// <summary>Constructs a basic sprite from an image and source rect.</summary>
 		public BasicSprite(Image image, Rectangle2I sourceRect, Point2I drawOffset,
 			Flip flip = Flip.None, Rotation rotation = Rotation.None)
 		{
@@ -64,6 +70,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.rotation		= rotation;
 		}
 
+		/// <summary>Constructs a copy of the specified basic sprite.</summary>
 		public BasicSprite(BasicSprite copy) {
 			this.image			= copy.image;
 			this.sourceRect		= copy.sourceRect;
@@ -78,7 +85,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public SpritePart GetParts(SpriteDrawSettings settings) {
+		public SpritePart GetParts(SpriteSettings settings) {
 			return new SpritePart(image, sourceRect, drawOffset/*, flipEffects, rotation*/);
 		}
 
@@ -88,7 +95,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
-		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
+		public Rectangle2I GetBounds(SpriteSettings settings) {
 			return new Rectangle2I(drawOffset, sourceRect.Size);
 		}
 

@@ -446,7 +446,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			for (int side = 0; side < 2; side++) {
 				int moveDir		= (direction + (side == 0 ? 1 : 3)) % 4;
-				float distance	= Math.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
+				float distance	= GMath.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
 
 				if (distance <= dodgeDist) {
 					Vector2F checkPos = pos + (dirVect * 1.0f) +
@@ -664,11 +664,8 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsOnSideScrollingIce {
 			get {
-				Collision standingCollision =
-					GetCenteredCollisionInDirection(Directions.Down);
-				return (standingCollision != null &&
-					standingCollision.IsTile &&
-					standingCollision.Tile.IsIce);
+				return (StandingCollision != null &&
+					StandingCollision.IsTile && StandingCollision.Tile.IsIce);
 			}
 		}
 

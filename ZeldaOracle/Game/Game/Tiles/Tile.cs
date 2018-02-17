@@ -348,8 +348,6 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dropEntity != null) {
 				if (dropEntity is Collectible)
 					(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-				else if (dropEntity is Monster)
-					(dropEntity as Monster).BeginSpawnState();
 
 				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
 			}
@@ -454,6 +452,7 @@ namespace ZeldaOracle.Game.Tiles {
 				if (dropEntity is Monster) {
 					RoomControl.ScheduleEvent(2, () => {
 						RoomControl.SpawnEntity(dropEntity);
+						((Monster) dropEntity).BeginSpawnState();
 					});
 				}
 				else {
@@ -562,15 +561,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		protected void CheckSurfaceTile() {
 			// Find the surface tile (tile below this one).
-			Tile newSurfaceTile = null;
-			foreach (Tile tile in roomControl.TileManager
-				.GetTilesAtLocation(location, TileLayerOrder.HighestToLowest))
-			{
-				if (tile != this && tile.IsSurface) {
-					newSurfaceTile = tile;
-					break;
-				}
-			}
+			Tile newSurfaceTile = roomControl.TileManager.GetSurfaceTileBelow(this);
 
 			// Check if the surface tile has changed.
 			if (surfaceTile != newSurfaceTile) {
@@ -779,7 +770,7 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions,
 					colorDefinitions, args.Time);
 				g.DrawSprite(
 					sprite,
@@ -1031,7 +1022,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public virtual bool IsSurface {
-			get { return ((!isSolid || IsHalfSolid) && !IsPlatform); }
+			get { return (!flags.HasFlag(TileFlags.NotSurface) && !IsPlatform); }
 		}
 		
 		public bool IsPlatform {
@@ -1040,6 +1031,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsHalfSolid {
 			get { return (SolidType == TileSolidType.HalfSolid); }
+		}
+
+		public bool IsBasicLedge {
+			get { return (SolidType == TileSolidType.BasicLedge); }
 		}
 
 		public bool IsLedge {
@@ -1052,7 +1047,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsAnyLedge {
 			get {
-				return (SolidType == TileSolidType.Ledge ||
+				return (SolidType == TileSolidType.BasicLedge ||
+						SolidType == TileSolidType.Ledge ||
 						SolidType == TileSolidType.LeapLedge);
 			}
 		}
@@ -1150,6 +1146,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public int HurtDamage {
 			get { return hurtDamage; }
 			set { hurtDamage = value; }
+		}
+
+		public bool HasMoved {
+			get { return hasMoved; }
 		}
 
 

@@ -155,7 +155,7 @@ namespace ZeldaEditor {
 								spr = ((Animation) spr).GetSubstrip(substripIndex);
 							}
 
-							g.DrawISprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions), drawPos, Color.White);
+							g.DrawISprite(spr, new SpriteSettings(Zone.StyleDefinitions), drawPos, Color.White);
 						}
 					}
 				}

@@ -212,7 +212,7 @@ namespace ZeldaOracle.Game.Tiles {
 				args.Color);
 			g.DrawSprite(
 				turnstileAnimation,//.GetSubstrip(clockwise ? 0 : 1),
-				new SpriteDrawSettings(args.Zone.StyleDefinitions, 16f),
+				new SpriteSettings(args.Zone.StyleDefinitions, 16f),
 				args.Position,
 				args.Color);
 		}

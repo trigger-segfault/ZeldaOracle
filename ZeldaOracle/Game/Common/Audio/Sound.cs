@@ -248,7 +248,7 @@ namespace ZeldaOracle.Common.Audio {
 		public int MaxInstances {
 			get { return maxInstances; }
 			set {
-				maxInstances = Math.Max(1, value);
+				maxInstances = GMath.Max(1, value);
 				while (sounds.Count > maxInstances) {
 					if (!sounds[0].IsStopped)
 						sounds[0].Stop();

@@ -24,9 +24,19 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns a vector positioned at (0, 0).</summary>
 		public static readonly Vector2F Zero = new Vector2F(0f, 0f);
+		/// <summary>Returns a vector positioned at (0.5, 0.5).</summary>
+		public static readonly Vector2F Half = new Vector2F(0.5f, 0.5f);
+		/// <summary>Returns a vector positioned at (0.5, 0).</summary>
+		public static readonly Vector2F HalfX = new Vector2F(0.5f, 0f);
+		/// <summary>Returns a vector positioned at (0, 0.5).</summary>
+		public static readonly Vector2F HalfY = new Vector2F(0f, 0.5f);
 		/// <summary>Returns a vector positioned at (1, 1).</summary>
 		public static readonly Vector2F One = new Vector2F(1f, 1f);
-		
+		/// <summary>Returns a vector positioned at (1, 0).</summary>
+		public static readonly Vector2F OneX = new Vector2F(1f, 0f);
+		/// <summary>Returns a vector positioned at (0, 1).</summary>
+		public static readonly Vector2F OneY = new Vector2F(0f, 1f);
+
 
 		//-----------------------------------------------------------------------------
 		// Members
@@ -64,19 +74,22 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Static Constructors
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>Constructs a vector from polar coordinates.</summary>
-		public static Vector2F FromPolar(float length, float direction) {
-			return new Vector2F(
-				length * GMath.Cos(direction),
-				length * GMath.Sin(direction));
+		public static Vector2F FromPolar(float length, float radians) {
+			return new Vector2F(GMath.Cos(radians), -GMath.Sin(radians)) * length;
+		}
+
+		/// <summary>Constructs a vector normalized polar vector from radians.</summary>
+		public static Vector2F FromPolar(float radians) {
+			return new Vector2F(GMath.Cos(radians), -GMath.Sin(radians));
 		}
 
 		/// <summary>Constructs a vector from a single axis based on the index.</summary>
 		public static Vector2F FromIndex(int index, float value, float otherValue = 0f) {
 			return new Vector2F(
-				(index == 0 ? value : otherValue),
-				(index == 1 ? value : otherValue));
+				(index == Axes.X ? value : otherValue),
+				(index == Axes.Y ? value : otherValue));
 		}
 
 		/// <summary>Constructs a vector from a single axis based on the boolean.</summary>
@@ -424,6 +437,7 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+		
 
 		/// <summary>Gets or sets the direction of the vector.</summary>
 		[ContentSerializerIgnore]
@@ -431,12 +445,12 @@ namespace ZeldaOracle.Common.Geometry {
 			get {
 				if (IsZero)
 					return 0f;
-				return GMath.Plusdir(GMath.Atan2(Y, X));
+				return GMath.Plusdir(GMath.Atan2(-Y, X));
 			}
 			set {
 				float length = Length;
 				X = length * GMath.Cos(value);
-				Y = length * GMath.Sin(value);
+				Y = length * -GMath.Sin(value);
 			}
 		}
 
@@ -467,17 +481,17 @@ namespace ZeldaOracle.Common.Geometry {
 		[ContentSerializerIgnore]
 		public float this[int index] {
 			get {
-				if (index == 0)
+				if (index == Axes.X)
 					return X;
-				else if (index == 1)
+				else if (index == Axes.Y)
 					return Y;
 				else
 					throw new IndexOutOfRangeException("Vector2F[coordinateIndex] must be either 0 or 1.");
 			}
 			set {
-				if (index == 0)
+				if (index == Axes.X)
 					X = value;
-				else if (index == 1)
+				else if (index == Axes.Y)
 					Y = value;
 				else
 					throw new IndexOutOfRangeException("Vector2F[coordinateIndex] must be either 0 or 1.");

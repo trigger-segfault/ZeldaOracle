@@ -250,6 +250,8 @@
       <Word>RESETWHEN</Word>
       <Word>CONVEYOR</Word>
       <Word>PROPERTIES</Word>
+      <Word>PROPERTY</Word>
+      <Word>DOCUMENTS</Word>
       <Word>EVENT</Word>
       <Word>SPRITE</Word>
       <Word>SAMESPRITE</Word>
@@ -271,6 +273,7 @@
       <Word>PREVIEW</Word>
       <Word>ENTITYDRAW</Word>
       <Word>LEAPLEDGE</Word>
+      <Word>BASICLEDGE</Word>
       <Word>TILEBELOW</Word>
     </Keywords>
 

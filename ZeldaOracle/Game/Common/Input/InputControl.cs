@@ -8,24 +8,25 @@ namespace ZeldaOracle.Common.Input {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		public const double DoubleClickTime = 0.150;
+		/// <summary>The time before a double click opportunity expires.</summary>
+		public const float DoubleClickTime = 0.150f * 60;
 
 
 		//-----------------------------------------------------------------------------
 		// Members
 		//-----------------------------------------------------------------------------
 
-		// The pressed state of the control.
+		/// <summary>The pressed state of the control.</summary>
 		protected InputState state;
-		// The disabled state of the control.
+		/// <summary>The disabled state of the control.</summary>
 		protected DisableState disabledState;
-		// True if the control was double clicked.
+		/// <summary>True if the control was double clicked.</summary>
 		protected bool isDoubleClicked;
-		// True if the control was clicked.
+		/// <summary>True if the control was clicked.</summary>
 		protected bool isClicked;
-		// True if the control was typed.
+		/// <summary>True if the control was typed.</summary>
 		protected bool isTyped;
-		// The time the key has been held for since being pressed, or released.
+		/// <summary>The time the key has been held for since being pressed, or released.</summary>
 		protected int holdTime;
 
 
@@ -33,7 +34,7 @@ namespace ZeldaOracle.Common.Input {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		// Constructs the default control.
+		/// <summary>Constructs the default control.</summary>
 		public InputControl() {
 			this.state				= InputState.Up;
 			this.disabledState		= DisableState.Enabled;
@@ -48,8 +49,10 @@ namespace ZeldaOracle.Common.Input {
 		// Updating
 		//-----------------------------------------------------------------------------
 
-		// Called every step to update the control state.
-		public void Update(int time, bool down, bool typed = false, bool doubleClicked = false, bool clicked = false) {
+		/// <summary>Called every step to update the control state.</summary>
+		public void Update(int time, bool down, bool typed = false, bool doubleClicked = false,
+			bool clicked = false)
+		{
 			// Update the duration of the control state
 			holdTime += time;
 
@@ -88,13 +91,13 @@ namespace ZeldaOracle.Common.Input {
 				}
 			}
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Management
 		//-----------------------------------------------------------------------------
 
-		// Resets the control state.
+		/// <summary>Resets the control state.</summary>
 		public void Reset(bool release = false) {
 			if ((state == InputState.Pressed || state == InputState.Down) && release)
 				state = InputState.Released;
@@ -105,11 +108,13 @@ namespace ZeldaOracle.Common.Input {
 			isTyped			= false;
 			holdTime		= 0;
 		}
-		// Enables the control.
+
+		/// <summary>Enables the control.</summary>
 		public void Enable() {
 			disabledState = DisableState.Enabled;
 		}
-		// Disables the control.
+
+		/// <summary>Disables the control.</summary>
 		public void Disable(bool untilRelease = false) {
 			if (untilRelease) {
 				if (state != InputState.Up && state != InputState.Released)
@@ -127,53 +132,60 @@ namespace ZeldaOracle.Common.Input {
 			holdTime		= 0;
 		}
 
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Control State
 		//-----------------------------------------------------------------------------
 
-		// Returns true if the control was double clicked.
+		/// <summary>Returns true if the control was double clicked.</summary>
 		public bool IsDoubleClicked() {
 			return (isDoubleClicked && disabledState == DisableState.Enabled);
 		}
-		// Returns true if the control was clicked.
+
+		/// <summary>Returns true if the control was clicked.</summary>
 		public bool IsClicked() {
 			return ((isDoubleClicked || isClicked) && disabledState == DisableState.Enabled);
 		}
-		// Returns true if the control was pressed.
+
+		/// <summary>Returns true if the control was pressed.</summary>
 		public bool IsPressed() {
 			return (state == InputState.Pressed && disabledState == DisableState.Enabled);
 		}
-		// Returns true if the control is down.
+
+		/// <summary>Returns true if the control is down.</summary>
 		public bool IsDown() {
 			return ((state == InputState.Pressed || state == InputState.Down) &&
 					disabledState == DisableState.Enabled);
 		}
-		// Returns true if the control was released.
+
+		/// <summary>Returns true if the control was released.</summary>
 		public bool IsReleased() {
 			return (state == InputState.Released && disabledState == DisableState.Enabled);
 		}
-		// Returns true if the control is up.
+
+		/// <summary>Returns true if the control is up.</summary>
 		public bool IsUp() {
 			return (state == InputState.Released || state == InputState.Up ||
 					disabledState != DisableState.Enabled);
 		}
-		// Returns true if the control was typed.
+
+		/// <summary>Returns true if the control was typed.</summary>
 		public bool IsTyped() {
 			return (isTyped && disabledState == DisableState.Enabled);
 		}
-		// Returns true if the control is disabled.
+
+		/// <summary>Returns true if the control is disabled.</summary>
 		public bool IsDisabled() {
 			return (disabledState != DisableState.Enabled);
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// The time the key has been held for since being pressed, or released.
+		/// <summary>The time the key has been held for since being pressed, or released.</summary>
 		public int HoldTime {
 			get { return holdTime; }
 		}

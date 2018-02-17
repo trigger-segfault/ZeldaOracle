@@ -7,14 +7,15 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics.Sprites {
 	/// <summary>The settings for drawing an ISprite.</summary>
-	public struct SpriteDrawSettings {
+	public struct SpriteSettings {
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The default sprite draw settings.</summary>
-		public static readonly SpriteDrawSettings Default = new SpriteDrawSettings(new StyleDefinitions(), new ColorDefinitions());
+		public static readonly SpriteSettings Default =
+			new SpriteSettings(new StyleDefinitions(), new ColorDefinitions());
 
 
 		//-----------------------------------------------------------------------------
@@ -33,43 +34,50 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public SpriteDrawSettings(StyleDefinitions styles) {
+		/// <summary>Constructs the sprite draw settings with the specified styles.</summary>
+		public SpriteSettings(StyleDefinitions styles) {
 			this.Styles			= styles;
 			this.Colors			= new ColorDefinitions();
 			this.PlaybackTime	= 0f;
 		}
 
-		public SpriteDrawSettings(ColorDefinitions colors) {
+		/// <summary>Constructs the sprite draw settings with the specified colors.</summary>
+		public SpriteSettings(ColorDefinitions colors) {
 			this.Styles         = new StyleDefinitions();
 			this.Colors			= colors;
 			this.PlaybackTime   = 0.0f;
 		}
 
-		public SpriteDrawSettings(float playbackTime) {
+		/// <summary>Constructs the sprite draw settings with the specified time.</summary>
+		public SpriteSettings(float playbackTime) {
 			this.Styles			= new StyleDefinitions();
 			this.Colors			= new ColorDefinitions();
 			this.PlaybackTime	= playbackTime;
 		}
 
-		public SpriteDrawSettings(StyleDefinitions styles, float playbackTime) {
+		/// <summary>Constructs the sprite draw settings with the specified styles and time.</summary>
+		public SpriteSettings(StyleDefinitions styles, float playbackTime) {
 			this.Styles			= styles;
 			this.Colors			= new ColorDefinitions();
 			this.PlaybackTime	= playbackTime;
 		}
 
-		public SpriteDrawSettings(ColorDefinitions colors, float playbackTime) {
+		/// <summary>Constructs the sprite draw settings with the specified colors and time.</summary>
+		public SpriteSettings(ColorDefinitions colors, float playbackTime) {
 			this.Styles			= new StyleDefinitions();
 			this.Colors			= colors;
 			this.PlaybackTime	= playbackTime;
 		}
 
-		public SpriteDrawSettings(StyleDefinitions styles, ColorDefinitions colors) {
+		/// <summary>Constructs the sprite draw settings with the specified styles and colors.</summary>
+		public SpriteSettings(StyleDefinitions styles, ColorDefinitions colors) {
 			this.Styles			= styles;
 			this.Colors			= colors;
 			this.PlaybackTime	= 0f;
 		}
 
-		public SpriteDrawSettings(StyleDefinitions styles, ColorDefinitions colors,
+		/// <summary>Constructs the sprite draw settings with all of the settings.</summary>
+		public SpriteSettings(StyleDefinitions styles, ColorDefinitions colors,
 			float playbackTime)
 		{
 			this.Styles			= styles;

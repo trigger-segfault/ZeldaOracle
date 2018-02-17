@@ -146,7 +146,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			Rectangle2I myBox = new Rectangle2I((int) position.X, (int) position.Y, 16, 16);
 			int minDist = -1;
 			for (int dir = 0; dir < 4; dir++) {
-				int dist = Math.Abs(myBox.GetEdge(dir) - roomBounds.GetEdge(dir));
+				int dist = GMath.Abs(myBox.GetEdge(dir) - roomBounds.GetEdge(dir));
 				if (dist < minDist || minDist < 0) {
 					edgeDirection = dir;
 					minDist = dist;

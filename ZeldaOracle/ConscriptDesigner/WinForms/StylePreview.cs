@@ -90,7 +90,7 @@ namespace ConscriptDesigner.WinForms {
 			UpdateSize(new Point2I(UnscaledClientSize.X, height));
 		}
 
-		protected override void Draw(Graphics2D g, SpriteDrawSettings settings, Zone zone) {
+		protected override void Draw(Graphics2D g, SpriteSettings settings, Zone zone) {
 			string originalStyle = settings.Styles.Get(styleGroup);
 
 			int startRow = (UnscaledScrollPosition.Y + 1) / (spriteSize.Y + 1);

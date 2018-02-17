@@ -183,7 +183,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			if (timedActions.ContainsKey(0))
 				timedActions[0].Invoke();
 
-			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, Math.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
+			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, GMath.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
 			toolBox.Point += (Point2I) player.CenterOffset;
 			playerTool.CollisionBox = toolBox;
 		}
@@ -280,7 +280,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 				OnSwingTilePeak(swingAngle, hitPoint);
 			}
 				
-			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, Math.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
+			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, GMath.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
 			toolBox.Point += (Point2I) player.CenterOffset;
 			playerTool.CollisionBox = toolBox;
 

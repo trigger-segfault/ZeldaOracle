@@ -77,7 +77,7 @@ namespace ZeldaOracle.Game {
 		public const float				SWITCH_HOOK_LIFT_SPEED					= 1.0f;
 		public const int				SWITCH_HOOK_LIFT_HEIGHT					= 16;
 		public const float				SLINGSHOT_SEED_SPEED					= 3.0f;
-		public const float				SLINGSHOT_SEED_DEGREE_OFFSET			= 20.0f; // For the 2 extra seed from the hyper slingshot.
+		public const float				SLINGSHOT_SEED_RADIAN_OFFSET			= GMath.FullAngle / 18f; // For the 2 extra seed from the hyper slingshot.
 		public const float				SEED_SHOOTER_SHOOT_SPEED				= 3.0f;
 		public const int				SEED_PROJECTILE_REBOUND_COUNT			= 3;
 		public const int				SCENT_POD_DURATION						= 240;
@@ -242,13 +242,15 @@ namespace ZeldaOracle.Game {
 		public const int				TILE_PULL_HANDLE_EXTEND_LENGTH			= 64;
 		public const int				TILE_PULL_HANDLE_WALL_OFFSET			= 8;
 
-		public const int                TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION  = 30;
+		public const int				TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION	= 30;
 
 		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_STARTS			= new int[] { 16, 32 };
 		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_INTERVALS		= new int[] { 32, 64, 96, 128 };
 		public const int				TILE_ARROW_SHOOTER_SHOOT_INTERVAL		= 33;
 		public const int				TILE_FIRE_SHOOTER_SHOOT_INVERVAL		= 16;
-		public const int                TILE_FIRE_SHOOTER_SHOOT_OFFSET			= 7;
+		public const int				TILE_FIRE_SHOOTER_SHOOT_OFFSET			= 7;
+
+		public const float				TILE_ICE_BLOCK_MOVEMENT_SPEED			= 1.75f;
 
 
 

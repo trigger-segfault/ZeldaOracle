@@ -439,7 +439,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					return;
 			}
 
-			if (isPassable || player.IsPassable || Math.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
+			if (isPassable || player.IsPassable || GMath.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
 				return;
 
 			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);

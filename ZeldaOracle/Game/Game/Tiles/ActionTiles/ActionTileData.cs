@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		public override Point2I Size {
 			get { return size; }
-			set { size = value; }
+			set { size = GMath.Max(Point2I.One, value); }
 		}
 
 

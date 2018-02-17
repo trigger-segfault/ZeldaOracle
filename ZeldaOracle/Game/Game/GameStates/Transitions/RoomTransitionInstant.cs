@@ -25,12 +25,11 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		}
 
 		public override void AssignPalettes() {
-			NewRoomControl.AssignPalettes();
+			OldRoomControl.AssignPalettes();
 		}
 
 		public override void Draw(Graphics2D g) {
 			// Draw the old room for a single frame.
-			g.ResetTranslation();
 			OldRoomControl.Draw(g);
 		}
 	}

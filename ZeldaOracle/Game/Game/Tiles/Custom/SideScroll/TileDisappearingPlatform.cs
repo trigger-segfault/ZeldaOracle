@@ -32,9 +32,9 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 
 		public override void OnInitialize() {
 			Properties properties = GetSyncedProperties(Properties, RoomControl.Room);
-			appearTime = Math.Max(0, properties.GetInteger("appear_time", 0));
-			disappearTime = Math.Max(0, properties.GetInteger("disappear_time", 0));
-			duration = Math.Max(Math.Max(appearTime, disappearTime) + 1, properties.GetInteger("duration", 2));
+			appearTime = GMath.Max(0, properties.GetInteger("appear_time", 0));
+			disappearTime = GMath.Max(0, properties.GetInteger("disappear_time", 0));
+			duration = GMath.Max(GMath.Max(appearTime, disappearTime) + 1, properties.GetInteger("duration", 2));
 
 			IsSolid = IsPlatformSolid;
 			Graphics.IsVisible = IsPlatformVisible;
@@ -79,9 +79,9 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 			}
 			else {
 				Properties properties = GetSyncedProperties(args.Properties, args.Room);
-				int appearTime = Math.Max(0, properties.GetInteger("appear_time", 0));
-				int disappearTime = Math.Max(0, properties.GetInteger("disappear_time", 0));
-				int duration = Math.Max(Math.Max(appearTime, disappearTime) + 1, properties.GetInteger("duration", 2));
+				int appearTime = GMath.Max(0, properties.GetInteger("appear_time", 0));
+				int disappearTime = GMath.Max(0, properties.GetInteger("disappear_time", 0));
+				int duration = GMath.Max(GMath.Max(appearTime, disappearTime) + 1, properties.GetInteger("duration", 2));
 				if (CheckPlatformVisible(args.Time, appearTime, disappearTime, duration))
 					Tile.DrawTileData(g, args);
 			}

@@ -75,9 +75,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Direction = Directions.Up;
 
 			// Start moving in a random angle
-			float randomAngle = GMath.TwoPi * GRandom.NextFloat();
-			moveVector.X = (float) Math.Cos(randomAngle);
-			moveVector.Y = (float) Math.Sin(randomAngle);
+			float randomAngle = GRandom.NextFloat(GMath.FullAngle);
+			moveVector = Vector2F.FromPolar(randomAngle);
 			rotationSpeed = 0.05f;
 			if (GRandom.NextBool())
 				rotationSpeed *= -1.0f;
@@ -103,8 +102,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Rotate velocity
 			float angle = rotationSpeed;
-			float cosAngle = (float) Math.Cos(angle);
-			float sinAngle = (float) Math.Sin(angle);
+			float cosAngle = GMath.Cos(angle);
+			float sinAngle = GMath.Sin(angle);
 			float x = (moveVector.X * cosAngle) - (moveVector.Y * sinAngle);
 			float y = (moveVector.Y * cosAngle) + (moveVector.X * sinAngle);
 			moveVector.X = x;
@@ -135,7 +134,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Draw(RoomGraphics g) {
 			// Draw body segments
-			SpriteDrawSettings drawSettings = new SpriteDrawSettings() {
+			SpriteSettings drawSettings = new SpriteSettings() {
 				Colors = Graphics.ModifiedColorDefinitions
 			};
 			for (int i = NUM_BODY_PARTS - 1; i >= 0; i--) {

@@ -211,11 +211,24 @@ namespace ZeldaOracle.Game.Entities {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		public static bool AreEntitiesAligned(Entity a, Entity b, int direction, float threshold) {
-			return ((Directions.IsVertical(direction) && Math.Abs(a.Center.X - b.Center.X) <= threshold) ||
-				(Directions.IsHorizontal(direction) && Math.Abs(a.Center.Y - b.Center.Y) <= threshold));
+		public static bool AreEntitiesAligned(Entity a, Entity b, int direction,
+			float threshold)
+		{
+			return (GMath.Abs(a.Center - b.Center)[!Directions.IsVertical(direction)] <=
+				threshold);
 		}
-	
+
+		public static bool AreEntitiesCollisionAligned(Entity a, Entity b, int direction,
+			CollisionBoxType collisionType)
+		{
+			Rectangle2F aBox = a.Physics.GetCollisionBox(collisionType) + a.Position;
+			Rectangle2F bBox = b.Physics.GetCollisionBox(collisionType) + b.Position;
+			if (Directions.IsVertical(direction))
+				return aBox.LeftRight.Intersects(bBox.LeftRight);
+			else
+				return aBox.TopBottom.Intersects(bBox.TopBottom);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -268,10 +281,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Vector2F DrawPosition {
 			get {
-				bool horizontal = Math.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
+				bool horizontal = GMath.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
 										(!Physics.IsCollidingInDirection(Directions.Left) &&
 										!Physics.IsCollidingInDirection(Directions.Right));
-				bool vertical = Math.Abs(Physics.SurfaceVelocity.Y) > GameSettings.EPSILON &&
+				bool vertical = GMath.Abs(Physics.SurfaceVelocity.Y) > GameSettings.EPSILON &&
 										(!Physics.IsCollidingInDirection(Directions.Up) &&
 										!Physics.IsCollidingInDirection(Directions.Down));
 				Vector2F surfacePosition = Vector2F.Zero;

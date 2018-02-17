@@ -110,15 +110,15 @@ namespace ZeldaOracle.Common.Input {
 		/// </summary>
 		/// <param name="window">The XNA window to which text input should be linked.</param>
 		public static void Initialize(GameWindow window) {
-			if (initialized)
-				throw new InvalidOperationException("TextInput.Initialize can only be called once!");
+			if (!initialized) {
 
-			hookProcDelegate = new WndProc(HookProc);
-			prevWndProc = (IntPtr)SetWindowLong(window.Handle, GWL_WNDPROC,
-				(int)Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
+				hookProcDelegate = new WndProc(HookProc);
+				prevWndProc = (IntPtr) SetWindowLong(window.Handle, GWL_WNDPROC,
+					(int) Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
 
-			hIMC = ImmGetContext(window.Handle);
-			initialized = true;
+				hIMC = ImmGetContext(window.Handle);
+				initialized = true;
+			}
 		}
 
 		static IntPtr HookProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam) {

@@ -138,14 +138,6 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Rectangle2I(-r.Point, -r.Size);
 		}
 
-		public static Rectangle2I operator ++(Rectangle2I r) {
-			return new Rectangle2I(++r.Point, r.Size);
-		}
-
-		public static Rectangle2I operator --(Rectangle2I r) {
-			return new Rectangle2I(--r.Point, r.Size);
-		}
-
 		//--------------------------------
 
 		public static Rectangle2I operator +(Rectangle2I r, Point2I p) {
@@ -233,7 +225,9 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 
-		//========== PROPERTIES ==========
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
 		// Dimensions
 
@@ -314,7 +308,9 @@ namespace ZeldaOracle.Common.Geometry {
 		public int     Parimeter   { get { return (2 * (Math.Abs(Width) + Math.Abs(Height))); } }
 
 
-		//========= CALCULATIONS =========
+		//-----------------------------------------------------------------------------
+		// Calculations
+		//-----------------------------------------------------------------------------
 
 		public int GetEdge(int direction) {
 			if (direction == Directions.Right)
@@ -361,7 +357,10 @@ namespace ZeldaOracle.Common.Geometry {
 			Size.Y += y * 2;
 		}
 
-		//=========== CONTAINS ===========
+
+		//-----------------------------------------------------------------------------
+		// Contains
+		//-----------------------------------------------------------------------------
 
 		// Returns true if the specified vector is inside this rectangle.
 		public bool Contains(Point2I point) {
@@ -394,7 +393,9 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 
-		//========== COLLISION ===========
+		//-----------------------------------------------------------------------------
+		// Collision
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns true if the specified vector is colliding with this rectangle.</summary>
 		public bool Colliding(Point2I point) {
@@ -437,4 +438,4 @@ namespace ZeldaOracle.Common.Geometry {
         }
 
 	}
-} // End namespace
+}

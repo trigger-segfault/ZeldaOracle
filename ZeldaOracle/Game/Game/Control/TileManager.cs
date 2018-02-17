@@ -71,40 +71,61 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Tile Accessors
 		//-----------------------------------------------------------------------------
-		
+
+		public Tile GetTileBelow(Tile tile) {
+			for (int i = tile.Layer - 1; i >= 0; i--) {
+				Tile tileBelow = tiles[tile.Location.X, tile.Location.Y, i];
+				if (tileBelow != null)
+					return tileBelow;
+			}
+			return null;
+		}
+
+		public Tile GetSurfaceTileBelow(Tile tile) {
+			for (int i = tile.Layer - 1; i >= 0; i--) {
+				Tile tileBelow = tiles[tile.Location.X, tile.Location.Y, i];
+				if (tileBelow != null && tileBelow.IsSurface)
+					return tileBelow;
+			}
+			return null;
+		}
+
 		// Return an enumerable list of tiles at the given location.
-		public IEnumerable<Tile> GetTilesAtLocation(Point2I location, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+		public IEnumerable<Tile> GetTilesAtLocation(Point2I location) {
 			if (IsTileInBounds(location)) {
-				foreach (int i in GetLayers(layerOrder)) {
+				foreach (int i in GetLayers(TileLayerOrder.HighestToLowest)) {
 					Tile tile = tiles[location.X, location.Y, i];
-					if (tile != null)
+					if (tile != null) {
 						yield return tile;
+						if (tile.IsSurface)
+							yield break;
+					}
 				}
 			}
 		}
 		
 		// Return an enumerable list of tiles touching the given point.
-		public IEnumerable<Tile> GetTilesAtPosition(Vector2F position, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+		public IEnumerable<Tile> GetTilesAtPosition(Vector2F position) {
 			Point2I location = GetTileLocation(position);
-			foreach (Tile tile in GetTilesAtLocation(location, layerOrder)) {
+			foreach (Tile tile in GetTilesAtLocation(location)) {
 				if (tile.Bounds.Contains(position))
 					yield return tile;
 			}
 		}
 		
 		// Return an enumerable list of tiles touching the given rectangular bounds.
-		public IEnumerable<Tile> GetTilesTouching(Rectangle2F bounds, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+		public IEnumerable<Tile> GetTilesTouching(Rectangle2F bounds) {
 			Rectangle2I area = GetTileAreaFromRect(bounds);
-			foreach (Tile tile in GetTilesInArea(area, layerOrder)) {
+			foreach (Tile tile in GetTilesInArea(area)) {
 				if (tile.Bounds.Intersects(bounds))
 					yield return tile;
 			}
 		}
 		
 		// Return an enumerable list of solid tiles colliding with the given collision box.
-		public IEnumerable<Tile> GetSolidTilesColliding(Rectangle2F collisionBox, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+		public IEnumerable<Tile> GetSolidTilesColliding(Rectangle2F collisionBox) {
 			Rectangle2I area = GetTileAreaFromRect(collisionBox);
-			foreach (Tile tile in GetTilesInArea(area, layerOrder)) {
+			foreach (Tile tile in GetTilesInArea(area)) {
 				if (tile.IsSolid && tile.CollisionModel != null &&
 					CollisionModel.Intersecting(tile.CollisionModel, tile.Position, collisionBox))
 					yield return tile;
@@ -112,19 +133,22 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		// Return an enumerable list of tiles contained within the given tile grid area.
-		public IEnumerable<Tile> GetTilesInArea(Rectangle2I area, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+		public IEnumerable<Tile> GetTilesInArea(Rectangle2I area) {
 			Rectangle2I clippedArea = Rectangle2I.Intersect(area,
 				new Rectangle2I(Point2I.Zero, gridDimensions));
-			foreach (int i in GetLayers(layerOrder)) {
-				for (int y = clippedArea.Top; y < clippedArea.Bottom; y++) {
-					for (int x = clippedArea.Left; x < clippedArea.Right; x++) {
+			for (int y = clippedArea.Top; y < clippedArea.Bottom; y++) {
+				for (int x = clippedArea.Left; x < clippedArea.Right; x++) {
+					foreach (int i in GetLayers(TileLayerOrder.HighestToLowest)) {
 						Tile tile = tiles[x, y, i];
 						if (tile != null) {
 							Point2I loc = tile.TileGridArea.Point;
 							if (!clippedArea.Contains(loc))
 								loc = Point2I.Clamp(loc, clippedArea);
-							if (x == loc.X && y == loc.Y)
+							if (x == loc.X && y == loc.Y) {
 								yield return tile;
+								if (tile.IsSurface)
+									break;
+							}
 						}
 					}
 				}
@@ -186,17 +210,17 @@ namespace ZeldaOracle.Game.Control {
 
 		// Return the tile at the given location that's on the highest layer.
 		public Tile GetTopTile(Point2I location) {
-			return GetTilesAtLocation(location, TileLayerOrder.HighestToLowest).FirstOrDefault();
+			return GetTilesAtLocation(location).FirstOrDefault();
 		}
 		
 		// Get the topmost tile touching the given point.
 		public Tile GetTopTileAtPosition(Vector2F position) {
-			return GetTilesAtPosition(position, TileLayerOrder.HighestToLowest).FirstOrDefault();
+			return GetTilesAtPosition(position).FirstOrDefault();
 		}
 
 		// Return the highest surface tile at the given position.
 		public Tile GetSurfaceTile(Point2I location) {
-			foreach (Tile tile in GetTilesAtLocation(location, TileLayerOrder.HighestToLowest)) {
+			foreach (Tile tile in GetTilesAtLocation(location)) {
 				if (tile.IsSurface)
 					return tile;
 			}
@@ -210,7 +234,7 @@ namespace ZeldaOracle.Game.Control {
 			Rectangle2I area = new Rectangle2I(location, Point2I.One);
 			area.Inflate(1, 1);
 
-			foreach (Tile tile in GetTilesInArea(area, TileLayerOrder.HighestToLowest)) {
+			foreach (Tile tile in GetTilesInArea(area)) {
 				Rectangle2F tileBounds = tile.Bounds;
 				tileBounds.Point -= tile.Velocity;
 				if (tileBounds.Contains(position) && (tile.IsSurface || (includePlatforms && tile.IsPlatform)))

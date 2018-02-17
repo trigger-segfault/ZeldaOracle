@@ -89,4 +89,4 @@ namespace GameFramework.MyGame.Debugging {
 
 		#endregion
 	}
-} // end namespace
+}

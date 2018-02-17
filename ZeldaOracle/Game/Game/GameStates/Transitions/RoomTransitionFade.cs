@@ -70,8 +70,6 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		}
 
 		public override void Draw(Graphics2D g) {
-			//g.ResetTranslation();
-
 			// Draw the room.
 			if (isBeginningFade)
 				OldRoomControl.Draw(g);

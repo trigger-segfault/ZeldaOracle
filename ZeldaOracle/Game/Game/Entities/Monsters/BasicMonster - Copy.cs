@@ -215,7 +215,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected void UpdateChargingState() {
-			speed = Math.Min(chargeSpeed, speed + chargeAcceleration);
+			speed = GMath.Min(chargeSpeed, speed + chargeAcceleration);
 			
 			float dir = (moveAngleIndex / (float) numMoveAngles) * GMath.FullAngle;
 			Physics.Velocity = Vector2F.FromPolar(speed, dir) * new Vector2F(1.0f, -1.0f);

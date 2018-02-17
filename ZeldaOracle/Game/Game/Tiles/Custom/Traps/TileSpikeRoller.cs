@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			bool vertical = args.Properties.GetBoolean("vertical", false);
-			int length = Math.Max(1, args.Properties.GetPoint("size", Point2I.One)[!vertical]);
+			int length = GMath.Max(1, args.Properties.GetPoint("size", Point2I.One)[!vertical]);
 			for (int i = 0; i < length; i++) {
 				int spriteIndex = 0;
 				if (i == 0) {

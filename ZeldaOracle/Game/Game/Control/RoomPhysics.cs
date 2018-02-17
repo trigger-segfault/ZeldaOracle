@@ -195,7 +195,7 @@ namespace ZeldaOracle.Game.Control {
 					entity.Position = newPos;
 					
 					Vector2F newVelocity = entity.Physics.Velocity;
-					if (Math.Abs(entity.Physics.Velocity[1 - axis]) < 0.1f) {
+					if (GMath.Abs(entity.Physics.Velocity[1 - axis]) < 0.1f) {
 						// Slightly push away from the center of the solid object.
 						Vector2F distance = entity.Physics.PositionedCollisionBox.Center - solidBox.Center;
 						//Vector2F correction = (entity.Position - solidBox.Center).Normalized;
@@ -642,14 +642,15 @@ namespace ZeldaOracle.Game.Control {
 			for (int side = 0; side < 2; side++) {
 				int dodgeDirection = lateralAxis + (side * 2);
 				Vector2F dodgeVector = Directions.ToVector(dodgeDirection);
-				float distanceToEdge = Math.Abs(entityBox.GetEdge(
+				float distanceToEdge = GMath.Abs(entityBox.GetEdge(
 					Directions.Reverse(dodgeDirection)) -
 					collision.SolidBox.GetEdge(dodgeDirection));
 				
 				// Check if the distance to the edge is within dodge range
 				if (distanceToEdge <= entity.Physics.AutoDodgeDistance) {
-					float moveAmount = Math.Min(entity.Physics.AutoDodgeSpeed,
+					float moveAmount = GMath.Min(entity.Physics.AutoDodgeSpeed,
 						distanceToEdge);
+
 					Vector2F nextPosition = GMath.Round(entity.Position) +
 						(dodgeVector * moveAmount);
 					Vector2F goalPosition = entity.Position +
@@ -688,7 +689,7 @@ namespace ZeldaOracle.Game.Control {
 			// Check dodging for both edges of the solid object
 			int dodgeDirection = Directions.Up;
 			Vector2F dodgeVector = Directions.ToVector(dodgeDirection);
-			float distanceToEdge = Math.Abs(entityBox.GetEdge(
+			float distanceToEdge = GMath.Abs(entityBox.GetEdge(
 				Directions.Reverse(dodgeDirection)) -
 				collision.SolidBox.GetEdge(dodgeDirection));
 				
@@ -1146,6 +1147,16 @@ namespace ZeldaOracle.Game.Control {
 							entity.Physics.LedgePassState = LedgePassState.PassingDown;
 						}
 					}
+				}
+				else {
+					// Keep the currently ledge tile location if we're still colliding with it.
+					Tile oldLedgeTile = entity.RoomControl.GetTopTile(
+											entity.Physics.LedgeTileLocation);
+					if (oldLedgeTile != null && CanCollideWithTile(entity, oldLedgeTile) &&
+						IsMovingDownLedge(entity, oldLedgeTile))
+						entity.Physics.LedgeTileLocation = oldLedgeTile.Location;
+					else
+						entity.Physics.LedgeTileLocation = -Point2I.One;
 				}
 			}
 		}

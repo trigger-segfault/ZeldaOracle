@@ -109,8 +109,10 @@
     <Compile Include="Controls\HistoryListViewItem.cs" />
     <Compile Include="Controls\ImageMenuItem.cs" />
     <Compile Include="Controls\ImageTreeViewItem.cs" />
+    <Compile Include="Controls\PointUpDown.cs" />
     <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
+    <Compile Include="Controls\PropertyGridEditorPointUpDown.cs" />
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorImages.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumFlagPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\Point2ISingleAxisPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\TextMessagePropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\WarpPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\WindowPropertyEditor.cs" />
@@ -143,6 +146,7 @@
     <Compile Include="TreeViews\EventTreeViewItem.cs" />
     <Compile Include="Undo\ActionChangeEvent.cs" />
     <Compile Include="Undo\ActionChangeProperty.cs" />
+    <Compile Include="Undo\ActionChangeTileSizeProperty.cs" />
     <Compile Include="Undo\ActionCreateLevel.cs" />
     <Compile Include="Undo\ActionDeleteDungeon.cs" />
     <Compile Include="Undo\ActionDeleteLevel.cs" />

@@ -141,4 +141,4 @@ namespace ZeldaOracle.Common.Debug {
 
 		#endregion
 	}
-} // End namespace
+}

@@ -125,7 +125,7 @@ TILE "ss_pot";
 	FLAGS		Cuttable, Movable, Pickupable, Switchable;
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
-	PROPERTIES	(integer, cuttable_sword_level, 1);
+	PROPERTY	(cuttable_sword_level, 1);
 END;
 TILE "ss_pot_underwater"; CLONE "ss_pot"; SAMESPRITE; END;
 
@@ -159,7 +159,7 @@ TILE "ss_coral_mid"; SAMESPRITE; ENVTYPE Water; END;
 
 TILE "ss_bombable_block";
 	SAMESPRITE;
-	SOLID block;
+	SOLID		block;
 	FLAGS		Bombable;
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
@@ -211,12 +211,16 @@ TILE "ss_faint_light_top_right"; SAMESPRITE; END;
 TILE "ss_faint_light_bottom_left"; SAMESPRITE; END;
 TILE "ss_faint_light_bottom_right"; SAMESPRITE; END;
 
-TILE "ss_moving_platform"; SAMESPRITE; SOLID block; END;
-TILE "ss_disappearing_platform";
-	TYPE			TileDisappearingPlatform;
-	SOLID			block;
+TILE "ss_moving_platform";
+	TYPE		TilePlatform;
 	SAMESPRITE;
-	PREVIEW			"tile_ss_disappearing_platform";
+	SOLID		block;
+END;
+TILE "ss_disappearing_platform";
+	TYPE		TileDisappearingPlatform;
+	SOLID		block;
+	SAMESPRITE;
+	PREVIEW		"tile_ss_disappearing_platform";
 	PROPERTIES
 		(integer, appear_time, 0,
 			"Appear Time", "", "Disappearing",
@@ -234,24 +238,25 @@ TILE "ss_disappearing_platform";
 TILE "ss_rotating_platform"; SAMESPRITE; SOLID block; END;
 
 TILE "temp_ss_conveyor_belt";
-	TYPE			TileConveyorBelt;
-	SOLID			block;
+	TYPE		TileConveyorBelt;
+	SOLID		block;
+	DOCUMENTS	(size, "Length", ("single_axis", "horizontal:1"), "Conveyor Belt", "The length of the conveyor belt in tiles.");
 END;
 
 TILE "ss_conveyor_belt_right";
-	CLONE			"temp_ss_conveyor_belt";
-	SPRITEINDEX		0, "tile_ss_conveyor_belt_right_both";
-	SPRITEINDEX		1, "tile_ss_conveyor_belt_right_left";
-	SPRITEINDEX		2, "tile_ss_conveyor_belt_right_mid";
-	SPRITEINDEX		3, "tile_ss_conveyor_belt_right_right";
-	CONVEYOR		Right,	0.5;
+	CLONE		"temp_ss_conveyor_belt";
+	SPRITEINDEX	0, "tile_ss_conveyor_belt_right_both";
+	SPRITEINDEX	1, "tile_ss_conveyor_belt_right_left";
+	SPRITEINDEX	2, "tile_ss_conveyor_belt_right_mid";
+	SPRITEINDEX	3, "tile_ss_conveyor_belt_right_right";
+	CONVEYOR	Right,	0.5;
 END;
 
 TILE "ss_conveyor_belt_left";
-	CLONE			"temp_ss_conveyor_belt";
-	SPRITEINDEX		0, "tile_ss_conveyor_belt_left_both";
-	SPRITEINDEX		1, "tile_ss_conveyor_belt_left_left";
-	SPRITEINDEX		2, "tile_ss_conveyor_belt_left_mid";
-	SPRITEINDEX		3, "tile_ss_conveyor_belt_left_right";
-	CONVEYOR		Left,	0.5;
+	CLONE		"temp_ss_conveyor_belt";
+	SPRITEINDEX	0, "tile_ss_conveyor_belt_left_both";
+	SPRITEINDEX	1, "tile_ss_conveyor_belt_left_left";
+	SPRITEINDEX	2, "tile_ss_conveyor_belt_left_mid";
+	SPRITEINDEX	3, "tile_ss_conveyor_belt_left_right";
+	CONVEYOR	Left,	0.5;
 END;

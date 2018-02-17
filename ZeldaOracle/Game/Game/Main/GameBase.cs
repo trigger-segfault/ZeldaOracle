@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Main {
 			this.spriteBatch			= null;
 			this.Content.RootDirectory	= "Content";
 			this.fullScreen				= false;
-			this.windowSize				= new Point2I(160 * 4, 144 * 4);
+			this.windowSize             = GameSettings.SCREEN_SIZE * 4;
 			this.windowSizeChanged		= false;
 			this.isContentLoaded		= true;
 			this.launchParameters		= launchParameters;
@@ -121,6 +121,7 @@ namespace ZeldaOracle.Game.Main {
 			Console.WriteLine("Begin Initialize");
 
 			Console.WriteLine("Initializing Input");
+			EventInput.Initialize(Window);
 			Keyboard.Initialize();
 			Mouse.Initialize();
 			GamePad.Initialize();
@@ -207,15 +208,6 @@ namespace ZeldaOracle.Game.Main {
 		private void OnClientSizeChanged(object sender, EventArgs e) {
 			Console.WriteLine("OnClientSizeChanged");
 			windowSizeChanged = true;
-			/*
-			if (Window.ClientBounds.Width > 0 && Window.ClientBounds.Height > 0)
-			{
-				graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-				graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-
-				//XCameraManager.UpdateViewports(myGraphics.GraphicsDevice.Viewport);
-			}
-			*/
 		}
 
 
@@ -301,9 +293,8 @@ namespace ZeldaOracle.Game.Main {
 
 		/// <summary>Called every step to update the fullscreen toggle.</summary>
 		protected void UpdateFullScreen() {
-
-			#if WINDOWS
-			if (IsWindows && fullScreen != graphics.IsFullScreen) {
+			
+			if (fullScreen != graphics.IsFullScreen) {
 				Console.WriteLine("UpdateFullScreen");
 				if (graphics.IsFullScreen) {
 					Form.FormBorderStyle				= FormBorderStyle.None;
@@ -334,7 +325,6 @@ namespace ZeldaOracle.Game.Main {
 				}
 				Console.WriteLine("End UpdateFullScreen");
 			}
-			#endif
 		}
 
 		/// <summary>Called every step to update the screenshot requests.</summary>
@@ -385,8 +375,7 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>Takes a screenshot of the game and saves it as a png.</summary>
 		private void SaveScreenShot() {
 			// Screenshot function taken from http://clifton.me/screenshot-xna-csharp/
-			#if WINDOWS
-
+			
 			// Get the screen size
 			int width	= GraphicsDevice.PresentationParameters.BackBufferWidth;
 			int height	= GraphicsDevice.PresentationParameters.BackBufferHeight;
@@ -428,8 +417,6 @@ namespace ZeldaOracle.Game.Main {
 				texture.SaveAsPng(stream, width, height);
 			}
 			texture.Dispose();
-
-			#endif
 		}
 
 
@@ -442,28 +429,6 @@ namespace ZeldaOracle.Game.Main {
 			get { return spriteBatch; }
 		}
 
-		/// <summary>Returns true if the game is running on Windows.</summary>
-		public bool IsWindows {
-			get {
-				#if WINDOWS
-				return true;
-				#else
-				return false;
-				#endif
-			}
-		}
-
-		/// <summary>Returns true if the game is running on the Xbox 360.</summary>
-		public bool IsXbox {
-			get {
-				#if XBOX
-				return true;
-				#else
-				return false;
-				#endif
-			}
-		}
-
 		/// <summary>The current frame rate of the game.</summary>
 		public double FPS {
 			get { return fps; }
@@ -472,24 +437,12 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>Gets or sets if the game should be in fullscreen.</summary>
 		public bool IsFullScreen {
 			get { return fullScreen; }
-			set {
-				#if WINDOWS
-				fullScreen = value;
-				#endif
-			}
+			set { fullScreen = value; }
 		}
-
-		#if WINDOWS
+		
 		/// <summary>Gets the Windows form of the XNA game.</summary>
 		public Form Form {
-			get {
-				#if WINDOWS
-				return (Form)Form.FromHandle(Window.Handle);
-				#else
-				return null;
-				#endif
-			}
+			get { return (Form)Form.FromHandle(Window.Handle); }
 		}
-		#endif
 	}
-} // End namespace
+}

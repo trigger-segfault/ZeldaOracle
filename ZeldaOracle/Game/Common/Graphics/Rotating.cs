@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>Rotations for an image in 90-degree increments.</summary>
@@ -29,9 +30,9 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>The array used to convert to radians.</summary>
 		private static readonly float[] RotationRadians = new float[4] {
 			0f,
-			(float)Math.PI / 2f,
-			(float)Math.PI,
-			(float)Math.PI + (float)Math.PI / 2f
+			GMath.QuarterAngle,
+			GMath.HalfAngle,
+			GMath.ThreeFourthsAngle
 		};
 
 		/// <summary>Adds the rotations together by wrapping them.</summary>

@@ -721,4 +721,4 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		}
 		
 	}
-} // end namespace
+}

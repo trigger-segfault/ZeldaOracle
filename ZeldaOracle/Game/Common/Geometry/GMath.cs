@@ -13,35 +13,29 @@ namespace ZeldaOracle.Common.Geometry {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Represents the ratio of the circumference of a circle to its diameter, specified by the constant, pi.</summary>
+		/// <summary>Represents the ratio of the circumference of a circle to its diameter,
+		/// specified by the constant, pi.</summary>
 		public const float Pi = 3.14159265358979323846f;
 		/// <summary>Represents the natural logarithmic base, specified by the constant, e.</summary>
 		public const float E = 2.71828182845904523536f;
-
-		/// <summary>Returns double the value of pi.</summary>
-		public const float DoublePi = Pi * 2f;
+		
+		/// <summary>Returns twice the value of pi.</summary>
 		public const float TwoPi = Pi * 2f;
 		/// <summary>Returns half the value of pi.</summary>
 		public const float HalfPi = Pi * 0.5f;
 		/// <summary>Returns a quarter of the value of pi.</summary>
 		public const float QuarterPi = Pi * 0.25f;
-	
-		/// <summary>Quarter of an angle in either radians or degrees.</summary>
-		public static float QuarterAngle {
-			get { return (UsingDegrees ? 90f : Pi / 2f); }
-		}
-		/// <summary>Half of an angle in either radians or degrees.</summary>
-		public static float HalfAngle {
-			get { return (UsingDegrees ? 180f : Pi); }
-		}
-		/// <summary>Three quarters of an angle in either radians or degrees.</summary>
-		public static float ThreeFourthsAngle {
-			get { return (UsingDegrees ? 270f : Pi * 1.5f); }
-		}
-		/// <summary>A full angle in either radians or degrees.</summary>
-		public static float FullAngle {
-			get { return (UsingDegrees ? 360f : Pi * 2f); }
-		}
+
+		/// <summary>A full angle in radians.</summary>
+		public const float FullAngle = TwoPi;
+		/// <summary>Three quarters of a full angle in radians.</summary>
+		public const float ThreeFourthsAngle = Pi + HalfPi;
+		/// <summary>Half of a full angle in radians.</summary>
+		public const float HalfAngle = Pi;
+		/// <summary>Quarter of a full angle in radians.</summary>
+		public const float QuarterAngle = HalfPi;
+		/// <summary>Eighth of a full angle in radians.</summary>
+		public const float EighthAngle = QuarterPi;
 
 
 		//-----------------------------------------------------------------------------
@@ -356,7 +350,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
 		public static short Sign(short a) {
-			return (short)Math.Sign(a);
+			return (short) Math.Sign(a);
 		}
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
@@ -366,22 +360,22 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
 		public static long Sign(long a) {
-			return (long)Math.Sign(a);
+			return Math.Sign(a);
 		}
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
 		public static float Sign(float a) {
-			return (float)Math.Sign(a);
+			return Math.Sign(a);
 		}
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
 		public static double Sign(double a) {
-			return (double)Math.Sign(a);
+			return Math.Sign(a);
 		}
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
 		public static decimal Sign(decimal a) {
-			return (decimal)Math.Sign(a);
+			return Math.Sign(a);
 		}
 
 		/// <summary>Returns the coordinates indicating the sign of the specified vector.</summary>
@@ -1067,62 +1061,34 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Angles
 		//-----------------------------------------------------------------------------
-
-		public static float GetDirection(Vector2F v, bool invertY) {
-			if (v.X == 0.0f && v.Y == 0.0f)
-				return 0.0f;
-			if (invertY)
-				v.Y = -v.Y;
-			return GMath.Plusdir(GMath.Atan2(v.Y, v.X));
-		}
 		
 		// Convert Angle --------------------------------------------------------------
-
-		/// <summary>Converts the given angle into degrees if UsingDegrees is true.</summary>
-		public static float ConvertToDegrees(float angle) {
-			return (UsingDegrees ? (angle / (float)Pi * 180.0f) : angle);
-		}
-
-		/// <summary>Converts the given angle into degrees if UsingDegrees is true.</summary>
-		public static double ConvertToDegrees(double angle) {
-			return (UsingDegrees ? (angle / Pi * 180.0) : angle);
-		}
-
-		/// <summary>Converts the given angle into radians if UsingDegrees is true.</summary>
-		public static float ConvertToRadians(float angle) {
-			return (UsingDegrees ? (angle / 180.0f * (float)Pi) : angle);
-		}
-
-		/// <summary>Converts the given angle into radians if UsingDegrees is true.</summary>
-		public static double ConvertToRadians(double angle) {
-			return (UsingDegrees ? (angle / 180.0 * Pi) : angle);
+		
+		/// <summary>Converts the specified angle from radians into degrees.</summary>
+		public static float ToDegrees(float radians) {
+			return radians / Pi * 180f;
 		}
 
 		/// <summary>Converts the specified angle from radians into degrees.</summary>
-		public static float ToDegrees(float angle) {
-			return angle / (float)Pi * 180.0f;
-		}
-
-		/// <summary>Converts the specified angle from radians into degrees.</summary>
-		public static double ToDegrees(double angle) {
-			return angle / Pi * 180.0;
+		public static double ToDegrees(double radians) {
+			return radians / Pi * 180.0;
 		}
 
 		/// <summary>Converts the specified angle from degrees into radians.</summary>
-		public static float ToRadians(float angle) {
-			return angle / 180.0f * (float)Pi;
+		public static float ToRadians(float degrees) {
+			return degrees / 180f * Pi;
 		}
 
 		/// <summary>Converts the specified angle from degrees into radians.</summary>
-		public static double ToRadians(double angle) {
-			return angle / 180.0 * Pi;
+		public static double ToRadians(double degrees) {
+			return degrees / 180.0 * Pi;
 		}
 
 		// Modulus Angle --------------------------------------------------------------
-
+		
 		/// <summary>Returns the absolute angle as (0, 360].</summary>
 		public static float Plusdir(float angle) {
-			return Wrap(angle, (float)FullAngle);
+			return Wrap(angle, FullAngle);
 		}
 
 		/// <summary>Returns the absolute angle as (0, 360].</summary>
@@ -1132,9 +1098,9 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the absolute angle as [0, 360).</summary>
 		public static float Plusdir2(float angle) {
-			float value = Wrap(angle, (float)FullAngle);
+			float value = Wrap(angle, FullAngle);
 			if (value == 0.0f)
-				return (float)FullAngle;
+				return FullAngle;
 			return value;
 		}
 
@@ -1145,12 +1111,12 @@ namespace ZeldaOracle.Common.Geometry {
 				return FullAngle;
 			return value;
 		}
-
+		
 		/// <summary>Returns the absolute angle as [-180, 180).</summary>
 		public static float Plusdir3(float angle) {
-			float value = Wrap(angle, (float)FullAngle);
-			if (value > (float)HalfAngle)
-				return value - (float)FullAngle;
+			float value = Wrap(angle, FullAngle);
+			if (value > HalfAngle)
+				return value - FullAngle;
 			return value;
 		}
 
@@ -1161,36 +1127,40 @@ namespace ZeldaOracle.Common.Geometry {
 				return value - FullAngle;
 			return value;
 		}
-
-		/// <summary>Returns the change in direction between two angles.</summary>
-		public static float DeltaDirection(float source, float destination) {
-			float dir = Plusdir(destination - source);
-			if (dir > HalfAngle)
-				return dir - FullAngle;
-			return dir;
-		}
-
-		/// <summary>Returns the change in direction between two angles.</summary>
-		public static double DeltaDirection(double source, double destination) {
-			double dir = Plusdir(destination - source);
-			if (dir > HalfAngle)
-				return dir - FullAngle;
-			return dir;
-		}
-
+		
 		/// <summary>Return the modular distance from one angle to another using the given winding order.</summary>
-		public static float GetAngleDistance(float startAngle, float endAngle, WindingOrder windingOrder) {
+		public static float DeltaDirection(float source, float destination, WindingOrder windingOrder = WindingOrder.CounterClockwise) {
+			source = Plusdir(source);
+			destination = Plusdir(destination);
 			if (windingOrder == WindingOrder.Clockwise) {
-				if (endAngle > startAngle)
-					return (startAngle + GMath.FullAngle - endAngle);
+				if (destination > source)
+					return (source + GMath.FullAngle - destination);
 				else
-					return (startAngle - endAngle);
+					return (source - destination);
 			}
 			else {
-				if (endAngle < startAngle)
-					return (endAngle + GMath.FullAngle - startAngle);
+				if (destination < source)
+					return (destination + GMath.FullAngle - source);
 				else
-					return (endAngle - startAngle);
+					return (destination - source);
+			}
+		}
+
+		/// <summary>Returns the change in direction between two angles.</summary>
+		public static double DeltaDirection(double source, double destination, WindingOrder windingOrder = WindingOrder.CounterClockwise) {
+			source = Plusdir(source);
+			destination = Plusdir(destination);
+			if (windingOrder == WindingOrder.Clockwise) {
+				if (destination > source)
+					return (source + GMath.FullAngle - destination);
+				else
+					return (source - destination);
+			}
+			else {
+				if (destination < source)
+					return (destination + GMath.FullAngle - source);
+				else
+					return (destination - source);
 			}
 		}
 
@@ -1200,76 +1170,84 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 
 		// Trigonometric --------------------------------------------------------------
-
+		
 		/// <summary>Returns the sine of the specified angle.</summary>
 		public static float Sin(float a) {
-			return (float)Math.Sin(ConvertToRadians(a));
+			return (float) Math.Sin(a);
 		}
+
 		/// <summary>Returns the sine of the specified angle.</summary>
 		public static double Sin(double a) {
-			return Math.Sin(ConvertToRadians(a));
+			return Math.Sin(a);
 		}
+
 		/// <summary>Returns the cosine of the specified angle.</summary>
 		public static float Cos(float a) {
-			return (float)Math.Cos(ConvertToRadians(a));
+			return (float) Math.Cos(a);
 		}
+
 		/// <summary>Returns the cosine of the specified angle.</summary>
 		public static double Cos(double a) {
-			return Math.Cos(ConvertToRadians(a));
+			return Math.Cos(a);
 		}
+
 		/// <summary>Returns the tangent of the specified angle.</summary>
 		public static float Tan(float a) {
-			return (float)Math.Tan(ConvertToRadians(a));
+			return (float) Math.Tan(a);
 		}
+
 		/// <summary>Returns the tangent of the specified angle.</summary>
 		public static double Tan(double a) {
-			return Math.Tan(ConvertToRadians(a));
+			return Math.Tan(a);
 		}
 		
 		// Arc Trigonometric ----------------------------------------------------------
 
 		/// <summary>Returns the angle whose sine is the specified number.</summary>
 		public static float Asin(float d) {
-			return ConvertToDegrees((float)Math.Asin(d));
+			return (float) Math.Asin(d);
 		}
+
 		/// <summary>Returns the angle whose sine is the specified number.</summary>
 		public static double Asin(double d) {
-			return ConvertToDegrees(Math.Asin(d));
+			return Math.Asin(d);
 		}
 
 		/// <summary>Returns the angle whose cosine is the specified number.</summary>
 		public static float Acos(float d) {
-			return ConvertToDegrees((float)Math.Acos(d));
+			return (float) Math.Acos(d);
 		}
+
 		/// <summary>Returns the angle whose cosine is the specified number.</summary>
 		public static double Acos(double d) {
-			return ConvertToDegrees(Math.Acos(d));
+			return Math.Acos(d);
 		}
 
 		/// <summary>Returns the angle whose tangent is the specified number.</summary>
 		public static float Atan(float d) {
-			return ConvertToDegrees((float)Math.Atan(d));
-		}
-		/// <summary>Returns the angle whose tangent is the specified number.</summary>
-		public static double Atan(double d) {
-			return ConvertToDegrees(Math.Atan(d));
+			return (float) Math.Atan(d);
 		}
 
+		/// <summary>Returns the angle whose tangent is the specified number.</summary>
+		public static double Atan(double d) {
+			return Math.Atan(d);
+		}
+		
 		/// <summary>Returns the angle whose tangent is the quotient of two specified numbers.</summary>
 		public static float Atan2(float y, float x) {
-			return ConvertToDegrees((float)Math.Atan2(y, x));
+			return (float) Math.Atan2(y, x);
 		}
 
 		/// <summary>Returns the angle whose tangent is the quotient of two specified numbers.</summary>
 		public static double Atan2(double y, double x) {
-			return ConvertToDegrees(Math.Atan2(y, x));
+			return Math.Atan2(y, x);
 		}
 		
 		// Hyperbolic -----------------------------------------------------------------
 
 		/// <summary>Returns the hyperbolic sine of the specified angle.</summary>
 		public static float Sinh(float a) {
-			return (float)Math.Sinh(a);
+			return (float) Math.Sinh(a);
 		}
 
 		/// <summary>Returns the hyperbolic sine of the specified angle.</summary>
@@ -1279,7 +1257,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the hyperbolic cosine of the specified angle.</summary>
 		public static float Cosh(float a) {
-			return (float)Math.Cosh(a);
+			return (float) Math.Cosh(a);
 		}
 
 		/// <summary>Returns the hyperbolic cosine of the specified angle.</summary>
@@ -1289,7 +1267,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the hyperbolic tangent of the specified angle.</summary>
 		public static float Tanh(float a) {
-			return (float)Math.Tanh(a);
+			return (float) Math.Tanh(a);
 		}
 
 		/// <summary>Returns the hyperbolic tangent of the specified angle.</summary>
@@ -1325,5 +1303,10 @@ namespace ZeldaOracle.Common.Geometry {
 
 			return (Point2I) GMath.Floor(tempDrawOffset + origin);
 		}
+
+		/// <summary>Returns the corrected angle for use with XNA drawing functions.</summary>
+		public static float CorrectAngle(float angle) {
+			return GMath.Wrap(-angle, FullAngle);
+		}
 	}
-} // End namespace
+}

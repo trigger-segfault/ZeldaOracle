@@ -5,23 +5,17 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
-namespace ZeldaOracle.Game.Tiles {
+namespace ZeldaOracle.Game.Tiles.Custom {
 
 	public class TileRoller : Tile {
-
+		
+		private Point2I startLocation;
 		private int returnTimer;
-
-		private int startPosition;
-
-		// The leader roller that commands all the other tiles.
-		private TileRoller firstRoller;
-		// The next roller away from the leader.
-		private TileRoller nextRoller;
-
 		private int pushTimer;
 		private bool pushed;
 
@@ -31,121 +25,55 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileRoller() {
+			fallsInHoles = false;
 			// TODO: Rollers can't be sword-stabbed, aren't pushable diagonally, and are only solid to the player.
-			Graphics.SyncPlaybackWithRoomTicks = false;
-		}
-
-		//-----------------------------------------------------------------------------
-		// Rolling
-		//-----------------------------------------------------------------------------
-
-		// Pushes the roller.
-		public void PushRoller(int direction) {
-			if (((IsVertical && Directions.IsVertical(direction)) || (!IsVertical && Directions.IsHorizontal(direction))) && nextRoller != null)
-				nextRoller.PushRoller(direction);
-
-			Graphics.PlayAnimation(TileData.SpriteList[1]);
-			Graphics.SubStripIndex = (direction <= 1 ? 0 : 1);
-
-			// Only the main roller should start the pushback.
-			if (firstRoller == this)
-				returnTimer = 60;
-			
-			if (base.Move(direction, 1, GameSettings.TILE_ROLLER_MOVE_SPEED)) {
-				if (firstRoller == this)
-					AudioSystem.PlaySound(GameData.SOUND_BLUE_ROLLER);
-			}
-		}
-
-		// Makes sure all rollers in the group can be pushed in the same direction.
-		private bool CanPushRoller(int direction) {
-			if (IsMoving)
-				return false;
-
-			// Make sure were not pushing out of bounds.
-			Point2I newLocation = Location + Directions.ToPoint(direction);
-			if (!RoomControl.IsTileInBounds(newLocation))
-				return false;
-
-			// Make sure there are no obstructions.
-			int newLayer;
-			if (IsMoveObstructed(direction, out newLayer))
-				return false;
-
-			if ((IsVertical && Directions.IsVertical(direction)) || (!IsVertical && Directions.IsHorizontal(direction)))
-				return (nextRoller != null ? nextRoller.CanPushRoller(direction) : true);
-			return false;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
-		
+
 		public override void OnInitialize() {
-			startPosition = (IsVertical ? Location.Y : Location.X);
+			startLocation = Location;
 			returnTimer = 0;
-			TileRoller roller = this;
-			do {
-				firstRoller = roller;
-				// Don't look any further, this is automatically the first roller.
-				if (roller.Properties.GetBoolean("first_roller"))
-					break;
-				roller = RoomControl.GetTopTile(roller.Location + Directions.ToPoint(IsVertical ? Directions.Left : Directions.Up)) as TileRoller;
-			} while (roller != null);
-
-			nextRoller = RoomControl.GetTopTile(Location + Directions.ToPoint(IsVertical ? Directions.Right : Directions.Down)) as TileRoller;
-			// Don't include the next roller if it's the start of a new group.
-			if (nextRoller != null && nextRoller.Properties.GetBoolean("first_roller"))
-				nextRoller = null;
-
-			pushed = false;
 			pushTimer = 0;
-			
+			pushed = false;
+
+			Graphics.SyncPlaybackWithRoomTicks = false;
 			Graphics.PlayAnimation(TileData.SpriteList[1]);
 			Graphics.AnimationPlayer.SkipToEnd();
+
+			CollisionModel = new CollisionModel(
+				new Rectangle2I(Point2I.FromBoolean(!IsVertical, Size[!IsVertical], 1) *
+					GameSettings.TILE_SIZE));
 		}
 
 		public override bool OnPush(int direction, float movementSpeed) {
+			// Don't use the Tile's built in pushing
 			return false;
 		}
 
 		public override void OnPushing(int direction) {
-			int currentPosition = (IsVertical ? Location.Y : Location.X);
-			if (!IsMoving && RoomControl.GameControl.Inventory.IsWeaponButtonDown(RoomControl.GameControl.Inventory.GetItem("item_bracelet"))) {
-				bool pushableDirection = false;
-
-				switch (direction) {
-				case Directions.Right:	pushableDirection = !IsVertical && currentPosition >= startPosition; break;
-				case Directions.Up:		pushableDirection =  IsVertical && currentPosition <= startPosition; break;
-				case Directions.Left:	pushableDirection = !IsVertical && currentPosition <= startPosition; break;
-				case Directions.Down:	pushableDirection =  IsVertical && currentPosition >= startPosition; break;
+			if (!IsMoving && IsPushableDirection(direction) &&
+				GameControl.Inventory.IsWeaponButtonDown(
+				GameControl.Inventory.GetItem("item_bracelet")))
+			{
+				ResetReturnTimer();
+				// Let the update method know that we're still pushing the tile
+				pushed = true;
+				if (pushTimer == PushDelay) {
+					MoveRoller(direction);
 				}
-
-				if (pushableDirection) {
-					firstRoller.returnTimer = 60;
-					pushed = true;
-					if (pushTimer == PushDelay) {
-						if (firstRoller.CanPushRoller(direction))
-							firstRoller.PushRoller(direction);
-					}
-					else {
-						pushTimer++;
-					}
+				else {
+					pushTimer++;
 				}
 			}
 		}
 
-		// Called when the tile is pushed into a hole.
-		public override void OnFallInHole() {
-		}
-
-		// Called when the tile is pushed into water.
-		public override void OnFallInWater() {
-		}
-
-		// Called when the tile is pushed into lava.
-		public override void OnFallInLava() {
+		public override void OnCompleteMovement() {
+			base.OnCompleteMovement();
+			ResetReturnTimer();
 		}
 
 		public override void Update() {
@@ -154,26 +82,67 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!IsMoving) {
 				if (!pushed)
 					pushTimer = 0;
-				int currentPosition = (IsVertical ? Location.Y : Location.X);
-				if (startPosition != currentPosition && firstRoller == this && returnTimer > 0) {
-					int direction;
-					if (currentPosition < startPosition)
-						direction = (IsVertical ? Directions.Down : Directions.Right);
-					else
-						direction = (IsVertical ? Directions.Up : Directions.Left);
 
-					if (!CanPushRoller(direction)) {
+				if (StartPosition != CurrentPosition) {
+					int newLayer;
+					if (IsMoveObstructed(ReturnDirection, out newLayer)) {
 						// Reset the return timer while it can't roll back.
-						returnTimer = 60;
+						ResetReturnTimer();
 					}
 					else {
-						returnTimer--;
 						if (returnTimer == 0)
-							PushRoller(direction);
+							MoveRoller(ReturnDirection);
+						else
+							returnTimer--;
 					}
 				}
 			}
+			
 			pushed = false;
+		}
+
+		public override void Draw(RoomGraphics g) {
+			base.Draw(g);
+
+			for (int i = 1; i < Size[!IsVertical]; i++) {
+				g.DrawAnimationPlayer(Graphics.AnimationPlayer,
+					Graphics.AnimationPlayer.PlaybackTime,
+					Position + Point2I.FromBoolean(!IsVertical, i * GameSettings.TILE_SIZE),
+					Graphics.DepthLayer, Position);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		// Moves the roller.
+		private bool MoveRoller(int direction) {
+			if (IsVertical != Directions.IsVertical(direction))
+				return false;
+
+			if (Move(direction, 1, GameSettings.TILE_ROLLER_MOVE_SPEED)) {
+				AudioSystem.PlaySound(GameData.SOUND_BLUE_ROLLER);
+				Graphics.PlayAnimation(TileData.SpriteList[1]);
+				Graphics.SubStripIndex = (direction <= 1 ? 0 : 1);
+				return true;
+			}
+			return false;
+		}
+
+		private bool IsPushableDirection(int direction) {
+			switch (direction) {
+			case Directions.Right:	return !IsVertical && CurrentPosition >= StartPosition;
+			case Directions.Up:		return  IsVertical && CurrentPosition <= StartPosition;
+			case Directions.Left:	return !IsVertical && CurrentPosition <= StartPosition;
+			case Directions.Down:	return  IsVertical && CurrentPosition >= StartPosition;
+			}
+			return false;
+		}
+
+		private void ResetReturnTimer() {
+			returnTimer = 60;
 		}
 
 
@@ -183,7 +152,16 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+			bool vertical = args.Properties.GetBoolean("vertical", false);
+			int length = GMath.Max(1, args.Properties.GetPoint("size", Point2I.One)[!vertical]);
+			for (int i = 0; i < length; i++) {
+				ISprite sprite = args.Tile.Sprite;
+				g.DrawSprite(
+					sprite,
+					args.SpriteDrawSettings,
+					args.Position + Point2I.FromBoolean(!vertical, i * GameSettings.TILE_SIZE),
+					args.Color);
+			}
 		}
 
 
@@ -193,6 +171,18 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private bool IsVertical {
 			get { return Properties.GetBoolean("vertical", false); }
+		}
+
+		private int ReturnDirection {
+			get { return Directions.FromPoint(startLocation - Location); }
+		}
+
+		private int StartPosition {
+			get { return startLocation[IsVertical]; }
+		}
+
+		private int CurrentPosition {
+			get { return Location[IsVertical]; }
 		}
 	}
 }

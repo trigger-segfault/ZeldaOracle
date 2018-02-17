@@ -179,4 +179,4 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 	}
-} // End namespace
+}

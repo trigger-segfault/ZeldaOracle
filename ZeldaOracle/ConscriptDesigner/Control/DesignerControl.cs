@@ -31,10 +31,12 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ConscriptDesigner.Control {
 	public static class DesignerControl {
-		
+
 		//-----------------------------------------------------------------------------
 		// Members
 		//-----------------------------------------------------------------------------
+
+		private static bool isActive = true;
 
 		private static MainWindow mainWindow;
 		private static ContentRoot project;
@@ -1053,6 +1055,11 @@ namespace ConscriptDesigner.Control {
 		public static Point2I SelectedTileLocation {
 			get { return selectedTileLocation; }
 			set { selectedTileLocation = value; }
+		}
+
+		public static bool IsActive {
+			get { return isActive; }
+			set { isActive = value; }
 		}
 	}
 }

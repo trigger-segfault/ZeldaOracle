@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpriteEffects = Microsoft.Xna.Framework.Graphics.SpriteEffects;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>Defines sprite mirroring options.</summary>

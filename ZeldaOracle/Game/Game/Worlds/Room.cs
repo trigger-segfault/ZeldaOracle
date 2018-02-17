@@ -13,11 +13,11 @@ using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Room : IEventObjectContainer, IEventObject {
-		
+
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
 		private TileDataInstance[,,]			tileData;	// 3D grid of tile data (x, y, layer)
-		private List<ActionTileDataInstance>		actionData;
+		private List<ActionTileDataInstance>	actionData;
 		//private Zone							zone;
 		private Properties						properties;
 		private EventCollection					events;
@@ -33,8 +33,8 @@ namespace ZeldaOracle.Game.Worlds {
 			this.tileData	= new TileDataInstance[0, 0, 0];
 			this.actionData	= new List<ActionTileDataInstance>();
 
-			this.events     = new EventCollection(this);
-			this.properties = new Properties(this);
+			this.events		= new EventCollection(this);
+			this.properties	= new Properties(this);
 			this.properties.BaseProperties = new Properties();
 
 			properties.BaseProperties.Set("id", "")
@@ -60,7 +60,9 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Room(Level level, int x, int y, Zone zone = null) :
-			this(level, new Point2I(x, y), zone) { }
+			this(level, new Point2I(x, y), zone)
+		{
+		}
 
 		public Room(Level level, Point2I location, Zone zone = null) :
 			this()
@@ -72,7 +74,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			//properties.BaseProperties.Set("event_all_monsters_dead", "")
 			//	.SetDocumentation("All Monsters Dead", "script", "", "Events", "Occurs when all monsters are dead.");
-			
+
 			// Room Flags:
 			// - discovered
 			// - hiddenFromMap
@@ -90,8 +92,8 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.SetAll(copy.properties);
 			events.SetAll(copy.events);
 
-			this.level      = copy.level;
-			this.location   = copy.location;
+			this.level		= copy.level;
+			this.location	= copy.location;
 			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
 			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
@@ -106,6 +108,7 @@ namespace ZeldaOracle.Game.Worlds {
 				AddActionTile(new ActionTileDataInstance(actionTile));
 			}
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Property objects
@@ -154,6 +157,27 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public TileDataInstance GetTile(int x, int y, int layer) {
 			return tileData[x, y, layer];
+		}
+
+		public IEnumerable<TileDataInstance> GetTilesInArea(Rectangle2I area, int layer) {
+			HashSet<TileDataInstance> encounteredTiles = new HashSet<TileDataInstance>();
+			for (int x = GMath.Max(0, -area.X); x < area.Width && x + area.X < Width; x++) {
+				for (int y = GMath.Max(0, -area.Y); y < area.Height && y + area.Y < Height; y++) {
+					TileDataInstance tile = tileData[area.X + x, area.Y + y, layer];
+					if (tile != null && !encounteredTiles.Contains(tile)) {
+						encounteredTiles.Add(tile);
+						yield return tile;
+					}
+				}
+			}
+		}
+
+		public bool ContainsTile(TileDataInstance tile) {
+			return (tile == tileData[tile.Location.X, tile.Location.Y, tile.Layer]);
+		}
+
+		public bool ContainsActionTile(ActionTileDataInstance actionTile) {
+			return actionData.Contains(actionTile);
 		}
 
 		public ActionTileDataInstance FindActionTileByID(string actionTileID) {
@@ -257,7 +281,7 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int x = 0; x < size.X; x++) {
 					for (int y = 0; y < size.Y; y++) {
 						Point2I loc = new Point2I(tile.Location.X + x, tile.Location.Y + y);
-						if (loc.X < Width && loc.Y < Height)
+						if (loc.X < Width && loc.Y < Height && tileData[loc.X, loc.Y, tile.Layer] == tile)
 							tileData[loc.X, loc.Y, tile.Layer] = null;
 					}
 				}
@@ -306,6 +330,16 @@ namespace ZeldaOracle.Game.Worlds {
 			AddActionTile(dataInstance);
 			return dataInstance;
 		}
+
+		public void UpdateTileSize(TileDataInstance tile, Point2I oldSize) {
+			if (ContainsTile(tile)) {
+				Point2I newSize = tile.Size;
+				tile.Size = oldSize;
+				RemoveTile(tile);
+				tile.Size = newSize;
+				PlaceTile(tile, tile.Location, tile.Layer);
+			}
+		}
 		
 		public void AddActionTile(ActionTileDataInstance actionTile) {
 			actionData.Add(actionTile);
@@ -319,7 +353,7 @@ namespace ZeldaOracle.Game.Worlds {
 		internal void ResizeLayerCount(int newLayerCount) {
 			TileDataInstance[,,] oldTileData = tileData;
 			tileData = new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, newLayerCount];
-			int minLayerCount = Math.Min(LayerCount, newLayerCount);
+			int minLayerCount = GMath.Min(LayerCount, newLayerCount);
 			for (int x = 0; x < level.RoomSize.X; x++) {
 				for (int y = 0; y < level.RoomSize.Y; y++) {
 					for (int layer = 0; layer < minLayerCount; layer++) {

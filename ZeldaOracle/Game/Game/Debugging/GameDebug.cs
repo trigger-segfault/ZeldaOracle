@@ -116,6 +116,8 @@ namespace ZeldaOracle.Game.Debug {
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.BackgroundColor = ConsoleColor.Black;
 
+			Console.WriteLine("FPS: " + GameControl.GameManager.FPS.ToString("00.#"));
+
 			Console.WriteLine("Player.Velocity: {0,-40}", player.Physics.Velocity);
 			if (player.Physics.OnGroundOverride)
 				Console.ForegroundColor = ConsoleColor.Red;
@@ -265,7 +267,7 @@ namespace ZeldaOracle.Game.Debug {
 				gameControl.Inventory.FillAllAmmo();
 				Dungeon dungeon = gameControl.RoomControl.Dungeon;
 				if (dungeon != null) {
-					dungeon.NumSmallKeys = Math.Min(dungeon.NumSmallKeys + 3, 9);
+					dungeon.NumSmallKeys = GMath.Min(dungeon.NumSmallKeys + 3, 9);
 					dungeon.HasMap		= true;
 					dungeon.HasCompass	= true;
 					dungeon.HasBossKey	= true;
@@ -511,7 +513,7 @@ namespace ZeldaOracle.Game.Debug {
 							color = Color.Red;
 						else
 							color = Color.Blue;
-						penetrationEdgeWidth = Math.Max(1.0f,
+						penetrationEdgeWidth = GMath.Max(1.0f,
 							GMath.Abs(collision.Penetration));
 					}
 					else if (collision.IsDodged)

@@ -87,7 +87,7 @@ namespace ConscriptDesigner.WinForms {
 			return false;
 		}
 
-		protected override void Draw(Graphics2D g, SpriteDrawSettings settings, Zone zone) {
+		protected override void Draw(Graphics2D g, SpriteSettings settings, Zone zone) {
 			if (tileset == null)
 				return;
 

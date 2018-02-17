@@ -240,7 +240,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			if ((entity != other) &&
 				(settings.RequiredType == null	|| settings.RequiredType.IsAssignableFrom(other.GetType())) &&
 				(settings.RequiredFlags == 0	|| other.Physics.Flags.HasFlag(settings.RequiredFlags)) &&
-				(settings.MaxZDistance < 0.0f	|| Math.Abs(entity.ZPosition - other.ZPosition) <= settings.MaxZDistance))
+				(settings.MaxZDistance < 0.0f	|| GMath.Abs(entity.ZPosition - other.ZPosition) <= settings.MaxZDistance))
 			{
 				// Setup the collision boxes.
 				Rectangle2F cbox1 = settings.GetCollisionBox1(entity);

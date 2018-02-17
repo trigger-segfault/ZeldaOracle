@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (player.WeaponState == null)
 				player.Graphics.PlayAnimation(player.Animations.Throw);
 			
-			boomerangMotionDirection = boomerang.Angle * GMath.QuarterAngle * 0.5f;
+			boomerangMotionDirection = boomerang.Angle * GMath.EighthAngle;
 		}
 		
 		public override void Update() {
@@ -61,20 +61,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (isArrowDown) {
 					int useAngle = player.UseAngle;
 					float currentAngle = boomerangMotionDirection;
-					float goalAngle = player.UseAngle * GMath.QuarterAngle * 0.5f;
-					float distCW = GMath.GetAngleDistance(
+					float goalAngle = player.UseAngle * GMath.EighthAngle;
+					float distCW = GMath.DeltaDirection(
 						currentAngle, goalAngle, WindingOrder.Clockwise);
-					float distCCW = GMath.GetAngleDistance(
+					float distCCW = GMath.DeltaDirection(
 						currentAngle, goalAngle, WindingOrder.CounterClockwise);
 
 					if (distCW != 0.0f || distCCW != 0.0f) {
 						int sign = (distCW <= distCCW ? -1 : 1);
-						boomerangMotionDirection += sign * 7f;
+						boomerangMotionDirection += sign * GMath.FullAngle / 50f;
 						boomerangMotionDirection = GMath.Plusdir(boomerangMotionDirection);
 					}
 
 					Vector2F velocity = Vector2F.FromPolar(boomerang.Speed, boomerangMotionDirection);
-					velocity.Y = -velocity.Y;
 					boomerang.Physics.Velocity = velocity;
 				}
 			}

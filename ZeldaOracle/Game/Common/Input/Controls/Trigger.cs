@@ -7,56 +7,42 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Input.Controls {
 	/// <summary>A class to store trigger data.</summary>
 	public class Trigger {
-
-		//========== CONSTANTS ===========
-
+		
 		/// <summary>The dead zone for the button control.</summary>
-		private static double ButtonDeadZone		= 0.24;
-
-		//=========== MEMBERS ============
-
+		private static float ButtonDeadZone		= 0.24f;
+		
 		/// <summary>The control for the button.</summary>
 		private InputControl button;
 		/// <summary>The disabled state of the control.</summary>
 		private DisableState disabledState;
 		/// <summary>The pressure of the trigger.</summary>
-		private double pressure;
+		private float pressure;
 		/// <summary>The dead zone of the trigger.</summary>
-		private double deadZone;
+		private float deadZone;
 
-		//========= CONSTRUCTORS =========
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs the default control.</summary>
 		public Trigger() {
 			this.button			= new InputControl();
 			this.disabledState	= DisableState.Enabled;
-			this.pressure		= 0.0;
-			this.deadZone		= 0.12;
+			this.pressure		= 0.0f;
+			this.deadZone		= 0.12f;
 		}
 
-		//========== PROPERTIES ==========
 
-		/// <summary>The position of the trigger.</summary>
-		public double Pressure {
-			get { return pressure; }
-		}
-		/// <summary>The dead zone of the trigger.</summary>
-		public double DeadZone {
-			get { return deadZone; }
-			set { deadZone = GMath.Max(0.0, GMath.Min(1.0, GMath.Abs(value))); }
-		}
-		/// <summary>The button of the trigger.</summary>
-		public InputControl Button {
-			get { return button; }
-		}
-
-		//=========== UPDATING ===========
+		//-----------------------------------------------------------------------------
+		// Updating
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Called every step to update the control state.</summary>
-		public void Update(int time, double pressure) {
+		public void Update(int time, float pressure) {
 			// Apply the dead zone to the position
 			if (pressure <= deadZone) {
-				pressure = 0.0;
+				pressure = 0f;
 			}
 
 			// Update the control state based on its position
@@ -67,7 +53,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 				button.Update(time, pressure > ButtonDeadZone);
 			}
 			else if (disabledState == DisableState.DisabledUntilRelease) {
-				if (pressure == 0.0) {
+				if (pressure == 0f) {
 					disabledState	= DisableState.Enabled;
 					for (int i = 0; i < 4; i++)
 						button.Enable();
@@ -75,11 +61,14 @@ namespace ZeldaOracle.Common.Input.Controls {
 			}
 		}
 
-		//========== MANAGEMENT ==========
+
+		//-----------------------------------------------------------------------------
+		// Management
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Resets the control state.</summary>
 		public void Reset(bool release = false) {
-			pressure = 0.0;
+			pressure = 0f;
 			button.Reset(release);
 		}
 		/// <summary>Enables the control.</summary>
@@ -90,27 +79,52 @@ namespace ZeldaOracle.Common.Input.Controls {
 		/// <summary>Disables the control.</summary>
 		public void Disable(bool untilRelease = false) {
 			if (untilRelease) {
-				if (pressure != 0.0)
+				if (pressure != 0f)
 					disabledState = DisableState.DisabledUntilRelease;
 				else
-					pressure	= 0.0;
+					pressure = 0f;
 			}
 			else {
-				pressure		= 0.0;
-				disabledState	= DisableState.Disabled;
+				pressure = 0f;
+				disabledState = DisableState.Disabled;
 			}
 			button.Disable(untilRelease);
 		}
 
-		//======== CONTROL STATES ========
+
+		//-----------------------------------------------------------------------------
+		// Control States
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns true if the trigger is centered.</summary>
 		public bool IsZero() {
-			return pressure == 0.0;
+			return (pressure <= deadZone);
 		}
+
 		/// <summary>Returns true if the trigger is disabled.</summary>
 		public bool IsDisabled() {
 			return (disabledState != DisableState.Enabled);
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The position of the trigger.</summary>
+		public float Pressure {
+			get { return pressure; }
+		}
+		/// <summary>The dead zone of the trigger.</summary>
+		public float DeadZone {
+			get { return deadZone; }
+			set { deadZone = GMath.Clamp(GMath.Abs(value), 0f, 1f); }
+		}
+		/// <summary>The button of the trigger.</summary>
+		public InputControl Button {
+			get { return button; }
+		}
+
+
 	}
-} // End namespace
+}

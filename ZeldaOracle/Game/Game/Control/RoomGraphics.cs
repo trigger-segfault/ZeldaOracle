@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Entities {
 		private class DrawingInstruction {
 			// Sprite
 			public ISprite sprite;
-			public SpriteDrawSettings settings;
+			public SpriteSettings settings;
 
 			// Text
 			public GameFont font;
@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Entities {
 			public DrawingInstruction next;
 			public Vector2F depthOrigin;
 
-			public DrawingInstruction(ISprite sprite, SpriteDrawSettings settings,
+			public DrawingInstruction(ISprite sprite, SpriteSettings settings,
 				Vector2F position, Vector2F depthOrigin)
 			{
 				this.sprite			= sprite;
@@ -138,7 +138,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Sort the list by depth origin Y.
 			instructions.Sort(delegate(DrawingInstruction a, DrawingInstruction b) {
-				if (Math.Round(a.depthOrigin.Y) < Math.Round(b.depthOrigin.Y))
+				if (GMath.Round(a.depthOrigin.Y) < GMath.Round(b.depthOrigin.Y))
 					return -1;
 				return 1;
 			});
@@ -170,12 +170,12 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		// Draw an animation player.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, SpriteSettings settings, Vector2F position, DepthLayer depth) {
 			DrawAnimationPlayer(animationPlayer, settings, position, depth, Vector2F.Zero);
 		}
 
 		// Draw an animation player at the given playback time.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, SpriteSettings settings, Vector2F position, DepthLayer depth) {
 			DrawAnimationPlayer(animationPlayer, time, settings, position, depth, Vector2F.Zero);
 		}
 
@@ -187,23 +187,23 @@ namespace ZeldaOracle.Game.Entities {
 		// Draw an animation player.
 		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 
-			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(animationPlayer.PlaybackTime), position, depth, depthOrigin);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteSettings(animationPlayer.PlaybackTime), position, depth, depthOrigin);
 		}
 
 		// Draw an animation player at the given time.
 		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 
-			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(time), position, depth, depthOrigin);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteSettings(time), position, depth, depthOrigin);
 		}
 
 		// Draw an animation player.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, SpriteSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 			settings.PlaybackTime = animationPlayer.PlaybackTime;
 			DrawSprite(animationPlayer.SpriteOrSubStrip, settings, position, depth, depthOrigin);
 		}
 
 		// Draw an animation player at the given time.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, SpriteSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 			settings.PlaybackTime = time;
 			DrawSprite(animationPlayer.SpriteOrSubStrip, settings, position, depth, depthOrigin);
 		}
@@ -214,10 +214,10 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public void DrawSprite(ISprite sprite, Vector2F position, DepthLayer depth) {
-			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth, Vector2F.Zero);
+			DrawSprite(sprite, SpriteSettings.Default, position, depth, Vector2F.Zero);
 		}
 
-		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
+		public void DrawSprite(ISprite sprite, SpriteSettings settings, Vector2F position, DepthLayer depth) {
 			DrawSprite(sprite, settings, position, depth, Vector2F.Zero);
 		}
 
@@ -227,10 +227,10 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public void DrawSprite(ISprite sprite, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth, depthOrigin);
+			DrawSprite(sprite, SpriteSettings.Default, position, depth, depthOrigin);
 		}
 
-		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+		public void DrawSprite(ISprite sprite, SpriteSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 			if (sprite == null)
 				return;
 

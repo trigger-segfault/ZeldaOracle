@@ -111,7 +111,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Accelerate crush speed
 			if (crushSpeed < GameSettings.MONSTER_THWOMP_CRUSH_MAX_SPEED) {
-				crushSpeed = Math.Min(crushSpeed +
+				crushSpeed = GMath.Min(crushSpeed +
 					GameSettings.MONSTER_THWOMP_CRUSH_ACCELERATION,
 					GameSettings.MONSTER_THWOMP_CRUSH_MAX_SPEED);
 			}

@@ -11,16 +11,12 @@ namespace ZeldaOracle.Game {
 	public static class GameUtil {
 		/// <summary>Rounds the specified vector to the nearest integral coordinates with bias.</summary>
 		public static Vector2F Bias(Vector2F a) {
-			return new Vector2F(
-				(float) Math.Round(a.X + GameSettings.BIAS),
-				(float) Math.Round(a.Y + GameSettings.BIAS));
+			return GMath.Round(a + GameSettings.BIAS);
 		}
 
 		/// <summary>Rounds the specified vector to the nearest integral coordinates with bias.</summary>
 		public static Vector2F ReverseBias(Vector2F a) {
-			return new Vector2F(
-				(float) Math.Round(a.X - GameSettings.BIAS),
-				(float) Math.Round(a.Y - GameSettings.BIAS));
+			return GMath.Round(a - GameSettings.BIAS);
 		}
 
 		/// <summary>Returns the type with the specified name. Throws an exception

@@ -172,7 +172,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override Point2I Size {
-			get { return properties.Get<Point2I>("size"); }
+			get { return GMath.Max(Point2I.One, properties.Get<Point2I>("size")); }
 			set { properties.SetGeneric("size", value); }
 		}
 

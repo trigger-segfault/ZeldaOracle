@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();	
 
 			timer++;
-			float percent = Math.Min(1.0f, (float) timer / (float) jumpDuration);
+			float percent = GMath.Min(1.0f, (float) timer / (float) jumpDuration);
 			player.Position = Vector2F.Lerp(startPosition, destination, percent);
 			
 			player.Physics.Velocity = Vector2F.Zero;

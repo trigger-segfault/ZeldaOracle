@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		private int canShoot;
 		private int angle;
 		private int rotateTimer;
-		private int shootAngle;
+		private Vector2F shootVector;
 
 
 		//-----------------------------------------------------------------------------
@@ -44,11 +44,9 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			// Determine shoot vector
 			Vector2F vectorToPlayer = RoomControl.Player.Position - Center;
 			int shootAngleCount = GameSettings.MONSTER_BEAMOS_SHOOT_ANGLE_COUNT;
-			float radians = (float) Math.Atan2((double) -vectorToPlayer.Y, (double) vectorToPlayer.X);
-			if (radians < 0.0f)
-				radians += GMath.TwoPi;
-			shootAngle = (int) GMath.Round((radians * shootAngleCount) / GMath.TwoPi);
-			shootAngle = GMath.Wrap(shootAngle, shootAngleCount);
+			int shootAngle = Orientations.NearestFromVector(vectorToPlayer, shootAngleCount);
+			shootVector = Orientations.ToVector(shootAngle, shootAngleCount);
+			shootVector *= GameSettings.MONSTER_BEAMOS_SHOOT_SPEED;
 		}
 
 		private void EndShoot() {
@@ -58,27 +56,11 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		}
 
 		private void ShootBeam(bool flicker) {
-			Vector2F vectorToPlayer = RoomControl.Player.Position - Center;
-			int angleToPlayer = Angles.NearestFromVector(vectorToPlayer);
-			
-			int shootAngleCount = GameSettings.MONSTER_BEAMOS_SHOOT_ANGLE_COUNT;
-			float shootRadians = (shootAngle * GMath.TwoPi) / (float) shootAngleCount;
-			Vector2F shootVector = new Vector2F(
-				(float) Math.Cos((double) shootRadians),
-				(float) -Math.Sin((double) shootRadians));
-			
 			// Create the projectile
 			BeamProjectile projectile = new BeamProjectile();
 			projectile.Flickers	= flicker;
 			projectile.Angle	= angle;
-			ShootProjectile(projectile, shootVector * GameSettings.MONSTER_BEAMOS_SHOOT_SPEED);
-			/*projectile.Owner	= null;
-			projectile.Source	= this;
-			projectile.Angle	= angle;
-			projectile.Physics.Velocity	= shootVector *
-				GameSettings.MONSTER_BEAMOS_SHOOT_SPEED;
-			RoomControl.SpawnEntity(projectile, Center);*/
-			AudioSystem.PlaySound(GameData.SOUND_LASER);
+			ShootProjectile(projectile, shootVector);
 		}
 
 
@@ -108,12 +90,16 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 				// 14 frames before first flash
 				// shoot happens at last frame of second flash
-				// 15 seconds after last flash
+				// 15 frames after last flash
 				if (shootTimer >= 14) {
 					int flashIndex = (shootTimer - 14) / 4;
 
+					//if (shootTimer == 21)
 					if (shootTimer >= 21) {
 						int shootIndex = shootTimer - 21;
+						if (shootIndex == 0) {
+							AudioSystem.PlaySound(GameData.SOUND_LASER);
+						}
 						if (shootIndex < 10) {
 							// Shoot the beam!
 							ShootBeam(((shootTimer - 21) % 2) == 1);
@@ -165,7 +151,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions,
 					ColorDefinitions.All("blue"), args.Time);
 				g.DrawSprite(
 					sprite,

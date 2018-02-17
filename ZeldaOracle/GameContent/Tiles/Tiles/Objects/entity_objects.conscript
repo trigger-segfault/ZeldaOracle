@@ -8,13 +8,11 @@ TILE "temp_roller";
 	TYPE		TileRoller;
 	FLAGS		Movable, NotGrabbable;
 	SOLID		block;
+	PROPERTY	(cling_on_stab, false);
 	PROPERTIES
 		(boolean, vertical, "false",
 			"Vertical", "", "Roller",
-			"The roller rolls vertically", false),
-		(boolean, first_roller, "false",
-			"First Roller", "", "Roller",
-			"This is the top left roller of a group. Any rollers before this won't be connected.");
+			"The roller rolls vertically", false);
 END;
 
 # Spike Roller ------------------------------------------------
@@ -22,8 +20,8 @@ END;
 TILE "temp_spike_roller";
 	CLONE		"tile_monster";
 	TYPE		TileSpikeRoller;
+	PROPERTY	(ignore_monster, true);
 	PROPERTIES
-		(boolean, ignore_monster, true),
 		(boolean, vertical, false,
 			"Vertical", "", "Roller",
 			"True if the spike roller rolls, vertically.", false),
@@ -65,9 +63,9 @@ TILE "temp_crossing_grate";
 	TYPE		TileCrossingGate;
 	SOLID		edge_w;
 	ENTITYDRAW	true;
+	PROPERTY	(cling_on_stab, false);
 	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
-				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left."),
-				(boolean, cling_on_stab, false);
+				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
 END;
 
 # Trampoline --------------------------------------------------
@@ -103,15 +101,15 @@ TILE "roller_horizontal";
 	CLONE		"temp_roller";
 	SPRITEINDEX	0, "tile_roller_horizontal";
 	SPRITEINDEX	1, "tile_roller_horizontal_roll";
-	PROPERTIES	(boolean, vertical, "false"),
-				(boolean, first_roller, "false");
+	PROPERTY	(vertical, false);
+	DOCUMENTS	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the roller in tiles.");
 END;
 TILE "roller_vertical";
 	CLONE		"temp_roller";
 	SPRITEINDEX	0, "tile_roller_vertical";
 	SPRITEINDEX	1, "tile_roller_vertical_roll";
-	PROPERTIES	(boolean, vertical, "true"),
-				(boolean, first_roller, "false");
+	PROPERTY	(vertical, true);
+	DOCUMENTS	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the roller in tiles.");
 END;
 
 # Spike Roller ------------------------------------------------
@@ -122,7 +120,8 @@ TILE "spike_roller_horizontal";
 	SPRITEINDEX 1, "tile_spike_roller_horizontal_top";
 	SPRITEINDEX 2, "tile_spike_roller_horizontal_mid";
 	SPRITEINDEX 3, "tile_spike_roller_horizontal_bottom";
-	PROPERTIES	(boolean, vertical, false);
+	PROPERTY	(vertical, false);
+	DOCUMENTS	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the spike roller in tiles.");
 END;
 TILE "spike_roller_vertical";
 	CLONE		"temp_spike_roller";
@@ -130,7 +129,8 @@ TILE "spike_roller_vertical";
 	SPRITEINDEX 1, "tile_spike_roller_vertical_left";
 	SPRITEINDEX 2, "tile_spike_roller_vertical_mid";
 	SPRITEINDEX 3, "tile_spike_roller_vertical_right";
-	PROPERTIES	(boolean, vertical, true);
+	PROPERTY	(vertical, true);
+	DOCUMENTS	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the spike roller in tiles.");
 END;
 
 # Arrow Cannon ------------------------------------------------
@@ -138,12 +138,12 @@ END;
 TILE "arrow_cannon_right";
 	CLONE		"temp_arrow_cannon";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 0);
+	PROPERTY	(direction, 0);
 END;
 TILE "arrow_cannon_left";
 	CLONE		"temp_arrow_cannon";
 	SAMESPRITE;
-	PROPERTIES (integer, direction, 2);
+	PROPERTY	(direction, 2);
 END;
 
 # Owl ---------------------------------------------------------
@@ -164,24 +164,24 @@ END;
 
 TILE "color_switch_blue";
 	CLONE		"temp_color_switch";
-	PROPERTIES	(boolean, switch_state, false),
-				(integer, sprite_index, 0);
+	PROPERTY	(switch_state, false);
+	PROPERTY	(sprite_index, 0);
 END;
 TILE "color_switch_red";
 	CLONE		"temp_color_switch";
-	PROPERTIES	(boolean, switch_state, true),
-				(integer, sprite_index, 1);
+	PROPERTY	(switch_state, true);
+	PROPERTY	(sprite_index, 1);
 END;
 
 # Crossing Gate -----------------------------------------------
 
 TILE "crossing_grate_right";
 	CLONE		"temp_crossing_grate";
-	PROPERTIES (boolean, face_left, false);
+	PROPERTY	(face_left, false);
 END;
 TILE "crossing_grate_left";
 	CLONE		"temp_crossing_grate";
-	PROPERTIES (boolean, face_left, true);
+	PROPERTY	(face_left, true);
 END;
 
 # Moving Platform ---------------------------------------------
@@ -201,8 +201,7 @@ TILE "sarcophagus";
 	PREVIEW		"preview_sarcophagus";
 	BREAKANIM	"effect_blue_brick_break";
 	BREAKSOUND	"monster_die";
-	PROPERTIES
-		(integer, pickupable_bracelet_level, 1);
+	PROPERTY	(pickupable_bracelet_level, 1);
 END;
 
 # Pull Handle -------------------------------------------------
