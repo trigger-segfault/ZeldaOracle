@@ -328,15 +328,22 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		}
 		
 		public bool IsTile {
-			get { return source.Type == CollisionType.Tile; }
+			get { return (source.Type == CollisionType.Tile); }
+		}
+		
+		public bool IsTileOrEntity {
+			get {
+				return (source.Type == CollisionType.Tile ||
+					source.Type == CollisionType.Entity);
+			}
 		}
 		
 		public bool IsEntity {
-			get { return source.Type == CollisionType.Entity; }
+			get { return (source.Type == CollisionType.Entity); }
 		}
 		
 		public bool IsRoomEdge {
-			get { return source.Type == CollisionType.RoomEdge; }
+			get { return (source.Type == CollisionType.RoomEdge); }
 		}
 		
 		public int Axis {

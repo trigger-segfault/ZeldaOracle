@@ -519,8 +519,8 @@ namespace ZeldaOracle.Game.Debug {
 				else
 					color = Color.White;
 				
-				if (entity.Physics.GetCollisionInDirection(
-					collision.Direction) == collision && collision.IsTile)
+				if (collision.IsTile &&
+					entity.Physics.StandingCollision == collision)
 				{
 					FillCollisionModel(g, collision.Tile.CollisionModel,
 						collision.Tile.Position, Color.Magenta * 0.3f);

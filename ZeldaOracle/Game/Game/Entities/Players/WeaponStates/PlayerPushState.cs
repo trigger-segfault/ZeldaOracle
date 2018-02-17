@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 			
 			Tile actionTile = player.Physics.GetFacingSolidTile(player.Direction);
-			Collision collision = player.Physics.GetCollisionInDirection(player.Direction);
+			Collision collision = player.Physics.GetCenteredCollisionInDirection(player.Direction);
 			bool isColliding = (collision != null && collision.IsTile && 
 				!collision.Tile.IsMoving && !collision.Tile.IsNotPushable);
 			

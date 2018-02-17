@@ -719,7 +719,7 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsOnSideScrollingIce {
 			get {
 				Collision standingCollision =
-					GetCollisionInDirection(Directions.Down);
+					GetCenteredCollisionInDirection(Directions.Down);
 				return (standingCollision != null &&
 					standingCollision.IsTile &&
 					standingCollision.Tile.IsIce);
@@ -909,19 +909,51 @@ namespace ZeldaOracle.Game.Entities {
 			return PreviousCollisions.Where(c => c.Direction == direction);
 		}
 
-		public Collision GetCollisionInDirection(int direction) {
+		public Collision GetCenteredCollisionInDirection(int direction) {
 			Collision best = null;
 			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			
+			foreach (Collision collision in Collisions) {
+				if (collision.Direction == direction) {
+					if (entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
+						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
+					{
+						if (best == null)
+							best = collision;
+					}
+				}
+			}
+			return best;
+		}
 
-			foreach (Collision collision in
-				Collisions.Where(c => c.Direction == direction))
-			{
-				// TODO: if no collisions are centered, then at least one collision should be returned
-				if (entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
-					entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
-				{
-					if (best == null)
+		public Collision PreviousStandingCollision { get; set; } = null;
+		public Collision StandingCollision { get; set; } = null;
+
+		public Collision GetCollisionInDirection(int direction) {
+			return GetCollisionInDirection(direction, Collisions);
+		}
+
+		public Collision GetPreviousCollisionInDirection(int direction) {
+			return GetCollisionInDirection(direction, PreviousCollisions);
+		}
+
+		public Collision GetCollisionInDirection(int direction,
+			IEnumerable<Collision> collisions)
+		{
+			Collision best = null;
+			bool bestIsCentered = false;
+			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+
+			foreach (Collision collision in collisions) {
+				if (collision.Direction == direction) {
+					bool isCentered =
+						(entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
+						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis]);
+
+					if (best == null || (isCentered && !bestIsCentered)) {
 						best = collision;
+						bestIsCentered = isCentered;
+					}
 				}
 			}
 			return best;

@@ -732,7 +732,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			IntegrateStateParameters();
 
 			// Check for beginning pushing
-			Collision collision = Physics.GetCollisionInDirection(direction);
+			Collision collision = Physics.GetCenteredCollisionInDirection(direction);
 			if (WeaponState == null && movement.IsMoving &&
 				!stateParameters.ProhibitPushing &&
 				collision != null &&
