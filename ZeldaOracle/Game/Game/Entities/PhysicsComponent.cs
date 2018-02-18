@@ -592,7 +592,7 @@ namespace ZeldaOracle.Game.Entities {
 					return false;
 				if (entity.RoomControl.IsSideScrolling)
 					return !IsCollidingInDirection(Directions.Down);
-				return (entity.ZPosition > 0.0f || zVelocity > 0.0f || IsFlying);
+				return (entity.ZPosition > 0.0f || zVelocity > 0.0f);// || IsFlying);
 			}
 		}
 
@@ -682,26 +682,26 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInHole {
-			get { return IsOnGround && topTile != null && topTile.IsHole; }
+			get { return IsOnGround && !IsFlying && topTile != null && topTile.IsHole; }
 		}
 
 		public bool IsInWater {
 			get {
-				return (IsOnGround || entity.RoomControl.IsSideScrolling) &&
+				return ((IsOnGround && !IsFlying) || entity.RoomControl.IsSideScrolling) &&
 					topTile != null && topTile.IsWater;
 			}
 		}
 
 		public bool IsInOcean {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ocean; }
+			get { return IsOnGround && !IsFlying && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ocean; }
 		}
 
 		public bool IsInLava {
-			get { return IsOnGround && topTile != null && topTile.IsLava; }
+			get { return IsOnGround && !IsFlying && topTile != null && topTile.IsLava; }
 		}
 
 		public bool IsOnIce {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ice; }
+			get { return IsOnGround && !IsFlying && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ice; }
 		}
 
 		public bool IsOnSideScrollingIce {
@@ -712,11 +712,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsOnStairs {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Stairs; }
+			get { return IsOnGround && !IsFlying &&  topTile != null && topTile.EnvironmentType == TileEnvironmentType.Stairs; }
 		}
 
 		public bool IsOnLadder {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ladder; }
+			get { return IsOnGround && !IsFlying && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ladder; }
 		}
 
 		public bool IsOverHalfSolid {

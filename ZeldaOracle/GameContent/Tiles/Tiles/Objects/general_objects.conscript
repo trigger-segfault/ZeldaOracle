@@ -198,12 +198,12 @@ END;
 TILE "magnet_stone_north";
 	CLONE "temp_magnet_stone";
 	SAMESPRITE;
-	# North
+	PROPERTY (polarity, 0);
 END;
 TILE "magnet_stone_south";
 	CLONE "temp_magnet_stone";
 	SAMESPRITE;
-	# South
+	PROPERTY (polarity, 1);
 END;
 
 # Soft Soil ---------------------------------------------------

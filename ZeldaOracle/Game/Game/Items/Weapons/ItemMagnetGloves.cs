@@ -1,11 +1,9 @@
 ﻿using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Items.Weapons {
-	public enum Polarity {
-		North = 0,
-		South = 1,
-	}
+	
 	public class ItemMagnetGloves : ItemWeapon {
 
 		private Polarity polarity;

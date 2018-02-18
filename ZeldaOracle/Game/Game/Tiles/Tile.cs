@@ -1098,6 +1098,11 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return properties.GetInteger("ledge_direction", Directions.Down); }
 		}
 
+		public Polarity Polarity {
+			get { return properties.GetEnum<Polarity>("polarity", Polarity.None); }
+			set { properties.Set("polarity", (int) value); }
+		}
+
 		public bool ClingWhenStabbed {
 			get { return properties.GetBoolean("cling_on_stab", true); }
 			set { properties.Set("cling_on_stab", value); }

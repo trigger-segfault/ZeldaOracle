@@ -238,6 +238,10 @@ namespace ZeldaOracle.Common.Geometry {
 		// Calculations
 		//-----------------------------------------------------------------------------
 
+		public RangeF GetAxisRange(int axis) {
+			return new RangeF(Point[axis], Point[axis] + Size[axis]);
+		}
+
 		public float GetEdge(int direction) {
 			if (direction == Directions.Right)
 				return Right;

@@ -6,6 +6,12 @@ using System.Text;
 
 namespace ZeldaOracle.Game.Tiles {
 
+	public enum Polarity {
+		None = -1,
+		North = 0,
+		South = 1,
+	}
+
 	public enum TileSolidType {
 		NotSolid = 0,
 		Solid,

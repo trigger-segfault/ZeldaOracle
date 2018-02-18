@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Tiles {
 			model               = null;
 			tileBelow			= null;
 
-			// General.
+			// General
 			properties.Set("size", Point2I.One)
 				.SetDocumentation("Size", "General", "");
 			properties.Set("flags", (int) TileFlags.Default)
@@ -53,11 +53,12 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Environment Type", "enum", "TileEnvironmentType", "General", "");
 			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
 				.SetDocumentation("Reset Condition", "enum", "TileResetCondition", "General", "The condition for when the tile resets its properties.");
-
+			properties.Set("polarity", (int) Polarity.None)
+				.SetDocumentation("Polarity", "enum", "Polarity", "General", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
 			properties.Set("disable_on_destroy", false)
 				.SetDocumentation("Disable on Destroy", "General", "");
 
-			// Motion.
+			// Motion
 			properties.Set("path", "")
 				.SetDocumentation("Path", "path", "", "Motion", "A path the tile follows in.");
 			properties.Set("conveyor_angle", -1)

@@ -212,7 +212,8 @@ namespace ZeldaOracle.Common.Geometry {
 		// Contains
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Returns true if the specified value is inside this range.</summary>
+		/// <summary>Returns true if the specified value is inside this range
+		/// (inclusive).</summary>
 		public bool Contains(float value) {
 			return ((value >= Min) && (value <=  Max));
 		}
