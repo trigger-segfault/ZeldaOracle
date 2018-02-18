@@ -107,15 +107,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			for (int i = 0; i < (int) ActionButtons.Count; i++)
 				buttonCallbacks[(int) i] = new List<ActionButtonCallback>();
 
-			// Register action button callbacks
+			// Register A-button callbacks
 			RegisterActionButtonCallback(ActionButtons.A, ActionThrowCarriedObject);
-			RegisterActionButtonCallback(ActionButtons.B, ActionThrowCarriedObject);
 			RegisterActionButtonCallback(ActionButtons.A, ActionObjectInteractions);
+			RegisterActionButtonCallback(ActionButtons.A, ActionUseWeapon);
+			RegisterActionButtonCallback(ActionButtons.A, ActionStroke);
+			// Register B-button callbacks
+			RegisterActionButtonCallback(ActionButtons.B, ActionThrowCarriedObject);
 			RegisterActionButtonCallback(ActionButtons.B, ActionUnderwaterResurface);
 			RegisterActionButtonCallback(ActionButtons.B, ActionSwimSubmerge);
-			RegisterActionButtonCallback(ActionButtons.A, ActionUseWeapon);
 			RegisterActionButtonCallback(ActionButtons.B, ActionUseWeapon);
-			RegisterActionButtonCallback(ActionButtons.A, ActionStroke);
 			RegisterActionButtonCallback(ActionButtons.B, ActionStroke);
 
 			// Unit properties
@@ -753,7 +754,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.OnBeginFalling();
 
 			if (RoomControl.IsSideScrolling) {
-				Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+				// Play the jump animation
+				if (WeaponState == null)
+					Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+				else if (Graphics.Animation == Animations.Default)
+					Graphics.PlayAnimation(Animations.Default);
 			}
 		}
 

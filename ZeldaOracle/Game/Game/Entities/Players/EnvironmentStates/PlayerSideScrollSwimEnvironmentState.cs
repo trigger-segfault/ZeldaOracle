@@ -54,7 +54,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			CreateSplashEffect();
+			player.InterruptWeapons();
+			//CreateSplashEffect(); // Now called in Entity.OnFallInSideScrollWater()
 		}
 		
 		public override void OnEnd(PlayerState newState) {

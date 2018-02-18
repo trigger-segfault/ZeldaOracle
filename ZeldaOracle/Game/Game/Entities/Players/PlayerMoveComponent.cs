@@ -199,7 +199,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Vector2F moveVector = PollMovementKeys(true);
 
 					if (isMoving) {
-						float scaledSpeed = mode.MovementSpeed * player.StateParameters.MovementSpeedScale;
+						float scaledSpeed = mode.MovementSpeed *
+							player.StateParameters.MovementSpeedScale * strokeSpeedScale;
 						Vector2F keyMotion		= moveVector * scaledSpeed;
 						player.Physics.Velocity	= keyMotion;
 						motion					= keyMotion;
@@ -332,7 +333,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveAngle = Directions.ToAngle(player.Direction);
 
 				// Determine key-motion (the velocity we want to move at)
-				float scaledSpeed = mode.MovementSpeed * player.StateParameters.MovementSpeedScale;
+				float scaledSpeed = mode.MovementSpeed *
+					player.StateParameters.MovementSpeedScale * strokeSpeedScale;
 				Vector2F keyMotion = keyMoveVector * scaledSpeed;
 
 				// Update acceleration-based motion

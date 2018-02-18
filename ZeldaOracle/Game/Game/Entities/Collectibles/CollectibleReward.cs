@@ -113,8 +113,9 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public override void OnLand() {
-			// Disable collisions after landing.
-			Physics.CollideWithWorld = false;
+			// Disable collisions after landing
+			if (!RoomControl.IsSideScrolling)
+				Physics.CollideWithWorld = false;
 		}
 
 		// Called when the entity falls in water.

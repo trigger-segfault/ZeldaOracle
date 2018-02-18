@@ -122,6 +122,16 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 		
+		/// <summary>Called when the entity falls in water in side-scroll mode
+		/// .</summary>
+		public virtual void OnFallInSideScrollWater() {
+			physics.VelocityX = 0.0f;
+			RoomControl.SpawnEntity(new Effect(
+				GameData.ANIM_EFFECT_WATER_SPLASH,
+				DepthLayer.EffectSplash, true), position);
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
+		}
+		
 		/// <summary>Called when the entity falls in water.</summary>
 		public virtual void OnFallInWater() {
 			if (physics.IsDestroyedInHoles) {

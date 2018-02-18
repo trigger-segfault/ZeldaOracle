@@ -56,8 +56,6 @@ namespace ZeldaOracle.Game.Entities {
 	
 	public class PhysicsComponent {
 
-
-
 		public delegate bool TileCollisionCondition(Tile tile);
 
 		// General
@@ -140,7 +138,9 @@ namespace ZeldaOracle.Game.Entities {
 		// Custom Collision Setup
 		//-----------------------------------------------------------------------------
 
-		public virtual Rectangle2F GetCollisionBox(CollisionBoxType type) {
+		/// <summary>Return the collision box of the given type (soft or hard).
+		/// </summary>
+		public Rectangle2F GetCollisionBox(CollisionBoxType type) {
 			if (type == CollisionBoxType.Hard)
 				return collisionBox;
 			return softCollisionBox;
@@ -266,17 +266,17 @@ namespace ZeldaOracle.Game.Entities {
 
 
 		//-----------------------------------------------------------------------------
-		// Collision polls
+		// Collision Queries
 		//-----------------------------------------------------------------------------
 		
-		// Return true if the entity would collide with a solid object using the
-		// given collision box if it were placed at the given position.
+		/// <summary>Return true if the entity would collide with a solid object using
+		/// the given collision box if it were placed at the given position.</summary>
 		public bool IsPlaceMeetingSolid(Vector2F position) {
 			return IsPlaceMeetingSolid(position, collisionBox);
 		}
 		
-		// Return true if the entity would collide with a solid object using the
-		// given collision box if it were placed at the given position.
+		/// <summary>Return true if the entity would collide with a solid object using
+		/// the given collision box if it were placed at the given position.</summary>
 		public bool IsPlaceMeetingSolid(Vector2F position, Rectangle2F collisionBox) {
 			Room room = entity.RoomControl.Room;
 			
@@ -307,8 +307,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			return false;
 		}
-		
-		
+				
 		/// <summary>Return true if the entity would collide with the room edge if it
 		/// were placed at the given position.</summary>
 		public bool IsPlaceMeetingRoomEdge(Vector2F position) {
@@ -317,16 +316,21 @@ namespace ZeldaOracle.Game.Entities {
 			return !bounds.Contains(collisionBox + position);
 		}
 
-		// Return true if the entity would collide with a tile if it were at the given position.
+		/// <summary>Return true if the entity would collide with a tile if it were at
+		/// the given position.</summary>
 		public bool IsPlaceMeetingTile(Vector2F position, Tile tile) {
 			if (CanCollideWithTile(tile)) {
-				return CollisionModel.Intersecting(tile.CollisionModel, tile.Position, collisionBox, position);
+				return CollisionModel.Intersecting(
+					tile.CollisionModel, tile.Position, collisionBox, position);
 			}
 			return false;
 		}
 
-		// Return true if the entity would collide with a tile if it were at the given position.
-		public bool IsPlaceMeetingEntity(Vector2F position, Entity entity, CollisionBoxType collisionBoxType, float maxZDistance = 10) {
+		/// <summary>Return true if the entity would collide with a tile if it were at
+		/// the given position.</summary>
+		public bool IsPlaceMeetingEntity(Vector2F position, Entity entity,
+			CollisionBoxType collisionBoxType, float maxZDistance = 10)
+		{
 			if (CanCollideWithEntity(entity)) {
 				return CollisionTest.PerformCollisionTest(entity, entity,
 					new CollisionTestSettings(null, collisionBoxType,
@@ -335,38 +339,51 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 		
-		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
+		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType,
+			int maxZDistance = 10)
+		{
 			if (collisionBoxType == CollisionBoxType.Hard)
 				return IsHardMeetingEntity(other);
 			return IsSoftMeetingEntity(other, maxZDistance);
 		}
 
+		/// <summary>Return true this entity and another entitys' soft collision boxes
+		/// are touching.</summary>
 		public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {
 			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
-				return PositionedSoftCollisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
+				return PositionedSoftCollisionBox.Intersects(
+					other.Physics.PositionedSoftCollisionBox);
 			return false;
 		}
 
 		public bool IsHardMeetingEntity(Entity other) {
 			if (CanCollideWithEntity(other))
-				return PositionedCollisionBox.Intersects(other.Physics.PositionedCollisionBox);
+				return PositionedCollisionBox.Intersects(
+					other.Physics.PositionedCollisionBox);
 			return false;
 		}
 
-		public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox, int maxZDistance = 10) {
+		public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox,
+			int maxZDistance = 10)
+		{
 			collisionBox.Point += entity.Position;
 			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
 				return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
 			return false;
 		}
 
-		public bool IsCollidingWith(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
+		public bool IsCollidingWith(Entity other, CollisionBoxType collisionBoxType,
+			int maxZDistance = 10)
+		{
 			return IsCollidingWith(other, collisionBoxType, collisionBoxType, maxZDistance);
 		}
 
-		public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType, CollisionBoxType otherBoxType, int maxZDistance = 10) {
+		public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType,
+			CollisionBoxType otherBoxType, int maxZDistance = 10)
+		{
 			return CollisionTest.PerformCollisionTest(entity, other,
-				new CollisionTestSettings(null, myBoxType, otherBoxType, maxZDistance)).IsColliding;
+				new CollisionTestSettings(null, myBoxType,
+					otherBoxType, maxZDistance)).IsColliding;
 		}
 
 

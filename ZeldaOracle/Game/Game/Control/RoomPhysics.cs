@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
@@ -936,7 +938,10 @@ namespace ZeldaOracle.Game.Control {
 					// Integrate acceleration due to gravity
 					entity.Physics.ZVelocity -= entity.Physics.Gravity;
 					// Limit to maximum fall speed
-					if (entity.Physics.MaxFallSpeed >= 0.0f &&
+					if (entity.Physics.IsInWater &&
+						entity.Physics.ZVelocity < -0.5f)
+						entity.Physics.ZVelocity = -0.5f;
+					else if (entity.Physics.MaxFallSpeed >= 0.0f &&
 						entity.Physics.ZVelocity < -entity.Physics.MaxFallSpeed)
 						entity.Physics.ZVelocity = -entity.Physics.MaxFallSpeed;
 					// Convert the Z-velocity to Y-velocity
@@ -968,7 +973,7 @@ namespace ZeldaOracle.Game.Control {
 
 		private void LandEntity(Entity entity) {
 			// Check if landed in a hazard surface.
-			CheckHazardSurface(entity);
+			CheckHazardSurface(entity, entity.Physics.TopTile);
 			if (entity.IsDestroyed)
 				return;
 
@@ -1006,6 +1011,8 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Check the surface tile beneath the entity
 		private void CheckSurfaceTile(Entity entity) {
+
+			Tile previousTopTile = entity.Physics.TopTile;
 
 			entity.Physics.SurfacePosition = Vector2F.Zero;
 			entity.Physics.SurfaceVelocity = Vector2F.Zero;
@@ -1067,18 +1074,29 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Check if surface tile is a hazardous (water/lava/hole)
-			CheckHazardSurface(entity);
+			CheckHazardSurface(entity, previousTopTile);
 		}
 		
 		/// <summary>Check if the entity is sitting on a hazardous surface
 		/// (water/lava/hole)</summary>
-		private void CheckHazardSurface(Entity entity) {
-			if (entity.Physics.IsInHole)
-				entity.OnFallInHole();
-			else if (entity.Physics.IsInWater)
-				entity.OnFallInWater();
-			else if (entity.Physics.IsInLava)
-				entity.OnFallInLava();
+		private void CheckHazardSurface(Entity entity, Tile previousTopTile) {
+			if (roomControl.IsSideScrolling) {
+				if (entity.Physics.IsInWater &&
+					(previousTopTile == null || !previousTopTile.IsWater))
+				{
+					entity.OnFallInSideScrollWater();
+				}
+				else if (entity.Physics.IsInLava)
+					entity.OnFallInLava();
+			}
+			else {
+				if (entity.Physics.IsInHole)
+					entity.OnFallInHole();
+				else if (entity.Physics.IsInWater)
+					entity.OnFallInWater();
+				else if (entity.Physics.IsInLava)
+					entity.OnFallInLava();
+			}
 		}
 
 
