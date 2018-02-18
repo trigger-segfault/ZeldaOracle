@@ -266,6 +266,7 @@
     <Compile Include="Game\Control\TileManager.cs" />
     <Compile Include="Game\Debugging\DevSettings.cs" />
     <Compile Include="Game\Debugging\GameDebug.cs" />
+    <Compile Include="Game\Debugging\PlayerDebugNoClipState.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleReward.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleFairy.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />

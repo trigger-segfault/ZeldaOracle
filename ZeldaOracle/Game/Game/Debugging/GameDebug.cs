@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Debug {
 		private static Point2I mouseTileLocation;
 		private static string sampledTileName = "";
 		private static Action printDebugInfoFunction = PrintPlayerDebugInfo;
-
+		private static PlayerDebugNoClipState playerNoClipState = new PlayerDebugNoClipState();
 		public static DevSettings DevSettings { get; set; } = new DevSettings();
 		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
 		private static TileDrawInfo		TileDebugInfoMode	= TileDrawInfo.None;
@@ -301,17 +301,12 @@ namespace ZeldaOracle.Game.Debug {
 				Vector2F source = gameControl.Player.Center + Vector2F.FromPolar(5.0f, angle);
 				gameControl.Player.Hurt(new DamageInfo(0, source));
 			}
-			// M: Play music.
-			/*if (Keyboard.IsKeyPressed(Keys.M)) {
-				AudioSystem.PlaySong("overworld");
-			}
-			// N: Set the volume to max.
-			if (Keyboard.IsKeyPressed(Keys.N)) {
-				AudioSystem.MasterVolume = 1.0f;
-			}*/
 			// N: Noclip mode.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.N)) {
-				RoomControl.Player.Physics.CollideWithWorld = !RoomControl.Player.Physics.CollideWithWorld;
+				if (playerNoClipState.IsActive)
+					playerNoClipState.End();
+				else
+					RoomControl.Player.BeginConditionState(playerNoClipState);
 			}
 			// Q: Spawn a random rupees collectible.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.Q)) {
@@ -420,11 +415,9 @@ namespace ZeldaOracle.Game.Debug {
 		}
 		
 		private static void ChangeRooms(int direction) {
-
 			Point2I roomLocation = RoomControl.RoomLocation;
 			Point2I adjacentRoomLocation = roomLocation + Directions.ToPoint(direction);
-			if (RoomControl.Level.ContainsRoom(adjacentRoomLocation))
-			{
+			if (RoomControl.Level.ContainsRoom(adjacentRoomLocation)) {
 				Room adjacentRoom = RoomControl.Level.GetRoomAt(adjacentRoomLocation);
 				RoomControl.TransitionToRoom(adjacentRoom, new RoomTransitionInstant());
 			}
