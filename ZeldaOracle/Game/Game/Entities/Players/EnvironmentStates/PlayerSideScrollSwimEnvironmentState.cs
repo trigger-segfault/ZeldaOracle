@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.AlwaysFaceLeftOrRight		= true;
 			StateParameters.ProhibitJumping				= true;
 			StateParameters.ProhibitPushing				= true;
+			StateParameters.DisableAnimationPauseWhenNotMoving = true;
 
 			PlayerAnimations.Default		= GameData.ANIM_PLAYER_MERMAID_SWIM;
 			PlayerAnimations.Aim			= GameData.ANIM_PLAYER_MERMAID_AIM;

@@ -40,9 +40,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			if (boomerangTracker.IsMaxedOut)
-				return;
+				return false;
 
 			// Shoot and track the boomerang
 			PlayerBoomerang boomerang = new PlayerBoomerang(this);
@@ -59,6 +59,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				Player.MagicBoomerangState.BoomerangEntity = boomerang;
 				Player.BeginConditionState(Player.MagicBoomerangState);
 			}
+			
+			return true;
 		}
 	}
 }

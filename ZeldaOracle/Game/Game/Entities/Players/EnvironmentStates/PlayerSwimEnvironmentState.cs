@@ -23,6 +23,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			submergedDuration	= 128;
 			isSubmerged			= false;
 			submergedTimer		= 0;
+
+			StateParameters.ProhibitJumping		= true;
+			StateParameters.ProhibitPushing		= true;
+			StateParameters.ProhibitWeaponUse	= true;
+			StateParameters.DisableAnimationPauseWhenNotMoving = true;
 			
 			MotionSettings = new PlayerMotionType() {
 				MovementSpeed			= 0.5f,
@@ -38,6 +43,36 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		// Internal methods
 		//-----------------------------------------------------------------------------
+
+		public void Submerge() {
+			isSubmerged = true;
+			player.IsPassable = true;
+			submergedTimer = submergedDuration;
+			PlayerAnimations.Default = GameData.ANIM_PLAYER_SUBMERGED;
+			StateParameters.DisableInteractionCollisions = true;
+
+			// Create a splash effect
+			Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true);
+			splash.Position = player.Center + new Vector2F(0, 4);
+			player.RoomControl.SpawnEntity(splash);
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
+
+			// Change player depth to lowest
+			player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;
+
+			if (player.Physics.IsInOcean && CanDive()) {
+				Dive();
+				return;
+			}
+		}
+		
+		public void Resurface() {
+			isSubmerged = false;
+			player.IsPassable = false;
+			player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
+			PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
+			StateParameters.DisableInteractionCollisions = false;
+		}
 
 		// Check if it is possible to dive from the player's current location.
 		private bool CanDive() {
@@ -87,10 +122,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void OnBegin(PlayerState previousState) {
-			StateParameters.ProhibitJumping		= true;
-			StateParameters.ProhibitPushing		= true;
-			StateParameters.ProhibitWeaponUse	= true;
-			StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
+			PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
+			StateParameters.DisableInteractionCollisions = false;
 
 			player.InterruptWeapons();
 
@@ -140,37 +173,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void Update() {
-
-			// Update the submerge state.
+			// Update the submerge state
 			if (isSubmerged) {
 				submergedTimer--;
 				player.IsPassable = true;
-				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
-					isSubmerged = false;
-					player.IsPassable = false;
-					player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
-					StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
-				}
-			}
-			else if (Controls.B.IsPressed()) {
-				isSubmerged = true;
-				player.IsPassable = true;
-				submergedTimer = submergedDuration;
-				StateParameters.PlayerAnimations.Default = GameData.ANIM_PLAYER_SUBMERGED;
-
-				// Create a splash effect
-				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true);
-				splash.Position = player.Center + new Vector2F(0, 4);
-				player.RoomControl.SpawnEntity(splash);
-				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
-
-				// Change player depth to lowest
-				player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;
-
-				if (player.Physics.IsInOcean && CanDive()) {
-					Dive();
-					return;
-				}
+				if (submergedTimer <= 0)
+					Resurface();
 			}
 		}
 

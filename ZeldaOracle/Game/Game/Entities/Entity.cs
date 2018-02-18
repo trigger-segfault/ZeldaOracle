@@ -22,6 +22,7 @@ namespace ZeldaOracle.Game.Entities {
 		protected float				zPosition;
 		protected Point2I			centerOffset;
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
+		protected Rectangle2F		buttonActionCollisionBox; // Collision box that for button actions
 		protected Sound				soundBounce;
 
 		protected PhysicsComponent	physics;
@@ -48,6 +49,7 @@ namespace ZeldaOracle.Game.Entities {
 			graphics			= new GraphicsComponent(this);
 			centerOffset		= Point2I.Zero;
 			actionAlignDistance	= 5;
+			buttonActionCollisionBox = Rectangle2F.Zero;
 		}
 		
 
@@ -355,6 +357,10 @@ namespace ZeldaOracle.Game.Entities {
 		public int ActionAlignDistance {
 			get { return actionAlignDistance; }
 			set { actionAlignDistance = value; }
+		}
+
+		public Rectangle2F ButtonActionCollisionBox {
+			get { return buttonActionCollisionBox; }
 		}
 
 		public Entity TransformedEntity {

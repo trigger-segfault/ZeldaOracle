@@ -45,11 +45,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B).
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			if (HasAmmo()) {
 				Player.SeedShooterState.Weapon = this;
 				Player.BeginWeaponState(Player.SeedShooterState);
+				return true;
 			}
+			return false;
 		}
 
 		// Draws the item inside the inventory.

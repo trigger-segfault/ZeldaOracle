@@ -354,7 +354,8 @@ namespace ZeldaOracle.Game.Entities
 
 		public DepthLayer CurrentDepthLayer {
 			get {
-				if (depthLayerInAir != DepthLayer.None && entity.IsInAir)
+				if (depthLayerInAir != DepthLayer.None &&
+					(entity.IsInAir && !entity.RoomControl.IsSideScrolling))
 					return depthLayerInAir;
 				return depthLayer;
 			}

@@ -87,9 +87,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B).
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			if (!HasAmmo())
-				return;
+				return false;
 
 			SeedType seedType = CurrentSeedType;
 
@@ -112,6 +112,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 						GameSettings.PLAYER_SPRINT_SPEED_SCALE);
 					UseAmmo();
 				}
+				else
+					return false;
 			}
 			else if (seedType == SeedType.Gale) {
 				if (galeSeedTracker.IsAvailable)
@@ -121,6 +123,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				if (mysterySeedTracker.IsAvailable)
 					mysterySeedTracker.TrackEntity(ThrowSeed(SeedType.Mystery));
 			}
+
+			return true;
 		}
 
 		// Draws the item inside the inventory.

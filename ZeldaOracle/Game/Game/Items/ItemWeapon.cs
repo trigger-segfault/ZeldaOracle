@@ -116,7 +116,7 @@ namespace ZeldaOracle.Game.Items {
 		public virtual void OnButtonDown() {}
 		
 		// Called when the items button is pressed (A or B).
-		public virtual void OnButtonPress() {}
+		public virtual bool OnButtonPress() { return false; }
 		
 		// Update the item.
 		public virtual void Update() { }

@@ -342,7 +342,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {
-			if (CanCollideWithEntity(other) && GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
 				return PositionedSoftCollisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
 			return false;
 		}
@@ -355,7 +355,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox, int maxZDistance = 10) {
 			collisionBox.Point += entity.Position;
-			if (CanCollideWithEntity(other) && GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
 				return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
 			return false;
 		}

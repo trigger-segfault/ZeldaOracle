@@ -42,26 +42,29 @@ namespace ZeldaOracle.Game.Items {
 		// Virtual
 		//-----------------------------------------------------------------------------
 
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			if (bombTracker.IsEmpty) {
 				if (HasAmmo()) {
-					// Conjure a new bomb.
+					// Conjure a new bomb
 					UseAmmo();
 					Bomb bomb = new Bomb();
 					bombTracker.TrackEntity(bomb);
 					Player.CarryState.SetCarryObject(bomb);
 					Player.BeginWeaponState(Player.CarryState);
+					return true;
 				}
 			}
 			else {
-				// Pickup a bomb from the ground.
+				// Pickup a bomb from the ground
 				Bomb bomb = bombTracker.GetEntity();
 				if (bomb != null && Player.Physics.IsSoftMeetingEntity(bomb)) {
 					Player.CarryState.SetCarryObject(bomb);
 					Player.BeginWeaponState(Player.CarryState);
 					bomb.RemoveFromRoom();
+					return true;
 				}
 			}
+			return false;
 		}
 
 		// Called when the item is added to the inventory list

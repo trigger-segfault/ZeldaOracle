@@ -46,10 +46,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 
 		// Jump when on ground.
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			if (Player.IsOnGround && !Player.Physics.IsInHole) {
 				Player.Movement.Jump();
+				return true;
 			}
+			return false;
 		}
 
 		// Deplay cape when in air.

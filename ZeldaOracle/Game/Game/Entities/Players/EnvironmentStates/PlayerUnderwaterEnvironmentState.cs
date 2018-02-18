@@ -40,8 +40,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Internal methods
 		//-----------------------------------------------------------------------------
 
-		// Check if it is possible to resurface from the player's current location.
-		private bool CanResurface() {
+		/// <summary>Check if it is possible to resurface from the player's current
+		/// location.</summary>
+		public bool CanResurface() {
 			Level surfaceLevel = player.RoomControl.Level.ConnectedLevelAbove;
 			if (surfaceLevel == null)
 				return false;
@@ -51,10 +52,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			return true;
 		}
 
-		// Resurface to the level above the current level. This will transition
-		// to the room located directly above this room in the same room
-		// location.
-		private void Resurface() {
+		/// <summary>Resurface to the level above the current level. This will
+		/// transition to the room located directly above this room in the same room
+		/// location.</summary>
+		public void Resurface() {
 			Level surfaceLevel = player.RoomControl.Level.ConnectedLevelAbove;
 			Point2I roomLocation = player.RoomControl.Room.Location;
 			Room connectedRoom = surfaceLevel.GetRoomAt(roomLocation);
@@ -93,14 +94,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnEnd(PlayerState newState) {
 			isResurfacing = false;
-		}
-
-		public override void Update() {
-			// Press B to attempt to resurface.
-			if (Controls.B.IsPressed() && CanResurface()) {
-				Resurface();
-				return;
-			}
 		}
 	}
 }

@@ -40,8 +40,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnButtonPress() {
-
+		public override bool OnButtonPress() {
 			Player.Direction = Player.UseDirection;
 
 			// Shoot and hook projectile.
@@ -51,6 +50,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			// Begin the player state.
 			Player.SwitchHookState.Hook = hook;
 			Player.BeginWeaponState(Player.SwitchHookState);
+			return true;
 		}
 	}
 }

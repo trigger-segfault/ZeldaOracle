@@ -42,9 +42,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B).
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			if (!seedTracker.IsEmpty || !HasAmmo())
-				return;
+				return false;
 
 			UseAmmo();
 
@@ -103,6 +103,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			{
 				playerState.Player.UnequipTool(playerState.Player.ToolVisual);
 			});
+
+			return true;
 		}
 
 		// Draws the item inside the inventory.

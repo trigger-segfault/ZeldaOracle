@@ -27,6 +27,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			timer = 0;
 			
+			StateParameters.DisableAnimationPauseWhenNotMoving = true;
+
 			if (!player.IsSwimming)
 				StateParameters.MovementSpeedScale = movementSpeedScale;
 			else

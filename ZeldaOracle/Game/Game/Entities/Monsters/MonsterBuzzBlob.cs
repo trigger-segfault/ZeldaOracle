@@ -1,6 +1,5 @@
 ﻿using System;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Entities.Monsters.States;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -11,15 +10,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public MonsterBuzzBlob() {
-			// General.
+			// General
 			MaxHealth		= 1;
 			ContactDamage	= 2;
 			Color			= MonsterColor.Green;
 			
-			// Movement.
+			// Movement
 			moveSpeed					= 0.25f;
 			numMoveAngles				= 8;
-			//isMovementDirectionBased = true;
 			orientationStyle			= OrientationStyle.Angle;
 			changeDirectionsOnCollide	= true;
 			movesInAir					= false;
@@ -27,16 +25,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			stopTime.Set(0, 0);
 			moveTime.Set(50, 80);
 			
-			// Physics.
-			Physics.Bounces			= true; // This is here for when the monster is digged up or dropped from the ceiling.
-			Physics.ReboundRoomEdge	= true;
-			Physics.ReboundSolid	= true;
+			// Physics
+			Physics.Bounces				= true; // This is here for when the monster is digged up or dropped from the ceiling
+			Physics.ReboundRoomEdge		= true;
+			Physics.ReboundSolid		= true;
+			Physics.SoftCollisionBox	= new Rectangle2I(-4, -10, 8, 9);
 			
-			// Graphics.
+			// Graphics
 			animationMove				= GameData.ANIM_MONSTER_BUZZ_BLOB;
 			syncAnimationWithDirection	= false;
-			//animationMove				= GameData.ANIM_MONSTER_BEAMOS;
-			//syncAnimationWithDirection	= true;
 			
 			// Interactions (Tools)
 			SetReaction(InteractionType.Sword,			Reactions.Electrocute);

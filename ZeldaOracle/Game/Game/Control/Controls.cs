@@ -7,6 +7,14 @@ using ZeldaOracle.Common.Input.Controls;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Main {
+
+	/// <summary>Buttons used to perform player actions (A or B).</summary>
+	public enum ActionButtons {
+		A = 0,
+		B = 1,
+		Count = 2,
+	}
+
 	/// <summary>The controls for the game.</summary>
 	public class Controls {
 
@@ -82,6 +90,14 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
+
+		public static MultiGameButton GetActionButton(ActionButtons button) {
+			if (button == ActionButtons.A)
+				return a;
+			else if (button == ActionButtons.B)
+				return b;
+			return null;
+		}
 
 		/// <summary>Gets the arrow controls.</summary>
 		public static InputControl GetArrowControl(int direction) {

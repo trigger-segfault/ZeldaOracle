@@ -103,6 +103,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
+		public void ReleaseObject(bool enterBusyState = true, bool playSound = true) {
+			if (player.Movement.IsMoving)
+				ThrowObject(enterBusyState, playSound);
+			else
+				DropObject(enterBusyState, playSound);
+		}
+
 		public void DestroyObject() {
 			isObjectDropped = true;
 			carryObject.Destroy();
@@ -142,10 +149,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnHurt(DamageInfo damage) {
 			base.OnHurt(damage);
-			if (player.Movement.IsMoving)
-				ThrowObject(false, false);
-			else
- 				DropObject(false, false);
+			ReleaseObject(false, false);
 			End();
 		}
 
@@ -190,21 +194,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				carryObject.Position	= player.Position;
 				carryObject.ZPosition	= player.ZPosition + 16;
 				carryObject.UpdateCarrying();
+
 				if (carryObject.IsDestroyed) {
 					End();
 					return;
-				}
-
-				// Check for button press to throw/drop.
-				if (!player.IsStateControlled && (Controls.A.IsPressed() || Controls.B.IsPressed())) {
-					if (Controls.A.IsPressed())
-						Controls.A.Reset();
-					if (Controls.B.IsPressed())
-						Controls.B.Reset();
-					if (player.Movement.IsMoving)
-						ThrowObject();
-					else
-						DropObject();
 				}
 			}
 			carryObject.Graphics.Update();

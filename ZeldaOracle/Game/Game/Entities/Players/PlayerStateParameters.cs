@@ -180,6 +180,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				//AlwaysFaceLeft = a.AlwaysFaceLeft || b.AlwaysFaceLeft,
 				//AlwaysFaceDown = a.AlwaysFaceDown || b.AlwaysFaceDown,
 				AlwaysFaceLeftOrRight = a.AlwaysFaceLeftOrRight || b.AlwaysFaceLeftOrRight,
+				DisableAnimationPauseWhenNotMoving = a.DisableAnimationPauseWhenNotMoving || b.DisableAnimationPauseWhenNotMoving,
 				EnableAutomaticRoomTransitions = a.EnableAutomaticRoomTransitions || b.EnableAutomaticRoomTransitions,
 				DisableMovement = a.DisableMovement || b.DisableMovement,
 				DisableAutomaticStateTransitions = a.DisableAutomaticStateTransitions || b.DisableAutomaticStateTransitions,
@@ -227,6 +228,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool AlwaysFaceUp { get; set; } = false;
 		public bool AlwaysFaceLeftOrRight { get; set; } = false;
 		//public bool AlwaysFaceDown { get; set; } = false;
+		public bool DisableAnimationPauseWhenNotMoving { get; set; } = false;
 
 		/// <summary>The player doesn't need to be moving to transition.</summary>
 		public bool EnableAutomaticRoomTransitions { get; set; } = false;

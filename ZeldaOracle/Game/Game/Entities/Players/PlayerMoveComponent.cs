@@ -143,20 +143,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (strokeSpeedScale > 1.0f)
 					strokeSpeedScale -= 0.025f;
 
-				// Stroking scales the movement speed
-				// Press A/B to stroke as long as a usable item is not in that slot
-				if (strokeSpeedScale <= 1.4f && allowMovementControl &&
-					((Controls.A.IsPressed() && 
-						(player.EquippedUsableItems[Inventory.SLOT_A] == null || 
-						!player.EquippedUsableItems[Inventory.SLOT_A].IsUsable())) ||
-					(Controls.B.IsPressed() && 
-						(player.EquippedUsableItems[Inventory.SLOT_B] == null || 
-						!player.EquippedUsableItems[Inventory.SLOT_B].IsUsable()))))
-				{
-					strokeSpeedScale = 2.0f;
-					AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
-				}
-
 				// Auto accelerate during the beginning of a stroke
 				isStroking = (strokeSpeedScale > 1.3f);
 			}
@@ -164,6 +150,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 				strokeSpeedScale = 1.0f;
 				isStroking = false;
 			}
+		}
+
+		public bool CanStroke() {
+			return (player.IsSwimming && strokeSpeedScale <= 1.4f &&
+				allowMovementControl);
+		}
+
+		public void Stroke() {
+			strokeSpeedScale = 2.0f;
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
+			isStroking = true;
 		}
 		
 
@@ -217,16 +214,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 					player.Physics.ZVelocity = GameSettings.PLAYER_SIDESCROLL_JUMP_SPEED;
 				else
 					player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
-				if (player.WeaponState == null)
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
 				
 				// Make sure we go to the environment state for jumping
 				if (player.IsOnSideScrollLadder)
 					player.SideScrollLadderState.End();
-				player.IntegrateStateParameters();
 				player.RequestNaturalState();
+				if (player.WeaponState == player.PushState)
+					player.PushState.End();
+				player.IntegrateStateParameters();
 				
+				if (player.WeaponState == null)
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+				else if (player.Graphics.Animation == player.Animations.Default)
+					player.Graphics.PlayAnimation(player.Animations.Default);
+
 				player.OnJump();
 			}
 		}
@@ -402,8 +404,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.Animation == GameData.ANIM_PLAYER_MERMAID_SWIM))
 			{
 				// Play/stop the move animation
-				if (isMoving || IsSprinting ||
-					(player.IsSwimming && !player.IsUnderwater))
+				if (isMoving ||
+					player.StateParameters.DisableAnimationPauseWhenNotMoving)
 				{
 					if (!player.Graphics.IsAnimationPlaying)
 						player.Graphics.PlayAnimation();
@@ -414,8 +416,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			}
 			
-			// Move animation can be replaced by cape animation.
-			if (player.Graphics.Animation == player.MoveAnimation && player.IsInAir && isCapeDeployed)
+			// Change to the default animation while in the air and not using a weapon
+			if (player.IsInAir && !player.IsInMinecart &&
+				allowMovementControl && player.WeaponState == null &&
+				player.Graphics.Animation != player.Animations.Default &&
+				player.Graphics.Animation != GameData.ANIM_PLAYER_JUMP)
+			{
+				player.Graphics.PlayAnimation(player.Animations.Default);
+			}
+
+			// Move animation can be replaced by cape animation
+			if (player.Graphics.Animation == player.MoveAnimation &&
+				player.IsInAir && isCapeDeployed)
 				player.Graphics.SetAnimation(GameData.ANIM_PLAYER_CAPE);
 			else if (player.IsOnGround && player.Graphics.Animation == GameData.ANIM_PLAYER_CAPE)
 				player.Graphics.SetAnimation(player.MoveAnimation);

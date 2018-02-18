@@ -92,10 +92,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B)
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DIG);
 			Player.BeginBusyState(GameData.ANIM_PLAYER_DIG.Duration)
 				.AddDelayedAction(4, PerformDig);
+			return true;
 		}
 
 		// Update the item.

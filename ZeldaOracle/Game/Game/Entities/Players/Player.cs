@@ -14,16 +14,6 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
-	// TODO: use this struct
-	public struct PlayerAnimationSet {
-		public Animation Swing;
-		public Animation Spin;
-		public Animation Stab;
-		public Animation Aim;
-		public Animation Throw;
-		public Animation Default;
-	}
-
 	public class Player : Unit {
 
 		/// <summary>The current direction that the player wants to face to use items.</summary>
@@ -46,8 +36,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private Animation moveAnimation;
 
-		private bool isStateControlled; // Is the player fully being controlled by its current state?
-
 		private Vector2F viewFocusOffset;
 
 		public delegate void PlayerDelegate(Player player);
@@ -57,6 +45,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private PlayerSwimmingSkills	swimmingSkills;
 		private PlayerTunics			tunic;
+
+		public delegate bool ActionButtonCallback(ActionButtons button);
+		private List<ActionButtonCallback>[] buttonCallbacks;
 
 		// Player Tools
 		private PlayerToolShield	toolShield;
@@ -111,6 +102,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public Player() {
+			buttonCallbacks = new List<ActionButtonCallback>[
+				(int) ActionButtons.Count];
+			for (int i = 0; i < (int) ActionButtons.Count; i++)
+				buttonCallbacks[(int) i] = new List<ActionButtonCallback>();
+
+			// Register action button callbacks
+			RegisterActionButtonCallback(ActionButtons.A, ActionThrowCarriedObject);
+			RegisterActionButtonCallback(ActionButtons.B, ActionThrowCarriedObject);
+			RegisterActionButtonCallback(ActionButtons.A, ActionObjectInteractions);
+			RegisterActionButtonCallback(ActionButtons.B, ActionUnderwaterResurface);
+			RegisterActionButtonCallback(ActionButtons.B, ActionSwimSubmerge);
+			RegisterActionButtonCallback(ActionButtons.A, ActionUseWeapon);
+			RegisterActionButtonCallback(ActionButtons.B, ActionUseWeapon);
+			RegisterActionButtonCallback(ActionButtons.A, ActionStroke);
+			RegisterActionButtonCallback(ActionButtons.B, ActionStroke);
+
 			// Unit properties
 			centerOffset			= new Point2I(0, -5);
 			MaxHealth               = 4 * 3;
@@ -458,8 +465,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
 				ItemWeapon item = EquippedUsableItems[i];
 				if (item != null && item.IsUsable()) {
-					if (Inventory.GetSlotButton(i).IsPressed())
-						item.OnButtonPress();
 					if (Inventory.GetSlotButton(i).IsDown())
 						item.OnButtonDown();
 					if (!item.IsTwoHanded || i == 1)
@@ -554,37 +559,118 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			}
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Button Actions
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Check for tile & entity press interactions.</summary>
-		private void CheckPressInteractions() {
-			// TODO: interactions not allowed when:
-			//  - In PlayerGrabState or PlayerCarryState
-			//  - In carry state
+		private bool CheckPressInteractions(ActionButtons button) {
+			List<ActionButtonCallback> callbacks = buttonCallbacks[(int) button];
+			for (int i = 0; i < callbacks.Count; i++) {
+				if (callbacks[i].Invoke(button))
+					return true;
+			}
+			return false;
+		}
 
-			if (IsOnGround && Controls.A.IsPressed()) {
-				// TEMP: Can't do actions while grabbing or carring.
-				if (WeaponState == stateGrab || WeaponState == stateCarry)
-					return;
+		/// <summary>Register a callback which will be invoked when the given action
+		/// button is pressed. The callback should return true if an action was
+		/// performed, so that other button callbacks do not also trigger.</summary>
+		public void RegisterActionButtonCallback(ActionButtons button,
+			ActionButtonCallback callback)
+		{
+			buttonCallbacks[(int) button].Add(callback);
+		}
+		
+		/// <summary>Use equipped weapons.</summary>
+		private bool ActionUseWeapon(ActionButtons button) {
+			int slot = (button == ActionButtons.A ?
+				Inventory.SLOT_A : Inventory.SLOT_B);
+			ItemWeapon weapon = EquippedUsableItems[slot];
+			if (weapon != null && weapon.IsUsable()) {
+				if (weapon.OnButtonPress())
+					return true;
+			}
+			return false;
+		}
+		
+		/// <summary>Throw or drop any carried objects</summary>
+		private bool ActionThrowCarriedObject(ActionButtons button) {
+			if (WeaponState == stateCarry) {
+				stateCarry.ReleaseObject();
+				return true;
+			}
+			return false;
+		}
+		
+		/// <summary>Interact with entities and tiles in front of the player.</summary>
+		private bool ActionObjectInteractions(ActionButtons button) {
+			if (IsBeingKnockedBack)
+				return false;
 
-				// First check entity interactions
-				for (int i = 0; i < RoomControl.EntityCount; i++) {
-					Entity e = RoomControl.Entities[i];
-					if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
-						Entity.AreEntitiesAligned(this, e, direction, e.ActionAlignDistance) &&
-						e.OnPlayerAction(direction))
+			// First check entity interactions
+			for (int i = 0; i < RoomControl.EntityCount; i++) {
+				Entity other = RoomControl.Entities[i];
+				if (other != this && !other.IsDestroyed) {
+					Rectangle2F myBox = Rectangle2F.Translate(
+						physics.SoftCollisionBox, position);
+					Rectangle2F otherBox = Rectangle2F.Translate(
+						other.ButtonActionCollisionBox, other.Position);
+					if (myBox.Intersects(otherBox) &&
+						Directions.NearestFromVector(other.Center - Center) == direction)
 					{
-						Controls.A.Disable(true);
-						StopPushing();
+						if (other.OnPlayerAction(direction)) {
+							StopPushing();
+							return true;
+						}
 					}
 				}
+			}
 
-				// Then check tile interactions
-				Tile actionTile = stateGrab.GetGrabTile();
-				if (actionTile != null && actionTile.OnAction(direction)) {
-					Controls.A.Disable(true);
+			// Then check tile interactions
+			Tile actionTile = stateGrab.GetGrabTile();
+			if (actionTile != null) {
+				if (actionTile.OnAction(direction)) {
 					StopPushing();
+					return true;
 				}
 			}
+
+			return false;
+		}
+
+		/// <summary>Submerge/resurface while swimming in top-down mode.</summary>
+		private bool ActionSwimSubmerge(ActionButtons button) {
+			if (EnvironmentState == environmentStateSwim) {
+				if (environmentStateSwim.IsSubmerged)
+					environmentStateSwim.Resurface();
+				else
+					environmentStateSwim.Submerge();
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Resurface when swimming underwater.</summary>
+		private bool ActionUnderwaterResurface(ActionButtons button) {
+			if (EnvironmentState == environmentStateUnderwater &&
+				environmentStateUnderwater.CanResurface())
+			{
+				environmentStateUnderwater.Resurface();
+				return true;
+			}
+			return false;
+		}
+		
+		/// <summary>Perform a stroke motion when swimming.</summary>
+		private bool ActionStroke(ActionButtons button) {
+			if (IsSwimming && movement.CanStroke()) {
+				movement.Stroke();
+				return true;
+			}
+			return false;
 		}
 
 
@@ -599,7 +685,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			direction			= Directions.Down;
 			useDirection		= 0;
 			useAngle			= 0;
-			isStateControlled	= false;
 			syncAnimationWithDirection = true;
 			isFrozen			= false;
 
@@ -743,7 +828,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			IntegrateStateParameters();
 
 			// Check for beginning pushing
-			if (WeaponState != statePush && statePush.GetPushTile() != null) {
+			if (WeaponState == null && statePush.GetPushTile() != null) {
 				BeginWeaponState(statePush);
 				IntegrateStateParameters();
 			}
@@ -775,24 +860,25 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Update() {
 			if (!isFrozen) {
 
-				// Pre-state update.
-				if (!isStateControlled) {
-					RequestNaturalState();
-					movement.Update();
-					UpdateUseDirections();
-					CheckPressInteractions();
-					RequestNaturalState();
-				}
+				// Pre-state update
+				RequestNaturalState();
+				movement.Update();
+				UpdateUseDirections();
+				if (Controls.A.IsPressed())
+					CheckPressInteractions(ActionButtons.A);
+				IntegrateStateParameters();
+				if (Controls.B.IsPressed())
+					CheckPressInteractions(ActionButtons.B);
+				IntegrateStateParameters();
+				RequestNaturalState();
 			
-				// Update the current player states.
+				// Update the current player states
 				UpdateStates();
 
-				// Post-state update.
-				if (!isStateControlled) {
-					UpdateEquippedItems();
-				}
+				// Post-state update
+				UpdateEquippedItems();
 
-				// Handle SHIELD holding.
+				// Handle SHIELD holding
 				if (Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_BLOCK ||
 					Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK)
 				{
@@ -802,7 +888,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					UnequipTool(toolShield);
 				}
 
-				// Update superclass.
+				// Update superclass
 				base.Update();
 			}
 		}
@@ -868,11 +954,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public Animation MoveAnimation {
 			get { return stateParameters.PlayerAnimations.Default; }
-		}
-
-		public bool IsStateControlled {
-			get { return isStateControlled; }
-			set { isStateControlled = value; }
 		}
 
 		public float PushSpeed {
@@ -1034,6 +1115,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerGrabState GrabState {
 			get { return stateGrab; }
+		}
+
+		public PlayerPushState PushState {
+			get { return statePush; }
 		}
 
 		public PlayerPullHandleState PullHandleState {

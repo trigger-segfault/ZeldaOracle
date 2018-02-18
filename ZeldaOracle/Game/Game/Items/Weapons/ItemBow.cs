@@ -51,9 +51,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B).
-		public override void OnButtonPress() {
+		public override bool OnButtonPress() {
 			if (arrowTracker.IsMaxedOut || !HasAmmo())
-				return;
+				return false;
 			
 			UseAmmo();
 			Player.Direction = Player.UseDirection;
@@ -69,6 +69,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			// Begin the busy state
 			Player.BeginBusyState(10, Player.Animations.Throw);
+
+			return true;
 		}
 
 		// Called when the item is added to the inventory list.
