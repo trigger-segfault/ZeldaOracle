@@ -76,6 +76,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_PULL;
 		public static Animation ANIM_PLAYER_DIG;
 		public static Animation ANIM_PLAYER_THROW;
+		public static Animation ANIM_PLAYER_AIM_WALK;
 		public static Animation ANIM_PLAYER_SWING;
 		public static Animation ANIM_PLAYER_SWING_NOLUNGE;
 		public static Animation ANIM_PLAYER_SWING_BIG;
@@ -269,6 +270,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_SIGN_BREAK;
 		public static Animation ANIM_EFFECT_LEAVES;
 		public static Animation ANIM_EFFECT_GRASS_LEAVES;
+		public static Animation ANIM_EFFECT_MAGNET_GLOVES_RED;
+		public static Animation ANIM_EFFECT_MAGNET_GLOVES_BLUE;
 
 		// Color effect animations.
 		public static Animation ANIM_EFFECT_LAVA_SPLASH;

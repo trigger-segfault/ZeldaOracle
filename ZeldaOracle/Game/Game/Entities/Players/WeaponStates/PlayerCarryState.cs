@@ -75,14 +75,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public void DropObject(bool enterBusyState = true, bool playSound = true) {
-			StateParameters.PlayerAnimations.Default = null;
+			PlayerAnimations.Default = null;
 
 			if (carryObject != null && carryObject.IsAlive) {
 				isObjectDropped = true;
 				player.RoomControl.SpawnEntity(carryObject, player.Position, 16);
 				if (enterBusyState) {
-					player.Graphics.PlayAnimation(
-						player.StateParameters.PlayerAnimations.Throw);
+					player.Graphics.PlayAnimation(player.Animations.Throw);
 					StateMachine.BeginState(new PlayerBusyState(
 						throwDuration, player.StateParameters.PlayerAnimations.Throw));
 				}
@@ -179,13 +178,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					objectZOffset		= 13;
 					isPickingUp = false;
 					StateParameters.ProhibitMovementControl	= false;
-					StateParameters.PlayerAnimations.Default =
-						player.StateParameters.PlayerAnimations.Carry;
+					PlayerAnimations.Default = player.Animations.Carry;
 				}
 			}
 			else {
-				StateParameters.PlayerAnimations.Default =
-					player.StateParameters.PlayerAnimations.Carry;
+				PlayerAnimations.Default = player.Animations.Carry;
 
 				// Update the carried object.
 				objectDrawOffset		= Point2I.Zero;

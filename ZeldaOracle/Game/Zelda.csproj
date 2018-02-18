@@ -366,6 +366,7 @@
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerSideScrollSwimEnvironmentState.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerUnderwaterEnvironmentState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerSwitchHookSwitchState.cs" />
+    <Compile Include="Game\Entities\Players\WeaponStates\PlayerMagnetGlovesState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\WeaponStates\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerRespawnDeathState.cs" />
@@ -495,6 +496,7 @@
     <Compile Include="Game\Items\Weapons\ItemShield.cs" />
     <Compile Include="Game\Items\Weapons\ItemShovel.cs" />
     <Compile Include="Game\Items\Weapons\ItemCane.cs" />
+    <Compile Include="Game\Items\Weapons\ItemMagnetGloves.cs" />
     <Compile Include="Game\Items\Weapons\ItemSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBigSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />

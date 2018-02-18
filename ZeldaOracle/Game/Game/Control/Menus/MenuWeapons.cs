@@ -109,6 +109,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			ItemWeapon unequippedWeapon = GameControl.Inventory.EquippedWeapons[equipSlot];
 			swapSlot.SlotItem = unequippedWeapon;
 			GameControl.Inventory.EquippedWeapons[equipSlot] = equippedWeapon;
+			unequippedWeapon.IsEquipped = false;
 
 			// Handle unequipping two handed weapons by nullifying the other slot
 			if (unequippedWeapon.IsTwoHanded)
@@ -122,6 +123,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 				GameControl.Inventory.EquippedWeapons[1 - equipSlot] = equippedWeapon;
 			}
 
+			equippedWeapon.IsEquipped = true;
 			equippedWeapon.CurrentEquipSlot = equipSlot;
 		}
 

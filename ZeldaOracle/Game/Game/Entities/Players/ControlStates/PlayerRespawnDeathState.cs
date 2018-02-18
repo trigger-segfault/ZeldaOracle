@@ -39,6 +39,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.DisablePlayerControl			= true;
 			StateParameters.DisablePlatformMovement			= true;
 
+			player.InterruptWeapons();
 			player.Movement.StopMotion();
 			player.Physics.ZVelocity = 0.0f;
 			player.KnockbackVelocity = Vector2F.Zero;

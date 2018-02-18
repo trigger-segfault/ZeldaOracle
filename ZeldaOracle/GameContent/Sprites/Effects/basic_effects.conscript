@@ -14,8 +14,9 @@ IGNORECOLORS	((255, 0, 0), (1, 1, 1));
 
 MAPPEDCOLORS	"entities_default", ("default", "blue", "green", "orange", "shaded_red");
 
+# Create the output sprite sheet
 SOURCE "temp_sheet_basic_effects";
-SPRITESET "effects_basic_effects", (8, 4);
+SPRITESET "effects_basic_effects", (8, 8);
 	MULTIPLE BASIC (0, 0), (0, 0), (3, 1); END;
 	SINGLE COLOR "", ("shaded_red", "shaded_blue"), (3, 0); END;
 	MULTIPLE BASIC (4, 0), (4, 0), (4, 1); END;
@@ -24,7 +25,9 @@ SPRITESET "effects_basic_effects", (8, 4);
 	MULTIPLE COLOR "", ("red"), (0, 1), (0, 2), (4, 1); END;
 	MULTIPLE BASIC (6, 1), (6, 1), (2, 1); END;
 	MULTIPLE BASIC (0, 2), (0, 3), (5, 1); END;
+	MULTIPLE COLOR "", ("shaded_red", "shaded_blue"), (0, 3), (0, 4), (8, 1); END;
 END;
+
 
 #==============================================================
 # Effects
@@ -125,3 +128,17 @@ COMPOSITE "temp_preview_grass_color_style";
 	ADD "effect_grass", (28, 0); END;
 	
 STYLEPREVIEW "grass_color", "temp_preview_grass_color_style";
+
+ANIMATION "effect_magnet_gloves_red";
+	SUBSTRIP repeat; ADD strip, 2, 2, (0, 4), (  2,  -9);
+	SUBSTRIP repeat; ADD strip, 2, 2, (2, 4), (-11, -24);
+	SUBSTRIP repeat; ADD strip, 2, 2, (4, 4), (-18,  -9);
+	SUBSTRIP repeat; ADD strip, 2, 2, (6, 4), ( -5,  -2);
+	CHANGECOLOR all, "shaded_red";
+	END;
+	
+ANIMATION "effect_magnet_gloves_blue";
+	CLONE "effect_magnet_gloves_red";
+	CHANGECOLOR all, "shaded_blue"; 
+	END;
+	

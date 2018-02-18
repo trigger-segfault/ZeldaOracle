@@ -54,10 +54,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerToolSword		toolSword;
 		private PlayerToolVisual	toolVisual;
 
-		// Player States
+		// Weapon States
 		private PlayerPushState				statePush;
-		private PlayerLedgeJumpState		stateLedgeJump;
-		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
 		private PlayerSwingSwordState		stateSwingSword;
 		private PlayerSwingBigSwordState	stateSwingBigSword;
 		private PlayerSwingCaneState		stateSwingCane;
@@ -72,10 +70,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerGrabState				stateGrab;
 		private PlayerCarryState			stateCarry;
 		private PlayerPullHandleState		statePullHandle;
+		private PlayerMagnetGlovesState		stateMagnetGloves;
+
+		// Control States
+		private PlayerLedgeJumpState		stateLedgeJump;
+		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
 		private PlayerRespawnDeathState		stateRespawnDeath;
 		private PlayerMinecartState			stateMinecart;
 		private PlayerJumpToState			stateJumpTo;
 
+		// Environment States
 		private PlayerGrassEnvironmentState					environmentStateGrass;
 		private PlayerStairsEnvironmentState				environmentStateStairs;
 		private PlayerJumpEnvironmentState					environmentStateJump;
@@ -188,6 +192,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSeedShooter	= new PlayerSeedShooterState();
 			stateSwitchHook		= new PlayerSwitchHookState();
 			stateCarry			= new PlayerCarryState();
+			stateMagnetGloves	= new PlayerMagnetGlovesState();
 
 			statePush.Player = this; // Necessary to call statePush.GetPushTile()
 			stateGrab.Player = this; // Necessary to call stateGrab.GetGrabTile()
@@ -1124,6 +1129,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerPushState PushState {
 			get { return statePush; }
+		}
+
+		public PlayerMagnetGlovesState MagnetGlovesState {
+			get { return stateMagnetGloves; }
 		}
 
 		public PlayerPullHandleState PullHandleState {

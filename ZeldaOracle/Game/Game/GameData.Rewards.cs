@@ -64,6 +64,7 @@ namespace ZeldaOracle.Game {
 				new ItemSeedSatchel(),
 				new ItemSeedShooter(),
 				new ItemSlingshot(),
+				new ItemMagnetGloves(),
 				
 				// Key items:
 				// Keep this as level 3 unless the game has wallet limitations
@@ -95,7 +96,7 @@ namespace ZeldaOracle.Game {
 
 		public static void LoadRewards(RewardManager rewardManager) {
 
-			// Key Items.
+			// Key Items
 
 			rewardManager.AddReward(new RewardItem("item_flippers_1", "item_flippers", Item.Level1, RewardHoldTypes.TwoHands,
 				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press A to swim, B to dive!",
@@ -105,7 +106,7 @@ namespace ZeldaOracle.Game {
 				"You got a <red>Mermaid Suit<red>! Now you can swim in deep waters. Press DPAD to swim, B to dive and A to use items.",
 				GameData.SPR_ITEM_ICON_FLIPPERS_2));
 			
-			// Weapons.
+			// Weapons
 
 			rewardManager.AddReward(new RewardItem("item_sword_1", "item_sword", Item.Level1, RewardHoldTypes.OneHand,
 				"You got a Hero's <red>Wooden Sword<red>! Hold A or B to charge it up, then release it for a spin attack!",
@@ -211,7 +212,11 @@ namespace ZeldaOracle.Game {
 				"Your <red>Bow<red> has been upgraded! You can now hold even more arrows.",
 				GameData.SPR_ITEM_ICON_BOW));
 
-			// Rupees.
+			rewardManager.AddReward(new RewardItem("item_magnet_gloves", "item_magnet_gloves", Item.Level1, RewardHoldTypes.OneHand,
+				"You got the Magnetic Gloves! Their magnetic might attracts and repels.",
+				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_BLUE));
+
+			// Rupees
 
 			rewardManager.AddReward(new RewardRupee("rupees_1", 1,
 				"You got <red>1 Rupee<red>!<n>...",
