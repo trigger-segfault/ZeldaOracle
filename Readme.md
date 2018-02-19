@@ -10,7 +10,8 @@ We have had a history of recreating the Oracle game engine ever since we were ki
 
 Project Started: 9/10/2015
 
-[Images and Videos](https://github.com/trigger-death/ZeldaOracle/wiki/Media)
+* **[Images and Videos](https://github.com/trigger-death/ZeldaOracle/wiki/Media)**
+* **[Pixel Graphics Video Player](https://github.com/trigger-death/PGVideoPlayer)** (Designated video player for discerning mechanics)
 
 ## Demo
 
