@@ -1,0 +1,158 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# A BasicSprite is a sprite composed of a direct link to an image.
+# BasicSprite is the only sprite that does not allow the use of SpriteSets.
+# (Because BasicSprites cannot be composed of existing sprites.)
+# All sprites created in the sprites.conscript are composed of
+# BasicSprites at the lowest level.
+# BasicSprites can also be paletted during loading.
+# See instructions in Tutorials/Paletting.conscript.
+# An END is required after finishing a BasicSprite.
+
+# Note: Although BasicSprite CLONE commands exist in the SpriteSR,
+#       they are not mentioned here because their role has been
+#       replaced by OffsetSprite.
+
+# Note: CONTINUE commands are not really needed for BasicSprites,
+#       and exist more to follow the pattern of implementing continue
+#       for all sprite types.
+
+
+# Builds a sprite from an entire image.
+# Required Mode: Root
+# Sets Mode: BasicSprite
+# Param: name = The name of the new sprite.
+# Param: imagePath = The path of the image file to load.
+# Param: drawOffset = The optional draw offset of the BasicSprite.
+#BASIC string name, string imagePath, Point drawOffset = (0, 0)
+BASIC "my_basic_sprite", "Tutorials/my_basic_sprite_image"; END;
+
+
+# Builds a sprite from an index in a sprite sheet.
+# Required Mode: Root
+# Sets Mode: BasicSprite
+# Param: name = The name of the new sprite.
+# Param: sourceIndex: The index in the sprite source to get the sprite from.
+# Param: drawOffset = The optional draw offset of the BasicSprite.
+#BASIC string name, Point sourceIndex, Point drawOffset = (0, 0)
+SOURCE "a_sprite_sheet";
+BASIC "my_basic_sprite_2", (0, 0); END;
+
+
+# Enters the BasicSprite mode with the selected BasicSprite.
+# Required Mode: Root
+# Sets Mode: BasicSprite
+# Use this to apply commands like SIZE, SOURCERECT, and DRAWOFFSET
+# Param: name = The name of the existing BasicSprite to continue.
+#CONTINUE BASIC string name
+CONTINUE BASIC "my_basic_sprite";
+
+
+# Changes the source rect size of the BasicSprite.
+# Required Mode: BasicSprite, SpriteSet+BasicSprite
+# Param: size = The new size of the source rect.
+#SIZE Point size
+SIZE (14, 16);
+
+
+# Changes the source rect of the BasicSprite.
+# Required Mode: BasicSprite, SpriteSet+BasicSprite
+# Param: sourceRect = The new source rect to use. The position
+#                     is relative to the current sourceRect point.
+#                     If a source rect is positioned at (32, 32), the following
+#                     command will change the position to (34, 32).
+#                     Changing the source rect will not affect the draw offset.
+#SOURCERECT Rectangle sourceRect
+SOURCERECT (2, 0, 14, 16);
+
+
+# Changes the draw offset of the BasicSprite.
+# Required Mode: BasicSprite, SpriteSet+BasicSprite
+# Param: drawOffset = The new draw offset of the BasicSprite.
+#DRAWOFFSET Point drawOffset
+DRAWOFFSET (2, 0);
+
+
+END; # End the CONTINUE BASIC command mode.
+
+
+#==============================================================
+# SpriteSet Commands
+#==============================================================
+
+# SpriteSet commands can only be called while in the SpriteSet mode.
+# Note that the SIZE, SOURCERECT, and DRAWOFFSET commands listed
+# above can be used exactly the same way in SpriteSets.
+# SpriteSets in general will be touched upon in a later document.
+
+# Begin a SpriteSet for demonstration.
+SPRITESET "my_sprite_set", (10, 10);
+
+
+# Builds and assigns multiple BasicSprites to a SpriteSet from a SpriteSheet.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+BasicSprite
+# Param: sourceIndex = The starting index in the SpriteSheet to grab sprites from.
+# Param: start = The starting index in the SpriteSet to assign the new BasicSprites to.
+# Param: span = The amount of sprites to assign to the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#MULTIPLE BASIC Point sourceIndex, Point start = (0, 0), Point span = (0, 0), Point drawOffset = (0, 0)
+SOURCE "my_sprite_sheet";
+# Assign all indecies in the SpriteSet starting with (3, 4) in the SpriteSheet.
+MULTIPLE BASIC (3, 4); END;
+
+# Assign (2x2) BasicSprites to the SpriteSet at the same index as the SpriteSheet.
+# The sourceIndex and start parameters will almost always be the same.
+MULTIPLE BASIC (3, 4), (3, 4), (2, 2); END;
+
+# Assign (4x1) BasicSprites to the SpriteSet at (5, 5), starting at (3, 4) in the SpriteSheet.
+MULTIPLE BASIC (3, 4), (5, 5), (4, 1); END;
+
+
+# Continue a collection of BasicSprites and allow modification of their settings in a SpriteSet.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+BasicSprite
+# Param: start = The starting position in the SpriteSet.
+# Param: span = The amount of sprites to modify.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#CONTINUE MULTIPLE BASIC Point start = (0, 0), Point span = (0, 0)
+CONTINUE MULTIPLE BASIC (5, 5), (4, 1);
+	SOURCERECT (4, 3, 8, 10);
+	DRAWOFFSET (4, 3);
+END; # End the CONTINUE MULTIPLE BASIC command mode.
+
+
+# Assigns a single BasicSprite to a SpriteSet from a SpriteSheet at the same index.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+BasicSprite
+# Param: sourceIndex = The source index of the SpriteSheet and output index of the SpriteSet.
+SINGLE BASIC (3, 4); END;
+
+
+# Assigns a single BasicSprite to a SpriteSet from a different index in the SpriteSheet.
+# Unlike the last one, this command allows setting the drawOffset without calling DRAWOFFSET.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+BasicSprite
+# Param: sourceIndex = The source index of the SpriteSheet to grab sprites from.
+# Param: setIndex = The output index to assign the BasicSprite to in the SpriteSet.
+# SINGLE BASIC Point sourceIndex, Point setIndex, Point drawOffset = (0, 0)
+SINGLE BASIC (3, 4), (5, 5), (-8, -8); END;
+
+
+# Continue a single BasicSprite in the SpriteSet and allow modifications to its settings.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+BasicSprite
+# Param: setIndex = The index of the BasicSprite in the SpriteSet to modify.
+#CONTINUE BASIC Point sourceIndex, Point setIndex
+CONTINUE SINGLE BASIC (5, 5);
+	SOURCERECT (4, 3, 8, 10);
+	DRAWOFFSET (4, 3);
+END; # End the CONTINUE SINGLE BASIC command mode.
+	
+
+END; # End the SPRITESET command mode.
+
+
+#==============================================================

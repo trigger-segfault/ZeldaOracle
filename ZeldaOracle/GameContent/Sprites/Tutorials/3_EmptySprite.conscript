@@ -1,0 +1,24 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# An EmptySprite is a sprite that exists soley to draw nothing.
+# Any container sprite can contain an EmptySprite.
+# EmptySprite is automatically used during the ADD emptyFrame
+# command for Animations.
+# An END is required after finishing an EmptySprite.
+
+# Note: EmptySprite is another sprite that does not have a CONTINUE
+#       command as there are no sub-commands to available for
+#       EmptySprite.
+
+
+# Build an EmptySprite.
+# Required Mode: Root
+# Sets Mode: EmptySprite
+# Param: name = The name of the new sprite.
+#EMPTY string name
+EMPTY "my_empty_sprite"; END;
+
+
+#==============================================================

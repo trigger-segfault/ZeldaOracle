@@ -437,6 +437,58 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tiles</Name>
     </None>
+    <None Include="Sprites\Tutorials\1_Introduction.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>1_Introduction</Name>
+    </None>
+    <None Include="Sprites\Tutorials\2_BasicSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>2_BasicSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\3_EmptySprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>3_EmptySprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\4_OffsetSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>4_OffsetSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\5_ColorSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>5_ColorSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\6_StyleSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>6_StyleSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\7_StyleColorSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>7_StyleColorSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\8_ColorStyleSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>8_ColorStyleSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\9_ColorMultiStyleSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>9_ColorMultiStyleSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\10_CompositeSprite.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>10_CompositeSprite</Name>
+    </None>
+    <None Include="Sprites\Tutorials\11_Animation.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>11_Animation</Name>
+    </None>
+    <None Include="Sprites\Tutorials\12_SpriteSet.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>12_SpriteSet</Name>
+    </None>
+    <None Include="Sprites\Tutorials\13_Paletting.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>13_Paletting</Name>
+    </None>
     <None Include="Sprites\UI\backgrounds.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>backgrounds</Name>

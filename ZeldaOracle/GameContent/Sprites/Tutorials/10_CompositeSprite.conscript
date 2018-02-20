@@ -1,0 +1,153 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# CompositeSprite is a sprite used to combine multiple sprites together
+# into a static sprite.
+# CompositeSprite is the equivilant of the old sprite framework's Sprite class.
+# An END is required after finishing a CompositeSprite.
+
+
+# Starts a new empty CompositeSprite.
+# Required Mode: Root
+# Sets Mode: CompositeSprite
+# Param: name = The name of the new sprite.
+#COMPOSITE string name
+COMPOSITE "my_composite_sprite";
+	#ADD ... add stuff to sprite
+END;
+
+
+# Continues an existing CompositeSprite.
+# Required Mode: Root
+# Sets Mode: CompositeSprite
+# Param: name = The name of the new sprite.
+#CONTINUE COMPOSITE string name
+CONTINUE COMPOSITE "my_composite_sprite";
+	#ADD ... add more stuff to sprite
+END;
+
+
+#==============================================================
+# Building Commands
+#==============================================================
+
+# Start a CompositeSprite for demonstration.
+COMPOSITE "demonstration_composite";
+
+
+# Adds a sprite part to the CompositeSprite.
+# Required Mode: CompositeSprite
+# Param: sprite = The sprite part to add to the CompositeSprite.
+# Param: drawOffset = The additional draw offset of the sprite part.
+# Param: clipping = The clipping of the sprite part. If unset, clipping will be ignored.
+#                   The point of the clipping rectangle will implicitly be added to
+#                   the already-supplied draw offset so that the position of the portion
+#                   of the sprite stays the same.
+#ADD Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1)
+SOURCE "my_sprite_source";
+ADD (0, 0), (-8, -16);
+ADD "predefined_sprite", clipping: (4, 0, 8, 16);
+ADD ((0, 1), "definition");
+
+
+# Adds a range of sprite parts in a sprite source to the CompositeSprite.
+# Required Mode: CompositeSprite
+# Param: sourceIndex = The starting index in the sprite source to grab sprite
+#                      parts from.
+# Param: range = The amount of sprite parts to add, following along the sprite source.
+# Param: spacing = The additional spacing added between each sprite.
+#                  (Does not account for sprite size.)
+# Param: drawOffset = The additional draw offset of all the sprite parts.
+#ADDTILED Point sourceIndex, Point range, Point spacing, Point drawOffset = (0, 0)
+ADDTILED (0, 0), (4, 4), (16, 16);
+
+
+# Inserts a sprite part into the CompositeSprite at the specified index.
+# Required Mode: CompositeSprite
+# Param: index = The index to insert the sprite part into the list at.
+# Param: sprite = The sprite part to add to the CompositeSprite.
+# Param: drawOffset = The additional draw offset of the sprite part.
+# Param: clipping = The clipping of the sprite part. If unset, clipping will be ignored.
+#                   The point of the clipping rectangle will implicitly be added to
+#                   the already-supplied draw offset so that the position of the portion
+#                   of the sprite stays the same.
+#INSERT int index, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1)
+INSERT 1, "temp_existing_sprite", (4, 2);
+
+# Replaces an existing sprite at the specified index with the new sprite part.
+# Required Mode: CompositeSprite
+# Param: index = The index to replace with the new sprite part.
+# Param: sprite = The sprite part to add to the CompositeSprite.
+# Param: drawOffset = The additional draw offset of the sprite part.
+# Param: clipping = The clipping of the sprite part. If unset, clipping will be ignored.
+#                   The point of the clipping rectangle will implicitly be added to
+#                   the already-supplied draw offset so that the position of the portion
+#                   of the sprite stays the same.
+#REPLACE int index, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1)
+REPLACE 1, "temp_existing_sprite_2", (4, 2);
+
+
+# Replaces an existing sprite at the specified index with the new sprite part
+# AND KEEPS ALL ORIGINAL OFFSET SETTINGS. (drawOffset & clipping)
+# Required Mode: CompositeSprite
+# Param: index = The index to replace with the new sprite part.
+# Param: sprite = The sprite part to add to the CompositeSprite.
+#REPLACE int index, Sprite sprite
+REPLACE 1, "temp_existing_sprite_3";
+
+
+# Removes an existing sprite at the specified index in the list.
+# Required Mode: CompositeSprite
+# Param: index = The index to remove the sprite part from.
+#REMOVE int index
+REMOVE 1;
+
+
+# Takes an existing CompositeSprite and adds all of its sprite parts
+# as new sprite parts to the current CompositeSprite. Additional draw
+# offset and clipping are applied to each sprite independantly.
+# Required Mode: CompositeSprite
+# Param: compositeSpriteName = The CompositeSprite to combine parts from.
+# Param: drawOffset = The additional draw offset of the sprite parts.
+# Param: clipping = The clipping of the sprite parts. If unset, clipping will be ignored.
+#                   The point of the clipping rectangle will implicitly be added to
+#                   the already-supplied draw offset so that the position of the portion
+#                   of the sprite stays the same.
+#COMBINE string compositeSpriteName, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1)
+COMBINE "my_composite_sprite", (8, 8);
+
+
+# Takes an existing CompositeSprite and adds all of its sprite parts
+# as new sprite parts to the current CompositeSprite at the specified index.
+# Additional draw offset and clipping are applied to each sprite independantly.
+# Required Mode: CompositeSprite
+# Param: index = The index to start inserting sprite parts at.
+# Param: compositeSpriteName = The CompositeSprite to combine parts from.
+# Param: drawOffset = The additional draw offset of the sprite parts.
+# Param: clipping = The clipping of the sprite parts. If unset, clipping will be ignored.
+#                   The point of the clipping rectangle will implicitly be added to
+#                   the already-supplied draw offset so that the position of the portion
+#                   of the sprite stays the same.
+#COMBINE int index, string compositeSpriteName, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1)
+COMBINE 0, "my_composite_sprite_2", (8, 8);
+
+
+# Adds additional offset to each sprite part in the CompositeSprite.
+# Required Mode: CompositeSprite
+# Param: offset = The additional draw offset to add to each sprite part.
+#OFFSET Point offset
+OFFSET (-16, -16);
+
+
+# Adds additional clipping to each sprite part in the CompositeSprite.
+# Required Mode: CompositeSprite
+# Param: clipping = The additional clipping of the sprite parts.
+#CLIP Rectangle clipping
+CLIP (0, 0, 8, 8);
+
+
+END; # End COMPOSITE command mode.
+
+
+#==============================================================

@@ -50,7 +50,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// SETUP SpriteSet
 			//=====================================================================================
 			AddCommand("MULTIPLE COLOR", (int) Modes.SpriteSet,
-				"string colorationGroup, (string colorGroups...), Point sourceIndex, Point start = (0, 0), Point dimensions = (0, 0)",
+				"string colorationGroup, (string colorGroups...), Point sourceIndex, Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				string colorationGroup = parameters.GetString(0);
 				var colorParams = parameters.GetParam(1);
@@ -74,7 +74,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CONTINUE MULTIPLE COLOR", (int) Modes.SpriteSet,
-				"(string colorGroups...), Point start = (0, 0), Point dimensions = (0, 0)",
+				"(string colorGroups...), Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				var colorParams = parameters.GetParam(0);
 				editingSetStart = parameters.GetPoint(1);

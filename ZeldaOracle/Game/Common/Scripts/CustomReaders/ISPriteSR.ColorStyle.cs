@@ -71,7 +71,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// SETUP SpriteSet
 			//=====================================================================================
 			AddCommand("MULTIPLE COLORSTYLE", (int) Modes.SpriteSet,
-				"string styleGroup, string colorationGroup, (string colorGroups...), Point start = (0, 0), Point dimensions = (0, 0)",
+				"string styleGroup, string colorationGroup, (string colorGroups...), Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				string colorationGroup = parameters.GetString(1);
 				editingStyleGroup = parameters.GetString(0);
@@ -98,8 +98,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CONTINUE MULTIPLE COLORSTYLE", (int) Modes.SpriteSet,
-				"(string colorGroups...), Point start = (0, 0), Point dimensions = (0, 0)",
-				"Point start = (0, 0), Point dimensions = (0, 0)",
+				"(string colorGroups...), Point start = (0, 0), Point span = (0, 0)",
+				"Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				editingSetStart = parameters.GetPoint(parameters.ChildCount - 2);
 				editingSetDimensions = parameters.GetPoint(parameters.ChildCount - 1);

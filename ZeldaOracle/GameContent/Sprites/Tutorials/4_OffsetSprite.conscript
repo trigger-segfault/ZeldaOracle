@@ -1,0 +1,28 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# An OffsetSprite is a sprite that takes a single existing sprite,
+# and modifies it for various uses.
+# OffsetSprites can contain any sprite type including another OffsetSprite.
+# An END is required after finishing an OffsetSprite.
+
+# Note: OffsetSprite is the only sprite to not have a CONTINUE command
+#       as there are no sub-commands to available for OffsetSprite.
+
+
+# Build an OffsetSprite from an existing sprite
+# Required Mode: Root
+# Sets Mode: OffsetSprite
+# Param: name = The name of the new sprite.
+# Param: sprite = The sprite to offset in this new sprite.
+# Param: drawOffset = The additional draw offset of the sprite.
+# Param: clipping = The clipping of the sprite. If unset, clipping will be ignored.
+#                   The point of the clipping rectangle will implicitly be added to
+#                   the already-supplied draw offset so that the position of the portion
+#                   of the sprite stays the same.
+#OFFSET string name, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1)
+OFFSET "my_offset_sprite", "my_basic_sprite", clipping: (8, 0, 8, 16); END;
+
+
+#==============================================================

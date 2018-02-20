@@ -1,0 +1,73 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# Animation is a special sprite that changes how it looks based on the
+# playback time.
+# An END is required after finishing an Animation.
+
+# Note: Animations keep track of the origins of sprites added as frames.
+#       Sprite source, source index, and definition are all of the variables
+#       That can be changed in an Animation. Examples would be shifting the
+#       source index of all sprites or changing the definition of all sprites.
+
+# Note: Animations are composed of substrips. Substrips are stored in a linked
+#       list so editing the final substrip will not make changes to any previous
+#       substrips.
+
+# Note: Because Animations normally store frames in order based on their start
+#       time, Depth is a concept for each frame, allowing frames to be inserted
+#       before or after others depending on their depth. The lower the number,
+#       the closer to the beginning of the list the frame is stored, and
+#       subsequently, the earlier it gets drawn. The default depth is 0.
+
+
+# Starts a new empty Animation.
+# Required Mode: Root
+# Sets Mode: Animation
+# Param: name = The name of the new sprite.
+#ANIMATION string name
+ANIMATION "my_animation";
+	#ADD frame... add stuff to sppite
+END;
+
+
+# Continues an existing Animation.
+# Required Mode: Root
+# Sets Mode: Animation
+# Param: name = The name of the new sprite.
+#CONTINUE ANIMATION string name
+CONTINUE ANIMATION "my_animation";
+	#ADD frame... add more stuff to sprite
+END;
+
+
+#==============================================================
+# Building Commands
+#==============================================================
+
+# Start an Animation for demonstration.
+ANIMATION "demonstration_animation";
+
+
+# The first thing to do when starting an Animation is to define a new
+# substrip with a loop mode.
+# Param: loopMode = How the Animation handles looping.
+#                   repeat = The Animation loops forever.
+#                   clamp = After finishing, the Animation stays on the last frame.
+#                   reset = After finishing, the Animation goes back to the first frame.
+#SUBSTRIP string loopMode
+SUBSTRIP repeat;
+# Add frames to the substrip
+SUBSTRIP reset;
+# Add frames to the substrip
+SUBSTRIP clamp;
+# Add frames to the substrip
+
+
+
+
+END; # End ANIMATION command mode.
+
+
+#==============================================================
