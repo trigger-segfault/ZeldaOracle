@@ -38,7 +38,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			// Legacy ANIM support
-			AddCommand("ANIM", (int) Modes.Root,
+			/*AddCommand("ANIM", (int) Modes.Root,
 				"string name",
 			delegate (CommandParam parameters) {
 				spriteName = parameters.GetString(0);
@@ -55,7 +55,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				ContinueSprite<Animation>(spriteName);
 				Mode |= Modes.Animation;
 				animationBuilder.Animation = Animation;
-			});
+			});*/
 			//=====================================================================================
 			// BUILDING
 			//=====================================================================================

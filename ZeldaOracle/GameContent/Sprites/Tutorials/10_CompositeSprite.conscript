@@ -14,7 +14,7 @@
 # Param: name = The name of the new sprite.
 #COMPOSITE string name
 COMPOSITE "my_composite_sprite";
-	#ADD ... add stuff to spite
+	#ADD ... add stuff to sprite
 END;
 
 
@@ -33,7 +33,7 @@ END;
 #==============================================================
 
 # Start a CompositeSprite for demonstration.
-COMPOSITE "preview_composite";
+COMPOSITE "demonstration_composite";
 
 
 # Adds a sprite part to the CompositeSprite.
