@@ -174,24 +174,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
-			AddCommand("SIZE", (int) Modes.CompositeSprite,
-				"Point size",
-			delegate (CommandParam parameters) {
-				if (CompositeSprite.SpriteCount > 0) {
-					OffsetSprite sprite = CompositeSprite.LastSprite();
-					if (sprite.Sprite is BasicSprite) {
-						BasicSprite basic = (BasicSprite) sprite.Sprite;
-						basic.SourceRect = new Rectangle2I(basic.SourceRect.Point, parameters.GetPoint(0));
-					}
-					else {
-						ThrowCommandParseError("Cannot call SIZE when the last sprite is not a basic sprite!");
-					}
-				}
-				else {
-					ThrowCommandParseError("Cannot call SIZE when no sprites have been added!");
-				}
-			});
-			//=====================================================================================
 			AddCommand("OFFSET", (int) Modes.CompositeSprite,
 				"Point offset",
 			delegate (CommandParam parameters) {
