@@ -236,18 +236,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("OFFSET", (int) Modes.Root, new string[] {
 				"string name, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), string flip = none, string rotation = none",
-				// Int needs to go before string as int/float defaults to string.
-				/*"string name, (int indexX, int indexY), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
-				"string name, (string spriteName, string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
-				"string name, ((int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
-				"string name, (string sourceName, (int indexX, int indexY)), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
-				"string name, (string sourceName, (int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
-				"string name, drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",*/
 			}, delegate (CommandParam parameters) {
 				spriteName = parameters.GetString(0);
 				Point2I drawOffset = parameters.GetPoint(2);
 				Rectangle2I? clipping = parameters.GetRectangle(3);
-				if (clipping.Value.Size == -Point2I.One)
+				if (clipping.Value == new Rectangle2I(-Point2I.One))
 					clipping = null;
 				Flip flip = ParseFlip(parameters.GetString(4));
 				Rotation rotation = ParseRotation(parameters.GetString(5));

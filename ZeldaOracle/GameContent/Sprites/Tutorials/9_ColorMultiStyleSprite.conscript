@@ -1,0 +1,174 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# COLORMULTISTYLE creates ColorSprites that contain StyleSprites that each
+# follow only one color group per style group.
+# An example of where this is used is for floors and fancy tiles, where
+# each has the same selection of styles to choose from, but each sprite
+# has it's own color associated with it. Some Examples:
+# * Style Group: floor			Color Group: floor
+# * Style Group: fancy_tile_1	Color Group: fancy_tile_1
+# * Style Group: fancy_tile_2	Color Group: fancy_tile_2
+# * ...
+# Like the COLORSTYLE command, it will most likely be the case that the
+# created ColorSprite will never be used directly and the StyleSprites
+# contained within will be used instead.
+# Because of how COLORMULTISTYLEs are used. Coloration Groups are
+# completely left out of these commands and ignored.
+# Like normal StyleSprites, the STYLEPREVIEW command also works.
+# Like normal ColorSprites, this sprite requires SpriteSheets as sources.
+# Like normal ColorSprites, this sprite requires paletting to be enabled.
+# An END is required after finishing a COLORMULTISTYLE command.
+
+
+# Creates a MultiColorStyleSprite with a specific style group for
+# every color group.
+# Required Mode: Root
+# Sets Mode: ColorSprite+StyleSprite+MultiStyle
+# Param: name = The name of the new sprite.
+# Param: (styleGroup = The style group to pair with the following color group.
+# Param: colorGroup) = The color group to pair with the previous style group.
+# Param: (styleGroup, colorGroup)... = The collection of each style/color group combo
+#                                      that will be available in this sprite.
+#COLORMULTISTYLE string name, ((string styleGroup, string colorGroup)...)
+SOURCE "armos_sprite_sheet";
+COLORMULTISTYLE "temp_floor_styles", (("floor", "floor"),
+	("fancy_tile_1", "fancy_tile_1"), ("fancy_tile_2", "fancy_tile_2"));
+
+
+# Adds a style that will be assigned to each defined style/color group in the ColorSprite.
+# Required Mode: ColorSprite+StyleSprite+MultiStyle
+# Param: style = The style to assign this sprite.
+# Param: sourceIndex = The source index in the SpriteSheet to palette the sprite from.
+#ADD string style, Point sourceIndex
+ADD "square_tiles_1",		(0, 0);
+ADD "square_tiles_2",		(0, 1);
+
+
+END; # End the COLORMULTISTYLE command mode.
+
+
+# Continues an existing ColorMultiStyleSprite, allowing the ability to add more
+# style/color group combinations.
+# Required Mode: Root
+# Sets Mode: ColorSprite+StyleSprite+MultiStyle
+# Param: name = The name of the existing ColorMultiStyleSprite to continue.
+# Param: (styleGroup, colorGroup)... = The additional collection of each style/color
+#                                      group combo that will be available in this sprite.
+#CONTINUE COLORMULTISTYLE string name, ((string styleGroup, string colorGroup)...)
+SOURCE "my_other_sprite_source";
+CONTINUE COLORMULTISTYLE "temp_floor_styles",
+	(("fancy_tile_3", "fancy_tile_3"), ("fancy_tile_4", "fancy_tile_4")); END;
+
+
+# Continues an existing ColorMultiStyleSprite, allowing the ability to add more
+# styles but not style/color groups.
+# Required Mode: Root
+# Sets Mode: ColorSprite+StyleSprite+MultiStyle
+# Param: name = The name of the existing ColorMultiStyleSprite to continue.
+#CONTINUE COLORSTYLE string name
+SOURCE "my_other_sprite_source";
+CONTINUE COLORMULTISTYLE "temp_floor_styles";
+	ADD "brick_tiles_1"			(0, 1);
+	ADD "brick_tiles_2"			(1, 1);
+END;
+
+
+#==============================================================
+# SpriteSet Commands
+#==============================================================
+
+# SpriteSet commands can only be called while in the SpriteSet mode.
+# SpriteSets in general will be touched upon in a later document.
+
+# Begin a SpriteSet for demonstration.
+SPRITESET "my_sprite_set", (10, 10);
+
+
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite+MultiStyle
+# Param: (styleGroup, colorGroup)... = The collection of each style/color group combo
+#                                      that will be available in this sprite.
+# Param: start = The starting index in the SpriteSet to assign the new ColorMultiStyleSprites to.
+# Param: span = The amount of sprites to assign to the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#MULTIPLE COLORMULTISTYLE ((string styleGroup, string colorGroup)...), Point start = (0, 0), Point span = (0, 0)
+SOURCE "my_sprite_source";
+MULTIPLE COLORMULTISTYLE (("styleG1", "red"), ("styleG2", "blue")), (0, 0), (2, 2);
+
+
+# Adds a range of sprites as a style to the SpriteSet using the start
+# and span specified in the MULTIPLE COLORMULTISTYLE command. These sprites will
+# be paletted for each style/color group in the ColorSprite.
+# This is the same command used with SINGLE COLORMULTISTYLE.
+# Required Mode: SpriteSet+ColorSprite+StyleSprite+MultiStyle
+# Param: style = The style to assign this sprite.
+# Param: sourceIndex = The source index in the SpriteSheet to palette the sprite from.
+#ADD string style, Point sourceIndex
+ADD "my_style_1",		(0, 0);
+ADD "my_style_2",		(1, 0);
+
+
+END; # End COLORMULTISTYLE command mode.
+
+
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite+MultiStyle
+# Param: (styleGroup, colorGroup)... = The additional collection of each style/color
+#                                      group combo that will be available in this sprite.
+# Param: start = The starting index in the SpriteSet to add style/color groups and styles to.
+# Param: span = The amount of sprites to modify in the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#CONTINUE MULTIPLE COLORMULTISTYLE ((string styleGroup, string colorGroup)...), Point start = (0, 0), Point span = (0, 0)
+CONTINUE MULTIPLE COLORMULTISTYLE (("styleG3", "green"), ("styleG4", "orange")), (0, 0), (2, 2); END;
+
+
+# Use when there's no new style/color groups you want to assign to the styles.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite+MultiStyle
+# Param: start = The starting index in the SpriteSet to add styles to.
+# Param: span = The amount of sprites to modify in the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#CONTINUE MULTIPLE COLORMULTISTYLE Point start = (0, 0), Point span = (0, 0)
+CONTINUE MULTIPLE COLORMULTISTYLE (0, 0), (1, 2);
+	#ADD ...
+END;
+
+
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite+MultiStyle
+# Param: (styleGroup, colorGroup)... = The collection of each style/color group combo
+#                                      that will be available in this sprite.
+# Param: setIndex = The output index to assign the ColorSprite to in the SpriteSet.
+#SINGLE COLORMULTISTYLE ((string styleGroup, string colorGroup)...), Point setIndex
+SINGLE COLORMULTISTYLE (("floor", "floor"),
+	("fancy_tile_1", "fancy_tile_1"), ("fancy_tile_2", "fancy_tile_2")), (0, 0);
+	#ADD ...
+END;
+
+
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite+MultiStyle
+# Param: (styleGroup, colorGroup)... = The additional collection of each style/color
+#                                      group combo that will be available in this sprite.
+# Param: setIndex = The index in the SpriteSet to continue the ColorMultiStyleSprite from.
+#CONTINUE SINGLE COLORSTYLE (string colorGroups...), Point setIndex
+CONTINUE SINGLE COLORMULTISTYLE
+	(("fancy_tile_3", "fancy_tile_3"), ("fancy_tile_4", "fancy_tile_4")), (1, 0); END;
+
+
+# Use when there's no new style/color groups to add to the styles.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite+MultiStyle
+# Param: setIndex = The index in the SpriteSet to continue the ColorMultiStyleSprite from.
+#CONTINUE SINGLE COLORMULTISTYLE Point setIndex
+CONTINUE SINGLE COLORMULTISTYLE (1, 0);
+	#ADD ...
+END;
+
+
+END; # End the SPRITESET command mode.
+
+
+#==============================================================

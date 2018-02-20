@@ -12,7 +12,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	public partial class ISpriteSR : ScriptReader {
 
-		/// <summary>Adds ColorSprite commands to the script reader.</summary>
+		/// <summary>Adds StyleColorSprite commands to the script reader.</summary>
 		public void AddStyleColorCommands() {
 
 			//=====================================================================================
@@ -51,7 +51,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// SETUP SpriteSet
 			//=====================================================================================
 			AddCommand("MULTIPLE STYLECOLOR", (int) Modes.SpriteSet,
-				"string styleGroup, (string colorGroups...), Point sourceIndex, Point start = (0, 0), Point dimensions = (0, 0)",
+				"string styleGroup, (string colorGroups...), Point sourceIndex, Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				string styleGroup = parameters.GetString(0);
 				var colorParams = parameters.GetParam(1);
@@ -77,7 +77,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CONTINUE MULTIPLE STYLECOLOR", (int) Modes.SpriteSet,
-				"(string colorGroups...), Point start = (0, 0), Point dimensions = (0, 0)",
+				"(string colorGroups...), Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				var colorParams = parameters.GetParam(0);
 				editingSetStart = parameters.GetPoint(1);
@@ -115,7 +115,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CONTINUE SINGLE STYLECOLOR", (int) Modes.SpriteSet,
-				"string colorationGroup, (string colorGroups...), Point setIndex",
+				"(string colorGroups...), Point setIndex",
 			delegate (CommandParam parameters) {
 				var colorParams = parameters.GetParam(0);
 				editingSetStart = parameters.GetPoint(1);

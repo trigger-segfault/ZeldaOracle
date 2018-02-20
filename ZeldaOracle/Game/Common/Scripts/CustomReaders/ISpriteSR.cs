@@ -38,16 +38,15 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private enum Modes {
 			Root			= 0,
 			SpriteSet		= 1 << 0,
-			Dynamic			= 1 << 1,
-			EmptySprite		= 1 << 2,
-			BasicSprite		= 1 << 3,
-			OffsetSprite	= 1 << 4,
-			StyleSprite		= 1 << 5,
-			ColorSprite		= 1 << 6,
-			StyleColorSprite= 1 << 7,
-			CompositeSprite	= 1 << 8,
-			Animation		= 1 << 9,
-			MultiStyle		= 1 << 10,
+			EmptySprite		= 1 << 1,
+			BasicSprite		= 1 << 2,
+			OffsetSprite	= 1 << 3,
+			StyleSprite		= 1 << 4,
+			ColorSprite		= 1 << 5,
+			StyleColorSprite= 1 << 6,
+			CompositeSprite	= 1 << 7,
+			Animation		= 1 << 8,
+			MultiStyle		= 1 << 9,
 			SpriteMask		= EmptySprite | BasicSprite | OffsetSprite |
 							  StyleSprite | ColorSprite | StyleColorSprite |
 							  CompositeSprite | Animation | MultiStyle
@@ -99,8 +98,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				// Int needs to go before string as int/float defaults to string.
 				"Point sourceIndex",
 				"(string animationName, int substrip)",
-				"(string spriteName, string definition)",
-				"(Point sourceIndex, string definition)",
+				"(string definitionSpriteName, string definition)",
+				"(Point definitionSourceIndex, string definition)",
 				"(string sourceName, Point sourceIndex)",
 				"(string sourceName, Point sourceIndex, string definition)"
 			);

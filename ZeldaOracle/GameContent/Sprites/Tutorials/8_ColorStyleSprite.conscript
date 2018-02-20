@@ -1,0 +1,173 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# COLORSTYLE creates ColorSprites that contain StyleSprites that match
+# for each the of ColorSprite's color groups.
+# no ADD command is needed, however, the definitions created will
+# still be considered styles and be browsable in the Style Browser.
+# An example of where this is used is for armos. Where the armos has two
+# styles (dirt, floor), and two color groups (armos, armos_alt). Note
+# That the ColorSprite is more of a helper class in this situation and
+# most likely will never be used directly. Instead, the referenced
+# StyleSprites inside the ColorSprite will be used.
+# Like normal StyleSprites, the STYLEPREVIEW command also works.
+# Like normal ColorSprites, this sprite requires SpriteSheets as sources.
+# Like normal ColorSprites, this sprite requires paletting to be enabled.
+# An END is required after finishing a COLORSTYLE command.
+
+
+# Creates a ColorStyleSprite with the specified style group, coloration group,
+# and color group styles.
+# Required Mode: Root
+# Sets Mode: ColorSprite+StyleSprite
+# Param: name = The name of the new sprite.
+# Param: styleGroup = The group to separate the contained StyleSprites from other StyleSprites.
+# Param: colorationGroup = The group to separate these ColorSprites from other ColorSprites.
+# Param: colorGroups... = The list of color groups to palette the ColorSprite with.
+#COLORSTYLE string name, string styleGroup, string colorationGroup, (string colorGroups...)
+SOURCE "armos_sprite_sheet";
+COLORSTYLE "my_armos_sprite", "armos", "", ("armos", "armos_alt");
+
+
+# Adds a style that will be assigned to each defined color group in the ColorSprite.
+# Required Mode: ColorSprite+StyleSprite
+# Param: style = The style to assign this sprite.
+# Param: sourceIndex = The source index in the SpriteSheet to palette the sprite from.
+#ADD string style, Point sourceIndex
+ADD "dirt",			(0, 0);
+ADD "floor",		(0, 1);
+
+
+END; # End the COLORSTYLE command mode.
+
+
+# Continues an existing ColorStyleSprite, allowing the ability to add more
+# color groups and styles.
+# Required Mode: Root
+# Sets Mode: ColorSprite+StyleSprite
+# Param: name = The name of the existing ColorStyleSprite to continue.
+# Param: colorGroups... = The additional list of color groups to palette
+#                         the ColorSprite with.
+#CONTINUE COLORSTYLE string name, (string colorGroups...)
+SOURCE "my_other_sprite_source";
+CONTINUE COLORSTYLE "leaf", ("red", "shaded_red");
+	ADD "a_style"			(0, 0);
+	ADD "b_style"			(1, 0);
+END;
+
+
+# Continues an existing ColorStyleSprite, allowing the ability to add more
+# styles but not color groups.
+# Required Mode: Root
+# Sets Mode: ColorSprite+StyleSprite
+# Param: name = The name of the existing ColorStyleSprite to continue.
+# Param: colorGroups... = The additional list of color groups to palette
+#                         the ColorSprite with.
+#CONTINUE COLORSTYLE string name
+SOURCE "my_other_sprite_source";
+CONTINUE COLORSTYLE "leaf";
+	ADD "d_style"			(0, 1);
+	ADD "c_style"			(1, 1);
+END;
+
+
+#==============================================================
+# SpriteSet Commands
+#==============================================================
+
+# SpriteSet commands can only be called while in the SpriteSet mode.
+# SpriteSets in general will be touched upon in a later document.
+
+# Begin a SpriteSet for demonstration.
+SPRITESET "my_sprite_set", (10, 10);
+
+
+# Starts multiple ColorStyleSprites with the specified style group, coloration group,
+# and color groups.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite
+# Param: styleGroup = The group to separate these StyleSprites from other StyleSprites.
+# Param: colorationGroup = The group to separate these ColorSprites from other ColorSprites.
+# Param: colorGroups... = The list of color groups to palette the ColorSprites' styles with.
+# Param: start = The starting index in the SpriteSet to assign the new ColorSprites to.
+# Param: span = The amount of sprites to assign to the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#MULTIPLE COLORSTYLE string styleGroup, string colorationGroup, (string colorGroups...), Point start = (0, 0), Point span = (0, 0)
+SOURCE "my_sprite_source";
+MULTIPLE COLORSTYLE "my_style_group", "", ("wall", "cliff"), (0, 0), (2, 2);
+
+
+# Adds a range of sprites as a style to the SpriteSet using the start
+# and span specified in the MULTIPLE COLORSTYLE command. These sprites will
+# be paletted for each color group in the ColorSprite.
+# This is the same command used with SINGLE COLORSTYLE.
+# Required Mode: SpriteSet+ColorSprite+StyleSprite
+# Param: style = The style to assign this sprite.
+# Param: sourceIndex = The source index in the SpriteSheet to palette the sprite from.
+#ADD string style, Point sourceIndex
+ADD "my_style_1",		(0, 0);
+ADD "my_style_2",		(1, 0);
+
+
+END; # End COLORSTYLE command mode.
+
+
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite
+# Param: colorGroups... = The additional list of color groups to palette the ColorSprites'
+#                         styles with.
+# Param: start = The starting index in the SpriteSet to add color groups and styles to.
+# Param: span = The amount of sprites to modify in the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#CONTINUE MULTIPLE COLORSTYLE (string colorGroups...), Point start = (0, 0), Point span = (0, 0)
+CONTINUE MULTIPLE COLORSTYLE ("red", "shaded_red", "shaded_blue"), (0, 0), (1, 2); END;
+
+
+# Use when there's no new color groups you want to assign to the styles.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite
+# Param: start = The starting index in the SpriteSet to add styles to.
+# Param: span = The amount of sprites to modify in the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#CONTINUE MULTIPLE COLORSTYLE Point start = (0, 0), Point span = (0, 0)
+CONTINUE MULTIPLE COLORSTYLE (0, 0), (1, 2);
+	#ADD ...
+END;
+
+
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite
+# Param: styleGroup = The group to separate this StyleSprite from other StyleSprites.
+# Param: colorationGroup = The group to separate this ColorSprite from other ColorSprites.
+# Param: colorGroups... = The list of color groups to palette the ColorSprite styles with.
+# Param: setIndex = The output index to assign the ColorSprite to in the SpriteSet.
+#SINGLE COLORSTYLE string styleGroup, string colorationGroup, (string colorGroups...), Point setIndex
+SINGLE COLORSTYLE "my_style_group_2", ("dirt", "dirt_alt"), (0, 0);
+	#ADD ...
+END;
+
+
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite
+# Param: colorGroups... = The additional list of color groups to palette the ColorSprite's
+#                         styles with.
+# Param: setIndex = The index in the SpriteSet to continue the ColorSprite from.
+#CONTINUE SINGLE COLORSTYLE (string colorGroups...), Point setIndex
+CONTINUE SINGLE COLORSTYLE ("eye_statue"), (1, 0); END;
+
+
+# Use when there's no new color groups to add to the styles.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite+StyleSprite
+# Param: setIndex = The index in the SpriteSet to continue the ColorSprite from.
+#CONTINUE SINGLE COLORSTYLE Point setIndex
+CONTINUE SINGLE COLORSTYLE (1, 0);
+	#ADD ...
+END;
+
+
+END; # End the SPRITESET command mode.
+
+
+#==============================================================
