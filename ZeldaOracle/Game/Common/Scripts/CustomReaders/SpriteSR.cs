@@ -12,7 +12,7 @@ using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public partial class ISpriteSR : ScriptReader {
+	public partial class SpriteSR : ScriptReader {
 
 		//-----------------------------------------------------------------------------
 		// Classes
@@ -77,7 +77,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public ISpriteSR() {
+		public SpriteSR() {
 			
 			this.source         = null;
 			this.sprite         = null;
@@ -226,7 +226,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("MAPPEDCOLORS",
-				"(string colorGroup, (string subtype, Color color)...)...",
+				//"(string colorGroup, (string subtype, Color color)...)...",
 				"string palette, (string colorGroups...)",
 			delegate (CommandParam parameters) {
 				paletteArgs.ColorMapping.Clear();
@@ -385,7 +385,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		
 		/// <summary>Creates a new script reader of the derived type.</summary>
 		protected override ScriptReader CreateNew() {
-			return new ISpriteSR();
+			return new SpriteSR();
 		}
 
 

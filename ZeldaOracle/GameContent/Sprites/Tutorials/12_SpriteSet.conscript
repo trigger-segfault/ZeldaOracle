@@ -1,0 +1,66 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# SpriteSets are a type of sprite source similar to SpriteSheets,
+# with the exception that SpriteSets are populated in conscripts
+# while SpriteSheets are populated from an image.
+# There are two major benefits to SpriteSets.
+# First: SpriteSets allow the storing of newly paletted but unnamed
+# sprites so that they can be accessed at a later time.
+# Second: SpriteSets are very useful for mass sprite creation,
+# paletting, and styling. SpriteSheets that have a large range of
+# sprites can be condensed into smaller SpriteSets thanks to styles
+# being combined into a single sprite.
+# SpriteSets do not care what the actual size of the stored sprite is
+# but due not that storing only similar sizes will make it easier to
+# view in the Source Browser.
+
+
+# Create a SpriteSet with the specified maximum dimensions.
+# Required Mode: Root
+# Sets Mode: SpriteSet
+# Param: name = The name of the new SpriteSet.
+# Param: size = The dimensions of the SpriteSet.
+#SPRITESET string name, Point size
+SPRITESET "my_sprite_set", (10, 10);
+	
+	# Assign 3x2 sprites from the SpriteSheet as BasicSprites.
+	SOURCE "my_sprite_sheet";
+	MULTIPLE BASIC (0, 0), (0, 0), (3, 2); END;
+
+END; # End the SPRITESET command mode.
+
+
+# Continues an existing SpriteSet.
+# Required Mode: Root
+# Sets Mode: SpriteSet
+# Param: name = The name of the existing SpriteSet to continue.
+#CONTINUE SPRITESET string name
+CONTINUE SPRITESET "my_sprite_set";
+
+
+# Inserts the sprite into the SpriteSet at the specified index.
+# Required Mode: SpriteSet
+# Param: setIndex = The index in the SpriteSet to insert the sprite at.
+# Param: sprite = The sprite to insert.
+#INSERT Point setIndex, Sprite sprite
+INSERT (0, 2), "existing_sprite";
+INSERT (1, 2), (2, 2);
+
+
+# Takes an existing sprite at the specified index and appends another
+# sprite to it by turning it into a composite sprite if it isn't already
+# one.
+# Required Mode: SpriteSet
+# Param: setIndex = The index in the SpriteSet to insert the sprite at.
+# Param: sprite = The sprite to the sprite at setIndex.
+# Param: drawOffset = The offset to append the sprite at.
+#APPEND Point insertIndex, Sprite sprite, Point drawOffset = (0, 0)
+APPEND (0, 2), "another_existing_sprite", (0, -16);
+
+
+END; # End the SPRITESET command mode.
+
+
+#==============================================================

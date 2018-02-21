@@ -10,7 +10,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpriteSR : ScriptReader {
+	public partial class SpriteSR : ScriptReader {
 
 		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
 		public void AddAnimationCommands() {
@@ -351,19 +351,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("FLICKER", (int) Modes.Animation,
-				"int alternateDelay, string startOnOrOff",
+				"int alternateDelay",
 			delegate (CommandParam parameters) {
-				// FLICKER <alternateDelay> <on/off>
-
-				bool startOn = true;
-				if (parameters.GetString(1) == "on")
-					startOn = true;
-				else if (parameters.GetString(1) == "off")
-					startOn = false;
-				else
-					ThrowParseError("Must be either on or off for flicker start state");
-
-				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
+				// FLICKER <alternateDelay>
+				animationBuilder.MakeFlicker(parameters.GetInt(0));
 			});
 			//=====================================================================================
 			AddCommand("REPEAT", (int) Modes.Animation,
