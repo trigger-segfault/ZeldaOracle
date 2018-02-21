@@ -244,7 +244,7 @@ ANIMATION "temp_fountain_jet_right_continuous";
 	
 ANIMATION "temp_fountain_jet_left_flicker";
 	CLONE "temp_fountain_jet_left_continuous";
-	FLICKER 1, on; END;
+	FLICKER 1; END;
 	
 ANIMATION "temp_fountain_jet_right_flicker";
 	CLONE "temp_fountain_jet_left_flicker";

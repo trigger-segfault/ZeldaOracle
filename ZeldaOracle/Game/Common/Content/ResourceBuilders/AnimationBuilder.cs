@@ -262,7 +262,7 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return this;
 		}
 		
-		public AnimationBuilder MakeFlicker(int alternateDelayTicks, bool startOn = true) {
+		public AnimationBuilder MakeFlicker(int alternateDelayTicks) {
 
 			Animation newAnimation = new Animation();
 

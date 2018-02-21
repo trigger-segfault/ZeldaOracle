@@ -10,100 +10,96 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpriteSR : ScriptReader {
+	public partial class SpriteSR : ScriptReader {
 
-		/// <summary>Adds ColorSprite+(StyleSprite/ColorGroup) commands to the script reader.</summary>
-		public void AddColorMultiStyleCommands() {
+		/// <summary>Adds ColorSprite+StyleSprite commands to the script reader.</summary>
+		public void AddColorStyleCommands() {
 
 			//=====================================================================================
 			// SETUP
 			//=====================================================================================
-			AddCommand("COLORMULTISTYLE", (int) Modes.Root,
-				"string name, ((string styleGroup, string colorGroup)...)",
+			AddCommand("COLORSTYLE", (int) Modes.Root,
+				"string name, string styleGroup, string colorationGroup, (string colorGroups...)",
 			delegate (CommandParam parameters) {
-				editingColorStyleGroups.Clear();
+				string colorationGroup = parameters.GetString(2);
+				editingStyleGroup = parameters.GetString(1);
+				editingColorGroups.Clear();
 
-				CommandParam colorStyleParams = parameters.GetParam(1);
-				for (int i = 0; i < colorStyleParams.ChildCount; i++) {
-					CommandParam colorStyle = colorStyleParams.GetParam(i);
-					string styleGroup = colorStyle.GetString(0);
-					string colorGroup = colorStyle.GetString(1);
-					editingColorStyleGroups.Add(new ColorStyleGroup(styleGroup, colorGroup));
-					Resources.RegisterStyleGroup(styleGroup, null);
+				CommandParam colorParams = parameters.GetParam(3);
+				for (int i = 0; i < colorParams.ChildCount; i++) {
+					editingColorGroups.Add(colorParams.GetString(i));
 				}
 
 				spriteName = parameters.GetString(0);
-				sprite = new ColorSprite("");
+				sprite = new ColorSprite(colorationGroup);
 				AddResource<ISprite>(spriteName, sprite);
+				Resources.RegisterStyleGroup(editingStyleGroup, null);
 
-				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
+				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
 			//=====================================================================================
-			AddCommand("CONTINUE COLORMULTISTYLE", (int) Modes.Root,
-				"string name, ((string styleGroup, string colorGroup)...)",
+			AddCommand("CONTINUE COLORSTYLE", (int) Modes.Root,
+				"string name, (string colorGroups...)",
 				"string name",
 			delegate (CommandParam parameters) {
 				spriteName = parameters.GetString(0);
 				ContinueSprite<ColorSprite>(spriteName);
-				
-				editingColorStyleGroups.Clear();
+
+				editingStyleGroup = ColorSprite.DefaultStyleSprite.Group;
+				editingColorGroups.Clear();
 
 				foreach (DefinedSprite definition in ColorSprite.GetDefinitions()) {
-					editingColorStyleGroups.Add(new ColorStyleGroup(
-						((StyleSprite) definition.Sprite).Group, definition.Definition));
+					editingColorGroups.Add(definition.Definition);
 				}
 
-				// Add the new color mappings and style groups to all existing styles
+				// Add the new color mappings to all existing styles
 				if (parameters.ChildCount == 2) {
 					Color[][] defaultMappings = null;
-					CommandParam colorStyleParams = parameters.GetParam(1);
-					for (int i = 0; i < colorStyleParams.ChildCount; i++) {
-						CommandParam colorStyle = colorStyleParams.GetParam(i);
-						editingColorStyleGroups.Add(new ColorStyleGroup(
-							colorStyle.GetString(0), colorStyle.GetString(1)));
-						Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
+					CommandParam colorParams = parameters.GetParam(2);
+					for (int i = 0; i < colorParams.ChildCount; i++) {
+						editingColorGroups.Add(colorParams.GetString(i));
 					}
 					foreach (DefinedSprite definition in ColorSprite.DefaultStyleSprite.GetDefinitions()) {
-						defaultMappings = ColorizeColorMultiStyleSprite(
+						defaultMappings = ColorizeColorStyleSprite(
 							definition.Definition, ColorSprite, Point2I.Zero, defaultMappings);
 					}
 				}
-
-				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
+				
+				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
 			//=====================================================================================
 			// SETUP SpriteSet
 			//=====================================================================================
-			AddCommand("MULTIPLE COLORMULTISTYLE", (int) Modes.SpriteSet,
-				"((string styleGroup, string colorGroup)...), Point start = (0, 0), Point span = (0, 0)",
+			AddCommand("MULTIPLE COLORSTYLE", (int) Modes.SpriteSet,
+				"string styleGroup, string colorationGroup, (string colorGroups...), Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
-				editingColorStyleGroups.Clear();
+				string colorationGroup = parameters.GetString(1);
+				editingStyleGroup = parameters.GetString(0);
+				editingColorGroups.Clear();
 
-				CommandParam colorStyleParams = parameters.GetParam(0);
-				for (int i = 0; i < colorStyleParams.ChildCount; i++) {
-					CommandParam colorStyle = colorStyleParams.GetParam(i);
-					editingColorStyleGroups.Add(new ColorStyleGroup(
-						colorStyle.GetString(0), colorStyle.GetString(1)));
-					Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
+				CommandParam colorParams = parameters.GetParam(2);
+				for (int i = 0; i < colorParams.ChildCount; i++) {
+					editingColorGroups.Add(colorParams.GetString(i));
 				}
 
-				editingSetStart = parameters.GetPoint(1);
-				editingSetDimensions = parameters.GetPoint(2);
+				editingSetStart = parameters.GetPoint(3);
+				editingSetDimensions = parameters.GetPoint(4);
 				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
 				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
 
 				for (int x = 0; x < editingSetDimensions.X; x++) {
 					for (int y = 0; y < editingSetDimensions.Y; y++) {
-						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), new ColorSprite(""));
+						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), new ColorSprite(colorationGroup));
 					}
 				}
+				Resources.RegisterStyleGroup(editingStyleGroup, null);
 				
-				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
+				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
 			//=====================================================================================
-			AddCommand("CONTINUE MULTIPLE COLORMULTISTYLE", (int) Modes.SpriteSet,
-				"((string styleGroup, string colorGroup)...), Point start = (0, 0), Point span = (0, 0)",
-				"Point start = (0, 0), Point dimensions = (0, 0)",
+			AddCommand("CONTINUE MULTIPLE COLORSTYLE", (int) Modes.SpriteSet,
+				"(string colorGroups...), Point start = (0, 0), Point span = (0, 0)",
+				"Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				editingSetStart = parameters.GetPoint(parameters.ChildCount - 2);
 				editingSetDimensions = parameters.GetPoint(parameters.ChildCount - 1);
@@ -111,22 +107,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
 
 				ColorSprite firstColorSprite = GetSprite<ColorSprite>(editingSpriteSet, editingSetStart);
-				editingColorStyleGroups.Clear();
+				editingStyleGroup = firstColorSprite.DefaultStyleSprite.Group;
 
 				foreach (DefinedSprite definition in firstColorSprite.GetDefinitions()) {
-					editingColorStyleGroups.Add(new ColorStyleGroup(
-						((StyleSprite) definition.Sprite).Group, definition.Definition));
+					editingColorGroups.Add(definition.Definition);
 				}
-
-				// Add the new color mappings and style groups to all existing styles
+				
+				// Add the new color mappings to all existing styles
 				if (parameters.ChildCount == 3) {
 					Color[][] defaultMappings = null;
-					CommandParam colorStyleParams = parameters.GetParam(0);
-					for (int i = 0; i < colorStyleParams.ChildCount; i++) {
-						CommandParam colorStyle = colorStyleParams.GetParam(i);
-						editingColorStyleGroups.Add(new ColorStyleGroup(
-							colorStyle.GetString(0), colorStyle.GetString(1)));
-						Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
+					CommandParam colorParams = parameters.GetParam(0);
+					for (int i = 0; i < colorParams.ChildCount; i++) {
+						editingColorGroups.Add(colorParams.GetString(i));
 					}
 					for (int x = 0; x < editingSetDimensions.X; x++) {
 						for (int y = 0; y < editingSetDimensions.Y; y++) {
@@ -135,13 +127,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 								ColorSprite colorSprite = GetSprite<ColorSprite>(
 									editingSpriteSet, editingSetStart + point);
 
-								defaultMappings = ColorizeColorMultiStyleSprite(
+								defaultMappings = ColorizeColorStyleSprite(
 									definition.Definition, colorSprite, Point2I.Zero, defaultMappings);
 							}
 						}
 					}
 				}
-
+				
 				// Confirm all sprites are colorSprites
 				for (int x = 0; x < editingSetDimensions.X; x++) {
 					for (int y = 0; y < editingSetDimensions.Y; y++) {
@@ -149,80 +141,76 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					}
 				}
 				
-				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
+				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
 			//=====================================================================================
-			AddCommand("SINGLE COLORMULTISTYLE", (int) Modes.SpriteSet,
-				"((string styleGroup, string colorGroup)...), Point setIndex",
+			AddCommand("SINGLE COLORSTYLE", (int) Modes.SpriteSet,
+				"string styleGroup, string colorationGroup, (string colorGroups...), Point setIndex",
 			delegate (CommandParam parameters) {
+				string colorationGroup = parameters.GetString(1);
+				editingStyleGroup = parameters.GetString(0);
 				editingSetStart = parameters.GetPoint(3);
 				editingSetDimensions = Point2I.One;
 
-				sprite = new ColorSprite("");
+				sprite = new ColorSprite(colorationGroup);
 				editingSpriteSet.SetSprite(editingSetStart, ColorSprite);
-
-				editingColorStyleGroups.Clear();
-
-				CommandParam colorStyleParams = parameters.GetParam(0);
-				for (int i = 0; i < colorStyleParams.ChildCount; i++) {
-					CommandParam colorStyle = colorStyleParams.GetParam(i);
-					editingColorStyleGroups.Add(new ColorStyleGroup(
-						colorStyle.GetString(0), colorStyle.GetString(1)));
-					Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
+				
+				editingColorGroups.Clear();
+				CommandParam colorParams = parameters.GetParam(2);
+				for (int i = 0; i < colorParams.ChildCount; i++) {
+					editingColorGroups.Add(colorParams.GetString(i));
 				}
+				Resources.RegisterStyleGroup(editingStyleGroup, null);
 
-				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
+				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
 			//=====================================================================================
-			AddCommand("CONTINUE SINGLE COLORMULTISTYLE", (int) Modes.SpriteSet,
-				"((string styleGroup, string colorGroup)...), Point setIndex",
+			AddCommand("CONTINUE SINGLE COLORSTYLE", (int) Modes.SpriteSet,
+				"(string colorGroups...), Point setIndex",
 				"Point setIndex",
 			delegate (CommandParam parameters) {
 				sprite = GetSprite<ColorSprite>(editingSpriteSet, editingSetStart);
-				
+
+				editingStyleGroup = ColorSprite.DefaultStyleSprite.Group;
 				editingSetStart = parameters.GetPoint(parameters.ChildCount - 1);
 				editingSetDimensions = Point2I.One;
-				
-				editingColorStyleGroups.Clear();
 
+
+				editingColorGroups.Clear();
 				foreach (DefinedSprite definition in ColorSprite.GetDefinitions()) {
-					editingColorStyleGroups.Add(new ColorStyleGroup(
-						((StyleSprite) definition.Sprite).Group, definition.Definition));
+					editingColorGroups.Add(definition.Definition);
 				}
 
-				// Add the new color mappings and style groups to all existing styles
+				// Add the new color mappings to all existing styles
 				if (parameters.ChildCount == 2) {
 					Color[][] defaultMappings = null;
-					CommandParam colorStyleParams = parameters.GetParam(0);
-					for (int i = 0; i < colorStyleParams.ChildCount; i++) {
-						CommandParam colorStyle = colorStyleParams.GetParam(i);
-						editingColorStyleGroups.Add(new ColorStyleGroup(
-							colorStyle.GetString(0), colorStyle.GetString(1)));
-						Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
+					CommandParam colorParams = parameters.GetParam(2);
+					for (int i = 0; i < colorParams.ChildCount; i++) {
+						editingColorGroups.Add(colorParams.GetString(i));
 					}
 					foreach (DefinedSprite definition in ColorSprite.DefaultStyleSprite.GetDefinitions()) {
-						defaultMappings = ColorizeColorMultiStyleSprite(
+						defaultMappings = ColorizeColorStyleSprite(
 							definition.Definition, ColorSprite, Point2I.Zero, defaultMappings);
 					}
 				}
 				
-				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
+				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
 			//=====================================================================================
 			// BUILDING
 			//=====================================================================================
-			AddCommand("ADD", (int) (Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle),
+			AddCommand("ADD", (int) (Modes.ColorSprite | Modes.StyleSprite),
 				"string style, Point sourceIndex",
 			delegate (CommandParam parameters) {
 				string style = parameters.GetString(0);
 				Point2I sourceIndex = parameters.GetPoint(1);
 
-				ColorizeColorMultiStyleSprite(style, ColorSprite, sourceIndex);
+				ColorizeColorStyleSprite(style, ColorSprite, sourceIndex);
 			});
 			//=====================================================================================
 			// BUILDING SpriteSet
 			//=====================================================================================
-			AddCommand("ADD", (int) (Modes.SpriteSet | Modes.ColorSprite |  Modes.StyleSprite | Modes.MultiStyle),
+			AddCommand("ADD", (int) (Modes.SpriteSet | Modes.ColorSprite |  Modes.StyleSprite),
 				"string style, Point sourceIndex",
 			delegate (CommandParam parameters) {
 				string style = parameters.GetString(0);
@@ -234,7 +222,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						Point2I point = new Point2I(x, y);
 						ColorSprite colorSprite = GetSprite<ColorSprite>(
 							editingSpriteSet, editingSetStart + point);
-						defaultMappings = ColorizeColorMultiStyleSprite(
+						defaultMappings = ColorizeColorStyleSprite(
 							style, colorSprite, sourceIndex + point, defaultMappings);
 					}
 				}
@@ -248,11 +236,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Colorizes a color sprite with the specified color parameters.</summary>
-		private Color[][] ColorizeColorMultiStyleSprite(string style, ColorSprite sprite, Point2I sourceIndex, Color[][] defaultMappings = null) {
+		private Color[][] ColorizeColorStyleSprite(string style, ColorSprite sprite, Point2I sourceIndex, Color[][] defaultMappings = null) {
 			if (paletteArgs.Dictionary == null)
 				ThrowCommandParseError("Cannot create color sprite with no palette dictionary specified!");
 			if (SourceMode != SourceModes.SpriteSheet && (sprite.DefaultSprite == null  ||
-				sprite.DefaultStyleSprite.DefaultSprite == null)) {
+				sprite.DefaultStyleSprite.DefaultSprite == null))
+			{
 				ThrowCommandParseError("Cannot create color sprite with a source that is not a sprite sheet!");
 			}
 
@@ -261,9 +250,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				paletteArgs.SourceRect = SpriteSheet.GetSourceRect(sourceIndex);
 			}
 			if (defaultMappings == null) {
-				defaultMappings = new Color[editingColorStyleGroups.Count][];
-				for (int i = 0; i < editingColorStyleGroups.Count; i++) {
-					string colorGroup = editingColorStyleGroups[i].ColorGroup;
+				defaultMappings = new Color[editingColorGroups.Count][];
+				for (int i = 0; i < editingColorGroups.Count; i++) {
+					string colorGroup = editingColorGroups[i];
 					defaultMappings[i] = new Color[PaletteDictionary.ColorGroupSize];
 					for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
 						defaultMappings[i][j] = paletteArgs.Dictionary.GetMappedColor(
@@ -273,14 +262,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			}
 
 
-			for (int i = 0; i < editingColorStyleGroups.Count; i++) {
-				string colorGroup = editingColorStyleGroups[i].ColorGroup;
-				string styleGroup = editingColorStyleGroups[i].StyleGroup;
+			for (int i = 0; i < editingColorGroups.Count; i++) {
+				string colorGroup = editingColorGroups[i];
 				StyleSprite styleSprite;
 				if (!sprite.Contains(colorGroup)) {
-					styleSprite = new StyleSprite(styleGroup);
+					styleSprite = new StyleSprite(editingStyleGroup);
 					sprite.Add(colorGroup, styleSprite);
-					Resources.RegisterStylePreview(styleGroup, styleSprite);
+					Resources.RegisterStylePreview(editingStyleGroup, styleSprite);
 				}
 				else {
 					styleSprite = (StyleSprite) sprite.Get(colorGroup);
@@ -296,7 +284,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							(BasicSprite) sprite.DefaultStyleSprite.Get(style), paletteArgs);
 					}
 
-					Resources.RegisterStyle(styleGroup, style);
+					Resources.RegisterStyle(editingStyleGroup, style);
 					styleSprite.Add(style, coloredStyledSprite);
 				}
 			}

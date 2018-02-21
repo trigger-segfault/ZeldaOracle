@@ -575,7 +575,7 @@ namespace ZeldaOracle.Common.Content {
 
 		/// <summary>Loads/compiles sprite sheets from a script file.</summary>
 		public static void LoadSpriteSheets(string assetName) {
-			LoadScript(assetName, new ISpriteSR());
+			LoadScript(assetName, new SpriteSR());
 		}
 
 		/// <summary>Loads/compiles images from a script file.</summary>
@@ -591,7 +591,7 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Loads/compiles animations from a script file.</summary>
 		public static void LoadAnimations(string assetName) {
 			// TODO: Phase out separation of animations and sprites
-			LoadScript(assetName, new ISpriteSR());
+			LoadScript(assetName, new SpriteSR());
 		}
 
 		/// <summary>Loads/compiles collision models from a script file.</summary>

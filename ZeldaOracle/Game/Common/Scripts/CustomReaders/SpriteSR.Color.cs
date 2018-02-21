@@ -10,7 +10,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpriteSR : ScriptReader {
+	public partial class SpriteSR : ScriptReader {
 
 		/// <summary>Adds ColorSprite commands to the script reader.</summary>
 		public void AddColorCommands() {
