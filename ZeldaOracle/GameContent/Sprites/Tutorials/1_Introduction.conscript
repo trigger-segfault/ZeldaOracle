@@ -1,0 +1,178 @@
+﻿#==============================================================
+# ScriptReader Command Modes
+#==============================================================
+
+# The current mode affects which commands are available for use
+# at any given time. Sprite commands and SpriteSet commands start
+# a mode while END jumps back one mode.
+
+# LIST OF MODES:
+# * Root (The default mode)
+# * SpriteSet (Can be combined with most sprite types)
+# * EmptySprite
+# * BasicSprite
+# * OffsetSprite
+# * CompositeSprite
+# * Animation
+# * StyleSprite (Can be combined with ColorSprite & MultiStyle)
+# * ColorSprite (Can be combined with StyleSprite & MultiStyle)
+# * StyleColorSprite (solely for STYLECOLOR, a command to make a
+#                     StyleSprite behave like a ColorSprite)
+# * MultiStyle (solely for COLORMULTISTYLE, a command to make each
+#               style in a StyleSprite follow a different color group)
+
+
+#==============================================================
+# Sprite Parameter
+#==============================================================
+
+# The sprite parameter is used in a lot of locations to simplify
+# commands by not having to supply numerous overloads just to
+# present a sprite.
+
+# Let the lesson show an example of commands that specify a Sprite
+# as a parameter.
+COMPOSITE "my_composite_sprite";
+
+
+# Specifies a sprite from an existing sprite name in the database.
+#string spriteName
+ADD "my_basic_sprite";
+
+# Specifies a sprite at an index in the current SpriteSheet or SpriteSet.
+#Point sourceIndex
+SOURCE "my_sprite_source";
+ADD (0, 0);
+
+# Specifies the substrip of an animation with the given name.
+#(string animationName, int substrip)
+ADD ("my_animation", 1);
+
+# Specifies the definition of a DefinitionSprite with the given name
+# and definition name.
+#(string definitionSpriteName, string definition)
+ADD ("my_color_sprite", "shaded_red");
+
+# Specifies the definition of a DefinitionSprite at the index in
+# the current SpriteSheet or SpriteSet and the given definition name.
+#(Point definitionSourceIndex, string definition)
+ADD ("my_color_sprite", "shaded_red");
+
+# Specifies a sprite at an index in the SpriteSheet or SpriteSet with
+# the given name. This is useful if you need a different source for
+# only a single sprite.
+#(string sourceName, Point sourceIndex)
+ADD ("my_sprite_source_2", (5, 2));
+
+# Specifies the definition of a DefinitionSprite at the index in
+# SpriteSheet or SpriteSet with the given name. This is useful if
+# you need a different source for only a single sprite.
+#(string sourceName, Point sourceIndex, string definition)
+ADD ("my_color_effects", (1, 3), "orange");
+
+
+END; # End the COMPOSITE command mode.
+
+
+#==============================================================
+# General Commands
+#==============================================================
+
+# Set the current sprite source to either a SpriteSheet or SpriteSet
+# with the given name in the database.
+# Note that SPRITESHEET and SPRITESET commands DO NOT set the source.
+# Required Mode: ANY
+#SOURCE string name;
+SOURCE "my_sprite_sheet";
+
+
+# Unset the current sprite source. This may be useful if you want
+# to make sure an error occurs if you forget to change the sprite
+# source later or if you don't want the current sprite source to
+# be referenced again.
+# Required Mode: ANY
+#SOURCE const none
+#SOURCE const null
+SOURCE		none;
+
+
+# Add a sprite sheet to the database with the image path as its name.
+# Required Mode: ANY
+#SPRITESHEET string path, Point cellSize, Point spacing, Point offset
+SPRITESHEET "Tutorials/direct_sprite_sheet", (16, 16), (1, 1), (18, 18);
+
+
+# Add a sprite sheet to the database with a name unrelated to the image path.
+# Required Mode: ANY
+#SPRITESHEET string name, string path, Point cellSize, Point spacing, Point offset
+SPRITESHEET "my_named_spritesheet", "Tutorials/named_sprite_sheet", (16, 16), (1, 1), (18, 18);
+
+
+# Assign a name to the specified sprite so that it can be looked up later.
+# The most common use is to assign names to sprite source indexes.
+# If an existing name is supplied for the sprite. Then both names will
+# Link to the exact same sprite in the database without cloning it.
+#NAME string name, Sprite sprite
+SOURCE "my_sprite_source";
+NAME "named_source_sprite"				(4, 5);
+
+NAME "different_name_same_sprite"		"named_source_sprite";
+
+
+# End the current mode. Throws an exception if the current mode is Root.
+#END
+ANIMATION "my_animation";
+	SUBSTRIP repeat; ADD frame, "named_source_sprite";
+END;
+
+
+#==============================================================
+# Temporary Sprites
+#==============================================================
+
+# All ScriptReaders allow the use of "temp_" as a prefix to add
+# the resource to a temporary database instead of ending up in
+# the real database. This is useful if you don't want to clutter
+# the Sprite List with half-implemented sprites.
+# Referencing a temporary sprite still requires the "temp_" prefix.
+NAME "temp_my_temp_sprite"			(0, 0);
+
+COMPOSITE "another_composite_sprite";
+	ADD "temp_my_temp_sprite", (8, 8);
+END;
+
+# In ScriptReader's LOAD command, the boolean after the script name
+# specifies if temporary resources should reference the temporary
+# database used by the current conscript.
+
+# Dose not allow access to previously defined "temp_" sprites.
+LOAD "Tutorials/EmptySprite.conscript", true;
+
+# Allows access to previously defined "temp_" sprites.
+LOAD "Tutorials/BasicSprite.conscript", true;
+
+
+#==============================================================
+# Next Tutorials
+#==============================================================
+
+# Sprite Tutorials:
+LOAD "2_BasicSprite.conscript", true;
+LOAD "3_EmptySprite.conscript", true;
+LOAD "4_OffsetSprite.conscript", true;
+LOAD "5_ColorSprite.conscript", true;
+LOAD "6_StyleSprite.conscript", true;
+LOAD "7_StyleColorSprite.conscript", true;
+LOAD "8_ColorStyleSprite.conscript", true;
+LOAD "9_MultiColorStyleSprite.conscript", true;
+LOAD "10_CompositeSprite.conscript", true;
+LOAD "11_Animation.conscript", true;
+
+# SpriteSet Tutorial:
+LOAD "12_SpriteSet.conscript", true;
+
+# Palette Tutorial:
+LOAD "13_Paletting.conscript", true;
+
+
+#==============================================================

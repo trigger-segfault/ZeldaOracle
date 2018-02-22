@@ -10,7 +10,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpriteSR : ScriptReader {
+	public partial class SpriteSR : ScriptReader {
 
 		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
 		public void AddCompositeCommands() {
@@ -171,24 +171,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						if (clipping != null)
 							CompositeSprite.GetSprite(CompositeSprite.SpriteCount - 1).Clip(clipping.Value);
 					}
-				}
-			});
-			//=====================================================================================
-			AddCommand("SIZE", (int) Modes.CompositeSprite,
-				"Point size",
-			delegate (CommandParam parameters) {
-				if (CompositeSprite.SpriteCount > 0) {
-					OffsetSprite sprite = CompositeSprite.LastSprite();
-					if (sprite.Sprite is BasicSprite) {
-						BasicSprite basic = (BasicSprite) sprite.Sprite;
-						basic.SourceRect = new Rectangle2I(basic.SourceRect.Point, parameters.GetPoint(0));
-					}
-					else {
-						ThrowCommandParseError("Cannot call SIZE when the last sprite is not a basic sprite!");
-					}
-				}
-				else {
-					ThrowCommandParseError("Cannot call SIZE when no sprites have been added!");
 				}
 			});
 			//=====================================================================================

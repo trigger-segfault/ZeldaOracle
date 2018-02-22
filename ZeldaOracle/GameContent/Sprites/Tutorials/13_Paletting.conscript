@@ -1,0 +1,185 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# Paletting is the process of taking already-colored sprites and
+# Converting their pixels into mapped colors that can be looked
+# up by the palette shader. When a PaletteDictionary is set,
+# paletting will automatically be enabled for all sprites grabbed
+# from SpriteSheets (Because they are an original image source.)
+# When you want to disable paletting, set PaletteDictionary to none/null.
+
+# The process of paletting involves taking an existing image and
+# trying to match colors in a rectangle to a specified palette's
+# mapped color group.
+
+# Note: Paletting by default will never palette actual transparent colors,
+#       but they still must be specified in a color group if they are to
+#       be allowed. Alternatively, paletting also automatically treats
+#       transparent colors as ignore colors if it is the ONLY occuring color.
+#       This is helpful when paletting a large SpriteSheet with empty cells.
+
+# Note: It's recommended that palettes chosen for mapping are designed
+#       speecifically for mapping and have no use in the real game.
+#       That way, their color values won't need to ever be changed along
+#       with the existing images requiring paletting.
+
+# Tip:  ColorSprite is a great way to palette a sprite to a color group
+#       that it does not match. For example, a brown armos sprite can't
+#       be normally mapped to "dirt_alt" (gray) because their colors
+#       wouldn't match. With ColorSprites, you can override the color group
+#       the spite is mapped to after it's palette has been determined.
+
+
+# Sets the current PaletteDictionary to reference color groups from.
+# Setting this value will enable paletting.
+# Required Mode: ANY
+# Param: name = The name of the palette dictionary to load.
+#PALETTEDICTIONARY string name
+PALETTEDICTIONARY "entities_dictionary";
+
+
+# Unsets the current PaletteDictionary and disables paletting.
+# Required Mode: ANY
+#PALETTEDICTIONARY const none
+#PALETTEDICTIONARY const null
+PALETTEDICTIONARY none;
+
+# Sets the palette and color groups to look for when converting an
+# image to a mapped palette image. This step is also required.
+# Required Mode: ANY
+# Param: palette = The palette to match color groups from.
+# Param: colorGroups... = The color groups defined in the palette
+#                         to match colors from. Order is important
+#                         as whichever group contains the encountered
+#                         colors first will be chosen.
+#MAPPEDCOLORS string palette, (string colorGroups...)
+MAPPEDCOLORS	"entities_default", ("red", "green", "blue");
+
+
+# Sets the colors that will be completely ignored and overlooked in the
+# mapping operation. These colors will keep their original color and stay
+# unmapped.
+# Required Mode: ANY
+# Param: colors... = The list of colors that will be excluded from the
+#                    mapping of colors and be kept as its original color.
+#                    This is often used for paletting "unspecified tiles"
+#                    like ones with X's on them for missing style counterparts.
+#IGNORECOLORS (Color colors...)
+IGNORECOLORS	((1, 1, 1), (255, 0, 0));
+
+
+# Removes any existing ignore colors and sets the list to empty.
+# Required Mode: ANY
+#IGNORECOLORS const none
+#IGNORECOLORS const null
+IGNORECOLORS none;
+
+
+# Sets the chunk size to use for when converting rectangles of the current
+# sprite to a mapped sprite. Each chunk is allowed to have it's own color group
+# allowing for 8x8 color groups.
+# Required Mode: ANY
+# Param: chunkSize = The size of chunks to palette at a time. Each chunk can
+#                    have a different color group allowing for tiles using
+#                    8x8 color groups.
+#CHUNKSIZE Point chunkSize
+CHUNKSIZE	(8, 8);
+
+
+# Unsets the chunk size back to paletting the entire sprite at once.
+# It's best to call this when chunksize is unneeded in order to speed
+# up the paletting process.
+# Required Mode: ANY
+#CHUNKSIZE const none
+#CHUNKSIZE const null
+CHUNKSIZE	none;
+
+
+#==============================================================
+# Paletting Examples
+#==============================================================
+
+# Paletting is almost always combined with SpriteSets to speed up
+# the process by using MULTIPLE commands.
+
+
+# Here is an example from UI/ui_sprites.conscript
+# This shows the ability for a SpriteSet to share mapped sprites
+# from different PaletteDictionaries.
+SOURCE "temp_sheet_ui_small";
+SPRITESET "ui_small", (12, 6);
+	PALETTEDICTIONARY "entity_dictionary";
+	MAPPEDCOLORS	"entities_default",
+		("default", "green", "blue", "red", "orange", "shaded_red", "shaded_blue", "ui_red");
+		
+	MULTIPLE BASIC (0, 0), (0, 0), (12, 2); END;
+	MULTIPLE BASIC (0, 2), (0, 2), (7, 2); END;
+	
+	MULTIPLE BASIC (0, 4), (0, 4), (4, 2); END;
+	
+	PALETTEDICTIONARY "menu_dictionary";
+	MAPPEDCOLORS	"menu_default", ("background" "background_fancy_black");
+	
+	SINGLE BASIC (7, 3); END;
+	MULTIPLE BASIC (8, 2), (8, 2), (4, 2); END;
+	
+END;
+
+
+# An example of how the gale seed animation is done in Effects/color_effects.conscript
+# Each sprite it references is a pre-existing ColorSprite in the SpriteSet.
+SOURCE "effects_color_effects";
+ANIMATION "effect_seed_gale"; SUBSTRIP repeat;
+	ADD frame, 1, ((4, 1), "blue");   ADD frame, 1, ((4, 1), "red");    ADD frame, 1, ((4, 1), "orange");
+	ADD frame, 1, ((5, 1), "green");  ADD frame, 1, ((5, 1), "blue");   ADD frame, 1, ((5, 1), "red");
+	ADD frame, 1, ((4, 1), "orange"); ADD frame, 1, ((4, 1), "green");  ADD frame, 1, ((4, 1), "blue");
+	ADD frame, 1, ((5, 1), "red");    ADD frame, 1, ((5, 1), "orange"); ADD frame, 1, ((5, 1), "green");
+	OFFSET (-8, -8); END;
+
+
+# An example of paletting the large biggoron sprite which uses
+# quite a few different color groups in a single sprite.
+PALETTEDICTIONARY	"tile_dictionary";
+MAPPEDCOLORS	"tiles_default", ("biggoron", "biggoron_hands", "biggoron_top", "biggoron_chin");
+CHUNKSIZE		(8, 8);
+
+BASIC "biggoron_body", "Units/NPCs/biggoron"; END;
+
+
+# An example of changing the mapped colors multiple times when
+# paletting because the color groups share the same colors.
+PALETTEDICTIONARY	"tile_dictionary";
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+SPRITESET "tiles_stairs" (4, 3);
+	SOURCE "temp_sheet_stairs";
+	MAPPEDCOLORS	"tiles_default", ("stairs");
+	MULTIPLE STYLE "stairs", (0, 0), (4, 1);
+		ADD "overworld"		(0, 0);
+		ADD	"border"		(0, 1);
+		ADD	"interior"		(0, 2);
+		ADD "dungeon"		(0, 3);
+		END;
+	
+	MAPPEDCOLORS	"tiles_default", ("floor_staircase");
+	MULTIPLE STYLE "staircase" (0, 1), (2, 1);
+		ADD "indoors"		(4, 0);
+		ADD	"natural"		(4, 1);
+		ADD "natural_dark"	(4, 2);
+		ADD "maku_tree"		(4, 3);
+		END;
+		
+	MAPPEDCOLORS	"tiles_default", ("wall_staircase");
+	MULTIPLE STYLE "staircase" (2, 1), (2, 1);
+		ADD "indoors"		(6, 0);
+		ADD	"natural"		(6, 1);
+		ADD	"natural_dark"	(6, 2);
+		ADD "maku_tree"		(6, 3);
+		END;
+		
+	MAPPEDCOLORS	"tiles_default", ("floor_stairwell");
+	SINGLE BASIC (8, 0), (0, 2); END;
+END;
+
+
+#==============================================================

@@ -1,0 +1,173 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# A StyleSprite is a type of DefinitionSprite composed of sprites
+# with slightly different designs or even colors.
+# StyleSprites are pretty much exclusively used for tiles and for
+# defining how a zone looks, but, for example, it can apply to
+# other things like the leaf color (green for normal or orange for autumn).
+# Like CompositeSprites and Animations, StyleSprites are only properly
+# defined after the initial STYLE command. Styles must be added using the
+# ADD command with a style name and an associated sprite.
+# An END is required after finishing a StyleSprite.
+
+# Term: "DefinitionSprite" is a type of sprite that has a group name, and a
+#       list of definitions each with their own sprite. The group name is
+#       used to separate the DefinitionSprite from other sprites so that
+#       only its definition can be set. DefinitionSprites' definitions can
+#       be accessed like so: ((0, 0), "shaded_red"), ("my_def_sprite", "shaded_red").
+
+# Note: DefinitionSprites are the sprites that are most useful to use
+#       CONTINUE commands with. As later in the loading you may want
+#       to add definintions from other sources.
+
+# Term: "Style Group" stands for a group that the StyleSprite follows.
+#       Style Group is what makes a collection of styles different from
+#       another StyleSprite. Style Groups are used to define what different
+#       tiles can be changed in a zone. Registered Style Groups and Styles
+#       are viewable in the Style Browser.
+
+# Term: "Style" stands for a definition in a StyleSprite's where each
+#       variant has it's own style (definition).
+
+
+# Creates a StyleSprite.
+# Required Mode: Root
+# Sets Mode: StyleSprite
+# Param: name = The name of the new sprite.
+# Param: styleGroup = The group to separate this StyleSprite from other StyleSprites.
+#STYLE string name, string styleGroup
+SOURCE "my_sprite_source";
+STYLE "my_style_sprite", "floor";
+
+
+# Adds a style to a StyleSprite.
+# A StyleSprite is pointless unless it defines multiple styles.
+# Required Mode: StyleSprite
+# Param: style = The definition for this sprites style.
+# Param: sprite = The sprite assigned to this style definition.
+#ADD string style, Sprite sprite
+ADD "square_tiles",			(0, 0);
+ADD "diagonal_bricks",		(1, 0);
+ADD "cracked_tiles",		"predefined_sprite";
+
+
+# Replaces an existing style in the StyleSprite with a new sprite.
+# Required Mode: StyleSprite
+# Param: style = The definition for the style to replace.
+# Param: sprite = The new sprite assigned to this style definition.
+#REPLACE string style, Sprite sprite
+REPLACE "cracked_tiles"		(2, 0);
+
+
+END; # End the STYLE command mode.
+
+
+# Continues an existing StyleSprite, allowing the ability to add more styles.
+# Required Mode: Root
+# Sets Mode: StyleSprite
+# Param: name = The name of the existing StyleSprite to continue.
+#CONTINUE STYLE string name
+SOURCE "my_other_sprite_source";
+CONTINUE STYLE "my_style_sprite";
+	ADD "other_floor",		(0, 0);
+END;
+
+
+# Sets the sprite to preview in the style browser for all styles
+# in the style group. Sprites for individual styles in a style group
+# cannot be defined, instead the supplied sprite must be composed
+# of at least one StyleSprite belonging to this style group.
+# Initially, style previews are registered to the first StyleSprite
+# created with the style group.
+# Required Mode: ANY
+# Param: styleGroup = The styleGroup to set the preview sprite for.
+# Param: sprite = The sprite to preview. This must contain at least
+#                 one StyleSprite that uses this style group so that
+#                 each style can properly be displayed.
+#STYLEPREVIEW string styleGroup, Sprite sprite
+# It's best practice to make style preview sprites temporary so they
+# don't clutter up the Sprite List.
+COMPOSITE "temp_preview_wall_style";
+	ADD "wall_nw", (0, 0); ADD "wall_up", (16, 0); ADD "wall_ne", (32, 0);
+	ADD "wall_left", (0, 16); ADD "wall_right", (32, 16);
+	ADD "wall_sw", (0, 32); ADD "wall_down", (16, 32); ADD "wall_se", (32, 32);
+END;
+STYLEPREVIEW "wall", "temp_preview_wall_style";
+
+
+#==============================================================
+# SpriteSet Commands
+#==============================================================
+
+# SpriteSet commands can only be called while in the SpriteSet mode.
+# SpriteSets in general will be touched upon in a later document.
+
+# Begin a SpriteSet for demonstration.
+SPRITESET "my_sprite_set", (10, 10);
+
+
+# Starts multiple StyleSprites with the specified style group.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+StyleSprite
+# Param: styleGroup = The group to separate these StyleSprites from other StyleSprites.
+# Param: start = The starting index in the SpriteSet to assign the new StyleSprites to.
+# Param: span = The amount of sprites to assign to the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#MULTIPLE STYLE string styleGroup, Point start = (0, 0), Point span = (0, 0)
+SOURCE "armos_sprite_sheet";
+MULTIPLE STYLE "armos", (0, 0), (2, 1);
+
+
+# Adds a range of sprites as a style to the SpriteSet using the start
+# and span specified in the MULTIPLE STYLE command.
+# This is the same command used with SINGLE STYLE.
+# RequiredMode: SpriteSet+StyleSprite
+# Param: style = The style to assign all of the sprites.
+# Param: sourceIndex = The point in the sprite source to grab the sprites from.
+#ADD string style, Point sourceIndex
+ADD "dirt",			(0, 0);
+ADD "floor"			(0, 1);
+
+
+END; # End the STYLE command mode.
+
+
+# Continues a collection of StyleSprites, allowing more styles to be defined.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+StyleSprite
+# Param: start = The starting index in the SpriteSet to add styles to.
+# Param: span = The amount of sprites to modify in the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#CONTINUE MULTIPLE COLOR (string colorGroups...), Point start = (0, 0), Point span = (0, 0)
+CONTINUE MULTIPLE STYLE (0, 0), (1, 2);
+	ADD "other"			(0, 2);
+END;
+
+
+# Assigns a single StyleSprite to a SpriteSet with the specified style group.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+StyleSprite
+# Param: styleGroup = The group to separate this StyleSprite from other StyleSprites.
+# Param: setIndex = The output index in the SpriteSet.
+#SINGLE STYLE string styleGroup, Point setIndex
+SINGLE STYLE "my_single_style_group", (0, 1);
+	ADD "my_single_style_1",		"named_sprite_1";
+END;
+
+
+# Continues a single StyleSprite in the SpriteSet.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite
+# Param: setIndex = The index in the SpriteSet to continue the StyleSprite from.
+#CONTINUE SINGLE STYLE Point setIndex
+CONTINUE SINGLE STYLE (0, 1);
+	ADD "my_single_style_2",		(0, 3);
+END;
+
+
+END; # End the SPRITESET command mode.
+
+
+#==============================================================

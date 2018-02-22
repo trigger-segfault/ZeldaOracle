@@ -1,0 +1,461 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# Animation is a special sprite that changes how it looks based on the
+# playback time.
+# An END is required after finishing an Animation.
+
+# Note: Animations keep track of the origins of sprites added as frames.
+#       Sprite source, source index, and definition are all of the variables
+#       That can be changed in an Animation. Examples would be shifting the
+#       source index of all sprites or changing the definition of all sprites.
+
+# Note: Animations are composed of substrips. Substrips are stored in a linked
+#       list so editing the final substrip will not make changes to any previous
+#       substrips.
+
+# Note: Because Animations normally store frames in order based on their start
+#       time, Depth is a concept for each frame, allowing frames to be inserted
+#       before or after others depending on their depth. The lower the number,
+#       the closer to the beginning of the list the frame is stored, and
+#       subsequently, the earlier it gets drawn. The default depth is 0.
+
+
+# Starts a new empty Animation.
+# Required Mode: Root
+# Sets Mode: Animation
+# Param: name = The name of the new sprite.
+#ANIMATION string name
+ANIMATION "my_animation";
+	#ADD frame... add stuff to sppite
+END;
+
+
+# Continues an existing Animation.
+# Required Mode: Root
+# Sets Mode: Animation
+# Param: name = The name of the new sprite.
+#CONTINUE ANIMATION string name
+CONTINUE ANIMATION "my_animation";
+	#ADD frame... add more stuff to sprite
+END;
+
+
+#==============================================================
+# Building Commands
+#==============================================================
+
+# Start an Animation for demonstration.
+ANIMATION "demonstration_animation_1";
+
+
+# The first thing to do when starting an Animation is to define a new
+# substrip with a loop mode.
+# Required Mode: Animation
+# Param: loopMode = How the Animation handles looping.
+#                   repeat = The Animation loops forever.
+#                   clamp = After finishing, the Animation stays on the last frame.
+#                   reset = After finishing, the Animation goes back to the first frame.
+#SUBSTRIP string loopMode
+SUBSTRIP repeat;
+# Add frames to the substrip
+SUBSTRIP reset;
+# Add frames to the substrip
+SUBSTRIP clamp;
+# Add frames to the substrip
+
+
+# Adds an empty frame so that the Animation shows nothing for the duration.
+# Required Mode: Animation
+# Param: duration = The duration to show nothing for in the animation.
+#ADD emptyframe, int duration
+ADD emptyframe, 4;
+
+
+# Adds a row, column, etc of sprites from a sprite source to the Animation.
+# Required Mode: Animation
+# Param: duration = The duration of each frame in the strip.
+# Param: stripLength = The number of frames to add from the strip.
+# Param: sourceIndex = The index in the sprite source to grab sprites from.
+# Param: drawOffset = The drawOffset to use for each frame.
+# Param: clipping = The clipping to apply to each frame.
+# Param: depth = The depth to insert the frames at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+# Param: relative = The relative distance to grab sprites from in the sprite sheet.
+#                   Becaues this parameter is so  far back in the list it's
+#                   recommended to call it using named parameters.
+#ADD strip, int duration, int stripLength, Point sourceIndex, Point drawOffset = (0, 0),
+#          Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)
+ADD strip, 4, 4, (0, 0), (-8, 0), relative: (0, 1);
+
+
+# Adds a row, column, etc of sprites from a sprite source to the Animation.
+# Use this overload if the sprite you are adding is a DefinitionSprite's
+# definition.
+# Required Mode: Animation
+# Param: duration = The duration of each frame in the strip.
+# Param: stripLength = The number of frames to add from the strip.
+# Param: (sourceIndex = The index in the sprite source to grab sprites from.
+# Param: definition) = The definition to apply to each frame. Each sprite grabbed
+#                      from the sprite source must be a DefinitionSprite.
+# Param: drawOffset = The drawOffset to use for each frame.
+# Param: clipping = The clipping to apply to each frame.
+# Param: depth = The depth to insert the frames at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+# Param: relative = The relative distance to grab sprites from in the sprite sheet.
+#                   Becaues this parameter is so  far back in the list it's
+#                   recommended to call it using named parameters.
+#ADD strip, int duration, int stripLength, (Point sourceIndex, string definition), Point drawOffset = (0, 0),
+#          Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)
+ADD strip, 4, 4, ((1, 0), "inverse_red"), clipping: (4, 4, 8, 8), depth: 1;
+
+
+# Adds a sprite as a frame at the end of the Animation.
+# Required Mode: Animation
+# Param: duration = The duration of the frame.
+# Param: Sprite = The sprite of the frame.
+# Param: drawOffset = The draw offset of the frame's sprite.
+# Param: clipping = The clipping of the frame's sprite.
+# Param: depth = The depth to insert the frame at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+#ADD frame, int duration, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0
+SOURCE "my_sprite_source";
+ADD frame, 16, (0, 0), (0, 0);
+ADD frame, 16, (1, 0), (-8, 0);
+
+
+# Adds a another sprite to the last sprite that was added by inserting it
+# at the starting time of the last frame.
+# Required Mode: Animation
+# Param: duration = The duration of the frame. This can be shorter
+#                   or longer than the previous frame.
+# Param: Sprite = The sprite of the frame.
+# Param: drawOffset = The draw offset of the frame's sprite.
+# Param: clipping = The clipping of the frame's sprite.
+# Param: depth = The depth to insert the frame at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+#ADD part, int duration, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0
+ADD part, 16, (2, 0), (8, 0);
+
+
+# Adds a sprite that starts at the beginning of the Animation and last for
+# the entirety of the Animation's CURRENT duration. This shoud be called,
+# only after the final duration is reached.
+# Param: Sprite = The sprite of the frame.
+# Param: drawOffset = The draw offset of the frame's sprite.
+# Param: clipping = The clipping of the frame's sprite.
+# Param: depth = The depth to insert the frame at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+#ADD static, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0
+ADD static, "background_sprite", depth: -1;
+
+
+# Inserts a row, column, etc of sprites from a sprite source to the Animation.
+# Required Mode: Animation
+# Param: time = The starting time to insert the first frame at.
+# Param: duration = The duration of each frame in the strip.
+# Param: stripLength = The number of frames to add from the strip.
+# Param: sourceIndex = The index in the sprite source to grab sprites from.
+# Param: drawOffset = The drawOffset to use for each frame.
+# Param: clipping = The clipping to apply to each frame.
+# Param: depth = The depth to insert the frames at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+# Param: relative = The relative distance to grab sprites from in the sprite sheet.
+#                   Becaues this parameter is so  far back in the list it's
+#                   recommended to call it using named parameters.
+#INSERT strip, int time, int duration, int stripLength, Point sourceIndex, Point drawOffset = (0, 0),
+#              Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)
+INSERT strip, 1, 4, 4, (0, 0), (-8, 0), relative: (0, 1);
+
+
+# Inserts a row, column, etc of sprites from a sprite source to the Animation.
+# Use this overload if the sprite you are adding is a DefinitionSprite's
+# definition.
+# Required Mode: Animation
+# Param: time = The starting time to insert the first frame at.
+# Param: duration = The duration of each frame in the strip.
+# Param: stripLength = The number of frames to add from the strip.
+# Param: (sourceIndex = The index in the sprite source to grab sprites from.
+# Param: definition) = The definition to apply to each frame. Each sprite grabbed
+#                      from the sprite source must be a DefinitionSprite.
+# Param: drawOffset = The drawOffset to use for each frame.
+# Param: clipping = The clipping to apply to each frame.
+# Param: depth = The depth to insert the frames at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+# Param: relative = The relative distance to grab sprites from in the sprite sheet.
+#                   Becaues this parameter is so  far back in the list it's
+#                   recommended to call it using named parameters.
+#INSERT strip, int time, int duration, int stripLength, (Point sourceIndex, string definition),
+#              Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)
+INSERT strip, 2, 4, 4, ((1, 0), "inverse_red"), clipping: (4, 4, 8, 8), depth: 1;
+
+
+# Adds a sprite as a frame at the end of the Animation.
+# Required Mode: Animation
+# Param: time = The starting time to insert the frame at.
+# Param: duration = The duration of the frame.
+# Param: Sprite = The sprite of the frame.
+# Param: drawOffset = The draw offset of the frame's sprite.
+# Param: clipping = The clipping of the frame's sprite.
+# Param: depth = The depth to insert the frame at. Becaues this parameter is so
+#                far back in the list it's recommended to call it using named
+#                parameters.
+#INSERT frame, int time, int duration, Sprite sprite, Point drawOffset = (0, 0),
+#              Rectangle clipping = (0, 0, -1, -1), int depth = 0
+INSERT frame, 3, 8, "existing_sprite", (0, 0);
+
+
+# Takes all frames from the specified Animation and appends them to the end
+# of this Animation.
+# Required Mode: Animation
+# Param: animationName = The name of the Animation to grab frames from.
+# Param: substrip = The substrip index of the Animation.
+# Param: drawOffset = The additional draw offset of the each frame's sprite.
+# Param: clipping = The additional clipping of the each frame's sprite.
+# Param: depth = The additional depth offset to insert the frame at. Becaues this
+#                parameter is so far back in the list it's recommended to call it
+#                using named parameters.
+#COMBINE string animationName, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depthOffset = 0
+#COMBINE (string animationName, int substrip), Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depthOffset = 0
+COMBINE "existing_animation", (0, 16);
+COMBINE ("existing_animation", 2), (0, 16);
+
+
+# Takes all frames from the specified Animation and inserts them into the
+# Animation starting at the specified time.
+# Required Mode: Animation
+# Param: timeOffset = The starting time to insert the first frame at.
+# Param: animationName = The name of the Animation to grab frames from.
+# Param: substrip = The substrip index of the Animation.
+# Param: drawOffset = The additional draw offset of the each frame's sprite.
+# Param: clipping = The additional clipping of the each frame's sprite.
+# Param: depth = The additional depth offset to insert the frame at. Becaues this
+#                parameter is so far back in the list it's recommended to call it
+#                using named parameters.
+#COMBINE int timeOffset, string animationName, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depthOffset = 0
+#COMBINE int timeOffset, (string animationName, int substrip), Point drawOffset = (0, 0),
+#        Rectangle clipping = (0, 0, -1, -1), int depthOffset = 0
+COMBINE 0, "existing_animation", (16, 0);
+COMBINE 0, ("existing_animation", 1), (16, 0);
+
+
+END; # End ANIMATION command mode.
+
+
+#==============================================================
+# Helper Commands
+#==============================================================
+
+# Start an Animation for demonstration.
+ANIMATION "demonstration_animation_2";
+
+# Takes an existing Animation and clones all of its substrips and frames.
+# This should be the first command called when starting an Animation based
+# off of another Animation. Note that calling SUBSTRIP is not needed when
+# cloning as you most likely will not need to add any *new* substrips.
+# Required Mode: Animation
+# Param: animationName = The name of the Animation to clone.
+#CLONE string animationName
+CLONE "demonstration_animation_1";
+
+
+# Tiles the 8x8 Animation into a 16x16 Animation by copying all frames
+# and inserting them with a (0, 8), (8, 0), and (8, 8) draw offset.
+# Required Mode: Animation
+#MAKEQUAD
+SOURCE "my_8x8_sprite_source";
+ADD strip, 16, 4, (0, 0);
+MAKEQUAD;
+
+
+# Takes an Animation and adds X substrips each with an additional offset in the
+# sprite source. This is especially useful for creating directional Animations that
+# share the same draw offsets for each direction.
+# Required Mode: Animation
+# Param: numSubstrips = The number of substrips the Animation ends up with.
+#                       This INCLUDES the current substrip.
+# Param: relative = The relative offset in the sprite source for each frame.
+#MAKEDYNAMIC int numSubstrips, Point relative
+SOURCE "my_directional_sprite_source";
+ADD strip, 14, 4, (0, 0);
+MAKEDYNAMIC 4, (0, 1);
+
+
+# Takes a finished Animation or substrip and applies extra draw offset
+# to every frame. This is great for centering Animations without having
+# to set the draw offset for every added frame.
+# Required Mode: Animation
+# Param: offset = The additional draw offset to add to each frame.
+#OFFSET Point offset
+OFFSET (-8, -8);
+
+
+# Applies flickering to a finished Animation where nothing is drawn for
+# a short period of time.
+# Required Mode: Animation
+# Param: alternateDelay = The delay between switching between visible
+#                         and hidden.
+#FLICKER int alternateDelay
+CLONE "effect_leaves";
+FLICKER 1;
+
+# Takes every frame in the Animation and appends them to the end X times.
+# Required Mode: Animation
+# Param: numRepeats = The number of times to repeat every frame in the
+#                     Animation.
+#REPEAT int numRepeats
+ADD frame, 2, (0, 0);
+ADD frame, 2, (1, 0);
+REPEAT 4;
+
+# Takes the last X frames in the Animation and appends them to the end Y times.
+# Required Mode: Animation
+# Param: numFrames = The number of last added frames to repeat in the animation.
+# Param: numRepeats = The number of times to repeat the last frames in the
+#                     Animation.
+#REPEAT int numFrames, int numRepeats
+ADD frame, 4, (0, 0);
+ADD frame, 2, (1, 0);
+ADD frame, 2, (2, 0);
+REPEAT 2, 4;
+
+
+# Sets the current substrip being edited back to the original Animation the
+# current substrip is a part of.
+# Required Mode: Animation
+#REWIND
+SUBSTRIP repeat; ADD strip 4, 4, (0, 0);
+SUBSTRIP repeat; ADD strip 4, 4, (0, 0);
+REWIND; # Now editing the first substrip again.
+
+
+# Shifts the source index of every frame in the Animation.
+# Required Mode: Animation
+# Param: relative = The relative offset to apply to the source index of
+#                   each frame in the Animation.
+#SHIFTSOURCE Point relative
+CLONE "sword_swing";
+SHIFTSOURCE (0, 1);
+
+
+# Changes the style of every StyleSprite frame in the Animation.
+# This also applies to all StyleSprites that don't have a definition set as well.
+# Required Mode: Animation
+# Param: newStyle = The new style definition to apply to each StyleSprite frame.
+#CHANGESTYLE const all, string newStyle
+CLONE "old_style_animation";
+CHANGESTYLE all, "new_style";
+
+
+# Changes the style of every StyleSprite frame in the Animation with the old style.
+# Required Mode: Animation
+# Param: oldStyle = The old style definition that will be changed. Only
+#                   StyleSprite frames with this style will be modified.
+# Param: newStyle = The new style definition to apply to each StyleSprite frame.
+#CHANGESTYLE string oldStyle, string newStyle
+CLONE "old_style_animation_b";
+CHANGESTYLE "old_style_1", "new_style_1";
+CHANGESTYLE "old_style_2", "new_style_2";
+
+
+# Changes the color group of every ColorSprite frame in the Animation.
+# This also applies to all ColorSprites that don't have a definition set as well.
+# Required Mode: Animation
+# Param: newColor = The new style definition to apply to each ColorSprite frame.
+#CHANGECOLOR const all, string newColor
+CLONE "old_color_animation";
+CHANGECOLOR all, "red";
+
+
+# Changes the color group of every ColorSprite frame in the Animation with the old color group.
+# Required Mode: Animation
+# Param: oldColor = The old color group that will be changed. Only
+#                   ColorSprite frames with this color group will be modified.
+# Param: newColor = The new color group to apply to each ColorSprite frame.
+#CHANGECOLOR string oldColor, string newColor
+CLONE "red_color_animation";
+CHANGECOLOR "red", "blue";
+
+
+# Adds additional clipping to every frame in the Animation.
+# Required Mode: Animation
+# Param: clipping = The additional clipping to apply to every frame in
+#                   the Animation.
+#CLIP Rectangle clipping
+CLONE "unclipped_animation";
+CLIP (2, 2, 28, 28);
+
+
+END; # End ANIMATION command mode.
+
+
+#==============================================================
+# Animation Examples
+#==============================================================
+
+# An example of MAKEDYNAMIC used for swinging Animations.
+ANIMATION "sword_swing";
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 8, (0, 0), ( 20,   4); ADD frame, 3, (0, 0), ( 12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (0, 0), ( 16,   0); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 8, (2, 0), ( -4, -20); ADD frame, 3, (2, 0), ( -4, -12);
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (3, 0), (-13, -13); ADD frame, 8, (4, 0), (-20,   4); ADD frame, 3, (4, 0), (-12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (4, 0), (-15,   2); ADD frame, 3, (5, 0), (-13,  15); ADD frame, 8, (6, 0), (  3,  20); ADD frame, 3, (6, 0), (  3,  14); END;
+ANIMATION "magic_rod_swing";
+	CLONE "sword_swing";
+	SHIFTSOURCE (0, 3);
+	END;
+ANIMATION "cane_swing";
+	CLONE "sword_swing";
+	SHIFTSOURCE (0, 4);
+	END;
+
+
+# An example of applying CHANGECOLOR to Animations.
+ANIMATION "temp_effect_poof_base"; SUBSTRIP reset;
+	ADD frame, 3, (3, 0);
+	ADD frame, 3, (0, 0);
+	ADD frame, 3, (1, 0);
+	OFFSET (-8, -8); END;
+ANIMATION "effect_poof_red";
+	CLONE "temp_effect_poof_base";
+	CHANGECOLOR all, "red"; END;
+
+ANIMATION "effect_seed_pegasus"; SUBSTRIP reset;
+	ADD frame, 3, ((3, 0), "blue");
+	ADD frame, 3, ((0, 0), "blue");
+	ADD frame, 3, ((1, 0), "blue");
+	OFFSET (-8, -8); END;
+ANIMATION "effect_seed_mystery";
+	CLONE "effect_seed_pegasus";
+	CHANGECOLOR all, "green"; END;
+	
+	
+# An example of managing depth and static frames
+SOURCE "tiles_town_fountain";
+ANIMATION "temp_fountain_jet_left"; SUBSTRIP repeat;
+	ADD frame, 6, (0, 6); ADD frame, 6, (0, 7); END;
+	
+ANIMATION "temp_fountain_water_nw"; SUBSTRIP repeat;
+	ADD strip, 12, 4, (2, 0), relative: (0, 2); END;
+	
+ANIMATION "tile_fountain_dirt_nw"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_nw";
+	ADD static, "temp_fountain_jet_left", depth: 1;
+	ADD static, (0, 0), depth: -1; END;
+
+
+# An example of MAKEDYNAMIC.
+SOURCE "units_monster_items";
+ANIMATION "projectile_monster_arrow"; SUBSTRIP repeat;
+	ADD frame, 1, (0, 0), (-8, -8);
+	MAKEDYNAMIC 4, (1, 0); END;
+
+
+#==============================================================

@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpriteSR : ScriptReader {
+	public partial class SpriteSR : ScriptReader {
 
 		/// <summary>Adds StyleSprite commands to the script reader.</summary>
 		public void AddStyleCommands() {
@@ -41,7 +41,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// SETUP SpriteSet
 			//=====================================================================================
 			AddCommand("MULTIPLE STYLE", (int) Modes.SpriteSet,
-				"string styleGroup, Point start = (0, 0), Point dimensions = (0, 0)",
+				"string styleGroup, Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				string styleGroup = parameters.GetString(0);
 				editingSetStart = parameters.GetPoint(1);
@@ -63,7 +63,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CONTINUE MULTIPLE STYLE", (int) Modes.SpriteSet,
-				"Point start = (0, 0), Point dimensions = (0, 0)",
+				"Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				editingSetStart = parameters.GetPoint(0);
 				editingSetDimensions = parameters.GetPoint(1);
@@ -122,12 +122,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				StyleSprite.Set(style, GetSpriteFromParams(parameters, 1));
 			});
 			//=====================================================================================
-			AddCommand("REMOVE", (int) Modes.StyleSprite,
+			/*AddCommand("REMOVE", (int) Modes.StyleSprite,
 				"string style",
 			delegate (CommandParam parameters) {
 				string style = parameters.GetString(0);
 				StyleSprite.Remove(style);
-			});
+			});*/
 			//=====================================================================================
 			// BUILDING SpriteSet
 			//=====================================================================================
@@ -151,7 +151,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			// Style Preview
 			//=====================================================================================
-			AddCommand("STYLEPREVIEW", (int) Modes.Root,
+			AddCommand("STYLEPREVIEW",
 				"string styleGroup, Sprite sprite",
 			delegate (CommandParam parameters) {
 				string styleGroup = parameters.GetString(0);

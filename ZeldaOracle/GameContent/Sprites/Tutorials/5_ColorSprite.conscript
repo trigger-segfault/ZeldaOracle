@@ -1,0 +1,137 @@
+﻿#==============================================================
+# Root Commands
+#==============================================================
+
+# A ColorSprite is a type of DefinitionSprite composed of a single
+# sprite with the ability to have multiple different color palettes
+# applied.
+# Like BasicSprites, ColorSprites can only originate from SpriteSheets.
+# ColorSprites may only be used while paletting sprites.
+# See instructions in Tutorials/Paletting.conscript.
+# An END is required after finishing a ColorSprite.
+
+# Tip:  ColorSprites are great for repaletting an existing sprite without
+#       having to make a new sprite. There are many instances of ColorSprites
+#       created with one color group just to repalette another sprite. It's
+#       recommended that when assigning this sprite to a name, etc, that you
+#       reference it's color group like so ((0, 0), "single_color_group") to
+#       avoid having to spend time looking up the definition in the dictionary.
+
+# Term: "DefinitionSprite" is a type of sprite that has a group name, and a
+#       list of definitions each with their own sprite. The group name is
+#       used to separate the DefinitionSprite from other sprites so that
+#       only its definition can be set. DefinitionSprites' definitions can
+#       be accessed like so: ((0, 0), "shaded_red"), ("my_def_sprite", "shaded_red").
+
+# Note: DefinitionSprites are the sprites that are most useful to use
+#       CONTINUE commands with. As later in the loading you may want
+#       to add definintions from other sources.
+
+# Term: "Coloration Group" stands for a group that the ColorSprite follows.
+#       Coloration Group has no use in conscripts but instead has use
+#       programmatically for setting multiple color definitions for different
+#       Coloration Groups. Coloration Group is unneeded when the final sprite
+#       only makes of one group and thus most of the time this field will be
+#       left empty like so: "". An example of when Coloration Groups is when
+#       you have a boss that has multiple body parts that each need to be
+#       able to change color independantly of each other.
+
+# Term: "Color Group" stands for a group of 4 colors with a name assigned in
+#       a palette dictionary. For example, "shaded_red" is a color group in
+#       "Palettes/Dictionaries/entities_dictionary.conscript".
+
+
+# Builds a ColorGroup and applies the listed color groups.
+# Required Mode: Root
+# Sets Mode: ColorSprite
+# Param: name = The name of the new sprite.
+# Param: colorationGroup = The group to separate this ColorSprite from other ColorSprites.
+# Param: colorGroups... = The list of color groups to palette the ColorSprite with.
+# Param: sourceIndex = The index in the SpriteSheet to get the sprite from.
+#COLOR string name, string colorationGroup, (string colorGroups...), Point sourceIndex
+# In this example, the colorationGroup is unneeded so it is left blank.
+SOURCE "my_sprite_sheet";
+COLOR "my_color_sprite", "", ("green", "red", "blue", "hurt"), (3, 4); END;
+
+
+# Continues a ColorGroup and adds more palette color groups to the list.
+# Although ColorSprite has no mode commands, CONTINUE exists because the
+# command itself applies the color groups.
+# Required Mode: Root
+# Sets Mode: ColorSprite
+# Param: name = The name of the existing ColorGroup to continue.
+# Param: colorGroups... = The additional list of color groups to palette the ColorSprite with.
+#COLOR string name, (string colorGroups...)
+CONTINUE COLOR "my_color_sprite", ("shaded_red", "shaded_blue"); END;
+
+
+#==============================================================
+# SpriteSet Commands
+#==============================================================
+
+# SpriteSet commands can only be called while in the SpriteSet mode.
+# SpriteSets in general will be touched upon in a later document.
+
+# Begin a SpriteSet for demonstration.
+SPRITESET "my_sprite_set", (10, 10);
+
+
+# Builds and assigns multiple ColorSprites to a SpriteSet from a SpriteSheet.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite
+# Param: colorationGroup = The group to separate these ColorSprites from other ColorSprites.
+# Param: colorGroups... = The list of color groups to palette the ColorSprites with.
+# Param: sourceIndex = The starting index in the SpriteSheet to create ColorSprites from.
+# Param: start = The starting index in the SpriteSet to assign the new ColorSprites to.
+# Param: span = The amount of sprites to assign to the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#MULTIPLE COLOR string colorationGroup, (string colorGroups...), Point sourceIndex, Point start = (0, 0), Point span = (0, 0)
+SOURCE "armos_sprite_sheet";
+MULTIPLE COLOR "", ("armos", "armos_alt"), (0, 1), (0, 0), (1, 2); END;
+
+
+# Continues a collection of ColorSprites and assign more color groups to them.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite
+# Param: colorGroups... = The additional list of color groups to palette the ColorSprites with.
+# Param: start = The starting index in the SpriteSet to add color groups to.
+# Param: span = The amount of sprites to modify in the SpriteSet.
+#               If a coordinate is zero, it will be converted to the dimension of the SpriteSet.
+#CONTINUE MULTIPLE COLOR (string colorGroups...), Point start = (0, 0), Point span = (0, 0)
+CONTINUE MULTIPLE COLOR ("armos_asobject", "armos_alt_asobject"), (0, 0), (1, 2); END;
+
+
+# Assigns a single ColorSprite to a SpriteSet from a SpriteSheet at the same index.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite
+# Param: colorationGroup = The group to separate this ColorSprite from other ColorSprites.
+# Param: colorGroups... = The list of color groups to palette the ColorSprite with.
+# Param: sourceIndex = The source index of the SpriteSheet and output index of the SpriteSet.
+#SINGLE COLOR string colorationGroup, (string colorGroups...), Point sourceIndex
+SINGLE COLOR "boss_arm_1", ("boss_a_arm", "hurt"), (0, 0); END;
+
+
+# Assigns a single ColorSprite to a SpriteSet from a different index in the SpriteSheet.
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+ColorSprite
+# Param: colorationGroup = The group to separate this ColorSprite from other ColorSprites.
+# Param: colorGroups... = The list of color groups to palette the ColorSprite with.
+# Param: sourceIndex = The source index of the SpriteSheet to grab sprites from.
+# Param: setIndex = The output index to assign the ColorSprite to in the SpriteSet.
+#SINGLE COLOR string colorationGroup, (string colorGroups...), Point sourceIndex, Point setIndex
+SINGLE COLOR "boss_arm_2", ("boss_a_arm", "hurt"), (0, 0), (1, 0); END;
+
+
+# Continue a single ColorSprite in the SpriteSet and add more color groups to it
+# RequiredMode: SpriteSet
+# Sets Mode: SpriteSet+BasicSprite
+# Param: colorGroups... = The additional list of color groups to palette the ColorSprite with.
+# Param: setIndex = The index of the BasicSprite in the SpriteSet to modify.
+#CONTINUE SINGLE COLOR (string colorGroups...), Point setIndex
+CONTINUE COLOR ("inverse_blue"), (0, 0); END;
+	
+
+END; # End the SPRITESET command mode.
+
+
+#==============================================================

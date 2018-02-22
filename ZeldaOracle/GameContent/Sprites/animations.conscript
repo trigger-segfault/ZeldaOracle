@@ -785,7 +785,7 @@
 #	END;
 #ANIMATION "effect_grass_leaves";
 #	CLONE "effect_leaves";
-#	FLICKER 1, on;
+#	FLICKER 1;
 #	END;
 #ANIMATION "item_scent_pod"; SUBSTRIP repeat;
 #	ADD frame, 8, (0, 2);
@@ -862,7 +862,7 @@
 #	ADD frame, 4, (4, 12);
 #	ADD frame, 3, (5, 12);
 #	OFFSET (-8, -8);
-#	FLICKER 1, on; END;
+#	FLICKER 1; END;
 #ANIMATION "effect_owl_sparkle"; SUBSTRIP reset;
 #	ADD frame,  9, (9,  8);
 #	ADD frame, 18, (9,  9);
@@ -879,7 +879,7 @@
 #	OFFSET (-8, -8); END;
 #ANIMATION "effect_cling_light";
 #	CLONE "effect_cling";
-#	FLICKER 1, on; END;
+#	FLICKER 1; END;
 #ANIMATION "effect_burn"; SUBSTRIP repeat;
 #	ADD frame, 1, (1, 2);
 #	ADD frame, 2, (1, 14);
