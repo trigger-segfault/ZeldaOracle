@@ -213,7 +213,7 @@
     <Compile Include="Common\Scripts\Commands\CommandParamParser.cs" />
     <Compile Include="Common\Scripts\CustomReaders\GameFontSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\CollisionModelSR.cs" />
-    <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Animation.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\SpriteSR.Animation.cs" />
     <Compile Include="Common\Scripts\CustomReaders\SpriteSR.BasicEmptyOffset.cs" />
     <Compile Include="Common\Scripts\CustomReaders\SpriteSR.Color.cs" />
     <Compile Include="Common\Scripts\CustomReaders\SpriteSR.ColorMultiStyle.cs" />
