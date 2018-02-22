@@ -129,7 +129,7 @@ COMPOSITE "temp_preview_grass_color_style";
 	
 STYLEPREVIEW "grass_color", "temp_preview_grass_color_style";
 
-ANIMATION "effect_magnet_gloves_red";
+ANIMATION "effect_magnet_gloves_north";
 	SUBSTRIP repeat; ADD strip, 2, 2, (0, 4), (  2,  -9);
 	SUBSTRIP repeat; ADD strip, 2, 2, (2, 4), (-11, -24);
 	SUBSTRIP repeat; ADD strip, 2, 2, (4, 4), (-18,  -9);
@@ -137,8 +137,8 @@ ANIMATION "effect_magnet_gloves_red";
 	CHANGECOLOR all, "shaded_red";
 	END;
 	
-ANIMATION "effect_magnet_gloves_blue";
-	CLONE "effect_magnet_gloves_red";
+ANIMATION "effect_magnet_gloves_south";
+	CLONE "effect_magnet_gloves_north";
 	CHANGECOLOR all, "shaded_blue"; 
 	END;
 	

@@ -8,6 +8,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -93,32 +94,42 @@ namespace ZeldaOracle.Game.Tiles {
 
 			bool isDown = isCovered;
 
-			// Update the uncovered state.
+			// Update the uncovered state
 			if (!isCovered) {
-				// There is a small delay between being uncovered and becoming unpressed.
+				// There is a small delay between being uncovered and being released
 				uncoverTimer--;
 				if (uncoverTimer > 0) {
 					isDown = true;
 				}
 				else {
-					// Raise certain tiles (pots) that are partially covering this button.
+					// Visually raise certain tiles (such as pots) that are partially
+					// covering this button
 					foreach (Tile tile in tilesCovering) {
-						if (tile.Bounds.Contains(Center) && tile.Properties.GetBoolean("raised_on_buttons", false)) {
-							tile.Graphics.RaisedDrawOffset = new Point2I(0, -GameSettings.TILE_BUTTON_TILE_RAISE_AMOUNT);
+						if (tile.Bounds.Contains(Center) &&
+							tile.Properties.GetBoolean("raised_on_buttons", false))
+						{
+							tile.Graphics.RaisedDrawOffset = new Point2I(
+								0, -GameSettings.TILE_BUTTON_TILE_RAISE_AMOUNT);
 						}
 					}
 				}
 			}
 
-			// Check if the player is on top of this button.
 			if (!isDown) {
-				Rectangle2F pressRect = Rectangle2F.Translate(
-					GameSettings.TILE_BUTTON_PLAYER_PRESS_AREA, Position);
-				if (pressRect.Contains(RoomControl.Player.Position))
+				// Check if the player is on top of this button
+				if (Bounds.Contains(RoomControl.Player.Center))
 					isDown = true;
+
+				// Check if a magnet ball is on top of this button
+				foreach (MagnetBall ball in
+					RoomControl.GetEntitiesOfType<MagnetBall>())
+				{
+					if (Bounds.Contains(ball.Center))
+						isDown = true;
+				}
 			}
 
-			// Check if the pressed state needs to be changed.
+			// Check if the pressed state needs to be changed
 			if (isPressed != isDown && (isDown || isReleasable))
 				SetPressed(isDown);
 		}

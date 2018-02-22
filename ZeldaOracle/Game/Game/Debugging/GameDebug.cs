@@ -28,6 +28,7 @@ using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Monsters.JumpMonsters;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
@@ -400,10 +401,11 @@ namespace ZeldaOracle.Game.Debug {
 			else if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseTileLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				Monster monster = new MonsterCukeman();
+				//Monster monster = new MonsterCukeman();
 				//monster.Color = MonsterColor.Red;
-				monster.SetPositionByCenter(spawnPosition);
-				RoomControl.SpawnEntity(monster);
+				//monster.SetPositionByCenter(spawnPosition);
+				//RoomControl.SpawnEntity(monster);
+				RoomControl.SpawnEntity(new MagnetBall(), spawnPosition);
 
 				//TileData tileData = new TileData(typeof(TileMonsterBeamos),
 				//	TileFlags.None);

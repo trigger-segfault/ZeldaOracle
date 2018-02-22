@@ -27,6 +27,8 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_SWITCH_HOOK_LINK;
 		public static ISprite SPR_MINECART_VERTICAL;
 		public static ISprite SPR_MINECART_HORIZONTAL;
+		public static ISprite SPR_MAGNET_BALL_NORTH;
+		public static ISprite SPR_MAGNET_BALL_SOUTH;
 		
 		// Monsters
 		public static ISprite SPR_MONSTER_MINI_MOLDORM_BODY_SEGMENT_LARGE;
@@ -148,8 +150,8 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_ITEM_ICON_BOOMERANG_2;
 		public static ISprite SPR_ITEM_ICON_SWITCH_HOOK;
 		public static ISprite SPR_ITEM_ICON_HOOK_SHOT;
-		public static ISprite SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
-		public static ISprite SPR_ITEM_ICON_MAGNET_GLOVES_RED;
+		public static ISprite SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH;
+		public static ISprite SPR_ITEM_ICON_MAGNET_GLOVES_NORTH;
 		public static ISprite SPR_ITEM_ICON_CANE;
 		public static ISprite SPR_ITEM_ICON_ROD_OF_ESSENCES;
 		public static ISprite SPR_ITEM_ICON_MAGIC_ROD;

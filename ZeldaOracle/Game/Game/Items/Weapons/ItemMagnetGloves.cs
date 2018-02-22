@@ -1,6 +1,8 @@
 ﻿using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	
@@ -24,13 +26,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				ItemFlags.UsableWhileInHole;
 
 			this.sprite = new ISprite[] {
-				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_BLUE
+				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH
 			};
 
 			polarity = Polarity.South;
 			polaritySprites = new ISprite[2];
-			polaritySprites[(int) Polarity.North] = GameData.SPR_ITEM_ICON_MAGNET_GLOVES_RED;
-			polaritySprites[(int) Polarity.South] = GameData.SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
+			polaritySprites[(int) Polarity.North] = GameData.SPR_ITEM_ICON_MAGNET_GLOVES_NORTH;
+			polaritySprites[(int) Polarity.South] = GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH;
 		}
 
 
@@ -43,6 +45,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Player.MagnetGlovesState.Weapon = this;
 			Player.BeginWeaponState(Player.MagnetGlovesState);
 			return true;
+		}
+
+		// Draws the item inside the inventory.
+		public override void DrawSlot(Graphics2D g, Point2I position) {
+			DrawSprite(g, position);
+			g.DrawString(GameData.FONT_SMALL, (polarity == Polarity.North ? "N" : "S"),
+				position + new Point2I(8, 8), EntityColors.Black);
 		}
 
 

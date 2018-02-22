@@ -245,7 +245,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_2;
 		public static Animation ANIM_PROJECTILE_SWITCH_HOOK;
 		public static Animation ANIM_PROJECTILE_MAGIC_ROD_FIRE;
-		
+
 		// Monster projectile animations.
 		public static Animation ANIM_PROJECTILE_MONSTER_ARROW;
 		public static Animation ANIM_PROJECTILE_MONSTER_ARROW_CRASH;
@@ -270,8 +270,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_SIGN_BREAK;
 		public static Animation ANIM_EFFECT_LEAVES;
 		public static Animation ANIM_EFFECT_GRASS_LEAVES;
-		public static Animation ANIM_EFFECT_MAGNET_GLOVES_RED;
-		public static Animation ANIM_EFFECT_MAGNET_GLOVES_BLUE;
+		public static Animation ANIM_EFFECT_MAGNET_GLOVES_SOUTH;
+		public static Animation ANIM_EFFECT_MAGNET_GLOVES_NORTH;
 
 		// Color effect animations.
 		public static Animation ANIM_EFFECT_LAVA_SPLASH;

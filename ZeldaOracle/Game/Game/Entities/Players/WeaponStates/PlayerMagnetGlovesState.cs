@@ -1,6 +1,7 @@
 ﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
 
@@ -8,9 +9,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 	public class PlayerMagnetGlovesState : PlayerState {
 
+		private enum MagneticObjectType {
+			None,
+			Ball,
+			Tile,
+		};
+
+		private MagneticObjectType magneticObjectType;
 		private ItemMagnetGloves weapon;
 		private AnimationPlayer effectAnimation;
-		private Tile magneticTile;
+		private object magneticObject;
 		private Rectangle2F alignBox;
 
 
@@ -32,9 +40,55 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 		
-		private void UpdatePullState() {
+		private MagneticObjectType GetMagneticObjectType(object obj) {
+			if (obj == null)
+				return MagneticObjectType.None;
+			if (obj is Tile)
+				return MagneticObjectType.Tile;
+			else if (obj is MagnetBall)
+				return MagneticObjectType.Ball;
+			return MagneticObjectType.None;
+		}
+
+		private void OnPullTileBegin() {
+			player.Physics.IsFlying							= true;
+			StateParameters.ProhibitMovementControlOnGround	= true;
+			StateParameters.ProhibitMovementControlInAir	= RoomControl.IsSideScrolling;
+			StateParameters.DisableGravity					= RoomControl.IsSideScrolling;
+			StateParameters.EnableGroundOverride			= RoomControl.IsSideScrolling;
+			Tile magneticTile = (Tile) magneticObject;
+
+			// Determine the magnetic pull direction
+			int moveDirection = player.Direction;
+			if (Polarity == magneticTile.Polarity)
+				moveDirection = Directions.Reverse(moveDirection);
+			int axis = Directions.ToAxis(moveDirection);
+
+			// If the player is moving in the opposite direction of the megetic
+			// pull direction, then flip his velocity
+			if (player.Physics.Velocity.Dot(
+				Directions.ToVector(moveDirection)) < 0.0f)
+			{
+				Vector2F newVelocity = player.Physics.Velocity;
+				newVelocity[axis] = -newVelocity[axis];
+				player.Physics.Velocity = newVelocity;
+			}
+
+			player.Graphics.PlayAnimation(player.Animations.Throw);
+		}
+
+		private void OnPullTileEnd() {
+			player.Physics.IsFlying							= false;
+			StateParameters.ProhibitMovementControlOnGround	= false;
+			StateParameters.ProhibitMovementControlInAir	= false;
+			StateParameters.DisableGravity					= false;
+			StateParameters.EnableGroundOverride			= false;
+		}
+
+		private void OnPullTileUpdate() {
 			int axis = Directions.ToAxis(player.Direction);
 			float moveSpeed = GameSettings.PLAYER_MAGNET_GLOVE_MOVE_SPEED;
+			Tile magneticTile = (Tile) magneticObject;
 				
 			// Check if the player is jumping and can move while jumping
 			bool canMoveDuringJump = true;
@@ -69,6 +123,50 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Position += velocity;
 		}
+		
+		private void OnPullBallBegin() {
+			MagnetBall ball = magneticObject as MagnetBall;
+			ball.IsMoving = true;
+			ball.Direction = player.Direction;
+			if (ball.Polarity != Polarity)
+				ball.Direction = Directions.Reverse(ball.Direction);
+		}
+
+		private void OnPullBallEnd() {
+			MagnetBall ball = magneticObject as MagnetBall;
+			ball.IsMoving = false;
+		}
+
+		private void OnPullBallUpdate() {
+			int direction = player.Direction;
+			int axis = Directions.ToAxis(player.Direction);
+			int lateralAxis = Axes.GetOpposite(axis);
+			MagnetBall ball = magneticObject as MagnetBall;
+			float distance = GMath.Abs(ball.Center[axis] - player.Center[axis]);
+
+			Vector2F velocity = Vector2F.Zero;
+
+			if (distance > GameSettings.MAGNET_BALL_MIN_DISTANCE ||
+				ball.Polarity == weapon.Polarity)
+			{
+				// Move away/toward the player
+				velocity[axis] = ball.Physics.Velocity[axis];
+				velocity += Directions.ToVector(ball.Direction) *
+					GameSettings.MAGNET_BALL_ACCELERATION;
+				velocity[axis] = GMath.Clamp(velocity[axis],
+					-GameSettings.MAGNET_BALL_MAX_MOVE_SPEED,
+					GameSettings.MAGNET_BALL_MAX_MOVE_SPEED);
+			}
+			else {
+				// If close enough to the player, then move with the player
+				velocity[axis] = player.Physics.Velocity[axis];
+			}
+
+			velocity[lateralAxis] = GMath.Clamp(
+				player.Center[lateralAxis] - ball.Center[lateralAxis] +
+				player.Physics.Velocity[lateralAxis], -1.0f, 1.0f);
+			ball.Physics.Velocity = velocity;
+		}
 
 		/// <summary>Reverse the polarity of the magnetic gloves</summary>
 		public void ReversePolarity() {
@@ -76,6 +174,45 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				weapon.Polarity = Polarity.South;
 			else
 				weapon.Polarity = Polarity.North;
+		}
+
+		/// <summary>Get the nearest magnetic object in front of and aligned with the 
+		/// player, or null if none was found.</summary>
+		public object GetMagneticObject() {
+			int axis = Directions.ToAxis(player.Direction);
+			int lateralAxis = Axes.GetOpposite(axis);
+			RangeF lateralRange = alignBox.GetAxisRange(lateralAxis);
+			lateralRange.Min -= GameSettings.EPSILON;
+			lateralRange.Max += GameSettings.EPSILON;
+
+			object bestObject = null;
+			float bestDistance = 0.0f;
+
+			// First check magnetic tiles
+			Tile magneticTile = GetMagnetTile();
+			if (magneticTile != null) {
+				bestObject = magneticTile;
+				bestDistance = GMath.Abs(
+					magneticTile.Center[axis] - player.Center[axis]);
+			}
+
+			// Second check magnet balls
+			foreach (MagnetBall ball in RoomControl.GetEntitiesOfType<MagnetBall>()) {
+				float distance = GMath.Abs(ball.Center[axis] - player.Center[axis]);
+				Vector2F ballToPlayer = player.Center - ball.Center;
+
+				if (ball.IsOnGround &&
+					lateralRange.Contains(ballToPlayer[lateralAxis]) &&
+					Directions.NearestFromVector(
+						ball.Center - player.Center) == player.Direction &&
+					(bestObject == null || distance < bestDistance))
+				{
+					bestDistance = distance;
+					bestObject = ball;
+				}
+			}
+
+			return bestObject;
 		}
 
 		public Tile GetMagnetTile() {
@@ -86,6 +223,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			checkArea.Point += player.Center;
 			checkArea.ExtendEdge(player.Direction, RoomControl.RoomBounds.Size[axis]);
 			Rectangle2I tileArea = RoomControl.GetTileAreaFromRect(checkArea);
+			RangeF lateralRange = alignBox.GetAxisRange(lateralAxis);
+			lateralRange.Min -= GameSettings.EPSILON;
+			lateralRange.Max += GameSettings.EPSILON;
 
 			Tile bestTile = null;
 			float bestDistance = 0.0f;
@@ -96,9 +236,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					float distance = GMath.Abs(tile.Center[axis] - player.Center[axis]);
 					float lateralDistance = GMath.Abs(tile.Center[lateralAxis] - player.Center[lateralAxis]);
 					Vector2F tileToPlayer = player.Center - tile.Center;
-					RangeF lateralRange = alignBox.GetAxisRange(lateralAxis);
-					lateralRange.Min -= GameSettings.EPSILON;
-					lateralRange.Max += GameSettings.EPSILON;
 
 					if (lateralRange.Contains(tileToPlayer[lateralAxis]) &&
 						Directions.NearestFromVector(
@@ -114,26 +251,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			return bestTile;
 		}
 
-		private void BeginPulling() {
-			// Determine the magnetic pull direction
-			int moveDirection = player.Direction;
-			if (Polarity == magneticTile.Polarity)
-				moveDirection = Directions.Reverse(moveDirection);
-			int axis = Directions.ToAxis(moveDirection);
-
-			// If the player is moving in the opposite direction of the megetic
-			// pull direction, then flip his velocity
-			if (player.Physics.Velocity.Dot(
-				Directions.ToVector(moveDirection)) < 0.0f)
-			{
-				Vector2F newVelocity = player.Physics.Velocity;
-				newVelocity[axis] = -newVelocity[axis];
-				player.Physics.Velocity = newVelocity;
-			}
-
-			player.Graphics.PlayAnimation(player.Animations.Throw);
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
@@ -145,42 +262,58 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Initialize the magnet effect
 			Animation animation;
 			if (Polarity == Polarity.North)
-				animation = GameData.ANIM_EFFECT_MAGNET_GLOVES_RED;
+				animation = GameData.ANIM_EFFECT_MAGNET_GLOVES_NORTH;
 			else
-				animation = GameData.ANIM_EFFECT_MAGNET_GLOVES_BLUE;
+				animation = GameData.ANIM_EFFECT_MAGNET_GLOVES_SOUTH;
 			effectAnimation.Play(animation);
 			effectAnimation.SubStripIndex = player.Direction;
 
-			magneticTile = null;
+			magneticObjectType = MagneticObjectType.None;
+			magneticObject = null;
 		}
 
 		public override void OnEnd(PlayerState newState) {
+			// End pulling the magnetic object
+			if (magneticObjectType == MagneticObjectType.Ball)
+				OnPullBallEnd();
+			else if (magneticObjectType == MagneticObjectType.Tile)
+				OnPullTileEnd();
+
 			player.Physics.IsFlying = false;
 		}
 
 		public override void Update() {
-			// Check if the magnetic tile has changed
-			Tile newMagnetTile = GetMagnetTile();
-			if (newMagnetTile != magneticTile) {
-				if (magneticTile == null) {
-					magneticTile = newMagnetTile;
-					BeginPulling();
-				}
-				else {
-					magneticTile = newMagnetTile;
-				}
-			}
 
-			// Update the pull or idle state
-			if (magneticTile != null) {
-				player.Physics.IsFlying = true;
-				StateParameters.ProhibitMovementControlOnGround = true;
-				UpdatePullState();
+			object newMagneticObject = GetMagneticObject();
+			MagneticObjectType newMagneticObjectType =
+				GetMagneticObjectType(newMagneticObject);
+
+			if (newMagneticObjectType != magneticObjectType) {
+				// End pulling the previous magnetic object
+				if (magneticObjectType == MagneticObjectType.Ball)
+					OnPullBallEnd();
+				else if (magneticObjectType == MagneticObjectType.Tile)
+					OnPullTileEnd();
+				
+				magneticObject = newMagneticObject;
+				magneticObjectType = newMagneticObjectType;
+
+				// Begin pulling the new magnetic object
+				if (magneticObjectType == MagneticObjectType.Ball)
+					OnPullBallBegin();
+				else if (magneticObjectType == MagneticObjectType.Tile)
+					OnPullTileBegin();
 			}
 			else {
-				player.Physics.IsFlying = false;
-				StateParameters.ProhibitMovementControlOnGround = false;
+				magneticObject = newMagneticObject;
+				magneticObjectType = newMagneticObjectType;
 			}
+			
+			// Update the magnetic object state
+			if (magneticObjectType == MagneticObjectType.Ball)
+				OnPullBallUpdate();
+			else if (magneticObjectType == MagneticObjectType.Tile)
+				OnPullTileUpdate();
 
 			// Udpate the magnet effect animation
 			effectAnimation.SubStripIndex = player.Direction;

@@ -84,7 +84,12 @@ namespace ZeldaOracle.Game {
 		public const int				SCENT_POD_FADE_DELAY					= 60;
 		public const int				BOMB_FUSE_TIME							= 108;
 		public const int				BOMB_FLICKER_DELAY						= 72;
-
+		public const float				MAGNET_BALL_MAX_MOVE_SPEED				= 3.0f;
+		public const float				MAGNET_BALL_LEDGE_JUMP_MOVE_SPEED		= 1.0f;
+		public const float				MAGNET_BALL_LEDGE_JUMP_JUMP_SPEED		= 1.8f;
+		public const float				MAGNET_BALL_ACCELERATION				= 0.02f;
+		public const float				MAGNET_BALL_DECELERATION				= 0.04f;
+		public const float				MAGNET_BALL_MIN_DISTANCE				= 21;
 		// Units
 		public const float				UNIT_KNOCKBACK_SPEED			= 1.0f; // 1.3 ??
 		public const int				UNIT_KNOCKBACK_DURATION			= 16;

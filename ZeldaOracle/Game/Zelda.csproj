@@ -396,6 +396,7 @@
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\FireballProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\BoneProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\FireShooterProjectile.cs" />
+    <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\MagnetBall.cs" />
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\PlayerBoomerang.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MagicProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MonsterBoomerang.cs" />

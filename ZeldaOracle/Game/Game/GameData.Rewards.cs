@@ -214,7 +214,7 @@ namespace ZeldaOracle.Game {
 
 			rewardManager.AddReward(new RewardItem("item_magnet_gloves", "item_magnet_gloves", Item.Level1, RewardHoldTypes.OneHand,
 				"You got the Magnetic Gloves! Their magnetic might attracts and repels.",
-				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_BLUE));
+				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH));
 
 			// Rupees
 
