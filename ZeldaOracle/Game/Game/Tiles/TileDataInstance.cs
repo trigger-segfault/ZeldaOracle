@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.Worlds;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
 
@@ -177,11 +169,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsSolid {
 			get { return SolidType != TileSolidType.NotSolid; }
-		}
-
-		public TileResetCondition ResetCondition {
-			get { return properties.GetEnum<TileResetCondition>("reset_condition", TileResetCondition.LeaveRoom); }
-			set { properties.Set("reset_condition", (int) value); }
 		}
 
 		public int ConveyorAngle {

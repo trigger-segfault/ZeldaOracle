@@ -136,6 +136,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		protected override void Initialize() {
 			base.Initialize();
 
+			properties.Print();
+
 			string typeName = Properties.GetString("warp_type", "Tunnel");
 			warpType		= (WarpType) Enum.Parse(typeof(WarpType), typeName, true);
 			collisionBox	= new Rectangle2I(2, 6, 12, 12);

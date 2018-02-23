@@ -27,20 +27,23 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		
 		// Called when the player presses A on this tile, when facing the given direction.
 		public override bool OnAction(int direction) {
-			if (!Properties.GetBoolean("looted", false)) {
+			if (!IsLooted) {
 
 				if (direction == Directions.Up) {
 					string rewardName = Properties.GetString("reward", "rupees_1");
 					Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
-					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
+					RoomControl.GameControl.PushRoomState(
+						new RoomStateReward(reward, (Point2I)Position));
 					
+					IsLooted = true;
+					IsEnabled = true; // Opened chest will always spawn
+
 					AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
-					Properties.Set("looted", true);
-					Properties.Set("enabled", true); // Opened chest are always spawned.
 					Graphics.PlayAnimation(SpriteList[1]);
 				}
 				else {
-					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
+					RoomControl.GameControl.DisplayMessage(
+						"It won't open from this side!");
 				}
 				return true;
 			}
@@ -81,6 +84,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public bool IsLooted {
 			get { return Properties.GetBoolean("looted", false); }
+			set { Properties.Set("looted", value); }
 		}
 	}
 }

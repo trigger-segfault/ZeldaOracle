@@ -403,21 +403,19 @@ namespace ZeldaOracle.Game.Control {
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set {
-				Level oldLevel = roomControl.Level;
+				// Leave the previous room
+				roomControl.Room.OnLeaveRoom();
+
+				// Leave the previous area
+				if (value.Level != roomControl.Level) {
+					foreach (Room room in roomControl.Level.GetRooms())
+						room.OnLeaveArea();
+				}
+
 				roomControl = value;
 
 				if (!roomControl.Room.IsHiddenFromMap)
 					lastRoomOnMap = roomControl.Room;
-				
-				// Leave the old room.
-				foreach (Room room in oldLevel.GetRooms())
-					room.OnRoomLeave();
-
-				// Respawn all monsters in the previous level.
-				if (roomControl.Level != oldLevel) {
-					foreach (Room room in oldLevel.GetRooms())
-						room.RespawnMonsters();
-				}
 			}
 		}
 

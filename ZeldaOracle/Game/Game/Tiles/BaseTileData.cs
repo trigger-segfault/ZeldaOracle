@@ -49,6 +49,10 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("substrip_index", 0)
 				.SetDocumentation("Animation Substrip Index", "", "", "Internal",
 				"The index of the substrip for dynamic animations.", true, false);
+			
+			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
+				.SetDocumentation("Reset Condition", "enum", "TileResetCondition", "General",
+				"The condition for when the tile resets its properties.");
 		}
 
 		public BaseTileData(BaseTileData copy) {
@@ -135,6 +139,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public ISprite PreviewSprite {
 			get { return previewSprite; }
 			set { previewSprite = value; }
+		}
+
+		public TileResetCondition ResetCondition {
+			get { return properties.GetEnum<TileResetCondition>("reset_condition", TileResetCondition.LeaveRoom); }
+			set { properties.Set("reset_condition", (int) value); }
 		}
 	}
 }

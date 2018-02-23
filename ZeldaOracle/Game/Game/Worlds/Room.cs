@@ -367,28 +367,31 @@ namespace ZeldaOracle.Game.Worlds {
 		// Special In-Game Methods
 		//-----------------------------------------------------------------------------
 		
-		public void OnRoomLeave() {
-			// Reset tile states.
+		public void OnLeaveRoom() {
+			// Reset tile states
 			foreach (TileDataInstance tile in GetTiles()) {
 				if (tile.ResetCondition == TileResetCondition.LeaveRoom)
 					tile.ResetState();
 			}
 
-			// TODO: Reset action tile states.
+			// Reset action tile states
+			foreach (ActionTileDataInstance tile in actionData) {
+				if (tile.ResetCondition == TileResetCondition.LeaveRoom)
+					tile.ResetState();
+			}
 		}
 
-		public void RespawnMonsters() {
-			// Reset tile states.
+		public void OnLeaveArea() {
+			// Reset tile states
 			foreach (TileDataInstance tile in GetTiles()) {
 				if (tile.ResetCondition == TileResetCondition.LeaveArea)
 					tile.ResetState();
 			}
 
-			// Reset action tile states.
+			// Reset action tile states
 			foreach (ActionTileDataInstance tile in actionData) {
-				if (tile.Type == typeof(MonsterAction)) {
-					tile.Properties.Set("dead", false);
-				}
+				if (tile.ResetCondition == TileResetCondition.LeaveArea)
+					tile.ResetState();
 			}
 		}
 

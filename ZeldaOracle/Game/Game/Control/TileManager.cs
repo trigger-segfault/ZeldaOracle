@@ -565,10 +565,15 @@ namespace ZeldaOracle.Game.Control {
 			// Check for covered/uncovered tiles.
 			Rectangle2F tileBoundsOld = tile.PreviousBounds;
 			Rectangle2F tileBoundsNew = tile.Bounds;
+			Rectangle2I combinedArea = Rectangle2I.Union(nextArea, prevArea);
 			if (tileBoundsOld != tileBoundsNew) {
-				foreach (Tile t in GetTilesInArea(nextArea).Union(GetTilesInArea(prevArea))) {
+				foreach (Tile t in
+					GetTilesInArea(combinedArea))
+				{
 					Rectangle2F tBounds = t.Bounds;
 					if (t != tile) {
+						if (t.Location == new Point2I(3, 3) && tile.IsMoving)
+							Console.WriteLine("{0}, {1}", tileBoundsNew.Contains(tBounds), tileBoundsOld.Contains(tBounds));
 						if (tileBoundsNew.Contains(tBounds) && !tileBoundsOld.Contains(tBounds))
 							t.OnCoverComplete(tile);
 						else if (tileBoundsNew.Intersects(tBounds) && !tileBoundsOld.Intersects(tBounds))

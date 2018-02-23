@@ -51,8 +51,6 @@ namespace ZeldaOracle.Game.Tiles {
 			//	.SetDocumentation("Collision Model", "collision_model", "", "General", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
 				.SetDocumentation("Environment Type", "enum", "TileEnvironmentType", "General", "");
-			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
-				.SetDocumentation("Reset Condition", "enum", "TileResetCondition", "General", "The condition for when the tile resets its properties.");
 			properties.Set("polarity", (int) Polarity.None)
 				.SetDocumentation("Polarity", "enum", "Polarity", "General", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
 			properties.Set("disable_on_destroy", false)
@@ -232,11 +230,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileSolidType SolidType {
 			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
 			set { properties.Set("solidity", (int) value); }
-		}
-
-		public TileResetCondition ResetCondition {
-			get { return properties.GetEnum<TileResetCondition>("reset_condition", TileResetCondition.LeaveRoom); }
-			set { properties.Set("reset_condition", (int) value); }
 		}
 
 		public int LedgeDirection {

@@ -29,6 +29,7 @@ END;
 ACTIONTILE temp_magnet_ball;
 	TYPE		MagnetBallActionTile;
 	SPRITE		magnet_ball_north;
+	RESETWHEN	LeaveArea;
 	PROPERTIES	(string, polarity, "north", "Polarity", ("enum", "Polarity"), "Magnet Ball", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
 END;
 

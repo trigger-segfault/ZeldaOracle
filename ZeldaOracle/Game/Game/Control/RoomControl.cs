@@ -180,20 +180,23 @@ namespace ZeldaOracle.Game.Control {
 		// Tile & Entity Management
 		//-----------------------------------------------------------------------------
 		
-		// Use this for spawning entites at runtime.
+		/// <summary>Initialize and spawn an entity, and have it be managed by the
+		/// RoomControl.</summary>
 		public void SpawnEntity(Entity e) {
 			e.EntityIndex = ++entityIndexCounter;
 			e.Initialize(this);
 			entities.Add(e);
 		}
 		
-		// Use this for spawning entites at a position at runtime.
+		/// <summary>Initialize and spawn an entity at the given position, and have it
+		/// be managed by the RoomControl.</summary>
 		public void SpawnEntity(Entity e, Vector2F position) {
 			e.Position = position;
 			SpawnEntity(e);
 		}
 		
-		// Use this for spawning entites at a position at runtime.
+		/// <summary>Initialize and spawn an entity at the given position, and have it
+		/// be managed by the RoomControl.</summary>
 		public void SpawnEntity(Entity e, Vector2F position, float zPosition) {
 			e.Position	= position;
 			e.ZPosition	= zPosition;
@@ -311,14 +314,14 @@ namespace ZeldaOracle.Game.Control {
 			else
 				visualEffect = null;
 
-			// Discover the room.
+			// Discover the room
 			room.IsDiscovered = true;
 			room.Level.IsDiscovered = true;
 
-			// Clear action tiles.
+			// Clear action tiles
 			actionTiles.Clear();
 
-			// Clear all entities from the old room (except for the player).
+			// Clear all entities from the old room (except for the player)
 			entities.Clear();
 			if (Player != null) {
 				Player.Initialize(this);
@@ -326,7 +329,7 @@ namespace ZeldaOracle.Game.Control {
 				entities.Add(Player);
 			}
 
-			// Create the tile grid.
+			// Create the tile grid
 			tileManager.Initialize(room);
 			for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
@@ -335,7 +338,7 @@ namespace ZeldaOracle.Game.Control {
 
 						if (data != null && data.IsAtLocation(x, y)) {
 							if (data.ModifiedProperties.GetBoolean("enabled", true)) {
-								// Place the tile.
+								// Place the tile
 								Tile tile = Tile.CreateTile(data);
 								PlaceTile(tile, x, y, i, false);
 							}
@@ -387,16 +390,17 @@ namespace ZeldaOracle.Game.Control {
 
 		// Set all entities to destroyed (except the player).
 		public void DestroyRoom() {
-			for (int i = 0; i < entities.Count; i++) {
-				if (entities[i] != Player) {
-					entities[i].IsDestroyed = true;
-				}
-			}
 			foreach (Tile tile in GetTiles()) {
 				tile.OnRemoveFromRoom();
 			}
 			foreach (ActionTile actionTile in actionTiles) {
 				actionTile.OnRemoveFromRoom();
+			}
+
+			for (int i = 0; i < entities.Count; i++) {
+				if (entities[i] != Player) {
+					entities[i].RemoveFromRoom();
+				}
 			}
 		}
 		
@@ -534,7 +538,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			// Update entities.
+			// Update entities
 			entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
 				if (entities[i] != Player && entities[i].IsAlive &&
@@ -558,7 +562,7 @@ namespace ZeldaOracle.Game.Control {
 					Player.UpdateGraphics();
 			}
 
-			// Remove destroyed entities.
+			// Remove destroyed entities
 			for (int i = 0; i < entities.Count; i++) {
 				if (!entities[i].IsAlive || !entities[i].IsInRoom) {
 					entities.RemoveAt(i--);
@@ -568,15 +572,15 @@ namespace ZeldaOracle.Game.Control {
 			//if (requestedTransitionDirection >= 0)
 			//	return;
 			
-			// Update tiles.
+			// Update tiles
 			tileManager.UpdateTiles();
 
-			// Update the action tiles.
+			// Update the action tiles
 			for (int i = 0; i < actionTiles.Count; i++) {
 				actionTiles[i].Update();
 			}
 			
-			// Process Physics.
+			// Process Physics
 			if (GameControl.UpdateRoom) {
 				roomPhysics.ProcessPhysics();
 				Player.CheckRoomTransitions();
@@ -598,18 +602,18 @@ namespace ZeldaOracle.Game.Control {
 
 			viewControl.ShakeOffset = Vector2F.Zero;
 			
-			// Update the current visual effect.
+			// Update the current visual effect
 			if (visualEffect != null && !disableVisualEffect)
 				visualEffect.Update();
 			
-			// Update entities, tiles, and action tiles.
+			// Update entities, tiles, and action tiles
 			UpdateObjects();
 
-			// Update view to follow player.
+			// Update view to follow player
 			viewControl.PanTo(Player.DrawCenter + Player.ViewFocusOffset);
 			
 			if (requestedTransitionDirection >= 0) {
-				// Call the event RoomTransitioning.
+				// Call the event RoomTransitioning
 				// This event has a chance to cancel the room transition.
 				if (eventRoomTransitioning != null) {
 					Delegate[] invocationList = eventRoomTransitioning.GetInvocationList();
@@ -625,15 +629,15 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			
-			// Update HUD and current room state.
+			// Update HUD and current room state
 			GameControl.HUD.Update();
 			GameControl.UpdateRoomState();
 
 			if (GameControl.UpdateRoom) {
-				// [Start] Open inventory.
+				// [Start] Open inventory
 				if (Controls.Start.IsPressed())
 					GameControl.OpenMenu(GameControl.MenuWeapons);
-				// [Select] Open map screen.
+				// [Select] Open map screen
 				else if (Controls.Select.IsPressed())
 					GameControl.OpenMapScreen();
 			}
@@ -807,37 +811,41 @@ namespace ZeldaOracle.Game.Control {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// The current level that contains the room the player is in.
+		/// <summary>The current level.</summary>
 		public Level Level {
 			get { return room.Level; }
 		}
 
-		// The current room the player is in.
+		/// <summary>Get the current room.</summary>
 		public Room Room {
 			get { return room; }
 		}
 
-		// The player entity (NOTE: this can be null)
+		/// <summary>Get the player entity.</summary>
 		public Player Player {
 			get { return GameControl.Player; }
 		}
-
-		// Get the list of entities.
+		
+		/// <summary>Get the list of entities.</summary>
 		public List<Entity> Entities {
 			get { return entities; }
 		}
 
-		// Get the number of entities (use this to iterate the entity list).
+		/// <summary>Get the number of entities (use this to iterate the entity list).
+		/// </summary>
 		public int EntityCount {
 			get { return entityCount; }
 		}
 
-		// Get the size of the room in pixels.
+		/// <summary>Get the size of the current room in pixels.</summary>
 		public Rectangle2I RoomBounds {
-			get { return new Rectangle2I(Point2I.Zero, room.Size * GameSettings.TILE_SIZE); }
+			get {
+				return new Rectangle2I(Point2I.Zero,
+					room.Size * GameSettings.TILE_SIZE);
+			}
 		}
 
-		// Get the room's location within the level.
+		/// <summary>Get the current room's location within the level.</summary>
 		public Point2I RoomLocation {
 			get { return roomLocation; }
 		}
@@ -870,19 +878,18 @@ namespace ZeldaOracle.Game.Control {
 			remove { eventRoomTransitioning -= value; }
 		}
 
-		// Are we in a side-scrolling room?
+		/// <summary>True if the current room is a side-scrolling room.</summary>
 		public bool IsSideScrolling {
 			get { return isSideScrolling; }
 			set { isSideScrolling = value; }
 		}
 
-		// Are we in an underwater room?
+		/// <summary>True if the current room is underwater.</summary>
 		public bool IsUnderwater {
 			get { return isUnderwater; }
 			set { isUnderwater = value; }
 		}
 
-		// Are we in an underwater room?
 		public bool DisableVisualEffect {
 			get { return disableVisualEffect; }
 			set { disableVisualEffect = value; }
@@ -904,7 +911,8 @@ namespace ZeldaOracle.Game.Control {
 			get { return tilePaletteOverride; }
 			set {
 				tilePaletteOverride = value;
-				if (tilePaletteOverride != null && tilePaletteOverride.PaletteType != PaletteTypes.Tile)
+				if (tilePaletteOverride != null &&
+					tilePaletteOverride.PaletteType != PaletteTypes.Tile)
 					throw new ArgumentException("Palette is not a tile palette!");
 			}
 		}
@@ -913,7 +921,8 @@ namespace ZeldaOracle.Game.Control {
 			get { return entityPaletteOverride; }
 			set {
 				entityPaletteOverride = value;
-				if (entityPaletteOverride != null && entityPaletteOverride.PaletteType != PaletteTypes.Entity)
+				if (entityPaletteOverride != null &&
+					entityPaletteOverride.PaletteType != PaletteTypes.Entity)
 					throw new ArgumentException("Palette is not an entity palette!");
 			}
 		}

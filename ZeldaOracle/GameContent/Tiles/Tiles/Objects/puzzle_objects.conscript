@@ -345,6 +345,7 @@ TILE "color_lantern";
 	TYPE		TileColorLantern;
 	SOLID		block;
 	SAMESPRITE;
+	PROPERTIES	(integer, color, -1, "Color", ("enum", "PuzzleColor"), "Color", "The color of the lantern flames.");
 	EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
 END;
 

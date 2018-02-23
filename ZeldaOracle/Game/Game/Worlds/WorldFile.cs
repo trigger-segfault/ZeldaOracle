@@ -384,12 +384,12 @@ namespace ZeldaOracle.Game.Worlds {
 				tile.TileData = ReadResource(reader, tileData);
 			}
 
-			// Read the tile's properties.
+			// Read the tile's properties
 			ReadProperties(reader, tile.Properties);
 			ReadEvents(reader, tile.Events, world);
 			if (tile.TileData != null)
 				tile.Properties.BaseProperties = tile.TileData.Properties;
-			tile.ModifiedProperties.Clone(tile.Properties);
+			tile.ModifiedProperties.BaseProperties = tile.Properties;
 
 			return (tile.TileData != null ? tile : null);
 		}
@@ -401,14 +401,15 @@ namespace ZeldaOracle.Game.Worlds {
 			Point2I position = new Point2I(
 				reader.ReadInt32(), reader.ReadInt32());
 
-			ActionTileDataInstance actionTileTile = new ActionTileDataInstance(tileData, position);
-			ReadProperties(reader, actionTileTile.Properties);
-			ReadEvents(reader, actionTileTile.Events, world);
-			actionTileTile.Properties.PropertyObject = actionTileTile;
+			ActionTileDataInstance actionTile = new ActionTileDataInstance(tileData, position);
+			ReadProperties(reader, actionTile.Properties);
+			ReadEvents(reader, actionTile.Events, world);
+			actionTile.Properties.PropertyObject = actionTile;
 			if (tileData != null)
-				actionTileTile.Properties.BaseProperties = actionTileTile.ActionTileData.Properties;
+				actionTile.Properties.BaseProperties = actionTile.ActionTileData.Properties;
+			actionTile.ModifiedProperties.BaseProperties = actionTile.Properties;
 
-			return (actionTileTile.ActionTileData != null ? actionTileTile : null);
+			return (actionTile.ActionTileData != null ? actionTile : null);
 		}
 
 		private void ReadEvents(BinaryReader reader, EventCollection events, World world) {

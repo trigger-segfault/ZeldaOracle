@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 			Monster monster = null;
 
-			// Construct the monster object.
+			// Construct the monster object
 			if (!isDead) {
 				string monsterTypeStr = Properties.GetString("monster_type", "");
 				monster = ConstructObject<Monster>(monsterTypeStr);
@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					Console.WriteLine("Error trying to spawn monster of type " + monsterTypeStr);
 			}
 
-			// Spawn the monster entity.
+			// Spawn the monster entity
 			if (monster != null) {
 				Vector2F center = position + (size * GameSettings.TILE_SIZE / 2);
 				monster.SetPositionByCenter(center);

@@ -188,12 +188,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowParseError("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!", parameters[0]);
 			});
 			//=====================================================================================
-			AddCommand("RESETWHEN", (int) Modes.Tile,
+			AddCommand("RESETWHEN", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"string resetCondition",
 			delegate (CommandParam parameters) {
-				TileResetCondition envType = TileResetCondition.LeaveRoom;
-				if (Enum.TryParse<TileResetCondition>(parameters.GetString(0), true, out envType))
-					tileData.ResetCondition = envType;
+				TileResetCondition resetCondition = TileResetCondition.LeaveRoom;
+				if (Enum.TryParse(parameters.GetString(0), true, out resetCondition))
+					baseTileData.ResetCondition = resetCondition;
 				else
 					ThrowParseError("Invalid tile reset condition: \"" + parameters.GetString(0) + "\"!", parameters[0]);
 			});

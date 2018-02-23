@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Graphics.Sprites;
@@ -26,9 +21,9 @@ namespace ZeldaOracle.Game.Tiles {
 		public BaseTileDataInstance() {
 			this.room				= null;
 			this.tileData			= null;
-			this.properties							= new Properties(this);
-			this.modifiedProperties					= new Properties(this);
-			this.events								= new EventCollection(this);
+			this.properties			= new Properties(this);
+			this.modifiedProperties	= new Properties(this);
+			this.events				= new EventCollection(this);
 		}
 
 		public BaseTileDataInstance(BaseTileData tileData) {
@@ -37,7 +32,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties							= new Properties(this);
 			this.properties.BaseProperties			= tileData.Properties;
 			this.modifiedProperties					= new Properties(this);
-			this.modifiedProperties.BaseProperties	= tileData.Properties;
+			this.modifiedProperties.BaseProperties	= this.properties;
 			this.events								= new EventCollection(tileData.Events, this);
 		}
 
@@ -59,7 +54,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public void ResetState() {
 			// Copy the properties into the modified properties.
-			modifiedProperties.Clone(properties);
+			//modifiedProperties.Clone(properties);
+			modifiedProperties.Clear();
 		}
 
 		public void OverrideDefaultState() {
@@ -139,10 +135,6 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Tileset; }
 		}
 
-		public string ID {
-			get { return properties.GetString("id", ""); }
-		}
-
 		public bool HasModifiedProperties {
 			get { return properties.HasModifiedProperties; }
 		}
@@ -161,6 +153,15 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public ISprite PreviewSprite {
 			get { return tileData.PreviewSprite; }
+		}
+
+		public string ID {
+			get { return properties.GetString("id", ""); }
+		}
+		
+		public TileResetCondition ResetCondition {
+			get { return properties.GetEnum("reset_condition", TileResetCondition.LeaveRoom); }
+			set { properties.Set("reset_condition", (int) value); }
 		}
 	}
 }

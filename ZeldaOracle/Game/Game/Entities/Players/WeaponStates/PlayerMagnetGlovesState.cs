@@ -29,9 +29,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerMagnetGlovesState() {
-			StateParameters.ProhibitJumping	= true;
-			StateParameters.EnableStrafing	= true;
-			PlayerAnimations.Default		= GameData.ANIM_PLAYER_AIM_WALK;
+			StateParameters.ProhibitJumping			= true;
+			StateParameters.EnableStrafing			= true;
+			StateParameters.ProhibitRoomTransitions	= true;
+			PlayerAnimations.Default				= GameData.ANIM_PLAYER_AIM_WALK;
 
 			effectAnimation = new AnimationPlayer();
 			alignBox = new Rectangle2F(-10, -12, 20, 19);

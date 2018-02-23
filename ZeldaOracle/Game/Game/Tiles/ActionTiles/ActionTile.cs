@@ -91,7 +91,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public static ActionTile CreateAction(ActionTileDataInstance data) {
 			ActionTile tile;
 			
-			// Construct the tile.
+			// Construct the action tile
 			if (data.Type == null)
 				tile = new ActionTile();
 			else
@@ -100,9 +100,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			tile.position	= data.Position;
 			tile.actionData	= data;
 			tile.size		= data.Size;
-			tile.properties.SetAll(data.BaseProperties);
-			tile.properties.SetAll(data.Properties);
-			tile.properties.BaseProperties	= data.Properties;
+			//tile.properties.SetAll(data.BaseProperties);
+			//tile.properties.SetAll(data.Properties);
+			//tile.properties.BaseProperties	= data.Properties;
+			tile.properties	= data.ModifiedProperties;
 			
 			return tile;
 		}

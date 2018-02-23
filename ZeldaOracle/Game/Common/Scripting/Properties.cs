@@ -299,6 +299,11 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		// General Mutators
 		//-----------------------------------------------------------------------------
+
+		public void Clear() {
+			map.Clear();
+		}
+
 		/*
 		public void RunActionForAll() {
 			List<Property> list = map.Values.ToList();
@@ -509,6 +514,24 @@ namespace ZeldaOracle.Common.Scripting {
 				foreach (Property property in map.Values)
 					property.BaseProperty = null;
 			}
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Debug Methods
+		//-----------------------------------------------------------------------------
+
+		public void Print() {
+			foreach (Property property in map.Values) {
+				PrintProperty(property);
+			}
+		}
+
+		public void PrintProperty(Property property) {
+			Console.Write(property.Name);
+			Console.Write(" = ");
+			Console.Write(property.StringValue);
+			Console.WriteLine();
 		}
 
 

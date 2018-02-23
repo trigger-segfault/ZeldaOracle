@@ -32,16 +32,23 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		}
 
 		public override void OnRemoveFromRoom() {
-			// Remember the ball position
-			Point2I ballPosition = (Point2I) GMath.Round(magnetBall.Position);
+			if (magnetBall.IsDestroyed) {
+				properties.Set("position", (Point2I) Position);
+			}
+			else {
+				// Remember the ball's position
+				Point2I ballPosition = (Point2I) GMath.Round(magnetBall.Position);
 
-			// Clamp the position so that the ball is at least one tile aways from the
-			// room edge
-			Rectangle2I area = RoomControl.RoomBounds;
-			area.Inflate(-24, -24);
-			ballPosition = GMath.Clamp(ballPosition, area);
+				// TODO: this needs to reset when leaving the dungeon
 
-			properties.SetBase("position", ballPosition);
+				// Clamp the position so that the ball is at least one tile aways from the
+				// room edge
+				Rectangle2I area = RoomControl.RoomBounds;
+				area.Inflate(-24, -24);
+				ballPosition = GMath.Clamp(ballPosition, area);
+
+				properties.Set("position", ballPosition);
+			}
 		}
 
 
