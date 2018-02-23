@@ -43,6 +43,8 @@ namespace ZeldaOracle.Game {
 		public static Sound SOUND_BOOMERANG_LOOP;
 		public static Sound SOUND_FIRE_ROD;
 		public static Sound SOUND_KEY_BOUNCE;
+		public static Sound SOUND_MAGNET_GLOVES_LOOP;
+		public static Sound SOUND_MAGNET_GLOVES_STOP;
 		public static Sound SOUND_SEED_SHOOTER;
 		public static Sound SOUND_SHIELD;
 		public static Sound SOUND_SHIELD_DEFLECT;

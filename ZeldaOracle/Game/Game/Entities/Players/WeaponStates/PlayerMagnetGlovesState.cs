@@ -1,4 +1,5 @@
-﻿using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Monsters;
@@ -393,6 +394,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnEnd(PlayerState newState) {
 			// End pulling the magnetic object
 			subStateMachine.EndCurrentState();
+			AudioSystem.PlaySound(GameData.SOUND_MAGNET_GLOVES_STOP);
 		}
 
 		public override void Update() {
@@ -402,6 +404,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Udpate the magnet effect animation
 			effectAnimation.SubStripIndex = player.Direction;
 			effectAnimation.Update();
+
+			// Loop the magnet gloves sound while this update method is called
+			AudioSystem.LoopSoundWhileActive(GameData.SOUND_MAGNET_GLOVES_LOOP);
 
 			// Check if the action button was released
 			if (!weapon.IsButtonDown()) {

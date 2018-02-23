@@ -1565,7 +1565,18 @@
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Sounds\Items\magnet_gloves_loop.wav">
+      <Name>magnet_gloves_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\magnet_gloves_stop.wav">
+      <Name>magnet_gloves_stop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>

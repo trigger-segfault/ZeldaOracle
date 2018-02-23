@@ -22,6 +22,8 @@ SOUND bomb_explode,				"Items/bomb_explode";		# Oracle_Bomb_Blow
 SOUND boomerang_loop,			"Items/boomerang_loop";		# Oracle_Boomerang
 SOUND fire_rod,					"Items/fire_rod";			# (from Link's Awakening)
 SOUND key_bounce,				"Items/key_bounce";			# Oracle_Key_Bounce
+SOUND magnet_gloves_loop		"Items/magnet_gloves_loop";	# OOS_MagneticGloves1
+SOUND magnet_gloves_stop		"Items/magnet_gloves_stop";	# OOS_MagneticGloves2
 SOUND seed_shooter,				"Items/seed_shooter";		# OOA_SeedShooter
 SOUND shield,					"Items/shield";				# Oracle_Shield
 SOUND shield_deflect,			"Items/shield_deflect";		# Oracle_Shield_Deflect

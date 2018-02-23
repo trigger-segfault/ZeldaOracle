@@ -359,7 +359,9 @@ namespace ZeldaOracle.Common.Audio {
 			return ForcePlaySound(soundList[GRandom.NextInt(soundList.Length)]);
 		}
 
-		/// <summary></summary>
+		/// <summary>Play the sound looped if it is not already playing. The sound will
+		/// automatically stop if this function is not called again before the next
+		/// audio system update step.</summary>
 		public static void LoopSoundWhileActive(Sound sound) {
 			sound.LoopWhileActive();
 		}
