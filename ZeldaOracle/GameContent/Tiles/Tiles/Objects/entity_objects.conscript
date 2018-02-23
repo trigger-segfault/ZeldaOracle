@@ -78,17 +78,21 @@ END;
 
 # Magnet Spinner ----------------------------------------------
 
-TILE "magnet_spinner_north";
+TILE "temp_magnet_spinner";
 	TYPE		TileMagnetSpinner;
-	SPRITE		tile_magnet_spinner_north;
 	SOLID		block;
+	PROPERTY	(polarity, 0); # North
+	PROPERTIES	(integer, rotation_direction, 1, "Rotation Direction", ("enum", "WindingOrder"),
+	             "Magnet Spinner", "The direction in which the spinner will rotate.");
+END;
+
+TILE "magnet_spinner_north";
+	CLONE		"temp_magnet_spinner";
 	PROPERTY	(polarity, 0); # North
 END;
 
 TILE "magnet_spinner_south";
-	TYPE		TileMagnetSpinner;
-	SPRITE		tile_magnet_spinner_south;
-	SOLID		block;
+	CLONE		"temp_magnet_spinner";
 	PROPERTY	(polarity, 1); # South
 END;
 

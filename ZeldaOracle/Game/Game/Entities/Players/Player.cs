@@ -830,6 +830,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			physics.CollideWithWorld	= !stateParameters.DisableSolidCollisions;
 			physics.MovesWithPlatforms	= !StateParameters.DisablePlatformMovement;
 			physics.MovesWithConveyors	= !StateParameters.DisablePlatformMovement;
+			physics.DisableSurfaceContact			= StateParameters.DisableSurfaceContact;
 
 			IsPassable = stateParameters.DisableInteractionCollisions;
 		}

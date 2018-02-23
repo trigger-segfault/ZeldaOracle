@@ -18,12 +18,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		private GenericStateMachine<MagnetState> subStateMachine;
-
 		private ItemMagnetGloves weapon;
 		private AnimationPlayer effectAnimation;
 		private object magneticObject;
 		private Rectangle2F alignBox;
-		private int spinTimer;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,45 +32,57 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.ProhibitJumping	= true;
 			StateParameters.EnableStrafing	= true;
 			PlayerAnimations.Default		= GameData.ANIM_PLAYER_AIM_WALK;
-			effectAnimation					= new AnimationPlayer();
 
+			effectAnimation = new AnimationPlayer();
 			alignBox = new Rectangle2F(-10, -12, 20, 19);
 
 			subStateMachine = new GenericStateMachine<MagnetState>();
 			subStateMachine.AddState(MagnetState.Idle)
-				.OnUpdate(OnIdleStateUpdate);
+				.OnUpdate(OnUpdateIdleState);
 			subStateMachine.AddState(MagnetState.PullingBall)
-				.OnBegin(OnPullBallBegin)
-				.OnUpdate(OnPullBallUpdate)
-				.OnEnd(OnPullBallEnd);
+				.OnBegin(OnBeginPullBallState)
+				.OnEnd(OnEndPullBallState)
+				.OnUpdate(OnUpdatePullBallState);
 			subStateMachine.AddState(MagnetState.PullingTile)
-				.OnBegin(OnPullTileBegin)
-				.OnUpdate(OnPullTileUpdate)
-				.OnEnd(OnPullTileEnd);
+				.OnBegin(OnBeginPullTileState)
+				.OnEnd(OnEndPullTileState)
+				.OnUpdate(OnUpdatePullTileState);
 			subStateMachine.AddState(MagnetState.AttachedToSpinner)
-				.OnBegin(OnAttachedToSpinnerBegin)
-				.OnUpdate(OnAttachedToSpinnerUpdate)
-				.OnEnd(OnAttachedToSpinnerEnd);
+				.OnBegin(OnBeginAttachedToSpinnerState)
+				.OnEnd(OnEndAttachedToSpinnerState)
+				.OnUpdate(OnUpdateAttachedToSpinnerState);
 		}
 		
 
 		//-----------------------------------------------------------------------------
-		// Internal Methods
+		// Magnet Spinner Interaction
 		//-----------------------------------------------------------------------------
 
-		private void OnIdleStateUpdate() {
+		/// <summary>Called by the Magnet Spinner tile when its rotation is complete.
+		/// </summary>
+		public void DetachFromSpinner() {
+			subStateMachine.BeginState(MagnetState.Idle);
+			magneticObject = null;
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// State Callbacks
+		//-----------------------------------------------------------------------------
+
+		private void OnUpdateIdleState() {
 			CheckMagneticObject();
 		}
 
-		private void OnPullTileBegin() {
-			player.Physics.IsFlying							= true;
+		private void OnBeginPullTileState() {
+			player.Physics.DisableSurfaceContact			= true;
 			StateParameters.ProhibitMovementControlOnGround	= true;
 			StateParameters.ProhibitMovementControlInAir	= RoomControl.IsSideScrolling;
 			StateParameters.DisableGravity					= RoomControl.IsSideScrolling;
 			StateParameters.EnableGroundOverride			= RoomControl.IsSideScrolling;
-			Tile magneticTile = (Tile) magneticObject;
 
 			// Determine the magnetic pull direction
+			Tile magneticTile = (Tile) magneticObject;
 			int moveDirection = player.Direction;
 			if (Polarity == magneticTile.Polarity)
 				moveDirection = Directions.Reverse(moveDirection);
@@ -91,20 +101,20 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Graphics.PlayAnimation(player.Animations.Throw);
 		}
 
-		private void OnPullTileEnd() {
-			player.Physics.IsFlying							= false;
+		private void OnEndPullTileState() {
+			player.Physics.DisableSurfaceContact			= false;
 			StateParameters.ProhibitMovementControlOnGround	= false;
 			StateParameters.ProhibitMovementControlInAir	= false;
 			StateParameters.DisableGravity					= false;
 			StateParameters.EnableGroundOverride			= false;
 		}
 
-		private void OnPullTileUpdate() {
+		private void OnUpdatePullTileState() {
+			// Check if we stopped pulling this tile
 			if (CheckMagneticObject())
 				return;
 
 			int axis = Directions.ToAxis(player.Direction);
-			float moveSpeed = GameSettings.PLAYER_MAGNET_GLOVE_MOVE_SPEED;
 			Tile magneticTile = (Tile) magneticObject;
 				
 			// Check if the player is jumping and can move while jumping
@@ -123,10 +133,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			float distance = GMath.Abs(
 				magneticTile.Center[axis] - player.Center[axis]);
 			if (distance > 32.0f)
-				velocity = Directions.ToVector(player.Direction) * moveSpeed;
+				velocity = Directions.ToVector(player.Direction) *
+					GameSettings.PLAYER_MAGNET_GLOVE_MOVE_SPEED;
 			else {
-				velocity = (magneticTile.Center - player.Center).Normalized * moveSpeed;
-					//new Vector2F(0, 1.5f)).Normalized * moveSpeed;
+				velocity = (magneticTile.Center - player.Center).Normalized *
+					GameSettings.PLAYER_MAGNET_GLOVE_MOVE_SPEED;
 				velocity = Vector2F.SnapDirectionByCount(velocity, 16);
 			}
 
@@ -140,6 +151,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Position += velocity;
 
+			// Check if the tile is a Magnet Spinner and if we can attach to it
 			if (magneticTile.Polarity != Polarity && distance <= 14 &&
 				(magneticTile is TileMagnetSpinner) &&
 				!((TileMagnetSpinner) magneticTile).IsRotating)
@@ -152,27 +164,25 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		private void OnAttachedToSpinnerBegin() {
+		private void OnBeginAttachedToSpinnerState() {
 			player.Physics.Velocity = Vector2F.Zero;
 
-			spinTimer = 0;
-
-			TileMagnetSpinner spinner = magneticObject as TileMagnetSpinner;
-			player.Physics.IsFlying							= true;
+			player.Physics.DisableSurfaceContact			= true;
 			StateParameters.ProhibitMovementControlOnGround	= true;
 			StateParameters.ProhibitMovementControlInAir	= RoomControl.IsSideScrolling;
 			StateParameters.DisableGravity					= RoomControl.IsSideScrolling;
 			StateParameters.EnableGroundOverride			= RoomControl.IsSideScrolling;
 			StateParameters.DisableSolidCollisions			= true;
 
+			TileMagnetSpinner spinner = (TileMagnetSpinner) magneticObject;
 			spinner.OnPlayerAttach();
 		}
 
-		private void OnAttachedToSpinnerEnd() {
-			TileMagnetSpinner spinner = magneticObject as TileMagnetSpinner;
+		private void OnEndAttachedToSpinnerState() {
+			TileMagnetSpinner spinner = (TileMagnetSpinner) magneticObject;
 			spinner.OnPlayerDetach();
 
-			player.Physics.IsFlying							= false;
+			player.Physics.DisableSurfaceContact			= false;
 			StateParameters.ProhibitMovementControlOnGround	= false;
 			StateParameters.ProhibitMovementControlInAir	= false;
 			StateParameters.DisableGravity					= false;
@@ -180,43 +190,37 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.DisableSolidCollisions			= false;
 		}
 
-		private void OnAttachedToSpinnerUpdate() {
-			TileMagnetSpinner spinner = magneticObject as TileMagnetSpinner;
-
+		private void OnUpdateAttachedToSpinnerState() {
 			player.Physics.Velocity = Vector2F.Zero;
 
-			if (spinner.IsRotating || spinTimer > 0) {
-				spinTimer++;
-				if (spinTimer > 0 && !spinner.IsRotating) {
-					subStateMachine.BeginState(MagnetState.Idle);
-					magneticObject = null;
-				}
-			}
+			// The Magnet Spinner tile will detach the player when its next rotation
+			// is complete
 		}
 		
-		private void OnPullBallBegin() {
-			MagnetBall ball = magneticObject as MagnetBall;
+		private void OnBeginPullBallState() {
+			MagnetBall ball = (MagnetBall) magneticObject;
 			ball.IsMoving = true;
 			ball.Direction = player.Direction;
 			if (ball.Polarity != Polarity)
 				ball.Direction = Directions.Reverse(ball.Direction);
 		}
 
-		private void OnPullBallEnd() {
-			MagnetBall ball = magneticObject as MagnetBall;
+		private void OnEndPullBallState() {
+			MagnetBall ball = (MagnetBall) magneticObject;
 			ball.IsMoving = false;
 		}
 
-		private void OnPullBallUpdate() {
+		private void OnUpdatePullBallState() {
+			// Check if we stopped pulling this magnet ball
 			if (CheckMagneticObject())
 				return;
 
-			int direction = player.Direction;
+			MagnetBall ball = (MagnetBall) magneticObject;
 			int axis = Directions.ToAxis(player.Direction);
 			int lateralAxis = Axes.GetOpposite(axis);
-			MagnetBall ball = magneticObject as MagnetBall;
 			float distance = GMath.Abs(ball.Center[axis] - player.Center[axis]);
 
+			// Determine the magnet ball's velocity
 			Vector2F velocity = Vector2F.Zero;
 
 			if (distance > GameSettings.MAGNET_BALL_MIN_DISTANCE ||
@@ -235,21 +239,33 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				velocity[axis] = player.Physics.Velocity[axis];
 			}
 
+			// Always move laterally toward the player
 			velocity[lateralAxis] = GMath.Clamp(
 				player.Center[lateralAxis] - ball.Center[lateralAxis] +
-				player.Physics.Velocity[lateralAxis], -1.0f, 1.0f);
+					player.Physics.Velocity[lateralAxis],
+				-GameSettings.MAGNET_BALL_LATERAL_MOVE_SPEED,
+				GameSettings.MAGNET_BALL_LATERAL_MOVE_SPEED);
+
 			ball.Physics.Velocity = velocity;
 		}
+		
 
-		/// <summary>Reverse the polarity of the magnetic gloves</summary>
-		public void ReversePolarity() {
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Reverse the polarity of the magnetic gloves weapon.</summary>
+		private void ReversePolarity() {
 			if (weapon.Polarity == Polarity.North)
 				weapon.Polarity = Polarity.South;
 			else
 				weapon.Polarity = Polarity.North;
 		}
 
-		public bool CheckMagneticObject() {
+		/// <summary>Check for the magnetic object that is in front of (and closest to)
+		/// the player. If this object is different from the current one, then
+		/// transition to the sub-state for the new object.</summary>
+		private bool CheckMagneticObject() {
 			object newMagneticObject = GetMagneticObject();
 
 			if (newMagneticObject != magneticObject) {
@@ -274,7 +290,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		/// <summary>Get the nearest magnetic object in front of and aligned with the 
 		/// player, or null if none was found.</summary>
-		public object GetMagneticObject() {
+		private object GetMagneticObject() {
 			int axis = Directions.ToAxis(player.Direction);
 			int lateralAxis = Axes.GetOpposite(axis);
 			RangeF lateralRange = alignBox.GetAxisRange(lateralAxis);
@@ -310,8 +326,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			return bestObject;
 		}
-
-		public Tile GetMagnetTile() {
+		
+		/// <summary>Get the nearest magnetic tile in front of and aligned with the 
+		/// player, or null if none was found.</summary>
+		private Tile GetMagnetTile() {
 			// Create an area to check for magnet tiles
 			int axis = Directions.ToAxis(player.Direction);
 			int lateralAxis = Axes.GetOpposite(axis);
@@ -329,8 +347,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Iterate tiles looking for tiles with a polarity in front of the player
 			foreach (Tile tile in RoomControl.GetTopTilesInArea(tileArea)) {
 				if (tile.Polarity != Polarity.None) {
-					float distance = GMath.Abs(tile.Center[axis] - player.Center[axis]);
-					float lateralDistance = GMath.Abs(tile.Center[lateralAxis] - player.Center[lateralAxis]);
+					float distance = GMath.Abs(
+						tile.Center[axis] - player.Center[axis]);
+					float lateralDistance = GMath.Abs(
+						tile.Center[lateralAxis] - player.Center[lateralAxis]);
 					Vector2F tileToPlayer = player.Center - tile.Center;
 
 					if (lateralRange.Contains(tileToPlayer[lateralAxis]) &&
@@ -364,6 +384,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			effectAnimation.Play(animation);
 			effectAnimation.SubStripIndex = player.Direction;
 
+			// Begin the idle sub-state
 			magneticObject = null;
 			subStateMachine.BeginState(MagnetState.Idle);
 		}

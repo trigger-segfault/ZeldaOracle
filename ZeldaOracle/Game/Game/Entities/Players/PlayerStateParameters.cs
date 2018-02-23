@@ -159,6 +159,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				EnableGroundOverride = a.EnableGroundOverride || b.EnableGroundOverride,
 				DisableSolidCollisions = a.DisableSolidCollisions || b.DisableSolidCollisions,
 				DisablePlatformMovement = a.DisablePlatformMovement || b.DisablePlatformMovement,
+				DisableSurfaceContact = a.DisableSurfaceContact || b.DisableSurfaceContact,
 
 				// Unit
 				DisableInteractionCollisions = a.DisableInteractionCollisions || b.DisableInteractionCollisions,
@@ -204,6 +205,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		
 		// Physics
+		public bool DisableSurfaceContact { get; set; } = false;
 		public bool DisableGravity { get; set; } = false;
 		public bool EnableGroundOverride { get; set; } = false;
 		public bool DisableSolidCollisions { get; set; } = false;

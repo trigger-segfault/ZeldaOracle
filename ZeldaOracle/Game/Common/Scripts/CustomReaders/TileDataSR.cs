@@ -546,7 +546,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// Parse the property type and value.
 			PropertyType type;
 			if (!Enum.TryParse<PropertyType>(param.GetString(0), true, out type))
-				ThrowParseError("Unknown property type " + name);
+				ThrowParseError("Unknown property type '" + param.GetString(0) + "'");
 			object value = ParsePropertyValue(param[2], type);
 
 			// Set the property.

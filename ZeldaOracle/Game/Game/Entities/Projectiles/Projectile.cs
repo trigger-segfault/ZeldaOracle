@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		
 		public Projectile() {
-			EnablePhysics(PhysicsFlags.Flying);
+			EnablePhysics(PhysicsFlags.DisableSurfaceContact);
 
 			syncAnimationWithAngle		= false;
 			syncAnimationWithDirection	= false;

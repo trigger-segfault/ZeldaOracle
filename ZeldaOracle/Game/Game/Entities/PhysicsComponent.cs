@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Entities {
 		MoveWithPlatforms		= 0x8000,	// Moves with moving platform tiles.
 		Crushable				= 0x10000,
 		EdgeClipping			= 0x20000,	// Allow clipping into the edges of tiles.
-		Flying					= 0x40000,	// Flying entities are never considered to be on the ground (even if their Z position is zero)
+		DisableSurfaceContact	= 0x40000,	// Do not check for surface interactions such as water, holes, conveyors
 
 
 		CheckRadialCollisions	= 0x80000,
@@ -390,9 +390,109 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Collisions
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Returns true if the entity is currently colliding in the given
+		/// direction.</summary>
+		public bool IsCollidingInDirection(int direction) {
+			return  Collisions.Any(c => c.Direction == direction);
+		}
 
-		// Collide with the inside edges of a rectangle.
-		// NOTE: At the moment, this is only used when player is doomed to fall in a hole.
+		/// <summary>Iterate the collisions which are penetrating on the given axis.
+		/// </summary>
+		public IEnumerable<Collision> GetCollisionsOnAxis(int axis) {
+			return Collisions.Where(c => c.Axis == axis);
+		}
+		
+		/// <summary>Iterate the collisions which are penetrating in the given
+		/// direction.</summary>
+		public IEnumerable<Collision> GetCollisionsInDirection(int direction) {
+			return Collisions.Where(c => c.Direction == direction);
+		}
+		
+		/// <summary>Iterate the collisions from the previous update which were
+		/// penetrating in the given direction.</summary>
+		public IEnumerable<Collision> GetPreviousCollisionsInDirection(int direction) {
+			return PreviousCollisions.Where(c => c.Direction == direction);
+		}
+
+		/// <summary></summary>
+		public Collision GetCenteredCollisionInDirection(int direction) {
+			Collision best = null;
+			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			
+			foreach (Collision collision in Collisions) {
+				if (collision.Direction == direction) {
+					if (entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
+						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
+					{
+						if (best == null)
+							best = collision;
+					}
+				}
+			}
+			return best;
+		}
+
+		/// <summary></summary>
+		public Collision GetCenteredPotentialCollisionInDirection(int direction,
+			float minPenetration = 0.0f)
+		{
+			Collision best = null;
+			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			
+			foreach (Collision collision in PotentialCollisions) {
+				if (collision.Direction == direction) {
+					if (collision.Penetration >= minPenetration - GameSettings.EPSILON &&
+						entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
+						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
+					{
+						if (best == null)
+							best = collision;
+					}
+				}
+			}
+			return best;
+		}
+
+		/// <summary>Return the center-most collision of all collisions which are
+		/// penetrating in the given direction.</summary>
+		public Collision GetCollisionInDirection(int direction) {
+			return GetCollisionInDirection(direction, Collisions);
+		}
+		
+		/// <summary>Return the center-most collision of all collisions from the
+		/// previous update which are penetrating in the given direction.</summary>
+		public Collision GetPreviousCollisionInDirection(int direction) {
+			return GetCollisionInDirection(direction, PreviousCollisions);
+		}
+		
+		/// <summary>Return the center-most collision of all collisions which are
+		/// penetrating in the given direction.</summary>
+		private Collision GetCollisionInDirection(int direction,
+			IEnumerable<Collision> collisions)
+		{
+			Collision best = null;
+			bool bestIsCentered = false;
+			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+
+			foreach (Collision collision in collisions) {
+				if (collision.Direction == direction) {
+					bool isCentered =
+						(entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
+						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis]);
+
+					if (best == null || (isCentered && !bestIsCentered)) {
+						best = collision;
+						bestIsCentered = isCentered;
+					}
+				}
+			}
+			return best;
+		}
+
+		/// <summary>Collide with the inside edges of a rectangle.
+		/// NOTE: At the moment, this is only used when player is doomed to fall in a hole.
+		/// </summary>
 		public void PerformInsideEdgeCollisions(Rectangle2F collisionBox, Rectangle2F rect) {
 			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position);
 
@@ -625,22 +725,33 @@ namespace ZeldaOracle.Game.Entities {
 			set { crushMaxGapSize = value; }
 		}
 
-		// Collision info
+		
+		//-----------------------------------------------------------------------------
+		// Collision Properties
+		//-----------------------------------------------------------------------------
 
+		/// <summary>The "Hard" collision box which is used to collide with solid
+		/// objects.</summary>
 		public Rectangle2F CollisionBox {
 			get { return collisionBox; }
 			set { collisionBox = value; }
 		}
 
+		/// <summary>The "Soft" collision box which is typically used to interact with
+		/// other entities, such as when a player touches a monster.</summary>
 		public Rectangle2F SoftCollisionBox {
 			get { return softCollisionBox; }
 			set { softCollisionBox = value; }
 		}
 
+		/// <summary>The "Hard" collision box translated to the entity's current
+		/// position.</summary>
 		public Rectangle2F PositionedCollisionBox {
 			get { return Rectangle2F.Translate(collisionBox, entity.Position); }
 		}
 		
+		/// <summary>The "Soft" collision box translated to the entity's current
+		/// position.</summary>
 		public Rectangle2F PositionedSoftCollisionBox {
 			get { return Rectangle2F.Translate(softCollisionBox, entity.Position); }
 		}
@@ -655,12 +766,13 @@ namespace ZeldaOracle.Game.Entities {
 			set { customTileIsNotSolidCondition = value; }
 		}
 		
+		/// <summary>True if the entity is currently colliding.</summary>
 		public bool IsColliding {
 			get { return isColliding; }
 			set { isColliding = value; }
 		}
 
-
+		/// <summary>The surface tile underneath the entity.</summary>
 		public Tile TopTile {
 			get { return topTile; }
 			set { topTile = value; }
@@ -671,37 +783,17 @@ namespace ZeldaOracle.Game.Entities {
 			set { topTilePointOffset = value; }
 		}
 
-		// Tile Flags.
 
-		public bool IsInGrass {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Grass; }
-		}
-
-		public bool IsInPuddle {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Puddle; }
-		}
-
-		public bool IsInHole {
-			get { return IsOnGround && !IsFlying && topTile != null && topTile.IsHole; }
-		}
+		//-----------------------------------------------------------------------------
+		// Surface Properties
+		//-----------------------------------------------------------------------------
 
 		public bool IsInWater {
 			get {
-				return ((IsOnGround && !IsFlying) || entity.RoomControl.IsSideScrolling) &&
+				return ((IsOnGround && !DisableSurfaceContact) ||
+					entity.RoomControl.IsSideScrolling) &&
 					topTile != null && topTile.IsWater;
 			}
-		}
-
-		public bool IsInOcean {
-			get { return IsOnGround && !IsFlying && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ocean; }
-		}
-
-		public bool IsInLava {
-			get { return IsOnGround && !IsFlying && topTile != null && topTile.IsLava; }
-		}
-
-		public bool IsOnIce {
-			get { return IsOnGround && !IsFlying && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ice; }
 		}
 
 		public bool IsOnSideScrollingIce {
@@ -711,12 +803,60 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		public bool IsInGrass {
+			get {
+				return IsOnGround && topTile != null &&
+					topTile.EnvironmentType == TileEnvironmentType.Grass;
+			}
+		}
+
+		public bool IsInPuddle {
+			get {
+				return IsOnGround && topTile != null &&
+					topTile.EnvironmentType == TileEnvironmentType.Puddle;
+			}
+		}
+
+		public bool IsInHole {
+			get {
+				return IsOnGround && !DisableSurfaceContact && topTile != null &&
+					topTile.IsHole;
+			}
+		}
+
+		public bool IsInOcean {
+			get {
+				return IsOnGround && !DisableSurfaceContact && topTile != null &&
+					topTile.EnvironmentType == TileEnvironmentType.Ocean;
+			}
+		}
+
+		public bool IsInLava {
+			get {
+				return IsOnGround && !DisableSurfaceContact && topTile != null &&
+					topTile.IsLava;
+			}
+		}
+
+		public bool IsOnIce {
+			get {
+				return IsOnGround && !DisableSurfaceContact && topTile != null &&
+					topTile.EnvironmentType == TileEnvironmentType.Ice;
+			}
+		}
+
 		public bool IsOnStairs {
-			get { return IsOnGround && !IsFlying &&  topTile != null && topTile.EnvironmentType == TileEnvironmentType.Stairs; }
+			get {
+				return IsOnGround && !DisableSurfaceContact &&  topTile != null &&
+					topTile.EnvironmentType == TileEnvironmentType.Stairs;
+			}
 		}
 
 		public bool IsOnLadder {
-			get { return IsOnGround && !IsFlying && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ladder; }
+			get {
+				return IsOnGround && !DisableSurfaceContact && topTile != null &&
+					topTile.EnvironmentType == TileEnvironmentType.Ladder;
+			}
 		}
 
 		public bool IsOverHalfSolid {
@@ -728,7 +868,9 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 
-		// Physics Flags:
+		//-----------------------------------------------------------------------------
+		// Physics Flags Properties
+		//-----------------------------------------------------------------------------
 
 		public PhysicsFlags Flags {
 			get { return flags; }
@@ -820,9 +962,9 @@ namespace ZeldaOracle.Game.Entities {
 			set { SetFlags(PhysicsFlags.Crushable, value); }
 		}
 		
-		public bool IsFlying {
-			get { return HasFlags(PhysicsFlags.Flying); }
-			set { SetFlags(PhysicsFlags.Flying, value); }
+		public bool DisableSurfaceContact {
+			get { return HasFlags(PhysicsFlags.DisableSurfaceContact); }
+			set { SetFlags(PhysicsFlags.DisableSurfaceContact, value); }
 		}
 		
 		public bool CheckRadialCollisions {
@@ -835,6 +977,10 @@ namespace ZeldaOracle.Game.Entities {
 			set { SetFlags(PhysicsFlags.OnGroundOverride, value); }
 		}
 		
+
+		//-----------------------------------------------------------------------------
+		// Misc Properties
+		//-----------------------------------------------------------------------------
 
 		public Vector2F ReboundVelocity {
 			get { return reboundVelocity; }
@@ -888,112 +1034,13 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
-		public bool IsCollidingInDirection(int direction) {
-			return  Collisions.Any(c => c.Direction == direction);
-		}
-
-		public IEnumerable<Collision> GetCollisionsOnAxis(int axis) {
-			return Collisions.Where(c => c.Axis == axis);
-		}
-
-		public IEnumerable<Collision> GetCollisionsInDirection(int direction) {
-			return Collisions.Where(c => c.Direction == direction);
-		}
-
-		public IEnumerable<Collision> GetPreviousCollisionsInDirection(int direction) {
-			return PreviousCollisions.Where(c => c.Direction == direction);
-		}
-
-		public Collision GetCenteredCollisionInDirection(int direction) {
-			Collision best = null;
-			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
-			
-			foreach (Collision collision in Collisions) {
-				if (collision.Direction == direction) {
-					if (entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
-						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
-					{
-						if (best == null)
-							best = collision;
-					}
-				}
-			}
-			return best;
-		}
-
-		public Collision GetCenteredPotentialCollisionInDirection(int direction,
-			float minPenetration = 0.0f)
-		{
-			Collision best = null;
-			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
-			
-			foreach (Collision collision in PotentialCollisions) {
-				if (collision.Direction == direction) {
-					if (collision.Penetration >= minPenetration - GameSettings.EPSILON &&
-						entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
-						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis])
-					{
-						if (best == null)
-							best = collision;
-					}
-				}
-			}
-			return best;
-		}
-
 		public Collision PreviousStandingCollision { get; set; } = null;
+
 		public Collision StandingCollision { get; set; } = null;
-
-		public Collision GetCollisionInDirection(int direction) {
-			return GetCollisionInDirection(direction, Collisions);
-		}
-
-		public Collision GetPreviousCollisionInDirection(int direction) {
-			return GetCollisionInDirection(direction, PreviousCollisions);
-		}
-
-		public Collision GetCollisionInDirection(int direction,
-			IEnumerable<Collision> collisions)
-		{
-			Collision best = null;
-			bool bestIsCentered = false;
-			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
-
-			foreach (Collision collision in collisions) {
-				if (collision.Direction == direction) {
-					bool isCentered =
-						(entity.Center[lateralAxis] <= collision.SolidBox.Max[lateralAxis] &&
-						entity.Center[lateralAxis] >= collision.SolidBox.Min[lateralAxis]);
-
-					if (best == null || (isCentered && !bestIsCentered)) {
-						best = collision;
-						bestIsCentered = isCentered;
-					}
-				}
-			}
-			return best;
-		}
-
+		
 		/// <summary>Only used by RoomPhysics to detect landing in side scrolling mode.
 		/// </summary>
 		public bool IsOnGroundPrevious { get; set; }  = true;
-		
-		private Vector2F netVelocity;
-
-		public Vector2F NetVelocity {
-			get { return  netVelocity; }
-			set { netVelocity = value; }
-		}
-		
-		public float NetVelocityX {
-			get { return netVelocity.X; }
-			set { netVelocity.X = value; }
-		}
-
-		public float NetVelocityY {
-			get { return netVelocity.Y; }
-			set { netVelocity.Y = value; }
-		}
 
 		public Vector2F SurfacePosition {
 			get { return surfacePosition; }

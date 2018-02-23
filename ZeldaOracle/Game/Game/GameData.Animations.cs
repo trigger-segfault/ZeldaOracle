@@ -52,6 +52,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_MAGNET_SPINNER_SOUTH;
 		public static Animation ANIM_TILE_MAGNET_SPINNER_NORTH_ROTATE;
 		public static Animation ANIM_TILE_MAGNET_SPINNER_SOUTH_ROTATE;
+		public static Animation ANIM_TILE_MAGNET_SPINNER_NORTH_ROTATE_CONTINUOUS;
+		public static Animation ANIM_TILE_MAGNET_SPINNER_SOUTH_ROTATE_CONTINUOUS;
 
 		// General tiles.
 		public static Animation ANIM_MINECART;

@@ -200,11 +200,21 @@ ANIMATION "tile_magnet_spinner_north";
 
 ANIMATION "tile_magnet_spinner_north_rotate";
 	SUBSTRIP clamp; # Clockwise
-		#ADD frame, 31, (0, 5); ADD frame, 15, (1, 5);
-		#ADD frame, 4, (2, 5); ADD frame, 3, (3, 5);
-		ADD frame, 15, (1, 5); ADD frame, 4, (2, 5); ADD frame, 3, (3, 5); ADD frame, 1, (0, 5);
+		ADD frame, 15, (1, 5); ADD frame, 4, (2, 5);
+		ADD frame, 3, (3, 5); ADD frame, 1, (0, 5);
 	SUBSTRIP clamp; # Counter-Clockwise
-		ADD frame, 15, (3, 5); ADD frame, 4, (2, 5); ADD frame, 3, (1, 5); ADD frame, 1, (0, 5);
+		ADD frame, 15, (3, 5); ADD frame, 4, (2, 5);
+		ADD frame, 3, (1, 5); ADD frame, 1, (0, 5);
+	END;
+
+# Used for the editor tile preview
+ANIMATION "tile_magnet_spinner_north_rotate_continuous";
+	SUBSTRIP repeat; # Clockwise
+		ADD frame, 31, (0, 5); ADD frame, 15, (1, 5);
+		ADD frame, 4, (2, 5); ADD frame, 3, (3, 5);
+	SUBSTRIP repeat; # Counter-Clockwise
+		ADD frame, 31, (0, 5); ADD frame, 15, (3, 5);
+		ADD frame, 4, (2, 5); ADD frame, 3, (1, 5);
 	END;
 
 ANIMATION "tile_magnet_spinner_south";
@@ -212,6 +222,9 @@ ANIMATION "tile_magnet_spinner_south";
 	
 ANIMATION "tile_magnet_spinner_south_rotate";
 	CLONE "tile_magnet_spinner_north_rotate"; SHIFTSOURCE (4, 0); END;
+	
+ANIMATION "tile_magnet_spinner_south_rotate_continuous";
+	CLONE "tile_magnet_spinner_north_rotate_continuous"; SHIFTSOURCE (4, 0); END;
 
 # Eye Statue --------------------------------------------------
 
