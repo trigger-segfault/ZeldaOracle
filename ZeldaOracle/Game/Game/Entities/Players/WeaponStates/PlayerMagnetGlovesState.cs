@@ -386,7 +386,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Begin the idle sub-state
 			magneticObject = null;
-			subStateMachine.BeginState(MagnetState.Idle);
+			subStateMachine.InitializeOnState(MagnetState.Idle);
 		}
 
 		public override void OnEnd(PlayerState newState) {

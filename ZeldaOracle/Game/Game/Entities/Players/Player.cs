@@ -825,12 +825,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Integrate the combined state parameters
 			
-			physics.HasGravity			= !stateParameters.DisableGravity;
-			physics.OnGroundOverride	= stateParameters.EnableGroundOverride;
-			physics.CollideWithWorld	= !stateParameters.DisableSolidCollisions;
-			physics.MovesWithPlatforms	= !StateParameters.DisablePlatformMovement;
-			physics.MovesWithConveyors	= !StateParameters.DisablePlatformMovement;
-			physics.DisableSurfaceContact			= StateParameters.DisableSurfaceContact;
+			physics.HasGravity				= !stateParameters.DisableGravity;
+			physics.OnGroundOverride		= stateParameters.EnableGroundOverride;
+			physics.CollideWithWorld		= !stateParameters.DisableSolidCollisions;
+			physics.MovesWithPlatforms		= !StateParameters.DisablePlatformMovement;
+			physics.MovesWithConveyors		= !StateParameters.DisablePlatformMovement;
+			physics.DisableSurfaceContact	= StateParameters.DisableSurfaceContact;
 
 			IsPassable = stateParameters.DisableInteractionCollisions;
 		}

@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.DisableSolidCollisions			= true;
 			StateParameters.DisableInteractionCollisions	= true;
 			StateParameters.DisableGravity					= true;
-			StateParameters.DisablePlatformMovement			= true;
+			StateParameters.DisableSurfaceContact			= true;
 			StateParameters.DisablePlayerControl			= true;
 		}
 

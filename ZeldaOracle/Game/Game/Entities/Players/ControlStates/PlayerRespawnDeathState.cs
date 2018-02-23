@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerRespawnDeathState : PlayerState {
 
-		private bool respawning;
+		private enum RespawnState {
+			DeathAnimation,
+			ViewPanning,
+			Delay,
+		}
+
 		private bool waitForAnimation;
+		private GenericStateMachine<RespawnState> subStateMachine;
 
 		// Crush: 44 frames of squished. 40 frames of flicker
 		// (blank, normal, blank, squish, blank, squish, blank, normal, (repeat))
@@ -19,17 +26,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerRespawnDeathState() {
-			respawning = false;
 			waitForAnimation = true;
-		}
-		
-
-		//-----------------------------------------------------------------------------
-		// Overridden methods
-		//-----------------------------------------------------------------------------
-
-		public override void OnBegin(PlayerState previousState) {
-			respawning = false;
 			
 			StateParameters.EnableAutomaticRoomTransitions	= true;
 			StateParameters.EnableStrafing					= true;
@@ -37,33 +34,71 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.DisableInteractionCollisions	= true;
 			StateParameters.DisableGravity					= true;
 			StateParameters.DisablePlayerControl			= true;
-			StateParameters.DisablePlatformMovement			= true;
+			StateParameters.DisableSurfaceContact			= true;
 
+			// Configure the sub-state-machine
+			subStateMachine = new GenericStateMachine<RespawnState>();
+			subStateMachine.AddState(RespawnState.DeathAnimation)
+				.OnUpdate(OnUpdateDeathAnimationState)
+				.OnEnd(OnEndDeathAnimationState);
+			subStateMachine.AddState(RespawnState.ViewPanning)
+				.OnUpdate(OnUpdateViewPanningState)
+				.OnEnd(OnEndViewPanningState);
+			subStateMachine.AddState(RespawnState.Delay)
+				.OnBegin(OnBeginDelayState)
+				.AddEvent(16, delegate() {
+					End();
+				});
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// State Callbacks
+		//-----------------------------------------------------------------------------
+
+		private void OnUpdateDeathAnimationState() {
+			// Wait for the death animation to complete
+			if (!waitForAnimation || player.Graphics.IsAnimationDone)
+				subStateMachine.NextState();
+		}
+
+		private void OnEndDeathAnimationState() {
+			player.Graphics.IsVisible = false;
+			player.Respawn();
+		}
+
+		private void OnUpdateViewPanningState() {
+			// Wait for the view to pan to the player
+			if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center))
+				subStateMachine.NextState();
+		}
+
+		private void OnEndViewPanningState() {
+			player.Graphics.IsVisible = true;
+			player.Hurt(new DamageInfo(2));
+		}
+		
+		private void OnBeginDelayState() {
+			player.Graphics.PlayAnimation(player.Animations.Default);
+			player.Graphics.PauseAnimation();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------
+
+		public override void OnBegin(PlayerState previousState) {
 			player.InterruptWeapons();
 			player.Movement.StopMotion();
 			player.Physics.ZVelocity = 0.0f;
 			player.KnockbackVelocity = Vector2F.Zero;
-		}
-		
-		public override void OnEnd(PlayerState newState) {
+
+			subStateMachine.InitializeOnState(RespawnState.DeathAnimation);
 		}
 
 		public override void Update() {
-			base.Update();
-
-			if (respawning) {
-				// Wait for the view to pan to the player
-				if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center)) {
-					player.Graphics.IsVisible = true;
-					player.Hurt(new DamageInfo(2));
-					End();
-				}
-			}
-			else if (!waitForAnimation || player.Graphics.IsAnimationDone) {
-				player.Graphics.IsVisible = false;
-				respawning = true;
-				player.Respawn();
-			}
+			subStateMachine.Update();
 		}
 
 

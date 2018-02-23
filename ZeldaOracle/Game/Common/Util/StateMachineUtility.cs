@@ -179,6 +179,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// State Transitions
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Begin the state machine on the state with the given ID. This will
+		/// not end the previous state if one was active.</summary>
+		public void InitializeOnState(IDType id) {
+			currentState = states[id];
+			if (currentState != null)
+				currentState.Begin();
+		}
+
 		/// <summary>Begin or transition to the state with the given ID.</summary>
 		public void BeginState(IDType id) {
 			if (currentState != null)

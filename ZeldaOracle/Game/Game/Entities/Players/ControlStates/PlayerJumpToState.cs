@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			StateParameters.EnableStrafing					= true;
 			StateParameters.DisableSolidCollisions			= true;
 			StateParameters.DisableInteractionCollisions	= true;
-			StateParameters.DisablePlatformMovement			= true;
+			StateParameters.DisableSurfaceContact			= true;
 			StateParameters.DisablePlayerControl			= true;
 
 			player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
