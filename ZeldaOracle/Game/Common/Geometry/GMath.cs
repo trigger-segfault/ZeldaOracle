@@ -4,6 +4,7 @@ using System.Linq;
 
 using Microsoft.Xna.Framework;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>A static class for advanced game-related mathematical functions and calculations.</summary>
@@ -1129,7 +1130,9 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 		
 		/// <summary>Return the modular distance from one angle to another using the given winding order.</summary>
-		public static float DeltaDirection(float source, float destination, WindingOrder windingOrder = WindingOrder.CounterClockwise) {
+		public static float DeltaDirection(float source, float destination,
+			WindingOrder windingOrder = WindingOrder.CounterClockwise)
+		{
 			source = Plusdir(source);
 			destination = Plusdir(destination);
 			if (windingOrder == WindingOrder.Clockwise) {

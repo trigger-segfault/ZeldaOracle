@@ -8,13 +8,6 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Main {
 
-	/// <summary>Buttons used to perform player actions (A or B).</summary>
-	public enum ActionButtons {
-		A = 0,
-		B = 1,
-		Count = 2,
-	}
-
 	/// <summary>The controls for the game.</summary>
 	public class Controls {
 

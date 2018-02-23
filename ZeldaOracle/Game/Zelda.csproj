@@ -240,6 +240,7 @@
     <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Common\Util\PathHelper.cs" />
     <Compile Include="Common\Util\ReflectionHelper.cs" />
+    <Compile Include="Game\CommonTypes.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />
@@ -356,8 +357,6 @@
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerSideScrollLadderEnvironmentState.cs" />
     <Compile Include="Game\Entities\Players\PlayerStateParameters.cs" />
     <Compile Include="Game\Entities\Players\PlayerStateMachine.cs" />
-    <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
-    <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerLeapLedgeJumpState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerPullHandleState.cs" />
     <Compile Include="Game\Entities\Players\ControlStates\PlayerJumpToState.cs" />

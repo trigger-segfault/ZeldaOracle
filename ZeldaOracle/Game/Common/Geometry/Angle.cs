@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Geometry {
 
@@ -24,12 +25,6 @@ namespace ZeldaOracle.Common.Geometry {
 	// - PlayerMagicBoomerangState
 	// - RoomStateTurnstile
 	// - TileTurnstile
-
-	// The direction of rotation.
-	public enum WindingOrder {
-		CounterClockwise	= 0,
-		Clockwise			= 1,
-	}
 
 	// Enumeration values and methods for integers representing one of eight
 	// 45 degree angle intervals in a circle.

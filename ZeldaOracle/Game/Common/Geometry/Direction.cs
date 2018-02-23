@@ -2,8 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Geometry {
+
+	/// <summary>The direction of rotation, either Clockwise or Counter-Clockwise.
+	/// </summary>
+	public enum WindingOrder {
+		CounterClockwise = 0,
+		Clockwise = 1,
+	}
 	
 	/*[Flags]
 	public enum DirectionMask {

@@ -10,16 +10,6 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
-	
-	// The types of seeds.
-	public enum SeedType {
-		Ember	= 0,
-		Scent	= 1,
-		Pegasus	= 2,
-		Gale	= 3,
-		Mystery	= 4
-	}
-
 
 	// The base class for the two types of seeds.
 	public class SeedEntity : Projectile {

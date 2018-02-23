@@ -48,7 +48,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Find the action tile for the this warp point's destination.
 		public ActionTileDataInstance FindDestinationPoint() {
 			string warpID = properties.GetString("destination_warp_point", "?");
-			string warpLevelID = Properties.GetString("destination_level", RoomControl.Level.Properties.GetString("id"));
+			string warpLevelID = Properties.GetString("destination_level",
+				RoomControl.Level.Properties.GetString("id"));
 			if (warpID.Length == 0 || warpLevelID.Length == 0)
 				return null;
 			Level warpLevel = RoomControl.GameControl.World.GetLevel(warpLevelID);
