@@ -4,7 +4,13 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
-	public class MonsterStateMachine<IDType> where IDType : struct, IConvertible {
+	/// <summary>
+	/// Utility class that can handle a single state at a time, using an enum type as
+	/// the state ID. Each state can be created with callbacks for begin/end/update, 
+	/// and can also include timed events.
+	/// </summary>
+	/// <typeparam name="IDType">The enum used for state IDs.</typeparam>
+	public class GenericStateMachine<IDType> where IDType : struct, IConvertible {
 		
 		//-----------------------------------------------------------------------------
 		// Internal State class
@@ -15,7 +21,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			public StateBeginDelegate BeginFunction { get; set; }
 			public StateUdpateDelegate UpdateFunction { get; set; }
 			public StateEndDelegate EndFunction { get; set; }
-			public MonsterStateMachine<IDType> StateMachine { get; set; }
+			public GenericStateMachine<IDType> StateMachine { get; set; }
 			public bool IsActive { get; set; }
 			
 			public State() {
@@ -23,26 +29,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 
 			public virtual void Begin() {
-				if (BeginFunction != null)
-					BeginFunction();
+				BeginFunction?.Invoke();
 				IsActive = true;
 			}
+
 			public virtual void Update() {
-				if (UpdateFunction != null)
-					UpdateFunction();
+				UpdateFunction?.Invoke();
 			}
+
 			public virtual void End() {
-				if (EndFunction != null)
-					EndFunction();
+				EndFunction?.Invoke();
 				IsActive = false;
 			}
 		}
 		
-
-		//-----------------------------------------------------------------------------
-		// Overridden Methods
-		//-----------------------------------------------------------------------------
-
 		public class TimedState : State {
 			private int timer;
 			public RangeI Duration { get; set; }
@@ -148,7 +148,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public MonsterStateMachine() {
+		public GenericStateMachine() {
 			states = new Dictionary<IDType, State>();
 			stateIds = new List<IDType>();
 			foreach (IDType id in Enum.GetValues(typeof(IDType)))
@@ -157,9 +157,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 
 		//-----------------------------------------------------------------------------
-		// Setup
+		// Configuration
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Add a new state using the given ID.</summary>
 		public TimedState AddState(IDType id) {
 			TimedState state = new TimedState() {
 				ID				= id,
@@ -173,20 +174,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			return state;
 		}
 
-		public TimedState GetState(IDType id) {
-			return states[id] as TimedState;
-		}
-
 		
 		//-----------------------------------------------------------------------------
-		// Operation
+		// State Transitions
 		//-----------------------------------------------------------------------------
 
-		public void Update() {
-			if (currentState != null)
-				currentState.Update();
-		}
-
+		/// <summary>Begin or transition to the state with the given ID.</summary>
 		public void BeginState(IDType id) {
 			if (currentState != null)
 				currentState.End();
@@ -195,12 +188,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				currentState.Begin();
 		}
 
+		/// <summary>End the currently active state.</summary>
 		public void EndCurrentState() {
 			if (currentState != null)
 				currentState.End();
 			currentState = null;
 		}
 
+		/// <summary>Transition to the next state as defined by the order of the
+		/// state ID values.</summary>
 		public void NextState() {
 			int index = stateIds.IndexOf(currentState.ID);
 			index = (index + 1) % stateIds.Count;
@@ -209,9 +205,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 
 		//-----------------------------------------------------------------------------
+		// Update
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Update the currently active state.</summary>
+		public void Update() {
+			if (currentState != null)
+				currentState.Update();
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Returns the ID of the current state.</summary>
 		public IDType CurrentState {
 			get { return currentState.ID; }
 		}

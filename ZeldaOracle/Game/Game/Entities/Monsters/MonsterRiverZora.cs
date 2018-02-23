@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 		
 		private FireballProjectile fireball;
-		private MonsterStateMachine<RiverZoraState> stateMachine;
+		private GenericStateMachine<RiverZoraState> stateMachine;
 
 		
 		//-----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Damage);
 
 			// Behavior
-			stateMachine = new MonsterStateMachine<RiverZoraState>();
+			stateMachine = new GenericStateMachine<RiverZoraState>();
 			stateMachine.AddState(RiverZoraState.Submerged)
 				.OnBegin(BeginSubmerged)
 				.SetDuration(25, 60);

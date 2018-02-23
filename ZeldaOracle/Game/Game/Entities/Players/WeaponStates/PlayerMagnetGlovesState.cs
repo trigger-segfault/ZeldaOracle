@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			AttachedToSpinner,
 		}
 
-		private MonsterStateMachine<MagnetState> subStateMachine;
+		private GenericStateMachine<MagnetState> subStateMachine;
 
 		private ItemMagnetGloves weapon;
 		private AnimationPlayer effectAnimation;
@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			alignBox = new Rectangle2F(-10, -12, 20, 19);
 
-			subStateMachine = new MonsterStateMachine<MagnetState>();
+			subStateMachine = new GenericStateMachine<MagnetState>();
 			subStateMachine.AddState(MagnetState.Idle)
 				.OnUpdate(OnIdleStateUpdate);
 			subStateMachine.AddState(MagnetState.PullingBall)

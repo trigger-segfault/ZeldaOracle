@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Electrecuting,
 		}
 
-		private MonsterStateMachine<BariState> stateMachine;
+		private GenericStateMachine<BariState> stateMachine;
 
 		private Vector2F guardPoint;
 		private int numMoveAngles;
@@ -70,7 +70,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
 
 			// Behavior
-			stateMachine = new MonsterStateMachine<BariState>();
+			stateMachine = new GenericStateMachine<BariState>();
 			stateMachine.AddState(BariState.Moving)
 				.OnBegin(OnBeginMovingBehavior)
 				.OnUpdate(OnUpdateMovingBehavior)

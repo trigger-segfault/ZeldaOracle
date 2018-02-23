@@ -9,7 +9,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Flying,
 		}
 
-		private MonsterStateMachine<FlyState> stateMachine;
+		private GenericStateMachine<FlyState> stateMachine;
 		private int flyTimer;
 
 
@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Boomerang,	SenderReactions.Intercept);
 			
 			// Behavior
-			stateMachine = new MonsterStateMachine<FlyState>();
+			stateMachine = new GenericStateMachine<FlyState>();
 			stateMachine.AddState(FlyState.Stopped)
 				.OnBegin(BeginStoppedState)
 				.SetDuration(GameSettings.MONSTER_PEAHAT_STOP_DURATION);

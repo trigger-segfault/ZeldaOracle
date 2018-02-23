@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Raise,	// Moving up back to idle position
 		}
 
-		private MonsterStateMachine<CrushState> stateMachine;
+		private GenericStateMachine<CrushState> stateMachine;
 		private Vector2F hoverPosition;
 		private float crushSpeed;
 		private int eyeAngle;
@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
 			
 			// Behavior
-			stateMachine = new MonsterStateMachine<CrushState>();
+			stateMachine = new GenericStateMachine<CrushState>();
 			stateMachine.AddState(CrushState.Idle)
 				.OnBegin(OnBeginIdleState)
 				.OnUpdate(OnUpdateIdleState);
