@@ -12,6 +12,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			Color			= MonsterColor.Red;
 			MaxHealth		= 1;
 			ContactDamage	= 1;
+			softKill		= true; // Offspring will perform the "hard" kill
 
 			// Red Zol observations:
 			//   * 26 frames of stopped between movements
@@ -58,6 +59,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		private void SpawnOffspring(Vector2F position) {
 			MonsterGel child = new MonsterGel();
 			child.Color = MonsterColor.Red;
+			child.Properties = Properties;
 			RoomControl.SpawnEntity(child, position);
 		}
 

@@ -198,6 +198,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		public void DestroyAndTransform(Entity transformedEntity) {
 			Destroy();
+			transformedEntity.Properties = properties;
 			this.transformedEntity = transformedEntity;
 		}
 

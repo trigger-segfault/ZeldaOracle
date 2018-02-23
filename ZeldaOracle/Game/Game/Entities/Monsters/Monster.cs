@@ -44,9 +44,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	// - MonsterFallInHoleState
 
 	public partial class Monster : Unit, ZeldaAPI.Monster {
-
-		private bool softKill;
-
+		
 		private int contactDamage;
 		private InteractionHandler[] interactionHandlers;
 		private MonsterColor color;
@@ -56,6 +54,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// The previous monster state.
 		private MonsterState previousState;
 
+		protected bool softKill;
 		protected bool isBurnable;
 		protected bool isGaleable;
 		protected bool isStunnable;
