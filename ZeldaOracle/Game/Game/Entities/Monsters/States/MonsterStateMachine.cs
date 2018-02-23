@@ -195,6 +195,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				currentState.Begin();
 		}
 
+		public void EndCurrentState() {
+			if (currentState != null)
+				currentState.End();
+			currentState = null;
+		}
+
 		public void NextState() {
 			int index = stateIds.IndexOf(currentState.ID);
 			index = (index + 1) % stateIds.Count;

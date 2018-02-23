@@ -514,6 +514,7 @@
     <Compile Include="Game\Tiles\Custom\SideScroll\TileConveyorBelt.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />
     <Compile Include="Game\Tiles\Custom\TileIceBlock.cs" />
+    <Compile Include="Game\Tiles\Custom\TileMagnetSpinner.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileArrowCannon.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileArrowShooter.cs" />
     <Compile Include="Game\Tiles\Custom\TileDigableReward.cs" />

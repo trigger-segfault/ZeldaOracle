@@ -48,6 +48,10 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_BOSS_KEY_DOOR_CLOSE;
 		public static Animation[,] ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS;
 		public static Animation ANIM_TILE_REGROWABLE_BUSH_REGROW;
+		public static Animation ANIM_TILE_MAGNET_SPINNER_NORTH;
+		public static Animation ANIM_TILE_MAGNET_SPINNER_SOUTH;
+		public static Animation ANIM_TILE_MAGNET_SPINNER_NORTH_ROTATE;
+		public static Animation ANIM_TILE_MAGNET_SPINNER_SOUTH_ROTATE;
 
 		// General tiles.
 		public static Animation ANIM_MINECART;

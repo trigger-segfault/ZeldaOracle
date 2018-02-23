@@ -76,6 +76,23 @@ TILE "temp_trampoline";
 	FLAGS		Movable;
 END;
 
+# Magnet Spinner ----------------------------------------------
+
+TILE "magnet_spinner_north";
+	TYPE		TileMagnetSpinner;
+	SPRITE		tile_magnet_spinner_north;
+	SOLID		block;
+	PROPERTY	(polarity, 0); # North
+END;
+
+TILE "magnet_spinner_south";
+	TYPE		TileMagnetSpinner;
+	SPRITE		tile_magnet_spinner_south;
+	SOLID		block;
+	PROPERTY	(polarity, 1); # South
+END;
+
+
 #==============================================================
 # Tiles
 #==============================================================
