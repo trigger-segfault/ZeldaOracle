@@ -63,9 +63,11 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 
+		protected virtual void Initialize() {}
+
 		public virtual void OnTouch() {}
 
-		protected virtual void Initialize() {}
+		public virtual void OnRemoveFromRoom() {}
 		
 		// Called when the room is only to update graphics.
 		public virtual void UpdateGraphics() {}

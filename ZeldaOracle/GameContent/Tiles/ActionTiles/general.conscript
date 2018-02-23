@@ -25,3 +25,21 @@ ACTIONTILE npc;
 				(string,  animation,		"npc_shopkeeper", "Animation", "animation", "NPC", "The animation of the NPC."),
 				(string,  animation_talk,	"", "Talk Animation", "animation", "NPC", "The animation of the NPC when being talked to.");
 END;
+
+ACTIONTILE temp_magnet_ball;
+	TYPE		MagnetBallActionTile;
+	SPRITE		magnet_ball_north;
+	PROPERTIES	(string, polarity, "north", "Polarity", ("enum", "Polarity"), "Magnet Ball", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
+END;
+
+ACTIONTILE magnet_ball_north;
+	CLONE		temp_magnet_ball;
+	SPRITE		magnet_ball_north;
+	PROPERTY	(polarity, North);
+END;
+
+ACTIONTILE magnet_ball_south;
+	CLONE		temp_magnet_ball;
+	SPRITE		magnet_ball_south;
+	PROPERTY	(polarity, South);
+END;

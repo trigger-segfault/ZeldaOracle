@@ -47,7 +47,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		private bool softKill;
 
-		private Properties properties;
 		private int contactDamage;
 		private InteractionHandler[] interactionHandlers;
 		private MonsterColor color;
@@ -84,7 +83,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// - Sides: 3 overlap	
 
 			color = MonsterColor.Red;
-			properties = new Properties();
+			Properties = new Properties();
 
 			// Physics
 			Physics.CollisionBox        = new Rectangle2I(-5, -9, 10, 10);
@@ -524,11 +523,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public Properties Properties {
-			get { return properties; }
-			set { properties = value; }
-		}
 
 		public int ContactDamage {
 			get { return contactDamage; }

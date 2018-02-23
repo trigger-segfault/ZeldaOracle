@@ -411,6 +411,10 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property SetBase(string name, bool value) {
 			return SetProperty(name, value, true);
 		}
+		
+		public Property SetBase(string name, Point2I value) {
+			return SetProperty(name, value, true);
+		}
 
 		public void SetDocumentation(string name, string readableName, string editorType,
 			string editorSubType, string category, string description, bool isEditable = true, bool isHidden = false)

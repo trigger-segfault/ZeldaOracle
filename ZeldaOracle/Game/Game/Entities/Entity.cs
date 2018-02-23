@@ -1,5 +1,6 @@
 ﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
@@ -17,6 +18,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Entity				transformedEntity; // The entity this entity has transformed into (bomb -> explosion)
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
+		private Properties			properties;
 
 		protected Vector2F			position;
 		protected float				zPosition;
@@ -50,6 +52,7 @@ namespace ZeldaOracle.Game.Entities {
 			centerOffset		= Point2I.Zero;
 			actionAlignDistance	= 5;
 			buttonActionCollisionBox = Rectangle2F.Zero;
+			properties			= null;
 		}
 		
 
@@ -380,6 +383,11 @@ namespace ZeldaOracle.Game.Entities {
 		public Sound BounceSound {
 			get { return soundBounce; }
 			set { soundBounce = value; }
+		}
+
+		public Properties Properties {
+			get { return properties; }
+			set { properties = value; }
 		}
 	}
 }

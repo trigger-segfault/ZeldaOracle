@@ -388,11 +388,15 @@ namespace ZeldaOracle.Game.Control {
 		// Set all entities to destroyed (except the player).
 		public void DestroyRoom() {
 			for (int i = 0; i < entities.Count; i++) {
-				if (entities[i] != Player)
+				if (entities[i] != Player) {
 					entities[i].IsDestroyed = true;
+				}
 			}
 			foreach (Tile tile in GetTiles()) {
 				tile.OnRemoveFromRoom();
+			}
+			foreach (ActionTile actionTile in actionTiles) {
+				actionTile.OnRemoveFromRoom();
 			}
 		}
 		

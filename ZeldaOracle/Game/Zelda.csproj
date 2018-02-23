@@ -506,6 +506,7 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\MagnetBallActionTile.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonster.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterArmos.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />

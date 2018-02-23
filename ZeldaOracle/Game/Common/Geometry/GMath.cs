@@ -341,6 +341,20 @@ namespace ZeldaOracle.Common.Geometry {
 		public static Point2I Clamp(Point2I value, int minX, int minY, int maxX, int maxY) {
 			return new Point2I(Math.Max(minX, Math.Min(maxX, value.X)), Math.Max(minY, Math.Min(maxY, value.Y)));
 		}
+
+		/// <summary>Clamp the vector within a rectangular area.</summary>
+		public static Vector2F Clamp(Vector2F value, Rectangle2F area) {
+			return new Vector2F(
+				Clamp(value.X, area.Left, area.Right),
+				Clamp(value.Y, area.Top, area.Bottom));
+		}
+
+		/// <summary>Clamp the point within a rectangular area.</summary>
+		public static Point2I Clamp(Point2I value, Rectangle2I area) {
+			return new Point2I(
+				Clamp(value.X, area.Left, area.Right),
+				Clamp(value.Y, area.Top, area.Bottom));
+		}
 		
 		// Sign -----------------------------------------------------------------------
 
