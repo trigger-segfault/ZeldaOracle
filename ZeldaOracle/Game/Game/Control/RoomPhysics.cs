@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using ZeldaOracle.Common.Audio;
+﻿using System.Collections.Generic;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
@@ -137,7 +134,7 @@ namespace ZeldaOracle.Game.Control {
 				entity.Physics.StandingCollision;
 			if (IsSideScrolling)
 				entity.Physics.StandingCollision =
-					entity.Physics.GetCollisionInDirection(Directions.Down);
+					entity.Physics.GetCollisionInDirection(Direction.Down);
 			else
 				entity.Physics.StandingCollision = null;
 
@@ -234,8 +231,7 @@ namespace ZeldaOracle.Game.Control {
 					return false;
 				if (collision.IsTile)
 					return (collision.Tile.IsMoving &&
-						collision.Tile.MoveDirection ==
-							Directions.Reverse(collision.Direction));
+						collision.Tile.MoveDirection == collision.Direction.Reverse());
 			}
 			return false;
 		}
@@ -326,7 +322,7 @@ namespace ZeldaOracle.Game.Control {
 						entity.Physics.HasGravity &&
 						entity.Physics.VelocityY >= 0.0f &&
 						entity.Physics.PositionedCollisionBox.Bottom <= tile.Bounds.Top &&
-						!((Player) entity).Movement.IsMovingInDirection(Directions.Down))
+						!((Player) entity).Movement.IsMovingInDirection(Direction.Down))
 					{
 						// Check if this tile is a top-most ladder
 						Tile checkAboveTile = RoomControl.TileManager
@@ -386,9 +382,9 @@ namespace ZeldaOracle.Game.Control {
 				if (a.IsDynamic)
 					continue;
 				if (a.IsTile && a.Tile.IsLadder) {
-					a.Connections[Directions.Right] = true;
-					a.Connections[Directions.Left] = true;
-					a.Connections[Directions.Down] = true;
+					a.Connections[Direction.Right] = true;
+					a.Connections[Direction.Left] = true;
+					a.Connections[Direction.Down] = true;
 				}
 				for (int j = i + 1; j < entity.Physics.PotentialCollisions.Count; j++) {
 					Collision b = entity.Physics.PotentialCollisions[j];
@@ -400,9 +396,10 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Attempt to connect the edges of two static collisions.</summary>
 		private void ConnectCollisionPair(Collision a, Collision b) {
-			for (int direction = 0; direction < Directions.Count; direction++) {
-				int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
-				int oppositeDirection = Directions.Reverse(direction);
+			//for (int direction = 0; direction < Direction.Count; direction++) {
+			foreach (Direction direction in Direction.Range) {
+				int lateralAxis = direction.PerpendicularAxis;
+				int oppositeDirection = direction.Reverse();
 
 				// Make sure their edges are touching
 				if (GMath.Abs(a.GetEdge(direction) -
@@ -447,26 +444,29 @@ namespace ZeldaOracle.Game.Control {
 				entityBox.Bottom - solidBox.Top);
 			
 			// Get the collision direction for each axis
-			int[] axisDirections = new int[2] { -1, -1 };
+			Direction[] axisDirections = new Direction[2] {
+				Direction.Invalid,
+				Direction.Invalid,
+			};
 			for (int axis = 0; axis < 2; axis++) {
 				axisDirections[axis] = Axes.GetDirection(axis,
 					solidBox.Center[axis] - entityBox.Center[axis]);
-				if (collision.Connections[(axisDirections[axis] + 2) % 4]) {
-						axisDirections[axis] = -1;
+				if (collision.Connections[axisDirections[axis].Reverse().Index]) {
+					axisDirections[axis] = Direction.Invalid;
 				}
 				else if (collision.Source.IsInsideCollision)
-					axisDirections[axis] = Directions.Reverse(axisDirections[axis]);
+					axisDirections[axis] = axisDirections[axis].Reverse();
 			}
-			if (axisDirections[0] == -1 && axisDirections[1] == -1)
+			if (!axisDirections[0].IsValid && !axisDirections[1].IsValid)
 				return -1;
 			
 			// Set the collision direction on the axis of least penetration,
 			int collisionAxis = -1;
-			if (axisDirections[Axes.X] >= 0 && axisDirections[Axes.Y] >= 0)
+			if (axisDirections[Axes.X].IsValid && axisDirections[Axes.Y].IsValid)
 				collisionAxis = (penetrationBox.X < penetrationBox.Y ? Axes.X : Axes.Y);
-			else if (axisDirections[Axes.X] >= 0)
+			else if (axisDirections[Axes.X].IsValid)
 				collisionAxis = Axes.X;
-			else if (axisDirections[Axes.Y] >= 0)
+			else if (axisDirections[Axes.Y].IsValid)
 				collisionAxis = Axes.Y;
 			collision.Direction = axisDirections[collisionAxis];
 			return collision.Direction;
@@ -493,7 +493,7 @@ namespace ZeldaOracle.Game.Control {
 
 				// Adjust and recalculate collision penetrations
 				AdjustCollisionPenetrations(entity, entity.Physics.Velocity[axis],
-					axis == Axes.X ? Directions.Right : Directions.Down);
+					axis == Axes.X ? Direction.Right : Direction.Down);
 
 				// Resolve the collisions on this axis
 				Collision collision = GetPriorityCollision(entity, axis);
@@ -510,7 +510,7 @@ namespace ZeldaOracle.Game.Control {
 		private void ResolveCollision(Entity entity, Vector2F velocity,
 			Collision collision)
 		{
-			int oppositeDirection = Directions.Reverse(collision.Direction);
+			Direction oppositeDirection = collision.Direction.Reverse();
 			
 			// Now calculate the positional correction distance that would resolve
 			// this collision
@@ -543,18 +543,15 @@ namespace ZeldaOracle.Game.Control {
 
 			// Apply positional correction
 			collision.IsResolved = true;
-			entity.Position -= Directions.ToVector(collision.Direction) *
-				positionalCorrection;
+			entity.Position -= collision.Direction.ToVector(positionalCorrection);
 			entity.Physics.IsColliding = true;
 
 			// Adjust and recalculate penetration for all collisions
 			AdjustCollisionPenetrations(entity, positionalCorrection,
-				Directions.Reverse(collision.Direction));
+				collision.Direction.Reverse());
 			
 			// Apply impulse to update velocity in the collision direction
-			if (entity.Physics.Velocity.Dot(
-				Directions.ToVector(collision.Direction)) > 0.0f)
-			{
+			if (entity.Physics.Velocity.Dot(collision.Direction.ToVector()) > 0.0f) {
 				Vector2F newVelocity = entity.Physics.Velocity;
 
 				if (CanReboundColliison(entity, collision)) {
@@ -603,7 +600,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Can't dodge moving tiles
 			if (collision.Tile != null && collision.Tile.IsMoving && 
-				axis != Directions.ToAxis(collision.Tile.MoveDirection))
+				axis != collision.Tile.MoveDirection.Axis)
 				return false;
 
 			Rectangle2F entityBox = Rectangle2F.Translate(
@@ -611,10 +608,10 @@ namespace ZeldaOracle.Game.Control {
 
 			// Check dodging for both edges of the solid object
 			for (int side = 0; side < 2; side++) {
-				int dodgeDirection = lateralAxis + (side * 2);
-				Vector2F dodgeVector = Directions.ToVector(dodgeDirection);
-				float distanceToEdge = GMath.Abs(entityBox.GetEdge(
-					Directions.Reverse(dodgeDirection)) -
+				Direction dodgeDirection = lateralAxis + (side * 2);
+				Vector2F dodgeVector = dodgeDirection.ToVector();
+				float distanceToEdge = GMath.Abs(
+					entityBox.GetEdge(dodgeDirection.Reverse()) -
 					collision.SolidBox.GetEdge(dodgeDirection));
 				
 				// Check if the distance to the edge is within dodge range
@@ -625,7 +622,7 @@ namespace ZeldaOracle.Game.Control {
 					Vector2F nextPosition = GMath.Round(entity.Position) +
 						(dodgeVector * moveAmount);
 					Vector2F goalPosition = entity.Position +
-						Directions.ToVector(collision.Direction) * 4 +
+						collision.Direction.ToVector(4.0f) +
 						(dodgeVector * distanceToEdge);
 
 					// Make sure the entity is not colliding when placed at the solid
@@ -658,10 +655,10 @@ namespace ZeldaOracle.Game.Control {
 				collision.CollisionBox, entity.Position);
 
 			// Check dodging for both edges of the solid object
-			int dodgeDirection = Directions.Up;
-			Vector2F dodgeVector = Directions.ToVector(dodgeDirection);
-			float distanceToEdge = GMath.Abs(entityBox.GetEdge(
-				Directions.Reverse(dodgeDirection)) -
+			Direction dodgeDirection = Direction.Up;
+			Vector2F dodgeVector = dodgeDirection.ToVector();
+			float distanceToEdge = GMath.Abs(
+				entityBox.GetEdge(dodgeDirection.Reverse()) -
 				collision.SolidBox.GetEdge(dodgeDirection));
 				
 			// Check if the distance to the edge is within dodge range
@@ -669,7 +666,7 @@ namespace ZeldaOracle.Game.Control {
 				Vector2F nextPosition = GMath.Round(entity.Position) +
 					(dodgeVector * 1);
 				Vector2F goalPosition = entity.Position +
-					Directions.ToVector(collision.Direction) * 2 +
+					collision.Direction.ToVector(2.0f) +
 					(dodgeVector * distanceToEdge);
 
 				// Make sure the entity is not colliding when placed at the solid
@@ -681,14 +678,14 @@ namespace ZeldaOracle.Game.Control {
 					collision.IsDodged = true;
 
 					// Change this collision into a downward collision
-					collision.Direction = Directions.Down;
+					collision.Direction = Direction.Down;
 					collision.CalcPenetration();
 
 					// Adjust and recalculate penetration for all collisions
 					AdjustCollisionPenetrations(entity,
 						distanceToEdge, dodgeDirection);
 					AdjustCollisionPenetrations(entity, 2,
-						Directions.Reverse(collision.Direction));
+						collision.Direction.Reverse());
 					return true; // Dodged successfully
 				}
 			}
@@ -697,11 +694,10 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		private void AdjustCollisionPenetrations(Entity entity, float amount,
-			int direction)
+			Direction direction)
 		{
-			int axis = Directions.ToAxis(direction);
-			foreach (Collision collision in entity.Physics.PotentialCollisions)
-			{
+			int axis = direction.Axis;
+			foreach (Collision collision in entity.Physics.PotentialCollisions) {
 				bool prevIsColliding = collision.IsColliding;
 
 				if (collision.Axis == axis) {
@@ -725,9 +721,11 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
-		private bool IsCollidingAt(Entity entity, Vector2F position, int direction) {
+		private bool IsCollidingAt(Entity entity, Vector2F position,
+			Direction direction)
+		{
 			foreach (Collision collision in entity.Physics.PotentialCollisions) {
-				if (direction >= 0 && collision.Direction != direction)
+				if (direction.IsValid && collision.Direction != direction)
 					continue;
 				if (collision.IsCollidingAt(position))
 					return true;
@@ -813,8 +811,8 @@ namespace ZeldaOracle.Game.Control {
 			// Iterate collisions which are able to crush the entity
 			foreach (Collision rock in entity.Physics.Collisions) {
 				if (CanColliisonCrush(entity, rock)) {
-					int crushDirection = rock.Tile.MoveDirection;
-					int crushAxis = Directions.ToAxis(crushDirection);
+					Direction crushDirection = rock.Tile.MoveDirection;
+					int crushAxis = crushDirection.Axis;
 
 					// Iterate collisions which are caused by the crushing collision
 					foreach (Collision hardPlace in entity.Physics.Collisions) {
@@ -861,8 +859,8 @@ namespace ZeldaOracle.Game.Control {
 				// Check for beginning climbing by moving up while falling
 				if ((player.Physics.VelocityY >= 0.0f || !player.Physics.HasGravity) &&
 					!player.Physics.IsInWater &&
-					player.Movement.IsMovingInDirection(Directions.Up) ||
-					(player.Movement.IsMovingInDirection(Directions.Down) &&
+					player.Movement.IsMovingInDirection(Direction.Up) ||
+					(player.Movement.IsMovingInDirection(Direction.Down) &&
 						isTopLadder && player.Center.Y < ladderBox.Top))
 				{
 					player.BeginEnvironmentState(player.SideScrollLadderState);
@@ -879,7 +877,7 @@ namespace ZeldaOracle.Game.Control {
 					player.Physics.VelocityY >= 0.0f &&
 					(!isTopLadder || collisionBox.Bottom > ladderBox.Top ||
 						player.Physics.PreviousStandingCollision
-							.GetEdge(Directions.Down) != ladderBox.Top))
+							.GetEdge(Direction.Down) != ladderBox.Top))
 				{
 					player.BeginEnvironmentState(player.SideScrollLadderState);
 					player.IntegrateStateParameters();
@@ -933,7 +931,7 @@ namespace ZeldaOracle.Game.Control {
 				if (entity.Physics.HasGravity && !entity.Physics.OnGroundOverride) {
 					// Zero jump speed if the entity is colliding below
 					if (entity.Physics.ZVelocity < 0.0f &&
-						entity.Physics.IsCollidingInDirection(Directions.Down))
+						entity.Physics.IsCollidingInDirection(Direction.Down))
 						entity.Physics.ZVelocity = 0.0f;
 					// Integrate acceleration due to gravity
 					entity.Physics.ZVelocity -= entity.Physics.Gravity;
@@ -1141,10 +1139,12 @@ namespace ZeldaOracle.Game.Control {
 					}
 				}
 				else {
-					// Keep the currently ledge tile location if we're still colliding with it.
+					// Keep the currently ledge tile location if we're still colliding
+					// with it
 					Tile oldLedgeTile = entity.RoomControl.GetTopTile(
 						entity.Physics.LedgeTileLocation);
-					if (oldLedgeTile != null && entity.Physics.CanCollideWithTile(oldLedgeTile) &&
+					if (oldLedgeTile != null &&
+						entity.Physics.CanCollideWithTile(oldLedgeTile) &&
 						entity.Physics.IsMovingDownLedge(oldLedgeTile))
 						entity.Physics.LedgeTileLocation = oldLedgeTile.Location;
 					else

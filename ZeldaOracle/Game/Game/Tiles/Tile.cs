@@ -904,8 +904,8 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return (isMoving || path != null); }
 		}
 
-		public int MoveDirection {
-			get { return Directions.FromPoint(moveDirection); }
+		public Direction MoveDirection {
+			get { return Direction.FromPoint(moveDirection); }
 		}
 
 		public Properties Properties {
@@ -1094,7 +1094,7 @@ namespace ZeldaOracle.Game.Tiles {
 			set { properties.Set("solidity", (int) value); }
 		}
 
-		public int LedgeDirection {
+		public Direction LedgeDirection {
 			get { return properties.GetInteger("ledge_direction", Directions.Down); }
 		}
 

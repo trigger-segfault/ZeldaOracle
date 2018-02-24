@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -393,7 +390,7 @@ namespace ZeldaOracle.Game.Entities {
 		
 		/// <summary>Returns true if the entity is currently colliding in the given
 		/// direction.</summary>
-		public bool IsCollidingInDirection(int direction) {
+		public bool IsCollidingInDirection(Direction direction) {
 			return  Collisions.Any(c => c.Direction == direction);
 		}
 
@@ -405,20 +402,22 @@ namespace ZeldaOracle.Game.Entities {
 		
 		/// <summary>Iterate the collisions which are penetrating in the given
 		/// direction.</summary>
-		public IEnumerable<Collision> GetCollisionsInDirection(int direction) {
+		public IEnumerable<Collision> GetCollisionsInDirection(Direction direction) {
 			return Collisions.Where(c => c.Direction == direction);
 		}
 		
 		/// <summary>Iterate the collisions from the previous update which were
 		/// penetrating in the given direction.</summary>
-		public IEnumerable<Collision> GetPreviousCollisionsInDirection(int direction) {
+		public IEnumerable<Collision> GetPreviousCollisionsInDirection(
+			Direction direction)
+		{
 			return PreviousCollisions.Where(c => c.Direction == direction);
 		}
 
 		/// <summary></summary>
-		public Collision GetCenteredCollisionInDirection(int direction) {
+		public Collision GetCenteredCollisionInDirection(Direction direction) {
 			Collision best = null;
-			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			int lateralAxis = direction.PerpendicularAxis;
 			
 			foreach (Collision collision in Collisions) {
 				if (collision.Direction == direction) {
@@ -434,11 +433,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		/// <summary></summary>
-		public Collision GetCenteredPotentialCollisionInDirection(int direction,
-			float minPenetration = 0.0f)
+		public Collision GetCenteredPotentialCollisionInDirection(
+			Direction direction, float minPenetration = 0.0f)
 		{
 			Collision best = null;
-			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			int lateralAxis = direction.PerpendicularAxis;
 			
 			foreach (Collision collision in PotentialCollisions) {
 				if (collision.Direction == direction) {
@@ -456,24 +455,24 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Return the center-most collision of all collisions which are
 		/// penetrating in the given direction.</summary>
-		public Collision GetCollisionInDirection(int direction) {
+		public Collision GetCollisionInDirection(Direction direction) {
 			return GetCollisionInDirection(direction, Collisions);
 		}
 		
 		/// <summary>Return the center-most collision of all collisions from the
 		/// previous update which are penetrating in the given direction.</summary>
-		public Collision GetPreviousCollisionInDirection(int direction) {
+		public Collision GetPreviousCollisionInDirection(Direction direction) {
 			return GetCollisionInDirection(direction, PreviousCollisions);
 		}
 		
 		/// <summary>Return the center-most collision of all collisions which are
 		/// penetrating in the given direction.</summary>
-		private Collision GetCollisionInDirection(int direction,
+		private Collision GetCollisionInDirection(Direction direction,
 			IEnumerable<Collision> collisions)
 		{
 			Collision best = null;
 			bool bestIsCentered = false;
-			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			int lateralAxis = direction.PerpendicularAxis;
 
 			foreach (Collision collision in collisions) {
 				if (collision.Direction == direction) {
@@ -556,44 +555,47 @@ namespace ZeldaOracle.Game.Entities {
 		
 		/// <summary>Returns true if the entity is moving down the ledge.</summary>
 		public bool IsMovingDownLedge(Tile ledgeTile) {
-			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
+			return velocity.Dot(ledgeTile.LedgeDirection.ToVector()) > 0.0f;
 		}
 
 		/// <summary>Returns true if the entity is moving up the ledge.</summary>
 		public bool IsMovingUpLedge(Tile ledgeTile) {
-			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
+			return velocity.Dot(ledgeTile.LedgeDirection.ToVector()) < 0.0f;
 		}
 
-		public bool CanDodgeCollision(Tile tile, int direction) {
+		public bool CanDodgeCollision(Tile tile, Direction direction) {
 			if (!CanCollideWithTile(tile))
 				return false;
 			for (int i = 0; i < tile.CollisionModel.Boxes.Count; i++) {
-				if (CanDodgeCollision(Rectangle2F.Translate(tile.CollisionModel.Boxes[i], tile.Position), direction)) {
+				if (CanDodgeCollision(Rectangle2F.Translate(
+					tile.CollisionModel.Boxes[i], tile.Position), direction))
+				{
 					return true;
 				}
 			}
 			return false;
 		}
 
-		public bool CanDodgeCollision(Rectangle2F block, int direction) {
+		public bool CanDodgeCollision(Rectangle2F block, Direction direction) {
 			// Only dodge when moving horizontally or vertically.
 			if (GMath.Abs(velocity.X) > GameSettings.EPSILON &&
 				GMath.Abs(velocity.Y) > GameSettings.EPSILON)
 				return false;
 
-			float		dodgeDist	= autoDodgeDistance;
-			Rectangle2F	objBox		= PositionedCollisionBox;
-			Vector2F	pos			= entity.Position;
-			Vector2F	dirVect		= Directions.ToVector(direction);
+			float dodgeDist		= autoDodgeDistance;
+			Rectangle2F	objBox	= PositionedCollisionBox;
+			Vector2F pos		= entity.Position;
+			Vector2F dirVect	= direction.ToVector();
 
 			for (int side = 0; side < 2; side++) {
-				int moveDir		= (direction + (side == 0 ? 1 : 3)) % 4;
-				float distance	= GMath.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
+				Direction moveDir = (direction + (side == 0 ? 1 : 3)) % 4;
+				float distance = GMath.Abs(
+					objBox.GetEdge(moveDir.Reverse()) - block.GetEdge(moveDir));
 
 				if (distance <= dodgeDist) {
 					Vector2F checkPos = pos + (dirVect * 1.0f) +
-						(Directions.ToVector(moveDir) * distance);
-					Vector2F gotoPos = GMath.Round(pos) + Directions.ToVector(moveDir);
+						moveDir.ToVector(distance);
+					Vector2F gotoPos = GMath.Round(pos) + moveDir.ToVector(1.0f);
 
 					if (!IsPlaceMeetingSolid(checkPos, collisionBox) &&
 						!IsPlaceMeetingSolid(gotoPos, collisionBox))
@@ -605,7 +607,7 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 		
-		public bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
+		public bool IsSafeClippingInDirection(Rectangle2F solidBox, Direction direction) {
 			return false; // TODO: IsSafeClippingInDirection
 			//return (ClipCollisionInfo[direction].IsAllowedClipping &&
 				//RoomPhysics.AreEdgesAligned(solidBox,
@@ -691,7 +693,7 @@ namespace ZeldaOracle.Game.Entities {
 				if (flags.HasFlag(PhysicsFlags.OnGroundOverride))
 					return false;
 				if (entity.RoomControl.IsSideScrolling)
-					return !IsCollidingInDirection(Directions.Down);
+					return !IsCollidingInDirection(Direction.Down);
 				return (entity.ZPosition > 0.0f || zVelocity > 0.0f);// || IsFlying);
 			}
 		}
