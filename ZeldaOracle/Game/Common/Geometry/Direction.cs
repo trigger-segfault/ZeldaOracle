@@ -352,7 +352,7 @@ namespace ZeldaOracle.Common.Geometry {
 	
 
 
-
+	/*
 
 	public struct Orientation {
 
@@ -441,6 +441,8 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Orientation((index + (count / 2)) % count, count);
 		}
 	}
+
+	*/
 
 	public enum OrientationStyle {
 		None,		// Not-applicable

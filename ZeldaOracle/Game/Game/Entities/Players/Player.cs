@@ -485,54 +485,54 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		private void UpdateUseDirections() {
-			int controlDirection = -1;
-			int controlAngle = -1;
+			Direction controlDirection = Direction.Invalid;
+			Angle controlAngle = Angle.Invalid;
 			
 			// Find control direction
 			// Arrow priority: Left > Up > Right > Down
 			if (Controls.Left.IsDown())
-				controlDirection = Directions.Left;
+				controlDirection = Direction.Left;
 			else if (Controls.Up.IsDown())
-				controlDirection = Directions.Up;
+				controlDirection = Direction.Up;
 			else if (Controls.Right.IsDown())
-				controlDirection = Directions.Right;
+				controlDirection = Direction.Right;
 			else if (Controls.Down.IsDown())
-				controlDirection = Directions.Down;
+				controlDirection = Direction.Down;
 
 			// Find control angle
 			// Arrow priorities: Left > Right, Up > Down
 			if (Controls.Up.IsDown()) {
 				if (Controls.Left.IsDown())
-					controlAngle = Angles.UpLeft;
+					controlAngle = Angle.UpLeft;
 				else if (Controls.Right.IsDown())
-					controlAngle = Angles.UpRight;
+					controlAngle = Angle.UpRight;
 				else
-					controlAngle = Angles.Up;
+					controlAngle = Angle.Up;
 			}
 			else if (Controls.Down.IsDown()) {
 				if (Controls.Left.IsDown())
-					controlAngle = Angles.DownLeft;
+					controlAngle = Angle.DownLeft;
 				else if (Controls.Right.IsDown())
-					controlAngle = Angles.DownRight;
+					controlAngle = Angle.DownRight;
 				else
-					controlAngle = Angles.Down;
+					controlAngle = Angle.Down;
 			}
 			else if (Controls.Left.IsDown())
-				controlAngle = Angles.Left;
+				controlAngle = Angle.Left;
 			else if (Controls.Right.IsDown())
-				controlAngle = Angles.Right;
+				controlAngle = Angle.Right;
 
 			// Determine use angle/direction
 			if (movement.IsMoving && !StateParameters.EnableStrafing) {
 				useAngle		= movement.MoveAngle;
 				useDirection	= movement.MoveDirection;
 			}
-			else if (controlAngle >= 0) {
+			else if (controlAngle.IsValid) {
 				useAngle		= controlAngle;
 				useDirection	= controlDirection;
 			}
 			else {
-				useAngle		= Directions.ToAngle(direction);
+				useAngle		= direction.ToAngle();
 				useDirection	= direction;
 			}
 		}
@@ -625,7 +625,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Rectangle2F otherBox = Rectangle2F.Translate(
 						other.ButtonActionCollisionBox, other.Position);
 					if (myBox.Intersects(otherBox) &&
-						Directions.NearestFromVector(other.Center - Center) == direction)
+						Direction.FromVector(other.Center - Center) == direction)
 					{
 						if (other.OnPlayerAction(direction)) {
 							StopPushing();
@@ -688,7 +688,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.Initialize();
 			
 			viewFocusOffset		= Vector2F.Zero;
-			direction			= Directions.Down;
+			direction			= Direction.Down;
 			useDirection		= 0;
 			useAngle			= 0;
 			syncAnimationWithDirection = true;

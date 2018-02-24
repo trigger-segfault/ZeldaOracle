@@ -45,7 +45,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Graphics
 			Graphics.DrawOffset			= new Point2I(-8, -8);
 			centerOffset				= new Point2I(0, 0);
-			syncAnimationWithDirection	= true;
+			syncAnimationWithDirection	= false;
 
 			// Physics
 			Physics.HasGravity			= false;
@@ -111,7 +111,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveVector = moveVector.Normalized * moveSpeed;
 
 			physics.Velocity = moveVector;
-			Angle = Angles.NearestFromVector(moveVector);
+			Graphics.SubStripIndex = Angle.FromVector(moveVector);
 
 			// Reverse rotation direction regularly
 			timer++;

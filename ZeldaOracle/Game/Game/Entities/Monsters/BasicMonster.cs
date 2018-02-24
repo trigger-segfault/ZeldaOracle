@@ -111,7 +111,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			movesInAir					= false;
 			facePlayerOdds				= 4;
 			orientationStyle			= OrientationStyle.Direction;
-			numMoveAngles				= Directions.Count;
+			numMoveAngles				= Direction.Count;
 			stopTime.Set(30, 60);
 			moveTime.Set(30, 50);
 
@@ -246,8 +246,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				.GetConstructor(Type.EmptyTypes).Invoke(null);
 
 			// Determine projectile velocity
-			Vector2F projectileUnitVelocity = 
-				Directions.ToVector(direction);
+			Vector2F projectileUnitVelocity = direction.ToVector();
 			if (aimType == AimType.SeekPlayer) {
 				Vector2F vectorToPlayer = RoomControl.Player.Center - Center;
 				projectileUnitVelocity = vectorToPlayer.Normalized;
@@ -368,11 +367,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void UpdateSubStripIndex() {
 			if (syncAnimationWithDirection) {
 				if (isAnimationHorizontal) {
-					if (Directions.IsHorizontal(direction))
-						Graphics.SubStripIndex = direction / 2;
+					if (direction.IsHorizontal)
+						Graphics.SubStripIndex = direction.Index / 2;
 				}
 				else {
-					Graphics.SubStripIndex = direction;
+					Graphics.SubStripIndex = direction.Index;
 				}
 			}
 		}
@@ -431,7 +430,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 						chargeCooldownTimer--;
 					}
 					else if (chargeType != ChargeType.None) {
-						int directionToPlayer = Directions.NearestFromVector(
+						int directionToPlayer = Direction.FromVector(
 							RoomControl.Player.Center - Center);
 						if (Entity.AreEntitiesCollisionAligned(this, RoomControl.Player,
 							directionToPlayer, CollisionBoxType.Hard))
@@ -459,15 +458,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public int MoveAngle {
 			get { return moveAngle; }
 			set {
-				if (value != moveAngle) {
-					moveAngle = value;
-					
-					// Update direction/angle
-					if (orientationStyle == OrientationStyle.Direction)
-						Direction = (moveAngle * Directions.Count) / numMoveAngles;
-					else 
-						Angle = (moveAngle * Angles.AngleCount) / numMoveAngles;
-				}
+				moveAngle = value;
+				if (numMoveAngles == Direction.Count)
+					direction = moveAngle;
 			}
 		}
 	}

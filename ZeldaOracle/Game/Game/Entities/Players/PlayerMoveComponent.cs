@@ -332,7 +332,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Update movement or acceleration
 			if (allowMovementControl && (isMoving || isStroking) && !player.IsInMinecart) {
 				if (!isMoving)
-					moveAngle = Directions.ToAngle(player.Direction);
+					moveAngle = player.Direction.ToAngle();
 
 				// Determine key-motion (the velocity we want to move at)
 				float scaledSpeed = mode.MovementSpeed *

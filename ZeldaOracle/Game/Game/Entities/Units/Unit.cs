@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		private HashSet<UnitTool> tools;
 
 		// The direction the unit is facing.
-		protected int		direction;
+		protected Direction	direction;
 		protected bool		syncAnimationWithDirection;
 		protected OrientationStyle orientationStyle;
 
@@ -77,12 +77,12 @@ namespace ZeldaOracle.Game.Entities.Units {
 			tools					= new HashSet<UnitTool>();
 			
 			orientationStyle			= OrientationStyle.Direction;
-			direction					= Directions.Right;
+			direction					= Direction.Right;
 			syncAnimationWithDirection	= false;
 
 			health			= 1;
 			healthMax		= 1;
-			direction		= Directions.Right;
+			direction		= Direction.Right;
 			centerOffset	= new Point2I(8, 8);
 
 		}
@@ -116,11 +116,15 @@ namespace ZeldaOracle.Game.Entities.Units {
 		// Projectiles
 		//-----------------------------------------------------------------------------
 		
-		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed) {
+		public Projectile ShootFromDirection(
+			Projectile projectile, int direction, float speed)
+		{
 			return ShootFromDirection(projectile, direction, speed, Vector2F.Zero, 0);
 		}
 
-		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed) {
+		public Projectile ShootFromAngle(
+			Projectile projectile, int angle,float speed)
+		{
 			return ShootFromAngle(projectile, angle, speed, Vector2F.Zero, 0);
 		}
 
@@ -128,27 +132,37 @@ namespace ZeldaOracle.Game.Entities.Units {
 			return ShootProjectile(projectile, velocity, Vector2F.Zero, 0);
 		}
 		
-		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+		public Projectile ShootFromDirection(Projectile projectile,
+			Direction direction, float speed, Vector2F positionOffset,
+			int zPositionOffset = 0)
+		{
 			projectile.Owner		= this;
 			projectile.Direction	= direction;
-			projectile.Physics.Velocity	= Directions.ToVector(direction) * speed;
-			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPosition + zPositionOffset);
+			projectile.Physics.Velocity	= direction.ToVector(speed);
+			RoomControl.SpawnEntity(projectile,
+				Center + positionOffset, zPosition + zPositionOffset);
 			return projectile;
 		}
 		
-		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+		public Projectile ShootFromAngle(Projectile projectile, Angle angle,
+			float speed, Vector2F positionOffset, int zPositionOffset = 0)
+		{
 			projectile.Owner	= this;
 			projectile.Angle	= angle;
-			projectile.Physics.Velocity	= Angles.ToVector(angle, true) * speed;
-			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPosition + zPositionOffset);
+			projectile.Physics.Velocity	= angle.ToVector(speed);
+			RoomControl.SpawnEntity(projectile,
+				Center + positionOffset, zPosition + zPositionOffset);
 			return projectile;
 		}
 
-		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity, Vector2F positionOffset, int zPositionOffset) {
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity,
+			Vector2F positionOffset, int zPositionOffset = 0)
+		{
 			projectile.Owner		= this;
 			projectile.Direction	= direction;
 			projectile.Physics.Velocity	= velocity;
-			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPosition + zPositionOffset);
+			RoomControl.SpawnEntity(projectile,
+				Center + positionOffset, zPosition + zPositionOffset);
 			return projectile;
 		}
 
@@ -357,16 +371,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			get { return (hurtFlickerTimer > 0); }
 		}
 		
-		public int Direction {
-			get { return direction; }
-			set {
-				direction = value;
-				if (syncAnimationWithDirection)
-					graphics.SubStripIndex = direction;
-			}
-		}
-		
-		public int Angle {
+		public Direction Direction {
 			get { return direction; }
 			set {
 				direction = value;

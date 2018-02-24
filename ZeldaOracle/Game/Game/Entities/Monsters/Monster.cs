@@ -327,7 +327,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		protected virtual void FacePlayer() {
 			Vector2F lookVector = RoomControl.Player.Center - Center;
-			direction = Directions.NearestFromVector(lookVector);
+			direction = Direction.FromVector(lookVector);
 		}
 
 		public virtual bool CanSpawnAtLocation(Point2I location) {

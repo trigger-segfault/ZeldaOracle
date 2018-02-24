@@ -1,5 +1,5 @@
 ﻿using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
@@ -9,16 +9,19 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Hide,
 			Peek,
 			Strike,
+			StrikePause,
 			Return,
 		}
 		
-		private PincerState pincerState;
-		private int timer;
 		private Vector2F holePosition;
 		private Vector2F strikeVelocity;
 		private float distance;
+		private Angle angle;
+		private bool drawBody;
+		private int timer;
+		private GenericStateMachine<PincerState> stateMachine;
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -32,19 +35,106 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Graphics
 			Graphics.DrawOffset			= new Point2I(-8, -8);
 			centerOffset				= new Point2I(0, 0);
-			syncAnimationWithDirection	= true;
+			syncAnimationWithDirection	= false;
 
 			// Physics
-			Physics.HasGravity			= false;
-			Physics.CollideWithWorld	= false;
-			Physics.IsDestroyedInHoles	= false;
-			Physics.CollisionBox		= new Rectangle2F(-6, -6, 12, 12);
-			Physics.SoftCollisionBox	= Physics.CollisionBox.Inflated(-2, -2);
+			Physics.HasGravity				= false;
+			Physics.CollideWithWorld		= false;
+			Physics.DisableSurfaceContact	= true;
+			Physics.CollisionBox			= new Rectangle2F(-6, -6, 12, 12);
+			Physics.SoftCollisionBox		= Physics.CollisionBox.Inflated(-2, -2);
 
 			// Reactions
 			SetReaction(InteractionType.Gale, SenderReactions.Intercept, Reactions.None);
 			SetReaction(InteractionType.GaleSeed, SenderReactions.Intercept, Reactions.None);
 			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
+
+			// State Machine
+			stateMachine = new GenericStateMachine<PincerState>();
+			stateMachine.AddState(PincerState.Hide)
+				.OnBegin(OnBeginHideState)
+				.OnUpdate(OnUpdateHideState);
+			stateMachine.AddState(PincerState.Peek)
+				.OnBegin(OnBeginPeekState)
+				.SetDuration(GameSettings.MONSTER_PINCER_PEEK_DURATION);
+			stateMachine.AddState(PincerState.Strike)
+				.OnBegin(OnBeginStrikeState)
+				.OnUpdate(OnUpdateStrikeState)
+				.OnEnd(OnEndStrikeState);
+			stateMachine.AddState(PincerState.StrikePause)
+				.SetDuration(GameSettings.MONSTER_PINCER_RETURN_DELAY);
+			stateMachine.AddState(PincerState.Return)
+				.OnBegin(OnBeginReturnState)
+				.OnUpdate(OnUpdateReturnState);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// State Callbacks
+		//-----------------------------------------------------------------------------
+
+		private void OnBeginHideState() {
+			IsPassable = true;
+			position = holePosition;
+			physics.Velocity = Vector2F.Zero;
+			Graphics.IsVisible = false;
+			drawBody = false;
+		}
+
+		private void OnUpdateHideState() {
+			timer++;
+
+			// Wait for player to be in range to start peeking
+			if (timer > GameSettings.MONSTER_PINCER_PEEK_DELAY &&
+				Center.DistanceTo(RoomControl.Player.Center) <
+					GameSettings.MONSTER_PINCER_PEEK_RANGE)
+			{
+				stateMachine.BeginState(PincerState.Peek);
+			}
+		}
+
+		private void OnBeginPeekState() {
+			Graphics.IsVisible = true;
+			Graphics.PlayAnimation(GameData.ANIM_MONSTER_PINCER_EYES);
+		}
+
+		private void OnBeginStrikeState() {
+			Vector2F vectorToPlayer = RoomControl.Player.Center - Center;
+			angle = Angle.FromVector(vectorToPlayer);
+			strikeVelocity = angle.ToVector(GameSettings.MONSTER_PINCER_STRIKE_SPEED);
+			IsPassable = false;
+			Graphics.PlayAnimation(GameData.ANIM_MONSTER_PINCER_HEAD);
+			drawBody = true;
+			distance = 0;
+		}
+
+		private void OnUpdateStrikeState() {
+			physics.Velocity = strikeVelocity;
+			distance += physics.Velocity.Length;
+
+			// End strike after extending a certain distance
+			if (distance >= GameSettings.MONSTER_PINCER_STRIKE_DISTANCE)
+				stateMachine.BeginState(PincerState.Return);
+		}
+
+		private void OnEndStrikeState() {
+			physics.Velocity = Vector2F.Zero;
+		}
+
+		private void OnBeginReturnState() {
+			Vector2F vectorToHole = holePosition - position;
+			physics.Velocity = vectorToHole.Normalized *
+				GameSettings.MONSTER_PINCER_RETURN_SPEED;
+		}
+
+		private void OnUpdateReturnState() {
+			Vector2F vectorToHole = holePosition - position;
+			physics.Velocity = vectorToHole.Normalized *
+				GameSettings.MONSTER_PINCER_RETURN_SPEED;
+
+			// Check if returned to hole
+			if (vectorToHole.Length < GameSettings.MONSTER_PINCER_RETURN_SPEED)
+				stateMachine.BeginState(PincerState.Hide);
 		}
 
 
@@ -52,94 +142,22 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnFallInHole() {
-			// Do not fall in holes
-		}
-
 		public override void Initialize() {
 			base.Initialize();
 
 			// Begin hiding
-			IsPassable = true;
 			holePosition = position;
-			Graphics.IsVisible = false;
-			Graphics.PlayAnimation(GameData.ANIM_MONSTER_PINCER_EYES);
-			pincerState = PincerState.Hide;
+			stateMachine.InitializeOnState(PincerState.Hide);
 		}
 
 		public override void UpdateAI() {
-			Player player = RoomControl.Player;
-			
-			if (pincerState == PincerState.Return) {
-				Vector2F vectorToHole = holePosition - position;
-				timer++;
-
-				// Begin returning after a short delay
-				if (timer > GameSettings.MONSTER_PINCER_RETURN_DELAY)
-					physics.Velocity = vectorToHole.Normalized *
-						GameSettings.MONSTER_PINCER_RETURN_SPEED;
-
-				// Check if returned to hole
-				if (vectorToHole.Length < GameSettings.MONSTER_PINCER_RETURN_SPEED) {
-					timer = 0;
-					IsPassable = true;
-					position = holePosition;
-					physics.Velocity = Vector2F.Zero;
-					Graphics.IsVisible = false;
-					pincerState = PincerState.Hide;
-				}
-			}
-			else if (pincerState == PincerState.Strike) {
-				physics.Velocity = strikeVelocity;
-				distance += physics.Velocity.Length;
-
-				// End strike after extending a certain distance
-				if (distance >= GameSettings.MONSTER_PINCER_STRIKE_DISTANCE) {
-					timer = 0;
-					physics.Velocity = Vector2F.Zero;
-					pincerState = PincerState.Return;
-				}
-			}
-			else if (pincerState == PincerState.Peek) {
-				timer++;
-
-				// Peek for a short duration before striking
-				if (timer > GameSettings.MONSTER_PINCER_PEEK_DURATION) {
-					distance = 0;
-					Vector2F vectorToPlayer = player.Center - Center;
-					Angle = Angles.NearestFromVector(vectorToPlayer);
-					strikeVelocity = Angles.ToVector(Angle) *
-						GameSettings.MONSTER_PINCER_STRIKE_SPEED;
-					IsPassable = false;
-					Graphics.PlayAnimation(GameData.ANIM_MONSTER_PINCER_HEAD);
-					pincerState = PincerState.Strike;
-				}
-			}
-			else {
-				timer++;
-
-				// Wait for player to be in range to start peeking
-				if (timer > GameSettings.MONSTER_PINCER_PEEK_DELAY &&
-					Center.DistanceTo(player.Center) <
-					GameSettings.MONSTER_PINCER_PEEK_RANGE)
-				{
-					timer = 0;
-					Graphics.IsVisible = true;
-					Graphics.PlayAnimation(GameData.ANIM_MONSTER_PINCER_EYES);
-					pincerState = PincerState.Peek;
-				}
-			}
-		}
-
-		public override void Update() {
-			base.Update();
+			stateMachine.Update();
+			Graphics.SubStripIndex = angle;
 		}
 
 		public override void Draw(RoomGraphics g) {
 			// Draw body segments
-			if (pincerState == PincerState.Strike || 
-				pincerState == PincerState.Return)
-			{
+			if (drawBody) {
 				for (int i = 0; i <
 					GameSettings.MONSTER_PINCER_BODY_SEGMENT_COUNT; i++)
 				{
