@@ -269,7 +269,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		protected void StartCharging(int chargeDirection) {
 			direction	= chargeDirection;
-			moveAngle	= direction * 4 / numMoveAngles;
+			moveAngle	= direction * numMoveAngles / 4;
 			isCharging	= true;
 			chargeCooldownTimer = chargeCooldown;
 
@@ -278,9 +278,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 		}
 
-		protected void EndCharging() {
+		protected void StopCharging() {
 			isCharging = false;
-			speed = GMath.Min(speed, moveSpeed);
+			StartMoving();
 		}
 
 		protected void UpdateChargingState() {
@@ -288,17 +288,25 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 
+			if (avoidHazardTiles) {
+				// Avoid moving into a hazardous tile
+				foreach (Tile tile in Physics.GetTilesMeeting(
+					position + physics.Velocity * 1.1f, CollisionBoxType.Hard)) {
+					if (tile.IsHoleWaterOrLava) {
+						StopCharging();
+						return;
+					}
+				}
+			}
 			if (chargeType == ChargeType.ChargeForDuration) {
 				if (moveTimer <= 0) {
-					EndCharging();
+					StopCharging();
 					return;
 				}
 			}
-			else {
-				if (Physics.IsColliding) {
-					EndCharging();
-					return;
-				}
+			if (Physics.IsColliding) {
+				StopCharging();
+				return;
 			}
 
 			moveTimer--;

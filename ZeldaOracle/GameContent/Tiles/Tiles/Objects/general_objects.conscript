@@ -86,8 +86,11 @@ END;
 
 TILE "mushroom";
 	SOLID		block;
-	FLAGS		Pickupable;
+	FLAGS		Pickupable, Bounces;
 	SAMESPRITE; SAMESPRITEOBJ;
+	BREAKLAYER	EffectBlockPoof;
+	BREAKANIM	"effect_block_poof";
+	BREAKSOUND	"appear_vanish";
 END;
 
 # Dirt Pile ---------------------------------------------------

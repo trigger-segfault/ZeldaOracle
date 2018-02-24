@@ -48,7 +48,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the hash code for the unmapped sprite lookup.</summary>
 		public override int GetHashCode() {
-			return base.GetHashCode();
+			return SpriteParts.GetHashCode();
 		}
 
 		/// <summary>Returns true if the object is an unmapped sprite lookup and equal.</summary>

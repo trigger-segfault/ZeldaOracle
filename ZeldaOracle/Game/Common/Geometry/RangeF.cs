@@ -106,6 +106,11 @@ namespace ZeldaOracle.Common.Geometry {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
+		public void Set(float uniform) {
+			this.Min = uniform;
+			this.Max = uniform;
+		}
+
 		public void Set(float min, float max) {
 			this.Min = min;
 			this.Max = max;

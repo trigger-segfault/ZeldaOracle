@@ -57,7 +57,9 @@ namespace ZeldaOracle.Game.Items {
 			else {
 				// Pickup a bomb from the ground
 				Bomb bomb = bombTracker.GetEntity();
-				if (bomb != null && Player.Physics.IsSoftMeetingEntity(bomb)) {
+				if (bomb != null && bomb.IsPickupable && Player.Physics.IsBraceletMeetingEntity(
+					bomb, GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
+				{
 					Player.CarryState.SetCarryObject(bomb);
 					Player.BeginWeaponState(Player.CarryState);
 					bomb.RemoveFromRoom();

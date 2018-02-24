@@ -309,6 +309,7 @@
     <Compile Include="Game\Entities\Monsters\MonsterGopongaFlower.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterAntiFairy.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterSpikeRoller.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterSpinyBeetle.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterSpawnState.cs" />
     <Compile Include="Common\Util\StateMachineUtility.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterWaterTektike.cs" />

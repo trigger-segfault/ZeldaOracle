@@ -1,6 +1,7 @@
 ﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles {
 	public class TileDataInstance : BaseTileDataInstance {
@@ -133,6 +134,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public ISprite SpriteAsObject {
 			get { return TileData.SpriteAsObject; }
+		}
+
+		public DepthLayer BreakLayer {
+			get { return TileData.BreakLayer; }
 		}
 
 		public Animation BreakAnimation {

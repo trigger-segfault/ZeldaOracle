@@ -69,6 +69,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private TileFlags			flags;
 		private Point2I				size;				// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
 		private ISprite				spriteAsObject;		// The sprite for the tile if it were picked up, pushed, etc.
+		private DepthLayer			breakLayer;
 		private Animation			breakAnimation;		// The animation to play when the tile is broken.
 		private Sound				breakSound;			// The sound to play when the tile is broken.
 		private int					pushDelay;			// Number of ticks of pushing before the player can move this tile.
@@ -347,7 +348,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Entity dropEntity = SpawnDrop();
 			if (dropEntity != null) {
 				if (dropEntity is Collectible)
-					(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+					(dropEntity as Collectible).CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
 
 				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
 			}
@@ -420,7 +421,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void Break(bool spawnDrops) {
 			// Spawn the break effect.
 			if (breakAnimation != null && !CancelBreakEffect) {
-				Effect breakEffect = new Effect(breakAnimation, DepthLayer.EffectTileBreak, true);
+				Effect breakEffect = new Effect(breakAnimation, breakLayer, true);
 				RoomControl.SpawnEntity(breakEffect, Center);
 			}
 
@@ -590,6 +591,10 @@ namespace ZeldaOracle.Game.Tiles {
 			graphics.Draw(g);
 		}
 
+		public virtual void Draw(RoomGraphics g, DepthLayer depthLayer) {
+			graphics.Draw(g, depthLayer);
+		}
+
 		public virtual void DrawAbove(RoomGraphics g) {
 			graphics.DrawAbove(g);
 		}
@@ -660,6 +665,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.tileData			= data;
 			tile.flags				= data.Flags;
 			tile.spriteAsObject		= data.SpriteAsObject;
+			tile.breakLayer			= data.BreakLayer;
 			tile.breakAnimation		= data.BreakAnimation;
 			tile.breakSound			= data.BreakSound;
 			tile.collisionModel		= data.CollisionModel;
@@ -874,6 +880,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public ISprite[] SpriteList {
 			get { return tileData.SpriteList; }
+		}
+
+		public DepthLayer BreakLayer {
+			get { return breakLayer; }
+			set { breakLayer = value; }
 		}
 
 		public Animation BreakAnimation {

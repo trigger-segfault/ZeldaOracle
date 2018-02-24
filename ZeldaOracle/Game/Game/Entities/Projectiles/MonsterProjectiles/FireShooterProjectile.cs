@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		public override void OnCollideSolidEntity(Entity entity) {
 			//if (entity is MagnetBall) {
 				Effect effect = new Effect(GameData.ANIM_EFFECT_BLOCK_POOF,
-							Entities.DepthLayer.EffectSomariaBlockPoof);
+							Entities.DepthLayer.EffectBlockPoof);
 				RoomControl.SpawnEntity(effect, Position);
 				AudioSystem.PlaySound(GameData.SOUND_APPEAR_VANISH);
 			//}

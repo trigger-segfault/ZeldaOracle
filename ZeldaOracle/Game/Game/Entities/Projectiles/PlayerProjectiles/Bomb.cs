@@ -35,7 +35,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			
 			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-3, -5, 6, 1);
+			Physics.BraceletCollisionBox	= new Rectangle2I(-4, -9, 8, 8);
 			soundBounce					= GameData.SOUND_BOMB_BOUNCE;
+
+			IsPickupable = true;
 
 			Graphics.DepthLayer			= DepthLayer.ProjectileBomb;
 			Graphics.DrawOffset			= new Point2I(-8, -13);
@@ -102,14 +105,25 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			Graphics.PauseAnimation();
 		}
 
-		public override void UpdateCarrying() {
-			BurnFuse();
-			Graphics.Update();
-		}
-
 		public override void Update() {
 			base.Update();
 			BurnFuse();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Carrying Override Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Updates the pickupable entity while being carried.</summary>
+		public override void UpdateCarrying(bool isPickingUp) {
+			Graphics.Update();
+			BurnFuse();
+		}
+
+		/// <summary>Draws the pickupable entity while being carried.</summary>
+		public override void DrawCarrying(RoomGraphics g, bool isPickingUp) {
+			Graphics.Draw(g, DepthLayer.ProjectileCarriedTile);
 		}
 	}
 }

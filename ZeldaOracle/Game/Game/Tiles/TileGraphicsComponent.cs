@@ -141,6 +141,17 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (tile.Layer == 2)
 				depthLayer = DepthLayer.TileLayer3;
 
+			Draw(g, depthLayer);
+		}
+
+		public void Draw(RoomGraphics g, DepthLayer depthLayer) {
+			if (!isVisible)
+				return;
+
+			// Determine draw position.
+			Vector2F drawPosition = (useAbsoluteDrawPosition ?
+				absoluteDrawPosition : tile.Position);
+
 			drawPosition += (raisedDrawOffset + drawOffset);
 
 			// Draw the tile's as-object sprite.

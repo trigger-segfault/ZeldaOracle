@@ -87,9 +87,17 @@ namespace ZeldaOracle.Game.Entities
 			if (palette == null)
 				palette = Entity.RoomControl.Zone.Palette;
 
+			ColorDefinitions finalColorDefinitions = colorDefinitions;
+
+			// Change the color if hurting.
+			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4) {
+				finalColorDefinitions = ColorDefinitions.All("hurt");
+			}
+
 			Graphics2D g2d = new Graphics2D(Resources.SpriteBatch);
 			unmappedSprite = Unmapping.UnmapSprite(g2d, animationPlayer.SpriteOrSubStrip,
-				new SpriteSettings(colorDefinitions, animationPlayer.PlaybackTime),
+				new SpriteSettings(Entity.RoomControl.Zone.StyleDefinitions,
+					colorDefinitions, animationPlayer.PlaybackTime),
 				palette, Entity.RoomControl.EntityPalette);
 		}
 
@@ -159,19 +167,7 @@ namespace ZeldaOracle.Game.Entities
 			}
 
 			if (unmapped) {
-				ColorDefinitions finalColorDefinitions = colorDefinitions;
-
-				// Change the color if hurting.
-				if (isHurting && entity.GameControl.RoomTicks % 8 >= 4) {
-					finalColorDefinitions = ColorDefinitions.All("hurt");
-				}
-
-				Palette palette = Entity.RoomControl.TilePaletteOverride ?? unmappedPalette;
-
-				Graphics2D g2d = new Graphics2D(Resources.SpriteBatch);
-				unmappedSprite = Unmapping.UnmapSprite(g2d, animationPlayer.SpriteOrSubStrip,
-					new SpriteSettings(finalColorDefinitions, animationPlayer.PlaybackTime),
-					palette, Entity.RoomControl.EntityPalette);
+				CreateUnmappedSprite();
 			}
 		}
 

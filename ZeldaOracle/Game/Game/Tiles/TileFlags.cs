@@ -122,5 +122,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>The tile will be skipped when checking for surfaces.</summary>
 		NotSurface = 0x8000,
+
+		/// <summary>True if the carried tile bounces.</summary>
+		Bounces = 0x10000,
 	}
 }

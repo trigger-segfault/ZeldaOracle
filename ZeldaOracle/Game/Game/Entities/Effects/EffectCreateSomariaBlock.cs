@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			this.position		= (tileLocation * GameSettings.TILE_SIZE) + new Vector2F(8, 8);
 			this.zPosition		= zPosition;
 			
-			Graphics.DepthLayer	= DepthLayer.EffectSomariaBlockPoof;
+			Graphics.DepthLayer	= DepthLayer.EffectBlockPoof;
 		}
 		
 
@@ -85,7 +85,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			else {
 				// Spawn a poof effect.
 				RoomControl.SpawnEntity(
-					new Effect(GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY, DepthLayer.EffectSomariaBlockPoof),
+					new Effect(GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY, DepthLayer.EffectBlockPoof),
 					position, zPosition);
 			}
 		}

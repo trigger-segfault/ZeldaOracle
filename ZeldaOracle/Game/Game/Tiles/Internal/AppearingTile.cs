@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Tiles.Internal {
 				for (int x = 0; x < size.X; x++) {
 					for (int y = 0; y < size.Y; y++) {
 						Effect effect = new Effect(GameData.ANIM_EFFECT_BLOCK_POOF,
-							Entities.DepthLayer.EffectSomariaBlockPoof);
+							Entities.DepthLayer.EffectBlockPoof);
 						Vector2F pos = (Location + new Point2I(x, y) + Vector2F.Half) * GameSettings.TILE_SIZE;
 						RoomControl.SpawnEntity(effect, pos);
 					}

@@ -26,6 +26,9 @@ namespace ZeldaOracle.Game.Entities {
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
 		protected Rectangle2F		buttonActionCollisionBox; // Collision box that for button actions
 		protected Sound				soundBounce;
+		protected bool              isGrabbable;
+		protected bool              isPickupable;
+		protected Vector2F          carriedDrawOffset;
 
 		protected PhysicsComponent	physics;
 		protected GraphicsComponent	graphics;
@@ -89,6 +92,11 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Called every step to draw the entity.</summary>
 		public virtual void Draw(RoomGraphics g) {
 			graphics.Draw(g);
+		}
+
+		/// <summary>Called every step to draw the entity.</summary>
+		public virtual void Draw(RoomGraphics g, DepthLayer depthLayer) {
+			graphics.Draw(g, depthLayer);
 		}
 
 		/// <summary>Called when the entity enters the room. FIXME: this is never
@@ -157,9 +165,23 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
-		/// <summary>Special update method for when the entity is being carried.
-		/// </summary>
-		public virtual void UpdateCarrying() {}
+		/// <summary>Called when the entity is picked up.</summary>
+		public virtual void OnPickup() { }
+
+		/// <summary>Called when the entity has been picked up and is now being carried.</summary>
+		public virtual void OnCarry() { }
+
+		/// <summary>Called when the carried entity is thrown.</summary>
+		public virtual void OnThrow() { }
+
+		/// <summary>Called when the carried entity is dropped.</summary>
+		public virtual void OnDrop() { }
+
+		/// <summary>Updates the entity while being carried or picked up.</summary>
+		public virtual void UpdateCarrying(bool isPickingUp) { }
+
+		/// <summary>Draws the entity while being carried or picked up.</summary>
+		public virtual void DrawCarrying(RoomGraphics g, bool isPickingUp) { }
 
 		/// <summary>Called immediately after the entity is destroyed.</summary>
 		public virtual void OnDestroy() {}
@@ -238,6 +260,29 @@ namespace ZeldaOracle.Game.Entities {
 				return aBox.LeftRight.Intersects(bBox.LeftRight);
 			else
 				return aBox.TopBottom.Intersects(bBox.TopBottom);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Virtual Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets or sets if the entity can currently be grabbed.</summary>
+		public bool IsGrabbable {
+			get { return isGrabbable; }
+			set { isGrabbable = value; }
+		}
+
+		/// <summary>Gets or sets if the entity can currently be picked up.</summary>
+		public bool IsPickupable {
+			get { return isPickupable; }
+			set { isPickupable = value; }
+		}
+
+		/// <summary>Gets or sets the extra draw offset applied while carring the entity.</summary>
+		public Vector2F CarriedDrawOffset {
+			get { return carriedDrawOffset; }
+			set { carriedDrawOffset = value; }
 		}
 
 

@@ -12,6 +12,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
@@ -363,6 +364,16 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (!drawOffset.IsZero) {
 					tileData.SpriteAsObject = new OffsetSprite(tileData.Sprite, drawOffset);
 				}
+			});
+			//=====================================================================================
+			AddCommand("BREAKLAYER", (int) Modes.Tile,
+				"string layerName",
+			delegate (CommandParam parameters) {
+				string depthStr = parameters.GetString(0);
+				DepthLayer breakLayer;
+				if (!Enum.TryParse(depthStr, true, out breakLayer))
+					ThrowCommandParseError("Unknown DepthLayer '" + depthStr + "'!");
+				tileData.BreakLayer = breakLayer;
 			});
 			//=====================================================================================
 			AddCommand("BREAKANIM", (int) Modes.Tile,
