@@ -1,5 +1,6 @@
 ﻿using System;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Entities.Monsters.States;
 
 namespace ZeldaOracle.Game.Entities.Monsters {

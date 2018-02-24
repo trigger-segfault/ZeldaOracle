@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Entities.Monsters;
+﻿using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerRespawnDeathState : PlayerState {

@@ -313,6 +313,16 @@ namespace ZeldaOracle.Common.Geometry {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Return the index of the direction (0 to 3).</summary>
+		public int Index {
+			get { return index; }
+		}
+
+		/// <summary>Return true if this is a valid axis-aligned direction.</summary>
+		public bool IsValid {
+			get { return (index >= 0 && index < 4); }
+		}
+
 		/// <summary>Return the axis of the direction (0 for X, 1 for Y).</summary>
 		public int Axis {
 			get {  return (index % 2); }
@@ -327,11 +337,6 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Return true if the direction is vertical (up or down).</summary>
 		public bool IsVertical {
 			get { return ((index % 2) == 1); }
-		}
-
-		/// <summary>Return true if this is a valid axis-aligned direction.</summary>
-		public bool IsValid {
-			get { return (index >= 0 && index < 4); }
 		}
 	}
 	

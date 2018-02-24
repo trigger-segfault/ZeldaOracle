@@ -1,33 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
-using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
 	public class PlayerSeedShooterState : PlayerState {
 
-		private const int SHOOT_WAIT_TIME = 12;
+		private enum SubState {
+			Aiming,
+			Shooting,
+		}
 
-		// The angle that the player is aiming in.
-		private int angle;
-		// The direction the player should return to after shooting.
-		private int returnDirection;
-		// The seed shooter item.
+		/// <summary>The angle that the player is aiming in.</summary>
+		private Angle aimAngle;
+		/// <summary>The direction the player should return to after shooting.
+		/// </summary>
+		private Direction returnDirection;
+		/// <summary>The seed shooter weapon item.</summary>
 		private ItemSeedShooter weapon;
 
-		private bool isShooting;
+		private int autoRotateTimer;
 
 		private int shootTimer;
+
+		private GenericStateMachine<SubState> subStateMachine;
 
 
 		//-----------------------------------------------------------------------------
@@ -35,54 +35,119 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSeedShooterState() {
+			// State Parameters
+			StateParameters.ProhibitMovementControlOnGround = true;
+
+			// Sub-state Machine
+			subStateMachine = new GenericStateMachine<SubState>();
+			subStateMachine.AddState(SubState.Aiming)
+				.OnBegin(OnBeginAimingState)
+				.OnUpdate(OnUpdateAimingState);
+			subStateMachine.AddState(SubState.Shooting)
+				.OnBegin(OnBeginShootingState)
+				.OnUpdate(OnUpdateShootingState)
+				.OnEnd(OnEndShootingState);
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
-		// Internal methods
+		// Sub State Callbacks
 		//-----------------------------------------------------------------------------
 
-		private void Shoot() {
-			if (!weapon.SeedTracker.IsMaxedOut && weapon.HasAmmo()) {
-				Vector2F[] projectilePositions = new Vector2F[] {
-					new Vector2F(16, 7),
-					new Vector2F(15, -2),
-					new Vector2F(0, -12),
-					new Vector2F(-4, -6),
-					new Vector2F(-9, 7),
-					new Vector2F(-4, 12),
-					new Vector2F(7, 15),
-					new Vector2F(15, 11)
-				};
+		private void OnBeginAimingState() {
+			autoRotateTimer	= 0;
+		}
 
-				// Spawn the seed projectile.
-				SeedProjectile seed = new SeedProjectile(weapon.CurrentSeedType, true);
-				Vector2F spawnOffset = projectilePositions[angle] + new Vector2F(4, 11) - new Vector2F(8, 8);
-				int spawnZPosition = 0;
+		private void OnUpdateAimingState() {
+			// Get the desired aim angle
+			Angle goalAngle = player.UseAngle;
 
-				if (!player.RoomControl.IsSideScrolling) {
-					spawnZPosition = 5;
+			// Determine the direction of rotation to get to the goal angle
+			WindingOrder rotateDirection = WindingOrder.Clockwise;
+			if (goalAngle != aimAngle.Reverse())
+				aimAngle.NearestDistanceTo(goalAngle, out rotateDirection);
+
+			bool rotate = false;
+
+			// Check if the player should rotate this frame
+			if (Controls.Arrows.Any(c => c.IsPressed())) {
+				// Pressing an arrow control will instantly rotate
+				autoRotateTimer = 0;
+				rotate = true;
+			}
+			else if (Controls.Arrows.Any(c => c.IsDown())) {
+				// Holding down an arrow control will automatically rotate every
+				// 16 frames
+				autoRotateTimer++;
+				if (autoRotateTimer >= GameSettings.SEED_SHOOTER_AUTO_ROTATE_DELAY) {
+					rotate = true;
+					autoRotateTimer = 0;
 				}
-				else {
-					spawnOffset.Y -= 5.0f;
-					spawnZPosition = 0;
-				}
+			}
 
-				player.ShootFromAngle(seed, angle,
-					GameSettings.SEED_SHOOTER_SHOOT_SPEED,
-					spawnOffset, spawnZPosition);
-				weapon.SeedTracker.TrackEntity(seed);
-				weapon.UseAmmo();
-				
-				AudioSystem.PlaySound(GameData.SOUND_SEED_SHOOTER);
+			if (rotate && aimAngle != goalAngle) {
+				// Rotate the player's aim angle once
+				aimAngle = aimAngle.Rotate(1, rotateDirection);
 
-				// Begin shooting.
-				isShooting = true;
-				shootTimer = 0;
+				// Remember the last axis-aligned direction
+				if (aimAngle.IsAxisAligned)
+					returnDirection = aimAngle.ToDirection();
+			}
+
+			// Attempt to shoot a seed when the button is released
+			if (!weapon.IsEquipped || !weapon.IsButtonDown()) {
+				if (!weapon.SeedTracker.IsMaxedOut && weapon.HasAmmo())
+					subStateMachine.BeginState(SubState.Shooting);
+				else
+					End();
+			}
+		}
+
+		private void OnBeginShootingState() {
+			Vector2F[] projectilePositions = new Vector2F[] {
+				new Vector2F(16, 7),
+				new Vector2F(15, -2),
+				new Vector2F(0, -12),
+				new Vector2F(-4, -6),
+				new Vector2F(-9, 7),
+				new Vector2F(-4, 12),
+				new Vector2F(7, 15),
+				new Vector2F(15, 11)
+			};
+
+			// Spawn the seed projectile
+			SeedProjectile seed = new SeedProjectile(weapon.CurrentSeedType, true);
+			Vector2F spawnOffset = projectilePositions[aimAngle] + new Vector2F(4, 11) - new Vector2F(8, 8);
+			int spawnZPosition = 0;
+
+			if (!player.RoomControl.IsSideScrolling) {
+				spawnZPosition = 5;
 			}
 			else {
-				End();
+				spawnOffset.Y -= 5.0f;
+				spawnZPosition = 0;
 			}
+
+			player.ShootFromAngle(seed, aimAngle,
+				GameSettings.SEED_SHOOTER_SHOOT_SPEED,
+				spawnOffset, spawnZPosition);
+			weapon.SeedTracker.TrackEntity(seed);
+			weapon.UseAmmo();
+				
+			AudioSystem.PlaySound(GameData.SOUND_SEED_SHOOTER);
+
+			shootTimer = 0;
+		}
+
+		private void OnUpdateShootingState() {
+			shootTimer++;
+			if (shootTimer >= GameSettings.SEED_SHOOTER_SHOOT_PAUSE_DURATION)
+				subStateMachine.EndCurrentState();
+		}
+
+		private void OnEndShootingState() {
+			player.Direction = returnDirection;
+			End();
 		}
 
 
@@ -91,73 +156,43 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			isShooting		= false;
-			shootTimer		= 0;
-			angle			= player.UseAngle;
+			aimAngle = player.UseAngle;
 			returnDirection	= player.UseDirection;
 
-			player.SyncAnimationWithDirection = false;
+			// Begin the aiming sub-state
+			subStateMachine.InitializeOnState(SubState.Aiming);
 
-			StateParameters.ProhibitMovementControlOnGround = true;
-
+			// Equip the seed shooter tool (purely visual)
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
-			player.ToolVisual.AnimationPlayer.SubStripIndex = angle;
+			player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
 
-			player.Graphics.SubStripIndex = angle;
+			// Play the player's aim animation
+			player.Graphics.SubStripIndex = aimAngle.Index;
 			player.Graphics.PlayAnimation(
 				player.StateParameters.PlayerAnimations.Aim);
+
+			// This state will select the player's substrip index based on the aim
+			// angle
+			player.SyncAnimationWithDirection = false;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.UnequipTool(player.ToolVisual);
-			player.SyncAnimationWithDirection	= true;
+			player.SyncAnimationWithDirection = true;
 		}
 
 		public override void Update() {
-			base.Update();
+			// Update the current sub-state
+			subStateMachine.Update();
 			
+			// Play the player's aim animation
 			player.Graphics.SetAnimation(
 				player.StateParameters.PlayerAnimations.Aim);
 
-			if (isShooting) {
-				shootTimer++;
-				if (shootTimer >= SHOOT_WAIT_TIME) {
-					player.Direction = returnDirection;
-					End();
-				}
-			}
-			else {
-				// TODO: automatically aim when key is held down
-
-				// Update aiming controls.
-				for (int dir = 0; dir < 4; dir++) {
-					if (Controls.Arrows[dir].IsPressed()) {
-						int goalAngle	= Directions.ToAngle(dir);
-						int distCW		= Angles.GetAngleDistance(angle, goalAngle, WindingOrder.Clockwise);
-						int distCCW		= Angles.GetAngleDistance(angle, goalAngle, WindingOrder.CounterClockwise);
-
-						if (distCW != 0) {
-							if (distCCW <= distCW)
-								angle = GMath.Wrap(angle + 1, Angles.AngleCount); // Turn Counter-Clockwise
-							else
-								angle = GMath.Wrap(angle - 1, Angles.AngleCount); // Turn Clockwise
-						}
-
-						if (angle % 2 == 0)
-							returnDirection = angle / 2;
-					}
-				}
-
-				// Make player and seed-shooter face the aim angle.
-				player.Graphics.SubStripIndex = angle;
-				player.ToolVisual.AnimationPlayer.SubStripIndex = angle;
-
-				// Shoot when the button is released.
-				if (!weapon.IsEquipped || !weapon.IsButtonDown()) {
-					Shoot();
-				}
-			}
+			// Make player and seed-shooter face the aim angle
+			player.Graphics.SubStripIndex = aimAngle.Index;
+			player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
 		}
 
 		

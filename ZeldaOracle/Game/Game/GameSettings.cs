@@ -77,8 +77,10 @@ namespace ZeldaOracle.Game {
 		public const float				SWITCH_HOOK_LIFT_SPEED					= 1.0f;
 		public const int				SWITCH_HOOK_LIFT_HEIGHT					= 16;
 		public const float				SLINGSHOT_SEED_SPEED					= 3.0f;
-		public const float				SLINGSHOT_SEED_RADIAN_OFFSET			= GMath.FullAngle / 18f; // For the 2 extra seed from the hyper slingshot.
+		public const float				SLINGSHOT_SEED_RADIAN_OFFSET			= GMath.FullAngle / 18.0f; // For the 2 extra seed from the hyper slingshot.
 		public const float				SEED_SHOOTER_SHOOT_SPEED				= 3.0f;
+		public const int				SEED_SHOOTER_SHOOT_PAUSE_DURATION		= 12;
+		public const int				SEED_SHOOTER_AUTO_ROTATE_DELAY			= 16; // Auto-rotate every 16 frames
 		public const int				SEED_PROJECTILE_REBOUND_COUNT			= 3;
 		public const int				SCENT_POD_DURATION						= 240;
 		public const int				SCENT_POD_FADE_DELAY					= 60;

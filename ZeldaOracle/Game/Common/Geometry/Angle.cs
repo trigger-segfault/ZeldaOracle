@@ -186,6 +186,22 @@ namespace ZeldaOracle.Common.Geometry {
 			return Angle.NearestDistance(this, other);
 		}
 		
+		/// <summary>Return the nearest distance between this angle and another.
+		/// This will return a positive distance, and set the winding order output
+		/// variable to direction-of-rotation to rotate that distance to get to the
+		/// destination angle.</summary>
+		public int NearestDistanceTo(Angle other, out WindingOrder windingOrder) {
+			int signedDistance = Angle.NearestDistance(this, other);
+			if (signedDistance < 0) {
+				windingOrder = WindingOrder.Clockwise;
+				return -signedDistance;
+			}
+			else {
+				windingOrder = WindingOrder.CounterClockwise;
+				return signedDistance;
+			}
+		}
+		
 		/// <summary>Return the distance from one angle to another when traveling in
 		/// the given winding order. The result will always be positive.</summary>
 		public int DistanceTo(Angle other, WindingOrder windingOrder) {
@@ -228,14 +244,14 @@ namespace ZeldaOracle.Common.Geometry {
 			WindingOrder windingOrder)
 		{
 			if (windingOrder == WindingOrder.Clockwise) {
-				if (from.index > to.index)
-					return (8 + from.index - to.index);
+				if (to.index > from.index)
+					return (8 + from.index - to.index) % 8;
 				else
 					return (from.index - to.index);
 			}
 			else {
-				if (to.index < from.index)
-					return (8 + to.index - from.index);
+				if (from.index > to.index)
+					return (8 + to.index - from.index) % 8;
 				else
 					return (to.index - from.index);
 			}
@@ -260,13 +276,21 @@ namespace ZeldaOracle.Common.Geometry {
 		/// left, or down).</summary>
 		public override string ToString() {
 			if (index == 0)
-				return "right";
-			if (index == 1)
-				return "up";
-			if (index == 2)
-				return "left";
-			if (index == 3)
-				return "down";
+				return "east";
+			else if (index == 1)
+				return "northeast";
+			else if (index == 2)
+				return "north";
+			else if (index == 3)
+				return "northwest";
+			else if (index == 4)
+				return "west";
+			else if (index == 5)
+				return "southwest";
+			else if (index == 6)
+				return "south";
+			else if (index == 7)
+				return "southeast";
 			return "invalid";
 		}
 
@@ -274,6 +298,14 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Explicit Conversions
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Return the angle's angle in radians.</summary>
+		public Direction ToDirection() {
+			if (IsAxisAligned)
+				return new Direction(index / 2);
+			else
+				return Direction.Invalid;
+		}
 
 		/// <summary>Return the angle's angle in radians.</summary>
 		public float ToRadians() {
@@ -345,6 +377,16 @@ namespace ZeldaOracle.Common.Geometry {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Return the index of the angle (0 to 7).</summary>
+		public int Index {
+			get { return index; }
+		}
+
+		/// <summary>Return true if this is a valid angle.</summary>
+		public bool IsValid {
+			get { return (index >= 0 && index < 8); }
+		}
+
 		/// <summary>Return true if the angle is horizontal (left or right).
 		/// </summary>
 		public bool IsHorizontal {
@@ -356,9 +398,9 @@ namespace ZeldaOracle.Common.Geometry {
 			get { return (index == 2 || index == 6); }
 		}
 
-		/// <summary>Return true if this is a valid angle.</summary>
-		public bool IsValid {
-			get { return (index >= 0 && index < 8); }
+		/// <summary>Return true if the angle is axis-aligned.</summary>
+		public bool IsAxisAligned {
+			get { return (index % 2 == 0); }
 		}
 	}
 

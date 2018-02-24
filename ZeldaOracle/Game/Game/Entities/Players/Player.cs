@@ -919,7 +919,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Returns the inventory of the player.
+		/// <summary>Returns the inventory of the player.</summary>
 		public Inventory Inventory {
 			get { return GameControl.Inventory; }
 		}
@@ -928,19 +928,19 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return Inventory.EquippedWeapons; }
 		}
 
-		public int MoveAngle {
+		public Angle MoveAngle {
 			get { return movement.MoveAngle; }
 		}
 
-		public int MoveDirection {
+		public Direction MoveDirection {
 			get { return movement.MoveDirection; }
 		}
 
-		public int UseAngle {
+		public Angle UseAngle {
 			get { return useAngle; }
 		}
 		
-		public int UseDirection {
+		public Direction UseDirection {
 			get { return useDirection; }
 		}
 		

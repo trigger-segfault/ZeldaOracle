@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Game.Entities.Monsters {
+namespace ZeldaOracle.Common.Util {
 
 	/// <summary>
 	/// Utility class that can handle a single state at a time, using an enum type as

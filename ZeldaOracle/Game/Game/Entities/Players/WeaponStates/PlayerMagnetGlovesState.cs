@@ -2,7 +2,7 @@
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;

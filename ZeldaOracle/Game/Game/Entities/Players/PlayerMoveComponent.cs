@@ -603,11 +603,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 		
-		public int MoveDirection {
+		public Direction MoveDirection {
 			get { return moveDirection; }
 		}
 		
-		public int MoveAngle {
+		public Angle MoveAngle {
 			get { return moveAngle; }
 		}
 		
