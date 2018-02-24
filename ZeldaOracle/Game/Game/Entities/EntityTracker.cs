@@ -44,6 +44,12 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 
+		public void ClearEntities() {
+			for (int i = 0; i < entities.Length; i++) {
+				entities[i] = null;
+			}
+		}
+
 		// Return true if a non-null entity is considered dead/destroyed.
 		private bool IsEntityDead(Entity entity) {
 			return (entity.IsDestroyed || !entity.IsInRoom);

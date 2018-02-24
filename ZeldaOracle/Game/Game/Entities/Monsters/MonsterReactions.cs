@@ -49,9 +49,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		/// <summary>TODO.
 		/// <para/>Default = Reactions.None</summary>
 		Parry,
-		/// <summary>Attempt to use the bracelet to pickup.
+		/// <summary>Attempt to use the bracelet to pickup or grab.
 		/// <para/>Default = Reactions.None</summary>
-		Pickup,
+		Bracelet,
 		
 		//-----------------------------------------------------------------------------
 		// Seed Interactions
@@ -151,16 +151,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	//-----------------------------------------------------------------------------
 	
 	public class InteractionArgs : EventArgs {
-        public Vector2F ContactPoint { get; set; }
+		public Vector2F ContactPoint { get; set; }
 	}
 
 	public class WeaponInteractionEventArgs : EventArgs {
-        public ItemWeapon Weapon { get; set; }
+		public ItemWeapon Weapon { get; set; }
+		public UnitTool Tool { get; set; }
 	}
 	
 	public class ParryInteractionArgs : InteractionArgs {
-        public UnitTool SenderTool { get; set; }
-        public UnitTool MonsterTool { get; set; }
+		public UnitTool SenderTool { get; set; }
+		public UnitTool MonsterTool { get; set; }
 	}
 
 

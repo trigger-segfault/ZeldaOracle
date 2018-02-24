@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 			// Collect collectible entities.
 			if (entity is Collectible) {
 				Collectible collectible = (Collectible) entity;
-				if (collectible.IsPickupable && collectible.IsCollectibleWithItems)
+				if (collectible.IsCollectible && collectible.IsCollectibleWithItems)
 					collectible.Collect();
 			}
 		}
@@ -62,7 +62,8 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 
 			// Trigger the monster's sword reaction.
 			monster.TriggerInteraction(interactionType, unit, new WeaponInteractionEventArgs() {
-				Weapon = itemSword
+				Weapon = itemSword,
+				Tool = this
 			});
 
 			// Stab if holding sword.

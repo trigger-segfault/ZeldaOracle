@@ -55,6 +55,12 @@ MONSTER "monster_pokey",				"monster_pokey_head",			MonsterPokey,			green;	END;
 MONSTER "monster_peahat",				"monster_peahat",				MonsterPeahat,			red;	END;
 MONSTER "monster_bari",					"monster_bari",					MonsterBari,			blue;	END;
 MONSTER "monster_biri",					"monster_biri",					MonsterBiri,			blue;	END;
+MONSTER "monster_spiny_beetle_bush",	"monster_spiny_beetle",			MonsterSpinyBeetle,		red;
+	PROPERTIES	(string, cover_tile, "bush");
+END;
+MONSTER "monster_spiny_beetle_rock",	"monster_spiny_beetle",			MonsterSpinyBeetle,		red;
+	PROPERTIES	(string, cover_tile, "bracelet_rock");
+END;
 
 
 #==============================================================================

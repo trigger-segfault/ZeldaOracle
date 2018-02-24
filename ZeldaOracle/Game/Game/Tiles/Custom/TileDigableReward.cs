@@ -62,7 +62,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 						Properties.Set("looted", true);
 						IsEnabled = false;
 					};
-					collectibleReward.PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+					collectibleReward.CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
 				}
 				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
 			}

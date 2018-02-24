@@ -64,7 +64,8 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 
 		public override void OnHitMonster(Monster monster) {
 			monster.TriggerInteraction(InteractionType.Shield, unit, new WeaponInteractionEventArgs() {
-				Weapon = itemShield
+				Weapon = itemShield,
+				Tool = this
 			});
 		}
 

@@ -88,7 +88,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 			// Pickup collectibles.
 			foreach (Collectible collectible in Physics.GetEntitiesMeeting<Collectible>(CollisionBoxType.Soft)) {
-				if (collectible.IsPickupable && collectible.IsCollectibleWithItems) {
+				if (collectible.IsCollectible && collectible.IsCollectibleWithItems) {
 					collectibles.Add(collectible);
 					collectible.Destroy();
 					BeginReturn();
