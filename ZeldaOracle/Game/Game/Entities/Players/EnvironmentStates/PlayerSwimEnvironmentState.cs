@@ -47,11 +47,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		/// <summary>Submerge or dive.</summary>
 		public void Submerge() {
-			isSubmerged = true;
-			player.IsPassable = true;
-			submergedTimer = submergedDuration;
 			PlayerAnimations.Default = GameData.ANIM_PLAYER_SUBMERGED;
-			StateParameters.DisableInteractionCollisions = true;
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
 
 			// Create a splash effect
 			CreateSplashEffect();
@@ -61,13 +58,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (player.Physics.IsInOcean && CanDive()) {
 				Dive();
-				return;
+			}
+			else {
+				isSubmerged = true;
+				submergedTimer = submergedDuration;
+				StateParameters.DisableInteractionCollisions = true;
 			}
 		}
 		
 		public void Resurface() {
 			isSubmerged = false;
-			player.IsPassable = false;
 			player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 			PlayerAnimations.Default = GameData.ANIM_PLAYER_SWIM;
 			StateParameters.DisableInteractionCollisions = false;
@@ -93,11 +93,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		/// <summary>Returns true if the player has the capability to swim in the
-		/// liquid he is in.</summary>
+		/// liquid he is currently in.</summary>
 		private bool CanSwimInCurrentLiquid() {
-			return ((player.Physics.IsInWater && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater)) ||
-				(player.Physics.IsInOcean && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean)) ||
-				(player.Physics.IsInLava && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava)));
+			if (player.Physics.IsInLava)
+				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava);
+			else if (player.Physics.IsInOcean)
+				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean);
+			else if (player.Physics.IsInWater)
+				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater);
+			else
+				return false;
 		}
 
 		/// <summary>Make the player die by drowning.</summary>
