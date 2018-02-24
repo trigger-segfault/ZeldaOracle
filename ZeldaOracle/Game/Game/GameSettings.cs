@@ -141,6 +141,13 @@ namespace ZeldaOracle.Game {
 		public const float              PLAYER_LEAP_LEDGE_JUMP_SPEED		= 1.75f;
 		public const float				PLAYER_MAGNET_GLOVE_MOVE_SPEED		= 1.5f;
 
+		public static readonly Rectangle2F[] PLAYER_BRACELET_BOXES = {
+			new Rectangle2I(-2, -7, 13, 13),
+			new Rectangle2I(-6, -13, 12, 13),
+			new Rectangle2I(-11, -7, 13, 13),
+			new Rectangle2I(-6, -2, 12, 13),
+		};
+
 		// Monsters
 		public const int				MONSTER_STUN_DURATION					= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
 		public const int				MONSTER_STUN_SHAKE_DURATION				= 60;	// How long the monster shakes at the end of being stunned.

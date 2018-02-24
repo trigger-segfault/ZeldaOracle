@@ -261,6 +261,7 @@
       <Word>SPRITEINDEX</Word>
       <Word>SPRITELIST</Word>
       <Word>SPRITEOBJ</Word>
+      <Word>BREAKLAYER</Word>
       <Word>BREAKANIM</Word>
       <Word>BREAKSOUND</Word>
       <Word>MODEL</Word>

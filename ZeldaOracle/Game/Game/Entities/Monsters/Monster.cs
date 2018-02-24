@@ -129,7 +129,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
 			SetReaction(InteractionType.Shovel,			Reactions.Bump);
 			SetReaction(InteractionType.Parry,			Reactions.Parry);
-			SetReaction(InteractionType.Pickup,			Reactions.None);
+			SetReaction(InteractionType.Bracelet,			Reactions.None);
 			// Seed interations
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.SilentDamage);

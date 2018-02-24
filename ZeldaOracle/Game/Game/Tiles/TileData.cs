@@ -9,6 +9,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -18,6 +19,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private ISprite[]			spriteList;
 		private ISprite             spriteAbove;
 		private ISprite				spriteAsObject;
+		private DepthLayer          breakLayer;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;
 		private CollisionModel		model;
@@ -35,6 +37,7 @@ namespace ZeldaOracle.Game.Tiles {
 			spriteAbove			= null;
 			spriteAsObject		= null;
 			breakAnimation		= null;
+			breakLayer    = DepthLayer.EffectTileBreak;
 			model               = null;
 			tileBelow			= null;
 
@@ -203,6 +206,11 @@ namespace ZeldaOracle.Game.Tiles {
 				else
 					spriteAsObject = value;
 			}
+		}
+
+		public DepthLayer BreakLayer {
+			get { return breakLayer; }
+			set { breakLayer = value; }
 		}
 
 		public Animation BreakAnimation {

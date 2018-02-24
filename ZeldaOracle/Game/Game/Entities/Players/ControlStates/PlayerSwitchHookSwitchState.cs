@@ -124,7 +124,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 
 				// Spawn drops as the tile is picked up
-				hookedTile.SpawnDrop();
+				if (hookedTile.StaysOnSwitch)
+					hookedTile.SpawnDrop();
 			}
 
 			hookedEntity.RemoveFromRoom();
@@ -178,6 +179,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					}
 					else {
 						player.RoomControl.SpawnEntity(hookedEntity);
+						hookedEntity.OnLand();
 					}
 
 					End();

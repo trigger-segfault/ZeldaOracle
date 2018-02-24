@@ -71,7 +71,8 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Collision settings
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
-		private Rectangle2F				softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
+		private Rectangle2F				softCollisionBox;   // The "soft" collision box, used to collide with items, monsters, room edges, etc.
+		private Rectangle2F				braceletCollisionBox;
 		private TileCollisionCondition	customTileIsSolidCondition;
 		private TileCollisionCondition	customTileIsNotSolidCondition;
 		private CollisionBoxType		roomEdgeCollisionBoxType;
@@ -113,6 +114,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
 			this.collisionBox		= new Rectangle2F(-1, -1, 2, 2);
 			this.softCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
+			this.braceletCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
 			this.topTile			= null;
 			this.topTilePointOffset	= Vector2F.Zero;
 			this.isColliding		= false;
@@ -369,6 +371,15 @@ namespace ZeldaOracle.Game.Entities {
 			collisionBox.Point += entity.Position;
 			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
 				return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
+			return false;
+		}
+
+		public bool IsBraceletMeetingEntity(Entity other, Rectangle2F collisionBox,
+			int maxZDistance = 10)
+		{
+			collisionBox.Point += entity.Position;
+			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+				return collisionBox.Intersects(other.Physics.PositionedBraceletCollisionBox);
 			return false;
 		}
 
@@ -744,6 +755,11 @@ namespace ZeldaOracle.Game.Entities {
 			set { softCollisionBox = value; }
 		}
 
+		public Rectangle2F BraceletCollisionBox {
+			get { return braceletCollisionBox; }
+			set { braceletCollisionBox = value; }
+		}
+
 		/// <summary>The "Hard" collision box translated to the entity's current
 		/// position.</summary>
 		public Rectangle2F PositionedCollisionBox {
@@ -754,6 +770,10 @@ namespace ZeldaOracle.Game.Entities {
 		/// position.</summary>
 		public Rectangle2F PositionedSoftCollisionBox {
 			get { return Rectangle2F.Translate(softCollisionBox, entity.Position); }
+		}
+
+		public Rectangle2F PositionedBraceletCollisionBox {
+			get { return Rectangle2F.Translate(braceletCollisionBox, entity.Position); }
 		}
 
 		public TileCollisionCondition CustomTileIsSolidCondition {

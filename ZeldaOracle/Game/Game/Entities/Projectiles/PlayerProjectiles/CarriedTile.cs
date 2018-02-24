@@ -33,6 +33,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.DestroyedInHoles);
 
+			if (tile.HasFlag(TileFlags.Bounces))
+				EnablePhysics(PhysicsFlags.Bounces);
+
+			BounceSound = GameData.SOUND_BOMB_BOUNCE;
+
 			// Graphics.
 			Graphics.DepthLayer			= DepthLayer.ProjectileCarriedTile;
 			Graphics.DrawOffset			= new Point2I(-8, -13);
@@ -46,7 +51,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public void Break() {
 			if (tile.BreakAnimation != null) {
-				Effect breakEffect = new Effect(tile.BreakAnimation, DepthLayer.EffectTileBreak, true);
+				Effect breakEffect = new Effect(tile.BreakAnimation, tile.BreakLayer, true);
 				RoomControl.SpawnEntity(breakEffect, Center);
 			}
 			if (tile.BreakSound != null)
@@ -61,16 +66,53 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-			Graphics.IsUnmapped = true;
-			Graphics.UnmappedPalette = RoomControl.Zone.Palette;
 			if (tile.SpriteAsObject != null)
 				Graphics.PlayAnimation(tile.SpriteAsObject);
 			else
 				Graphics.PlayAnimation(tile.Graphics.AnimationPlayer.SpriteOrSubStrip);
+			Graphics.IsUnmapped = true;
+			Graphics.UnmappedPalette = RoomControl.Zone.Palette;
 			Graphics.CreateUnmappedSprite();
 		}
 
 		public override void OnLand() {
+			CollisionChecks();
+			Break();
+		}
+
+		public override void OnBounce() {
+			base.OnBounce();
+			CollisionChecks();
+		}
+
+		public override void Update() {
+			base.Update();
+
+			if (Physics.IsColliding && !Physics.HasFlags(PhysicsFlags.Bounces))
+				Break();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Carrying Override Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Updates the pickupable entity while being carried.</summary>
+		public override void UpdateCarrying(bool isPickingUp) {
+			Graphics.Update();
+		}
+
+		/// <summary>Draws the pickupable entity while being carried.</summary>
+		public override void DrawCarrying(RoomGraphics g, bool isPickingUp) {
+			Graphics.Draw(g, DepthLayer.ProjectileCarriedTile);
+		}
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Performs tile and monster collision checks.</summary>
+		private void CollisionChecks() {
 			// Collide with monsters.
 			foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
 				monster.TriggerInteraction(InteractionType.ThrownObject, this);
@@ -88,15 +130,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 						return;
 				}
 			}
-
-			Break();
 		}
 
-		public override void Update() {
-			base.Update();
 
-			if (Physics.IsColliding)
-				Break();
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public Tile Tile {
+			get { return tile; }
 		}
 	}
 }

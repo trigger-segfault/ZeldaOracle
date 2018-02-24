@@ -2,10 +2,12 @@
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBracelet : ItemWeapon {
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -35,8 +37,29 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			// Check for a tile to grab
 			if (!Player.IsBeingKnockedBack) {
 				Tile grabTile = Player.GrabState.GetGrabTile();
-				if (grabTile != null)
+				if (grabTile != null) {
 					grabTile.OnGrab(Player.Direction, this);
+					return;
+				}
+				foreach (Entity entity in RoomControl.Entities) {
+					if (entity.IsPickupable && Player.Physics.IsBraceletMeetingEntity(
+						entity, GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
+					{
+						Player.CarryState.SetCarryObject(entity);
+						Player.BeginWeaponState(Player.CarryState);
+						entity.RemoveFromRoom();
+						return;
+					}
+					else if (entity is Monster && Player.Physics.IsBraceletMeetingEntity(
+						entity, GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
+					{
+						((Monster) entity).TriggerInteraction(InteractionType.Bracelet,
+							Player, new WeaponInteractionEventArgs() {
+								Weapon = this
+						});
+						return;
+					}
+				}
 			}
 		}
 	}

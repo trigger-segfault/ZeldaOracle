@@ -10,7 +10,7 @@ namespace ZeldaOracle.Game.Entities {
 	public class Collectible : Entity {
 
 		protected int timer;
-		protected int pickupableDelay;
+		protected int collectibleDelay;
 		protected int aliveDuration;
 		protected int fadeDelay;
 		protected bool hasDuration;
@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			aliveDuration	= GameSettings.COLLECTIBLE_ALIVE_DURATION;
 			fadeDelay		= GameSettings.COLLECTIBLE_FADE_DELAY;
-			pickupableDelay	= GameSettings.COLLECTIBLE_PICKUPABLE_DELAY;
+			collectibleDelay	= GameSettings.COLLECTIBLE_PICKUPABLE_DELAY;
 
 			isCollectibleWithItems = true;
 
@@ -80,7 +80,7 @@ namespace ZeldaOracle.Game.Entities {
 			}
 
 			// Check if colliding with the player.
-			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && IsPickupable)
+			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && IsCollectible)
 				Collect();
 		}
 
@@ -89,17 +89,17 @@ namespace ZeldaOracle.Game.Entities {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public bool IsPickupable {
-			get { return (timer >= pickupableDelay); }
+		public bool IsCollectible {
+			get { return (timer >= collectibleDelay); }
 		}
 
 		public bool IsCollectibleWithItems {
 			get { return isCollectibleWithItems; }
 		}
 
-		public int PickupableDelay {
-			get { return pickupableDelay; }
-			set { pickupableDelay = value; }
+		public int CollectibleDelay {
+			get { return collectibleDelay; }
+			set { collectibleDelay = value; }
 		}
 
 		public bool HasDuration {
