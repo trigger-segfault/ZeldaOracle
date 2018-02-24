@@ -259,6 +259,11 @@ namespace ZeldaOracle.Common.Geometry {
 		// Explicit Conversions
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Return an Angle struct that represents this direction.</summary>
+		public Angle ToAngle() {
+			return new Angle(index * 2);
+		}
+
 		/// <summary>Return the direction's angle in radians.</summary>
 		public float ToRadians() {
 			return (index * GMath.HalfPi);
@@ -323,9 +328,14 @@ namespace ZeldaOracle.Common.Geometry {
 			get { return (index >= 0 && index < 4); }
 		}
 
-		/// <summary>Return the axis of the direction (0 for X, 1 for Y).</summary>
+		/// <summary>Return the axis parallel with this direction (0 for X, 1 for Y).</summary>
 		public int Axis {
 			get {  return (index % 2); }
+		}
+
+		/// <summary>Return the axis perpendicular to this direction (0 for X, 1 for Y).</summary>
+		public int PerpendicularAxis {
+			get {  return (1 - (index % 2)); }
 		}
 
 		/// <summary>Return true if the direction is horizontal (left or right).

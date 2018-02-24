@@ -162,7 +162,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			this.source			= source;
 			this.physicsEntity	= physicsEntity;
 			this.collisionBox	= physicsEntity.Physics.CollisionBox;
-			direction			= 0;
+			direction			= Direction.Right;
 			isDodged			= false;
 			isRebound			= false;
 			isResolved			= false;
@@ -328,24 +328,24 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 		/// <summary>The direction of penetration, which is typically the nearest
 		/// direction from the player to the solid object.</summary>
-		public int Direction {
+		public Direction Direction {
 			get { return direction; }
 			set { direction = value; }
 		}
 		
 		/// <summary>The axis of collision.</summary>
 		public int Axis {
-			get { return Directions.ToAxis(direction); }
+			get { return direction.Axis; }
 		}
 		
 		/// <summary>True if the collision is happening on the X-axis.</summary>
 		public bool IsHorizontal {
-			get { return Directions.IsHorizontal(direction); }
+			get { return direction.IsHorizontal; }
 		}
 		
 		/// <summary>True if the collision is happening on the Y-axis.</summary>
 		public bool IsVertical {
-			get { return Directions.IsVertical(direction); }
+			get { return direction.IsVertical; }
 		}
 
 		/// <summary>True if this collision is penetrating beyond the allowed
@@ -456,10 +456,10 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		//-----------------------------------------------------------------------------
 		
 		public void Clear() {
-			type			= CollisionType.None;
-			solidObject		= null;
-			direction		= Directions.Right;
-			isAutoDodged	= false;
+			type				= CollisionType.None;
+			solidObject			= null;
+			direction			= Directions.Right;
+			isAutoDodged		= false;
 			isMovementCollision	= false;
 			isResolved			= false;
 			penetration			= 0.0f;

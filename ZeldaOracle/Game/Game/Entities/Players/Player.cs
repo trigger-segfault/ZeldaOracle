@@ -17,9 +17,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 	public class Player : Unit {
 
 		/// <summary>The current direction that the player wants to face to use items.</summary>
-		private int useDirection;
+		private Direction useDirection;
 		/// <summary>The current angle that the player wants face to use items.</summary>
-		private int useAngle;
+		private Angle useAngle;
 		/// <summary>The position the player was at when he entered the room.</summary>
 		private Vector2F respawnPosition;
 		private int respawnDirection;

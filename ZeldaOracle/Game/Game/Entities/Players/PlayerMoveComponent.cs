@@ -21,8 +21,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F			velocityPrev;			// The player's velocity on the previous frame.
 		private bool				allowMovementControl;	// Is the player allowed to control his movement?
 		private bool				isMoving;				// Is the player holding down a movement key?
-		private int					moveAngle;				// The angle the player is moving in.
-		private int					moveDirection;			// The direction that the player wants to face.
+		private Angle				moveAngle;				// The angle the player is moving in.
+		private Direction			moveDirection;			// The direction that the player wants to face.
 		private float				strokeSpeedScale;
 		private bool				isStroking;
 
@@ -56,7 +56,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			motion					= Vector2F.Zero;
 			isMoving				= false;
 			velocityPrev			= Vector2F.Zero;
-			moveAngle				= Angles.South;
+			moveAngle				= Angle.South;
 			mode					= new PlayerMotionType();
 			jumpStartTile			= -Point2I.One;
 			isCapeDeployed			= false;
@@ -98,12 +98,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Restrict player direction
 			if (allowMovementControl) {
 				if (player.StateParameters.AlwaysFaceUp)
-					player.Direction = Directions.Up;
+					player.Direction = Direction.Up;
 				else if (player.StateParameters.AlwaysFaceLeftOrRight) {
-					if (player.Direction == Directions.Up)
-						player.Direction = Directions.Right;
-					if (player.Direction == Directions.Down)
-						player.Direction = Directions.Left;
+					if (player.Direction == Direction.Up)
+						player.Direction = Direction.Right;
+					if (player.Direction == Direction.Down)
+						player.Direction = Direction.Left;
 				}
 			}
 
@@ -168,9 +168,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Movement Checks
 		//-----------------------------------------------------------------------------
 		
-		public bool IsMovingInDirection(int direction) {
+		public bool IsMovingInDirection(Direction direction) {
 			return (IsMoving &&
-				Directions.ToPoint(direction).Dot(Angles.ToPoint(moveAngle)) > 0);
+				direction.ToPoint().Dot(moveAngle.ToPoint()) > 0);
 		}
 		
 		
@@ -263,9 +263,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			else {
 				// Check movement keys.
-				if (!CheckMoveKey(Directions.Left, allowMovementControl) && !CheckMoveKey(Directions.Right, allowMovementControl))
+				if (!CheckMoveKey(Direction.Left, allowMovementControl) &&
+					!CheckMoveKey(Direction.Right, allowMovementControl))
 					moveAxes[Axes.X] = false;
-				if (!CheckMoveKey(Directions.Up, allowMovementControl) && !CheckMoveKey(Directions.Down, allowMovementControl))
+				if (!CheckMoveKey(Direction.Up, allowMovementControl) &&
+					!CheckMoveKey(Direction.Down, allowMovementControl))
 					moveAxes[Axes.Y] = false;
 			}
 
@@ -274,7 +276,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (analogMode)
 					moveVector = Controls.AnalogMovement.Position;
 				else
-					moveVector = Angles.ToVector(moveAngle);
+					moveVector = moveAngle.ToVector();
 			}
 
 			// Clip all Y velocity when sidescrolling with gravity enabled,
@@ -284,7 +286,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (analogMode)
 					moveVector = new Vector2F(Controls.AnalogMovement.Position.X, 0.0f);
 				else
-					moveVector = new Vector2F(Angles.ToVector(moveAngle, false).X, 0.0f);
+					moveVector = new Vector2F(moveAngle.ToPoint().X, 0.0f);
 			}
 
 			return moveVector;
@@ -318,10 +320,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Update the player's facing direction
 			bool canUpdateDirection = false;
 			if (player.StateParameters.AlwaysFaceUp)
-				canUpdateDirection = (moveDirection == Directions.Up);
+				canUpdateDirection = (moveDirection == Direction.Up);
 			else if (player.StateParameters.AlwaysFaceLeftOrRight)
-				canUpdateDirection = (moveDirection == Directions.Left ||
-					moveDirection == Directions.Right);
+				canUpdateDirection = (moveDirection == Direction.Left ||
+					moveDirection == Direction.Right);
 			else
 				canUpdateDirection = !player.StateParameters.EnableStrafing;
 			if (canUpdateDirection && allowMovementControl && isMoving)
@@ -437,22 +439,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		// Poll the movement key for the given direction, returning true if
 		// it is down. This also manages the strafing behavior of movement.
-		private bool CheckMoveKey(int dir, bool allowMovementControl) {
+		private bool CheckMoveKey(Direction dir, bool allowMovementControl) {
 			if (Controls.GetArrowControl(dir).IsDown()) {
 				if (allowMovementControl)
 					isMoving = true;
 			
-				if (!moveAxes[(dir + 1) % 2])
-					moveAxes[dir % 2] = true;
+				if (!moveAxes[dir.PerpendicularAxis])
+					moveAxes[dir.Axis] = true;
 
-				if (moveAxes[dir % 2]) {
+				if (moveAxes[dir.Axis]) {
 					moveDirection = dir;
-					moveAngle = dir * 2;
+					moveAngle = dir.ToAngle();
 
-					if (Controls.GetArrowControl((dir + 1) % 4).IsDown())
-						moveAngle = (moveAngle + 1) % 8;
-					if (Controls.GetArrowControl((dir + 3) % 4).IsDown())
-						moveAngle = (moveAngle + 7) % 8;
+					if (Controls.GetArrowControl(
+						dir.Rotate(1, WindingOrder.CounterClockwise)).IsDown())
+						moveAngle = moveAngle.Rotate(1, WindingOrder.CounterClockwise);
+					if (Controls.GetArrowControl(
+						dir.Rotate(1, WindingOrder.Clockwise)).IsDown())
+						moveAngle = moveAngle.Rotate(1, WindingOrder.Clockwise);
 				}
 				return true;
 			}
@@ -466,7 +470,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			moveAxes[0]		= true;
 			moveAxes[1]		= true;
-			moveDirection   = Directions.RoundFromRadians(analogAngle);
+			moveDirection   = Direction.FromRadians(analogAngle);
 		}
 
 		private void UpdateFallingInHoles() {
@@ -521,7 +525,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				player.Position += holeSlipVelocity;
 					
-				// Fall in the hole when too close to the center.
+				// Fall in the hole when too close to the center
 				if (player.Center.DistanceTo(holeTile.Center) <= 1.0f) {
 					AudioSystem.PlaySound(GameData.SOUND_PLAYER_FALL);
 					player.SetPositionByCenter(holeTile.Center);
@@ -532,8 +536,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					doomedToFallInHole	= false;
 				}
 			}
-			else if (player.Physics.IsInHole && player.ControlState != player.RespawnDeathState) {
-				// Start falling in a hole.
+			else if (player.Physics.IsInHole) {
+				// Start falling in a hole
 				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
 				holeTile			= player.Physics.TopTile;
 				holeEnterQuadrent	= (Point2I) (player.Position / 8);
@@ -544,9 +548,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		/// <summary>Try to perform a ledge jump if the path is clear.</summary>
-		private bool TryLedgeJump(int ledgeDirection) {
+		private bool TryLedgeJump(Direction ledgeDirection) {
 			// Check if there any obstructions to the side of the ledge
-			int ledgeAxis = Directions.ToAxis(ledgeDirection);
 			foreach (Collision collision in player.Physics.Collisions) {
 				if (collision.Direction == ledgeDirection &&
 					collision.IsLaterallyColliding && 
@@ -554,7 +557,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				{
 					return false;
 				}
-				else if (collision.Axis != ledgeAxis && !collision.IsResolved)
+				else if (collision.Axis != ledgeDirection.Axis && !collision.IsResolved)
 					return false;
 			}
 
@@ -567,12 +570,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		/// <summary>Try to perform a leap ledge jump to the opposite leap ledge.
 		/// </summary>
-		private bool TryLeapLedgeJump(int ledgeDirection, Tile startingTile) {
+		private bool TryLeapLedgeJump(Direction ledgeDirection, Tile startingTile) {
 			// Leap if there is an opposite leap ledge to land onto
 			Tile landingTile = player.RoomControl.TileManager.GetTopTile(
-				startingTile.Location + Directions.ToPoint(ledgeDirection) * 2);
+				startingTile.Location + ledgeDirection.ToPoint(2));
 			if (landingTile != null && landingTile.IsLeapLedge &&
-				landingTile.LedgeDirection == Directions.Reverse(ledgeDirection))
+				landingTile.LedgeDirection == ledgeDirection.Reverse())
 			{
 				player.LeapLedgeJumpState.LedgeJumpDirection = ledgeDirection;
 				player.BeginControlState(player.LeapLedgeJumpState);
