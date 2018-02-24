@@ -98,7 +98,7 @@ namespace ZeldaOracle.Common.Geometry {
 		
 		/// <summary>Return the nearest axis-aligned direction from an angle in
 		/// radians.</summary>
-		public static int FromRadians(float radians) {
+		public static Direction FromRadians(float radians) {
 			return new Direction(GMath.Wrap(
 				(int) GMath.Round(radians / GMath.QuarterPi), 4));
 		}
@@ -147,7 +147,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Rotate the direction once, counter-clockwise.</summary>
 		public static Direction operator --(Direction a) {
-			return new Direction((a.index + 5) % 4);
+			return new Direction((a.index + 3) % 4);
 		}
 		
 		
@@ -163,9 +163,9 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Direction(GMath.Wrap(index + amount, 4));
 		}
 		
-		/// <summary>Return the nearest distance between to directions. A positive
-		/// distance is counter-clockwise while a negative distance is clockwise.
-		/// </summary>
+		/// <summary>Return the nearest distance between this direction and another. A
+		/// positive distance is counter-clockwise while a negative distance is
+		/// clockwise.</summary>
 		public int NearestDistanceTo(Direction other) {
 			return Direction.NearestDistance(this, other);
 		}
@@ -192,7 +192,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return direction.Rotate(amount, WindingOrder.Clockwise);
 		}
 		
-		/// <summary>Return the nearest distance between to directions. A positive
+		/// <summary>Return the nearest distance between two directions. A positive
 		/// distance is counter-clockwise while a negative distance is clockwise.
 		/// </summary>
 		public static int NearestDistance(Direction from, Direction to) {
@@ -213,15 +213,15 @@ namespace ZeldaOracle.Common.Geometry {
 		{
 			if (windingOrder == WindingOrder.Clockwise) {
 				if (from.index > to.index)
-					return new Direction(4 + from.index - to.index);
+					return (4 + from.index - to.index);
 				else
-					return new Direction(from.index - to.index);
+					return (from.index - to.index);
 			}
 			else {
 				if (to.index < from.index)
-					return new Direction(4 + to.index - from.index);
+					return (4 + to.index - from.index);
 				else
-					return new Direction(to.index - from.index);
+					return (to.index - from.index);
 			}
 		}
 
