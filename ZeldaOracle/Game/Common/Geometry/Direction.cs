@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace ZeldaOracle.Common.Geometry {
 
 	/// <summary>The direction of rotation, either Clockwise or Counter-Clockwise. Note
@@ -41,6 +43,14 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>The total number of unique directions.</summary>
 		public const int Count = 4;
+
+		/// <summary>Iterate all four directions.</summary>
+		public static IEnumerable<Direction> Range {
+			get {
+				for (int index = 0; index < Direction.Count; index++)
+					yield return new Direction(index);
+			}
+		}
 		
 
 		//-----------------------------------------------------------------------------

@@ -31,11 +31,11 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Get the direction from the origin to a position along an axis. For
 		/// example, the direction to +1 along the X-Axis would be Directions.Right.
 		/// </summary>
-		public static int GetDirection(int axis, float positionOnAxis) {
+		public static Direction GetDirection(int axis, float positionOnAxis) {
 			if (axis == Axes.X)
-				return (positionOnAxis >= 0.0f ? Directions.Right : Directions.Left);
+				return (positionOnAxis >= 0.0f ? Direction.Right : Direction.Left);
 			else
-				return (positionOnAxis >= 0.0f ? Directions.Down : Directions.Up);
+				return (positionOnAxis >= 0.0f ? Direction.Down : Direction.Up);
 		}
 
 	}

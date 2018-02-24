@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace ZeldaOracle.Common.Geometry {
 	
 	/// <summary>Struct used to represent an axis-aligned or diagonal angle.</summary>
@@ -47,6 +49,14 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>The total number of unique angles.</summary>
 		public const int Count = 8;
+
+		/// <summary>Iterate all eight angles.</summary>
+		public static IEnumerable<Angle> Range {
+			get {
+				for (int index = 0; index < Angle.Count; index++)
+					yield return new Angle(index);
+			}
+		}
 		
 
 		//-----------------------------------------------------------------------------
