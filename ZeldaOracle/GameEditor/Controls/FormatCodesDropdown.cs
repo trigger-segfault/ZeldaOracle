@@ -86,7 +86,7 @@ namespace ZeldaEditor.Controls {
 				part_wrapPanel.Children.Clear();
 				if (IsColorCodes) {
 					part_wrapPanel.Width = ButtonSize.X * 8;
-					part_wrapPanel.Orientation = Orientation.Vertical;
+					part_wrapPanel.Orientation = System.Windows.Controls.Orientation.Vertical;
 					foreach (var pair in FormatCodes.GetColorCodes()) {
 						part_wrapPanel.Width = 65;
 						string code = "<" + pair.Key + ">";

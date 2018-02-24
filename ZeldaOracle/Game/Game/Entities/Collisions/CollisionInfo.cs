@@ -142,7 +142,8 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		private bool isDynamic;
 		private bool[] connections;
 
-		private int direction;
+		//private int direction;
+		private Direction direction;
 		private float penetration;
 		private float allowedPenetration;
 		private float lateralPenetration;
