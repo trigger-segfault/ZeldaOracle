@@ -50,7 +50,7 @@ namespace ZeldaOracle.Common.Translation {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the format codes.</summary>
-		public static void Initialize() {
+		static FormatCodes() {
 
 			FormatCodes.colorCodes			= new Dictionary<string, ColorOrPalette>();
 			FormatCodes.stringCodes			= new Dictionary<string, string>();

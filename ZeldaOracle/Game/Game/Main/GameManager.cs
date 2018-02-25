@@ -58,6 +58,8 @@ namespace ZeldaOracle.Game.Main {
 		private bool			isGamePaused;
 		/// <summary>True if a console window as been allocated for this game.</summary>
 		private bool			isConsoleOpen;
+		/// <summary>The default TextWriter for console output.</summary>
+		private TextWriter      defaultConsoleOut;
 		/// <summary>The user settings for the game.</summary>
 		private UserSettings	userSettings;
 
@@ -83,6 +85,7 @@ namespace ZeldaOracle.Game.Main {
 			this.launchParameters	= launchParameters;
 			this.isGamePaused       = false;
 			this.isConsoleOpen      = false;
+			this.defaultConsoleOut	= Console.Out;
 			this.userSettings       = null;
 
 			this.gameBase.Window.Title = GameName;
@@ -93,8 +96,7 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>Initializes the game manager.</summary>
 		public void Initialize() {
 			elapsedTicks = 0;
-
-			FormatCodes.Initialize();
+			
 			ScreenResized();
 
 			userSettings	= new UserSettings();
@@ -385,16 +387,14 @@ namespace ZeldaOracle.Game.Main {
 				if (value != isConsoleOpen) {
 					isConsoleOpen = value;
 					if (isConsoleOpen) {
+						// Allocate a new console window
 						NativeMethods.AllocConsole();
-						// stdout's handle seems to always be equal to 7
-						IntPtr defaultStdout = new IntPtr(7);
-						IntPtr currentStdout = NativeMethods.GetStdHandle(NativeMethods.StdOutputHandle);
 
-						if (currentStdout != defaultStdout)
-							// reset stdout
-							NativeMethods.SetStdHandle(NativeMethods.StdOutputHandle, defaultStdout);
+						// Reset StdOut
+						NativeMethods.SetStdHandle(NativeMethods.StdOutputHandle,
+								NativeMethods.DefaultStdOut);
 
-						// reopen stdout
+						// Reopen StdOut
 						TextWriter writer = new StreamWriter(Console.OpenStandardOutput()) {
 							AutoFlush = true
 						};
@@ -404,7 +404,9 @@ namespace ZeldaOracle.Game.Main {
 						gameBase.Form.Activate();
 					}
 					else {
+						// Free the console window
 						NativeMethods.FreeConsole();
+						Console.SetOut(defaultConsoleOut);
 					}
 				}
 			}
