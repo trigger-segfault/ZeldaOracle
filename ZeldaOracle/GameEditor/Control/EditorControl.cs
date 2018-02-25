@@ -197,7 +197,6 @@ namespace ZeldaEditor.Control {
 
 		public void Initialize() {
 			GameData.Initialize();
-			FormatCodes.Initialize();
 			EditorResources.Initialize(this);
 			paletteShader = new PaletteShader(GameData.PALETTE_LERP_SHADER);
 
