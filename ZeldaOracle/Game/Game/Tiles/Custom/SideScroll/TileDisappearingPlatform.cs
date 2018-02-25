@@ -176,5 +176,14 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 			else
 				return (time >= disappearTime || time < disappearEnd);
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		public override bool IsStatic {
+			get { return false; }
+		}
 	}
 }

@@ -20,6 +20,8 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public TileMonsterFlyingTile() {
+			// Not static, but we still wanna be able to stand on this.
+			surfaceStatic = false;
 		}
 
 
@@ -57,6 +59,10 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		/// <summary>Gets the type of monster to spawn.</summary>
 		public override Type MonsterType {
 			get { return typeof(MonsterFlyingTile); }
+		}
+
+		public override bool IsStatic {
+			get { return false; }
 		}
 
 

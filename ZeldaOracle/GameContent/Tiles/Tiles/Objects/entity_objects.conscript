@@ -62,6 +62,7 @@ END;
 TILE "temp_crossing_grate";
 	TYPE		TileCrossingGate;
 	SOLID		edge_w;
+	FLAGS		NotSurface;
 	ENTITYDRAW	true;
 	PROPERTY	(cling_on_stab, false);
 	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
@@ -229,6 +230,7 @@ END;
 
 TILE "pull_handle";
 	TYPE		TilePullHandle;
+	FLAGS		NotSurface;
 	SPRITE		"tile_pull_handle_down";
 	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
 	EVENT		retracting, "Retracting", "Pull Handle", "Occurs every step that the pull handle is retracting into the wall.", (PullHandle, pullHandle);

@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 	public class TileConveyorBelt : Tile {
-		
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 					Position + new Point2I(x, 0) * GameSettings.TILE_SIZE, DepthLayer.TileLayer1 + Layer);
 			}
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Static Methods

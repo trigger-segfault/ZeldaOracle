@@ -92,13 +92,19 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Override Properties
 		//-----------------------------------------------------------------------------
+		
+		public override bool IsStatic {
+			get { return false; }
+		}
 
 		public override bool CanSpawn {
 			get { return base.CanSpawn && !IsLooted; }
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
