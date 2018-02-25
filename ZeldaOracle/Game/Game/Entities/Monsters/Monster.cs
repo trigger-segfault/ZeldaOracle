@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Units;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters.States;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
@@ -37,16 +32,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Count
 	}
 
-	// MonsterState:
-	// - MonsterBurnState
-	// - MonsterGaleState
-	// - MonsterStunState
-	// - MonsterFallInHoleState
-
 	public partial class Monster : Unit, ZeldaAPI.Monster {
 		
 		private int contactDamage;
-		private InteractionHandler[] interactionHandlers;
+		private MonsterInteractionManager interactions;
 		private MonsterColor color;
 
 		// The current monster state.
@@ -98,7 +87,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Graphics.DrawOffset         = new Point2I(-8, -14);
 			centerOffset                = new Point2I(0, -6);
 
-			// Monster & unit settings
+			// Monster & Unit settings
 			knockbackSpeed          = GameSettings.MONSTER_KNOCKBACK_SPEED;
 			hurtKnockbackDuration   = GameSettings.MONSTER_HURT_KNOCKBACK_DURATION;
 			bumpKnockbackDuration   = GameSettings.MONSTER_BUMP_KNOCKBACK_DURATION;
@@ -113,9 +102,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			ignoreZPosition			= false;
 
 			// Setup default interactions.
-			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
-			for (int i = 0; i < (int) InteractionType.Count; i++)
-				interactionHandlers[i] = new InteractionHandler();
+			interactions = new MonsterInteractionManager(this);
 			SetDefaultReactions();
 		}
 
@@ -127,7 +114,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
 			SetReaction(InteractionType.Shovel,			Reactions.Bump);
 			SetReaction(InteractionType.Parry,			Reactions.Parry);
-			SetReaction(InteractionType.Bracelet,			Reactions.None);
+			SetReaction(InteractionType.Bracelet,		Reactions.None);
 			// Seed interations
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.SilentDamage);
@@ -250,72 +237,58 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		// Trigger an interaction.
 		public void TriggerInteraction(InteractionType type, Entity sender) {
-			TriggerInteraction(type, sender, EventArgs.Empty);
+			interactions.Trigger(type, sender);
 		}
 
 		// Trigger an interaction with the given arguments.
 		public void TriggerInteraction(InteractionType type, Entity sender, EventArgs args) {
-			InteractionHandler handler = GetInteraction(type);
-			handler.Trigger(this, sender, args);
+			interactions.Trigger(type, sender, args);
 		}
 
 		// Get the interaction handler for the given interaction type.
 		protected InteractionHandler GetInteraction(InteractionType type) {
-			return interactionHandlers[(int) type];
+			return interactions[type];
 		}
 
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
-		protected void SetReaction(InteractionType type, params InteractionStaticDelegate[] reactions) {
-			InteractionHandler handler = GetInteraction(type);
-			handler.Clear();
-			for (int i = 0; i < reactions.Length; i++)
-				handler.Add(reactions[i]);
+		protected void SetReaction(InteractionType type,
+			params InteractionStaticDelegate[] reactions)
+		{
+			interactions.Set(type, reactions);
 		}
 
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
-		protected void SetReaction(InteractionType type, params InteractionMemberDelegate[] reactions) {
-			InteractionHandler handler = GetInteraction(type);
-			handler.Clear();
-			for (int i = 0; i < reactions.Length; i++)
-				handler.Add(reactions[i]);
+		protected void SetReaction(InteractionType type,
+			params InteractionMemberDelegate[] reactions)
+		{
+			interactions.Set(type, reactions);
 		}
 
 		protected void SetReaction(InteractionType type,
 			InteractionStaticDelegate staticReaction,
-			params InteractionMemberDelegate[] memberReactions) {
-			InteractionHandler handler = GetInteraction(type);
-			handler.Clear();
-			handler.Add(staticReaction);
-			for (int i = 0; i < memberReactions.Length; i++)
-				handler.Add(memberReactions[i]);
+			params InteractionMemberDelegate[] memberReactions)
+		{
+			interactions.Set(type, staticReaction, memberReactions);
 		}
 
 		protected void SetReaction(InteractionType type,
 			InteractionStaticDelegate staticReaction1,
 			InteractionStaticDelegate staticReaction2,
-			params InteractionMemberDelegate[] memberReactions) {
-			InteractionHandler handler = GetInteraction(type);
-			handler.Clear();
-			handler.Add(staticReaction1);
-			handler.Add(staticReaction2);
-			for (int i = 0; i < memberReactions.Length; i++)
-				handler.Add(memberReactions[i]);
+			params InteractionMemberDelegate[] memberReactions)
+		{
+			interactions.Set(type, staticReaction1, staticReaction2, memberReactions);
 		}
 
 		protected void SetReaction(InteractionType type,
 			InteractionStaticDelegate staticReaction1,
 			InteractionStaticDelegate staticReaction2,
 			InteractionStaticDelegate staticReaction3,
-			params InteractionMemberDelegate[] memberReactions) {
-			InteractionHandler handler = GetInteraction(type);
-			handler.Clear();
-			handler.Add(staticReaction1);
-			handler.Add(staticReaction2);
-			handler.Add(staticReaction3);
-			for (int i = 0; i < memberReactions.Length; i++)
-				handler.Add(memberReactions[i]);
+			params InteractionMemberDelegate[] memberReactions)
+		{
+			interactions.Set(type, staticReaction1, staticReaction2,
+				staticReaction3, memberReactions);
 		}
 
 
@@ -418,6 +391,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				ZPosition = 0;
 
 			// Check for minecart interactions
+			// TODO: Move this trigger into PlayerMineCartState
 			if (!isPassable && player.IsInMinecart &&
 				physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
 				TriggerInteraction(InteractionType.MineCart, player);
@@ -428,8 +402,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (isPassable || player.IsPassable || GMath.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
 				return;
 
-			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
-			IEnumerable<UnitTool> playerTools = player.EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
+			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(
+				t => t.IsPhysicsEnabled && t.IsSwordOrShield);
+			IEnumerable<UnitTool> playerTools = player.EquippedTools.Where(
+				t => t.IsPhysicsEnabled && t.IsSwordOrShield);
 
 			// 1. (M-M) MonsterTools to PlayerTools
 			// 2. (M-1) MonsterTools to Player
@@ -542,6 +518,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		/// <summary>True if this monster needs to be killed in order to clear the room.</summary>
 		public bool NeedsClearing {
 			get { return !IgnoreMonster && IsAlive; }
+		}
+
+		public MonsterInteractionManager Interactions {
+			get { return interactions; }
 		}
 	}
 }
