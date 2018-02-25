@@ -379,6 +379,7 @@ namespace ZeldaOracle.Game.Control {
 			
 			viewControl.Bounds = RoomBounds;
 			viewControl.ViewSize = GameSettings.VIEW_SIZE;
+			viewControl.CenterOn(Player.DrawCenter + Player.ViewFocusOffset);
 
 			// Fire the RoomStart event.
 			GameControl.FireEvent(room, "room_start");
