@@ -14,6 +14,10 @@ END;
 # Tiles
 #==============================================================
 
+# Dug ---------------------------------------------------------
+
+TILE "dug"; SAMESPRITE; END;
+
 # Leaves ------------------------------------------------------
 
 TILE "leaves";
@@ -29,6 +33,7 @@ TILE "grass";
 	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
 	ENVTYPE		Grass;
 	SAMESPRITE;
+	TILEBELOW	"ground";
 	BREAKANIM	"effect_grass_leaves";
 	BREAKSOUND	"leaves";
 END;
@@ -99,6 +104,7 @@ TILE "dirt_pile";
 	SOLID		block;
 	FLAGS		Digable;
 	SAMESPRITE;
+	TILEBELOW	"dirt";
 END;
 
 # Burnable Tree -----------------------------------------------
@@ -119,6 +125,7 @@ TILE "bracelet_rock";
 	SOLID		block;
 	FLAGS		Pickupable;
 	SAMESPRITE; SAMESPRITEOBJ;
+	TILEBELOW	"dug";
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
 END;
