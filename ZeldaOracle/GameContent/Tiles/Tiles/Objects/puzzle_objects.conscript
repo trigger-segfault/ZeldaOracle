@@ -553,8 +553,6 @@ TILE "cracked_floor";
 		"Cracked Floor", "True if the floor does not make a noise or animation upon crumbling.", false);
 END;
 
-TILE "dug"; SAMESPRITE; END;
-
 # Hardened Lava -----------------------------------------------
 
 TILE "hardened_lava"; SAMESPRITE; END;

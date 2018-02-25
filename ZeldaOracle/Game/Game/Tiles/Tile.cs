@@ -333,9 +333,10 @@ namespace ZeldaOracle.Game.Tiles {
 			// Remove/dig the tile.
 			if (layer == 0) {
 				roomControl.RemoveTile(this);
-					
-				// Spawn the a "dug" tile in this tile's place.
-				TileData data = Resources.GetResource<TileData>("dug");
+
+				// Spawn the a "dug" tile or TileBelow in this tile's place.
+				TileData data = TileBelow ??
+					Resources.GetResource<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
 			}
