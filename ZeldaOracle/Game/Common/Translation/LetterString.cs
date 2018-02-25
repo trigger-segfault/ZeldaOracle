@@ -155,8 +155,9 @@ namespace ZeldaOracle.Common.Translation {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/// <summary>The default color of a letter.</summary>
-		public static readonly Color DefaultColor = ZeldaOracle.Common.Graphics.Color.White;
+		/// <summary>The default color of a letter. Used to override the letter's color.
+		/// Choose some arbitrary obscure color that will never be used.</summary>
+		public static readonly Color DefaultColor = new Color(0, 0, 0, 1);
 
 
 		//-----------------------------------------------------------------------------
