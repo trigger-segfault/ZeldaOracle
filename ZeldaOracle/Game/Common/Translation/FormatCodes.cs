@@ -14,6 +14,8 @@ namespace ZeldaOracle.Common.Translation {
 		Color,
 		/// <summary>The format code outputs to a character or string.</summary>
 		String,
+		/// <summary>The format code outputs to an uncolored character or string.</summary>
+		NoColorString,
 		/// <summary>The format code outputs to a string representation of a variable.</summary>
 		Variable
 	}
@@ -26,9 +28,9 @@ namespace ZeldaOracle.Common.Translation {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The character used to mark a new paragraph.</summary>
-		public const char ParagraphCharacter = (char)128;
+		public const char ParagraphCharacter = (char)253;
 		/// <summary>The character used to mark a heart piece display.</summary>
-		public const char HeartPieceCharacter = (char)129;
+		public const char HeartPieceCharacter = (char)254;
 
 
 		//-----------------------------------------------------------------------------
@@ -39,6 +41,8 @@ namespace ZeldaOracle.Common.Translation {
 		private static Dictionary<string, ColorOrPalette> colorCodes;
 		/// <summary>The list of string codes.</summary>
 		private static Dictionary<string, string> stringCodes;
+		/// <summary>The list of uncolored string codes.</summary>
+		private static Dictionary<string, string> noColorStringCodes;
 
 
 		//-----------------------------------------------------------------------------
@@ -50,6 +54,7 @@ namespace ZeldaOracle.Common.Translation {
 
 			FormatCodes.colorCodes			= new Dictionary<string, ColorOrPalette>();
 			FormatCodes.stringCodes			= new Dictionary<string, string>();
+			FormatCodes.noColorStringCodes  = new Dictionary<string, string>();
 
 			FormatCodes.colorCodes.Add("red", EntityColors.Red); //#FFF80828
 			FormatCodes.colorCodes.Add("green", EntityColors.Green); //#FF10A840
@@ -87,8 +92,16 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("house", "" + (char)127);
 			FormatCodes.stringCodes.Add("<", "<");
 			FormatCodes.stringCodes.Add("n", "\n");
+
+			FormatCodes.stringCodes.Add("a", "" + (char)128 + (char)129);
+			FormatCodes.stringCodes.Add("b", "" + (char)130 + (char)131);
+			FormatCodes.stringCodes.Add("x", "" + (char)132 + (char)133);
+			FormatCodes.stringCodes.Add("y", "" + (char)134 + (char)135);
+
 			FormatCodes.stringCodes.Add("p", "" + ParagraphCharacter);
 			FormatCodes.stringCodes.Add("heart-piece", "" + HeartPieceCharacter);
+
+			FormatCodes.noColorStringCodes.Add("dpad", "" + (char)136);
 		}
 
 
@@ -102,6 +115,8 @@ namespace ZeldaOracle.Common.Translation {
 				return FormatCodeType.Color;
 			else if (stringCodes.ContainsKey(code))
 				return FormatCodeType.String;
+			else if (noColorStringCodes.ContainsKey(code))
+				return FormatCodeType.NoColorString;
 			else if (code.StartsWith("var:"))
 				return FormatCodeType.Variable;
 			return FormatCodeType.None;
@@ -112,7 +127,11 @@ namespace ZeldaOracle.Common.Translation {
 			if (stringCodes.ContainsKey(code)) {
 				return stringCodes[code];
 			}
+			else if (noColorStringCodes.ContainsKey(code)) {
+				return noColorStringCodes[code];
+			}
 			else if (code.StartsWith("var:")) {
+				string varName = code.Substring(4);
 				// return the variable as text
 			}
 			return "";
@@ -124,7 +143,12 @@ namespace ZeldaOracle.Common.Translation {
 				return colorCodes[code];
 			}
 			else if (code.StartsWith("color:")) {
-				return Color.Parse(code.Substring(("color:").Length));
+				try {
+					return Color.Parse(code.Substring(("color:").Length));
+				}
+				catch {
+					return Color.White;
+				}
 			}
 			return Letter.DefaultColor;
 		}
@@ -161,6 +185,10 @@ namespace ZeldaOracle.Common.Translation {
 						if (codeType == FormatCodeType.String || codeType == FormatCodeType.Variable) {
 							string stringCode = FormatCodes.GetFormatCodeString(currentCode);
 							letterString.AddRange(stringCode, currentColor);
+						}
+						else if (codeType == FormatCodeType.NoColorString) {
+							string stringCode = FormatCodes.GetFormatCodeString(currentCode);
+							letterString.AddRange(stringCode, Color.White);
 						}
 						else if (codeType == FormatCodeType.Color) {
 							ColorOrPalette colorCode = FormatCodes.GetFormatCodeColor(currentCode);
@@ -200,6 +228,13 @@ namespace ZeldaOracle.Common.Translation {
 		/// <summary>Gets the enumeration of string codes.</summary>
 		public static IEnumerable<KeyValuePair<string, string>> GetStringCodes() {
 			foreach (var pair in stringCodes) {
+				yield return pair;
+			}
+		}
+
+		/// <summary>Gets the enumeration of uncolored string codes.</summary>
+		public static IEnumerable<KeyValuePair<string, string>> GetNoColorStringCodes() {
+			foreach (var pair in noColorStringCodes) {
 				yield return pair;
 			}
 		}
