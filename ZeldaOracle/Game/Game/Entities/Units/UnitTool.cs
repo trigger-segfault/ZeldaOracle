@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Monsters;
@@ -68,12 +64,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public virtual void OnHitProjectile(Projectile projectile) {
 		}
 
-		public virtual void OnCollideEntity(Entity entity) {
-
-		}
-
 		public virtual void OnInitialize() {
-
 		}
 
 		public virtual void OnEquip() {
@@ -86,18 +77,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 			animationPlayer.Update();
 			if (syncAnimationWithDirection)
 				animationPlayer.SubStripIndex = unit.Direction;
-
-			if (isPhysicsEnabled) {
-				for (int i = 0; i < unit.RoomControl.EntityCount; i++) {
-					Entity entity = unit.RoomControl.Entities[i];
-
-					if (entity != unit && entity.Physics.IsEnabled &&
-						PositionedCollisionBox.Intersects(entity.Physics.PositionedSoftCollisionBox))
-					{
-						OnCollideEntity(entity);
-					}
-				}
-			}
 		}
 		
 

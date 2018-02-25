@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Entities.Players;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Units;
 
 namespace ZeldaOracle.Game.Entities.Monsters.Tools {
@@ -45,12 +39,13 @@ namespace ZeldaOracle.Game.Entities.Monsters.Tools {
 		}
 
 		public override void Update() {
-			// Set the collision box based on facing direction.
+			// Set the collision box based on facing direction
 			collisionBox = SWORD_BOXES[unit.Direction];
 			collisionBox.Point += (Point2I) unit.CenterOffset;
 			
-			// Change depth based on facing direction.
-			DrawAboveUnit = (unit.Direction == Directions.Right || unit.Direction == Directions.Down);
+			// Change depth based on facing direction
+			DrawAboveUnit = (unit.Direction == Directions.Right ||
+				unit.Direction == Directions.Down);
 
 			base.Update();
 		}

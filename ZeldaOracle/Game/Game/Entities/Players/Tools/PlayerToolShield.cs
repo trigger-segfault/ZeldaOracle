@@ -44,14 +44,6 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 			itemShield = (ItemShield) unit.GameControl.Inventory.GetItem("item_shield");
 		}
 
-		public override void OnCollideEntity(Entity entity) {
-
-			if (entity is Monster) {
-				//Monster monster = (Monster) entity;
-				//monster.TriggerInteraction(monster.HandlerShield, itemShield);
-			}
-		}
-
 		public override void OnHitProjectile(Projectile projectile) {
 			if (projectile.ProjectileType == ProjectileType.Physical ||
 				projectile.ProjectileType == ProjectileType.Magic ||

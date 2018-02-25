@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			//-------------------------------------------------------------------------
 
 			/// <summary>No reaction.</summary>
-			public const InteractionStaticDelegate None = null;
+			public const MonsterInteractionStaticDelegate None = null;
 
 			/// <summary>Instantly kill the monster.</summary>
 			public static void Kill(Monster monster, Entity sender, EventArgs args) {
@@ -217,7 +217,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			//-------------------------------------------------------------------------
 
 			/// <summary>Damage the monster for the given amount.</summary>
-			public static InteractionStaticDelegate Damage(int amount) {
+			public static MonsterInteractionStaticDelegate Damage(int amount) {
 				return delegate(Monster monster, Entity sender, EventArgs args) {
 					monster.Hurt(amount, sender.Center);
 				};
@@ -225,7 +225,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			/// <summary>Damage the monster for the given amount based on the used item's
 			/// level.</summary>
-			public static InteractionStaticDelegate DamageByLevel(
+			public static MonsterInteractionStaticDelegate DamageByLevel(
 				int amountLevel1, int amountLevel2, int amountLevel3 = 0)
 			{
 				return delegate(Monster monster, Entity sender, EventArgs args) {
@@ -243,7 +243,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			/// <summary>Silentyly damage the monster for the given amount based on the used item's
 			/// level.</summary>
-			public static InteractionStaticDelegate SilentDamageByLevel(
+			public static MonsterInteractionStaticDelegate SilentDamageByLevel(
 				int amountLevel1, int amountLevel2, int amountLevel3 = 0) {
 				return delegate (Monster monster, Entity sender, EventArgs args) {
 					int level = (args as WeaponInteractionEventArgs).Weapon.Level;
@@ -260,7 +260,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				};
 			}
 
-			public static InteractionStaticDelegate ContactEffect(Effect effect) {
+			public static MonsterInteractionStaticDelegate ContactEffect(Effect effect) {
 				return delegate(Monster monster, Entity sender, EventArgs args) {
 					Effect clonedEffect = effect.Clone();
 					InteractionArgs interactionArgs = args as InteractionArgs;

@@ -246,14 +246,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		// Get the interaction handler for the given interaction type.
-		protected InteractionHandler GetInteraction(InteractionType type) {
+		protected MonsterInteractionHandler GetInteraction(InteractionType type) {
 			return interactions[type];
 		}
 
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
 		protected void SetReaction(InteractionType type,
-			params InteractionStaticDelegate[] reactions)
+			params MonsterInteractionStaticDelegate[] reactions)
 		{
 			interactions.Set(type, reactions);
 		}
@@ -261,31 +261,31 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
 		protected void SetReaction(InteractionType type,
-			params InteractionMemberDelegate[] reactions)
+			params MonsterInteractionMemberDelegate[] reactions)
 		{
 			interactions.Set(type, reactions);
 		}
 
 		protected void SetReaction(InteractionType type,
-			InteractionStaticDelegate staticReaction,
-			params InteractionMemberDelegate[] memberReactions)
+			MonsterInteractionStaticDelegate staticReaction,
+			params MonsterInteractionMemberDelegate[] memberReactions)
 		{
 			interactions.Set(type, staticReaction, memberReactions);
 		}
 
 		protected void SetReaction(InteractionType type,
-			InteractionStaticDelegate staticReaction1,
-			InteractionStaticDelegate staticReaction2,
-			params InteractionMemberDelegate[] memberReactions)
+			MonsterInteractionStaticDelegate staticReaction1,
+			MonsterInteractionStaticDelegate staticReaction2,
+			params MonsterInteractionMemberDelegate[] memberReactions)
 		{
 			interactions.Set(type, staticReaction1, staticReaction2, memberReactions);
 		}
 
 		protected void SetReaction(InteractionType type,
-			InteractionStaticDelegate staticReaction1,
-			InteractionStaticDelegate staticReaction2,
-			InteractionStaticDelegate staticReaction3,
-			params InteractionMemberDelegate[] memberReactions)
+			MonsterInteractionStaticDelegate staticReaction1,
+			MonsterInteractionStaticDelegate staticReaction2,
+			MonsterInteractionStaticDelegate staticReaction3,
+			params MonsterInteractionMemberDelegate[] memberReactions)
 		{
 			interactions.Set(type, staticReaction1, staticReaction2,
 				staticReaction3, memberReactions);

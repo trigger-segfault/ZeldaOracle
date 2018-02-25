@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Entities {
 		protected Vector2F			position;
 		protected float				zPosition;
 		protected Point2I			centerOffset;
+
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
 		protected Rectangle2F		buttonActionCollisionBox; // Collision box that for button actions
 		protected Sound				soundBounce;
