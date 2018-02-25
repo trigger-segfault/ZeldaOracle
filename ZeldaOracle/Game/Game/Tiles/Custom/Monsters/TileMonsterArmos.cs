@@ -113,6 +113,10 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		public override Type MonsterType {
 			get { return (IsBlue ? typeof(MonsterArmosBlue) : typeof(MonsterArmosRed)); }
 		}
+		
+		public override bool IsStatic {
+			get { return false; }
+		}
 
 
 		//-----------------------------------------------------------------------------

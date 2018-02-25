@@ -22,13 +22,23 @@ namespace ZeldaOracle.Game.Tiles {
 
 		protected virtual void OnSpawnEntity() { }
 
+
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Virtual Properties
 		//-----------------------------------------------------------------------------
 
 		public virtual bool CanSpawn {
 			get { return RoomControl.RoomNumber != Properties.GetInteger("last_room_number", -1); }
 			private set { Properties.Set("last_room_number", RoomControl.RoomNumber); }
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		public override bool IsStatic {
+			get { return false; }
 		}
 	}
 }

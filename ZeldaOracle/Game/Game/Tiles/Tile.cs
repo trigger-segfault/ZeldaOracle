@@ -76,6 +76,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private DropList			dropList;
 		private Properties			properties;
 		
+		protected bool				surfaceStatic;		// True if IsSurface requires IsStatic to be true.
 		private bool				isSolid;
 		private CollisionModel		collisionModel;
 		private CollisionStyle		collisionStyle;
@@ -115,6 +116,7 @@ namespace ZeldaOracle.Game.Tiles {
 			soundMove			= GameData.SOUND_BLOCK_PUSH;
 			conveyorVelocity	= Vector2F.Zero;
 			surfaceTile			= null;
+			surfaceStatic       = true;
 			collisionStyle		= CollisionStyle.Rectangular;
 			graphics			= new TileGraphicsComponent(this);
 			cancelBreakSound	= false;
@@ -1033,7 +1035,24 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public virtual bool IsSurface {
-			get { return (!flags.HasFlag(TileFlags.NotSurface) && !IsPlatform); }
+			get {
+				return (!flags.HasFlag(TileFlags.NotSurface) &&
+					!IsPlatform && (!surfaceStatic || IsStatic));
+			}
+		}
+
+		public virtual bool IsStatic {
+			get {
+				// Note: Digable does not disqualify a tile for static status.
+				return (!flags.HasFlag(TileFlags.Bombable) &&
+						!flags.HasFlag(TileFlags.Boomerangable) &&
+						!flags.HasFlag(TileFlags.Burnable) &&
+						!flags.HasFlag(TileFlags.Cuttable) &&
+						!flags.HasFlag(TileFlags.Movable) &&
+						!flags.HasFlag(TileFlags.Pickupable) &&
+						!flags.HasFlag(TileFlags.Switchable) &&
+						!IsInMotion);
+			}
 		}
 		
 		public bool IsPlatform {
