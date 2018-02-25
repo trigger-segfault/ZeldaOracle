@@ -66,8 +66,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// TODO: Bigger collision box for cover
 			
-			syncAnimationWithDirection	= false;
-			orientationStyle			= OrientationStyle.None;
+			syncAnimationWithDirection = false;
 			
 			covered				= true;
 			revealed			= false;

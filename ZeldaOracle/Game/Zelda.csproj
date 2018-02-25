@@ -285,6 +285,8 @@
     <Compile Include="Game\Entities\Effects\Fire.cs" />
     <Compile Include="Game\Entities\Effects\EffectFallingObject.cs" />
     <Compile Include="Game\Entities\Effects\ScentPod.cs" />
+    <Compile Include="Game\Entities\EntityComponent.cs" />
+    <Compile Include="Game\Entities\InteractionComponent.cs" />
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\IInterceptable.cs" />

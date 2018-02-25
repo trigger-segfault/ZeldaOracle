@@ -35,10 +35,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			Physics.CollisionBox		= new Rectangle2F(-8, -8, 16, 16);
 			Physics.SoftCollisionBox	= new Rectangle2F(-8, -8, 16, 16);
 			soundBounce					= GameData.SOUND_KEY_BOUNCE;
-
-			Graphics.DepthLayer			= DepthLayer.ProjectileBomb;
-			Graphics.DrawOffset			= new Point2I(-8, -8);
-			centerOffset				= new Point2I(0, 0);
+			
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= true;
+			Graphics.IsRipplesEffectVisible	= true;
+			Graphics.DepthLayer				= DepthLayer.ProjectileBomb;
+			Graphics.DrawOffset				= new Point2I(-8, -8);
+			centerOffset					= new Point2I(0, 0);
 		}
 
 		

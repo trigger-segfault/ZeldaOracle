@@ -110,7 +110,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			syncAnimationWithDirection	= true;
 			movesInAir					= false;
 			facePlayerOdds				= 4;
-			orientationStyle			= OrientationStyle.Direction;
 			numMoveAngles				= Direction.Count;
 			stopTime.Set(30, 60);
 			moveTime.Set(30, 50);

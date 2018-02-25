@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Players.States.SwingStates;
 using ZeldaOracle.Game.Entities.Players.Tools;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
@@ -109,6 +110,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public Player() {
+			IsPersistentBetweenRooms = true;
+
 			buttonCallbacks = new List<ActionButtonCallback>[
 				(int) ActionButtons.Count];
 			for (int i = 0; i < (int) ActionButtons.Count; i++)
@@ -708,6 +711,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			toolVisual.Initialize(this);
 			
 			stateParameters = new PlayerStateParameters();
+
+			//Effect attachment = new Effect(GameData.ANIM_SEED_SHOOTER, DepthLayer.ItemSeedShooter);
+			//attachment.Graphics.SubStripIndex = Angle.Right.Index;
+			//RoomControl.SpawnEntity(attachment);
+			////attachment.Position = position;
+			//attachment.AttachmentOffset = graphics.DrawOffset;
+			//attachment.IsPersistentBetweenRooms = true;
+			////attachment.AttachmentZOffset = 7;
+			////attachment.Graphics.IsShadowVisible = true;
+			//AttachEntity(attachment);
 		}
 
 		public override void OnEnterRoom() {

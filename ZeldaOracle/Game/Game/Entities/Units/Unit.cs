@@ -25,29 +25,26 @@ namespace ZeldaOracle.Game.Entities.Units {
 	
 	public class Unit : Entity {
 		
-		// List of tools that the unit is carrying/holding.
+		/// <summary>List of tools that the unit is carrying/holding.</summary>
 		private HashSet<UnitTool> tools;
-
-		// The direction the unit is facing.
+		
+		/// <summary>The direction the unit is facing.</summary>
 		protected Direction	direction;
-		protected bool		syncAnimationWithDirection;
-		protected OrientationStyle orientationStyle;
 
+		protected bool		syncAnimationWithDirection;
 		protected int		health;
 		protected int		healthMax;
-		
 		protected bool		isKnockbackable; // Can the unit be knocked back?
-		protected bool		isDamageable; 
-		protected bool		isPassable;
-
+		protected bool		isDamageable;
+		protected bool		isPassable; // True if cannot touch other entities like projectiles or monsters/player
 		protected float		knockbackSpeed;
-		protected int		knockbackDuration;
 		protected int		hurtInvincibleDuration;
 		protected int		hurtFlickerDuration;
 		
+		// Internal state
+		protected int		knockbackDuration;
 		protected int		hurtKnockbackDuration;
 		protected int		bumpKnockbackDuration;
-
 		private int			knockbackTimer;
 		private int			invincibleTimer;
 		private int			hurtFlickerTimer;
@@ -76,7 +73,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 			knockbackVelocity		= Vector2F.Zero;
 			tools					= new HashSet<UnitTool>();
 			
-			orientationStyle			= OrientationStyle.Direction;
 			direction					= Direction.Right;
 			syncAnimationWithDirection	= false;
 
@@ -84,6 +80,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 			healthMax		= 1;
 			direction		= Direction.Right;
 			centerOffset	= new Point2I(8, 8);
+			
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= true;
+			Graphics.IsRipplesEffectVisible	= true;
 
 		}
 

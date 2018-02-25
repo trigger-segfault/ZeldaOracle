@@ -225,7 +225,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 		public override void Draw(Graphics2D g) {
 			Point2I pos = new Point2I(8, 24);
-			if (GameControl.Player.Y < ((GameSettings.VIEW_HEIGHT) / 2 + 8))
+			if (GameControl.Player.Position.Y < ((GameSettings.VIEW_HEIGHT) / 2 + 8))
 				pos.Y = 96;
 			// TODO: Apply Player position based on view
 			g.FillRectangle(new Rectangle2I(pos, new Point2I(144, 8 + 16 * linesPerWindow)), EntityColors.Black);

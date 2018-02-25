@@ -78,7 +78,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			if (isRising) {
 				monster.ZPosition += 6;
 
-				if (monster.Y - monster.ZPosition < -2) {
+				if (monster.Position.Y - monster.ZPosition < -2) {
 					monster.Destroy();
 				}
 			}

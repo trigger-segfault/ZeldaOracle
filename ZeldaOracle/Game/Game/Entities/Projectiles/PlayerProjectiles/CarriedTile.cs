@@ -39,9 +39,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			BounceSound = GameData.SOUND_BOMB_BOUNCE;
 
 			// Graphics.
-			Graphics.DepthLayer			= DepthLayer.ProjectileCarriedTile;
-			Graphics.DrawOffset			= new Point2I(-8, -13);
-			centerOffset				= new Point2I(0, -5);
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= false;
+			Graphics.IsRipplesEffectVisible	= false;
+			Graphics.DepthLayer				= DepthLayer.ProjectileCarriedTile;
+			Graphics.DrawOffset				= new Point2I(-8, -13);
+			centerOffset					= new Point2I(0, -5);
 		}
 
 

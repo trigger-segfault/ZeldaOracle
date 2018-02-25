@@ -1,4 +1,5 @@
-﻿using ZeldaOracle.Common.Audio;
+﻿using System.Collections.Generic;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control;
@@ -8,7 +9,7 @@ using ZeldaOracle.Game.Entities.Effects;
 namespace ZeldaOracle.Game.Entities {
 
 	// The main class for entity objects in the room.
-	public abstract class Entity {
+	public class Entity {
 
 		private RoomControl			roomControl;
 		private	bool				isInitialized;
@@ -20,6 +21,7 @@ namespace ZeldaOracle.Game.Entities {
 		private float				previousZPosition;
 		private Properties			properties;
 
+		private bool				isPersistentBetweenRooms;
 		protected Vector2F			position;
 		protected float				zPosition;
 		protected Point2I			centerOffset;
@@ -30,6 +32,13 @@ namespace ZeldaOracle.Game.Entities {
 		protected bool              isGrabbable;
 		protected bool              isPickupable;
 		protected Vector2F          carriedDrawOffset;
+
+		// Attachment
+
+		private Entity				parent;
+		private List<Entity>		children;
+		private Vector2F			attachmentOffset;
+		private float				attachmentZOffset;
 
 		protected PhysicsComponent	physics;
 		protected GraphicsComponent	graphics;
@@ -57,8 +66,39 @@ namespace ZeldaOracle.Game.Entities {
 			actionAlignDistance	= 5;
 			buttonActionCollisionBox = Rectangle2F.Zero;
 			properties			= null;
+			isPersistentBetweenRooms	= false;
+			parent				= null;
+			children			= new List<Entity>();
+			attachmentOffset	= Vector2F.Zero;
+			attachmentZOffset	= 0.0f;
 		}
 		
+
+		//-----------------------------------------------------------------------------
+		// Entity Attachment
+		//-----------------------------------------------------------------------------
+
+		public void AttachEntity(Entity child, Vector2F offset) {
+			child.AttachmentOffset = offset;
+			AttachEntity(child);
+		}
+		
+		public void AttachEntity(Entity child) {
+			child.parent = this;
+			children.Add(child);
+
+			// Make sure the entity is in the room
+			if (!child.IsAlive || child.roomControl != roomControl)
+				RoomControl.SpawnEntity(child);
+		}
+
+		public void DetachEntity(Entity child) {
+			if (children.Contains(child)) {
+				child.parent = null;
+				children.Remove(child);
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Interaction Methods
@@ -81,8 +121,8 @@ namespace ZeldaOracle.Game.Entities {
 	
 		/// <summary>Called every step to update the entity.</summary>
 		public virtual void Update() {
-			previousPosition  = position;
-			previousZPosition = zPosition;
+			previousPosition  = Position;
+			previousZPosition = ZPosition;
 		}
 
 		/// <summary>Called every step to update the entity's gaphics.</summary>
@@ -212,6 +252,8 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public void Destroy() {
+			if (parent != null)
+				parent.DetachEntity(this);
 			if (isAlive) {
 				isAlive = false;
 				isInRoom = false;
@@ -330,43 +372,56 @@ namespace ZeldaOracle.Game.Entities {
 			set { entityIndex = value; }
 		}
 
-		/// <summary>Gets or sets the position of the entity.</summary>
-		public Vector2F Position {
-			get { return position; }
-			set { position = value; }
-		}
-
 		public Vector2F DrawPosition {
 			get {
-				bool horizontal = GMath.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
-										(!Physics.IsCollidingInDirection(Directions.Left) &&
-										!Physics.IsCollidingInDirection(Directions.Right));
-				bool vertical = GMath.Abs(Physics.SurfaceVelocity.Y) > GameSettings.EPSILON &&
-										(!Physics.IsCollidingInDirection(Directions.Up) &&
-										!Physics.IsCollidingInDirection(Directions.Down));
-				Vector2F surfacePosition = Vector2F.Zero;
-				if (horizontal)	surfacePosition.X = Physics.SurfacePosition.X;
-				if (vertical)	surfacePosition.Y = Physics.SurfacePosition.Y;
-				return GameUtil.Bias(surfacePosition) -
-					GameUtil.ReverseBias(surfacePosition - position);
+				if (Physics.IsEnabled) {
+					bool horizontal = GMath.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
+											(!Physics.IsCollidingInDirection(Directions.Left) &&
+											!Physics.IsCollidingInDirection(Directions.Right));
+					bool vertical = GMath.Abs(Physics.SurfaceVelocity.Y) > GameSettings.EPSILON &&
+											(!Physics.IsCollidingInDirection(Directions.Up) &&
+											!Physics.IsCollidingInDirection(Directions.Down));
+					Vector2F surfacePosition = Vector2F.Zero;
+					if (horizontal)	surfacePosition.X = Physics.SurfacePosition.X;
+					if (vertical)	surfacePosition.Y = Physics.SurfacePosition.Y;
+					return GameUtil.Bias(surfacePosition) -
+						GameUtil.ReverseBias(surfacePosition - position);
+				}
+				else {
+					return GameUtil.Bias(GameUtil.Bias(Position));
+				}
 			}
+		}
+
+		/// <summary>Gets or sets the position of the entity.</summary>
+		public Vector2F Position {
+			get {
+				if (parent != null)
+					return parent.position + attachmentOffset;
+				return position;
+			}
+			set { position = value; }
 		}
 
 		/// <summary>Gets or sets the x-position of the entity.</summary>
 		public float X {
-			get { return position.X; }
+			get { return Position.X; }
 			set { position.X = value; }
 		}
 
 		/// <summary>Gets or sets the y-position of the entity.</summary>
 		public float Y {
-			get { return position.Y; }
+			get { return Position.Y; }
 			set { position.Y = value; }
 		}
-	
+
 		/// <summary>Gets or sets the entity's z-position.</summary>
 		public float ZPosition {
-			get { return zPosition; }
+			get {
+				if (parent != null)
+					return GMath.Max(0.0f, parent.zPosition + attachmentZOffset);
+				return zPosition;
+			}
 			set { zPosition = value; }
 		}
 		
@@ -403,7 +458,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public Vector2F Center {
-			get { return position + centerOffset; }
+			get { return Position + centerOffset; }
 		}
 
 		public Vector2F DrawCenter {
@@ -435,6 +490,33 @@ namespace ZeldaOracle.Game.Entities {
 		public Properties Properties {
 			get { return properties; }
 			set { properties = value; }
+		}
+
+		public Entity Parent {
+			get { return parent; }
+		}
+
+		public List<Entity> Children {
+			get { return children; }
+		}
+
+		public Vector2F AttachmentOffset {
+			get { return attachmentOffset; }
+			set { attachmentOffset = value; }
+		}
+
+		public float AttachmentZOffset {
+			get { return attachmentZOffset; }
+			set { attachmentZOffset = value; }
+		}
+
+		public bool IsPersistentBetweenRooms {
+			get {
+				if (parent != null && parent.IsPersistentBetweenRooms)
+					return true;
+				return isPersistentBetweenRooms;
+			}
+			set { isPersistentBetweenRooms = value; }
 		}
 	}
 }

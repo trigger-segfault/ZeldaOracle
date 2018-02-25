@@ -53,8 +53,11 @@ namespace ZeldaOracle.Game.Entities {
 			buttonActionCollisionBox = Physics.SoftCollisionBox;
 
 			// Graphics.
-			Graphics.DepthLayer	= DepthLayer.PlayerAndNPCs;
-			Graphics.DrawOffset = new Point2I(-8, -14);
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= true;
+			Graphics.IsRipplesEffectVisible	= true;
+			Graphics.DepthLayer				= DepthLayer.PlayerAndNPCs;
+			Graphics.DrawOffset				= new Point2I(-8, -14);
 
 			// General.
 			centerOffset		= Graphics.DrawOffset + new Point2I(8, 8);

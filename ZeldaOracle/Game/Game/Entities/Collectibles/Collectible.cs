@@ -26,14 +26,17 @@ namespace ZeldaOracle.Game.Entities {
 			this.timer			= 0;
 			this.hasDuration	= true;
 
-			// Physics.
+			// Physics
 			Physics.CollisionBox		= new Rectangle2I(-2, -2, 4, 4);
 			Physics.SoftCollisionBox	= new Rectangle2I(-2, -2, 4, 4);
 			Physics.MovesWithConveyors	= true;
 
-			// Graphics.
-			Graphics.DepthLayer			= DepthLayer.Collectibles;
-			Graphics.DepthLayerInAir	= DepthLayer.InAirCollectibles;
+			// Graphics
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= true;
+			Graphics.IsRipplesEffectVisible	= true;
+			Graphics.DepthLayer				= DepthLayer.Collectibles;
+			Graphics.DepthLayerInAir		= DepthLayer.InAirCollectibles;
 
 			aliveDuration	= GameSettings.COLLECTIBLE_ALIVE_DURATION;
 			fadeDelay		= GameSettings.COLLECTIBLE_FADE_DELAY;

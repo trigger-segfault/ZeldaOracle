@@ -55,12 +55,12 @@ namespace ZeldaOracle.Game.Entities
 			this.depthLayer				= DepthLayer.None;
 			this.depthLayerInAir		= DepthLayer.None;
 			this.isVisible				= true;
-			this.isShadowVisible		= true;
+			this.isShadowVisible		= false;
 			this.grassDrawOffset		= Point2I.Zero;
 			this.ripplesDrawOffset		= Point2I.Zero;
 			this.shadowDrawOffset		= Point2I.Zero;
-			this.isGrassEffectVisible	= true;
-			this.isRipplesEffectVisible	= true;
+			this.isGrassEffectVisible	= false;
+			this.isRipplesEffectVisible	= false;
 			this.grassAnimationTicks	= 0;
 			this.drawOffset				= Point2I.Zero;
 			this.isFlickering			= false;

@@ -52,7 +52,11 @@ namespace ZeldaOracle.Game.Debug {
 		private static Vector2F mousePosition;
 		private static Point2I mouseTileLocation;
 		private static string sampledTileName = "";
-		private static Action printDebugInfoFunction = PrintPlayerDebugInfo;
+		private static Action[] printDebugInfoFunctions = new Action[] {
+			PrintDebugInfoEntities,
+			PrintPlayerDebugInfo,
+		};
+		private static int printDebugInfoFunctionIndex = 0;
 		private static PlayerDebugNoClipState playerNoClipState = new PlayerDebugNoClipState();
 		public static DevSettings DevSettings { get; set; } = new DevSettings();
 		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
@@ -99,6 +103,25 @@ namespace ZeldaOracle.Game.Debug {
 			// Equip starting weapons
 			EquipStartWeapon(DevSettings.Inventory.A, Inventory.SLOT_A);
 			EquipStartWeapon(DevSettings.Inventory.B, Inventory.SLOT_B);
+		}
+
+		public static void PrintDebugInfoEntities() {
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("Entity Heirarchy:");
+			Console.ForegroundColor = ConsoleColor.White;
+			for (int i = 0; i < RoomControl.EntityCount; i++) {
+				Entity entity = RoomControl.Entities[i];
+				if (entity.Parent == null)
+					PrintEntityDebugInfo(entity, " ");
+			}
+		}
+
+		public static void PrintEntityDebugInfo(Entity entity, string tabs) {
+			Console.WriteLine("{0, 3}.{1}{2}",
+				entity.EntityIndex, tabs, entity.GetType().Name);
+			foreach (Entity child in entity.Children) {
+				PrintEntityDebugInfo(child, tabs + "  ");
+			}
 		}
 
 		public static void PrintPlayerDebugInfo() {
@@ -164,11 +187,14 @@ namespace ZeldaOracle.Game.Debug {
 				Keyboard.IsKeyDown(Keys.RShift));
 			
 			// Print debug info to the console window
-			if (GameManager.IsConsoleOpen && printDebugInfoFunction != null) {
+			if (GameManager.IsConsoleOpen &&
+				printDebugInfoFunctions[printDebugInfoFunctionIndex] != null)
+			{
 				Console.SetCursorPosition(0, 0);
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.BackgroundColor = ConsoleColor.Black;
-				printDebugInfoFunction();
+				Console.Clear();
+				printDebugInfoFunctions[printDebugInfoFunctionIndex]();
 				Console.WriteLine("");
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.BackgroundColor = ConsoleColor.Black;
@@ -180,9 +206,17 @@ namespace ZeldaOracle.Game.Debug {
 			// CTRL+R: Restart the game.
 			if (ctrl && Keyboard.IsKeyPressed(Keys.R))
 				GameManager.Restart();
-			// CTRL+R: Toggle console window.
+			// CTRL+T: Toggle console window.
 			if (ctrl && Keyboard.IsKeyPressed(Keys.T))
 				GameManager.IsConsoleOpen = !GameManager.IsConsoleOpen;
+			// F1: Cycle debug console printouts
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.F1)) {
+				if (!GameManager.IsConsoleOpen)
+					GameManager.IsConsoleOpen = true;
+				else
+					printDebugInfoFunctionIndex = (printDebugInfoFunctionIndex + 1) %
+						printDebugInfoFunctions.Length;
+			}
 			// F5: Pause gameplay.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.F5))
 				GameManager.IsGamePaused = !GameManager.IsGamePaused;

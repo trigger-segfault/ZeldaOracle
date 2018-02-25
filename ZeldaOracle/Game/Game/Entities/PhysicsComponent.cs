@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Entities {
 		PassingDown,
 		PassingUp,
 	}
-	
+
 	public class PhysicsComponent {
 
 		public delegate bool TileCollisionCondition(Tile tile);
@@ -552,8 +552,9 @@ namespace ZeldaOracle.Game.Entities {
 			{
 				return false;
 			}
-			if (customTileIsSolidCondition != null)
-				return customTileIsSolidCondition(checkTile);
+			if (customTileIsNotSolidCondition != null &&
+				!customTileIsNotSolidCondition(checkTile))
+				return false;
 			return true;
 		}
 		

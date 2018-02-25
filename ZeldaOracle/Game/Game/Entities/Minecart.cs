@@ -21,17 +21,20 @@ namespace ZeldaOracle.Game.Entities {
 		public Minecart(TileMinecartTrack minecartTrack) {
 			this.minecartTrack = minecartTrack;
 
-			// Physics.
+			// Physics
 			EnablePhysics(PhysicsFlags.Solid);
 			Physics.CollisionBox		= new Rectangle2F(-1, 3, 18, 15);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, 3, 18, 15);
 
-			// Graphics.
-			Graphics.DepthLayer	= DepthLayer.PlayerAndNPCs;
-			Graphics.DrawOffset = new Point2I(0, 0);
-			centerOffset		= new Point2I(8, 8);
+			// Graphics
+			Graphics.IsShadowVisible		= false;
+			Graphics.IsGrassEffectVisible	= false;
+			Graphics.IsRipplesEffectVisible	= false;
+			Graphics.DepthLayer				= DepthLayer.PlayerAndNPCs;
+			Graphics.DrawOffset				= new Point2I(0, 0);
+			centerOffset					= new Point2I(8, 8);
 
-			// General.
+			// General
 			actionAlignDistance	= 5;
 		}
 

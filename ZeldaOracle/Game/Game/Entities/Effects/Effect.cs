@@ -20,16 +20,18 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 		
 		public Effect() {
-			updateOnRoomPaused = false;
-			destroyTimer = -1;
-			fadeDelay = -1;
-			destroyOnAnimationComplete = false;
-
+			updateOnRoomPaused			= false;
+			destroyTimer				= -1;
+			fadeDelay					= -1;
+			destroyOnAnimationComplete	= false;
+			
+			// Graphics
 			Graphics.IsShadowVisible		= false;
 			Graphics.IsGrassEffectVisible	= false;
 			Graphics.IsRipplesEffectVisible	= false;
 
-			physics.IsDestroyedInHoles		= false;
+			// Physics
+			Physics.IsDestroyedInHoles		= false;
 		}
 		
 		// Create an effect that plays an animation and then dissapears

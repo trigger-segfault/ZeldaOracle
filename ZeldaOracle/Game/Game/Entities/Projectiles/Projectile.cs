@@ -48,6 +48,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Projectile() {
 			EnablePhysics(PhysicsFlags.DisableSurfaceContact);
 
+			Graphics.IsShadowVisible		= true;
+			graphics.IsGrassEffectVisible	= false;
+			graphics.IsRipplesEffectVisible	= false;
+
 			syncAnimationWithAngle		= false;
 			syncAnimationWithDirection	= false;
 

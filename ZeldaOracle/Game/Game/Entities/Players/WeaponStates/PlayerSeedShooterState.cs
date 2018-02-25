@@ -29,6 +29,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private GenericStateMachine<SubState> subStateMachine;
 
+		private Entity seedShooter;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -163,9 +165,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			subStateMachine.InitializeOnState(SubState.Aiming);
 
 			// Equip the seed shooter tool (purely visual)
-			player.EquipTool(player.ToolVisual);
-			player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
-			player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
+			//player.EquipTool(player.ToolVisual);
+			//player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
+			//player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
 
 			// Play the player's aim animation
 			player.Graphics.SubStripIndex = aimAngle.Index;
@@ -175,11 +177,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// This state will select the player's substrip index based on the aim
 			// angle
 			player.SyncAnimationWithDirection = false;
+			
+			// Create the seed shooter entity
+			seedShooter = new Entity();
+			seedShooter.Graphics.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
+			seedShooter.Graphics.DepthLayer = DepthLayer.ItemSeedShooter;
+			seedShooter.AttachmentOffset = player.CenterOffset;
+			player.AttachEntity(seedShooter, player.CenterOffset);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.UnequipTool(player.ToolVisual);
+			//player.UnequipTool(player.ToolVisual);
 			player.SyncAnimationWithDirection = true;
+			seedShooter.Destroy();
 		}
 
 		public override void Update() {
@@ -192,7 +202,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Make player and seed-shooter face the aim angle
 			player.Graphics.SubStripIndex = aimAngle.Index;
-			player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
+			//player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
+			seedShooter.Graphics.SubStripIndex = aimAngle;
 		}
 
 		

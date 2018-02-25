@@ -183,7 +183,7 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Initialize and spawn an entity, and have it be managed by the
 		/// RoomControl.</summary>
 		public void SpawnEntity(Entity e) {
-			e.EntityIndex = ++entityIndexCounter;
+			e.EntityIndex = entityIndexCounter++;
 			e.Initialize(this);
 			entities.Add(e);
 		}
@@ -300,8 +300,17 @@ namespace ZeldaOracle.Game.Control {
 		public void BeginRoom() {
 			BeginRoom(room);
 		}
-
+		
+		public void BeginRoom(List<Entity> persistentEntities) {
+			BeginRoom(room, persistentEntities);
+		}
+		
 		public void BeginRoom(Room room) {
+			List<Entity> persistentEntities = new List<Entity>();
+			BeginRoom(room, persistentEntities);
+		}
+
+		public void BeginRoom(Room room, List<Entity> persistentEntities) {
 			this.room				= room;
 			this.roomLocation		= room.Location;
 			this.dungeon			= room.Dungeon;
@@ -321,12 +330,21 @@ namespace ZeldaOracle.Game.Control {
 			// Clear action tiles
 			actionTiles.Clear();
 
-			// Clear all entities from the old room (except for the player)
+			// Clear all entities from the old room,  then re-add any persistent
+			// entities such as the player
 			entities.Clear();
+			entityIndexCounter = 0;
 			if (Player != null) {
-				Player.Initialize(this);
-				Player.EntityIndex = 0;
 				entities.Add(Player);
+				Player.EntityIndex = entityIndexCounter++;
+				Player.Initialize(this);
+			}
+			foreach (Entity entity in persistentEntities) {
+				if (entity != Player) {
+					entities.Add(entity);
+					entity.EntityIndex = entityIndexCounter++;
+					entity.Initialize(this);
+				}
 			}
 
 			// Create the tile grid
@@ -540,14 +558,17 @@ namespace ZeldaOracle.Game.Control {
 
 			// Update entities
 			entityCount = entities.Count;
-			for (int i = 0; i < entities.Count; i++) {
-				if (entities[i] != Player && entities[i].IsAlive &&
-					entities[i].IsInRoom && i < entityCount)
-				{
+			for (int i = 0; i < entityCount; i++) {
+				Entity entity = entities[i];
+				if (entity != Player && entity.IsAlive && entity.IsInRoom) {
 					if (GameControl.UpdateRoom)
-						entities[i].Update();
+						entity.Update();
+					if (entity.IsAlive) {
+						//foreach (Entity child in entity.Children)
+							//child.Position = entity.Position + child.AttachmentOffset;
+					}
 					if (GameControl.AnimateRoom)
-						entities[i].UpdateGraphics();
+						entity.UpdateGraphics();
 
 					if (requestedTransitionDirection >= 0)
 						break;
@@ -558,6 +579,8 @@ namespace ZeldaOracle.Game.Control {
 			if (Player.IsAlive && Player.IsInRoom) {
 				if (GameControl.UpdateRoom)
 					Player.Update();
+				//foreach (Entity child in Player.Children)
+					//child.Position = Player.Position + child.AttachmentOffset;
 				if (GameControl.AnimateRoom)
 					Player.UpdateGraphics();
 			}
@@ -568,6 +591,7 @@ namespace ZeldaOracle.Game.Control {
 					entities.RemoveAt(i--);
 				}
 			}
+			entityCount = entities.Count;
 
 			//if (requestedTransitionDirection >= 0)
 			//	return;

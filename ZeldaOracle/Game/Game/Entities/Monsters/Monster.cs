@@ -34,15 +34,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 	public partial class Monster : Unit, ZeldaAPI.Monster {
 		
-		private int contactDamage;
+		/// <summary>The interaction manager.</summary>
 		private MonsterInteractionManager interactions;
-		private MonsterColor color;
-
-		// The current monster state.
+		/// <summary>The current monster state.</summary>
 		private MonsterState state;
-		// The previous monster state.
+		/// <summary>The previous monster state.</summary>
 		private MonsterState previousState;
 
+		// Properties
+
+		private MonsterColor color;
+		private int contactDamage;
 		protected bool softKill;
 		protected bool isBurnable;
 		protected bool isGaleable;
@@ -51,7 +53,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		/// as if the monsters z position was at zero.</summary>
 		protected bool ignoreZPosition;
 
-		// States.
+		// States
 		/*private MonsterBurnState		stateBurn;
 		private MonsterStunState		stateStun;
 		private MonsterFallInHoleState	stateFallInHole;

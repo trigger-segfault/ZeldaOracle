@@ -39,10 +39,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			soundBounce					= GameData.SOUND_BOMB_BOUNCE;
 
 			IsPickupable = true;
-
-			Graphics.DepthLayer			= DepthLayer.ProjectileBomb;
-			Graphics.DrawOffset			= new Point2I(-8, -13);
-			centerOffset				= new Point2I(0, -3);
+			
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= false;
+			Graphics.IsRipplesEffectVisible	= false;
+			Graphics.DepthLayer				= DepthLayer.ProjectileBomb;
+			Graphics.DrawOffset				= new Point2I(-8, -13);
+			centerOffset					= new Point2I(0, -3);
 		}
 
 

@@ -45,8 +45,19 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			// Move the player from the old room to the new room.
 			// RoomControl.BeginRoom() will update the player's RoomControl
 			// reference.
-			OldRoomControl.Entities.Remove(Player);
-			NewRoomControl.BeginRoom();
+
+			// Transfer all persistent entities to the new RoomControl
+			List<Entity> persistentEntities = new List<Entity>();
+			for (int i = 0; i < OldRoomControl.Entities.Count; i++) {
+				Entity entity = OldRoomControl.Entities[i];
+				if (entity.IsPersistentBetweenRooms) {
+					persistentEntities.Add(entity);
+					OldRoomControl.Entities.RemoveAt(i--);
+				}
+			}
+			//OldRoomControl.Entities.Remove(Player);
+
+			NewRoomControl.BeginRoom(persistentEntities);
 
 			if (eventSetupNewRoom != null)
 				eventSetupNewRoom.Invoke(roomNew);

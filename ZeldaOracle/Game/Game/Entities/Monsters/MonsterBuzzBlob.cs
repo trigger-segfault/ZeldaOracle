@@ -18,7 +18,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Movement
 			moveSpeed					= 0.25f;
 			numMoveAngles				= 8;
-			orientationStyle			= OrientationStyle.Angle;
 			changeDirectionsOnCollide	= true;
 			movesInAir					= false;
 			facePlayerOdds				= 0;

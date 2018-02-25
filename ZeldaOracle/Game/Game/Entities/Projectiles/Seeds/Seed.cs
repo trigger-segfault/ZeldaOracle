@@ -66,16 +66,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 			if (type == SeedType.Scent) {
 				if (RoomControl.IsSideScrolling)
-					effect.Y += 3;
+					effect.Position += new Vector2F(0, 3);
 			}
 			else if (type == SeedType.Ember) {
 				if (RoomControl.IsSideScrolling)
-					effect.Y += 1;
+					effect.Position += new Vector2F(0, 1);
 				effect.Physics.HasGravity = false;
 			}
 			else if (type == SeedType.Mystery) {
 				if (RoomControl.IsSideScrolling)
-					effect.Y -= 1;
+					effect.Position += new Vector2F(0, -1);
 			}
 		}
 
