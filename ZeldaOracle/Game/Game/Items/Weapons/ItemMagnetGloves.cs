@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			return true;
 		}
 
-		// Draws the item inside the inventory.
+		/// <summary>Draws the item inside the inventory.</summary>
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
 			g.DrawString(GameData.FONT_SMALL, (polarity == Polarity.North ? "N" : "S"),

@@ -40,6 +40,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			boomerangMotionDirection = boomerang.Angle * GMath.EighthAngle;
 		}
+
+		public override void OnInterruptWeapons() {
+			End();
+		}
 		
 		public override void Update() {
 			// Check if we should stop controlling the boomerang

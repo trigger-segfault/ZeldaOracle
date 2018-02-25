@@ -90,6 +90,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerUnderwaterEnvironmentState			environmentStateUnderwater;
 		private PlayerSideScrollSwimEnvironmentState		environmentStateSideScrollSwim;
 
+		// Condition States
+		private PlayerShieldState stateShield;
+
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -216,6 +219,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			environmentStateSideScrollSwim		= new PlayerSideScrollSwimEnvironmentState();
 			environmentStateLadder				= new PlayerLadderEnvironmentState();
 			environmentStateSideScrollLadder	= new PlayerSideScrollLadderEnvironmentState();
+			
+			// Condition states
+			stateShield			= new PlayerShieldState();
 		}
 
 
@@ -461,6 +467,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 						break;
 				}
 			}
+			foreach (PlayerState state in ActiveStates)
+				state.OnInterruptWeapons();
 			if (weaponStateMachine.IsActive)
 				weaponStateMachine.CurrentState.End();
 			IntegrateStateParameters();
@@ -817,11 +825,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateParameters.PlayerAnimations.Spin			= GameData.ANIM_PLAYER_SPIN;
 			stateParameters.PlayerAnimations.Stab			= GameData.ANIM_PLAYER_STAB;
 			stateParameters.PlayerAnimations.Carry			= GameData.ANIM_PLAYER_CARRY;
-			stateParameters |= controlStateMachine.StateParameters;
-			stateParameters |= weaponStateMachine.StateParameters;
-			stateParameters |= environmentStateMachine.StateParameters;
 			foreach (PlayerState state in ConditionStates)
 				stateParameters |= state.StateParameters;
+			stateParameters |= environmentStateMachine.StateParameters;
+			stateParameters |= controlStateMachine.StateParameters;
+			stateParameters |= weaponStateMachine.StateParameters;
 
 			// Integrate the combined state parameters
 			
@@ -888,16 +896,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 				// Post-state update
 				UpdateEquippedItems();
-
-				// Handle SHIELD holding
-				if (Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_BLOCK ||
-					Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK)
-				{
-					EquipTool(toolShield);
-				}
-				else if (toolShield.IsEquipped) {
-					UnequipTool(toolShield);
-				}
 
 				// Update superclass
 				base.Update();
@@ -1134,6 +1132,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerMagnetGlovesState MagnetGlovesState {
 			get { return stateMagnetGloves; }
+		}
+
+		public PlayerShieldState ShieldState {
+			get { return stateShield; }
 		}
 
 		public PlayerPullHandleState PullHandleState {

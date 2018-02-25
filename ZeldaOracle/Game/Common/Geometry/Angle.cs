@@ -181,9 +181,10 @@ namespace ZeldaOracle.Common.Geometry {
 		// Binary Operations
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Rotate the angle either clockwise or counter-clockwise.
-		/// </summary>
-		public Angle Rotate(int amount, WindingOrder windingOrder) {
+		/// <summary>Rotate the angle either clockwise or counter-clockwise.</summary>
+		public Angle Rotate(int amount,
+			WindingOrder windingOrder = WindingOrder.CounterClockwise)
+		{
 			if (windingOrder == WindingOrder.Clockwise)
 				amount = -amount;
 			return new Angle(GMath.Wrap(index + amount, 8));

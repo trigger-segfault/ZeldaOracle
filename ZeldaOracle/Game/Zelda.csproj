@@ -349,6 +349,7 @@
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
     <Compile Include="Game\Entities\NPC.cs" />
+    <Compile Include="Game\Entities\Players\ConditionStates\PlayerShieldState.cs" />
     <Compile Include="Game\Entities\Players\ConditionStates\PlayerDisarmedState.cs" />
     <Compile Include="Game\Entities\Players\ConditionStates\PlayerSprintState.cs" />
     <Compile Include="Game\Entities\Players\EnvironmentStates\PlayerGrassEnvironmentState.cs" />

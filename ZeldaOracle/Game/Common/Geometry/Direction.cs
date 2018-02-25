@@ -167,7 +167,9 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Rotate the direction either clockwise or counter-clockwise.
 		/// </summary>
-		public Direction Rotate(int amount, WindingOrder windingOrder) {
+		public Direction Rotate(int amount,
+			WindingOrder windingOrder = WindingOrder.CounterClockwise)
+		{
 			if (windingOrder == WindingOrder.Clockwise)
 				amount = -amount;
 			return new Direction(GMath.Wrap(index + amount, 4));

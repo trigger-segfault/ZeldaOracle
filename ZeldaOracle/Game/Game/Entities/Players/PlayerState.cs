@@ -52,6 +52,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public virtual void OnHurt(DamageInfo damage) {}
 
+		public virtual void OnInterruptWeapons() {}
+
 		public virtual void Update() {}
 		
 		public virtual void DrawUnder(RoomGraphics g) {}
