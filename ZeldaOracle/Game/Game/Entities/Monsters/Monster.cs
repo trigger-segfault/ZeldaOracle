@@ -58,7 +58,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected bool isBurnable;
 		protected bool isGaleable;
 		protected bool isStunnable;
-		protected bool isFlying;
 		/// <summary>True if the player will always check collisions
 		/// as if the monsters z position was at zero.</summary>
 		protected bool ignoreZPosition;
@@ -110,7 +109,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isBurnable              = true;
 			isStunnable             = true;
 			isKnockbackable         = true;
-			isFlying                = false;
 			softKill                = false;
 			ignoreZPosition			= false;
 
@@ -407,19 +405,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void OnFallInHole() {
 			// Begin the fall-in-hole state (slipping into a hole)
-			if (!isFlying && state is MonsterNormalState) {
+			if (state is MonsterNormalState) {
 				BeginState(new MonsterFallInHoleState());
 			}
-		}
-
-		public override void OnFallInWater() {
-			if (!isFlying)
-				base.OnFallInWater();
-		}
-
-		public override void OnFallInLava() {
-			if (!isFlying)
-				base.OnFallInLava();
 		}
 
 		private void CollideMonsterAndPlayer() {

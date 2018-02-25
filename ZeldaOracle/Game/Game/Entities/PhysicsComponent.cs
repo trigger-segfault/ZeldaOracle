@@ -705,7 +705,7 @@ namespace ZeldaOracle.Game.Entities {
 					return false;
 				if (entity.RoomControl.IsSideScrolling)
 					return !IsCollidingInDirection(Direction.Down);
-				return (entity.ZPosition > 0.0f || zVelocity > 0.0f);// || IsFlying);
+				return (entity.ZPosition > 0.0f || zVelocity > 0.0f);
 			}
 		}
 

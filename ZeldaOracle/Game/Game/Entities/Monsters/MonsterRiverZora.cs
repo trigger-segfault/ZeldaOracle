@@ -31,12 +31,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Color			= MonsterColor.Red;
 			isGaleable		= false;
 			isKnockbackable	= false;
-			isFlying		= true;
 
 			// Physics
-			Physics.HasGravity			= false;
-			Physics.CollideWithWorld	= false;
-			Physics.IsDestroyedInHoles	= false;
+			Physics.HasGravity				= false;
+			Physics.CollideWithWorld		= false;
+			Physics.IsDestroyedInHoles		= false;
+			physics.DisableSurfaceContact	= true;
 
 			// Projectile interactions
 			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);

@@ -35,7 +35,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			flyMoveTime = new RangeI(420, 600);
 
 			// Movement
-			isFlying					= true;
 			moveSpeed					= 0.75f;
 			numMoveAngles				= 24;
 			facePlayerOdds				= 0;
@@ -45,9 +44,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveTime.Set(15, 120);
 								
 			// Physics
-			Physics.Gravity			= 0.0f;
-			Physics.ReboundRoomEdge	= true;
-			Physics.ReboundSolid	= true;
+			Physics.Gravity					= 0.0f;
+			Physics.ReboundRoomEdge			= true;
+			Physics.ReboundSolid			= true;
+			physics.DisableSurfaceContact	= true;
 			
 			// Graphics
 			animationMove				= GameData.ANIM_MONSTER_KEESE;

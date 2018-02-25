@@ -25,15 +25,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			facePlayerOdds				= 0;
 			stopTime.Set(10, 10);
 			moveTime.Set(60, 70);
-			isFlying					= true;
 			changeDirectionsOnCollide	= false;
 			syncAnimationWithDirection	= false;
 			playAnimationOnlyWhenMoving	= false;
 			avoidHazardTiles			= false;
 
 			// Physics
-			Physics.Gravity			= 0.0f;
-			Physics.ReboundRoomEdge	= true;
+			Physics.Gravity					= 0.0f;
+			Physics.ReboundRoomEdge			= true;
+			physics.DisableSurfaceContact	= true;
 			Physics.CustomTileIsSolidCondition = delegate(Tile tile) {
 				// Collide with non-water tiles
 				return !tile.IsWater;

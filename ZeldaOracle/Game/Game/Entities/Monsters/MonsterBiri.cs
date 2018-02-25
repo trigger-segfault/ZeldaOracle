@@ -26,15 +26,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Color			= MonsterColor.Blue;
 			
 			// Movement
-			isFlying					= true;
 			numMoveAngles				= 24;
 			moveSpeed					= 0.25f;
 			angleDuration				= 16;
 
 			// Physics
-			Physics.Gravity				= 0.0f;
-			Physics.CollideWithWorld	= false;
-			Physics.ReboundRoomEdge		= true;
+			Physics.Gravity					= 0.0f;
+			Physics.CollideWithWorld		= false;
+			physics.DisableSurfaceContact	= true;
+			Physics.ReboundRoomEdge			= true;
 
 			// Weapon Interactions
 			SetReaction(InteractionType.Sword,			Reactions.Kill);

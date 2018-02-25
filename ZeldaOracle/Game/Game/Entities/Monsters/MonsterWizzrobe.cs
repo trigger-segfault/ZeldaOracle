@@ -33,10 +33,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Movement
 			syncAnimationWithDirection	= true;
-			isFlying = true;
 
 			// Physics
-			Physics.CollideWithWorld = false;
+			Physics.CollideWithWorld		= false;
+			physics.DisableSurfaceContact	= true;
 
 			// Weapon interactions
 			SetReaction(InteractionType.SwitchHook, Reactions.SwitchHook, WizzrobeSwitchHook);

@@ -59,17 +59,21 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		//-----------------------------------------------------------------------------
 
 		private void Attach() {
-			attachTimer					= 0;
-			isAttached					= true;
-			Physics.HasGravity			= false;
-			Physics.CollideWithWorld	= false;
-			Physics.IsDestroyedInHoles	= false;
-			Physics.Velocity			= Vector2F.Zero;
-			physics.ZVelocity			= 0.0f;
-			position					= RoomControl.Player.Position;
-			zPosition					= 0;
-			IsPassable					= true;
-			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
+			attachTimer	= 0;
+			isAttached	= true;
+
+			position	= RoomControl.Player.Position;
+			zPosition	= 0;
+			IsPassable	= true;
+
+			Physics.HasGravity				= false;
+			Physics.CollideWithWorld		= false;
+			Physics.IsDestroyedInHoles		= false;
+			Physics.Velocity				= Vector2F.Zero;
+			physics.ZVelocity				= 0.0f;
+			Physics.DisableSurfaceContact	= true;
+
+			Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_GEL_ATTACH);
 
 			// Give the player the disarmed condition
@@ -81,11 +85,14 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		private void Detach() {
 			attachTimer					= 60; // Used to give a short delay before attaching again
 			isAttached					= false;
-			Physics.HasGravity			= true;
-			Physics.CollideWithWorld	= true;
-			Physics.IsDestroyedInHoles	= true;
-			IsPassable					= false;
-			Graphics.DepthLayer			= DepthLayer.Monsters;
+
+			Physics.HasGravity				= true;
+			Physics.CollideWithWorld		= true;
+			Physics.IsDestroyedInHoles		= true;
+			Physics.DisableSurfaceContact	= false;
+
+			IsPassable = false;
+			Graphics.DepthLayer	 = DepthLayer.Monsters;
 
 			Jump();
 
@@ -112,21 +119,6 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			isAttached = false;
 			attachTimer = 0;
 			disarmedPlayerState = null;
-		}
-
-		public override void OnFallInHole() {
-			if (!isAttached)
-				base.OnFallInHole();
-		}
-
-		public override void OnFallInWater() {
-			if (!isAttached)
-				base.OnFallInWater();
-		}
-
-		public override void OnFallInLava() {
-			if (!isAttached)
-				base.OnFallInWater();
 		}
 
 		public override void OnTouchPlayer(Entity sender, EventArgs args) {

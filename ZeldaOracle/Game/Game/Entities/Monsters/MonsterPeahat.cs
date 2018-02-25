@@ -26,7 +26,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			IsKnockbackable	= false;
 			
 			// Movement
-			isFlying					= true;
 			moveSpeed					= 0.75f;
 			numMoveAngles				= 24;
 			facePlayerOdds				= 0;
@@ -36,9 +35,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveTime.Set(15, 120);
 								
 			// Physics
-			Physics.Gravity				= 0.0f;
-			Physics.CollideWithWorld	= false;
-			Physics.ReboundRoomEdge		= true;
+			Physics.Gravity					= 0.0f;
+			Physics.CollideWithWorld		= false;
+			Physics.ReboundRoomEdge			= true;
+			physics.DisableSurfaceContact	= true;
 			
 			// Graphics
 			animationMove = GameData.ANIM_MONSTER_PEAHAT;

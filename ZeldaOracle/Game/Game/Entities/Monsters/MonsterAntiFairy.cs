@@ -24,12 +24,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isGaleable		= false;
 			isBurnable		= false;
 			isStunnable		= false;
-			isFlying		= true;
 
 			// Physics
-			Physics.Gravity			= 0.0f;
-			Physics.ReboundRoomEdge	= true;
-			Physics.ReboundSolid	= true;
+			Physics.Gravity					= 0.0f;
+			Physics.ReboundRoomEdge			= true;
+			Physics.ReboundSolid			= true;
+			physics.DisableSurfaceContact	= true;
 
 			// Projectile interations
 			SetReaction(InteractionType.Boomerang, SenderReactions.Intercept, Reactions.SoftKill);

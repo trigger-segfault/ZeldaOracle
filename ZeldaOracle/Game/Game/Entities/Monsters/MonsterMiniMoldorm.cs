@@ -36,22 +36,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Color			= MonsterColor.Green;
 			
 			// Movement
-			moveSpeed		= 1.0f;
-			isFlying		= true;
-			Physics.Flags |=
-				PhysicsFlags.ReboundSolid |
-				PhysicsFlags.ReboundRoomEdge;
-			
+			moveSpeed = 1.0f;
+
 			// Graphics
 			Graphics.DrawOffset			= new Point2I(-8, -8);
 			centerOffset				= new Point2I(0, 0);
 			syncAnimationWithDirection	= false;
 
 			// Physics
-			Physics.HasGravity			= false;
-			Physics.IsDestroyedInHoles	= false;
-			Physics.CollisionBox		= new Rectangle2F(-6, -6, 12, 12);
-			Physics.SoftCollisionBox	= Physics.CollisionBox.Inflated(-2, -2);
+			Physics.HasGravity				= false;
+			Physics.IsDestroyedInHoles		= false;
+			Physics.CollisionBox			= new Rectangle2F(-6, -6, 12, 12);
+			Physics.SoftCollisionBox		= Physics.CollisionBox.Inflated(-2, -2);
+			Physics.DisableSurfaceContact	= true;
+			Physics.ReboundSolid			= true;
+			Physics.ReboundRoomEdge			= true;
 
 			// Projectile Interactions
 			SetReaction(InteractionType.Gale,			SenderReactions.Intercept, Reactions.None);

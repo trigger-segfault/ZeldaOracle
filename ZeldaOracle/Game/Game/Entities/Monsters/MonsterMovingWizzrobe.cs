@@ -32,7 +32,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Movement
 			moveSpeed = 0.5f;
-			isFlying = true;
 			facePlayerOdds = 2;
 			stopTime.Set(0, 0);
 			moveTime.Set(50, 90);
@@ -45,7 +44,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			animationMove = GameData.ANIM_MONSTER_WIZZROBE;
 
 			// Physics
-			Physics.CollideWithWorld = false;
+			Physics.CollideWithWorld		= false;
+			physics.DisableSurfaceContact	= true;
 			
 			// Projectile interactions
 			SetReaction(InteractionType.Boomerang, SenderReactions.Intercept);
