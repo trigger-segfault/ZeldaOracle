@@ -4,6 +4,11 @@
   <RuleSet>
     <!-- Regular Keywords -->
     <Keywords fontWeight="bold">
+      <Word>&lt;a&gt;</Word>
+      <Word>&lt;b&gt;</Word>
+      <Word>&lt;x&gt;</Word>
+      <Word>&lt;y&gt;</Word>
+      <Word>&lt;dpad&gt;</Word>
       <Word>&lt;triangle&gt;</Word>
       <Word>&lt;square&gt;</Word>
       <Word>&lt;heart&gt;</Word>

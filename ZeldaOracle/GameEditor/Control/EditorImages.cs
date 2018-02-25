@@ -80,13 +80,16 @@ namespace ZeldaEditor.Control {
 		static EditorImages() {
 			
 			string[] stringCodesOrder = new string[] {
-				"triangle", "square", "circle", "heart", "diamond", "club", "spade", "rupee",
+				"a", "b", "x", "y", "", "", "dpad", "rupee",
+				"triangle", "square", "circle", "heart", "diamond", "club", "spade", "cursor",
 				"up", "down", "right", "left", "up-tri", "down-tri", "right-tri", "left-tri",
 				"male", "female", "music", "music-beam", "!!", "pilcrow", "section", "house",
-				"1", "2", "3", "cursor", "invalid"
+				"1", "2", "3", "invalid"
 			};
 
-			Point2I charSize = new Point2I(16, 24);
+			Point2I wideCharSize = new Point2I(25, 24);
+			Point2I thinCharSize = new Point2I(16, 24);
+			Point2I charSize = wideCharSize;
 			int i = 0;
 			for (i = 0; i < stringCodesOrder.Length; i++) {
 				Int32Rect source = new Int32Rect(
@@ -95,6 +98,11 @@ namespace ZeldaEditor.Control {
 				);
 				CroppedBitmap cropped = new CroppedBitmap(EditorImages.CharacterFormatCodes, source);
 				StringCodeImages.Add(stringCodesOrder[i], cropped);
+				if (i + 1 == 4) {
+					// Skip four spaces to align the rows
+					i += 2;
+					charSize = thinCharSize;
+				}
 			}
 		}
 

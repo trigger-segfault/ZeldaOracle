@@ -62,8 +62,10 @@ namespace ZeldaEditor.Controls {
 			"1", "2", "3", "cursor", "invalid"
 		};*/
 		private static Style ToolBarButtonStyle;
-		private static readonly Point2I CharSize = new Point2I(16, 24);
-		private static readonly Point2I ButtonSize = CharSize + new Point2I(6, 4);
+		private static readonly Point2I ThinCharSize = new Point2I(16, 24);
+		private static readonly Point2I ThinButtonSize = ThinCharSize + new Point2I(6, 4);
+		private static readonly Point2I WideCharSize = new Point2I(25, 24);
+		private static readonly Point2I WideButtonSize = WideCharSize + new Point2I(8, 4);
 
 		static FormatCodesDropdown() {
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(FormatCodesDropdown),
@@ -85,10 +87,10 @@ namespace ZeldaEditor.Controls {
 				WrapPanel part_wrapPanel = menuItem.GetPopupTemplateChild("PART_WrapPanel") as WrapPanel;
 				part_wrapPanel.Children.Clear();
 				if (IsColorCodes) {
-					part_wrapPanel.Width = ButtonSize.X * 8;
+					//part_wrapPanel.Width = ThinButtonSize.X * 8;
+					part_wrapPanel.Width = 65;
 					part_wrapPanel.Orientation = System.Windows.Controls.Orientation.Vertical;
 					foreach (var pair in FormatCodes.GetColorCodes()) {
-						part_wrapPanel.Width = 65;
 						string code = "<" + pair.Key + ">";
 						string name = pair.Key;
 						name = "" + char.ToUpper(pair.Key[0]) + pair.Key.Substring(1);
@@ -106,18 +108,26 @@ namespace ZeldaEditor.Controls {
 					}
 				}
 				else {
-					part_wrapPanel.Width = ButtonSize.X * 8;
+					part_wrapPanel.Width = ThinButtonSize.X * 8;
+					int index = 0;
+					Point2I buttonSize = WideButtonSize;
 					foreach (var pair in EditorImages.StringCodeImages) {
 						string code = "<" + pair.Key + ">";
 						ImageButton button = new ImageButton();
-						button.Width = ButtonSize.X;
-						button.Height = ButtonSize.Y;
+						button.Width = buttonSize.X;
+						button.Height = buttonSize.Y;
 						button.Padding = new Thickness(0);
 						button.Source = pair.Value;
 						button.ToolTip = code;
 						button.Tag = code;
 						button.Click += OnFormatCodeSelected;
 						part_wrapPanel.Children.Add(button);
+						if (index + 1 == 4) {
+							// Skip two characters and change the button size
+							index += 2;
+							buttonSize = ThinButtonSize;
+						}
+						index++;
 					}
 				}
 			}
