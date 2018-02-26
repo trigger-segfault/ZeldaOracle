@@ -3,7 +3,7 @@ namespace ZeldaOracle.Game.Entities {
 	
 	public class EntityComponent {
 
-		private Entity entity;
+		protected Entity entity;
 		private bool isEnabled;
 		
 		

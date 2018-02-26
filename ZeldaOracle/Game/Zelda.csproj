@@ -289,7 +289,6 @@
     <Compile Include="Game\Entities\InteractionComponent.cs" />
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
-    <Compile Include="Game\Entities\IInterceptable.cs" />
     <Compile Include="Game\Entities\Minecart.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\JumpMonster.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
@@ -306,7 +305,7 @@
     <Compile Include="Game\Entities\Monsters\MonsterFlyingTile.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPeahat.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPokey.cs" />
-    <Compile Include="Game\Entities\Monsters\MonsterInteractionManager.cs" />
+    <Compile Include="Game\Entities\InteractionEventManager.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterRiverZora.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterMovingWizzrobe.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterGopongaFlower.cs" />

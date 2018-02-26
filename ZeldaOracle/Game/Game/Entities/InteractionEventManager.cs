@@ -3,14 +3,15 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 
-namespace ZeldaOracle.Game.Entities.Monsters {
+namespace ZeldaOracle.Game.Entities {
 	
 	//-----------------------------------------------------------------------------
 	// Interaction Type
 	//-----------------------------------------------------------------------------
 
-	/// <summary>The possible monster interaction types.</summary>
+	/// <summary>The possible interaction types.</summary>
 	public enum InteractionType {
+
 		None = -1,
 		
 		
@@ -87,7 +88,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Player Interactions
 		//-----------------------------------------------------------------------------
 
-		/// <summary>The player presses the 'A' button when facing the monster.
+		/// <summary>The player presses the 'A' button when facing the entity.
 		/// <para/>Default = Reactions.None</summary>
 		ButtonAction,
 		/// <summary>Collides with the player.
@@ -157,27 +158,27 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	// Interaction Delegates
 	//-----------------------------------------------------------------------------
 
-	public delegate void MonsterInteractionMemberDelegate(
+	public delegate void InteractionMemberDelegate(
 		Entity sender, EventArgs args);
 
-	public delegate void MonsterInteractionStaticDelegate(
-		Monster monster, Entity sender, EventArgs args);
-
+	public delegate void InteractionStaticDelegate(
+		Entity subject, Entity sender, EventArgs args);
+	
 
 	//-----------------------------------------------------------------------------
 	// Interaction Handler
 	//-----------------------------------------------------------------------------
 
-	public class MonsterInteractionHandler {
+	public class InteractionHandler {
 
-		private MonsterInteractionStaticDelegate handler;
-			
+		private InteractionStaticDelegate handler;
+
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public MonsterInteractionHandler() {
+		public InteractionHandler() {
 			handler = null;
 		}
 
@@ -186,11 +187,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Interaction Triggering
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Trigger this interaction's callbacks using the given monster,
-		/// sender and interaction arguments.</summary>
-		public void Trigger(Monster monster, Entity sender, EventArgs args) {
+		/// <summary>Trigger this interaction's callbacks using the given subject,
+		/// sender, and interaction arguments.</summary>
+		public void Trigger(Entity entity, Entity sender, EventArgs args) {
 			if (handler != null)
-				handler.Invoke(monster, sender, args);
+				handler.Invoke(entity, sender, args);
 		}
 
 
@@ -199,37 +200,37 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Clear all interaction handlers.</summary>
-		public MonsterInteractionHandler Clear() {
+		public InteractionHandler Clear() {
 			handler = null;
 			return this;
 		}
 		
 		/// <summary>Set the callback for this reaction to a single function.</summary>
-		public MonsterInteractionHandler Set(
-			MonsterInteractionMemberDelegate callback)
+		public InteractionHandler Set(
+			InteractionMemberDelegate callback)
 		{
 			handler = ToStaticInteractionDelegate(callback);
 			return this;
 		}
 			
 		/// <summary>Set the callback for this reaction to a single function.</summary>
-		public MonsterInteractionHandler Set(
-			MonsterInteractionStaticDelegate callback)
+		public InteractionHandler Set(
+			InteractionStaticDelegate callback)
 		{
 			handler = callback;
 			return this;
 		}
 			
 		/// <summary>Add a new callback for this interaction.</summary>
-		public MonsterInteractionHandler Add(
-			MonsterInteractionMemberDelegate callback)
+		public InteractionHandler Add(
+			InteractionMemberDelegate callback)
 		{
 			return Add(ToStaticInteractionDelegate(callback));
 		}
 			
 		/// <summary>Add a new callback for this interaction.</summary>
-		public MonsterInteractionHandler Add(
-			MonsterInteractionStaticDelegate callback)
+		public InteractionHandler Add(
+			InteractionStaticDelegate callback)
 		{
 			if (handler == null)
 				handler = callback;
@@ -238,33 +239,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			return this;
 		}
 
-		public static MonsterInteractionHandler operator +(
-			MonsterInteractionHandler handler,
-			MonsterInteractionMemberDelegate reaction)
-		{
-			handler.Add(ToStaticInteractionDelegate(reaction));
-			return handler;
-		}
-
-		public static MonsterInteractionHandler operator +(
-			MonsterInteractionHandler handler,
-			MonsterInteractionStaticDelegate reaction)
-		{
-			handler.Add(reaction);
-			return handler;
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Convert a member callback, which has an implicit monster, to a
-		/// static callback, which has the monster as a parameter.</summary>
-		private static MonsterInteractionStaticDelegate ToStaticInteractionDelegate(
-			MonsterInteractionMemberDelegate memberDelegate)
+		/// <summary>Convert a member callback, which has an implicit subject, to a
+		/// static callback, which has the subject as a parameter.</summary>
+		private static InteractionStaticDelegate ToStaticInteractionDelegate(
+			InteractionMemberDelegate memberDelegate)
 		{
-			return delegate(Monster monster, Entity sender, EventArgs args) {
+			return delegate(Entity subject, Entity sender, EventArgs args) {
 				memberDelegate.Invoke(sender, args);
 			};
 		}
@@ -275,25 +260,26 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	// Interaction Manager
 	//-----------------------------------------------------------------------------
 
-	public class MonsterInteractionManager {
+	public class InteractionEventManager {
 
-		/// <summary>The monster which is interacting.</summary>
-		private Monster monster;
+		/// <summary>The subject entity which is interacting.</summary>
+		private Entity entity;
 		/// <summary>List of interaction handlers for each interaction type.</summary>
-		private MonsterInteractionHandler[] interactionHandlers;
+		private InteractionHandler[] interactionHandlers;
 
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Create an interaction manager for the given monster.</summary>
-		public MonsterInteractionManager(Monster monster) {
-			this.monster = monster;
+		/// <summary>Create an interaction manager for the given subject entity.
+		/// </summary>
+		public InteractionEventManager(Entity entity) {
+			this.entity = entity;
 			interactionHandlers =
-				new MonsterInteractionHandler[(int) InteractionType.Count];
+				new InteractionHandler[(int) InteractionType.Count];
 			for (int i = 0; i < (int) InteractionType.Count; i++)
-				interactionHandlers[i] = new MonsterInteractionHandler();
+				interactionHandlers[i] = new InteractionHandler();
 		}
 
 
@@ -308,8 +294,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		/// <summary>Trigger an interaction with the given arguments.</summary>
 		public void Trigger(InteractionType type, Entity sender, EventArgs args) {
-			MonsterInteractionHandler handler = Get(type);
-			handler.Trigger(monster, sender, args);
+			InteractionHandler handler = Get(type);
+			handler.Trigger(entity, sender, args);
 		}
 
 		
@@ -319,15 +305,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		/// <summary>Get the interaction handler for the given interaction type.
 		/// </summary>
-		public MonsterInteractionHandler Get(InteractionType type) {
+		public InteractionHandler Get(InteractionType type) {
 			return interactionHandlers[(int) type];
 		}
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			params MonsterInteractionStaticDelegate[] reactions)
+			params InteractionStaticDelegate[] reactions)
 		{
-			MonsterInteractionHandler handler = Get(type);
+			InteractionHandler handler = Get(type);
 			handler.Clear();
 			for (int i = 0; i < reactions.Length; i++)
 				handler.Add(reactions[i]);
@@ -335,9 +321,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			params MonsterInteractionMemberDelegate[] reactions)
+			params InteractionMemberDelegate[] reactions)
 		{
-			MonsterInteractionHandler handler = Get(type);
+			InteractionHandler handler = Get(type);
 			handler.Clear();
 			for (int i = 0; i < reactions.Length; i++)
 				handler.Add(reactions[i]);
@@ -345,10 +331,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			MonsterInteractionStaticDelegate staticReaction,
-			params MonsterInteractionMemberDelegate[] memberReactions)
+			InteractionStaticDelegate staticReaction,
+			params InteractionMemberDelegate[] memberReactions)
 		{
-			MonsterInteractionHandler handler = Get(type);
+			InteractionHandler handler = Get(type);
 			handler.Clear();
 			handler.Add(staticReaction);
 			for (int i = 0; i < memberReactions.Length; i++)
@@ -357,11 +343,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			MonsterInteractionStaticDelegate staticReaction1,
-			MonsterInteractionStaticDelegate staticReaction2,
-			params MonsterInteractionMemberDelegate[] memberReactions)
+			InteractionStaticDelegate staticReaction1,
+			InteractionStaticDelegate staticReaction2,
+			params InteractionMemberDelegate[] memberReactions)
 		{
-			MonsterInteractionHandler handler = Get(type);
+			InteractionHandler handler = Get(type);
 			handler.Clear();
 			handler.Add(staticReaction1);
 			handler.Add(staticReaction2);
@@ -371,12 +357,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			MonsterInteractionStaticDelegate staticReaction1,
-			MonsterInteractionStaticDelegate staticReaction2,
-			MonsterInteractionStaticDelegate staticReaction3,
-			params MonsterInteractionMemberDelegate[] memberReactions)
+			InteractionStaticDelegate staticReaction1,
+			InteractionStaticDelegate staticReaction2,
+			InteractionStaticDelegate staticReaction3,
+			params InteractionMemberDelegate[] memberReactions)
 		{
-			MonsterInteractionHandler handler = Get(type);
+			InteractionHandler handler = Get(type);
 			handler.Clear();
 			handler.Add(staticReaction1);
 			handler.Add(staticReaction2);
@@ -392,15 +378,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		/// <summary>Get the interaction handler for the given interaction type.
 		/// </summary>
-		public MonsterInteractionHandler this[InteractionType type] {
+		public InteractionHandler this[InteractionType type] {
 			get { return interactionHandlers[(int) type]; }
 			set { interactionHandlers[(int) type] = value; }
 		}
 		
-		/// <summary>The monster which is interacting.</summary>
-		public Monster Monster {
-			get { return monster; }
-			set { monster = value; }
+		/// <summary>The subject entity which is interacting.</summary>
+		public Entity Entity {
+			get { return entity; }
+			set { entity = value; }
 		}
 	}
 }

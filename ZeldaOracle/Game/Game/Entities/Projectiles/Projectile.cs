@@ -66,12 +66,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			bounceOnCrash		= false;
 
 			projectileType = ProjectileType.Physical;
-			// Prevent collision snapping from tile owner.
+
+			// Disable collisions with owner
 			Physics.CustomTileIsNotSolidCondition = (Tile tile) => {
 				return (tile == null || tile != tileOwner);
 			};
+
+			//Interactions.SetReaction(InteractionType.Sword, Deflect);
 		}
-		
+
+		//public void Deflect(Entity sender, EventArgs args) {
+		//}
 		
 		//-----------------------------------------------------------------------------
 		// Virtual Methods

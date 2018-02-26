@@ -130,7 +130,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
 			SetReaction(InteractionType.Shovel,			Reactions.Bump);
 			SetReaction(InteractionType.Parry,			Reactions.Parry);
-			SetReaction(InteractionType.Bracelet,			PickupInteraction);
+			SetReaction(InteractionType.Bracelet,		PickupInteraction);
 			// Seed interations
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
@@ -195,7 +195,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Reactions
 		//-------------------------------------------------------------------------
 
-		private void SwitchHookInteraction(Monster monster, Entity sender, EventArgs args) {
+		private void SwitchHookInteraction(Entity sender, EventArgs args) {
 			SwitchHookProjectile hook = sender as SwitchHookProjectile;
 			carriedTile.Position = Center + new Vector2F(0, 4);
 			if (revealed)
@@ -208,20 +208,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Uncover(false);
 		}
 
-		private void PickupInteraction(Monster monster, Entity sender, EventArgs args) {
+		private void PickupInteraction(Entity sender, EventArgs args) {
 			RoomControl.Player.CarryState.SetCarryObject(coverTile);
 			RoomControl.Player.BeginWeaponState(RoomControl.Player.CarryState);
 			Uncover(false);
 		}
 
-		private void BreakCover(Monster monster, Entity sender, EventArgs args) {
+		private void BreakCover(Entity sender, EventArgs args) {
 			Uncover(true);
 		}
 
-		private void BurnCover(Monster monster, Entity sender, EventArgs args) {
+		private void BurnCover(Entity sender, EventArgs args) {
 			// TODO: Detach and burn cover tile
 			// (Monster keeps charging (most likely untill burned up))
-			BreakCover(monster, sender, args);
+			BreakCover(sender, args);
 		}
 
 

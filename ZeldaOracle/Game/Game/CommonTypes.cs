@@ -40,5 +40,8 @@ namespace ZeldaOracle.Game {
 		CanSwimInOcean	= 0x2,
 		CanSwimInLava	= 0x4,
 	}
-
+	
+	public interface IInterceptable {
+		void Intercept();
+	}
 }

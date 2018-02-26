@@ -119,7 +119,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Spawn the seed projectile
 			SeedProjectile seed = new SeedProjectile(weapon.CurrentSeedType, true);
-			Vector2F spawnOffset = projectilePositions[aimAngle] + new Vector2F(4, 11) - new Vector2F(8, 8);
+			Vector2F spawnOffset = projectilePositions[aimAngle] +
+				new Vector2F(4, 11) - new Vector2F(8, 8);
 			int spawnZPosition = 0;
 
 			if (!player.RoomControl.IsSideScrolling) {
@@ -163,12 +164,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Begin the aiming sub-state
 			subStateMachine.InitializeOnState(SubState.Aiming);
-
-			// Equip the seed shooter tool (purely visual)
-			//player.EquipTool(player.ToolVisual);
-			//player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
-			//player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
-
+			
 			// Play the player's aim animation
 			player.Graphics.SubStripIndex = aimAngle.Index;
 			player.Graphics.PlayAnimation(
@@ -178,7 +174,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// angle
 			player.SyncAnimationWithDirection = false;
 			
-			// Create the seed shooter entity
+			// Equip the seed shooter tool (purely visual)
 			seedShooter = new Entity();
 			seedShooter.Graphics.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
 			seedShooter.Graphics.DepthLayer = DepthLayer.ItemSeedShooter;
@@ -187,7 +183,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.UnequipTool(player.ToolVisual);
 			player.SyncAnimationWithDirection = true;
 			seedShooter.Destroy();
 		}
@@ -202,7 +197,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Make player and seed-shooter face the aim angle
 			player.Graphics.SubStripIndex = aimAngle.Index;
-			//player.ToolVisual.AnimationPlayer.SubStripIndex = aimAngle.Index;
 			seedShooter.Graphics.SubStripIndex = aimAngle;
 		}
 

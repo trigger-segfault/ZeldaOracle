@@ -34,8 +34,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 	public partial class Monster : Unit, ZeldaAPI.Monster {
 		
-		/// <summary>The interaction manager.</summary>
-		private MonsterInteractionManager interactions;
 		/// <summary>The current monster state.</summary>
 		private MonsterState state;
 		/// <summary>The previous monster state.</summary>
@@ -103,8 +101,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			softKill                = false;
 			ignoreZPosition			= false;
 
-			// Setup default interactions.
-			interactions = new MonsterInteractionManager(this);
+			// Setup default interactions
 			SetDefaultReactions();
 		}
 
@@ -239,57 +236,52 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		// Trigger an interaction.
 		public void TriggerInteraction(InteractionType type, Entity sender) {
-			interactions.Trigger(type, sender);
+			Interactions.Trigger(type, sender);
 		}
 
 		// Trigger an interaction with the given arguments.
 		public void TriggerInteraction(InteractionType type, Entity sender, EventArgs args) {
-			interactions.Trigger(type, sender, args);
-		}
-
-		// Get the interaction handler for the given interaction type.
-		protected MonsterInteractionHandler GetInteraction(InteractionType type) {
-			return interactions[type];
+			Interactions.Trigger(type, sender, args);
 		}
 
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
 		protected void SetReaction(InteractionType type,
-			params MonsterInteractionStaticDelegate[] reactions)
+			params InteractionStaticDelegate[] reactions)
 		{
-			interactions.Set(type, reactions);
+			Interactions.SetReaction(type, reactions);
 		}
 
 		// Set the reactions to the given interaction type.
 		// The reaction functions are called in the order they are specified.
 		protected void SetReaction(InteractionType type,
-			params MonsterInteractionMemberDelegate[] reactions)
+			params InteractionMemberDelegate[] reactions)
 		{
-			interactions.Set(type, reactions);
+			Interactions.SetReaction(type, reactions);
 		}
 
 		protected void SetReaction(InteractionType type,
-			MonsterInteractionStaticDelegate staticReaction,
-			params MonsterInteractionMemberDelegate[] memberReactions)
+			InteractionStaticDelegate staticReaction,
+			params InteractionMemberDelegate[] memberReactions)
 		{
-			interactions.Set(type, staticReaction, memberReactions);
+			Interactions.SetReaction(type, staticReaction, memberReactions);
 		}
 
 		protected void SetReaction(InteractionType type,
-			MonsterInteractionStaticDelegate staticReaction1,
-			MonsterInteractionStaticDelegate staticReaction2,
-			params MonsterInteractionMemberDelegate[] memberReactions)
+			InteractionStaticDelegate staticReaction1,
+			InteractionStaticDelegate staticReaction2,
+			params InteractionMemberDelegate[] memberReactions)
 		{
-			interactions.Set(type, staticReaction1, staticReaction2, memberReactions);
+			Interactions.SetReaction(type, staticReaction1, staticReaction2, memberReactions);
 		}
 
 		protected void SetReaction(InteractionType type,
-			MonsterInteractionStaticDelegate staticReaction1,
-			MonsterInteractionStaticDelegate staticReaction2,
-			MonsterInteractionStaticDelegate staticReaction3,
-			params MonsterInteractionMemberDelegate[] memberReactions)
+			InteractionStaticDelegate staticReaction1,
+			InteractionStaticDelegate staticReaction2,
+			InteractionStaticDelegate staticReaction3,
+			params InteractionMemberDelegate[] memberReactions)
 		{
-			interactions.Set(type, staticReaction1, staticReaction2,
+			Interactions.SetReaction(type, staticReaction1, staticReaction2,
 				staticReaction3, memberReactions);
 		}
 
@@ -520,10 +512,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		/// <summary>True if this monster needs to be killed in order to clear the room.</summary>
 		public bool NeedsClearing {
 			get { return !IgnoreMonster && IsAlive; }
-		}
-
-		public MonsterInteractionManager Interactions {
-			get { return interactions; }
 		}
 	}
 }

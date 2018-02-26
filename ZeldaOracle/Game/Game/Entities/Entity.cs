@@ -11,6 +11,8 @@ namespace ZeldaOracle.Game.Entities {
 	// The main class for entity objects in the room.
 	public class Entity {
 
+		// Internal state
+
 		private RoomControl			roomControl;
 		private	bool				isInitialized;
 		private bool				isAlive;
@@ -20,6 +22,8 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
 		private Properties			properties;
+
+		// Settings
 
 		private bool				isPersistentBetweenRooms;
 		protected Vector2F			position;
@@ -40,8 +44,11 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F			attachmentOffset;
 		private float				attachmentZOffset;
 
-		protected PhysicsComponent	physics;
-		protected GraphicsComponent	graphics;
+		// Components
+
+		private InteractionComponent	interactions;
+		protected PhysicsComponent		physics;
+		protected GraphicsComponent		graphics;
 
 
 		//-----------------------------------------------------------------------------
@@ -49,28 +56,32 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public Entity() {
-			entityIndex			= -1;
-			roomControl			= null;
-			isAlive				= false;
-			isInRoom			= false;
-			isInitialized		= false;
-			transformedEntity	= null;
-			soundBounce			= null;
-			position			= Vector2F.Zero;
-			zPosition			= 0.0f;
-			previousPosition	= Vector2F.Zero;
-			previousZPosition	= 0.0f;
-			physics				= new PhysicsComponent(this);
-			graphics			= new GraphicsComponent(this);
-			centerOffset		= Point2I.Zero;
-			actionAlignDistance	= 5;
-			buttonActionCollisionBox = Rectangle2F.Zero;
-			properties			= null;
+			entityIndex					= -1;
+			roomControl					= null;
+			isAlive						= false;
+			isInRoom					= false;
+			isInitialized				= false;
+			transformedEntity			= null;
+			soundBounce					= null;
+			position					= Vector2F.Zero;
+			zPosition					= 0.0f;
+			previousPosition			= Vector2F.Zero;
+			previousZPosition			= 0.0f;
+			centerOffset				= Point2I.Zero;
+			actionAlignDistance			= 5;
+			buttonActionCollisionBox	= Rectangle2F.Zero;
+			properties					= null;
 			isPersistentBetweenRooms	= false;
+
 			parent				= null;
 			children			= new List<Entity>();
 			attachmentOffset	= Vector2F.Zero;
 			attachmentZOffset	= 0.0f;
+			
+			// Create entity components
+			physics			= new PhysicsComponent(this);
+			graphics		= new GraphicsComponent(this);
+			interactions	= new InteractionComponent(this);
 		}
 		
 
@@ -443,6 +454,11 @@ namespace ZeldaOracle.Game.Entities {
 		public GraphicsComponent Graphics {
 			get { return graphics; }
 			set { graphics = value; graphics.Entity = this; }
+		}
+	
+		/// <summary>Gets or sets the entity's interaction component.</summary>
+		public InteractionComponent Interactions {
+			get { return interactions; }
 		}
 
 		public bool IsInAir {
