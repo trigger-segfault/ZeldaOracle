@@ -1086,8 +1086,11 @@ namespace ZeldaOracle.Game.Control {
 				{
 					entity.OnFallInSideScrollWater();
 				}
-				else if (entity.Physics.IsInLava)
-					entity.OnFallInLava();
+				else if (entity.Physics.IsInLava &&
+					(previousTopTile == null || !previousTopTile.IsLava))
+				{
+					entity.OnFallInSideScrollLava();
+				}
 			}
 			else {
 				if (entity.Physics.IsInHole)

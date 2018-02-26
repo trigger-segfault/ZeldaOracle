@@ -48,6 +48,29 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 		}
 
+		/// <summary>Returns true if the player has the capability to swim in the
+		/// liquid he is currently in.</summary>
+		private bool CanSwimInCurrentLiquid() {
+			if (player.Physics.IsInLava && !player.RoomControl.IsSideScrolling)
+				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava);
+			else if (player.Physics.IsInOcean)
+				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean);
+			else if (player.Physics.IsInWater)
+				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater);
+			else
+				return false;
+		}
+
+		/// <summary>Make the player die by drowning.</summary>
+		private void Drown() {
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DROWN);
+
+			if (player.Physics.IsInLava)
+				player.Graphics.IsHurting = true;
+
+			player.RespawnDeath();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -56,6 +79,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			player.InterruptWeapons();
 			//CreateSplashEffect(); // Now called in Entity.OnFallInSideScrollWater()
+			if (!CanSwimInCurrentLiquid()) {
+				Drown();
+				// TODO: Cancel the hurt animation if the player was knocked in.
+				//player.InvincibleTimer = 0;
+				//player.Graphics.IsHurting = false;
+			}
 		}
 		
 		public override void OnEnd(PlayerState newState) {
