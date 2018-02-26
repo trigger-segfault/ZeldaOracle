@@ -71,6 +71,9 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			Vector2F center = position + new Vector2F(8, 8);
 			player.SetPositionByCenter(center);
 			
+			// Get the natural state to be in when spawning
+			player.RequestSpawnNaturalState(true);
+
 			// Position the player.
 			if (warpType == WarpType.Entrance) {
 				if (edgeDirection == Directions.Down)
@@ -87,6 +90,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			// Setup the player's state.
 			player.InterruptWeapons();
 			player.StopPushing();
+
+			player.Graphics.PlayAnimation(player.MoveAnimation);
 		}
 
 		// Create the game-state when exiting a room through this warp point.

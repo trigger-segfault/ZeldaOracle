@@ -14,6 +14,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private int		submergedTimer;
 		private int		submergedDuration;
 		private bool	isDiving;
+		private bool	silentBeginning;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,6 +25,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			submergedDuration	= 128;
 			isSubmerged			= false;
 			submergedTimer		= 0;
+			silentBeginning     = false;
 
 			StateParameters.ProhibitJumping		= true;
 			StateParameters.ProhibitPushing		= true;
@@ -173,15 +175,20 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			isDiving	= false;
 			isSubmerged	= false;
-			
-			CreateSplashEffect();
 
-			// Check if the player should drown
-			if (!CanSwimInCurrentLiquid()) {
-				Drown();
-				// TODO: Cancel the hurt animation if the player was knocked in.
-				//player.InvincibleTimer = 0;
-				//player.Graphics.IsHurting = false;
+			if (!silentBeginning) {
+				CreateSplashEffect();
+
+				// Check if the player should drown
+				if (!CanSwimInCurrentLiquid()) {
+					Drown();
+					// TODO: Cancel the hurt animation if the player was knocked in.
+					//player.InvincibleTimer = 0;
+					//player.Graphics.IsHurting = false;
+				}
+			}
+			else {
+				silentBeginning = false;
 			}
 		}
 		
@@ -213,6 +220,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public bool IsSubmerged {
 			get { return isSubmerged; }
+		}
+
+		public bool SilentBeginning {
+			get { return silentBeginning; }
+			set { silentBeginning = value; }
 		}
 	}
 }
