@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		/// <summary>Returns true if the player has the capability to swim in the
 		/// liquid he is currently in.</summary>
 		private bool CanSwimInCurrentLiquid() {
-			if (player.Physics.IsInLava)
+			if (player.Physics.IsInLava && !player.RoomControl.IsSideScrolling)
 				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava);
 			else if (player.Physics.IsInOcean)
 				return player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean);

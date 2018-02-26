@@ -812,8 +812,8 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsInWater {
 			get {
-				return ((IsOnGround && !DisableSurfaceContact) ||
-					entity.RoomControl.IsSideScrolling) &&
+				return ((IsOnGround || entity.RoomControl.IsSideScrolling) &&
+					!DisableSurfaceContact) &&
 					topTile != null && topTile.IsWater;
 			}
 		}
@@ -855,8 +855,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsInLava {
 			get {
-				return IsOnGround && !DisableSurfaceContact && topTile != null &&
-					topTile.IsLava;
+				return ((IsOnGround || entity.RoomControl.IsSideScrolling)
+					&& !DisableSurfaceContact) &&
+					topTile != null && topTile.IsLava;
 			}
 		}
 

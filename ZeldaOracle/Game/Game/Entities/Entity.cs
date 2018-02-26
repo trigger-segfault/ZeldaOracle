@@ -142,7 +142,19 @@ namespace ZeldaOracle.Game.Entities {
 				DepthLayer.EffectSplash, true), position);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 		}
-		
+
+		/// <summary>Called when the entity falls in lava in side-scroll mode
+		/// .</summary>
+		public virtual void OnFallInSideScrollLava() {
+			if (physics.IsDestroyedInHoles) {
+				physics.VelocityX = 0.0f;
+				RoomControl.SpawnEntity(new Effect(
+					GameData.ANIM_EFFECT_LAVA_SPLASH,
+					DepthLayer.EffectSplash, true), position);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
+			}
+		}
+
 		/// <summary>Called when the entity falls in water.</summary>
 		public virtual void OnFallInWater() {
 			if (physics.IsDestroyedInHoles) {
