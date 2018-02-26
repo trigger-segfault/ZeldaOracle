@@ -435,5 +435,15 @@ namespace ZeldaOracle.Game.Entities {
 			get { return properties; }
 			set { properties = value; }
 		}
+
+		/// <summary>Gets the position of the entity relative to the view.</summary>
+		public Vector2F ViewPosition {
+			get { return DrawPosition - RoomControl.ViewControl.Position; }
+		}
+
+		/// <summary>Gets the center of the entity relative to the view.</summary>
+		public Vector2F ViewCenter {
+			get { return DrawCenter - RoomControl.ViewControl.Position; }
+		}
 	}
 }

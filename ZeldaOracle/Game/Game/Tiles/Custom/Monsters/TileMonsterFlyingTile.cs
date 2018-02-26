@@ -20,8 +20,6 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public TileMonsterFlyingTile() {
-			// Not static, but we still wanna be able to stand on this.
-			surfaceStatic = false;
 		}
 
 

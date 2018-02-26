@@ -76,7 +76,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private DropList			dropList;
 		private Properties			properties;
 		
-		protected bool				surfaceStatic;		// True if IsSurface requires IsStatic to be true.
 		private bool				isSolid;
 		private CollisionModel		collisionModel;
 		private CollisionStyle		collisionStyle;
@@ -116,7 +115,6 @@ namespace ZeldaOracle.Game.Tiles {
 			soundMove			= GameData.SOUND_BLOCK_PUSH;
 			conveyorVelocity	= Vector2F.Zero;
 			surfaceTile			= null;
-			surfaceStatic       = true;
 			collisionStyle		= CollisionStyle.Rectangular;
 			graphics			= new TileGraphicsComponent(this);
 			cancelBreakSound	= false;
@@ -1034,12 +1032,18 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return isSolid; }
 			set { isSolid = value; }
 		}
-		
-		public virtual bool IsSurface {
+
+		public bool AntiSurfaceFlags {
 			get {
-				return (!flags.HasFlag(TileFlags.NotSurface) &&
-					!IsPlatform && (!surfaceStatic || IsStatic));
+				return (flags.HasFlag(TileFlags.NotSurface) ||
+						flags.HasFlag(TileFlags.Movable) ||
+						(!flags.HasFlag(TileFlags.Switchable) &&
+						flags.HasFlag(TileFlags.SwitchStays)));
 			}
+		}
+
+		public virtual bool IsSurface {
+			get { return (!AntiSurfaceFlags && !IsPlatform && !IsInMotion); }
 		}
 
 		public virtual bool IsStatic {
@@ -1186,6 +1190,16 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool HasMoved {
 			get { return hasMoved; }
+		}
+
+		/// <summary>Gets the position of the tile relative to the view.</summary>
+		public Vector2F ViewPosition {
+			get { return Position - RoomControl.ViewControl.Position; }
+		}
+
+		/// <summary>Gets the center of the tile relative to the view.</summary>
+		public Vector2F ViewCenter {
+			get { return Center - RoomControl.ViewControl.Position; }
 		}
 
 
