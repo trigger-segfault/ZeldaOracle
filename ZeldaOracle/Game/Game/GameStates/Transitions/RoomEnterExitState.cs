@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 		
 		private RoomEnterExitState(EnterExitType type, int walkDirection, float walkDistance, Message enterMessage = null) :
-			this(type, walkDirection, walkDistance, GameSettings.PLAYER_MOVE_SPEED, enterMessage)
+			this(type, walkDirection, walkDistance, 0, enterMessage)
 		{
 		}
 
@@ -51,7 +51,28 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			distance = 0;
 			Player player = GameControl.Player;
 			player.Direction = walkDirection;
-			player.Graphics.PlayAnimation(GameControl.Player.MoveAnimation);
+
+			if (type == EnterExitType.Enter) {
+				Vector2F destination = player.Position +
+					Directions.ToVector(walkDirection) * walkDistance;
+				player.RequestSpawnNaturalState(destination, true);
+			}
+
+			// Keep directional animations
+			if (player.StateParameters.AlwaysFaceUp) {
+				player.Direction = Directions.Up;
+			}
+			else if (player.StateParameters.AlwaysFaceLeftOrRight) {
+				if (player.Direction == Direction.Up)
+					player.Direction = Direction.Right;
+				if (player.Direction == Direction.Down)
+					player.Direction = Direction.Left;
+			}
+
+			if (walkSpeed == 0)
+				walkSpeed = player.Movement.BaseMovementSpeed;
+
+			player.Graphics.PlayAnimation(player.MoveAnimation);
 		}
 
 		public override void OnEnd() {

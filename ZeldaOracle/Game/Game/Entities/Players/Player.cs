@@ -273,9 +273,36 @@ namespace ZeldaOracle.Game.Entities.Players {
 			IntegrateStateParameters();
 		}
 
+		/// <summary>Try to switch to a natural state based on the current
+		/// player position. This includes side-scrolling ladder checks.</summary>
+		public void RequestSpawnNaturalState(bool silent = false) {
+			RequestSpawnNaturalState(Position, silent);
+		}
+
+		/// <summary>Try to switch to a natural state based on the desired
+		/// destination position. This includes side-scrolling ladder checks.</summary>
+		public void RequestSpawnNaturalState(Vector2F destination, bool silent = false) {
+			Vector2F oldPosition = position;
+			position = destination;
+			Physics.TopTile = RoomControl.TileManager
+				.GetSurfaceTileAtPosition(position, Physics.MovesWithPlatforms);
+			if (!RoomControl.RoomPhysics.CheckPlayerLadderClimbing(this, true)) {
+				PlayerState desiredNaturalState = GetDesiredNaturalState(silent);
+				environmentStateMachine.BeginState(desiredNaturalState);
+				IntegrateStateParameters();
+			}
+			movement.UpdateMoveMode();
+			position = oldPosition;
+		}
+
+		/// <summary>Forces the player to attach to the current ladder.</summary>
+		public void ForceSideScrollingLadder() {
+			RoomControl.RoomPhysics.CheckPlayerLadderClimbing(this, true);
+		}
+
 		/// <summary>Return the player environment state that the player wants to be
 		/// in based on his current surface and jumping state.</summary>
-		public PlayerState GetDesiredNaturalState() {
+		public PlayerState GetDesiredNaturalState(bool silent = false) {
 			
 			// Find the surface tile underneath the entity
 			Tile feetTile = RoomControl.TileManager.GetSurfaceTileAtPosition(
@@ -302,8 +329,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 					return environmentStateUnderwater;
 				if (physics.IsInAir)
 					return environmentStateJump;
-				else if (physics.IsInWater || physics.IsInLava)
+				else if (physics.IsInWater || physics.IsInLava) {
+					environmentStateSwim.SilentBeginning = silent;
 					return environmentStateSwim;
+				}
 				else if (physics.IsInGrass)
 					return environmentStateGrass;
 				else if (physics.IsOnStairs)
@@ -449,6 +478,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 					break;
 				}
 			}
+
+			// Force the player to attach to ladders on spawn.
+			ForceSideScrollingLadder();
 
 			RoomControl.OnPlayerRespawn();
 		}
@@ -1072,6 +1104,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public bool IsOnSideScrollLadder {
 			get { return (EnvironmentState == environmentStateSideScrollLadder); }
+		}
+
+		public bool IsOnAnyLadder {
+			get {
+				return (EnvironmentState == environmentStateLadder ||
+						EnvironmentState == environmentStateSideScrollLadder);
+			}
 		}
 
 		public PlayerSwingSwordState SwingSwordState {
