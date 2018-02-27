@@ -110,6 +110,11 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		public void DetachFromParent() {
+			if (parent != null)
+				parent.DetachEntity(this);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Interaction Methods

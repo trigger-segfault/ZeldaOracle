@@ -598,8 +598,9 @@ namespace ZeldaOracle.Game.Debug {
 				// Blue soft collision box
 				//g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position,
 					//new Color(0, 0, 255, 150));
-				g.FillRectangle(entity.Interactions.InteractionBox + entity.Position,
-					new Color(0, 0, 255, 150));
+				if (entity.Interactions.IsEnabled)
+					g.FillRectangle(entity.Interactions.InteractionBox + entity.Position,
+						new Color(0, 0, 255, 150));
 				// Red hard collision box
 				g.FillRectangle(entity.Physics.CollisionBox + entity.Position,
 					new Color(255, 0, 0, 150));

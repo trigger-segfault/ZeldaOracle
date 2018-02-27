@@ -49,8 +49,7 @@ namespace ZeldaOracle.Game.Control {
 					subject.Interactions.GetInteractionBox(type);
 				subjectBox.Point += subject.Position;
 
-				if (sender != subject &&
-					subject.Interactions.IsEnabled &&
+				if (sender != subject && subject.Interactions.IsEnabled &&
 					subjectBox.Intersects(senderBox))
 				{
 					subject.Interactions.Trigger(type, sender);

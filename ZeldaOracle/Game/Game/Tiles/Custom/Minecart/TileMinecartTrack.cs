@@ -37,25 +37,23 @@ namespace ZeldaOracle.Game.Tiles {
 	}
 
 	public static class MinecartTrackOrientationExtensions {
-		public static bool HasDirection(this MinecartTrackOrientation orientation, int dir) {
-			switch (dir) {
-			case Directions.Right:
+		public static bool HasDirection(this MinecartTrackOrientation orientation, Direction dir) {
+			if (dir == Direction.Right)
 				return orientation == MinecartTrackOrientation.Horizontal ||
 						orientation == MinecartTrackOrientation.UpRight ||
 						orientation == MinecartTrackOrientation.DownRight;
-			case Directions.Up:
+			else if (dir == Direction.Up)
 				return orientation == MinecartTrackOrientation.Vertical ||
 						orientation == MinecartTrackOrientation.UpRight ||
 						orientation == MinecartTrackOrientation.UpLeft;
-			case Directions.Left:
+			else if (dir == Direction.Left)
 				return orientation == MinecartTrackOrientation.Horizontal ||
 						orientation == MinecartTrackOrientation.UpLeft ||
 						orientation == MinecartTrackOrientation.DownLeft;
-			case Directions.Down:
+			else if (dir == Direction.Down)
 				return orientation == MinecartTrackOrientation.Vertical ||
 						orientation == MinecartTrackOrientation.DownRight ||
 						orientation == MinecartTrackOrientation.DownLeft;
-			}
 			return false;
 		}
 	}
@@ -78,10 +76,10 @@ namespace ZeldaOracle.Game.Tiles {
 		// Track methods
 		//-----------------------------------------------------------------------------
 
-		public IEnumerable<int> GetDirections() {
-			for (int dir = 0; dir < 4; dir++) {
-				if (trackOrientation.HasDirection(dir))
-					yield return dir;
+		public IEnumerable<Direction> GetDirections() {
+			foreach (Direction direction in Direction.Range) {
+				if (trackOrientation.HasDirection(direction))
+					yield return direction;
 			}
 		}
 

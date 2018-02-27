@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Effects {
+
 	public class Fire : Effect {
 
 		private int timer;
@@ -22,12 +16,18 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public Fire() :
 			base(GameData.ANIM_EFFECT_SEED_EMBER)
 		{
-			Physics.Enable(PhysicsFlags.HasGravity);
-			
-			Physics.SoftCollisionBox = new Rectangle2F(-6, -6, 12, 12);
-
+			// Graphics
 			Graphics.DrawOffset	= new Point2I(0, -2);
 			Graphics.DepthLayer	= DepthLayer.EffectFire;
+
+			// Physics
+			Physics.Enable(PhysicsFlags.HasGravity);
+
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2F(-6, -6, 12, 12);
+
+			// Fire
 			isAbsorbed = false;
 		}
 		
@@ -55,18 +55,14 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public override void Update() {
 			timer++;
 
+			Interactions.InteractionType = InteractionType.None;
+
 			if (timer > 3) {
+				Interactions.InteractionType = InteractionType.Fire;
+
 				if (isAbsorbed) {
 					Destroy();
 					return;
-				}
-				else {
-					// Collide with monsters.
-					foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
-						monster.TriggerInteraction(InteractionType.Fire, this);
-						if (IsDestroyed)
-							return;
-					}
 				}
 			}
 

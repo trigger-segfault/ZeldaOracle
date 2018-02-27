@@ -390,6 +390,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			JumpToPosition(minecart.Center, 4.0f, 26,
 				delegate(PlayerJumpToState state)
 			{
+				ZPosition = 0.0f;
 				stateMinecart.Minecart = minecart;
 				BeginControlState(stateMinecart);
 			});

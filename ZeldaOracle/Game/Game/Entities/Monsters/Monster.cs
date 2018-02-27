@@ -387,12 +387,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Check for minecart interactions
 			// TODO: Move this trigger into PlayerMineCartState
-			if (!isPassable && player.IsInMinecart &&
-				physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
-				TriggerInteraction(InteractionType.MineCart, player);
-				if (IsDestroyed)
-					return;
-			}
+			//if (!isPassable && player.IsInMinecart &&
+			//	physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
+			//	TriggerInteraction(InteractionType.MineCart, player);
+			//	if (IsDestroyed)
+			//		return;
+			//}
 
 			if (isPassable || player.IsPassable || GMath.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
 				return;

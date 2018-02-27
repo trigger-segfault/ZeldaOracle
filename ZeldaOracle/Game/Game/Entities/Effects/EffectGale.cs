@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Tiles;
+﻿using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities.Effects {
+
 	public class EffectGale : Effect {
 		
 		// FROM SHOOTER TO WALL:
@@ -23,6 +16,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 		private bool droppedFromSatchel;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -30,16 +24,18 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public EffectGale(bool droppedFromSatchel) :
 			base(GameData.ANIM_EFFECT_SEED_GALE, DepthLayer.EffectGale)
 		{
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2F(-6, -6, 12, 12);
+			if (droppedFromSatchel)
+				Interactions.InteractionType = InteractionType.Gale;
+
+			// Gale Effect
 			this.droppedFromSatchel = droppedFromSatchel;
-
-			Physics.SoftCollisionBox = new Rectangle2F(-6, -6, 12, 12);
-
-			if (droppedFromSatchel) {
+			if (droppedFromSatchel)
 				CreateDestroyTimer(256, 255, 1);
-			}
-			else {
+			else
 				CreateDestroyTimer(30, 12, 1);
-			}
 		}
 		
 
@@ -48,22 +44,11 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 
 		public override void Update() {
-			base.Update();
-			
 			if (droppedFromSatchel) {
-				// Collide with player.
-				if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
-					// TODO: Gale player to warp screen.
-				}
+				// TODO: Gale player to warp screen
 			}
-			else {
-				// Collide with monsters.
-				foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
-					monster.TriggerInteraction(InteractionType.Gale, this);
-					if (IsDestroyed)
-						return;
-				}
-			}
+
+			base.Update();
 		}
 	}
 }

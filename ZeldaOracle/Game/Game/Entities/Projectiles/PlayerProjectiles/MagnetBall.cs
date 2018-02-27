@@ -1,5 +1,4 @@
-﻿using System;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Tiles;
 
