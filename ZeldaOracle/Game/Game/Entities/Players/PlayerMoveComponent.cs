@@ -82,12 +82,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Update
 		//-----------------------------------------------------------------------------
 
-		public void Update() {
+		public void UpdateMoveMode() {
 			// Get the movement mode for the current environment state
 			if (player.EnvironmentState != null)
 				mode = player.EnvironmentState.MotionSettings;
 			else
 				mode = moveModeNormal;
+		}
+
+		public void Update() {
+			UpdateMoveMode();
 
 			// Update movement
 			UpdateMoveControls();
@@ -651,6 +655,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public Rectangle2F ClimbCollisionBox {
 			get { return climbCollisionBox; }
+		}
+
+		public float BaseMovementSpeed {
+			get {
+				return player.StateParameters.MovementSpeedScale *
+					mode.MovementSpeed * strokeSpeedScale;
+			}
 		}
 	}
 }

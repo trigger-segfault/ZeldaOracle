@@ -12,6 +12,8 @@ namespace ZeldaOracle.Common.Util {
 		/// console screen buffer, CONOUT$.</summary>
 		public const uint StdOutputHandle = 0xFFFFFFF5;
 
+		public static readonly IntPtr DefaultStdOut = new IntPtr(7);
+
 		/// <summary>Allocates a new console for the calling process.</summary>
 		[DllImport("kernel32.dll")]
 		public static extern bool AllocConsole();

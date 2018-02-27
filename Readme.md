@@ -8,7 +8,7 @@
 
 We have had a history of recreating the Oracle game engine ever since we were kids. We've done it in GameMaker, Java, and now we're moving onto XNA.
 
-Project Started: 9/10/2015
+**Project Started:** 9/10/2015
 
 * **[Images and Videos](https://github.com/trigger-death/ZeldaOracle/wiki/Media)**
 * **[Pixel Graphics Video Player](https://github.com/trigger-death/PGVideoPlayer)** (Designated video player for discerning mechanics)
@@ -21,7 +21,8 @@ Project Started: 9/10/2015
 
 ## Planning
 
-[Google Doc](https://docs.google.com/document/d/1ttofVFRGUmLg7y79PeAXAQOPG_dDkfcC45kMf8m9Qls/edit) | [Trello Board](https://trello.com/b/SAaYiOsO/zelda-oracle)
+* **[Google Doc](https://docs.google.com/document/d/1ttofVFRGUmLg7y79PeAXAQOPG_dDkfcC45kMf8m9Qls/edit)**
+* **[Trello Boards](https://trello.com/zeldaoracleengine)**
 
 ## Previews
 

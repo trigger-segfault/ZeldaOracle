@@ -13,10 +13,23 @@ using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.GameStates.RoomStates {
 
-	// A game state for displaying a message box
+	/// <summary>The positions the text reader window can be in.</summary>
+	public enum TextReaderPosition {
+		Unset = -1,
+		Top,
+		TopMiddle,
+		BottomMiddle,
+		Bottom
+	}
+
+	/// <summary>A game state for displaying a message box.</summary>
 	public class RoomStateTextReader : RoomState {
 
-		// The states the text reader can be in.
+		//-----------------------------------------------------------------------------
+		// Enumerations
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The states the text reader can be in.</summary>
 		private enum TextReaderState {
 			WritingLine,
 			PushingLine,
@@ -26,28 +39,56 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			Finished
 		}
 
-		// The game message with text and questions.
-		private Message message;
-		// The wrapped and formatted lines.
-		private WrappedLetterString wrappedString;
-		// The timer for the transitions.
-		private int timer;
-		// The number of lines to use for this window.
-		private int linesPerWindow;
-		// The lines left before the next set of lines is in the message box.
-		private int windowLinesLeft;
-		// The current window line of the line being written.
-		private int windowLine;
-		// The current line in the wrapped string.
-		private int currentLine;
-		// The current character of the current line.
-		private int currentChar;
-		// The current state of the text reader.
-		private TextReaderState state;
-		// The timer used to update the arrow sprite.
-		private int arrowTimer;
 
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The default color used by the text reader.</summary>
+		private readonly ColorOrPalette TextColor = EntityColors.Tan;
+		/// <summary>The delay before the heart piece increments.</summary>
+		private const int HeartPieceDelay = 30;
+		/// <summary>The delay after the heart piece increments.</summary>
+		private const int HeartPieceParagraphDelay = 2;
+
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
+		// Message
+		/// <summary>The game message with text and questions.</summary>
+		private Message message;
+		/// <summary>The wrapped and formatted lines.</summary>
+		private WrappedLetterString wrappedString;
+
+		// Settings
+		/// <summary>The number of lines to use for this window.</summary>
+		private int linesPerWindow;
+		/// <summary>The position of the text reader on the screen.</summary>
+		private TextReaderPosition readerPosition;
+
+		// Updating
+		/// <summary>The current state of the text reader.</summary>
+		private TextReaderState state;
+		/// <summary>Used to prevent control presses from activating on the first step.</summary>
+		private bool firstUpdate;
+		/// <summary>The timer for the transitions.</summary>
+		private int timer;
+		/// <summary>The timer used to update the arrow sprite.</summary>
+		private int arrowTimer;
+		/// <summary>The lines left before the next set of lines is in the message box.</summary>
+		private int windowLinesLeft;
+		/// <summary>The current window line of the line being written.</summary>
+		private int windowLine;
+		/// <summary>The current line in the wrapped string.</summary>
+		private int currentLine;
+		/// <summary>The current character of the current line.</summary>
+		private int currentChar;
+		/// <summary>Used to play the letter sound every other letter in a word.</summary>
 		private int wordIndex;
+
+		// Piece of Heart
 		/// <summary>True if the heart piece UI is being displayed.</summary>
 		private bool heartPieceDisplay;
 		/// <summary>The internal counter used to display
@@ -56,44 +97,40 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 
 		//-----------------------------------------------------------------------------
-		// Constants
-		//-----------------------------------------------------------------------------
-
-		// The default color used by the text reader.
-		private readonly ColorOrPalette TextColor = EntityColors.Tan;
-		/// <summary>The delay before the heart piece increments.</summary>
-		private const int HeartPieceDelay = 30;
-		/// <summary>The delay after the heart piece increments.</summary>
-		private const int HeartPieceParagraphDelay = 2;
-
-		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		// Constructs a text reader with the specified message
-		public RoomStateTextReader(Message message, int linesPerWindow = 2, int piecesOfHeart = 0) {
+		/// <summary>Constructs a text reader with the specified message.</summary>
+		public RoomStateTextReader(Message message, int linesPerWindow = 2, int piecesOfHeart = 0,
+			TextReaderPosition readerPosition = TextReaderPosition.Unset)
+		{
 			this.updateRoom			= false;
 			this.animateRoom		= true;
 
 			this.message			= message;
 			this.wrappedString		= GameData.FONT_LARGE.WrapString(message.Text, 128);
-			this.timer				= 0;
-			this.arrowTimer			= 0;
 
 			this.linesPerWindow		= linesPerWindow;
+			this.readerPosition		= readerPosition;
+
+			this.state				= TextReaderState.WritingLine;
+			this.firstUpdate		= true;
+			this.timer				= 0;
+			this.arrowTimer			= 0;
 			this.windowLinesLeft	= this.linesPerWindow;
 			this.windowLine			= 0;
 			this.currentLine		= 0;
-			this.currentChar		= 0;
-			this.state				= TextReaderState.WritingLine;
-
+			this.currentChar        = 0;
+			this.wordIndex			= 0;
+			
 			this.heartPieceDisplay	= false;
 			this.piecesOfHeart	= piecesOfHeart;
 		}
 
-		// Constructs a text reader with the specified message text
-		public RoomStateTextReader(string text, int linesPerWindow = 2, int piecesOfHeart = 0) 
-			: this(new Message(text), linesPerWindow, piecesOfHeart) { }
+		/// <summary>Constructs a text reader with the specified message text.</summary>
+		public RoomStateTextReader(string text, int linesPerWindow = 2, int piecesOfHeart = 0,
+			TextReaderPosition readerPosition = TextReaderPosition.Unset)
+			: this(new Message(text), linesPerWindow, piecesOfHeart, readerPosition) { }
 		
 
 		//-----------------------------------------------------------------------------
@@ -103,12 +140,24 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		public override void OnBegin() {
 			timer = 1;
 			state = TextReaderState.WritingLine;
-			windowLinesLeft = linesPerWindow;
-			wordIndex = 0;
+			windowLinesLeft	= linesPerWindow;
+			windowLine		= 0;
+			currentLine		= 0;
+			currentChar		= 0;
+			wordIndex		= 0;
+
+			if (readerPosition == TextReaderPosition.Unset) {
+
+				if (GameControl.Player.ViewPosition.Y <
+					((GameSettings.VIEW_HEIGHT) / 2 + 8))
+					readerPosition = TextReaderPosition.Bottom;
+				else
+					readerPosition = TextReaderPosition.Top;
+			}
 		}
 
 		public override void Update() {
-			if (timer > 0 && (state != TextReaderState.WritingLine ||
+			if (timer > 0 && (state != TextReaderState.WritingLine || firstUpdate ||
 				(!heartPieceDisplay && !Controls.A.IsPressed() && !Controls.B.IsPressed())))
 			{
 				timer -= 1;
@@ -221,13 +270,29 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					break;
 				}
 			}
+
+			firstUpdate = false;
 		}
 
 		public override void Draw(Graphics2D g) {
-			Point2I pos = new Point2I(8, 24);
-			if (GameControl.Player.Position.Y < ((GameSettings.VIEW_HEIGHT) / 2 + 8))
-				pos.Y = 96;
-			// TODO: Apply Player position based on view
+			g.PushTranslation(0, GameSettings.HUD_HEIGHT);
+
+			Point2I pos = new Point2I(8, 0);
+			switch (readerPosition) {
+			case TextReaderPosition.Top:
+				pos.Y = 8;
+				break;
+			case TextReaderPosition.TopMiddle:
+				pos.Y = (GameSettings.VIEW_HEIGHT - 16 * (linesPerWindow + 1)) / 2;
+				break;
+			case TextReaderPosition.BottomMiddle:
+				pos.Y = (GameSettings.VIEW_HEIGHT - 16 * linesPerWindow) / 2;
+				break;
+			case TextReaderPosition.Bottom:
+				pos.Y = (GameSettings.VIEW_HEIGHT - 16 * (linesPerWindow + 1));
+				break;
+			}
+
 			g.FillRectangle(new Rectangle2I(pos, new Point2I(144, 8 + 16 * linesPerWindow)), EntityColors.Black);
 
 			// Draw the finished writting lines.
@@ -253,6 +318,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					g.DrawSprite(sprite, heartPiecePos);
 				}
 			}
+
+			g.PopTranslation();
 		}
 
 	}

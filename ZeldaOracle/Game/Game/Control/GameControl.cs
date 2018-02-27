@@ -212,6 +212,8 @@ namespace ZeldaOracle.Game.Control {
 			if (!roomControl.Room.IsHiddenFromMap)
 				lastRoomOnMap = roomControl.Room;
 
+			roomControl.Player.ForceSideScrollingLadder();
+			//roomControl.Player.RequestSpawnNaturalState();
 			roomControl.Player.OnEnterRoom();
 
 			FireEvent(world, "start_game", this);

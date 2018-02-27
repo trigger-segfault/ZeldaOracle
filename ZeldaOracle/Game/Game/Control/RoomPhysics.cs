@@ -833,9 +833,9 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		// Check the player's side-scrolling ladder collisions.
-		private void CheckPlayerLadderClimbing(Player player) {
+		public bool CheckPlayerLadderClimbing(Player player, bool force = false) {
 			if (!IsSideScrolling)
-				return;
+				return false;
 			
 			// Get the highest ladder the player is touching
 			Rectangle2F climbBoxPrev = Rectangle2F.Translate(
@@ -859,13 +859,14 @@ namespace ZeldaOracle.Game.Control {
 				// Check for beginning climbing by moving up while falling
 				if ((player.Physics.VelocityY >= 0.0f || !player.Physics.HasGravity) &&
 					!player.Physics.IsInWater &&
-					player.Movement.IsMovingInDirection(Direction.Up) ||
+					(player.Movement.IsMovingInDirection(Direction.Up) || force ||
 					(player.Movement.IsMovingInDirection(Direction.Down) &&
-						isTopLadder && player.Center.Y < ladderBox.Top))
+						isTopLadder && player.Center.Y < ladderBox.Top)))
 				{
 					player.BeginEnvironmentState(player.SideScrollLadderState);
 					player.IntegrateStateParameters();
 					player.Physics.VelocityY = 0.0f;
+					return true;
 				}
 
 				// Check for beginning climbing by stepping off of a solid object and
@@ -881,9 +882,10 @@ namespace ZeldaOracle.Game.Control {
 				{
 					player.BeginEnvironmentState(player.SideScrollLadderState);
 					player.IntegrateStateParameters();
-					return;
+					return true;
 				}
 			}
+			return false;
 		}
 		
 		/// <summary>Return the top-most ladder the player is colliding with when
@@ -1084,8 +1086,11 @@ namespace ZeldaOracle.Game.Control {
 				{
 					entity.OnFallInSideScrollWater();
 				}
-				else if (entity.Physics.IsInLava)
-					entity.OnFallInLava();
+				else if (entity.Physics.IsInLava &&
+					(previousTopTile == null || !previousTopTile.IsLava))
+				{
+					entity.OnFallInSideScrollLava();
+				}
 			}
 			else {
 				if (entity.Physics.IsInHole)

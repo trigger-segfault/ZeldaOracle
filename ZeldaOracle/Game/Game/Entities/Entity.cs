@@ -194,7 +194,19 @@ namespace ZeldaOracle.Game.Entities {
 				DepthLayer.EffectSplash, true), position);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 		}
-		
+
+		/// <summary>Called when the entity falls in lava in side-scroll mode
+		/// .</summary>
+		public virtual void OnFallInSideScrollLava() {
+			if (physics.IsDestroyedInHoles) {
+				physics.VelocityX = 0.0f;
+				RoomControl.SpawnEntity(new Effect(
+					GameData.ANIM_EFFECT_LAVA_SPLASH,
+					DepthLayer.EffectSplash, true), position);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
+			}
+		}
+
 		/// <summary>Called when the entity falls in water.</summary>
 		public virtual void OnFallInWater() {
 			if (physics.IsDestroyedInHoles) {
@@ -520,6 +532,8 @@ namespace ZeldaOracle.Game.Entities {
 			set { attachmentZOffset = value; }
 		}
 
+		/// <summary>True if the entity should always be in the current room, and
+		/// won't be destroyed upon a room transition</summary>
 		public bool IsPersistentBetweenRooms {
 			get {
 				if (parent != null && parent.IsPersistentBetweenRooms)
@@ -527,6 +541,16 @@ namespace ZeldaOracle.Game.Entities {
 				return isPersistentBetweenRooms;
 			}
 			set { isPersistentBetweenRooms = value; }
+		}
+
+		/// <summary>Gets the position of the entity relative to the view.</summary>
+		public Vector2F ViewPosition {
+			get { return DrawPosition - RoomControl.ViewControl.Position; }
+		}
+
+		/// <summary>Gets the center of the entity relative to the view.</summary>
+		public Vector2F ViewCenter {
+			get { return DrawCenter - RoomControl.ViewControl.Position; }
 		}
 	}
 }
