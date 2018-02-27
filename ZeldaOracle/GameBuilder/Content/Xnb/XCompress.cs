@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConscriptDesigner.Content.Xnb {
+namespace ZeldaOracleBuilder.Content.Xnb {
 	/// <summary>A static class for xcompress-based compression and decompression.</summary>
 	public static class XCompress {
 
@@ -41,7 +41,7 @@ namespace ConscriptDesigner.Content.Xnb {
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>Extracts and loads the xcompress dll.</summary>
 		static XCompress() {
 			IsAvailable = false;

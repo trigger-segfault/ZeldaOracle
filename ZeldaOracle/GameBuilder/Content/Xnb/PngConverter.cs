@@ -23,9 +23,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
-namespace ConscriptDesigner.Content.Xnb {
+namespace ZeldaOracleBuilder.Content.Xnb {
 	/// <summary>A Png to Xnb Converter.</summary>
 	public class PngConverter {
 

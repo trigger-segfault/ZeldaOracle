@@ -344,7 +344,7 @@ namespace ConscriptDesigner.Control {
 
 		public static void ShowExceptionMessage(Exception ex, string verb, string name) {
 			var result = TriggerMessageBox.Show(mainWindow, MessageIcon.Error, "An error occurred while trying to " +
-				verb + " '" + project.Name + "'! Would you like to see the error?", MessageBoxButton.YesNo);
+				verb + " '" + name + "'! Would you like to see the error?", MessageBoxButton.YesNo);
 			if (result == MessageBoxResult.Yes)
 				ErrorMessageBox.Show(ex, true);
 		}
@@ -703,6 +703,7 @@ namespace ConscriptDesigner.Control {
 			}
 			catch (Exception ex) {
 				ShowExceptionMessage(ex, "open", Path.GetFileName(path));
+				ProjectUserSettings.LoadDefaults();
 			}
 		}
 
@@ -834,7 +835,7 @@ namespace ConscriptDesigner.Control {
 		public static void LaunchEditor() {
 			SaveAll();
 			UpdateContentFolder(project);
-			Process.Start("ZeldaEditor.exe");
+			Process.Start("ZeldaEditor.exe", "-dev");
 		}
 
 

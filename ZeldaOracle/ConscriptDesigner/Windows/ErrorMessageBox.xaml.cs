@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Media;
 using System.Timers;
 using System.Windows;
 using System.Windows.Documents;
@@ -64,6 +65,14 @@ namespace ConscriptDesigner.Windows {
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
+
+
+		private void OnWindowLoaded(object sender, RoutedEventArgs e) {
+			// Only play a noisy sound if this window was not prompted by the user
+			if (buttonExit.Visibility == Visibility.Visible) {
+				SystemSounds.Hand.Play();
+			}
+		}
 
 		private void OnWindowClosing(object sender, CancelEventArgs e) {
 			copyTimer.Stop();
