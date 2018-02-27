@@ -167,9 +167,6 @@ namespace ConscriptDesigner {
 			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
 			suppressEvents = false;
 
-			OnOutputConsoleCommand();
-			OnProjectExplorerCommand();
-
 			loadedTimer = new DispatcherTimer(
 				TimeSpan.FromSeconds(0.1),
 				DispatcherPriority.ApplicationIdle,

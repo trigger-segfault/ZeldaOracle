@@ -1,4 +1,7 @@
-cd ZeldaOracle\ConscriptDesigner\bin\Debug
-REM start ZeldaOracle\ConscriptDesigner\bin\Debug\ConscriptDesigner.exe ZeldaOracle\GameContent\ZeldaContent.contentproj
-start ConscriptDesigner.exe ..\..\..\GameContent\ZeldaContent.contentproj
+REM # Update the bin folder's content and binaries files
+start GameBuilder.exe -debug -out "ZeldaOracle\ConscriptDesigner\bin" -game "ZeldaOracle\Game\bin" -editor "ZeldaOracle\GameEditor\bin" -content "ZeldaOracle\GameContent\ZeldaContent.contentproj"
+
+REM # Launch the designer
+cd "ZeldaOracle\ConscriptDesigner\bin\Debug"
+start ConscriptDesigner.exe "..\..\..\GameContent\ZeldaContent.contentproj"
 exit

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConscriptDesigner.Content.Xnb {
+namespace ZeldaOracleBuilder.Content.Xnb {
 	/// <summary>Xnb extensions for binary readers and writers.</summary>
 	public static class XnbExtensions {
 

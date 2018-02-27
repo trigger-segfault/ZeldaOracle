@@ -1,16 +1,21 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Media;
 using System.Timers;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>Shows an error that occured in the program.</summary>
 	public partial class ErrorMessageBox : Window {
-		//=========== MEMBERS ============
-		#region Members
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
 		/// <summary>The exception that was raised.</summary>
 		private Exception exception = null;
@@ -19,37 +24,26 @@ namespace ZeldaEditor.Windows {
 		/// <summary>True if viewing the full exception.</summary>
 		private bool viewingFull = false;
 		/// <summary>The timer for changing the copy button back to its original text.</summary>
-		private Timer copyTimer = new Timer(1000);
+		private DispatcherTimer copyTimer;
 		/// <summary>The text of the copy to clipboard button.</summary>
 		private readonly string copyText;
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
 
-		/// <summary>Constructs the error message box with an exception.</summary>
-		public ErrorMessageBox(Exception exception, bool alwaysContinue) {
-			InitializeComponent();
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
 
-			this.textBlockMessage.Text = "Exception:\n" + exception.Message;
-			this.exception = exception;
-			this.copyTimer.Elapsed += OnCopyTimer;
-			this.copyTimer.AutoReset = false;
-			this.copyText = buttonCopy.Content as string;
-			if (alwaysContinue) {
-				this.buttonExit.Visibility = Visibility.Collapsed;
-				this.buttonContinue.IsDefault = true;
-			}
-		}
 		/// <summary>Constructs the error message box with an exception object.</summary>
 		public ErrorMessageBox(object exceptionObject, bool alwaysContinue) {
 			InitializeComponent();
-			
-			this.textBlockMessage.Text = "Exception:\n" + (exceptionObject is Exception ? (exceptionObject as Exception).Message : exceptionObject.ToString());
+
+			this.textBlockMessage.Text = "Exception:\n";
 			this.exception = (exceptionObject is Exception ? exceptionObject as Exception : null);
 			this.exceptionObject = (exceptionObject is Exception ? null : exceptionObject);
-			this.copyTimer.Elapsed += OnCopyTimer;
-			this.copyTimer.AutoReset = false;
+			if (this.exception != null)
+				this.textBlockMessage.Text += this.exception.Message;
+			else if (this.exceptionObject != null)
+				this.textBlockMessage.Text += this.exceptionObject.ToString();
 			this.copyText = buttonCopy.Content as string;
 			if (!(exceptionObject is Exception)) {
 				this.buttonException.IsEnabled = false;
@@ -58,31 +52,49 @@ namespace ZeldaEditor.Windows {
 				this.buttonExit.Visibility = Visibility.Collapsed;
 				this.buttonContinue.IsDefault = true;
 			}
+
+			this.copyTimer = new DispatcherTimer(
+				TimeSpan.FromSeconds(1),
+				DispatcherPriority.ApplicationIdle,
+				OnCopyTimer,
+				Dispatcher);
+			this.copyTimer.Stop();
 		}
 
 
-		#endregion
-		//============ EVENTS ============
-		#region Events
-			
-		private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e) {
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+
+		private void OnWindowLoaded(object sender, RoutedEventArgs e) {
+			// Only play a noisy sound if this window was not prompted by the user
+			if (buttonExit.Visibility == Visibility.Visible) {
+				SystemSounds.Hand.Play();
+			}
+		}
+
+		private void OnWindowClosing(object sender, CancelEventArgs e) {
 			copyTimer.Stop();
 		}
+
 		private void OnExit(object sender, RoutedEventArgs e) {
 			DialogResult = true;
 			Close();
 		}
-		private void OnCopyTimer(object sender, ElapsedEventArgs e) {
-			Dispatcher.Invoke(() => {
-				buttonCopy.Content = copyText;
-			});
+
+		private void OnCopyTimer(object sender, EventArgs e) {
+			buttonCopy.Content = copyText;
+			copyTimer.Stop();
 		}
+
 		private void OnCopyToClipboard(object sender, RoutedEventArgs e) {
 			Clipboard.SetText(exception != null ? exception.ToString() : exceptionObject.ToString());
 			buttonCopy.Content = "Exception Copied!";
 			copyTimer.Stop();
 			copyTimer.Start();
 		}
+
 		private void OnSeeFullException(object sender, RoutedEventArgs e) {
 			viewingFull = !viewingFull;
 			if (!viewingFull) {
@@ -99,12 +111,14 @@ namespace ZeldaEditor.Windows {
 				scrollViewer.ScrollToTop();
 			}
 		}
+
 		private void OnMessageSizeChanged(object sender, SizeChangedEventArgs e) {
 			if (viewingFull) {
 				clientArea.Height = Math.Min(480, Math.Max(230, textBlockMessage.ActualHeight + 102));
 				scrollViewer.ScrollToTop();
 			}
 		}
+
 		private void OnPreviewKeyDown(object sender, KeyEventArgs e) {
 			var focused = FocusManager.GetFocusedElement(this);
 			switch (e.Key) {
@@ -134,27 +148,21 @@ namespace ZeldaEditor.Windows {
 				break;
 			}
 		}
+
 		private void OnRequestNavigate(object sender, RequestNavigateEventArgs e) {
 			Process.Start((sender as Hyperlink).NavigateUri.ToString());
 		}
 
-		#endregion
-		//=========== SHOWING ============
-		#region Showing
 
-		/// <summary>Shows an error message box with an exception.</summary>
-		public static bool Show(Exception exception, bool alwaysContinue = false) {
-			ErrorMessageBox messageBox = new ErrorMessageBox(exception, alwaysContinue);
-			var result = messageBox.ShowDialog();
-			return result.HasValue && result.Value;
-		}
+		//-----------------------------------------------------------------------------
+		// Showing
+		//-----------------------------------------------------------------------------
+
 		/// <summary>Shows an error message box with an exception object.</summary>
 		public static bool Show(object exceptionObject, bool alwaysContinue = false) {
 			ErrorMessageBox messageBox = new ErrorMessageBox(exceptionObject, alwaysContinue);
 			var result = messageBox.ShowDialog();
 			return result.HasValue && result.Value;
 		}
-
-		#endregion
 	}
 }

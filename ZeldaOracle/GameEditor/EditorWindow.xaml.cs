@@ -266,8 +266,8 @@ namespace ZeldaEditor {
 			editorControl.RoomSpacing = dropDownItemShowRoomBorders.IsChecked ? 1 : 0;
 		}
 
-		private void OnShowEventsChecked(object sender, RoutedEventArgs e) {
-			editorControl.ShowActions = dropDownItemShowEvents.IsChecked;
+		private void OnShowActionsChecked(object sender, RoutedEventArgs e) {
+			editorControl.ShowActions = dropDownItemShowActions.IsChecked;
 		}
 
 		private void OnLayerChanged(object sender, SelectionChangedEventArgs e) {

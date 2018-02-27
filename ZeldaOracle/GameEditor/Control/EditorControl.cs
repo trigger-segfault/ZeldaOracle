@@ -131,9 +131,6 @@ namespace ZeldaEditor.Control {
 		private bool                        noScriptWarnings;
 
 
-		private PaletteShader               paletteShader;
-
-
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -198,7 +195,6 @@ namespace ZeldaEditor.Control {
 		public void Initialize() {
 			GameData.Initialize();
 			EditorResources.Initialize(this);
-			paletteShader = new PaletteShader(GameData.PALETTE_LERP_SHADER);
 
 			this.inventory      = new Inventory(null);
 			this.rewardManager  = new RewardManager(null);
@@ -245,13 +241,18 @@ namespace ZeldaEditor.Control {
 			needsNewEventCache = true;
 			needsRecompiling = true;
 			
-			// TEMP: Open this world file upon starting the editor.
-			if (File.Exists("./temp_world.zwd"))
-				OpenWorld("temp_world.zwd");
-			else if (File.Exists("../../../../WorldFiles/temp_world.zwd"))
-				OpenWorld("../../../../WorldFiles/temp_world.zwd");
-			else if (File.Exists("../../../WorldFiles/temp_world.zwd"))
-				OpenWorld("../../../WorldFiles/temp_world.zwd");
+			string[] args = Environment.GetCommandLineArgs();
+			if (args.Length > 1) {
+				if (args[1] == "-dev") {
+					DevSettings settings = new DevSettings();
+					if (settings.Load() && !string.IsNullOrEmpty(settings.StartLocation.WorldFile)) {
+						OpenWorld(settings.StartLocation.WorldFile);
+					}
+				}
+				else {
+					OpenWorld(args[1]);
+				}
+			}
 		}
 
 		//-----------------------------------------------------------------------------
@@ -365,7 +366,19 @@ namespace ZeldaEditor.Control {
 			WorldFile worldFile = new WorldFile();
 			worldFile.LocateResource += OnWorldLocateResource;
 			worldFileLocatedResource = false;
-			World loadedWorld = worldFile.Load(fileName, true);
+			World loadedWorld;
+			try {
+				loadedWorld = worldFile.Load(fileName, true);
+			}
+			catch (Exception ex) {
+				var result = TriggerMessageBox.Show(editorWindow, MessageIcon.Error, "An error occurred while " +
+					"trying to open '" + Path.GetFileName(fileName) + "', would you like to see the error?",
+					"Load Failed", MessageBoxButton.YesNo);
+				if (result == MessageBoxResult.Yes) {
+					ErrorMessageBox.Show(ex, true);
+				}
+				return;
+			}
 
 			// Verify the world was loaded successfully.
 			if (loadedWorld != null) {
@@ -951,10 +964,6 @@ namespace ZeldaEditor.Control {
 
 		public Inventory Inventory {
 			get { return inventory; }
-		}
-
-		public PaletteShader PaletteShader {
-			get { return paletteShader; }
 		}
 
 		// World ----------------------------------------------------------------------
