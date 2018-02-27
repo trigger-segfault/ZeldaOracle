@@ -102,7 +102,7 @@ namespace ConscriptDesigner.Anchorables {
 
 
 		//-----------------------------------------------------------------------------
-		// ContentFileDocument Overrides
+		// Overrides Methods
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Completes setup after loading the content file.</summary>
@@ -115,7 +115,12 @@ namespace ConscriptDesigner.Anchorables {
 			Title = file.Name;
 		}
 
-		
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public override void Focus() {
+			editor.Focus();
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------

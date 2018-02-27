@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace ConscriptDesigner.Anchorables {
 		private class OutputTextWriter : TextWriter {
 			/// <summary>The output console to write to.</summary>
 			private OutputConsole console;
-
+			
 			/// <summary>Constructs the console text writer.</summary>
 			public OutputTextWriter(OutputConsole console) {
 				this.console = console;
@@ -65,6 +66,12 @@ namespace ConscriptDesigner.Anchorables {
 		private DispatcherTimer updateTimer;
 		/// <summary>The buffer for the text to be added to the output console.</summary>
 		private string buffer;
+		/// <summary>True if the console should be cleared during flush.</summary>
+		private bool requestClear;
+		
+		/// <summary>Used to prevent duplication or loss of console text.</summary>
+		private static readonly object myLock = new object();
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -88,8 +95,9 @@ namespace ConscriptDesigner.Anchorables {
 
 
 			buffer = "";
+			requestClear = false;
 			updateTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(16),
+				TimeSpan.FromMilliseconds(20),
 				DispatcherPriority.Render,
 				delegate { UpdateTimer(); },
 				Application.Current.Dispatcher);
@@ -103,6 +111,7 @@ namespace ConscriptDesigner.Anchorables {
 
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// XML Serialization
 		//-----------------------------------------------------------------------------
@@ -110,6 +119,16 @@ namespace ConscriptDesigner.Anchorables {
 		public override void ReadXml(XmlReader reader) {
 			base.ReadXml(reader);
 			DesignerControl.MainWindow.OutputConsole = this;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overrides
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public override void Focus() {
+			scrollViewer.Focus();
 		}
 
 
@@ -137,14 +156,15 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Clears the console.</summary>
 		public void Clear() {
-			Dispatcher.Invoke(() => {
-				stackPanel.Children.Clear();
-				AppendLine("");
-			});
+			lock (myLock) {
+				requestClear = true;
+				buffer = "";
+			}
 		}
 
 		/// <summary>Creates a new line if the current line isn't empty.</summary>
 		public void NewLine() {
+			FlushBuffer();
 			TextBlock textBlock = (TextBlock) stackPanel.Children[stackPanel.Children.Count - 1];
 			if (textBlock.Text != "")
 				AppendLine("");
@@ -157,12 +177,16 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Write text to the console.</summary>
 		public void Write(string text) {
-			buffer += text;
+			lock (myLock) {
+				buffer += text;
+			}
 		}
 
 		/// <summary>Write a character to the console.</summary>
 		public void Write(char c) {
-			buffer += new string(c, 1);
+			lock (myLock) {
+				buffer += new string(c, 1);
+			}
 		}
 
 
@@ -172,14 +196,25 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Flushes the buffer into the console log.</summary>
 		private void FlushBuffer() {
-			Dispatcher.Invoke(() => {
-				string[] lines = buffer.Replace("\r", "").Split('\n');
-				AppendText(lines[0]);
-				for (int i = 1; i < lines.Length; i++) {
-					AppendLine(lines[i]);
+			lock (myLock) {
+				// Don't flush again until the previous flush is finished
+				if (!buffer.Any() && !requestClear)
+					return;
+				if (requestClear) {
+					stackPanel.Children.Clear();
+					AppendLine("");
+					requestClear = false;
 				}
-				buffer = "";
-			});
+				if (buffer.Any()) {
+					string[] lines = buffer.Replace("\r", "").Split('\n');
+					AppendText(lines[0]);
+					for (int i = 1; i < lines.Length; i++) {
+						AppendLine(lines[i]);
+					}
+					scrollViewer.ScrollToBottom();
+					buffer = "";
+				}
+			}
 		}
 
 		/// <summary>Appends text to the last line in the stack panel.</summary>
@@ -197,7 +232,6 @@ namespace ConscriptDesigner.Anchorables {
 			while (stackPanel.Children.Count > MaxLines) {
 				stackPanel.Children.RemoveAt(0);
 			}
-			scrollViewer.ScrollToBottom();
 		}
 	}
 }
