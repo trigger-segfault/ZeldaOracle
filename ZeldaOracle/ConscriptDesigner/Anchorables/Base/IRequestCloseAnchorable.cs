@@ -17,5 +17,8 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Gets or sets if the anchorable is active.</summary>
 		bool IsActive { get; set; }
+
+		/// <summary>Focuses on the anchorable's content.</summary>
+		void Focus();
 	}
 }

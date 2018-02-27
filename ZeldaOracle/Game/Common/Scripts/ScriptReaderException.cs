@@ -44,7 +44,7 @@ namespace ZeldaOracle.Common.Scripts {
 		public override void PrintMessage() {
 			// Display the error message.
 			Console.WriteLine("------------------------------------------------------------------");
-			Console.WriteLine("Error in '" + fileName + "' at Line " + 
+			Console.WriteLine("Error in '" + fileName.Replace('/', '\\') + "' at Line " + 
 				lineNumber + ", Column " + columnNumber + ":");
 			Console.WriteLine();
 

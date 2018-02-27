@@ -82,6 +82,16 @@ namespace ConscriptDesigner.Anchorables {
 			writer.WriteAttributeString("ExpandedFolders", expandedFolders);
 		}
 
+		
+		//-----------------------------------------------------------------------------
+		// Overrides
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public override void Focus() {
+			treeView.Focus();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers

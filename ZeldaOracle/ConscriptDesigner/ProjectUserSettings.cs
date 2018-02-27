@@ -71,6 +71,9 @@ namespace ConscriptDesigner {
 			Window.Maximized = false;
 			Window.Width = Window.DefaultWidth;
 			Window.Height = Window.DefaultHeight;
+
+			DesignerControl.MainWindow.OpenOutputConsole();
+			DesignerControl.MainWindow.OpenProjectExplorer();
 		}
 
 		public static bool Load() {

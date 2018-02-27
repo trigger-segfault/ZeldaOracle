@@ -162,7 +162,7 @@
                     <MenuItem x:Name="dropDownItemShowStartLocation" Header="Show Start Location" IsCheckable="True" IsChecked="True" Click="OnShowStartLocationChecked"/>
                     <MenuItem x:Name="dropDownItemShowRoomBorders" Header="Show Room Borders" IsCheckable="True" IsChecked="True" Click="OnShowRoomBordersChecked"/>
                     <MenuItem x:Name="dropDownItemShowModified" Header="Show Modified Tiles" IsCheckable="True" Click="OnShowModifiedTilesChecked"/>
-                    <MenuItem x:Name="dropDownItemShowEvents" Header="Show Events" IsCheckable="True" Click="OnShowEventsChecked"/>
+                    <MenuItem x:Name="dropDownItemShowActions" Header="Show Actions" IsCheckable="True" Click="OnShowActionsChecked"/>
                 </MenuItem>
             </local:DropDownButton>
             <local:ImageToggleButton x:Name="buttonShowGrid" Source="Resources/Icons/Grid.png" ToolTip="Show Grid (Ctrl+G)" Command="cmd:EditorCommands.ShowGrid"/>

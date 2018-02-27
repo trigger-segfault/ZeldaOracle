@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConscriptDesigner.Content.Xnb {
+namespace ZeldaOracleBuilder.Content.Xnb {
 	/// <summary>A Wave to Xnb Converter.</summary>
 	public static class WavConverter {
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>Used to specify how XNA should read the xnb file.</summary>
 		private const string SoundEffectType =
 			"Microsoft.Xna.Framework.Content.SoundEffectReader";
@@ -136,7 +136,7 @@ namespace ConscriptDesigner.Content.Xnb {
 					writer.Write((int) (1000 * dataChunkSize / (nChannels * wBitsPerSample * nSamplesPerSec / 8)));
 				}
 			}
-
+			
 			return true;
 		}
 	}

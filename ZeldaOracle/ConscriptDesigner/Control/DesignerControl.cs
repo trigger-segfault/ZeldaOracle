@@ -218,17 +218,17 @@ namespace ConscriptDesigner.Control {
 		}
 
 		private static void Update(object sender, EventArgs e) {
-			if (busyTask != null) {
+			if (busyTask != null || busyThread != null) {
 				if (busyTask.IsCompleted) {
 					if (busyTaskIsConscripts)
 						lastScriptError = busyTask.Result;
 					busyTask = null;
 					busyThread = null;
-					CommandManager.InvalidateRequerySuggested();
 					if (FinishedBuilding != null)
 						FinishedBuilding(null, EventArgs.Empty);
 					if (busyTaskIsConscripts)
 						LoadResources();
+					CommandManager.InvalidateRequerySuggested();
 				}
 			}
 			if (closingAnchorables.Any()) {
@@ -344,9 +344,29 @@ namespace ConscriptDesigner.Control {
 
 		public static void ShowExceptionMessage(Exception ex, string verb, string name) {
 			var result = TriggerMessageBox.Show(mainWindow, MessageIcon.Error, "An error occurred while trying to " +
-				verb + " '" + project.Name + "'! Would you like to see the error?", MessageBoxButton.YesNo);
+				verb + " '" + name + "'! Would you like to see the error?", MessageBoxButton.YesNo);
 			if (result == MessageBoxResult.Yes)
 				ErrorMessageBox.Show(ex, true);
+		}
+
+		public static void Write(string text) {
+			if (mainWindow.OutputConsole != null)
+				mainWindow.OutputConsole.Write(text);
+		}
+
+		public static void WriteLine(string text) {
+			if (mainWindow.OutputConsole != null)
+				mainWindow.OutputConsole.WriteLine(text);
+		}
+
+		public static void WriteNewLine() {
+			if (mainWindow.OutputConsole != null)
+				mainWindow.OutputConsole.NewLine();
+		}
+
+		public static void Clear() {
+			if (mainWindow.OutputConsole != null)
+				mainWindow.OutputConsole.Clear();
 		}
 
 
@@ -357,8 +377,7 @@ namespace ConscriptDesigner.Control {
 		private static ScriptReaderException CompileContentTask() {
 			busyThread = Thread.CurrentThread;
 			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
-			if (mainWindow.OutputConsole != null)
-				mainWindow.OutputConsole.Clear();
+			Clear();
 			try {
 				Stopwatch watch = Stopwatch.StartNew();
 				foreach (ContentFile file in project.GetAllFiles()) {
@@ -384,10 +403,11 @@ namespace ConscriptDesigner.Control {
 		}
 
 		private static ScriptReaderException RunConscriptsTask() {
+			//if (mainWindow.OutputConsole != null)
+			//	mainWindow.OutputConsole.SetOut();
 			busyThread = Thread.CurrentThread;
 			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
-			if (mainWindow.OutputConsole != null)
-				mainWindow.OutputConsole.Clear();
+			Clear();
 			Resources.Uninitialize();
 
 			try {
@@ -671,18 +691,19 @@ namespace ConscriptDesigner.Control {
 				newProject.LoadContentProject(path);
 				project = newProject;
 				//mainWindow.LoadLayout();
-				if (IsGraphicsLoaded)
-					RunConscripts();
 				if (ProjectOpened != null)
 					ProjectOpened(null, EventArgs.Empty);
 				if (!ProjectUserSettings.Load()) {
 					mainWindow.OpenOutputConsole();
 					mainWindow.OpenProjectExplorer();
 				}
+				if (IsGraphicsLoaded)
+					RunConscripts();
 				CommandManager.InvalidateRequerySuggested();
 			}
 			catch (Exception ex) {
 				ShowExceptionMessage(ex, "open", Path.GetFileName(path));
+				ProjectUserSettings.LoadDefaults();
 			}
 		}
 
@@ -767,11 +788,10 @@ namespace ConscriptDesigner.Control {
 				busyThread.Abort();
 				busyThread = null;
 				busyTask = null;
-				CommandManager.InvalidateRequerySuggested();
-				if (mainWindow.OutputConsole != null)
-					mainWindow.OutputConsole.NewLine();
+				WriteNewLine();
 				Console.WriteLine("----------------------------------------------------------------");
 				Console.WriteLine("Canceled!");
+				CommandManager.InvalidateRequerySuggested();
 			}
 		}
 
@@ -815,7 +835,7 @@ namespace ConscriptDesigner.Control {
 		public static void LaunchEditor() {
 			SaveAll();
 			UpdateContentFolder(project);
-			Process.Start("ZeldaEditor.exe");
+			Process.Start("ZeldaEditor.exe", "-dev");
 		}
 
 

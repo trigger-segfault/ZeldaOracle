@@ -46,7 +46,7 @@ namespace ConscriptDesigner.Anchorables {
 
 
 		//-----------------------------------------------------------------------------
-		// ContentFileDocument Overrides
+		// Overrides
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Completes setup after loading the content file.</summary>
@@ -57,6 +57,11 @@ namespace ConscriptDesigner.Anchorables {
 
 			Reload();
 			Title = file.Name;
+		}
+
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public override void Focus() {
+			scrollViewer.Focus();
 		}
 
 
