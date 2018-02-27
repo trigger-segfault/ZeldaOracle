@@ -37,13 +37,13 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 
 			monster.Physics.Velocity = Vector2F.Zero;
 			monster.Graphics.PauseAnimation();
-			//monster.DisablePhysics();
+			//monster.Physics.Disable();
 		}
 
 		public override void OnEnd(MonsterState newState) {
 			
 			monster.Graphics.ResumeAnimation();
-			//monster.EnablePhysics();
+			//monster.Physics.Enable();
 		}
 
 		public override void Update() {

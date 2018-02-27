@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			// Physics
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
 			Physics.SoftCollisionBox    = new Rectangle2F(-2, -2, 4, 4);
-			EnablePhysics(
+			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |

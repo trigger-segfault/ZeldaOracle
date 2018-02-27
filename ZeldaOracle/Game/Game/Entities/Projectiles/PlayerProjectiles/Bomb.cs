@@ -23,7 +23,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public Bomb() {
-			EnablePhysics(
+			Physics.Enable(
 				PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |

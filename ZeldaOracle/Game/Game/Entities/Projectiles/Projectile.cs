@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		
 		public Projectile() {
-			EnablePhysics(PhysicsFlags.DisableSurfaceContact);
+			Physics.Enable(PhysicsFlags.DisableSurfaceContact);
 
 			Graphics.IsShadowVisible		= true;
 			graphics.IsGrassEffectVisible	= false;
@@ -101,7 +101,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				if (bounceOnCrash) {
 					effect = new Effect();
 					effect.CreateDestroyTimer(32);
-					effect.EnablePhysics(PhysicsFlags.HasGravity);
+					effect.Physics.Enable(PhysicsFlags.HasGravity);
 					if (!isInitialCollision)
 						effect.Physics.Velocity = Angles.ToVector(Angles.Reverse(Angle)) * 0.25f;
 					effect.Physics.ZVelocity	= 1.0f;

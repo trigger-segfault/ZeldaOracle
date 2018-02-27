@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -5, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-4, -9, 8, 10);
-			EnablePhysics(
+			Physics.Enable(
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.HalfSolidPassable |

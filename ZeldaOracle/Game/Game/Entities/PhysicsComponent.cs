@@ -132,6 +132,21 @@ namespace ZeldaOracle.Game.Entities {
 			this.edgeClipAmount		= 1;
 		}
 		
+		//-----------------------------------------------------------------------------
+		// Enable / Disable
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Enable physics with the given physics flags.</summary>
+		public void Enable(PhysicsFlags flags = PhysicsFlags.None) {
+			isEnabled = true;
+			this.flags |= flags;
+		}
+
+		/// <summary>Disable physics for this entity.</summary>
+		public void Disable() {
+			isEnabled = false;
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Custom Collision Setup

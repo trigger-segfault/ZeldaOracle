@@ -266,6 +266,7 @@
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
     <Compile Include="Game\Control\TileManager.cs" />
+    <Compile Include="Game\Control\InteractionManager.cs" />
     <Compile Include="Game\Debugging\DevSettings.cs" />
     <Compile Include="Game\Debugging\GameDebug.cs" />
     <Compile Include="Game\Debugging\PlayerDebugNoClipState.cs" />
@@ -418,7 +419,6 @@
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seeds\Seed.cs" />
-    <None Include="Game\Control\UnitSystem.cs" />
     <Compile Include="Game\Entities\TileDummy.cs" />
     <Compile Include="Game\Entities\Units\UnitTool.cs" />
     <Compile Include="Game\GameData.Rewards.cs" />

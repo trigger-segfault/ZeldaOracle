@@ -258,10 +258,8 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
-		public void RemoveFromRoom() {
-			isInRoom = false;
-		}
-
+		/// <summary>Destroy the entity, marking it to be removed from the room.
+		/// </summary>
 		public void Destroy() {
 			if (parent != null)
 				parent.DetachEntity(this);
@@ -272,23 +270,19 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		/// <summary>Mark the entity as having been removed from the current room.
+		/// </summary>
+		public void RemoveFromRoom() {
+			isInRoom = false;
+		}
+
 		public void DestroyAndTransform(Entity transformedEntity) {
 			Destroy();
 			transformedEntity.Properties = properties;
 			this.transformedEntity = transformedEntity;
 		}
-
-		/// <summary>Enable physics with the given physics flags.</summary>
-		public void EnablePhysics(PhysicsFlags flags = PhysicsFlags.None) {
-			physics.IsEnabled = true;
-			physics.Flags |= flags;
-		}
-
-		/// <summary>Disable physics for this entity.</summary>
-		public void DisablePhysics() {
-			physics.IsEnabled = false;
-		}
 		
+		/// <summary>Set the position of the entity by its center.</summary>
 		public void SetPositionByCenter(Vector2F center) {
 			position = center - centerOffset;
 		}

@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public Fire() :
 			base(GameData.ANIM_EFFECT_SEED_EMBER)
 		{
-			EnablePhysics(PhysicsFlags.HasGravity);
+			Physics.Enable(PhysicsFlags.HasGravity);
 			
 			Physics.SoftCollisionBox = new Rectangle2F(-6, -6, 12, 12);
 

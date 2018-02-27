@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-7, -7, 14, 14);
-			EnablePhysics(
+			Physics.Enable(
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				PhysicsFlags.DestroyedInHoles);
 
 			if (tile.HasFlag(TileFlags.Bounces))
-				EnablePhysics(PhysicsFlags.Bounces);
+				Physics.Enable(PhysicsFlags.Bounces);
 
 			BounceSound = GameData.SOUND_BOMB_BOUNCE;
 

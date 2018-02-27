@@ -115,6 +115,8 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Hit by a minecart.</summary>
 		/// <para/>Default = Reactions.SoftKill</summary>
 		MineCart,
+		/// <summary>Hit by a maget ball entity.</summary>
+		MagnetBall,
 		/// <summary>Hit by a block (either moving or spawned on top of).
 		/// <para/>Default = Reactions.Damage</summary>
 		Block,

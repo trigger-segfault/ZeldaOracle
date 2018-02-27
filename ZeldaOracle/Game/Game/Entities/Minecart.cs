@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.minecartTrack = minecartTrack;
 
 			// Physics
-			EnablePhysics(PhysicsFlags.Solid);
+			Physics.Enable(PhysicsFlags.Solid);
 			Physics.CollisionBox		= new Rectangle2F(-1, 3, 18, 15);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, 3, 18, 15);
 

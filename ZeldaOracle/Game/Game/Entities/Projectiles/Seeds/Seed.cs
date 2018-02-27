@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
-			EnablePhysics(
+			Physics.Enable(
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.DestroyedInHoles);

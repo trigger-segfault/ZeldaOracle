@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			syncAnimationWithDirection = true;
 
 			// Physics.
-			EnablePhysics(
+			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.CollideRoomEdge |
 				PhysicsFlags.LedgePassable |

@@ -201,7 +201,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (revealed)
 				carriedTile.ZPosition = 4;
 			// Prevent the spawned carried tile from hurting the monster.
-			carriedTile.DisablePhysics();
+			carriedTile.Physics.Disable();
 			// Spawn the entity so it draws during the pause before switching.
 			RoomControl.SpawnEntity(carriedTile);
 			hook.SwitchWithEntity(carriedTile);

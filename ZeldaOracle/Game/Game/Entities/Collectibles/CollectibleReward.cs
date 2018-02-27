@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Entities {
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2I(-4, -9, 8, 8);
 			Physics.SoftCollisionBox	= new Rectangle2I(-5, -9, 9, 8);
-			EnablePhysics(
+			Physics.Enable(
 				PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.CollideRoomEdge |

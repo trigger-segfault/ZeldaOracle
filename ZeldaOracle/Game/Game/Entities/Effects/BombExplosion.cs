@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Players;
+﻿using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities.Effects {
-	public class BombExplosion : Effect {
 
+	public class BombExplosion : Effect {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -20,11 +11,16 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public BombExplosion() :
 			base(GameData.ANIM_EFFECT_BOMB_EXPLOSION)
 		{
-			EnablePhysics(PhysicsFlags.None);
-			Physics.CollisionBox		= new Rectangle2F(-12, -12, 24, 24);
-			Physics.SoftCollisionBox	= new Rectangle2F(-12, -12, 24, 24);
-			
+			// Graphics
 			Graphics.DepthLayer = DepthLayer.EffectBombExplosion;
+
+			// Physics
+			Physics.Enable(PhysicsFlags.None);
+			Physics.CollisionBox = new Rectangle2F(-12, -12, 24, 24);
+			
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox	= new Rectangle2F(-12, -12, 24, 24);
 		}
 		
 
@@ -33,24 +29,10 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 
 		public override void Update() {
-
+			// Enable the Bomb explosion interaction type after a short delay
 			float playbackTime = Graphics.AnimationPlayer.PlaybackTime;
-
-			if (playbackTime > 10) { // TODO: magic number
-				// Collide with Monsters.
-				foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft, -1)) {
-					if (!monster.IsPassable) {
-						monster.TriggerInteraction(InteractionType.BombExplosion, this);
-						if (IsDestroyed)
-							return;
-					}
-				}
-
-				// Collide with the Player.
-				if (!RoomControl.Player.IsPassable && Physics.IsCollidingWith(RoomControl.Player, CollisionBoxType.Soft, -1)) {
-					RoomControl.Player.Hurt(new DamageInfo(2, Center));
-				}
-			}
+			if (playbackTime > GameSettings.BOMB_EXPLOSION_DAMAGE_DELAY)
+				Interactions.InteractionType = InteractionType.BombExplosion;
 
 			base.Update();
 		}

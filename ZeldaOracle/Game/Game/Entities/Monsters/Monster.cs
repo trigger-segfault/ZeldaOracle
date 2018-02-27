@@ -132,6 +132,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.BombExplosion,	Reactions.Damage);
 			SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
 			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
+			SetReaction(InteractionType.MagnetBall,		Reactions.Kill); // TODO: Confirm  this
 			SetReaction(InteractionType.Block,			Reactions.Damage);
 			// Player interations
 			SetReaction(InteractionType.ButtonAction,	Reactions.None);

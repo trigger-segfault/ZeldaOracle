@@ -46,6 +46,7 @@ namespace ZeldaOracle.Game.Control {
 		private RoomGraphics		roomGraphics;
 		private RoomPhysics			roomPhysics;
 		private TileManager			tileManager;
+		private InteractionManager	interactionManager;
 		private bool				allMonstersDead;
 		private int					entityIndexCounter;
 		private bool				isSideScrolling;
@@ -86,6 +87,7 @@ namespace ZeldaOracle.Game.Control {
 			tileManager				= new TileManager(this);
 			roomGraphics			= new RoomGraphics(this);
 			roomPhysics				= new RoomPhysics(this);
+			interactionManager		= new InteractionManager(this);
 			requestedTransitionDirection = 0;
 			eventPlayerRespawn		= null;
 			eventRoomTransitioning	= null;
@@ -542,6 +544,15 @@ namespace ZeldaOracle.Game.Control {
 			
 		}
 
+		/// <summary>Remove destroyed entities from the entity list.</summary>
+		private void RemoveDestroyedEntities() {
+			for (int i = 0; i < entities.Count; i++) {
+				if (!entities[i].IsAlive || !entities[i].IsInRoom)
+					entities.RemoveAt(i--);
+			}
+			entityCount = entities.Count;
+		}
+
 		private void UpdateObjects() {
 			requestedTransitionDirection = -1;
 
@@ -563,10 +574,6 @@ namespace ZeldaOracle.Game.Control {
 				if (entity != Player && entity.IsAlive && entity.IsInRoom) {
 					if (GameControl.UpdateRoom)
 						entity.Update();
-					if (entity.IsAlive) {
-						//foreach (Entity child in entity.Children)
-							//child.Position = entity.Position + child.AttachmentOffset;
-					}
 					if (GameControl.AnimateRoom)
 						entity.UpdateGraphics();
 
@@ -579,34 +586,30 @@ namespace ZeldaOracle.Game.Control {
 			if (Player.IsAlive && Player.IsInRoom) {
 				if (GameControl.UpdateRoom)
 					Player.Update();
-				//foreach (Entity child in Player.Children)
-					//child.Position = Player.Position + child.AttachmentOffset;
 				if (GameControl.AnimateRoom)
 					Player.UpdateGraphics();
 			}
 
 			// Remove destroyed entities
-			for (int i = 0; i < entities.Count; i++) {
-				if (!entities[i].IsAlive || !entities[i].IsInRoom) {
-					entities.RemoveAt(i--);
-				}
-			}
-			entityCount = entities.Count;
+			RemoveDestroyedEntities();
 
-			//if (requestedTransitionDirection >= 0)
-			//	return;
-			
 			// Update tiles
 			tileManager.UpdateTiles();
 
 			// Update the action tiles
-			for (int i = 0; i < actionTiles.Count; i++) {
+			for (int i = 0; i < actionTiles.Count; i++)
 				actionTiles[i].Update();
-			}
 			
-			// Process Physics
 			if (GameControl.UpdateRoom) {
+				// Process entity interactions
+				interactionManager.ProcessInteractions();
+				RemoveDestroyedEntities();
+
+				// Process physics
 				roomPhysics.ProcessPhysics();
+				RemoveDestroyedEntities();
+
+				// Check if the player wants to room transition
 				Player.CheckRoomTransitions();
 			}
 
@@ -825,6 +828,61 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
+		public IEnumerable<Entity> GetInteractingEntities(Entity sender, InteractionType type) {
+			Rectangle2F box = sender.Interactions.PositionedInteractionBox;
+			foreach (Entity entity in ActiveEntities) {
+				if (entity.Interactions.IsEnabled &&
+					entity.Interactions.PositionedInteractionBox.Intersects(box))
+				{
+					yield return entity;
+					if (sender.IsDestroyed)
+						break;
+				}
+			}
+		}
+		
+		public void TriggerInteractions(Entity sender, InteractionType type) {
+			Rectangle2F box = sender.Interactions.PositionedInteractionBox;
+			foreach (Entity entity in ActiveEntities) {
+				if (entity.Interactions.IsEnabled &&
+					entity.Interactions.PositionedInteractionBox.Intersects(box))
+				{
+					entity.Interactions.Trigger(InteractionType.BombExplosion, sender);
+					if (sender.IsDestroyed)
+						break;
+				}
+			}
+		}
+		
+		public IEnumerable<Entity> GetInteractingEntities(Vector2F point) {
+			foreach (Entity entity in ActiveEntities) {
+				if (entity.Interactions.IsEnabled &&
+					entity.Interactions.PositionedInteractionBox.Contains(point))
+				{
+					yield return entity;
+				}
+			}
+		}
+		
+		public IEnumerable<Entity> GetInteractingEntities(Rectangle2F box) {
+			foreach (Entity entity in ActiveEntities) {
+				if (entity.Interactions.IsEnabled &&
+					entity.Interactions.PositionedInteractionBox.Intersects(box))
+				{
+					yield return entity;
+				}
+			}
+		}
+		
+		public IEnumerable<Entity> ActiveEntities {
+			get {
+				for (int i = 0; i < entityCount; i++) {
+					if (entities[i].IsAlive && entities[i].IsInRoom)
+						yield return entities[i];
+				}
+			}
+		}
+		
 		public bool AllMonstersDead() {
 			return	!GetEntitiesOfType<Monster>().Any(m => m.NeedsClearing) &&
 					!GetTilesOfType<TileMonster>().Any(t => t.NeedsClearing);
@@ -882,12 +940,16 @@ namespace ZeldaOracle.Game.Control {
 			get { return tileManager; }
 		}
 
-		public Dungeon Dungeon {
-			get { return dungeon; }
-		}
-
 		public RoomPhysics RoomPhysics {
 			get { return roomPhysics; }
+		}
+
+		public InteractionManager InteractionManager {
+			get { return interactionManager; }
+		}
+
+		public Dungeon Dungeon {
+			get { return dungeon; }
 		}
 
 		// Called after the player respawns.

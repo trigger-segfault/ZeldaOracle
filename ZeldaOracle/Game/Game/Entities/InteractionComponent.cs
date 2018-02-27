@@ -12,6 +12,8 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>The interaction manager.</summary>
 		private InteractionEventManager interactionManager;
 
+		private InteractionType interactionType;
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -22,6 +24,16 @@ namespace ZeldaOracle.Game.Entities {
 		{
 			interactionBox		= Rectangle2F.Zero;
 			interactionManager	= null;
+			interactionType		= InteractionType.None;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		public Rectangle2F GetInteractionBox(InteractionType interactionType) {
+			return interactionBox;
 		}
 
 
@@ -112,6 +124,20 @@ namespace ZeldaOracle.Game.Entities {
 
 		public InteractionEventManager InteractionManager {
 			get { return interactionManager; }
+		}
+		
+		public Rectangle2F InteractionBox {
+			get { return interactionBox; }
+			set { interactionBox = value; }
+		}
+		
+		public Rectangle2F PositionedInteractionBox {
+			get { return Rectangle2F.Translate(interactionBox, entity.Position); }
+		}
+		
+		public InteractionType InteractionType {
+			get { return interactionType; }
+			set { interactionType = value; }
 		}
 	}
 }

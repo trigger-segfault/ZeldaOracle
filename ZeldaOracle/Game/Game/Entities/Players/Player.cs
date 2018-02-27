@@ -203,7 +203,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			statePush.Player = this; // Necessary to call statePush.GetPushTile()
 			stateGrab.Player = this; // Necessary to call stateGrab.GetGrabTile()
 
-			// Control states
+			// Control States
 			stateLedgeJump			= new PlayerLedgeJumpState();
 			stateLeapLedgeJump		= new PlayerLeapLedgeJumpState();
 			statePullHandle			= new PlayerPullHandleState();
@@ -212,7 +212,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateJumpTo				= new PlayerJumpToState();
 			stateSwitchHookSwitch	= new PlayerSwitchHookSwitchState();
 
-			// Environment states
+			// Environment States
 			environmentStateGrass				= new PlayerGrassEnvironmentState();
 			environmentStateStairs				= new PlayerStairsEnvironmentState();
 			environmentStateJump				= new PlayerJumpEnvironmentState();
@@ -223,8 +223,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			environmentStateLadder				= new PlayerLadderEnvironmentState();
 			environmentStateSideScrollLadder	= new PlayerSideScrollLadderEnvironmentState();
 			
-			// Condition states
-			stateShield			= new PlayerShieldState();
+			// Condition States
+			stateShield = new PlayerShieldState();
+
+			// Interaction Callbacks
+			Interactions.SetReaction(InteractionType.BombExplosion,
+				delegate(Entity sender, EventArgs args)
+			{
+				RoomControl.Player.Hurt(new DamageInfo(
+					GameSettings.BOMB_EXPLOSION_PLAYER_DAMAGE, sender.Center));
+			});
 		}
 
 

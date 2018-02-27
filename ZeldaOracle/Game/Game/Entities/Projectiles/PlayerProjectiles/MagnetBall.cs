@@ -18,30 +18,35 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public MagnetBall() {
-			EnablePhysics(
-				PhysicsFlags.Bounces |
-				PhysicsFlags.HasGravity |
-				PhysicsFlags.CollideWorld |
-				PhysicsFlags.CollideRoomEdge |
-				//PhysicsFlags.LedgePassable |
-				PhysicsFlags.DestroyedInHoles |
-				PhysicsFlags.MoveWithConveyors |
-				PhysicsFlags.EdgeClipping);
-			
-			polarity = Polarity.North;
-
-			Physics.EdgeClipAmount = 3;
-
-			Physics.CollisionBox		= new Rectangle2F(-8, -8, 16, 16);
-			Physics.SoftCollisionBox	= new Rectangle2F(-8, -8, 16, 16);
-			soundBounce					= GameData.SOUND_KEY_BOUNCE;
-			
+			// Graphics
 			Graphics.IsShadowVisible		= true;
 			Graphics.IsGrassEffectVisible	= true;
 			Graphics.IsRipplesEffectVisible	= true;
 			Graphics.DepthLayer				= DepthLayer.ProjectileBomb;
 			Graphics.DrawOffset				= new Point2I(-8, -8);
-			centerOffset					= new Point2I(0, 0);
+			centerOffset					= Point2I.Zero;
+
+			// Physics
+			Physics.Enable(
+				PhysicsFlags.Bounces |
+				PhysicsFlags.HasGravity |
+				PhysicsFlags.CollideWorld |
+				PhysicsFlags.CollideRoomEdge |
+				PhysicsFlags.DestroyedInHoles |
+				PhysicsFlags.MoveWithConveyors |
+				PhysicsFlags.EdgeClipping);
+			Physics.EdgeClipAmount	= 3;
+			Physics.CollisionBox	= new Rectangle2F(-8, -8, 16, 16);
+			soundBounce				= GameData.SOUND_KEY_BOUNCE;
+			
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox		= new Rectangle2F(-8, -8, 16, 16);
+			Interactions.InteractionType	= InteractionType.MagnetBall;
+
+			// Magnet Ball
+			polarity = Polarity.North;
+
 		}
 
 		
@@ -49,11 +54,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		private void LedgeJump(int ledgeDirection, Tile ledgeTile) {
+		/// <summary>Begin falling off of a ledge.</summary>
+		private void BeginLedgeJump(int ledgeDirection, Tile ledgeTile) {
 			isLedgeJumping = true;
 			physics.ZVelocity = 1.8f;
 			physics.Velocity = Directions.ToVector(ledgeDirection) * 1.0f;
 			physics.CollideWithWorld = false;
+			Interactions.Disable();
+		}
+
+		/// <summary>End falling off of a ledge.</summary>
+		private void EndLedgeJump() {
+			isLedgeJumping = false;
+			physics.CollideWithWorld = true;
+			Interactions.Disable();
 		}
 
 
@@ -77,18 +91,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		public override void Update() {
 
 			if (isLedgeJumping) {
-				if (IsOnGround) {
-					isLedgeJumping = false;
-					physics.CollideWithWorld = true;
-				}
+				if (IsOnGround)
+					EndLedgeJump();
 			}
 			else {
-				// NOTE: the TileButton class will check if a MagnetBall is pressing it
-
-				// TODO: Magnet Balls must keep their position in the room persistant
-
-				// TODO: collide with monsters
-
 				// Collide with player
 				Vector2F vectorToPlayer = RoomControl.Player.Center - Center;
 				float distanceToPlayer = vectorToPlayer.Length;
@@ -117,9 +123,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 								.Dot(Center - tile.Center) < 0.0f &&
 							tile.LedgeDirection == collision.Direction &&
 							tile.IsLedge && !tile.IsInMotion)
-							LedgeJump(tile.LedgeDirection, tile);
+							BeginLedgeJump(tile.LedgeDirection, tile);
 					}
 				}
+
+				// Only trigger interactions if moving
+				float speed = physics.Velocity.Length;
+				if (speed >= 1.0f)
+					Interactions.InteractionType = InteractionType.MagnetBall;
+				else
+					Interactions.InteractionType = InteractionType.None;
 			}
 
 			base.Update();

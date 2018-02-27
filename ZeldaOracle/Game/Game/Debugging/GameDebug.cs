@@ -437,10 +437,11 @@ namespace ZeldaOracle.Game.Debug {
 			else if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseTileLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				Monster monster = new MonsterSpinyBeetle();
+				Monster monster = new MonsterMoblin();
+				monster.Color = MonsterColor.Red;
 
-				monster.Properties = new Properties();
-				monster.Properties.Set("cover_tile", "bush");
+				//monster.Properties = new Properties();
+				//monster.Properties.Set("cover_tile", "bush");
 
 				//monster.Color = MonsterColor.Red;
 				monster.SetPositionByCenter(spawnPosition);
@@ -595,7 +596,9 @@ namespace ZeldaOracle.Game.Debug {
 
 			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
 				// Blue soft collision box
-				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position,
+				//g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position,
+					//new Color(0, 0, 255, 150));
+				g.FillRectangle(entity.Interactions.InteractionBox + entity.Position,
 					new Color(0, 0, 255, 150));
 				// Red hard collision box
 				g.FillRectangle(entity.Physics.CollisionBox + entity.Position,

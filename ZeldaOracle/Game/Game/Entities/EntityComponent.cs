@@ -31,13 +31,17 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public void Enable() {
-			isEnabled = true;
-			OnEnable();
+			if (!isEnabled) {
+				isEnabled = true;
+				OnEnable();
+			}
 		}
 
 		public void Disable() {
-			isEnabled = true;
-			OnEnable();
+			if (isEnabled) {
+				isEnabled = true;
+				OnEnable();
+			}
 		}
 
 
@@ -54,7 +58,12 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>True if this component is enabled.</summary>
 		public bool IsEnabled {
 			get { return isEnabled; }
-			set { isEnabled = value; }
+			set {
+				if (value)
+					Enable();
+				else
+					Disable();
+			}
 		}
 
 	}

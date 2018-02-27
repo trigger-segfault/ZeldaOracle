@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 				monster.Graphics.PlayAnimation(monsterAnimation);
 			}
 			monster.RoomControl.Player.Freeze();
-			//monster.DisablePhysics();
+			//monster.Physics.Disable();
 			AudioSystem.PlaySound(GameData.SOUND_ELECTROCUTE);
 		}
 
@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			monster.RoomControl.TilePaletteOverride = null;
 			monster.RoomControl.EntityPaletteOverride = null;
 			monster.OnElectrocuteComplete();
-			//monster.EnablePhysics();
+			//monster.Physics.Enable();
 		}
 
 		public override void Update() {

@@ -56,7 +56,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		//-----------------------------------------------------------------------------
 		
 		public Unit() {
-			EnablePhysics();
+			Physics.Enable();
 
 			isKnockbackable			= true;
 			isDamageable			= true;
@@ -264,7 +264,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 		public override void Update() {
 			
-			// Update knockback.
+			// Update knockback
 			if (knockbackTimer > 0) {
 				knockbackTimer--;
 				if (knockbackTimer == 0)
@@ -273,12 +273,12 @@ namespace ZeldaOracle.Game.Entities.Units {
 			if (IsBeingKnockedBack)
 				Physics.Velocity = knockbackVelocity; // TODO: player can move while being knocked back.
 			
-			// Update hurt flickering.
+			// Update hurt flickering
 			if (hurtFlickerTimer > 0)
 				hurtFlickerTimer--;
 			Graphics.IsHurting = IsHurtFlickering;
 			
-			// Update invinciblity timer.
+			// Update invinciblity timer
 			if (invincibleTimer > 0) {
 				invincibleTimer--;
 				if (invincibleTimer == 0) {
@@ -288,11 +288,15 @@ namespace ZeldaOracle.Game.Entities.Units {
 				}
 			}
 
-			// Update tools.
+			// Update tools
 			foreach (UnitTool tool in tools)
 				tool.Update();
 			
 			UpdateSubStripIndex();
+
+			// TODO: Remove soft collision box and Is-Passable
+			Interactions.InteractionBox = physics.SoftCollisionBox;
+			Interactions.IsEnabled = !isPassable;
 
 			base.Update();
 		}

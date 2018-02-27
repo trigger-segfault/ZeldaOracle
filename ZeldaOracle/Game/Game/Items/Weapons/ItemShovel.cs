@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				Effect effect = new Effect();
 				effect.Graphics.DepthLayer = DepthLayer.EffectDirt;
 				effect.CreateDestroyTimer(15);
-				effect.EnablePhysics(PhysicsFlags.HasGravity);
+				effect.Physics.Enable(PhysicsFlags.HasGravity);
 				effect.Physics.Velocity = Directions.ToVector(Player.Direction) * 0.5f;
 				effect.Graphics.IsShadowVisible = false;
 				effect.Graphics.PlayAnimation(GameData.ANIM_EFFECT_DIRT);
@@ -76,13 +76,22 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			else {
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
-			
+
 			// Check for monster interactions.
-			Rectangle2I shovelHitBox = new Rectangle2I(-4, -4, 8, 8);
-			shovelHitBox.Point += (Point2I) Player.CenterOffset;
+			//Rectangle2I shovelHitBox = new Rectangle2I(-4, -4, 8, 8);
+			//shovelHitBox.Point += (Point2I) Player.CenterOffset;
+			//shovelHitBox.ExtendEdge(Player.Direction, 7);
+			//foreach (Monster monster in Player.Physics.GetEntitiesMeeting<Monster>(shovelHitBox, CollisionBoxType.Soft)) {
+			//	monster.TriggerInteraction(InteractionType.Shovel, Player);
+			//}
+			Rectangle2F shovelHitBox = new Rectangle2F(-4, -4, 8, 8);
+			shovelHitBox.Point += Player.Center;
 			shovelHitBox.ExtendEdge(Player.Direction, 7);
-			foreach (Monster monster in Player.Physics.GetEntitiesMeeting<Monster>(shovelHitBox, CollisionBoxType.Soft)) {
-				monster.TriggerInteraction(InteractionType.Shovel, Player);
+
+			foreach (Entity entity in
+				RoomControl.GetInteractingEntities(shovelHitBox))
+			{
+				entity.Interactions.Trigger(InteractionType.Shovel, Player);
 			}
 		}
 

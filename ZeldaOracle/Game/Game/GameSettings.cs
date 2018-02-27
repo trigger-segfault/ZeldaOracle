@@ -86,6 +86,8 @@ namespace ZeldaOracle.Game {
 		public const int				SCENT_POD_FADE_DELAY					= 60;
 		public const int				BOMB_FUSE_TIME							= 108;
 		public const int				BOMB_FLICKER_DELAY						= 72;
+		public const int				BOMB_EXPLOSION_PLAYER_DAMAGE			= 2;
+		public const int				BOMB_EXPLOSION_DAMAGE_DELAY				= 10; // delay before bomb explosion
 		public const float				MAGNET_BALL_LATERAL_MOVE_SPEED			= 1.0f;
 		public const float				MAGNET_BALL_MAX_MOVE_SPEED				= 3.0f;
 		public const float				MAGNET_BALL_LEDGE_JUMP_MOVE_SPEED		= 1.0f;

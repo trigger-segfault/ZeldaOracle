@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 
 			monster.Physics.Velocity = Vector2F.Zero;
 			monster.Graphics.PauseAnimation();
-			monster.DisablePhysics();
+			monster.Physics.Disable();
 
 			galeAnimationPlayer.Play(GameData.ANIM_EFFECT_SEED_GALE);
 
