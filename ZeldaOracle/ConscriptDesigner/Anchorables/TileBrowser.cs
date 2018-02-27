@@ -42,6 +42,11 @@ namespace ConscriptDesigner.Anchorables {
 			browser.Unload();
 		}
 
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public override void Focus() {
+			browser.Focus();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// XML Serialization

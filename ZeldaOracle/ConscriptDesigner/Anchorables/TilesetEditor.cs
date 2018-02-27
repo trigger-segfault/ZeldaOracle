@@ -51,6 +51,11 @@ namespace ConscriptDesigner.Anchorables {
 			return control.RequestSave(silentFail);
 		}
 
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public override void Focus() {
+			control.Focus();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// ICommandAnchorable Override Methods

@@ -33,7 +33,7 @@ namespace ConscriptDesigner.Anchorables {
 
 
 		//-----------------------------------------------------------------------------
-		// Closing
+		// Public Methods
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Forces the document closed.</summary>
@@ -45,6 +45,11 @@ namespace ConscriptDesigner.Anchorables {
 			}
 		}
 
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public virtual void Focus() {
+			if (Content is UIElement)
+				((UIElement) Content).Focus();
+		}
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers

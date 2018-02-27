@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using ConscriptDesigner.Control;
 using Xceed.Wpf.AvalonDock.Layout;
@@ -30,7 +31,7 @@ namespace ConscriptDesigner.Anchorables {
 
 
 		//-----------------------------------------------------------------------------
-		// Closing
+		// Public Methods
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Forces the document closed.</summary>
@@ -40,6 +41,12 @@ namespace ConscriptDesigner.Anchorables {
 				Closing -= OnDocumentClosing;
 				Close();
 			}
+		}
+
+		/// <summary>Focuses on the anchorable's content.</summary>
+		public virtual void Focus() {
+			if (Content is UIElement)
+				((UIElement) Content).Focus();
 		}
 
 

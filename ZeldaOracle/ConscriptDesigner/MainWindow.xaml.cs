@@ -50,6 +50,7 @@ namespace ConscriptDesigner {
 		private DispatcherTimer checkOutdatedTimer;
 		private DispatcherTimer loadedTimer;
 		private DispatcherTimer displayTimer;
+		private DispatcherTimer focusTimer;
 
 		private IRequestCloseAnchorable activeAnchorable;
 
@@ -89,6 +90,16 @@ namespace ConscriptDesigner {
 
 			Application.Current.Activated += OnApplicationActivated;
 			Application.Current.Deactivated += OnApplicationDeactivated;
+
+			focusTimer = new DispatcherTimer(
+				TimeSpan.FromMilliseconds(16),
+				DispatcherPriority.Render,
+				delegate {
+					if (activeAnchorable != null)
+						activeAnchorable.Focus();
+					focusTimer.Stop();
+				}, Dispatcher);
+			focusTimer.Stop();
 		}
 
 
@@ -262,8 +273,11 @@ namespace ConscriptDesigner {
 				}
 			}
 			CommandManager.InvalidateRequerySuggested();
-			if (ActiveAnchorableChanged != null && activeAnchorable != oldAnchorable)
+			if (ActiveAnchorableChanged != null && activeAnchorable != oldAnchorable) {
+				// HACK: Focus after a split second so focus actually transfers.
+				focusTimer.Start();
 				ActiveAnchorableChanged(this, EventArgs.Empty);
+			}
 		}
 
 		private void OnAnchorableClosed(object sender, EventArgs e) {
