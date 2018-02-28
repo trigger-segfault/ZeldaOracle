@@ -47,9 +47,6 @@ namespace ZeldaOracleBuilder {
 			"ICSharpCode.NRefactory.dll",
 			"ICSharpCode.NRefactory.Xml.dll",
 			"Mono.Cecil.dll",
-			"Mono.Cecil.Mdb.dll",
-			"Mono.Cecil.Pdb.dll",
-			"Mono.Cecil.Rocks.dll",
 			"Xceed.Wpf.Toolkit.dll"
 		};
 
