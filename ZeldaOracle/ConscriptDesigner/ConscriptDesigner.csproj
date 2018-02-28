@@ -511,12 +511,6 @@
     <Resource Include="Resources\Icons\Overwrite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PostBuildEvent>"$(SolutionDir)\GameBuilder.exe" -debug -out "$(SolutionDir)\ZeldaOracle\ConscriptDesigner\bin" -game "$(SolutionDir)\ZeldaOracle\Game\bin" -editor "$(SolutionDir)\ZeldaOracle\GameEditor\bin" -content "$(SolutionDir)\ZeldaOracle\GameContent\ZeldaContent.contentproj"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PostBuildEvent>"$(SolutionDir)\GameBuilder.exe" -release -out "$(SolutionDir)\ZeldaOracle\ConscriptDesigner\bin" -game "$(SolutionDir)\ZeldaOracle\Game\bin" -editor "$(SolutionDir)\ZeldaOracle\GameEditor\bin" -content "$(SolutionDir)\ZeldaOracle\GameContent\ZeldaContent.contentproj"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
