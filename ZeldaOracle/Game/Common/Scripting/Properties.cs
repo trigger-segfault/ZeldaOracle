@@ -8,10 +8,13 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripting {
 
+	[Serializable]
 	/// <summary>A collection of properties.</summary>
 	public class Properties {
+		[NonSerialized]
 		/// <summary>The object that holds these properties.</summary>
 		private IPropertyObject propertyObject;
+		[NonSerialized]
 		/// <summary>The properties from which these properties derive from (can be null).</summary>
 		private Properties baseProperties;
 		/// <summary>The property map.</summary>
@@ -432,6 +435,19 @@ namespace ZeldaOracle.Common.Scripting {
 			Property p = GetProperty(name, false);
 			if (p != null)
 				p.Documentation = documentation;
+		}
+
+		/// <summary>Used to restore properties that were aquired from the clipboard.</summary>
+		public void RestoreFromClipboard(Properties baseProperties,
+			IPropertyObject propertyObject)
+		{
+			this.propertyObject = propertyObject;
+			this.baseProperties = baseProperties;
+			foreach (var pair in map) {
+				if (baseProperties.Contains(pair.Key)) {
+					pair.Value.BaseProperty = baseProperties.GetProperty(pair.Key, false);
+				}
+			}
 		}
 
 		// Set the given property ONLY it doesn't already exist.

@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Worlds;
 using ConscriptDesigner.Control;
 using Microsoft.Xna.Framework.Graphics;
 using System.Windows.Forms;
+using ConscriptDesigner.Util;
 
 namespace ConscriptDesigner.WinForms {
 	
@@ -25,7 +26,7 @@ namespace ConscriptDesigner.WinForms {
 		private static RenderTarget2D renderTarget;
 		private static Zone defaultZone;
 
-		private DispatcherTimer dispatcherTimer;
+		private StoppableTimer dispatcherTimer;
 		private SpriteBatch spriteBatch;
 		
 		protected int columns;
@@ -70,11 +71,15 @@ namespace ConscriptDesigner.WinForms {
 
 			isInitialized = true;
 
-			this.dispatcherTimer = new DispatcherTimer(
+			this.dispatcherTimer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(15),
+				DispatcherPriority.Render,
+				TimerUpdate);
+			/*this.dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
 				delegate { TimerUpdate(); },
-				System.Windows.Application.Current.Dispatcher);
+				System.Windows.Application.Current.Dispatcher);*/
 		}
 
 

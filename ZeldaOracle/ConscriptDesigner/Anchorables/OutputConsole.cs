@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml;
 using ConscriptDesigner.Control;
+using ConscriptDesigner.Util;
 
 namespace ConscriptDesigner.Anchorables {
 	public class OutputConsole : RequestCloseAnchorable {
@@ -63,7 +64,7 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>The stack panel for each line of text.</summary>
 		private VirtualizingStackPanel stackPanel;
 		/// <summary>The timer to flush the buffer.</summary>
-		private DispatcherTimer updateTimer;
+		private StoppableTimer updateTimer;
 		/// <summary>The buffer for the text to be added to the output console.</summary>
 		private string buffer;
 		/// <summary>True if the console should be cleared during flush.</summary>
@@ -96,11 +97,15 @@ namespace ConscriptDesigner.Anchorables {
 
 			buffer = "";
 			requestClear = false;
-			updateTimer = new DispatcherTimer(
+			updateTimer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(20),
+				DispatcherPriority.Render,
+				UpdateTimer);
+			/*updateTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(20),
 				DispatcherPriority.Render,
 				delegate { UpdateTimer(); },
-				Application.Current.Dispatcher);
+				Application.Current.Dispatcher);*/
 
 			Closed += OnAnchorableClosed;
 			AppendLine("");

@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Control;
+using ConscriptDesigner.Util;
 using NAudio.Wave;
 
 namespace ConscriptDesigner.Windows {
@@ -103,8 +104,8 @@ namespace ConscriptDesigner.Windows {
 
 		private bool suppressEvents;
 
-		private DispatcherTimer updateTimer;
-		private DispatcherTimer startTimer;
+		private StoppableTimer updateTimer;
+		private StoppableTimer startTimer;
 		private bool soundLoaded;
 
 
@@ -124,7 +125,18 @@ namespace ConscriptDesigner.Windows {
 			this.soundLoaded = false;
 			this.spinnerVolume.Value = ProjectUserSettings.Playback.Volume;
 			this.waveOut.Volume = (float) ProjectUserSettings.Playback.Volume;
-			this.updateTimer = new DispatcherTimer(
+			this.updateTimer = StoppableTimer.StartNew(
+				TimeSpan.FromSeconds(0.01),
+				DispatcherPriority.ApplicationIdle,
+				Update);
+			this.startTimer = StoppableTimer.Create(
+				TimeSpan.FromSeconds(0.05),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					OnPlay();
+					startTimer.Stop();
+				});
+			/*this.updateTimer = new DispatcherTimer(
 				TimeSpan.FromSeconds(0.01),
 				DispatcherPriority.ApplicationIdle,
 				delegate { Update(); },
@@ -137,7 +149,7 @@ namespace ConscriptDesigner.Windows {
 					startTimer.Stop();
 				},
 				Dispatcher);
-			this.startTimer.Stop();
+			this.startTimer.Stop();*/
 			this.suppressEvents = false;
 
 			PlaySound(sound);

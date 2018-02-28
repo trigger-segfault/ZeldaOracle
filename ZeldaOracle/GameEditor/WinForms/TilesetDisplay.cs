@@ -18,6 +18,7 @@ using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using ZeldaOracle.Common.Graphics.Sprites;
 using System.Windows.Threading;
 using Size = System.Drawing.Size;
+using ZeldaEditor.Util;
 
 namespace ZeldaEditor.WinForms {
 
@@ -29,7 +30,7 @@ namespace ZeldaEditor.WinForms {
 		private EditorWindow	editorWindow;
 		private EditorControl	editorControl;
 
-		private DispatcherTimer dispatcherTimer;
+		private StoppableTimer dispatcherTimer;
 
 		private bool needsToInvalidate;
 
@@ -65,14 +66,21 @@ namespace ZeldaEditor.WinForms {
 
 			//UpdateTileset();
 
-			dispatcherTimer = new DispatcherTimer(
+			dispatcherTimer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(15),
+				DispatcherPriority.Render,
+				delegate {
+					if (editorControl.IsActive)
+						TimerUpdate();
+				});
+			/*dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
 				delegate {
 					if (editorControl.IsActive)
 						TimerUpdate();
 				},
-				System.Windows.Application.Current.Dispatcher);
+				System.Windows.Application.Current.Dispatcher);*/
 		}
 
 		protected override void Dispose(bool disposing) {
@@ -236,6 +244,8 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
+			if (!editorControl.IsResourcesLoaded)
+				return;
 			editorControl.UpdateTicks();
 			Graphics2D g = new Graphics2D(spriteBatch);
 			//g.SetRenderTarget(GameData.RenderTargetGame);

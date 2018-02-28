@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using ZeldaEditor.Control;
+using ZeldaEditor.Util;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.Windows {
@@ -56,7 +57,7 @@ namespace ZeldaEditor.Windows {
 		private EditorControl editorControl;
 		private Task<int> searchTask;
 		private CancellationTokenSource cancellationToken;
-		private DispatcherTimer updateTimer;
+		private StoppableTimer updateTimer;
 		private bool needsToSearch;
 
 
@@ -72,9 +73,13 @@ namespace ZeldaEditor.Windows {
 			this.editorControl = editorControl;
 			this.needsToSearch = true;
 			this.refactorType = refactorType;
-			this.updateTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(100),
+			this.updateTimer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(100),
+				DispatcherPriority.ApplicationIdle,
+				UpdateSearch);
+			/*this.updateTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(100),
 				DispatcherPriority.ApplicationIdle, delegate { UpdateSearch(); },
-				Application.Current.Dispatcher);
+				Application.Current.Dispatcher);*/
 
 			textBoxFind.Focus();
 

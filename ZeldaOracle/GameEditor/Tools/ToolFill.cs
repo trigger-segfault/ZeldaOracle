@@ -26,7 +26,7 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public ToolFill() : base("Fill Tool", Key.F) {
-			
+			AddOption("RoomOnly");
 		}
 
 
@@ -94,16 +94,24 @@ namespace ZeldaEditor.Tools {
 				.GetTile(levelTileCoord % Level.RoomSize, EditorControl.CurrentLayer);
 		}
 
-		private bool Matches(TileDataInstance targetTile, Point2I current) {
+		private bool Matches(TileDataInstance targetTile, Point2I targetRoom, Point2I current) {
+			if (EditorControl.ToolOptionRoomOnly &&
+				targetRoom != (current / Level.RoomSize))
+			{
+				return false;
+			}
 			TileDataInstance currentTile = GetTileAt(current);
 			return Matches(targetTile, GetTileAt(current));
 		}
 
 		private bool Matches(TileDataInstance tile1, TileDataInstance tile2) {
-			if (tile1 == null)
+			if (tile1 == null) {
 				return (tile2 == null);
-			else if (tile2 != null)
-				return (tile1.TileData == tile2.TileData);
+			}
+			else if (tile2 != null) {
+				return (tile1.TileData == tile2.TileData &&
+					(!EditorControl.ToolOptionRoomOnly || tile1.Room == tile2.Room));
+			}
 			return false;
 		}
 
@@ -111,6 +119,7 @@ namespace ZeldaEditor.Tools {
 			Point2I totalSize = Level.Dimensions * Level.RoomSize;
 			TileDataInstance targetTile = GetTileAt(target);
 			Point2I point;
+			Point2I targetRoom = target / Level.RoomSize;
 
 			// Don't fill in the same tiles.
 			if (fillData == null && targetTile == null)
@@ -123,12 +132,12 @@ namespace ZeldaEditor.Tools {
 
 			while (nodes.Count > 0) {
 				point = nodes.Dequeue();
-				if (Matches(targetTile, point)) {
+				if (Matches(targetTile, targetRoom, point)) {
 					int width = 1;
 					// Travel as far left as possible.
-					for (; point.X - 1 >= 0 && Matches(targetTile, point - new Point2I(1, 0)); point.X--, width++) ;
+					for (; point.X - 1 >= 0 && Matches(targetTile, targetRoom, point - new Point2I(1, 0)); point.X--, width++) ;
 					// Travel as far right as possible.
-					for (; point.X + width < totalSize.X && Matches(targetTile, point + new Point2I(width, 0)); width++) ;
+					for (; point.X + width < totalSize.X && Matches(targetTile, targetRoom, point + new Point2I(width, 0)); width++) ;
 
 					// Fill the row of tiles.
 					for (int i = 0; i < width; i++)
@@ -138,7 +147,7 @@ namespace ZeldaEditor.Tools {
 					bool northContinue = false, southContinue = false;
 					for (int i = 0; i < width; i++) {
 						if (point.Y - 1 >= 0) {
-							if (Matches(targetTile, point + new Point2I(i, -1))) {
+							if (Matches(targetTile, targetRoom, point + new Point2I(i, -1))) {
 								if (!northContinue) {
 									nodes.Enqueue(point + new Point2I(i, -1));
 									northContinue = true;
@@ -149,7 +158,7 @@ namespace ZeldaEditor.Tools {
 							}
 						}
 						if (point.Y + 1 < totalSize.Y) {
-							if (Matches(targetTile, point + new Point2I(i, 1))) {
+							if (Matches(targetTile, targetRoom, point + new Point2I(i, 1))) {
 								if (!southContinue) {
 									nodes.Enqueue(point + new Point2I(i, 1));
 									southContinue = true;
@@ -170,6 +179,7 @@ namespace ZeldaEditor.Tools {
 
 			TileDataInstance oldTile = room.GetTile(tileCoord, EditorControl.CurrentLayer);
 			action.AddOverwrittenTile(levelTileCoord, oldTile);
+			action.AddPlacedTile(levelTileCoord);
 
 			room.CreateTile(tileData, tileCoord, EditorControl.CurrentLayer);
 		}

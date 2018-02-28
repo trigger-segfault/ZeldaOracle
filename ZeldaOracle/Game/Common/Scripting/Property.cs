@@ -11,6 +11,7 @@ namespace ZeldaOracle.Common.Scripting {
 	public delegate void PropertyAction(IPropertyObject sender, object value);
 
 	/// <summary>The possible raw data types for a property.</summary>
+	[Serializable]
 	public enum PropertyType {
 		List,
 		String,
@@ -30,6 +31,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 	/// <summary>A proprety represents a piece of data that can be represented
 	/// multiple types including lists of other properties.</summary>
+	[Serializable]
 	public class Property {
 		/// <summary>The name of the property.</summary>
 		private string name;
@@ -40,14 +42,19 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>If this property is part of a list of properties, then 'next' points to the next property in the list.</summary>
 		private Property nextSibling;
 		/// <summary>If this property is a list of properties, then 'firstChild' points to the first property in the list.</summary>
+		[NonSerialized]
 		private Property firstChild;
 		/// <summary>The documentation for this property, if it is a base-property.</summary>
+		[NonSerialized]
 		private PropertyDocumentation documentation;
 		/// <summary>The action that occurs when the property is changed. NOTE: this is currently unused.</summary>
+		[NonSerialized]
 		private PropertyAction action;
 		/// <summary>The properties containing this property.</summary>
+		[NonSerialized]
 		private Properties properties;
 		/// <summary>The base property that this property modifies.</summary>
+		[NonSerialized]
 		private Property baseProperty;
 
 

@@ -47,8 +47,8 @@ namespace ConscriptDesigner.Control {
 		private static Thread busyThread;
 		private static bool busyTaskIsConscripts;
 		private static ScriptReaderException lastScriptError;
-		private static DispatcherTimer updateTimer;
-		private static DispatcherTimer modifiedTimer;
+		private static StoppableTimer updateTimer;
+		private static StoppableTimer modifiedTimer;
 		private static List<IRequestCloseAnchorable> openAnchorables;
 		private static List<IRequestCloseAnchorable> closingAnchorables;
 
@@ -65,7 +65,7 @@ namespace ConscriptDesigner.Control {
 		private static ObservableCollection<string> previewEntityPalettes;
 		private static Stopwatch animationWatch;
 		private static int previewScale;
-		private static DispatcherTimer animationTimer;
+		private static StoppableTimer animationTimer;
 
 		//private static string resourceAutoCompleteType;
 		private static bool playAnimations;
@@ -88,10 +88,22 @@ namespace ConscriptDesigner.Control {
 			};
 			openAnchorables = new List<IRequestCloseAnchorable>();
 			closingAnchorables = new List<IRequestCloseAnchorable>();
-			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
+			updateTimer = StoppableTimer.StartNew(
+				TimeSpan.FromSeconds(0.05),
+				DispatcherPriority.Render,
+				Update);
+			modifiedTimer = StoppableTimer.StartNew(
+				TimeSpan.FromSeconds(3),
+				DispatcherPriority.ApplicationIdle,
+				delegate { CheckForOutdatedFiles(); });
+			/*animationTimer = StoppableTimer.StartNew(
+				TimeSpan.FromSeconds(0.05),
+				DispatcherPriority.Render,
+				Update);*/
+			/*updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
 			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
 			animationTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
-
+			*/
 			previewZone = null;
 			previewZoneID = "default";
 			previewZones = new ObservableCollection<string>();
@@ -217,7 +229,7 @@ namespace ConscriptDesigner.Control {
 			selectedTileLocation = -Point2I.One;
 		}
 
-		private static void Update(object sender, EventArgs e) {
+		private static void Update() {
 			if (busyTask != null || busyThread != null) {
 				if (busyTask.IsCompleted) {
 					if (busyTaskIsConscripts)

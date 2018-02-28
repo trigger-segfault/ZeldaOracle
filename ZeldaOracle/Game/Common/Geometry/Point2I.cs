@@ -15,6 +15,7 @@ using GdiRectangleF	= System.Drawing.RectangleF;
 
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>The 2D integer precision point with basic operations and functions.</summary>
+	[Serializable]
 	public struct Point2I {
 
 		//-----------------------------------------------------------------------------

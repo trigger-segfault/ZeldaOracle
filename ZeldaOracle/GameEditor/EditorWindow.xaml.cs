@@ -54,7 +54,8 @@ namespace ZeldaEditor {
 
 		private bool suppressEvents = false;
 
-		private DispatcherTimer updateTimer;
+		private StoppableTimer updateTimer;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -118,11 +119,15 @@ namespace ZeldaEditor {
 
 			suppressEvents = true;
 
-			updateTimer = new DispatcherTimer(
+			updateTimer = StoppableTimer.StartNew(
+				TimeSpan.FromSeconds(0.4),
+				DispatcherPriority.ApplicationIdle,
+				Update);
+			/*updateTimer = new DispatcherTimer(
 				TimeSpan.FromSeconds(0.4),
 				DispatcherPriority.ApplicationIdle,
 				delegate { Update(); },
-				Dispatcher);
+				Dispatcher);*/
 
 			Application.Current.Activated += OnApplicationActivated;
 			Application.Current.Deactivated += OnApplicationDeactivated;
@@ -145,6 +150,8 @@ namespace ZeldaEditor {
 			buttonToolFill.Tag = editorControl.ToolFill;
 			buttonToolSelection.Tag = editorControl.ToolSelection;
 			buttonToolEyedropper.Tag = editorControl.ToolEyedropper;
+
+			UpdateCurrentTool();
 		}
 
 		// Prompt the user to save unsaved changes if there are any. Returns
@@ -227,6 +234,18 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 		// Window Event Handlers
 		//-----------------------------------------------------------------------------
+		
+		private void OnSingleLayerChanged(object sender, RoutedEventArgs e) {
+			editorControl.ToolOptionSingleLayer = buttonToolSingleLayer.IsChecked.Value;
+		}
+
+		private void OnRoomOnlyChanged(object sender, RoutedEventArgs e) {
+			editorControl.ToolOptionRoomOnly = buttonToolRoomOnly.IsChecked.Value;
+		}
+
+		private void OnMergeChanged(object sender, RoutedEventArgs e) {
+			editorControl.ToolOptionMerge = buttonToolMerge.IsChecked.Value;
+		}
 
 		private void OnVisualsBelowChecked(object sender, RoutedEventArgs e) {
 			dropDownItemHideBelow.IsChecked = false;
@@ -536,7 +555,7 @@ namespace ZeldaEditor {
 		}
 		private void CanExecuteCycleLayerUp(object sender, CanExecuteRoutedEventArgs e) {
 			if (!suppressEvents) return;
-			e.CanExecute = editorControl.IsLevelOpen && (/*editorControl.CurrentLayer + 1 < editorControl.Level.RoomLayerCount && */!editorControl.ActionLayer);
+			e.CanExecute = editorControl.IsLevelOpen && !editorControl.ActionLayer;
 		}
 		private void CanExecuteCycleLayerDown(object sender, CanExecuteRoutedEventArgs e) {
 			if (!suppressEvents) return;
@@ -716,6 +735,24 @@ namespace ZeldaEditor {
 		public void UpdateCurrentTool() {
 			for (int i = 0; i < toolButtons.Length; i++)
 				toolButtons[i].IsChecked = (toolButtons[i].Tag == editorControl.CurrentTool);
+			separatorToolOptions.Visibility = (editorControl.CurrentTool.Options.Any() ?
+				Visibility.Visible : Visibility.Collapsed);
+			for (int i = toolBar2.Items.IndexOf(separatorToolOptions) + 1; ; i++) {
+				if (toolBar2.Items[i] is Separator)
+					break;
+
+				ToggleButton button = (ToggleButton) toolBar2.Items[i];
+				string buttonName = button.Name.Replace("buttonTool", "");
+				bool visible = editorControl.CurrentTool.Options.Contains(buttonName);
+				button.Visibility = (visible ? Visibility.Visible : Visibility.Collapsed);
+			}
+		}
+
+		public void UpdateCurrentLayer() {
+			if (editorControl.ActionLayer)
+				comboBoxLayers.SelectedIndex = comboBoxLayers.Items.Count - 1;
+			else
+				comboBoxLayers.SelectedIndex = editorControl.CurrentLayer;
 		}
 
 		// Status Bar -----------------------------------------------------------------
