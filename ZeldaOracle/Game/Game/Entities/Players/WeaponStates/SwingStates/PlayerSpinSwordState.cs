@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Main;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Control;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
@@ -46,13 +32,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			lunge					= false;
 			swingAnglePullBack		= 0;
 			swingAngleDurations		= new int[] { 3, 2, 3, 2, 3, 2, 3, 2, 5 };
-			weaponSwingAnimation			= GameData.ANIM_SWORD_SPIN;
-			playerSwingAnimation			= GameData.ANIM_PLAYER_SPIN;
-			playerSwingAnimationUnderwater	= GameData.ANIM_PLAYER_MERMAID_SPIN;
-			
-			//StateParameters.PlayerAnimations.Spin
+			weaponSwingAnimation		= GameData.ANIM_SWORD_SPIN;
+			weaponSwingAnimationLunge	= GameData.ANIM_SWORD_SPIN;
 
-			// Will always spin clockwise.
+			// The player will always spin clockwise
 			swingWindingOrders = new WindingOrder[] {
 				WindingOrder.Clockwise,
 				WindingOrder.Clockwise,
@@ -75,7 +58,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnSwingTilePeak(int angle, Vector2F hitPoint) {
-			// Don't cut the tile when the swing is started.
+			// Don't cut the tile when the swing is started
 			if (SwingAngleIndex > 0)
 				base.OnSwingTilePeak(angle, hitPoint);
 		}
@@ -90,12 +73,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingBegin() {
-			base.OnSwingBegin();
 			AudioSystem.PlaySound(GameData.SOUND_SWORD_SPIN);
 		}
 
 		public override void OnSwingEnd() {
-			// Cut the center tile.
+			// Cut the center tile
 			CutTilesAtPoint(player.Center);
 			End();
 		}

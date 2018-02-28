@@ -1,19 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Main;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Common.Graphics.Sprites;
 
@@ -76,14 +64,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		private ItemWeapon				weapon;
 		protected UnitTool				playerTool;
-		private int						swingDirection;	 // The player the direction is in when he starts swinging.
-		private int						swingAngleStart;
-		private WindingOrder			swingAngleDirection;
-		private int						swingAngle;
-		private int						swingAngleIndex;
-		private Rectangle2I[,]			swingCollisionBoxes;
 
-		// Settings.
+		// Settings
 		protected int				swingAnglePullBack;
 		protected bool				lunge;
 		protected bool				isReswingable;
@@ -93,47 +75,51 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		protected Rectangle2I[,]	swingCollisionBoxesNoLunge;
 		protected Animation			weaponSwingAnimationLunge;
 		protected Animation         weaponSwingAnimation;
-		protected Animation         playerSwingAnimation;
-		protected Animation         playerSwingAnimationLunge;
-		protected Animation         playerSwingAnimationInMinecart;
-		protected Animation         playerSwingAnimationUnderwater;
 		private Dictionary<int, Action>	timedActions;
 
+		// Internal state
+		private Direction				swingDirection;	 // The player the direction is in when he starts swinging.
+		private Angle					swingAngleStart;
+		private WindingOrder			swingAngleDirection;
+		private Angle					swingAngle;
+		private int						swingAngleIndex;
+		private Rectangle2I[,]			swingCollisionBoxes;
+		protected bool					isLunging;
 	
 
 		//-----------------------------------------------------------------------------
-		// Constructors & Setup
+		// Constructors & Configuration
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwingState() {
 			weapon = null;
 			timedActions = new Dictionary<int, Action>();
 
-			InitStandardSwing(GameData.ANIM_SWORD_SWING, GameData.ANIM_SWORD_MINECART_SWING);
+			StateParameters.ProhibitMovementControlOnGround = true;
+
+			InitStandardSwing(GameData.ANIM_SWORD_SWING,
+				GameData.ANIM_SWORD_MINECART_SWING);
 		}
 		
-		protected void InitStandardSwing(Animation toolAnimationLunge, Animation toolAnimation) {
-			this.lunge							= true;
-			this.isReswingable					= true;
-			this.swingAnglePullBack				= 2;
-			this.swingAngleDurations			= new int[] { 3, 3, 12 };
+		protected void InitStandardSwing(
+			Animation toolAnimationLunge, Animation toolAnimation)
+		{
+			lunge					= true;
+			isReswingable			= true;
+			swingAnglePullBack		= 2;
+			swingAngleDurations		= new int[] { 3, 3, 12 };
 
-			this.swingCollisionBoxesLunge		= SWING_TOOL_BOXES;
-			this.swingCollisionBoxesNoLunge		= SWING_TOOL_BOXES_NOLUNGE;
+			swingCollisionBoxesLunge	= SWING_TOOL_BOXES;
+			swingCollisionBoxesNoLunge	= SWING_TOOL_BOXES_NOLUNGE;
 
-			this.weaponSwingAnimationLunge		= toolAnimationLunge;
-			this.weaponSwingAnimation			= toolAnimation;
-			this.playerSwingAnimationLunge		= GameData.ANIM_PLAYER_SWING;
-			this.playerSwingAnimation			= GameData.ANIM_PLAYER_MINECART_SWING;
-			this.playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
-			this.playerSwingAnimationUnderwater	= GameData.ANIM_PLAYER_MERMAID_SWING;
+			weaponSwingAnimationLunge	= toolAnimationLunge;
+			weaponSwingAnimation		= toolAnimation;
 
-			this.swingWindingOrders = new WindingOrder[] {
-				WindingOrder.Clockwise,
-				WindingOrder.CounterClockwise,
-				WindingOrder.CounterClockwise,
-				WindingOrder.CounterClockwise
-			};
+			swingWindingOrders = new WindingOrder[Direction.Count];
+			swingWindingOrders[Direction.Right]	= WindingOrder.Clockwise;
+			swingWindingOrders[Direction.Up]	= WindingOrder.CounterClockwise;
+			swingWindingOrders[Direction.Left]	= WindingOrder.CounterClockwise;
+			swingWindingOrders[Direction.Down]	= WindingOrder.CounterClockwise;
 		}
 
 		
@@ -141,56 +127,61 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Swing methods
 		//-----------------------------------------------------------------------------
 
-		// Add an action to be invoked at the given time of the swing.
+		/// <summary>Add an action to be triggered at the given time after the swing
+		/// has begun.</summary>
 		public void AddTimedAction(int time, Action action) {
 			timedActions[time] = action;
 		}
 
-		private void Swing(int direction) {
-
-			swingDirection		= direction;
-			swingAngleDirection	= swingWindingOrders[swingDirection];
-			swingAngleStart		= Directions.ToAngle(swingDirection);
-			swingAngleStart		= Angles.Subtract(swingAngleStart, swingAnglePullBack, swingAngleDirection);
-			swingAngle			= swingAngleStart;
-			swingAngleIndex		= 0;
+		/// <summary>Perform a swing for the given facing direction.</summary>
+		private void Swing(Direction direction) {
+			swingDirection = direction;
+			swingAngleDirection = swingWindingOrders[swingDirection];
+			swingAngleStart = swingDirection.ToAngle()
+				.Rotate(swingAngleStart, swingAngleDirection);
+			swingAngle = swingAngleStart;
+			swingAngleIndex = 0;
 
 			player.Direction = direction;
+
+			// Equip the player tool
 			playerTool = GetSwingTool();
 			player.EquipTool(playerTool);
 			playerTool.AnimationPlayer.SubStripIndex = direction;
 			
 			// Do not lunge while in minecart
-			if (lunge && !player.IsInMinecart) {
-				player.Graphics.PlayAnimation(GetPlayerSwingAnimation(true));
+			isLunging = (lunge && !player.IsInMinecart);
+
+			player.Graphics.PlayAnimation(GetPlayerSwingAnimation(isLunging));
+			if (isLunging) {
 				playerTool.PlayAnimation(weaponSwingAnimationLunge);
 				swingCollisionBoxes = swingCollisionBoxesLunge;
 			}
 			else {
-				player.Graphics.PlayAnimation(GetPlayerSwingAnimation(false));
 				playerTool.PlayAnimation(weaponSwingAnimation);
 				swingCollisionBoxes = swingCollisionBoxesNoLunge;
 			}
 
 			OnSwingBegin();
 			
-			// Perform an initial swing tile peak.
-			Vector2F hitPoint = player.Center + (Angles.ToVector(swingAngle, false) * 13);
-			//Point2I hitTileLocation = player.RoomControl.GetTileLocation(hitPoint);
+			// Perform an initial swing tile peak
+			Vector2F hitPoint = player.Center + (swingAngle.ToPoint() * 13);
 			OnSwingTilePeak(swingAngle, hitPoint);
+
+			// Set the tool's initial collision box
+			Rectangle2I toolBox = swingCollisionBoxes[swingDirection,
+				GMath.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
+			toolBox.Point += (Point2I) player.CenterOffset;
+			playerTool.Interactions.InteractionBox = toolBox;
 			
-			// Invoke any actions set to occur at time 0.
+			// Trigger actions that occur at time 0
 			if (timedActions.ContainsKey(0))
 				timedActions[0].Invoke();
-
-			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, GMath.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
-			toolBox.Point += (Point2I) player.CenterOffset;
-			playerTool.CollisionBox = toolBox;
 		}
 		
 		
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Virtual Methods
 		//-----------------------------------------------------------------------------
 		
 		public virtual Animation GetPlayerSwingAnimation(bool lunge) {
@@ -203,21 +194,15 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			return player.ToolVisual;
 		}
 
-		public virtual void OnSwingBegin() {
-
-		}
+		public virtual void OnSwingBegin() {}
 
 		public virtual void OnSwingEnd() {
 			End();
 		}
 
-		public virtual void OnSwingTilePeak(int angle, Vector2F hitPoint) {
+		public virtual void OnSwingTilePeak(int angle, Vector2F hitPoint) {}
 
-		}
-
-		public virtual void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {
-
-		}
+		public virtual void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {}
 
 
 		//-----------------------------------------------------------------------------
@@ -225,7 +210,6 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			StateParameters.ProhibitMovementControlOnGround = true;
 			playerTool = player.ToolVisual;
 			playerTool.DrawAboveUnit = false;
 			Swing(player.UseDirection);
@@ -237,62 +221,62 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnExitMinecart() {
-			if (player.Graphics.Animation == playerSwingAnimationInMinecart)
-				player.Graphics.SetAnimation(playerSwingAnimation);
+			player.Graphics.SetAnimation(GetPlayerSwingAnimation(isLunging));
 		}
 
 		public override void OnEnterMinecart() {
 			// Being in a minecart disables lunging
-			if (player.Graphics.Animation == playerSwingAnimation ||
-				player.Graphics.Animation == playerSwingAnimationLunge)
-			{
-				player.Graphics.SetAnimation(playerSwingAnimationInMinecart);
+			if (!isLunging) {
+				isLunging = true;
 				swingCollisionBoxes = swingCollisionBoxesNoLunge;
 			}
+
+			player.Graphics.SetAnimation(GetPlayerSwingAnimation(isLunging));
 		}
 
 		public override void Update() {
-			base.Update();
-		
-			// Find the start time for the current swing angle.
+			// Get the start time for the current swing angle
 			int swingAngleStartTime = 0;
 			for (int i = 0; i < swingAngleIndex; i++)
 				swingAngleStartTime += swingAngleDurations[i];
 
-			// Check for changing swing angles.
+			// Check if it is time to change the swing angle
 			bool changedAngles = false;
-			int t = 0;
 			int time = (int) playerTool.AnimationPlayer.PlaybackTime;
-			for (int i = 0; i < swingAngleDurations.Length; i++) {
-				if (time == t && swingAngleIndex != i) {
-					swingAngleIndex	= i;
-					swingAngle		= Angles.Add(swingAngle, 1, swingAngleDirection);
-					changedAngles	= true;
+			int t = 0;
+			for (int angleIndex = 0;
+				angleIndex < swingAngleDurations.Length; angleIndex++)
+			{
+				if (t == time && swingAngleIndex != angleIndex) {
+					swingAngleIndex	= angleIndex;
+					swingAngle = swingAngle.Rotate(1, swingAngleDirection);
+					changedAngles = true;
 					break;
 				}
-				t += swingAngleDurations[i];
+				t += swingAngleDurations[angleIndex];
 			}
 
-			// Check for a swing tile peak (tile peaks happen just as the angle is changed).
+			// If the swing angle changed, then trigger a swing tile peak
 			if (changedAngles) {
-				Vector2F hitPoint = player.Center + (Angles.ToVector(swingAngle, false) * 13);
-				//Point2I hitTileLocation = player.RoomControl.GetTileLocation(hitPoint);
+				Vector2F hitPoint = player.Center + (swingAngle.ToPoint() * 13);
 				OnSwingTilePeak(swingAngle, hitPoint);
 			}
-				
-			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, GMath.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
+			
+			// Update the swing colliison box for the current swing angle
+			Rectangle2I toolBox = swingCollisionBoxes[swingDirection,
+				GMath.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
 			toolBox.Point += (Point2I) player.CenterOffset;
 			playerTool.CollisionBox = toolBox;
 
-			// Invoke any occuring timed actions.
+			// Invoke any occuring timed actions
 			if (timedActions.ContainsKey(time))
 				timedActions[time].Invoke();
 
-			// Reset the swing when the button is pressed again.
+			// If the action button is pressed, then reset the swing
 			if (isReswingable && weapon.IsEquipped && weapon.IsButtonPressed())
 				Swing(player.UseDirection);
 
-			// End the swing.
+			// End the swing upon completing the animation
 			if (playerTool.AnimationPlayer.IsDone && player.Graphics.IsAnimationDone)
 				OnSwingEnd();
 		}
@@ -307,7 +291,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			set { weapon = value; }
 		}
 
-		public int SwingDirection {
+		public Direction SwingDirection {
 			get { return swingDirection; }
 		}
 
@@ -315,7 +299,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			get { return swingAngleDirection; }
 		}
 
-		public int SwingStartAngle {
+		public Angle SwingStartAngle {
 			get { return swingAngleStart; }
 		}
 

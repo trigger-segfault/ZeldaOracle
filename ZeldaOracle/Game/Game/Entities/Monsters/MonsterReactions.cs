@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters.States;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
@@ -315,6 +316,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			public static void Intercept(Entity subject, Entity sender, EventArgs args) {
 				if (sender is IInterceptable)
 					(sender as IInterceptable).Intercept();
+			}
+
+			/// <summary>Deflect the sender if it is a projectile.</summary>
+			public static void Deflect(Entity subject, Entity sender, EventArgs args) {
+				if (sender is Projectile)
+					((Projectile) sender).Intercept();
 			}
 			
 			/// <summary>Bump the sender if it is a unit.</summary>

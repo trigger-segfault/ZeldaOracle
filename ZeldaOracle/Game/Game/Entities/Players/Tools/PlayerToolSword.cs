@@ -30,6 +30,13 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 			base.OnInitialize();
 
 			itemSword = (ItemSword) unit.GameControl.Inventory.GetItem("item_sword");
+
+			Interactions.Enable();
+			Interactions.InteractionType = InteractionType.Sword;
+			Interactions.InteractionEventArgs = new WeaponInteractionEventArgs() {
+				Weapon = itemSword,
+				Tool = this,
+			};
 		}
 		
 		public override void OnHitProjectile(Projectile projectile) {

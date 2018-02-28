@@ -23,8 +23,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		
 		private const int SWING_SWORD_BEAM_DELAY = 6;
 
-		// True if the player allowed to hold the sword after swinging.
-		// This turns false when the player slashes a monster.
+		/// <summary>True if the player allowed to hold the sword after swinging. This
+		/// will be set to false when the player slashes a monster.</summary>
 		private bool allowHold;
 
 
@@ -33,11 +33,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwingSwordState() {
-			allowHold				= true;
-			limitTilesToDirection	= true;
+			allowHold = true;
+			limitTilesToDirection = true;
 			
 			InitStandardSwing(GameData.ANIM_SWORD_SWING,
-							  GameData.ANIM_PLAYER_MINECART_SWING);
+				GameData.ANIM_SWORD_MINECART_SWING);
 			AddTimedAction(SWING_SWORD_BEAM_DELAY, SpawnSwordBeam);
 		}
 
@@ -49,21 +49,24 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		private void SpawnSwordBeam() {
 			ItemSword itemSword = Weapon as ItemSword;
 
-			if (itemSword.BeamTracker.IsAvailable && player.IsAtFullHealth && itemSword.Level > Item.Level1) {
-				// Spawn a sword beam.
+			if (itemSword.BeamTracker.IsAvailable && player.IsAtFullHealth &&
+				itemSword.Level > Item.Level1)
+			{
+				// Spawn a sword beam
 				SwordBeam beam = new SwordBeam();
-				beam.Owner				= player;
-				beam.Position			= player.Center + (Directions.ToVector(player.Direction) * 12.0f);
-				beam.ZPosition			= player.ZPosition;
-				beam.Direction			= player.Direction;
-				beam.Physics.Velocity	= Directions.ToVector(player.Direction) * GameSettings.PROJECTILE_SWORD_BEAM_SPEED;
+				beam.Owner		= player;
+				beam.Position	= player.Center + player.Direction.ToVector(12.0f);
+				beam.ZPosition	= player.ZPosition;
+				beam.Direction	= player.Direction;
+				beam.Physics.Velocity = player.Direction.ToVector(
+					GameSettings.PROJECTILE_SWORD_BEAM_SPEED);
 
-				// Adjust the beam spawn position based on player direction.
-				if (Directions.IsHorizontal(player.Direction))
+				// Adjust the beam spawn position based on player direction
+				if (player.Direction.IsHorizontal)
 					beam.Position += new Vector2F(0, 4);
-				else if (player.Direction == Directions.Up)
+				else if (player.Direction == Direction.Up)
 					beam.Position -= new Vector2F(4, 0);
-				else if (player.Direction == Directions.Down)
+				else if (player.Direction == Direction.Down)
 					beam.Position += new Vector2F(3, 0);
 			
 				player.RoomControl.SpawnEntity(beam);
@@ -78,24 +81,9 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin(PlayerState previousState) {
-			if (player.IsInMinecart) {
-				weaponSwingAnimation			= GameData.ANIM_SWORD_MINECART_SWING;
-				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_NOLUNGE;
-				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
-				allowHold						= false;
-			}
-			else {
-				weaponSwingAnimation			= GameData.ANIM_SWORD_SWING;
-				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING;
-				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
-			}
-			base.OnBegin(previousState);
-		}
-
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
-			allowHold = !(player.IsInMinecart);
+			allowHold = !player.IsInMinecart;
 			AudioSystem.PlayRandomSound(
 				GameData.SOUND_SWORD_SLASH_1,
 				GameData.SOUND_SWORD_SLASH_2,
@@ -103,20 +91,25 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingEnd() {
-			// Begin holding the sword after swinging.
-			if (!player.IsInMinecart && allowHold && Weapon.IsEquipped && Weapon.IsButtonDown()) {
+			if (!player.IsInMinecart && allowHold &&
+				Weapon.IsEquipped && Weapon.IsButtonDown())
+			{
+				// Begin holding the sword after swinging
 				player.HoldSwordState.Weapon = Weapon;
 				StateMachine.BeginState(player.HoldSwordState);
 			}
-			else
-				base.OnSwingEnd();
+			else {
+				End();
+			}
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
+		
+		/// <summary>True if the player allowed to hold the sword after swinging. This
+		/// will be set to false when the player slashes a monster.</summary>
 		public bool AllowSwordHold {
 			get { return allowHold; }
 			set { allowHold = false; }

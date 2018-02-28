@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
@@ -10,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Units;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
@@ -72,16 +74,39 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				return (tile == null || tile != tileOwner);
 			};
 
-			//Interactions.SetReaction(InteractionType.Sword, Deflect);
+			Interactions.Enable();
+			Interactions.SetReaction(InteractionType.Sword,			Deflect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Deflect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Deflect);
+			Interactions.SetReaction(InteractionType.Shield,		Deflect);
+			Interactions.SetReaction(InteractionType.PlayerContact,
+				delegate(Entity sender, EventArgs args)
+			{
+				OnCollidePlayer(RoomControl.Player);
+			});
 		}
 
-		//public void Deflect(Entity sender, EventArgs args) {
-		//}
-		
+		public void Deflect(Entity sender, EventArgs args) {
+			WeaponInteractionEventArgs weaponArgs = (WeaponInteractionEventArgs) args;
+			if (projectileType == ProjectileType.NotDeflectable)
+				return;
+			if (weaponArgs.Weapon.Level == Item.Level2)
+				return;
+			Deflect();
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
-		
+
+		public virtual void Deflect() {
+			if (projectileType != ProjectileType.NotDeflectable) {
+				AudioSystem.PlaySound(GameData.SOUND_KEY_BOUNCE);
+				Intercept();
+			}
+		}
+
 		public virtual void Intercept() {
 			Destroy();
 		}
@@ -186,6 +211,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update() {
+			Interactions.InteractionBox = Physics.SoftCollisionBox;
 
 			// Check if collided
 			if (physics.IsColliding && eventCollision != null) {
@@ -259,21 +285,22 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			else {
 				Player player = RoomControl.Player;
 				
+				
 				// Collide with the player's tools.
-				foreach (UnitTool tool in player.EquippedTools) {
-					if (Physics.PositionedCollisionBox.Intersects(tool.PositionedCollisionBox)) {
-						tool.OnHitProjectile(this);
-						if (IsDestroyed)
-							return;
-					}
-				}
+				//foreach (UnitTool tool in player.EquippedTools) {
+				//	if (Physics.PositionedCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+				//		tool.OnHitProjectile(this);
+				//		if (IsDestroyed)
+				//			return;
+				//	}
+				//}
 				
 				// Collide with the player.
-				if (!player.IsPassable && Physics.IsMeetingEntity(player, CollisionBoxType.Soft)) {
-					OnCollidePlayer(player);
-					if (IsDestroyed)
-						return;
-				}
+				//if (!player.IsPassable && Physics.IsMeetingEntity(player, CollisionBoxType.Soft)) {
+				//	OnCollidePlayer(player);
+				//	if (IsDestroyed)
+				//		return;
+				//}
 			}
 
 			// Collide with solid entities

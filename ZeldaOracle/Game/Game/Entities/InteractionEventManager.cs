@@ -126,9 +126,9 @@ namespace ZeldaOracle.Game.Entities {
 		// UNUSED:
 		//-----------------------------------------------------------------------------
 
-		SwordHitShield,			// Their sword hits my shield.
-		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
-		ShieldHitShield,		// Their shield hits my shield.
+		//SwordHitShield,			// Their sword hits my shield.
+		//BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
+		//ShieldHitShield,		// Their shield hits my shield.
 
 
 		//-----------------------------------------------------------------------------

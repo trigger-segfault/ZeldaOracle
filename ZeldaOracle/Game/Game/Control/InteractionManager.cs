@@ -52,7 +52,11 @@ namespace ZeldaOracle.Game.Control {
 				if (sender != subject && subject.Interactions.IsEnabled &&
 					subjectBox.Intersects(senderBox))
 				{
-					subject.Interactions.Trigger(type, sender);
+					Entity actualSender = sender;
+					if (sender.Parent != null)
+						actualSender = sender.Parent;
+					subject.Interactions.Trigger(type, actualSender,
+						sender.Interactions.InteractionEventArgs);
 					if (sender.IsDestroyed)
 						return;
 				}

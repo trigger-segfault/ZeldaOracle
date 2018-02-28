@@ -13,7 +13,8 @@ namespace ZeldaOracle.Game.Entities {
 		private InteractionEventManager interactionManager;
 
 		private InteractionType interactionType;
-		
+		private EventArgs interactionEventArgs;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -22,9 +23,10 @@ namespace ZeldaOracle.Game.Entities {
 		public InteractionComponent(Entity entity) :
 			base(entity)
 		{
-			interactionBox		= Rectangle2F.Zero;
-			interactionManager	= null;
-			interactionType		= InteractionType.None;
+			interactionBox			= Rectangle2F.Zero;
+			interactionManager		= null;
+			interactionType			= InteractionType.None;
+			interactionEventArgs	= null;
 		}
 
 
@@ -138,6 +140,10 @@ namespace ZeldaOracle.Game.Entities {
 		public InteractionType InteractionType {
 			get { return interactionType; }
 			set { interactionType = value; }
+		}
+		public EventArgs InteractionEventArgs {
+			get { return interactionEventArgs; }
+			set { interactionEventArgs = value; }
 		}
 	}
 }

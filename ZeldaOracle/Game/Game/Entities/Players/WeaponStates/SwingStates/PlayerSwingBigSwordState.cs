@@ -61,8 +61,6 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			swingAnglePullBack				= 2;
 			swingAngleDurations				= new int[] { 12, 4, 4, 4, 10 };
 			weaponSwingAnimation			= GameData.ANIM_BIG_SWORD_SWING;
-			playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_BIG;
-			playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_BIG;
 			swingCollisionBoxesNoLunge		= SWING_TOOL_BOXES_BIG;
 		}
 
@@ -76,8 +74,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingBegin() {
-			base.OnSwingBegin();
 			AudioSystem.PlaySound(GameData.SOUND_BIGGORON_SWORD);
+		}
+
+		public override void OnSwingEnd() {
+			End();
 		}
 	}
 }

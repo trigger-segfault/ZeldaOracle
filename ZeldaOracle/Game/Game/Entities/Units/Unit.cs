@@ -100,6 +100,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			if (tools.Add(tool)) {
 				tool.Unit = this;
 				tool.IsEquipped = true;
+				AttachEntity(tool);
 				tool.OnEquip();
 			}
 		}
@@ -108,6 +109,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 			if (tools.Remove(tool)) {
 				tool.IsEquipped = false;
 				tool.OnUnequip();
+				DetachEntity(tool);
+				tool.Destroy();
 			}
 		}
 
@@ -289,8 +292,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 			}
 
 			// Update tools
-			foreach (UnitTool tool in tools)
-				tool.Update();
+			//foreach (UnitTool tool in tools)
+				//tool.Update();
 			
 			UpdateSubStripIndex();
 
@@ -305,23 +308,23 @@ namespace ZeldaOracle.Game.Entities.Units {
 			DepthLayer depthLayer = Graphics.CurrentDepthLayer;
 
 			// Draw tools under.
-			foreach (UnitTool tool in tools) {
-				if (!tool.DrawAboveUnit) {
-					Vector2F drawPosition = DrawPosition - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimationPlayer(tool.AnimationPlayer, drawPosition, depthLayer, position);
-				}
-			}
+			//foreach (UnitTool tool in tools) {
+			//	if (!tool.DrawAboveUnit) {
+			//		Vector2F drawPosition = DrawPosition - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
+			//		g.DrawAnimationPlayer(tool.AnimationPlayer, drawPosition, depthLayer, position);
+			//	}
+			//}
 
 			// Draw entity.
 			base.Draw(g);
 
 			// Draw tools over.
-			foreach (UnitTool tool in tools) {
-				if (tool.DrawAboveUnit) {
-					Vector2F drawPosition = DrawPosition - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimationPlayer(tool.AnimationPlayer, drawPosition, depthLayer, position);
-				}
-			}
+			//foreach (UnitTool tool in tools) {
+			//	if (tool.DrawAboveUnit) {
+			//		Vector2F drawPosition = DrawPosition - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
+			//		g.DrawAnimationPlayer(tool.AnimationPlayer, drawPosition, depthLayer, position);
+			//	}
+			//}
 		}
 
 

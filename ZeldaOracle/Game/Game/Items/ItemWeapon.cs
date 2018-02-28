@@ -108,6 +108,10 @@ namespace ZeldaOracle.Game.Items {
 			else
 				return true;
 		}
+		
+		public virtual void OnWeaponEquip() { }
+
+		public virtual void OnWeaponUnequip() { }
 
 		// Immediately interrupt this item (ex: if the player falls in a hole).
 		public virtual void Interrupt() {}

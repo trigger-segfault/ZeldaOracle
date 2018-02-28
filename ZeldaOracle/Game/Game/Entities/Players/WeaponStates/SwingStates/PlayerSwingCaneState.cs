@@ -20,8 +20,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 	public class PlayerSwingCaneState : PlayerSwingState {
 
-		
-		private const int SPAWN_SOMARIA_BLOCK_DELAY = 15; // Occurs as the player pulls back his lunge.
+		// Occurs as the player pulls back his lunge
+		private const int SPAWN_SOMARIA_BLOCK_DELAY = 15;
 
 
 		//-----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public PlayerSwingCaneState() {
 			InitStandardSwing(GameData.ANIM_CANE_SWING,
-							  GameData.ANIM_CANE_MINECART_SWING);
+				GameData.ANIM_CANE_MINECART_SWING);
 			AddTimedAction(SPAWN_SOMARIA_BLOCK_DELAY, SpawnSomariaBlock);
 		}
 
@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		private void SpawnSomariaBlock() {
-			// Cane of Somaria doesn't work while the player is in a minecart.
+			// Cane of Somaria doesn't work while the player is in a minecart
 			if (player.IsInMinecart)
 				return;
 
@@ -53,9 +53,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 				itemCane.SomariaBlockTile = null;
 			}
 			
-			Vector2F pos = player.Center + (Directions.ToVector(SwingDirection) * 19);
+			Vector2F pos = player.Center + SwingDirection.ToVector(19);
 			Point2I tileLocation = player.RoomControl.GetTileLocation(pos);
-			EffectCreateSomariaBlock effect = new EffectCreateSomariaBlock(tileLocation, player.ZPosition, itemCane);
+			EffectCreateSomariaBlock effect = new EffectCreateSomariaBlock(
+				tileLocation, player.ZPosition, itemCane);
 			player.RoomControl.SpawnEntity(effect);
 			
 			AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
@@ -65,20 +66,6 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
-
-		public override void OnBegin(PlayerState previousState) {
-			if (player.IsInMinecart) {
-				weaponSwingAnimation			= GameData.ANIM_CANE_MINECART_SWING;
-				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_NOLUNGE;
-				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
-			}
-			else {
-				weaponSwingAnimation			= GameData.ANIM_CANE_SWING;
-				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING;
-				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
-			}
-			base.OnBegin(previousState);
-		}
 
 		public override void OnSwingBegin() {
 			AudioSystem.PlayRandomSound(

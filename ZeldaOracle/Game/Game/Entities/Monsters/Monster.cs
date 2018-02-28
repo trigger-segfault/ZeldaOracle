@@ -406,7 +406,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// 2. (M-1) MonsterTools to Player
 			// 4. (M-1) PlayerTools to Monster
 			// 2. (1-1) Monster to Player
-
+			/*
 			// Collide my tools with the player's tools
 			if (!IsStunned) {
 				foreach (UnitTool monsterTool in monsterTools) {
@@ -450,6 +450,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					break;
 				}
 			}
+			*/
+			bool parry = false;
 
 			// Check collisions with player
 			if (!parry && !IsStunned &&

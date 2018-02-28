@@ -227,6 +227,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateShield = new PlayerShieldState();
 
 			// Interaction Callbacks
+			Interactions.Enable();
+			Interactions.InteractionType = InteractionType.PlayerContact;
 			Interactions.SetReaction(InteractionType.BombExplosion,
 				delegate(Entity sender, EventArgs args)
 			{

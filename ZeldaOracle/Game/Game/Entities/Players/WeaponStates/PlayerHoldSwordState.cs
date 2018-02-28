@@ -109,7 +109,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnEnd(PlayerState newState) {
 			// Unequip the sword tool
-			player.UnequipTool(player.ToolSword);
+			if (newState != player.SpinSwordState)
+				player.UnequipTool(player.ToolSword);
 		}
 
 		public override void Update() {

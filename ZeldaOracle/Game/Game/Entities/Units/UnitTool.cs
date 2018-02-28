@@ -14,15 +14,15 @@ namespace ZeldaOracle.Game.Entities.Units {
 		Visual,
 	}
 
-	public class UnitTool {
+	public class UnitTool : Entity {
 		
 		protected Unit			unit;
 		protected bool			drawAboveUnit;
 		protected bool			syncAnimationWithDirection;
 		protected Rectangle2I	collisionBox;
-		protected Point2I		drawOffset;
+		//protected Point2I		drawOffset;
 		protected UnitToolType	toolType;
-		private AnimationPlayer	animationPlayer;
+		//private AnimationPlayer	animationPlayer;
 		private bool			isEquipped;
 		private bool			isPhysicsEnabled;
 
@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public UnitTool() {
 			unit				= null;
 			drawAboveUnit		= false;
-			animationPlayer		= new AnimationPlayer();
+			//animationPlayer		= new AnimationPlayer();
 			collisionBox		= new Rectangle2I(-1, -1, 2, 2);
 			toolType			= UnitToolType.Visual;
 			isEquipped			= false;
@@ -73,10 +73,16 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public virtual void OnUnequip() {
 		}
 
-		public virtual void Update() {
-			animationPlayer.Update();
+		public override void Update() {
+			//animationPlayer.Update();
+			//if (syncAnimationWithDirection)
+				//animationPlayer.SubStripIndex = unit.Direction;
+			
+			Graphics.DrawOffset = unit.Graphics.DrawOffset;
 			if (syncAnimationWithDirection)
-				animationPlayer.SubStripIndex = unit.Direction;
+				Graphics.SubStripIndex = unit.Direction.Index;
+
+			base.Update();
 		}
 		
 
@@ -112,19 +118,19 @@ namespace ZeldaOracle.Game.Entities.Units {
 		//-----------------------------------------------------------------------------
 
 		public void PlayAnimation() {
-			animationPlayer.Play();
+			Graphics.PlayAnimation();
 		}
 
 		public void PlayAnimation(Animation animation) {
-			animationPlayer.Play(animation);
+			Graphics.PlayAnimation(animation);
 		}
 		
 		public void StopAnimation() {
-			animationPlayer.Stop();
+			Graphics.StopAnimation();
 		}
 		
 		public void RemoveAnimation() {
-			animationPlayer.Clear();
+			Graphics.ClearAnimation();
 		}
 
 
@@ -133,7 +139,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		//-----------------------------------------------------------------------------
 
 		public AnimationPlayer AnimationPlayer {
-			get { return animationPlayer; }
+			get { return Graphics.AnimationPlayer; }
 		}
 		
 		public bool DrawAboveUnit {
@@ -143,7 +149,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 		public Rectangle2I CollisionBox {
 			get { return collisionBox; }
-			set { collisionBox = value; }
+			//set { collisionBox = value; }
+			set { Interactions.InteractionBox = value; }
 		}
 
 		public Rectangle2F PositionedCollisionBox {
@@ -151,8 +158,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 		}
 
 		public Point2I DrawOffset {
-			get { return drawOffset; }
-			set { drawOffset = value; }
+			get { return Graphics.DrawOffset; }
+			set { Graphics.DrawOffset = value; }
 		}
 
 		public UnitToolType ToolType {

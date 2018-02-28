@@ -42,6 +42,13 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 			base.OnInitialize();
 
 			itemShield = (ItemShield) unit.GameControl.Inventory.GetItem("item_shield");
+			
+			Interactions.Enable();
+			Interactions.InteractionType = InteractionType.Shield;
+			Interactions.InteractionEventArgs = new WeaponInteractionEventArgs() {
+				Weapon = itemShield,
+				Tool = this,
+			};
 		}
 
 		public override void OnHitProjectile(Projectile projectile) {
@@ -62,7 +69,7 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		}
 
 		public override void Update() {
-			collisionBox = shieldCollisionBoxes[Player.Direction];
+			Interactions.InteractionBox = shieldCollisionBoxes[Player.Direction];
 
 			base.Update();
 		}

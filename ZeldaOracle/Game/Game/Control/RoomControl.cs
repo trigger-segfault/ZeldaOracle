@@ -185,9 +185,11 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Initialize and spawn an entity, and have it be managed by the
 		/// RoomControl.</summary>
 		public void SpawnEntity(Entity e) {
-			e.EntityIndex = entityIndexCounter++;
 			e.Initialize(this);
-			entities.Add(e);
+			if (!entities.Contains(e)) {
+				e.EntityIndex = entityIndexCounter++;
+				entities.Add(e);
+			}
 		}
 		
 		/// <summary>Initialize and spawn an entity at the given position, and have it
@@ -568,9 +570,17 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
+			// Update the player first
+			if (Player.IsAlive && Player.IsInRoom) {
+				if (GameControl.UpdateRoom)
+					Player.Update();
+				if (GameControl.AnimateRoom)
+					Player.UpdateGraphics();
+			}
+
 			// Update entities
 			entityCount = entities.Count;
-			for (int i = 0; i < entityCount; i++) {
+			for (int i = 0; i < entities.Count; i++) {
 				Entity entity = entities[i];
 				if (entity != Player && entity.IsAlive && entity.IsInRoom) {
 					if (GameControl.UpdateRoom)
@@ -581,14 +591,6 @@ namespace ZeldaOracle.Game.Control {
 					if (requestedTransitionDirection >= 0)
 						break;
 				}
-			}
-
-			// Update the player last
-			if (Player.IsAlive && Player.IsInRoom) {
-				if (GameControl.UpdateRoom)
-					Player.Update();
-				if (GameControl.AnimateRoom)
-					Player.UpdateGraphics();
 			}
 
 			// Remove destroyed entities
