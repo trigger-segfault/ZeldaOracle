@@ -37,6 +37,9 @@
   <PropertyGroup>
     <ApplicationIcon>Editor.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.NRefactory, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
       <HintPath>..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
@@ -168,6 +171,7 @@
     <Compile Include="Undo\ActionRenameID.cs" />
     <Compile Include="Util\AlphanumComparatorFast.cs" />
     <Compile Include="Util\WpfHelper.cs" />
+    <Compile Include="Util\StoppableTimer.cs" />
     <Compile Include="Windows\AddNewDungeonWindow.xaml.cs">
       <DependentUpon>AddNewDungeonWindow.xaml</DependentUpon>
     </Compile>
@@ -634,16 +638,13 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\StartLocation.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolSelectionSingleLayer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolSelectionMerge.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PostBuildEvent>"$(SolutionDir)\GameBuilder.exe" -debug -out "$(SolutionDir)\ZeldaOracle\GameEditor\bin" -game "$(SolutionDir)\ZeldaOracle\Game\bin" -content "$(SolutionDir)\ZeldaOracle\GameContent\ZeldaContent.contentproj"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PostBuildEvent>"$(SolutionDir)\GameBuilder.exe" -release -out "$(SolutionDir)\ZeldaOracle\GameEditor\bin" -game "$(SolutionDir)\ZeldaOracle\Game\bin" -content "$(SolutionDir)\ZeldaOracle\GameContent\ZeldaContent.contentproj"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>echo "$(SolutionDir)\GameBuilder.exe" -debug -out "$(SolutionDir)\ZeldaOracle\GameEditor\bin" -game "$(SolutionDir)\ZeldaOracle\Game\bin" -content "$(SolutionDir)\ZeldaOracle\GameContent\ZeldaContent.contentproj"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

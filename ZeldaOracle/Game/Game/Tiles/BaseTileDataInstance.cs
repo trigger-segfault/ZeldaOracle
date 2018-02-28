@@ -117,6 +117,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public EventCollection Events {
 			get { return events; }
+			set { events = value; }
 		}
 
 		public Properties BaseProperties {

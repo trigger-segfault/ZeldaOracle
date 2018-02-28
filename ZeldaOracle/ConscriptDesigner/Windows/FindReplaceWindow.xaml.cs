@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Control;
 using ConscriptDesigner.Controls.TextEditing;
+using ConscriptDesigner.Util;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Rendering;
 using ICSharpCode.NRefactory;
@@ -139,7 +140,7 @@ namespace ConscriptDesigner.Windows {
 		/// <summary>The colorizer for search results.</summary>
 		private ColorizeSearchResultsBackgroundRenderer searchColorizor;
 		/// <summary>Used as a hack to focus on the find text box after changing modes.</summary>
-		private DispatcherTimer focusTimer;
+		private StoppableTimer focusTimer;
 
 		private bool suppressEvents;
 
@@ -180,7 +181,17 @@ namespace ConscriptDesigner.Windows {
 			if (comboBoxScope.SelectedIndex == -1)
 				comboBoxScope.SelectedIndex = 0;
 
-			focusTimer = new DispatcherTimer(
+			focusTimer = StoppableTimer.Create(
+				TimeSpan.FromSeconds(0.05),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					if (tabControl.SelectedIndex == 0)
+						textBoxFind.Focus();
+					else
+						textBoxReplaceFind.Focus();
+					focusTimer.Stop();
+				});
+			/*focusTimer = new DispatcherTimer(
 				TimeSpan.FromSeconds(0.05),
 				DispatcherPriority.ApplicationIdle,
 				delegate {
@@ -190,7 +201,7 @@ namespace ConscriptDesigner.Windows {
 						textBoxReplaceFind.Focus();
 					focusTimer.Stop();
 				}, Dispatcher);
-			focusTimer.Stop();
+			focusTimer.Stop();*/
 
 			if (replace)
 				ReplaceMode();

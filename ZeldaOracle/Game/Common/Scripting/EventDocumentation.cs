@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZeldaOracle.Common.Scripting {
 	/// <summary>A single parameter in a script event.</summary>
+	[Serializable]
 	public class ScriptParameter {
 		/// <summary>The type name of the parameter.</summary>
 		public string Type { get; set; }

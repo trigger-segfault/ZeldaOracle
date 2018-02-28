@@ -5,10 +5,13 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Scripting {
 	/// <summary>The collection of definable events.</summary>
+	[Serializable]
 	public class EventCollection {
 		/// <summary>The original collection of event documentation.</summary>
+		[NonSerialized]
 		private EventDocumentationCollection documentations;
 		/// <summary>The object that holds these events.</summary>
+		[NonSerialized]
 		private IEventObject eventObject;
 		/// <summary>The collection of events.</summary>
 		private Dictionary<string, Event> events;
@@ -37,6 +40,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Constructs a copy of the event collection.</summary>
 		public EventCollection(EventCollection copy, IEventObject eventObject) {
+			this.documentations	= copy.documentations;
 			this.eventObject	= eventObject;
 			this.events			= new Dictionary<string, Event>();
 			foreach (Event evnt in copy.events.Values) {
@@ -179,6 +183,20 @@ namespace ZeldaOracle.Common.Scripting {
 			return false;
 		}
 
+		/// <summary>Used to restore events that were aquired from the clipboard.</summary>
+		public void RestoreFromClipboard(EventDocumentationCollection documentations,
+			IEventObject eventObject)
+		{
+			this.eventObject = eventObject;
+			this.documentations = documentations;
+			foreach (EventDocumentation doc in documentations.GetEvents()) {
+				if (ContainsEvent(doc.Name)) {
+					GetEvent(doc.Name).Documentation = doc;
+				}
+			}
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -187,6 +205,11 @@ namespace ZeldaOracle.Common.Scripting {
 		public IEventObject EventObject {
 			get { return eventObject; }
 			set { eventObject = value; }
+		}
+
+		/// <summary>Gets or sets the documentations for the events.</summary>
+		public EventDocumentationCollection Documentation {
+			get { return documentations; }
 		}
 
 		/// <summary>Gets the number of events.</summary>

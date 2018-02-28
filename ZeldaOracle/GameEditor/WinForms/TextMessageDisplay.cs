@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using Microsoft.Xna.Framework.Content;
 using ZeldaEditor.Control;
+using ZeldaEditor.Util;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Translation;
@@ -28,7 +29,7 @@ namespace ZeldaEditor.WinForms {
 
 		private static ContentManager content;
 		private static Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
-		private DispatcherTimer dispatcherTimer;
+		private StoppableTimer dispatcherTimer;
 		
 		// The wrapped and formatted lines.
 		private WrappedLetterString wrappedString;
@@ -142,14 +143,21 @@ namespace ZeldaEditor.WinForms {
 			this.ResizeRedraw = true;
 
 			// Start the timer to refresh the panel.
-			dispatcherTimer = new DispatcherTimer(
+			dispatcherTimer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(15),
+				DispatcherPriority.Render,
+				delegate {
+					if (editorControl.IsActive)
+						Invalidate();
+				});
+			/*dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
 				delegate {
 					if (editorControl.IsActive)
 						Invalidate();
 				},
-				System.Windows.Application.Current.Dispatcher);
+				System.Windows.Application.Current.Dispatcher);*/
 			watch.Start();
 		}
 
@@ -282,6 +290,8 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		protected override void Draw() {
+			if (!editorControl.IsResourcesLoaded)
+				return;
 			Graphics2D g = new Graphics2D(spriteBatch);
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.Clear(Color.White);

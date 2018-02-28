@@ -12,6 +12,7 @@ using System.Xml;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Controls;
 using ConscriptDesigner.Controls.TextEditing;
+using ConscriptDesigner.Util;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
@@ -38,9 +39,9 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>The timer to update if the file is modified.
 		/// Needed because it doesn't always change right after an action.</summary>
-		private DispatcherTimer modifiedTimer;
+		private StoppableTimer modifiedTimer;
 		/// <summary>Navigate after a short pause to ensure focus.</summary>
-		private DispatcherTimer navigateTimer;
+		private StoppableTimer navigateTimer;
 		/// <summary>True if the title is currently displayed as modified.</summary>
 		private bool isTitleModified;
 
@@ -83,12 +84,16 @@ namespace ConscriptDesigner.Anchorables {
 			TextOptions.SetTextFormattingMode(this.editor, TextFormattingMode.Display);
 			border.Child = this.editor;
 
-			this.modifiedTimer = new DispatcherTimer(
+			this.modifiedTimer = StoppableTimer.Create(
+				TimeSpan.FromSeconds(0.05),
+				DispatcherPriority.ApplicationIdle,
+				delegate { CheckModified(); });
+			/*this.modifiedTimer = new DispatcherTimer(
 				TimeSpan.FromSeconds(0.05),
 				DispatcherPriority.ApplicationIdle,
 				delegate { CheckModified(); }, Dispatcher);
 
-			this.modifiedTimer.Stop();
+			this.modifiedTimer.Stop();*/
 
 			Content = border;
 		}
@@ -246,14 +251,22 @@ namespace ConscriptDesigner.Anchorables {
 		private void StartNavigateTimer(Action action) {
 			if (navigateTimer != null)
 				navigateTimer.Stop();
-			navigateTimer = new DispatcherTimer(
+			navigateTimer = StoppableTimer.StartNew(
 				TimeSpan.FromSeconds(0.05),
 				DispatcherPriority.ApplicationIdle,
 				delegate {
 					action();
 					navigateTimer.Stop();
 					navigateTimer = null;
-				}, Dispatcher);
+				});
+			/*navigateTimer = new DispatcherTimer(
+				TimeSpan.FromSeconds(0.05),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					action();
+					navigateTimer.Stop();
+					navigateTimer = null;
+				}, Dispatcher);*/
 		}
 
 		

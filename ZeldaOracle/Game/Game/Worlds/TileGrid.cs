@@ -7,10 +7,23 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
+using Clipboard = System.Windows.Forms.Clipboard;
 
 namespace ZeldaOracle.Game.Worlds {
 	
-	public class TileGrid {
+	public partial class TileGrid {
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The clipboard format identifier for tile grids.</summary>
+		public const string ClipboardFormat = "CF_ZELDA_ORACLE_TILE_GRID";
+
+
+		//-----------------------------------------------------------------------------
+		// Classes
+		//-----------------------------------------------------------------------------
 		
 		private struct TileGridTile {
 			public TileDataInstance Tile { get; set; }
@@ -52,7 +65,10 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private Point2I						size;
+		private int							startLayer;
 		private int							layerCount;
+		private bool						includeTiles;
+		private bool						includeActions;
 		private TileGridTile[,,]			tiles;
 		private List<TileGridAction>		actionTiles;
 
@@ -61,22 +77,61 @@ namespace ZeldaOracle.Game.Worlds {
 		// Constructor
 		//-----------------------------------------------------------------------------
 		
-		public TileGrid(Point2I size, int layerCount) {
+		/// <summary>Constructs a tile grid.</summary>
+		public TileGrid(Point2I size, int startLayer, int layerCount,
+			bool includeTiles, bool includeActions)
+		{
 			this.size			= size;
+			this.startLayer		= startLayer;
 			this.layerCount		= layerCount;
+			this.includeTiles	= includeTiles;
+			this.includeActions	= includeActions;
 			this.tiles			= new TileGridTile[size.X, size.Y, layerCount];
 			this.actionTiles	= new List<TileGridAction>();
 
 			Clear();
 		}
-		
+
+		/// <summary>Constructs a copy of the existing tile grid settings.</summary> 
+		private TileGrid(TileGrid copy) {
+			this.size			= copy.size;
+			this.startLayer		= copy.startLayer;
+			this.layerCount		= copy.layerCount;
+			this.includeTiles	= copy.includeTiles;
+			this.includeActions	= copy.includeActions;
+			this.tiles          = new TileGridTile[size.X, size.Y, layerCount];
+			this.actionTiles    = new List<TileGridAction>();
+
+			Clear();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Creates a tile grid with all tiles and action tiles.</summary>
+		public static TileGrid CreateFullTileGrid(Point2I size, int layerCount) {
+			return new TileGrid(size, 0, layerCount, true, true);
+		}
+
+		/// <summary>Creates a tile grid with only a single layer of tiles.</summary>
+		public static TileGrid CreateSingleLayerTileGrid(Point2I size, int startLayer) {
+			return new TileGrid(size, startLayer, 1, true, false);
+		}
+
+		/// <summary>Creates a tile grid with only action tiles.</summary>
+		public static TileGrid CreateActionGrid(Point2I size) {
+			return new TileGrid(size, -1, 0, false, true);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
-		
+
 		public TileDataInstance GetTile(Point2I location, int layer) {
-			return tiles[location.X, location.Y, layer].Tile;
+			return tiles[location.X, location.Y, layer - startLayer].Tile;
 		}
 
 		public TileDataInstance GetTile(int x, int y, int layer) {
@@ -84,14 +139,14 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public TileDataInstance GetTileIfAtLocation(Point2I location, int layer) {
-			TileGridTile tile = tiles[location.X, location.Y, layer];
+			TileGridTile tile = tiles[location.X, location.Y, layer - startLayer];
 			if (tile.Location.X == location.X && tile.Location.Y == location.Y && tile.Layer == layer)
 				return tile.Tile;
 			return null;
 		}
 
 		public TileDataInstance GetTileIfAtLocation(int x, int y, int layer) {
-			TileGridTile tile = tiles[x, y, layer];
+			TileGridTile tile = tiles[x, y, layer - startLayer];
 			if (tile.Location.X == x && tile.Location.Y == y && tile.Layer == layer)
 				return tile.Tile;
 			return null;
@@ -136,7 +191,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public IEnumerable<BaseTileDataInstance> GetTiles() {
+		public IEnumerable<TileDataInstance> GetTiles() {
 			// Iterate tiles.
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
@@ -149,7 +204,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public IEnumerable<BaseTileDataInstance> GetTilesAtLocation() {
+		public IEnumerable<TileDataInstance> GetTilesAtLocation() {
 			// Iterate tiles.
 			for (int x = size.X - 1; x >= 0; x--) {
 				for (int y = size.Y - 1; y >= 0; y--) {
@@ -158,6 +213,21 @@ namespace ZeldaOracle.Game.Worlds {
 						if (tile.Tile != null && tile.Location == new Point2I(x, y)) {
 							tile.Tile.Location = tile.Location;
 							yield return tile.Tile;
+						}
+					}
+				}
+			}
+		}
+
+		public IEnumerable<KeyValuePair<Point2I, TileDataInstance>> GetTilesAndLocations() {
+			// Iterate tiles.
+			for (int x = size.X - 1; x >= 0; x--) {
+				for (int y = size.Y - 1; y >= 0; y--) {
+					for (int i = 0; i < layerCount; i++) {
+						TileGridTile tile = tiles[x, y, i];
+						if (tile.Tile != null && tile.Location == new Point2I(x, y)) {
+							tile.Tile.Location = tile.Location;
+							yield return new KeyValuePair<Point2I, TileDataInstance>(tile.Location, tile.Tile);
 						}
 					}
 				}
@@ -194,7 +264,7 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					for (int i = 0; i < layerCount; i++) {
-						tiles[x, y, i].Set(null, x, y, i);
+						tiles[x, y, i].Set(null, x, y, i + startLayer);
 					}
 				}
 			}
@@ -215,10 +285,10 @@ namespace ZeldaOracle.Game.Worlds {
 					Point2I loc = new Point2I(location.X + x, location.Y + y);
 					if (loc.X < Width && loc.Y < Height) {
 						// Remove existing tile.
-						TileGridTile t = tiles[loc.X, loc.Y, layer];
+						TileGridTile t = tiles[loc.X, loc.Y, layer - startLayer];
 						if (t.Tile != null)
 							RemoveTile(t);
-						tiles[loc.X, loc.Y, layer].Set(tile, location.X, location.Y, layer);
+						tiles[loc.X, loc.Y, layer - startLayer].Set(tile, location.X, location.Y, layer);
 
 					}
 				}
@@ -247,13 +317,13 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int y = 0; y < size.Y; y++) {
 					Point2I loc = new Point2I(tile.Location.X + x, tile.Location.Y + y);
 					if (loc.X < Width && loc.Y < Height)
-						tiles[loc.X, loc.Y, tile.Layer].Set(null, loc.X, loc.Y, tile.Layer);
+						tiles[loc.X, loc.Y, tile.Layer - startLayer].Set(null, loc.X, loc.Y, tile.Layer);
 				}
 			}
 		}
 
 		public void RemoveTile(int x, int y, int layer) {
-			TileGridTile tile = tiles[x, y, layer];
+			TileGridTile tile = tiles[x, y, layer - startLayer];
 			if (tile.Tile != null)
 				RemoveTile(tile);
 		}
@@ -280,27 +350,31 @@ namespace ZeldaOracle.Game.Worlds {
 
 		// Return a copy of this tile grid.
 		public TileGrid Duplicate() {
-			TileGrid duplicate = new TileGrid(size, layerCount);
-			
-			// Duplicate tiles.
-			for (int x = 0; x < size.X; x++) {
-				for (int y = 0; y < size.Y; y++) {
-					for (int i = 0; i < layerCount; i++) {
-						TileGridTile tile = tiles[x, y, i];
-						if (tile.Tile != null && tile.Location == new Point2I(x, y)) {
-							TileDataInstance tileCopy = new TileDataInstance();
-							tileCopy.Clone(tile.Tile);
-							duplicate.PlaceTile(tileCopy, x, y, i);
+			TileGrid duplicate = new TileGrid(this);
+
+			if (duplicate.includeTiles) {
+				// Duplicate tiles
+				for (int x = 0; x < size.X; x++) {
+					for (int y = 0; y < size.Y; y++) {
+						for (int i = 0; i < layerCount; i++) {
+							TileGridTile tile = tiles[x, y, i];
+							if (tile.Tile != null && tile.Location == new Point2I(x, y)) {
+								TileDataInstance tileCopy = new TileDataInstance();
+								tileCopy.Clone(tile.Tile);
+								duplicate.PlaceTile(tileCopy, x, y, i + startLayer);
+							}
 						}
 					}
 				}
 			}
-			
-			// Duplicate action tiles.
-			foreach (TileGridAction actionTile in actionTiles) {
-				ActionTileDataInstance actionTileCopy = new ActionTileDataInstance();
-				actionTileCopy.Clone(actionTile.ActionTile);
-				duplicate.PlaceActionTile(actionTileCopy, actionTile.Position);
+
+			if (duplicate.includeActions) {
+				// Duplicate action tiles
+				foreach (TileGridAction actionTile in actionTiles) {
+					ActionTileDataInstance actionTileCopy = new ActionTileDataInstance();
+					actionTileCopy.Clone(actionTile.ActionTile);
+					duplicate.PlaceActionTile(actionTileCopy, actionTile.Position);
+				}
 			}
 
 			return duplicate;
@@ -308,8 +382,47 @@ namespace ZeldaOracle.Game.Worlds {
 
 
 		//-----------------------------------------------------------------------------
+		// Clipboard
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the clipboard contains a TileGridReference.</summary>
+		public static bool ContainsClipboard() {
+			return Clipboard.ContainsData(ClipboardFormat);
+		}
+
+		/// <summary>Loads the TileGridReference from the clipboard and dereferences it.</summary>
+		public static TileGrid LoadClipboard() {
+			TileGridReference reference =
+				(TileGridReference) Clipboard.GetData(ClipboardFormat);
+			return reference.Dereference();
+		}
+
+		/// <summary>Saves the tile grid to the clipboard as a TileGridReference.</summary>
+		public void SaveClipboard() {
+			TileGridReference reference = new TileGridReference(this);
+			Clipboard.SetData(ClipboardFormat, reference);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Propreties
 		//-----------------------------------------------------------------------------
+
+		public bool IncludesTiles {
+			get { return includeTiles; }
+		}
+
+		public bool IncludesActions {
+			get { return includeActions; }
+		}
+		
+		public int StartLayer {
+			get { return startLayer; }
+		}
+
+		public int EndLayer {
+			get { return startLayer + layerCount - 1; }
+		}
 
 		public int LayerCount {
 			get { return layerCount; }

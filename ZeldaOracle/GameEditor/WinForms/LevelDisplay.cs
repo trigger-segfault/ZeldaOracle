@@ -30,6 +30,7 @@ using XnaColor = Microsoft.Xna.Framework.Color;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 using SurfaceFormat = Microsoft.Xna.Framework.Graphics.SurfaceFormat;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaEditor.Util;
 
 namespace ZeldaEditor.WinForms {
 
@@ -54,7 +55,7 @@ namespace ZeldaEditor.WinForms {
 		private Room			selectedRoom;
 		private bool            isSelectionRoom;
 		
-		private DispatcherTimer dispatcherTimer;
+		private StoppableTimer		dispatcherTimer;
 
 		// Frame Rate:
 		/// <summary>The total number of frames passed since the last frame rate check.</summary>
@@ -101,7 +102,16 @@ namespace ZeldaEditor.WinForms {
 			this.highlightedRoom = -Point2I.One;
 			this.highlightedTile = -Point2I.One;
 
-			dispatcherTimer = new DispatcherTimer(
+			dispatcherTimer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(15),
+				DispatcherPriority.Render,
+				delegate {
+					if (editorControl.IsActive) {
+						editorControl.CurrentTool.Update();
+						Invalidate();
+					}
+				});
+			/*dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
 				delegate {
@@ -110,7 +120,7 @@ namespace ZeldaEditor.WinForms {
 						Invalidate();
 					}
 				},
-				System.Windows.Application.Current.Dispatcher);
+				System.Windows.Application.Current.Dispatcher);*/
 		}
 
 		protected override void Dispose(bool disposing) {
@@ -685,6 +695,8 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
+			if (!editorControl.IsResourcesLoaded)
+				return;
 			Stopwatch watch = new Stopwatch();
 			watch.Start();
 			editorControl.UpdateTicks();

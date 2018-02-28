@@ -111,8 +111,12 @@ namespace ZeldaEditor.Control {
 		private bool			startLocationMode;
 		private bool			showStartLocation;
 		private bool            showActions;
+		private bool            singleLayer;
+		private bool            roomOnly;
+		private bool			merge;
 
-		private DispatcherTimer             updateTimer;
+		private StoppableTimer					updateTimer;
+		private bool			resourcesLoaded;
 
 		private bool                        needsRecompiling;
 		private Task<ScriptCompileResult>   compileTask;
@@ -182,7 +186,11 @@ namespace ZeldaEditor.Control {
 			this.playerPlaceMode            = false;
 			this.startLocationMode			= false;
 			this.showStartLocation			= true;
+			this.singleLayer				= false;
+			this.roomOnly					= false;
+			this.merge						= false;
 
+			this.resourcesLoaded			= false;
 		}
 
 		public void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
@@ -193,28 +201,6 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void Initialize() {
-			GameData.Initialize();
-			EditorResources.Initialize(this);
-
-			this.inventory      = new Inventory(null);
-			this.rewardManager  = new RewardManager(null);
-			this.timer          = Stopwatch.StartNew();
-			this.ticks          = 0;
-			this.roomSpacing    = 1;
-			this.playAnimations = false;
-			this.tileset        = null;
-			this.zone           = GameData.ZONE_DEFAULT;
-			this.selectedTileData = null;// this.tileset.GetTileData(0, 0);
-			this.actionMode      = false;
-
-			GameData.LoadInventory(inventory);
-			GameData.LoadRewards(rewardManager);
-
-			// Create tileset combo box.
-			UpdateTilesets();
-
-			// Create zone combo box.
-			UpdateZones();
 
 			// Create tools.
 			tools = new List<EditorTool>();
@@ -228,16 +214,52 @@ namespace ZeldaEditor.Control {
 			currentToolIndex = 0;
 			tools[currentToolIndex].Begin();
 
-			this.undoActions = new ObservableCollection<EditorAction>();
-			this.undoPosition = -1;
+			undoActions = new ObservableCollection<EditorAction>();
+			undoPosition = -1;
 
-			this.isInitialized = true;
+			try {
+				GameData.Initialize();
 
-			this.updateTimer		= new DispatcherTimer(
+				this.inventory      = new Inventory(null);
+				this.rewardManager  = new RewardManager(null);
+				this.timer          = Stopwatch.StartNew();
+				this.ticks          = 0;
+				this.roomSpacing    = 1;
+				this.playAnimations = false;
+				this.tileset        = null;
+				this.zone           = GameData.ZONE_DEFAULT;
+				this.selectedTileData = null;
+				this.actionMode      = false;
+
+				GameData.LoadInventory(inventory);
+				GameData.LoadRewards(rewardManager);
+				resourcesLoaded = true;
+			}
+			catch (Exception ex) {
+				StoppableTimer.StopAll();
+				ShowExceptionMessage(ex, "load", "resources");
+				Environment.Exit(-1);
+			}
+			EditorResources.Initialize(this);
+
+			// Create tileset combo box.
+			UpdateTilesets();
+
+			// Create zone combo box.
+			UpdateZones();
+
+			this.updateTimer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(100),
+				DispatcherPriority.ApplicationIdle,
+				Update);
+			/*this.updateTimer		= new DispatcherTimer(
 				TimeSpan.FromMilliseconds(100),
 				DispatcherPriority.ApplicationIdle,
 				delegate { Update(); },
-				Application.Current.Dispatcher);
+				Application.Current.Dispatcher);*/
+
+			this.isInitialized = true;
+
 			needsNewEventCache = true;
 			needsRecompiling = true;
 			
@@ -572,10 +594,15 @@ namespace ZeldaEditor.Control {
 
 
 		//-----------------------------------------------------------------------------
-		// Tiles
+		// Helpers
 		//-----------------------------------------------------------------------------
-
-
+		
+		public void ShowExceptionMessage(Exception ex, string verb, string name) {
+			var result = TriggerMessageBox.Show(editorWindow, MessageIcon.Error, "An error occurred while trying to " +
+				verb + " '" + name + "'! Would you like to see the error?", MessageBoxButton.YesNo);
+			if (result == MessageBoxResult.Yes)
+				ErrorMessageBox.Show(ex, true);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Tools
@@ -1056,18 +1083,24 @@ namespace ZeldaEditor.Control {
 			get { return actionMode; }
 			set {
 				if (value != actionMode) {
+					CurrentTool.Finish();
 					actionMode = value;
 					CurrentTool.LayerChanged();
+					if (actionMode != IsSelectedTileAnAction)
+						SelectedTileData = null;
 				}
 			}
 		}
 
 		public bool ActionMode {
-			get { return (actionMode || (selectedTileData is ActionTileData)); }
+			get { return (actionMode /*|| (selectedTileData is ActionTileData)*/); }
 			set {
 				if (value != actionMode) {
+					CurrentTool.Finish();
 					actionMode = value;
 					CurrentTool.LayerChanged();
+					if (actionMode != IsSelectedTileAnAction)
+						SelectedTileData = null;
 				}
 			}
 		}
@@ -1086,11 +1119,25 @@ namespace ZeldaEditor.Control {
 			get { return selectedTileData; }
 			set {
 				selectedTileData = value;
+				if (IsSelectedTileAnAction) {
+					if (!actionMode) {
+						CurrentTool.Finish();
+						actionMode = true;
+						editorWindow.UpdateCurrentLayer();
+					}
+				}
+				else if (selectedTileData != null) {
+					if (actionMode) {
+						CurrentTool.Finish();
+						actionMode = false;
+						editorWindow.UpdateCurrentLayer();
+					}
+				}
 				editorWindow.TilesetDisplay.Invalidate();
 			}
 		}
 
-		public bool IsSelectedTileAnEvent {
+		public bool IsSelectedTileAnAction {
 			get { return (selectedTileData is ActionTileData); }
 		}
 
@@ -1147,8 +1194,25 @@ namespace ZeldaEditor.Control {
 			get { return toolEyedropper; }
 		}
 		
+		// Tool Options ---------------------------------------------------------------
+
+		public bool ToolOptionSingleLayer {
+			get { return singleLayer; }
+			set { singleLayer = value; }
+		}
+
+		public bool ToolOptionRoomOnly {
+			get { return roomOnly; }
+			set { roomOnly = value; }
+		}
+
+		public bool ToolOptionMerge {
+			get { return merge; }
+			set { merge = value; }
+		}
+
 		// Drawing --------------------------------------------------------------------
-		
+
 		public int Ticks {
 			get {
 				if (PlayAnimations)
@@ -1264,6 +1328,10 @@ namespace ZeldaEditor.Control {
 		public bool IsActive {
 			get { return isActive; }
 			set { isActive = value; }
+		}
+
+		public bool IsResourcesLoaded {
+			get { return resourcesLoaded; }
 		}
 	}
 }

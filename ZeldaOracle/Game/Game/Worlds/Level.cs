@@ -186,14 +186,27 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		// Take tiles from the level and put them into a tile grid.
-		public TileGrid CreateTileGrid(Rectangle2I area) {
-			return CreateTileGrid(area, CreateTileGridMode.Remove);
+		public TileGrid CreateFullTileGrid(Rectangle2I area, CreateTileGridMode mode) {
+			TileGrid tileGrid = TileGrid.CreateFullTileGrid(area.Size, roomLayerCount);
+			return SetupTileGrid(area, tileGrid, mode);
 		}
-		
+
+		// Take tiles from the level and put them into a tile grid.
+		public TileGrid CreateSingleLayerTileGrid(Rectangle2I area, int startLayer, CreateTileGridMode mode) {
+			TileGrid tileGrid = TileGrid.CreateSingleLayerTileGrid(area.Size, startLayer);
+			return SetupTileGrid(area, tileGrid, mode);
+		}
+
+		// Take tiles from the level and put them into a tile grid.
+		public TileGrid CreateActionGrid(Rectangle2I area, CreateTileGridMode mode) {
+			TileGrid tileGrid = TileGrid.CreateActionGrid(area.Size);
+			return SetupTileGrid(area, tileGrid, mode);
+		}
+
 		// Take tiles from the level (or duplicate them) and put them into a tile grid.
-		public TileGrid CreateTileGrid(Rectangle2I area, CreateTileGridMode mode) {
-			TileGrid tileGrid = new TileGrid(area.Size, roomLayerCount);
-			BaseTileDataInstance[] tiles = GetTilesInArea(area).ToArray();
+		private TileGrid SetupTileGrid(Rectangle2I area, TileGrid tileGrid, CreateTileGridMode mode) {
+			//TileGrid tileGrid = new TileGrid(area.Size, roomLayerCount);
+			BaseTileDataInstance[] tiles = GetTilesInArea(area, tileGrid).ToArray();
 
 			foreach (BaseTileDataInstance baseTileOriginal in tiles) {
 				// Duplicate the tile if specified, else remove the original.
@@ -225,37 +238,59 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		// Place the tiles in a tile grid starting at the given location.
-		public void PlaceTileGrid(TileGrid tileGrid, LevelTileCoord location) {
+		public void PlaceTileGrid(TileGrid tileGrid, LevelTileCoord location, bool merge) {
 			// Remove tiles.
 			Rectangle2I area = new Rectangle2I((Point2I) location, tileGrid.Size);
-			RemoveArea(area);
+			if (!merge)
+				RemoveArea(area, tileGrid);
 
-			// Place tiles
-			foreach (TileDataInstance tile in tileGrid.GetTilesAtLocation()) {
-				LevelTileCoord coord = (LevelTileCoord) ((Point2I) location + tile.Location);
-				Room room = GetRoom(coord);
+			if (tileGrid.IncludesTiles) {
+				// Place tiles
+				foreach (TileDataInstance tile in tileGrid.GetTilesAtLocation()) {
+					LevelTileCoord coord = (LevelTileCoord) ((Point2I) location + tile.Location);
+					Room room = GetRoom(coord);
 
-				if (room != null) {
-					tile.Location = GetTileLocation(coord);
-					room.PlaceTile(tile, tile.Location, tile.Layer);
+					if (room != null) {
+						tile.Location = GetTileLocation(coord);
+						room.PlaceTile(tile, tile.Location, tile.Layer);
+					}
 				}
 			}
 
-			// Place action tiles
-			foreach (ActionTileDataInstance actionTile in tileGrid.GetActionTilesAtPosition()) {
-				actionTile.Position += (Point2I) location * GameSettings.TILE_SIZE;
-				Point2I roomLocation = actionTile.Position / (roomSize * GameSettings.TILE_SIZE);
-				Room room = GetRoomAt(roomLocation);
-				if (room != null) {
-					actionTile.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
-					room.AddActionTile(actionTile);
+			if (tileGrid.IncludesActions) {
+				// Place action tiles
+				foreach (ActionTileDataInstance actionTile in tileGrid.GetActionTilesAtPosition()) {
+					actionTile.Position += (Point2I) location * GameSettings.TILE_SIZE;
+					if (!(actionTile.Position >= Point2I.Zero))
+						continue;
+					Point2I roomLocation = actionTile.Position / (roomSize * GameSettings.TILE_SIZE);
+					Room room = GetRoomAt(roomLocation);
+					if (room != null) {
+						actionTile.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
+						room.AddActionTile(actionTile);
+					}
 				}
 			}
 		}
 
 		// Remove all tiles within the given area.
 		public void RemoveArea(Rectangle2I area) {
-			BaseTileDataInstance[] tiles = GetTilesInArea(area).ToArray();
+			RemoveArea(area, 0, roomLayerCount, true, true);
+		}
+
+		// Remove all tiles within the given area.
+		public void RemoveArea(Rectangle2I area, TileGrid tileGrid) {
+			RemoveArea(area, tileGrid.StartLayer, tileGrid.LayerCount,
+				tileGrid.IncludesTiles, tileGrid.IncludesActions);
+		}
+
+		// Remove all tiles within the given area.
+		public void RemoveArea(Rectangle2I area,
+			int startLayer = 0, int layerCount = -1,
+			bool includeTiles = true, bool includeActions = true)
+		{
+			BaseTileDataInstance[] tiles = GetTilesInArea(area, startLayer,
+				layerCount, includeTiles, includeActions).ToArray();
 			foreach (BaseTileDataInstance tile in tiles) {
 				tile.Room.Remove(tile);
 			}
@@ -266,46 +301,62 @@ namespace ZeldaOracle.Game.Worlds {
 		// Internal Iteration
 		//-----------------------------------------------------------------------------
 
-		private IEnumerable<BaseTileDataInstance> GetTilesInArea(Rectangle2I area) {
+		private IEnumerable<BaseTileDataInstance> GetTilesInArea(Rectangle2I area,
+			TileGrid tileGrid)
+		{
+			return GetTilesInArea(area, tileGrid.StartLayer, tileGrid.LayerCount,
+				tileGrid.IncludesTiles, tileGrid.IncludesActions);
+		}
+
+		private IEnumerable<BaseTileDataInstance> GetTilesInArea(Rectangle2I area,
+			int startLayer = 0, int layerCount = -1,
+			bool includeTiles = true, bool includeActions = true)
+		{
+			if (layerCount == -1)
+				layerCount = roomLayerCount;
 			// Make sure the area is within the level bounds.
 			area = Rectangle2I.Intersect(area,
 				new Rectangle2I(Point2I.Zero, roomSize * dimensions));
 
-			// Iterate the tile grid. (Backwards to prevent large tiles from getting overwritten
-			for (int x = area.Width - 1; x >= 0; x--) {
-				for (int y = area.Height - 1; y >= 0; y--) {
-					LevelTileCoord coord = (LevelTileCoord) (area.Point + new Point2I(x, y));
-					Room room = GetRoom(coord);
-					if (room != null) {
-						Point2I tileLocation = GetTileLocation(coord);
-						for (int i = 0; i < roomLayerCount; i++) {
-							TileDataInstance tile = room.GetTile(tileLocation, i);
-							if (tile != null && tile.Location == tileLocation)
-								yield return tile;
+			if (includeTiles) {
+				// Iterate the tile grid. (Backwards to prevent large tiles from getting overwritten
+				for (int x = area.Width - 1; x >= 0; x--) {
+					for (int y = area.Height - 1; y >= 0; y--) {
+						LevelTileCoord coord = (LevelTileCoord) (area.Point + new Point2I(x, y));
+						Room room = GetRoom(coord);
+						if (room != null) {
+							Point2I tileLocation = GetTileLocation(coord);
+							for (int i = startLayer; i < startLayer + layerCount; i++) {
+								TileDataInstance tile = room.GetTile(tileLocation, i);
+								if (tile != null && tile.Location == tileLocation)
+									yield return tile;
+							}
 						}
 					}
 				}
 			}
 
-			// Determine the collection of rooms that will contain the action tiles.
-			Point2I roomAreaMin = GetRoomLocation((LevelTileCoord) area.Min);
-			Point2I roomAreaMax = GetRoomLocation((LevelTileCoord) area.Max);
-			Rectangle2I roomArea = new Rectangle2I(roomAreaMin, roomAreaMax - roomAreaMin + Point2I.One);
-			roomArea = Rectangle2I.Intersect(roomArea, new Rectangle2I(Point2I.Zero, dimensions));
-			Rectangle2I pixelArea = new Rectangle2I(
-				area.Point * GameSettings.TILE_SIZE,
-				area.Size  * GameSettings.TILE_SIZE);
+			if (includeActions) {
+				// Determine the collection of rooms that will contain the action tiles.
+				Point2I roomAreaMin = GetRoomLocation((LevelTileCoord) area.Min);
+				Point2I roomAreaMax = GetRoomLocation((LevelTileCoord) area.Max);
+				Rectangle2I roomArea = new Rectangle2I(roomAreaMin, roomAreaMax - roomAreaMin + Point2I.One);
+				roomArea = Rectangle2I.Intersect(roomArea, new Rectangle2I(Point2I.Zero, dimensions));
+				Rectangle2I pixelArea = new Rectangle2I(
+					area.Point * GameSettings.TILE_SIZE,
+					area.Size  * GameSettings.TILE_SIZE);
 
-			// Iterate action tiles.
-			for (int x = roomArea.Left; x < roomArea.Right; x++) {
-				for (int y = roomArea.Top; y < roomArea.Bottom; y++) {
-					Room room = rooms[x, y];
-					for (int i = 0; i < room.ActionData.Count; i++) {
-						ActionTileDataInstance actionTile = room.ActionData[i];
-						Rectangle2I tileBounds = actionTile.GetBounds();
-						tileBounds.Point += room.Location * roomSize * GameSettings.TILE_SIZE;
-						if (pixelArea.Contains(tileBounds.Point))
-							yield return actionTile;
+				// Iterate action tiles.
+				for (int x = roomArea.Left; x < roomArea.Right; x++) {
+					for (int y = roomArea.Top; y < roomArea.Bottom; y++) {
+						Room room = rooms[x, y];
+						for (int i = 0; i < room.ActionData.Count; i++) {
+							ActionTileDataInstance actionTile = room.ActionData[i];
+							Rectangle2I tileBounds = actionTile.GetBounds();
+							tileBounds.Point += room.Location * roomSize * GameSettings.TILE_SIZE;
+							if (pixelArea.Contains(tileBounds.Point))
+								yield return actionTile;
+						}
 					}
 				}
 			}
