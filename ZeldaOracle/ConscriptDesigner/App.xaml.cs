@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using ConscriptDesigner.Util;
 using ConscriptDesigner.Windows;
 using WinFormsApplication = System.Windows.Forms.Application;
 
@@ -19,6 +20,8 @@ namespace ConscriptDesigner {
 	public partial class App : Application {
 		/// <summary>The last exception. Used to prevent multiple error windows for the same error.</summary>
 		private static object lastException = null;
+		/// <summary>True if an exception window is open.</summary>
+		private static bool exceptionOpen;
 
 
 		//-----------------------------------------------------------------------------
@@ -28,6 +31,7 @@ namespace ConscriptDesigner {
 		/// <summary>Constructs the app and sets up embedded assembly resolving.</summary>
 		public App() {
 			AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssemblies;
+			exceptionOpen = false;
 		}
 
 
@@ -87,46 +91,42 @@ namespace ConscriptDesigner {
 
 		/// <summary>Show an exception window for an exception that occurred in a dispatcher thread.</summary>
 		private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
-			if (e.Exception != lastException) {
-				lastException = e.Exception;
-				if (ErrorMessageBox.Show(e.Exception))
-					Environment.Exit(0);
-				e.Handled = true;
-			}
+			ShowErrorMessageBox(e.Exception);
+			e.Handled = true;
 		}
 
 		/// <summary>Show an exception window for an exception that occurred in the AppDomain.</summary>
 		private void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e) {
-			if (e.ExceptionObject != lastException) {
-				lastException = e.ExceptionObject;
-				Dispatcher.Invoke(() => {
-					if (ErrorMessageBox.Show(e.ExceptionObject))
-						Environment.Exit(0);
-				});
-			}
+			Dispatcher.Invoke(() => {
+				ShowErrorMessageBox(e.ExceptionObject);
+			});
 		}
 
 		/// <summary>Show an exception window for an exception that occurred in a task.</summary>
 		private void OnTaskSchedulerUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e) {
-			if (e.Exception != lastException) {
-				lastException = e.Exception;
-				Dispatcher.Invoke(() => {
-					if (ErrorMessageBox.Show(e.Exception))
-						Environment.Exit(0);
-				});
-			}
+			Dispatcher.Invoke(() => {
+				ShowErrorMessageBox(e.Exception);
+			});
 		}
 
 		/// <summary>Show an exception window for an exception that occurred in winforms.</summary>
 		private void OnWinFormsThreadException(object sender, ThreadExceptionEventArgs e) {
-			if (e.Exception != lastException) {
-				lastException = e.Exception;
-				Dispatcher.Invoke(() => {
-					if (ErrorMessageBox.Show(e.Exception))
-						Environment.Exit(0);
-				});
-			}
+			Dispatcher.Invoke(() => {
+				ShowErrorMessageBox(e.Exception);
+			});
 		}
 
+		/// <summary>The helper method for showing an error message.</summary>
+		private void ShowErrorMessageBox(object ex) {
+			if (ex != lastException && !exceptionOpen) {
+				StoppableTimer.StopAll();
+				lastException = ex;
+				exceptionOpen = true;
+				if (ErrorMessageBox.Show(ex))
+					Environment.Exit(0);
+				exceptionOpen = false;
+				StoppableTimer.ResumeAll();
+			}
+		}
 	}
 }

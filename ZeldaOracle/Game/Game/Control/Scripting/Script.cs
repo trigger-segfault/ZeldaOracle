@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 	}
 
+	[Serializable]
 	public class ScriptCompileError {
 		
 		public ScriptCompileError() {
@@ -60,6 +61,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 	}
 
+	[Serializable]
 	public class Script : IIDObject {
 
 		private string id; // The script's identifier and name

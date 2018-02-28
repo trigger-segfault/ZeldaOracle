@@ -5,9 +5,11 @@ using System.Text;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Common.Scripting {
-		
+
+	[Serializable]
 	public class Event {
 		/// <summary>The documentation on the event.</summary>
+		[NonSerialized]
 		private EventDocumentation documentation;
 		/// <summary>The defined script for the event. This is only used in the editor. In-game, internalID refers to the script.</summary>
 		private Script script;
@@ -15,6 +17,7 @@ namespace ZeldaOracle.Common.Scripting {
 		private string internalID;
 		/// <summary>The event collection containing this event.</summary>
 		private EventCollection events;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor

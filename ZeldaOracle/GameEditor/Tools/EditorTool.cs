@@ -24,8 +24,9 @@ namespace ZeldaEditor.Tools {
 		private bool			isDragging;
 		private MouseButtons	dragButton;
 		private Cursor			mouseCursor;
-		private bool            isDrawing;
+		private bool			isDrawing;
 		private Key				hotKey;
+		private HashSet<string>	options;
 
 
 		//-----------------------------------------------------------------------------
@@ -35,6 +36,11 @@ namespace ZeldaEditor.Tools {
 		protected EditorTool(string name, Key hotKey) {
 			this.name       = name;
 			this.hotKey     = hotKey;
+			this.options	= new HashSet<string>();
+		}
+
+		protected void AddOption(string name) {
+			options.Add(name);
 		}
 
 
@@ -282,6 +288,10 @@ namespace ZeldaEditor.Tools {
 		public bool IsDrawing {
 			get { return isDrawing; }
 			set { isDrawing = value; }
+		}
+
+		public HashSet<string> Options {
+			get { return options; }
 		}
 	}
 

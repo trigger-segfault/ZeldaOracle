@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using ConscriptDesigner.Anchorables;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Control;
+using ConscriptDesigner.Util;
 using ConscriptDesigner.Windows;
 using ConscriptDesigner.WinForms;
 using Xceed.Wpf.AvalonDock.Layout;
@@ -47,10 +48,10 @@ namespace ConscriptDesigner {
 		private FindReplaceWindow findReplaceWindow;
 		private PlaybackWindow playbackWindow;
 
-		private DispatcherTimer checkOutdatedTimer;
-		private DispatcherTimer loadedTimer;
-		private DispatcherTimer displayTimer;
-		private DispatcherTimer focusTimer;
+		private StoppableTimer checkOutdatedTimer;
+		private StoppableTimer loadedTimer;
+		private StoppableTimer displayTimer;
+		private StoppableTimer focusTimer;
 
 		private IRequestCloseAnchorable activeAnchorable;
 
@@ -81,17 +82,31 @@ namespace ConscriptDesigner {
 			comboBoxScales.SelectedIndex = 0;
 
 
-			this.checkOutdatedTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.1),
+			this.checkOutdatedTimer = StoppableTimer.Create(
+				TimeSpan.FromSeconds(0.1),
+				DispatcherPriority.ApplicationIdle, delegate {
+					DesignerControl.CheckForOutdatedFiles(true);
+					checkOutdatedTimer.Stop();
+				});
+			/*this.checkOutdatedTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.1),
 				DispatcherPriority.ApplicationIdle, delegate {
 					DesignerControl.CheckForOutdatedFiles(true);
 					checkOutdatedTimer.Stop();
 				}, Dispatcher);
-			this.checkOutdatedTimer.Stop();
+			this.checkOutdatedTimer.Stop();*/
 
 			Application.Current.Activated += OnApplicationActivated;
 			Application.Current.Deactivated += OnApplicationDeactivated;
 
-			focusTimer = new DispatcherTimer(
+			focusTimer = StoppableTimer.Create(
+				TimeSpan.FromMilliseconds(16),
+				DispatcherPriority.Render,
+				delegate {
+					if (activeAnchorable != null)
+						activeAnchorable.Focus();
+					focusTimer.Stop();
+				});
+			/*focusTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(16),
 				DispatcherPriority.Render,
 				delegate {
@@ -99,7 +114,7 @@ namespace ConscriptDesigner {
 						activeAnchorable.Focus();
 					focusTimer.Stop();
 				}, Dispatcher);
-			focusTimer.Stop();
+			focusTimer.Stop();*/
 		}
 
 
@@ -120,14 +135,22 @@ namespace ConscriptDesigner {
 			}
 
 			Visibility = Visibility.Collapsed;
-			displayTimer = new DispatcherTimer(
+			displayTimer = StoppableTimer.StartNew(
 				TimeSpan.FromMilliseconds(0.1),
 				DispatcherPriority.ApplicationIdle,
 				delegate {
 					DisplayWindow();
 					displayTimer.Stop();
 					displayTimer = null;
-				}, Dispatcher);
+				});
+			/*displayTimer = new DispatcherTimer(
+				TimeSpan.FromMilliseconds(0.1),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					DisplayWindow();
+					displayTimer.Stop();
+					displayTimer = null;
+				}, Dispatcher);*/
 		}
 
 		private void DisplayWindow() {
@@ -167,14 +190,22 @@ namespace ConscriptDesigner {
 			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
 			suppressEvents = false;
 
-			loadedTimer = new DispatcherTimer(
+			loadedTimer = StoppableTimer.StartNew(
 				TimeSpan.FromSeconds(0.1),
 				DispatcherPriority.ApplicationIdle,
 				delegate {
 					Initialize();
 					loadedTimer.Stop();
 					loadedTimer = null;
-				}, Dispatcher);
+				});
+			/*loadedTimer = new DispatcherTimer(
+				TimeSpan.FromSeconds(0.1),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					Initialize();
+					loadedTimer.Stop();
+					loadedTimer = null;
+				}, Dispatcher);*/
 		}
 
 		private void OnApplicationActivated(object sender, EventArgs e) {

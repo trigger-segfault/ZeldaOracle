@@ -51,6 +51,8 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
+			if (!editorControl.IsResourcesLoaded)
+				return;
 			Graphics2D g = new Graphics2D(spriteBatch);
 			g.Clear(Color.White);
 			if (sprite == null)

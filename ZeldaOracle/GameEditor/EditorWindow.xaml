@@ -133,7 +133,11 @@
             <local:ImageToggleButton x:Name="buttonToolSquare" Source="Resources/Icons/ToolSquare.png" ToolTip="Square Tool (O)" Click="OnToolChanged"/>
             <local:ImageToggleButton x:Name="buttonToolFill" Source="Resources/Icons/ToolFill.png" ToolTip="Fill Tool (F)" Click="OnToolChanged"/>
             <local:ImageToggleButton x:Name="buttonToolSelection" Source="Resources/Icons/ToolSelection.png" ToolTip="Selection Tool (S)" Click="OnToolChanged"/>
-            <local:ImageToggleButton x:Name="buttonToolEyedropper" Source="Resources/Icons/ToolEyedropper.png" ToolTip="Eyedropper Tool (K)" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolEyedropper" Source="Resources/Icons/ToolEyedropper.png"  ToolTip="Eyedropper Tool (K)" Click="OnToolChanged"/>
+            <Separator x:Name="separatorToolOptions"/>
+            <local:ImageToggleButton x:Name="buttonToolSingleLayer" Source="Resources/Icons/ToolSelectionSingleLayer.png" ToolTip="Single-Layer Selection" Click="OnSingleLayerChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolMerge" Source="Resources/Icons/ToolSelectionMerge.png" ToolTip="Merge Selection" Click="OnMergeChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolRoomOnly" Source="Resources/Icons/Room.png" ToolTip="Only Fill Room" Click="OnRoomOnlyChanged"/>
             <Separator/>
             <local:ImageButton x:Name="buttonToolCopy" Source="Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
             <local:ImageButton x:Name="buttonToolCut" Source="Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>

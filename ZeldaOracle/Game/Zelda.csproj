@@ -119,6 +119,7 @@
     <Compile Include="Common\Audio\Song.cs" />
     <Compile Include="Common\Audio\Sound.cs" />
     <Compile Include="Common\Audio\SoundInstance.cs" />
+    <Compile Include="Common\Content\ResourceReferenceException.cs" />
     <Compile Include="Common\Geometry\Orientation.cs" />
     <Compile Include="Common\Geometry\Axes.cs" />
     <Compile Include="Common\Geometry\CollisionModel.cs" />
@@ -510,6 +511,8 @@
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
     <Compile Include="Game\Tiles\ActionTiles\MagnetBallActionTile.cs" />
+    <Compile Include="Game\Tiles\Clipboard\ActionTileDataReference.cs" />
+    <Compile Include="Game\Tiles\Clipboard\TileDataReference.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonster.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterArmos.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
@@ -526,6 +529,7 @@
     <Compile Include="Game\Tiles\Custom\Traps\TileFireShooter.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileSpikeRoller.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
+    <Compile Include="Game\Tiles\Clipboard\BaseTileDataReference.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
@@ -597,6 +601,7 @@
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
     <Compile Include="Game\Worlds\TileGrid.cs" />
+    <Compile Include="Game\Worlds\TileGrid.Reference.cs" />
     <Compile Include="Game\Worlds\World.cs" />
     <Compile Include="Game\Worlds\WorldFile.cs" />
     <Compile Include="Game\Worlds\Zone.cs" />

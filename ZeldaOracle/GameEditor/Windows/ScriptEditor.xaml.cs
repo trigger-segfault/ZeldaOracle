@@ -19,6 +19,7 @@ using ICSharpCode.AvalonEdit.Indentation;
 using ICSharpCode.CodeCompletion;
 using ZeldaEditor.Control;
 using ZeldaEditor.Scripting;
+using ZeldaEditor.Util;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaEditor.Windows {
@@ -38,7 +39,7 @@ namespace ZeldaEditor.Windows {
 		private string                      previousCode;       // The code of the script when the editor was opened.
 		//private bool                        autoCompile;
 		//private bool                        compileOnClose;
-		private DispatcherTimer             timer;
+		private StoppableTimer					timer;
 		private bool                        loaded;
 
 		private static CSharpCompletion     completion;
@@ -104,7 +105,11 @@ namespace ZeldaEditor.Windows {
 			editor.FontSize = 12.667;
 			editor.TextChanged += OnTextChanged;
 			editor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
-			timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.ApplicationIdle, delegate { RecompileUpdate(); }, Dispatcher);
+			timer = StoppableTimer.StartNew(
+				TimeSpan.FromMilliseconds(500),
+				DispatcherPriority.ApplicationIdle,
+				RecompileUpdate);
+			//timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.ApplicationIdle, delegate { RecompileUpdate(); }, Dispatcher);
 			TextOptions.SetTextFormattingMode(editor, TextFormattingMode.Display);
 			editor.IsModified = false;
 			editor.Focus();
