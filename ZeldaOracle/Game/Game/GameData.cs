@@ -14,6 +14,8 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles.ActionTiles;
+using System.Diagnostics;
+using ZeldaOracle.Common.Scripts;
 
 namespace ZeldaOracle.Game {
 	
@@ -25,7 +27,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Initializes and loads the game content. NOTE: The order here is important.
-		public static void Initialize(RewardManager rewardManager = null) {
+		public static void Initialize(bool preloadSprites = true, RewardManager rewardManager = null) {
 			/*
 			CommandReferenceParam param = CommandParamParser.ParseReferenceParams(
 				"(any objs...)...");
@@ -36,6 +38,15 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine(CommandParamParser.ToString(param));
 			throw new LoadContentException("END");
 			*/
+
+			Stopwatch watch = Stopwatch.StartNew();
+			Stopwatch audioWatch = new Stopwatch();
+			Stopwatch spriteWatch = new Stopwatch();
+			ScriptReader.Watch.Restart();
+
+			if (preloadSprites &&
+				Resources.PalettedSpriteDatabase.DatabaseFileExists())
+				Resources.PalettedSpriteDatabase.Load();
 
 			Console.WriteLine("Loading Palette Dictionaries");
 			LoadPaletteDictionaries();
@@ -52,8 +63,12 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Images");
 			LoadImages();
 
+			spriteWatch.Start();
+
 			Console.WriteLine("Loading Sprites");
 			LoadSprites();
+
+			spriteWatch.Stop();
 
 			Console.WriteLine("Loading Animations");
 			LoadAnimations();
@@ -64,11 +79,15 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Fonts");
 			LoadFonts();
 
+			audioWatch.Start();
+
 			Console.WriteLine("Loading Sound Effects");
 			LoadSounds();
 
 			Console.WriteLine("Loading Music");
 			LoadMusic();
+
+			audioWatch.Stop();
 
 			// CONSCRIPT DESIGNER ONLY
 			if (rewardManager != null) {
@@ -84,6 +103,21 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Zones");
 			LoadZonesPostTileData();
+
+			//Console.WriteLine("Took " + spriteWatch.ElapsedMilliseconds + "ms to load sprites.");
+			//Console.WriteLine("Took " + audioWatch.ElapsedMilliseconds + "ms to load audio.");
+			if (rewardManager == null) {
+				Console.WriteLine("Took " + ScriptReader.Watch.ElapsedMilliseconds + "ms to parse conscripts.");
+				Console.WriteLine("Took " + watch.ElapsedMilliseconds + "ms to load game data.");
+			}
+
+			if (!Resources.PalettedSpriteDatabase.IsPreloaded) {
+				watch.Restart();
+				Resources.PalettedSpriteDatabase.Save();
+
+				if (rewardManager == null)
+					Console.WriteLine("Took " + watch.ElapsedMilliseconds + "ms to save sprite database.");
+			}
 		}
 
 
