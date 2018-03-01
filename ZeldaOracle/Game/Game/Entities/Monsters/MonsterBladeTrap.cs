@@ -15,21 +15,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			IsKnockbackable	= false;
 			
 			// Interactions (Tools)
-			SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
 			// Interactions (Projectiles)
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
 
 			
-			SetReaction(InteractionType.Sword,			Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
 		}
 
 		public override void Initialize() {

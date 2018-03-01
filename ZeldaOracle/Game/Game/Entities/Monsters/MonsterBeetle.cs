@@ -33,7 +33,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			syncAnimationWithDirection	= true;
 
 			// Interactions.
-			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
+			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
 		}
 	}
 }

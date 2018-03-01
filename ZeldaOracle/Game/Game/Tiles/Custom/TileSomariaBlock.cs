@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 					if (entity is Monster) {
 						Monster monster = (Monster) entity;
-						monster.TriggerInteraction(InteractionType.Block, new TileDummy(this));
+						monster.Interactions.Trigger(InteractionType.Block, new TileDummy(this));
 					}
 				}
 			}
@@ -70,7 +70,7 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 					if (IsMoving && entity is Monster) {
 						Monster monster = (Monster) entity;
-						monster.TriggerInteraction(InteractionType.Block, new TileDummy(this));
+						monster.Interactions.Trigger(InteractionType.Block, new TileDummy(this));
 					}
 				}
 			}

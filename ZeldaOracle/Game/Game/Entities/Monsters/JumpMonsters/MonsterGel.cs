@@ -40,17 +40,17 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			Physics.SoftCollisionBox	= new Rectangle2F(-4, -3 - 6, 8, 8);
 			
 			// Weapon interactions
-			SetReaction(InteractionType.Sword,			Reactions.Kill);
-			SetReaction(InteractionType.SwordSpin,		Reactions.Kill);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Kill);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Kill);
 			// Projectile interactions
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Kill);
 			// Misc interactions
-			SetReaction(InteractionType.Block,			Reactions.Kill);
-			SetReaction(InteractionType.ThrownObject,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Block,			Reactions.Kill);
+			Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.Kill);
 		}
 
 		

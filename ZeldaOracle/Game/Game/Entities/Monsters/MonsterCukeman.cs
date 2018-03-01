@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Disable the transform-into-cukeman reaction which was set by the
 			// BuzzBlob base class
-			SetReaction(InteractionType.MysterySeed, Reactions.MysterySeed);
+			Interactions.SetReaction(InteractionType.MysterySeed, Reactions.MysterySeed);
 		}
 		
 

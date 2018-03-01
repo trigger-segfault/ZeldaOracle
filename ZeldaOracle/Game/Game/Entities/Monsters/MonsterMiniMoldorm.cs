@@ -53,14 +53,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.ReboundRoomEdge			= true;
 
 			// Projectile Interactions
-			SetReaction(InteractionType.Gale,			SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Damage);
+			Interactions.SetReaction(InteractionType.Gale,			SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Damage);
 		}
 
 

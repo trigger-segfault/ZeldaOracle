@@ -26,21 +26,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveSpeed = 0.375f;
 			
 			// Weapon interactions
-			SetReaction(InteractionType.Sword,			Reactions.Bump);
-			SetReaction(InteractionType.SwordSpin,		Reactions.Bump);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.Bump);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Bump);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Bump);
 			// Projectile interactions
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Bump);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Bump);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Bump);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Bump);
-			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, Reactions.Bump);
-			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.BombExplosion,	Reactions.Bump);
-			SetReaction(InteractionType.Block,			Reactions.Bump);
-			SetReaction(InteractionType.ThrownObject,	Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Bump);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Bump);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Bump);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, Reactions.Bump);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Block,			Reactions.Bump);
+			Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.Bump);
 		}
 
 		

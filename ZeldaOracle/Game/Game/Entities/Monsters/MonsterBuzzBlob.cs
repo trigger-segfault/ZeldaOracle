@@ -35,15 +35,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			syncAnimationWithDirection	= false;
 			
 			// Interactions (Tools)
-			SetReaction(InteractionType.Sword,			Reactions.Electrocute);
-			SetReaction(InteractionType.SwordSpin,		Reactions.Electrocute);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Electrocute);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.Electrocute);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Electrocute);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Electrocute);
 			// Interactions (Projectiles)
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Damage);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Electrocute);
-			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TransformIntoCukeman);
-			SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Damage);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Electrocute);
+			Interactions.SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TransformIntoCukeman);
+			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
 		}
 
 

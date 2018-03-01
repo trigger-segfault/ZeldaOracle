@@ -57,18 +57,18 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			physics.DisableSurfaceContact	= true;
 
 			// Weapon Interactions
-			SetReaction(InteractionType.Sword,			KillOrElectrocute);
-			SetReaction(InteractionType.SwordSpin,		KillOrElectrocute);
-			SetReaction(InteractionType.BiggoronSword,	KillOrElectrocute);
+			Interactions.SetReaction(InteractionType.Sword,			KillOrElectrocute);
+			Interactions.SetReaction(InteractionType.SwordSpin,		KillOrElectrocute);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	KillOrElectrocute);
 
 			// Projectile Interactions
-			SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy, Reactions.Kill);
-			SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy, Reactions.Kill);
-			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy, Reactions.Kill);
-			SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.Kill);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, KillOrElectrocute);
-			SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, KillOrElectrocute);
+			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
 
 			// Behavior
 			stateMachine = new GenericStateMachine<BariState>();

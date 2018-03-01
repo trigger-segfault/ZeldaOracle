@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			physics.DisableSurfaceContact	= true;
 
 			// Projectile interations
-			SetReaction(InteractionType.Boomerang, SenderReactions.Intercept, Reactions.SoftKill);
+			Interactions.SetReaction(InteractionType.Boomerang, SenderReactions.Intercept, Reactions.SoftKill);
 		}
 
 

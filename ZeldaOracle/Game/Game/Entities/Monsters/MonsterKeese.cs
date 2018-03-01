@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			//centerOffset				= new Point2I(0, -6) + new Point2I(0, 3);
 
 			// Projectile interactions
-			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Kill);
 		}
 
 

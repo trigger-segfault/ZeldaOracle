@@ -58,29 +58,29 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.Flags =	PhysicsFlags.DestroyedOutsideRoom;
 
 			// Weapon interations
-			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
 			// Seed interations
-			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
-			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
 			// Projectile interations
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);
-			SetReaction(InteractionType.SwitchHook,		Reactions.None);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwitchHook,		Reactions.None);
 			// Environment interations
-			SetReaction(InteractionType.Fire,			Reactions.None);
-			SetReaction(InteractionType.Gale,			Reactions.None);
-			SetReaction(InteractionType.BombExplosion,	Reactions.None);
-			SetReaction(InteractionType.ThrownObject,	Reactions.None);
-			SetReaction(InteractionType.MineCart,		Reactions.None);
-			SetReaction(InteractionType.Block,			Reactions.None);
+			Interactions.SetReaction(InteractionType.Fire,			Reactions.None);
+			Interactions.SetReaction(InteractionType.Gale,			Reactions.None);
+			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.None);
+			Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.None);
+			Interactions.SetReaction(InteractionType.MineCart,		Reactions.None);
+			Interactions.SetReaction(InteractionType.Block,			Reactions.None);
 		}
 
 

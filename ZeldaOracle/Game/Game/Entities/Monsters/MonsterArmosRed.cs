@@ -28,20 +28,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isKnockbackable			= false;
 
 			// Weapon interactions
-			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
 			// Seed interactions
-			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
 			// Projectile interactions
-			SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, Reactions.ClingEffect);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Stun, Reactions.DamageByLevel(0, 1));
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Stun, Reactions.DamageByLevel(0, 1));
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
 			// Environment interactions
-			SetReaction(InteractionType.Fire,			Reactions.None);
-			SetReaction(InteractionType.Gale,			Reactions.None);
-			SetReaction(InteractionType.BombExplosion,	Reactions.Damage2);
+			Interactions.SetReaction(InteractionType.Fire,			Reactions.None);
+			Interactions.SetReaction(InteractionType.Gale,			Reactions.None);
+			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Damage2);
 		}
 	}
 }

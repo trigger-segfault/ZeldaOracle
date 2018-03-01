@@ -169,7 +169,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 				((SeedEntity) sender).SeedType = seedType;
 
-				((Monster) subject).TriggerInteraction(
+				((Monster) subject).Interactions.Trigger(
 					Monster.GetSeedInteractionType(seedType),
 					sender, args);
 			}

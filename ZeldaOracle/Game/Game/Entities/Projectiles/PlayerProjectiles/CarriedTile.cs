@@ -118,7 +118,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		private void CollisionChecks() {
 			// Collide with monsters.
 			foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
-				monster.TriggerInteraction(InteractionType.ThrownObject, this);
+				monster.Interactions.Trigger(InteractionType.ThrownObject, this);
 				if (IsDestroyed)
 					return;
 			}

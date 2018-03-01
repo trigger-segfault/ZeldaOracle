@@ -28,15 +28,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			IsKnockbackable	= false;
 			
 			// Weapon interactions
-			SetReaction(InteractionType.Sword,			Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
 			// Projectile interactions
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
 		}
 
 

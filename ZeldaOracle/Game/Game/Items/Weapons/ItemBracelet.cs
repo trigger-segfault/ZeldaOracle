@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					else if (entity is Monster && Player.Physics.IsBraceletMeetingEntity(
 						entity, GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
 					{
-						((Monster) entity).TriggerInteraction(InteractionType.Bracelet,
+						((Monster) entity).Interactions.Trigger(InteractionType.Bracelet,
 							Player, new WeaponInteractionEventArgs() {
 								Weapon = this
 						});

@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(InteractionType.SwordBeam, this);
+			monster.Interactions.Trigger(InteractionType.SwordBeam, this);
 		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {

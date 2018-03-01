@@ -23,14 +23,6 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public Collectible() {
-			this.timer			= 0;
-			this.hasDuration	= true;
-
-			// Physics
-			Physics.CollisionBox		= new Rectangle2I(-2, -2, 4, 4);
-			Physics.SoftCollisionBox	= new Rectangle2I(-2, -2, 4, 4);
-			Physics.MovesWithConveyors	= true;
-
 			// Graphics
 			Graphics.IsShadowVisible		= true;
 			Graphics.IsGrassEffectVisible	= true;
@@ -38,13 +30,27 @@ namespace ZeldaOracle.Game.Entities {
 			Graphics.DepthLayer				= DepthLayer.Collectibles;
 			Graphics.DepthLayerInAir		= DepthLayer.InAirCollectibles;
 
-			aliveDuration	= GameSettings.COLLECTIBLE_ALIVE_DURATION;
-			fadeDelay		= GameSettings.COLLECTIBLE_FADE_DELAY;
-			collectibleDelay	= GameSettings.COLLECTIBLE_PICKUPABLE_DELAY;
+			// Physics
+			Physics.CollisionBox		= new Rectangle2I(-2, -2, 4, 4);
+			Physics.SoftCollisionBox	= new Rectangle2I(-2, -2, 4, 4);
+			Physics.MovesWithConveyors	= true;
 
-			isCollectibleWithItems = true;
-
-			collected = null;
+			// Interactions
+			Interactions.Enable();
+			Interactions.SetReaction(InteractionType.Sword,
+				delegate(Entity sender, EventArgs args)
+			{
+				if (IsCollectible && IsCollectibleWithItems)
+					Collect();
+			});
+			
+			// Collectible
+			hasDuration				= true;
+			isCollectibleWithItems	= true;
+			collected				= null;
+			aliveDuration			= GameSettings.COLLECTIBLE_ALIVE_DURATION;
+			fadeDelay				= GameSettings.COLLECTIBLE_FADE_DELAY;
+			collectibleDelay		= GameSettings.COLLECTIBLE_PICKUPABLE_DELAY;
 		}
 
 
@@ -70,9 +76,9 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public override void Update() {
-			base.Update();
+			physics.SoftCollisionBox = Interactions.InteractionBox;
 
-			// Update timeout timer.
+			// Update timeout timer
 			timer++;
 			if (hasDuration) {
 				if (timer == aliveDuration) {
@@ -85,6 +91,8 @@ namespace ZeldaOracle.Game.Entities {
 			// Check if colliding with the player.
 			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && IsCollectible)
 				Collect();
+
+			base.Update();
 		}
 
 

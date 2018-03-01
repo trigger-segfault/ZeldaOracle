@@ -44,8 +44,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			animationMove = GameData.ANIM_MONSTER_PEAHAT;
 
 			// Projectile interactions
-			SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, Reactions.Damage);
-			SetReaction(InteractionType.Boomerang,	SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, Reactions.Damage);
+			Interactions.SetReaction(InteractionType.Boomerang,	SenderReactions.Intercept);
 			
 			// Behavior
 			stateMachine = new GenericStateMachine<FlyState>();

@@ -87,15 +87,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.Bounces	= false;
 
 			SetDefaultReactions();
-			SetReaction(InteractionType.Sword,			Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			SetReaction(InteractionType.Shield,			OnShieldHit);
-			SetReaction(InteractionType.Shovel,			OnShovelHit);
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shield,			OnShieldHit);
+			Interactions.SetReaction(InteractionType.Shovel,			OnShovelHit);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
 		}
 
 		private void InitReactionsFlipped() {
@@ -106,7 +106,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.Bounces	= true;
 
 			SetDefaultReactions();
-			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Kill);
 		}
 		
 		private void OnShieldHit(Entity sender, EventArgs args) {

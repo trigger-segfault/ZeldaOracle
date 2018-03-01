@@ -259,6 +259,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 			tileLocation = tileLoc;
 
+			/*
 			if (owner is Player) {
 				// Collide with monster tools.
 				foreach (Monster monster in RoomControl.GetEntitiesOfType<Monster>()) {
@@ -302,13 +303,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				//		return;
 				//}
 			}
+			*/
 
 			// Collide with solid entities
-			foreach (Entity entity in Physics.GetSolidEntitiesMeeting<Entity>(CollisionBoxType.Hard)) {
-				OnCollideSolidEntity(entity);
-				if (IsDestroyed)
-					return;
-			}
+			//foreach (Entity entity in Physics.GetSolidEntitiesMeeting<Entity>(CollisionBoxType.Hard)) {
+			//	OnCollideSolidEntity(entity);
+			//	if (IsDestroyed)
+			//		return;
+			//}
 			
 
 

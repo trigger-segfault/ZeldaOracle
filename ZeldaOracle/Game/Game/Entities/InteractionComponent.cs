@@ -48,15 +48,24 @@ namespace ZeldaOracle.Game.Entities {
 				interactionManager = new InteractionEventManager(entity);
 		}
 
-		// Get the interaction handler for the given interaction type.
+		/// <summary>Get the interaction handler for the given interaction type.
+		/// </summary>
 		public InteractionHandler GetInteraction(InteractionType type) {
 			if (interactionManager == null)
 				return null;
 			return interactionManager[type];
 		}
 
-		// Set the reactions to the given interaction type.
-		// The reaction functions are called in the order they are specified.
+		/// <summary>Clear the callbacks for all interaction types.</summary>
+		public void ClearReactions() {
+			if (interactionManager != null) {
+				for (int i = 0; i < (int) InteractionType.Count; i++)
+					interactionManager[(InteractionType) i].Clear();
+			}
+		}
+
+		/// <summary>Set the reactions to the given interaction type. The reaction
+		/// functions are called in the order they are specified.</summary>
 		public void SetReaction(InteractionType type,
 			params InteractionStaticDelegate[] reactions)
 		{
@@ -64,8 +73,8 @@ namespace ZeldaOracle.Game.Entities {
 			interactionManager.Set(type, reactions);
 		}
 
-		// Set the reactions to the given interaction type.
-		// The reaction functions are called in the order they are specified.
+		/// <summary>Set the reactions to the given interaction type. The reaction
+		/// functions are called in the order they are specified.</summary>
 		public void SetReaction(InteractionType type,
 			params InteractionMemberDelegate[] reactions)
 		{

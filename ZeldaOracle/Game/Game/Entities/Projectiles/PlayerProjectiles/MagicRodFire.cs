@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(InteractionType.RodFire, this);
+			monster.Interactions.Trigger(InteractionType.RodFire, this);
 		}
 	}
 }

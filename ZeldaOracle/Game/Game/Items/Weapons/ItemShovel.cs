@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			//shovelHitBox.Point += (Point2I) Player.CenterOffset;
 			//shovelHitBox.ExtendEdge(Player.Direction, 7);
 			//foreach (Monster monster in Player.Physics.GetEntitiesMeeting<Monster>(shovelHitBox, CollisionBoxType.Soft)) {
-			//	monster.TriggerInteraction(InteractionType.Shovel, Player);
+			//	monster.Interactions.Trigger(InteractionType.Shovel, Player);
 			//}
 			Rectangle2F shovelHitBox = new Rectangle2F(-4, -4, 8, 8);
 			shovelHitBox.Point += Player.Center;

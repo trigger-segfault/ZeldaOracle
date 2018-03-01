@@ -59,24 +59,24 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			};
 
 			// Weapon interactions
-			//SetReaction(InteractionType.Sword, DamageBody);
-			//SetReaction(InteractionType.SwordSpin, DamageBody);
-			//SetReaction(InteractionType.BiggoronSword, DamageBody);
+			//Interactions.SetReaction(InteractionType.Sword, DamageBody);
+			//Interactions.SetReaction(InteractionType.SwordSpin, DamageBody);
+			//Interactions.SetReaction(InteractionType.BiggoronSword, DamageBody);
 			////// Projectile interactions
-			//SetReaction(InteractionType.Arrow, SenderReactions.Intercept, DamageBody);
-			//SetReaction(InteractionType.SwordBeam, SenderReactions.Intercept, DamageBody);
-			//SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, DamageBody);
-			//SetReaction(InteractionType.BombExplosion, DamageBody);
+			//Interactions.SetReaction(InteractionType.Arrow, SenderReactions.Intercept, DamageBody);
+			//Interactions.SetReaction(InteractionType.SwordBeam, SenderReactions.Intercept, DamageBody);
+			//Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, DamageBody);
+			//Interactions.SetReaction(InteractionType.BombExplosion, DamageBody);
 			
 			// Weapon interactions
-			SetReaction(InteractionType.Sword,			Reactions.Kill);
-			SetReaction(InteractionType.SwordSpin,		Reactions.Kill);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Kill);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Kill);
 			//// Projectile interactions
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
 		}
 
 

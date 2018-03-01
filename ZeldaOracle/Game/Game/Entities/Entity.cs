@@ -472,6 +472,10 @@ namespace ZeldaOracle.Game.Entities {
 			get { return interactions; }
 		}
 
+		public InteractionEventManager Reactions {
+			get { return interactions.InteractionManager; }
+		}
+
 		public bool IsInAir {
 			get {
 				if (Physics.IsEnabled)

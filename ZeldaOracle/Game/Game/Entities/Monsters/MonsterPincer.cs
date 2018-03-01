@@ -45,9 +45,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.SoftCollisionBox		= Physics.CollisionBox.Inflated(-2, -2);
 
 			// Reactions
-			SetReaction(InteractionType.Gale, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.GaleSeed, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
+			Interactions.SetReaction(InteractionType.Gale, SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.GaleSeed, SenderReactions.Intercept, Reactions.None);
+			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
 
 			// State Machine
 			stateMachine = new GenericStateMachine<PincerState>();

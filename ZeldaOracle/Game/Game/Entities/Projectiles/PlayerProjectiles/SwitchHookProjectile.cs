@@ -158,7 +158,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public override void OnCollideMonster(Monster monster) {
 			if (!isReturning && !isHooked && !isLifting)
-				monster.TriggerInteraction(InteractionType.SwitchHook, this);
+				monster.Interactions.Trigger(InteractionType.SwitchHook, this);
 		}
 
 		public override void Update() {

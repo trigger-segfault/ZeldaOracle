@@ -47,16 +47,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// actually supposed to crush the player
 
 			// Weapon Interactions
-			SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
 			// Projectile Interactions
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
-			
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, Reactions.ClingEffect);
+
 			// Behavior
 			stateMachine = new GenericStateMachine<CrushState>();
 			stateMachine.AddState(CrushState.Idle)

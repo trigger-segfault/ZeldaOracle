@@ -24,7 +24,8 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		public PlayerToolShield() {
 			toolType = UnitToolType.Shield;
 			IsPhysicsEnabled = true;
-			
+			IsPersistentBetweenRooms = true;
+
 			shieldCollisionBoxes = new Rectangle2I[] {
 				new Rectangle2I(14 - 8, 2 - 13, 2, 14),	// Right
 				new Rectangle2I( 7 - 8, 0 - 13, 9, 11),	// Up
@@ -62,7 +63,7 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		}
 
 		public override void OnHitMonster(Monster monster) {
-			monster.TriggerInteraction(InteractionType.Shield, unit, new WeaponInteractionEventArgs() {
+			monster.Interactions.Trigger(InteractionType.Shield, unit, new WeaponInteractionEventArgs() {
 				Weapon = itemShield,
 				Tool = this
 			});

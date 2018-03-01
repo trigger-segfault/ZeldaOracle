@@ -43,7 +43,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			animationMove = GameData.ANIM_MONSTER_WATER_TEKTIKE;
 			
 			// Projectile interactions
-			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Kill);
 		}
 
 

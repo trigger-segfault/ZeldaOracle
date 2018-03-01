@@ -45,10 +45,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			syncAnimationWithDirection	= true;
 			
 			// Interactions.
-			SetReaction(InteractionType.Sword,			Reactions.DamageByLevel(1, 2, 2));
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage2);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
-			SetReaction(InteractionType.GaleSeed,		Reactions.None);
+			Interactions.SetReaction(InteractionType.Sword,			Reactions.DamageByLevel(1, 2, 2));
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Damage2);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.GaleSeed,		Reactions.None);
 		}
 	}
 }

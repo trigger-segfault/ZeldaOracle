@@ -88,63 +88,63 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				swordLevel = GameControl.Inventory.GetItem("item_sword").Level;
 			int cuttableLevel = CoverProperties.GetInteger("cuttable_sword_level");
 			if (CoverFlags.HasFlag(TileFlags.Cuttable) && swordLevel >= cuttableLevel) {
-				SetReaction(InteractionType.Sword,			SenderReactions.Intercept,	Reactions.DamageByLevel(1, 2, 3), BreakCover);
-				SetReaction(InteractionType.SwordSpin,		Reactions.Damage2,			BreakCover);
-				SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3,			BreakCover);
-				SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy,	Reactions.Damage, BreakCover);
-				SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
+				Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept,	Reactions.DamageByLevel(1, 2, 3), BreakCover);
+				Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Damage2,			BreakCover);
+				Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3,			BreakCover);
+				Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy,	Reactions.Damage, BreakCover);
+				Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
 			}
 			else {
-				SetReaction(InteractionType.Sword,			Reactions.ClingEffect);
-				SetReaction(InteractionType.SwordSpin,		Reactions.ClingEffect);
-				SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-				SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-				SetReaction(InteractionType.ThrownObject,	Reactions.None);
+				Interactions.SetReaction(InteractionType.Sword,			Reactions.ClingEffect);
+				Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ClingEffect);
+				Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+				Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
+				Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.None);
 			}
 
 			int boomerangLevel = -1;
 			if (GameControl.Inventory.ItemExists("item_boomerang"))
 				boomerangLevel = GameControl.Inventory.GetItem("item_boomerang").Level;
 			if (CoverFlags.HasFlag(TileFlags.Boomerangable) && boomerangLevel >= Items.Item.Level2) {
-				SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Stun, BreakCover);
+				Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Stun, BreakCover);
 			}
 			else {
-				SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);
+				Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);
 			}
 
 			if (CoverFlags.HasFlag(TileFlags.Burnable)) {
-				SetReaction(InteractionType.Fire,			Reactions.Burn);
+				Interactions.SetReaction(InteractionType.Fire,			Reactions.Burn);
 			}
 			else {
 				// TODO: Flames need to go out quickly
-				SetReaction(InteractionType.Fire,			SenderReactions.Intercept);
+				Interactions.SetReaction(InteractionType.Fire,			SenderReactions.Intercept);
 			}
 
 			if (CoverFlags.HasFlag(TileFlags.Bombable)) {
-				SetReaction(InteractionType.BombExplosion,	Reactions.Damage, BreakCover);
+				Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Damage, BreakCover);
 			}
 			else {
-				SetReaction(InteractionType.BombExplosion,	Reactions.None);
+				Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.None);
 			}
 
-			SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
-			SetReaction(InteractionType.Shovel,			Reactions.Bump);
-			SetReaction(InteractionType.Parry,			Reactions.Parry);
-			SetReaction(InteractionType.Bracelet,		PickupInteraction);
+			Interactions.SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Shovel,			Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Parry,			Reactions.Parry);
+			Interactions.SetReaction(InteractionType.Bracelet,		PickupInteraction);
 			// Seed interations
-			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
-			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
-			SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
 			// Projectile interations
-			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
-			SetReaction(InteractionType.SwitchHook,		SwitchHookInteraction);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SwitchHookInteraction);
 			// Environment interations
-			SetReaction(InteractionType.Gale,			SenderReactions.Intercept);
-			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
-			SetReaction(InteractionType.Block,			Reactions.None);
+			Interactions.SetReaction(InteractionType.Gale,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
+			Interactions.SetReaction(InteractionType.Block,			Reactions.None);
 		}
 
 
@@ -306,7 +306,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Don't check for future collisions and force a popup if player is hit.
 			// Otherwise, if future collision is detected, don't popup.
 			if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
-				TriggerInteraction(InteractionType.PlayerContact, RoomControl.Player);
+				Interactions.Trigger(InteractionType.PlayerContact, RoomControl.Player);
 				return;
 			}
 			Vector2F nextVelocity = Angles.ToVector(moveAngle) * moveSpeed;
