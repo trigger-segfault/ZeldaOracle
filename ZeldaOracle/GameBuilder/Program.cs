@@ -73,6 +73,10 @@ namespace ZeldaOracleBuilder {
 		public static string OutputContentDirectory {
 			get { return Path.Combine(OutputBinDirectory, "Content"); }
 		}
+		/// <summary>The path to the preloaded paletted sprite database file.</summary>
+		public static string OutputSpriteDatabaseFile {
+			get { return Path.Combine(OutputContentDirectory, "PalettedSprites.dat"); }
+		}
 
 		/// <summary>True if game content should not be recompiled.</summary>
 		public static bool NoCompile { get; private set; }
@@ -278,7 +282,8 @@ namespace ZeldaOracleBuilder {
 				string filePath = Path.Combine(folder.OutputFilePath, leftoverFile);
 				if (Directory.Exists(filePath))
 					Directory.Delete(filePath, true);
-				else
+				// Don't delete the sprite database
+				else if (!PathHelper.IsPathTheSame(filePath, OutputSpriteDatabaseFile))
 					File.Delete(Path.Combine(folder.OutputFilePath, leftoverFile));
 			}
 		}

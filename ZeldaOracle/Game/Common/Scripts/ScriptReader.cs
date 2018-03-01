@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts.Commands;
 using System.Threading;
 using ZeldaOracle.Common.Util;
+using System.Diagnostics;
 
 namespace ZeldaOracle.Common.Scripts {
 	/// <summary>
@@ -15,7 +16,9 @@ namespace ZeldaOracle.Common.Scripts {
 	/// interpret text files written in a certain syntax.
 	/// <summary>
 	public abstract class ScriptReader {
-		
+
+		public static Stopwatch Watch = new Stopwatch();
+
 		private StreamReader	streamReader;
 		private string			fileName;
 		private string          directory;
@@ -323,7 +326,9 @@ namespace ZeldaOracle.Common.Scripts {
 					if (command.HasParameters(parameters, out newParams, typeDefinitions)) {
 						// Run the command.
 						try {
+							ScriptReader.Watch.Stop();
 							command.Action(newParams);
+							ScriptReader.Watch.Start();
 						}
 						catch (ThreadAbortException) { }
 						catch (LoadContentException ex) {
@@ -582,6 +587,7 @@ namespace ZeldaOracle.Common.Scripts {
 
 		/// <summary>Parse and interpret the given text stream as a script, line by line.</summary>
 		public void ReadScript(StreamReader reader, string path) {
+			ScriptReader.Watch.Start();
 			this.fileName = path;
 			this.directory = Path.GetDirectoryName(path);
 			this.streamReader = reader;
@@ -618,6 +624,7 @@ namespace ZeldaOracle.Common.Scripts {
 
 			// Remove the script from the call stack
 			scriptCallStack.Remove(normalizedPath);
+			ScriptReader.Watch.Stop();
 		}
 
 

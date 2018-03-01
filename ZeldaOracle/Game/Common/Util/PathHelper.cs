@@ -111,5 +111,22 @@ namespace ZeldaOracle.Common.Util {
 			}
 			return finalPath;
 		}
+
+		/// <summary>Returns a collection of all files and subfiles in the directory.</summary>
+		public static List<string> GetAllFiles(string directory) {
+			List<string> files = new List<string>();
+			AddAllFiles(files, directory);
+			return files;
+		}
+
+		/// <summary>Adds all of the files and subfiles in the directory to the list.</summary>
+		private static void AddAllFiles(List<string> files, string directory) {
+			foreach (string file in Directory.GetFiles(directory)) {
+				files.Add(file);
+			}
+			foreach (string dir in Directory.GetDirectories(directory)) {
+				AddAllFiles(files, dir);
+			}
+		}
 	}
 }

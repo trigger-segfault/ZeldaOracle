@@ -47,6 +47,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>false</XnaCompressContent>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +61,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>true</XnaCompressContent>
     <LangVersion>default</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -120,6 +122,7 @@
     <Compile Include="Common\Audio\Sound.cs" />
     <Compile Include="Common\Audio\SoundInstance.cs" />
     <Compile Include="Common\Content\ResourceReferenceException.cs" />
+    <Compile Include="Common\Content\Texture2DLoader.cs" />
     <Compile Include="Common\Geometry\Orientation.cs" />
     <Compile Include="Common\Geometry\Axes.cs" />
     <Compile Include="Common\Geometry\CollisionModel.cs" />
@@ -138,6 +141,8 @@
     <Compile Include="Common\Graphics\PaletteColors.cs" />
     <Compile Include="Common\Graphics\Rotating.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
+    <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Misc.cs" />
+    <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Size.cs" />
     <Compile Include="Common\Graphics\Sprites\SpriteSet.cs" />
     <Compile Include="Common\Graphics\Sprites\CompositeSprite.cs" />
     <Compile Include="Common\Graphics\Sprites\BasicSprite.cs" />
@@ -238,6 +243,7 @@
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
+    <Compile Include="Common\Util\BinaryExtensions.cs" />
     <Compile Include="Common\Util\EnumHelper.cs" />
     <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Common\Util\PathHelper.cs" />
