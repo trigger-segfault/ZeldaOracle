@@ -27,8 +27,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 	public class Projectile : Entity, IInterceptable {
 
-		protected int		angle;
-		protected int		direction;
+		protected Angle		angle;
+		protected Direction	direction;
 		protected Entity	owner;
 		protected Tile      tileOwner;
 		protected bool		syncAnimationWithAngle;
@@ -327,20 +327,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int Angle {
+		public Angle Angle {
 			get { return angle; }
 			set {
 				angle = value;
-				if (angle % 2 == 0)
-					direction = angle / 2;
+				if (angle.IsAxisAligned)
+					direction = angle.ToDirection();
 			}
 		}
 		
-		public int Direction {
+		public Direction Direction {
 			get { return direction; }
 			set {
 				direction = value;
-				angle = Directions.ToAngle(direction);
+				angle = direction.ToAngle();
 			}
 		}
 

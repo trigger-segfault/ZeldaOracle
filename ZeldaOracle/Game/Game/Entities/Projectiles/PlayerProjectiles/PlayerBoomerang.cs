@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
@@ -27,18 +19,43 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public PlayerBoomerang(ItemBoomerang itemBoomerang) {
-			this.itemBoomerang = itemBoomerang;
-
-			speed		= GameSettings.PROJECTILE_BOOMERANG_SPEEDS[itemBoomerang.Level];
-			returnDelay	= GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAYS[itemBoomerang.Level];
-
+			// Physics
 			if (itemBoomerang.Level == Item.Level2) {
 				physics.CustomTileIsNotSolidCondition = delegate(Tile tile) {
 					// Don't collide with boomerangable tiles, but instead break them
-					// as we pass over them.
+					// as we pass over them
 					return !tile.IsBoomerangable;
 				};
 			}
+
+			// Interactions
+			Interactions.InteractionType = InteractionType.Boomerang;
+			Interactions.InteractionEventArgs = new WeaponInteractionEventArgs() {
+				Weapon = itemBoomerang
+			};
+
+			// Boomerang
+			moveSpeed = GameSettings.PROJECTILE_BOOMERANG_SPEEDS[
+				itemBoomerang.Level];
+			returnDelay = GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAYS[
+				itemBoomerang.Level];
+
+			// Player Boomerang
+			collectibles = new List<Collectible>();
+			this.itemBoomerang = itemBoomerang;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Collectibles
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Pickup a collectible and carry it with the boomerang to be
+		/// collected upon returning to the player.</summary>
+		public void GrabCollectible(Collectible collectible) {
+			collectibles.Add(collectible);
+			collectible.Destroy();
+			BeginReturning();
 		}
 
 
@@ -54,28 +71,21 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			else
 				Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_BOOMERANG_2);
 
-			collectibles = new List<Collectible>();
+			collectibles.Clear();
 			tileLocation = new Point2I(-1, -1);
 		}
 
 		protected override void OnReturnedToOwner() {
-			base.OnReturnedToOwner();
-
-			// Collect the collectables.
+			// Collect the collectables that were grabbed
 			for (int i = 0; i < collectibles.Count; i++)
 				collectibles[i].Collect();
-		}
-
-		public override void OnCollideMonster(Monster monster) {
-			monster.Interactions.Trigger(InteractionType.Boomerang, this, new WeaponInteractionEventArgs() {
-				Weapon = itemBoomerang
-			});
+			collectibles.Clear();
 		}
 
 		public override void Update() {
 			AudioSystem.LoopSoundWhileActive(GameData.SOUND_BOOMERANG_LOOP);
 
-			// Check for boomerangable tiles.
+			// Check for boomerangable tiles
 			if (itemBoomerang.Level == Item.Level2) {
 				Point2I tileLoc = RoomControl.GetTileLocation(position);
 				if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc)) {
@@ -86,22 +96,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				tileLocation = tileLoc;
 			}
 
-			// Pickup collectibles.
-			foreach (Collectible collectible in Physics.GetEntitiesMeeting<Collectible>(CollisionBoxType.Soft)) {
-				if (collectible.IsCollectible && collectible.IsCollectibleWithItems) {
-					collectibles.Add(collectible);
-					collectible.Destroy();
-					BeginReturn();
-				}
-			}
-
 			base.Update();
 		}
 
 		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
-			// Draw collectibles over boomerang.
+			// Draw collectibles over boomerang
 			for (int i = 0; i < collectibles.Count; i++) {
 				Collectible collectible = collectibles[i];
 				collectible.SetPositionByCenter(Center);
@@ -109,6 +110,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				float percent = i / (float) collectibles.Count;
 				collectible.Graphics.Draw(g);
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+		
+		public ItemBoomerang Weapon {
+			get { return itemBoomerang; }
+			set { itemBoomerang = value; }
 		}
 	}
 }

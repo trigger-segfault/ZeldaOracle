@@ -81,8 +81,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			hookedEntityPosition	= hookedEntity.Position;
 			playerPosition			= player.Position;
 			hookProjectilePosition	= hookProjectile.Position;
-
-			hookProjectile.OnSwitchPositions();
 		}
 
 

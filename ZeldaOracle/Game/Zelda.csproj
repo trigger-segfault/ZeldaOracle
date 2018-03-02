@@ -402,7 +402,7 @@
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\FireballProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\BoneProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\FireShooterProjectile.cs" />
-    <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\MagnetBall.cs" />
+    <Compile Include="Game\Entities\Objects\MagnetBall.cs" />
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\PlayerBoomerang.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MagicProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MonsterBoomerang.cs" />
@@ -416,8 +416,8 @@
     <Compile Include="Game\Entities\Projectiles\Seeds\SeedProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\SwordBeam.cs" />
     <Compile Include="Game\Entities\Projectiles\Arrow.cs" />
-    <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\Bomb.cs" />
-    <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\CarriedTile.cs" />
+    <Compile Include="Game\Entities\Objects\Bomb.cs" />
+    <Compile Include="Game\Entities\Objects\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seeds\Seed.cs" />
     <Compile Include="Game\Entities\TileDummy.cs" />

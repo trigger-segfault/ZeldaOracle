@@ -383,10 +383,16 @@ namespace ZeldaOracle.Game.Entities {
 			set { isAlive = value; }
 		}
 
-		/// <summary>Returns true if the entity is being handled by RoomControl.
+		/// <summary>Returns true if the entity is being managed by RoomControl.
 		/// </summary>
 		public bool IsInRoom {
 			get { return isInRoom; }
+		}
+
+		/// <summary>Returns true if the entity is still alive and being managed by
+		/// RoomControl.</summary>
+		public bool IsAliveAndInRoom {
+			get { return (isAlive && isInRoom); }
 		}
 
 		public int EntityIndex {

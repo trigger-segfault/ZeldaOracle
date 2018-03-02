@@ -57,7 +57,8 @@ namespace ZeldaOracle.Game.Control {
 						actualSender = sender.Parent;
 					subject.Interactions.Trigger(type, actualSender,
 						sender.Interactions.InteractionEventArgs);
-					if (sender.IsDestroyed)
+					if (sender.IsDestroyed || !sender.Interactions.IsEnabled ||
+						sender.Interactions.InteractionType != type)
 						return;
 				}
 			}

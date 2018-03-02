@@ -43,11 +43,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public override bool OnButtonPress() {
 			Player.Direction = Player.UseDirection;
 
-			// Shoot and hook projectile.
-			SwitchHookProjectile hook = new SwitchHookProjectile(level);
+			// Shoot the switch hook projectile
+			SwitchHookProjectile hook = new SwitchHookProjectile(this);
 			Player.ShootFromDirection(hook, Player.Direction, hook.Speed);
 
-			// Begin the player state.
+			// Begin the player's switch hook state
 			Player.SwitchHookState.Hook = hook;
 			Player.BeginWeaponState(Player.SwitchHookState);
 			return true;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Entities {
@@ -37,11 +38,28 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Interactions
 			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2I(-2, -2, 4, 4);
 			Interactions.SetReaction(InteractionType.Sword,
 				delegate(Entity sender, EventArgs args)
 			{
 				if (IsCollectible && IsCollectibleWithItems)
 					Collect();
+			});
+			Interactions.SetReaction(InteractionType.Boomerang,
+				delegate(Entity sender, EventArgs args)
+			{
+				if (IsCollectible && IsCollectibleWithItems) {
+					PlayerBoomerang boomerang = (PlayerBoomerang) sender;
+					boomerang.GrabCollectible(this);
+				}
+			});
+			Interactions.SetReaction(InteractionType.SwitchHook,
+				delegate(Entity sender, EventArgs args)
+			{
+				if (IsCollectible && IsCollectibleWithItems) {
+					SwitchHookProjectile hook = (SwitchHookProjectile) sender;
+					hook.GrabCollectible(this);
+				}
 			});
 			
 			// Collectible

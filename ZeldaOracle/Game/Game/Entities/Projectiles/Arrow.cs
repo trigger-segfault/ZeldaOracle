@@ -23,13 +23,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 
 		public Arrow(bool silent = false) {
-			// General.
-			syncAnimationWithAngle	= true;
-			projectileType			= ProjectileType.Physical;
-			damage					= GameSettings.PROJECTILE_ARROW_DAMAGE;
-			this.silent				= silent;
+			// Graphics
+			Graphics.DepthLayer = DepthLayer.ProjectileArrow;
+			crashAnimation	= GameData.ANIM_PROJECTILE_PLAYER_ARROW_CRASH;
+			bounceOnCrash	= true;
 
-			// Physics.
+			// Physics
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
 			Physics.Enable(
@@ -38,10 +37,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
-			// Graphics.
-			Graphics.DepthLayer = DepthLayer.ProjectileArrow;
-			crashAnimation	= GameData.ANIM_PROJECTILE_PLAYER_ARROW_CRASH;
-			bounceOnCrash	= true;
+			// Projectile
+			syncAnimationWithAngle	= true;
+			projectileType			= ProjectileType.Physical;
+
+			// Arrow
+			damage		= GameSettings.PROJECTILE_ARROW_DAMAGE;
+			this.silent	= silent;
 		}
 
 

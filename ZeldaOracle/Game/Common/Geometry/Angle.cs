@@ -310,7 +310,8 @@ namespace ZeldaOracle.Common.Geometry {
 		// Explicit Conversions
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Return the angle's angle in radians.</summary>
+		/// <summary>Return the angle's represented as a direction. If the angle is not
+		/// axis-aligned, then this returns Direction.Invalid.</summary>
 		public Direction ToDirection() {
 			if (IsAxisAligned)
 				return new Direction(index / 2);
