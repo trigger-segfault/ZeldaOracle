@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
@@ -17,10 +11,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public SwordBeam() {
-			// General.
-			syncAnimationWithDirection = true;
-
-			// Physics.
+			// Physics
 			Physics.CollisionBox		= new Rectangle2F(-1, -4, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
 			Physics.Enable(
@@ -28,6 +19,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
+			
+			// Interactions
+			Interactions.InteractionType = InteractionType.SwordBeam;
+
+			// Projectile
+			syncAnimationWithDirection = true;
 		}
 
 
@@ -38,13 +35,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		public override void Initialize() {
 			base.Initialize();
 
-			if (Directions.IsHorizontal(Direction)) {
+			if (Direction.IsHorizontal) {
 				Physics.CollisionBox		= new Rectangle2F(-1, -5, 2, 1);
-				Physics.SoftCollisionBox	= new Rectangle2F(-1, -5, 2, 1);
+				Interactions.InteractionBox	= new Rectangle2F(-1, -5, 2, 1);
 			}
 			else {
 				Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
-				Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
+				Interactions.InteractionBox	= new Rectangle2F(-1, -1, 2, 2);
 			}
 
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_SWORD_BEAM);
@@ -52,14 +49,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		}
 		
 		public override void Intercept() {
-			// Create cling effect.
+			// Spawn a silent cling effect
 			Effect effect = new EffectCling(true);
 			RoomControl.SpawnEntity(effect, position, zPosition);
 			DestroyAndTransform(effect);
-		}
-
-		public override void OnCollideMonster(Monster monster) {
-			monster.Interactions.Trigger(InteractionType.SwordBeam, this);
 		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {

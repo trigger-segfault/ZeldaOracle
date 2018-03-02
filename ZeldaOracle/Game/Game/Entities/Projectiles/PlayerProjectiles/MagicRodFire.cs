@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
+
 	public class MagicRodFire : Projectile {
 		
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public MagicRodFire() {
-			// Physics.
-			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
+			// Graphics
+			Graphics.DepthLayer	= DepthLayer.ProjectileRodFire;
+
+			// Physics
+			Physics.CollisionBox = new Rectangle2F(-1, -1, 2, 1);
 			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
-			// Graphics.
-			Graphics.DepthLayer	= DepthLayer.ProjectileRodFire;
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2F(-1, -1, 2, 1);
+			Interactions.InteractionType = InteractionType.RodFire;
 		}
 
 
@@ -36,12 +33,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		// Intercept Methods
 		//-----------------------------------------------------------------------------
 
-		public override void Intercept() {
-			DestroyWithFire();
-		}
-
 		public void InterceptAndAbsorb() {
-			// Spawn fire.
+			// Spawn fire
 			Fire fire = DestroyWithFire();
 			fire.IsAbsorbed = true;
 		}
@@ -65,16 +58,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			CheckInitialCollision();
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			// Move 3 pixels into the block from where it collided.
-			if (!isInitialCollision)
-				position += Physics.PreviousVelocity.Normalized * 3.0f;
-
-			Intercept();
+		public override void Intercept() {
+			DestroyWithFire();
 		}
 
-		public override void OnCollideMonster(Monster monster) {
-			monster.Interactions.Trigger(InteractionType.RodFire, this);
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			// Move 3 pixels into the block from where it collided
+			if (!isInitialCollision)
+				position += Physics.PreviousVelocity.Normalized * 3.0f;
+			Intercept();
 		}
 	}
 }

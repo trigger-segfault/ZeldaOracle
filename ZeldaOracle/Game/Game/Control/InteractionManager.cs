@@ -64,6 +64,30 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
+		/// <summary>Process the interactions that an sender entity triggers upon
+		/// other entities.</summary>
+		public void TriggerInteractionsOnce(Entity sender, InteractionType type) {
+			Rectangle2F senderBox = sender.Interactions.PositionedInteractionBox;
+
+			foreach (Entity subject in roomControl.ActiveEntities) {
+				Rectangle2F subjectBox =
+					subject.Interactions.GetInteractionBox(type);
+				subjectBox.Point += subject.Position;
+
+				if (sender != subject && subject.Interactions.IsEnabled &&
+					subjectBox.Intersects(senderBox))
+				{
+					Entity actualSender = sender;
+					if (sender.Parent != null)
+						actualSender = sender.Parent;
+					subject.Interactions.Trigger(type, actualSender,
+						sender.Interactions.InteractionEventArgs);
+					if (sender.IsDestroyed || !sender.Interactions.IsEnabled)
+						return;
+				}
+			}
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Properties

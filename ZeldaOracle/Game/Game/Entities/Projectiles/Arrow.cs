@@ -29,21 +29,24 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			bounceOnCrash	= true;
 
 			// Physics
-			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
+			Physics.CollisionBox = new Rectangle2F(-1, -1, 2, 1);
 			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
+			// Interactions
+			Interactions.InteractionType = InteractionType.Arrow;
+			Interactions.InteractionBox = new Rectangle2F(-1, -1, 2, 1);
+
 			// Projectile
-			syncAnimationWithAngle	= true;
-			projectileType			= ProjectileType.Physical;
+			syncAnimationWithAngle = true;
+			projectileType = ProjectileType.Physical;
 
 			// Arrow
-			damage		= GameSettings.PROJECTILE_ARROW_DAMAGE;
-			this.silent	= silent;
+			damage = GameSettings.PROJECTILE_ARROW_DAMAGE;
+			this.silent = silent;
 		}
 
 
@@ -65,13 +68,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Crash(isInitialCollision);
 		}
 
-		public override void OnCollideMonster(Monster monster) {
-			monster.Interactions.Trigger(InteractionType.Arrow, this);
-		}
-
 		public override void OnCollidePlayer(Player player) {
-			player.Hurt(damage, Center);
-			Destroy();
+			if (owner != player) {
+				player.Hurt(damage, Center);
+				Destroy();
+			}
 		}
 
 		protected override void OnCrash() {

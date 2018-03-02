@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
+
 	public class CarriedTile : Entity {
+
 		private Tile tile;
 
 
@@ -20,11 +15,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public CarriedTile(Tile tile) {
-			this.tile = tile;
+			// Graphics
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= false;
+			Graphics.IsRipplesEffectVisible	= false;
+			Graphics.DepthLayer				= DepthLayer.ProjectileCarriedTile;
+			Graphics.DrawOffset				= new Point2I(-8, -13);
+			centerOffset					= new Point2I(0, -5);
 
-			// Physics.
-			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-7, -7, 14, 14);
+			// Physics
+			Physics.CollisionBox = new Rectangle2F(-3, -5, 6, 1);
 			Physics.Enable(
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
@@ -32,19 +32,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.DestroyedInHoles);
-
 			if (tile.HasFlag(TileFlags.Bounces))
 				Physics.Enable(PhysicsFlags.Bounces);
-
 			BounceSound = GameData.SOUND_BOMB_BOUNCE;
 
-			// Graphics.
-			Graphics.IsShadowVisible		= true;
-			Graphics.IsGrassEffectVisible	= false;
-			Graphics.IsRipplesEffectVisible	= false;
-			Graphics.DepthLayer				= DepthLayer.ProjectileCarriedTile;
-			Graphics.DrawOffset				= new Point2I(-8, -13);
-			centerOffset					= new Point2I(0, -5);
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2F(-7, -7, 14, 14);
+
+			// Carried Tile
+			this.tile = tile;
 		}
 
 
@@ -110,20 +107,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			Graphics.Draw(g, DepthLayer.ProjectileCarriedTile);
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Performs tile and monster collision checks.</summary>
 		private void CollisionChecks() {
-			// Collide with monsters.
-			foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
-				monster.Interactions.Trigger(InteractionType.ThrownObject, this);
-				if (IsDestroyed)
-					return;
-			}
+			// Trigger the thrown tile interaction
+			RoomControl.InteractionManager.TriggerInteractionsOnce(
+				this, InteractionType.ThrownObject);
+			if (IsDestroyed)
+				return;
 
-			// Collide with surface tiles.
+			// Collide with surface tiles
 			Point2I tileLoc = RoomControl.GetTileLocation(position);
 			if (RoomControl.IsTileInBounds(tileLoc)) {
 				Tile tile = RoomControl.GetTopTile(tileLoc);

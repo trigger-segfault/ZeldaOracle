@@ -202,6 +202,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public override void Initialize() {
 			base.Initialize();
 
+			if (owner is Player) {
+				// Disable interactions with the player
+				Reactions[InteractionType.Sword].Clear();
+				Reactions[InteractionType.SwordSpin].Clear();
+				Reactions[InteractionType.BiggoronSword].Clear();
+				Reactions[InteractionType.Shield].Clear();
+				Reactions[InteractionType.PlayerContact].Clear();
+			}
+
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
 			else if (syncAnimationWithAngle)
