@@ -980,6 +980,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return flags.HasFlag(TileFlags.NotPushable); }
 		}
 
+		public bool IsMovable {
+			get { return flags.HasFlag(TileFlags.Movable); }
+		}
+
 		public bool IsDigable {
 			get { return flags.HasFlag(TileFlags.Digable); }
 		}

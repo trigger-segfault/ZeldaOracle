@@ -161,7 +161,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Interactions.SetReaction(InteractionType.MagnetBall,
 				Reactions.Kill); // TODO: Confirm  this
 			Interactions.SetReaction(InteractionType.Block,
-				Reactions.Damage);
+				Reactions.Damage2);
 
 			// Player interations
 			Interactions.SetReaction(InteractionType.PlayerContact,

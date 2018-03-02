@@ -54,7 +54,9 @@ namespace ZeldaOracle.Game.Debug {
 		private static string sampledTileName = "";
 		private static Action[] printDebugInfoFunctions = new Action[] {
 			PrintDebugInfoEntities,
+			PrintDebugInfoInteractions,
 			PrintPlayerDebugInfo,
+			null,
 		};
 		private static int printDebugInfoFunctionIndex = 0;
 		private static PlayerDebugNoClipState playerNoClipState = new PlayerDebugNoClipState();
@@ -109,6 +111,7 @@ namespace ZeldaOracle.Game.Debug {
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine("Entity Heirarchy:");
 			Console.ForegroundColor = ConsoleColor.White;
+
 			for (int i = 0; i < RoomControl.EntityCount; i++) {
 				Entity entity = RoomControl.Entities[i];
 				if (entity.Parent == null)
@@ -124,8 +127,36 @@ namespace ZeldaOracle.Game.Debug {
 			}
 		}
 
+		public static void PrintDebugInfoInteractions() {
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("Entity Interactions:");
+			Console.ForegroundColor = ConsoleColor.White;
+
+			foreach (InteractionCollision interaction in
+				RoomControl.InteractionManager.Interactions)
+			{
+				Console.Write("{0, 5}: ", interaction.Duration);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(interaction.ActionEntity.GetType().Name);
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write(" --");
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.Write(interaction.Type.ToString());
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write("--> ");
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(interaction.ReactionEntity.GetType().Name);
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.WriteLine("");
+			}
+		}
+
 		public static void PrintPlayerDebugInfo() {
 			Player player = RoomControl.Player;
+			
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("Player Information:");
+			Console.ForegroundColor = ConsoleColor.White;
 			
 			string weaponStateName = "";
 			if (player.WeaponState != null)
@@ -137,30 +168,26 @@ namespace ZeldaOracle.Game.Debug {
 			if (player.EnvironmentState != null)
 				environmentStateName = player.EnvironmentState.GetType().Name;
 
-			Console.SetCursorPosition(0, 0);
-			Console.ForegroundColor = ConsoleColor.White;
-			Console.BackgroundColor = ConsoleColor.Black;
-
 			Console.WriteLine("FPS: " + GameControl.GameManager.FPS.ToString("00.#"));
 
-			Console.WriteLine("Player.Velocity: {0,-40}", player.Physics.Velocity);
+			Console.WriteLine("Player.Velocity:      {0}", player.Physics.Velocity);
 			if (player.Physics.OnGroundOverride)
 				Console.ForegroundColor = ConsoleColor.Red;
-			Console.WriteLine("Player.IsOnGround: {0,-40}", player.Physics.IsOnGround);
+			Console.WriteLine("Player.IsOnGround:    {0}", player.Physics.IsOnGround);
 			Console.ForegroundColor = ConsoleColor.White;
-			Console.WriteLine("Player.Motion: {0,-40}", player.Movement.Motion);
-			Console.WriteLine("Player.Direction:     {0,-40}", Directions.ToString(player.Direction));
-			Console.WriteLine("Player.UseDirection:  {0,-40}", player.UseDirection.ToString());
-			Console.WriteLine("Player.UseAngle:      {0,-40}", player.UseAngle.ToString());
-			Console.WriteLine("Player.MoveDirection: {0,-40}", player.MoveDirection.ToString());
-			Console.WriteLine("Player.MoveAngle:     {0,-40}", player.MoveAngle.ToPoint());
-			Console.WriteLine("Player.IsMoving:      {0,-40}", player.Movement.IsMoving);
+			Console.WriteLine("Player.Motion:        {0}", player.Movement.Motion);
+			Console.WriteLine("Player.Direction:     {0}", Directions.ToString(player.Direction));
+			Console.WriteLine("Player.UseDirection:  {0}", player.UseDirection.ToString());
+			Console.WriteLine("Player.UseAngle:      {0}", player.UseAngle.ToString());
+			Console.WriteLine("Player.MoveDirection: {0}", player.MoveDirection.ToString());
+			Console.WriteLine("Player.MoveAngle:     {0}", player.MoveAngle.ToPoint());
+			Console.WriteLine("Player.IsMoving:      {0}", player.Movement.IsMoving);
 			Console.ForegroundColor = ConsoleColor.Cyan;
-			Console.WriteLine("Ctl: {0,-40}", controlStateName);
+			Console.WriteLine("Ctl: {0}", controlStateName);
 			Console.ForegroundColor = ConsoleColor.Red;
-			Console.WriteLine("Wpn: {0,-40}", weaponStateName);
+			Console.WriteLine("Wpn: {0}", weaponStateName);
 			Console.ForegroundColor = ConsoleColor.Green;
-			Console.WriteLine("Env: {0,-40}", environmentStateName);
+			Console.WriteLine("Env: {0}", environmentStateName);
 			Console.ForegroundColor = ConsoleColor.Magenta;
 			Console.Write("Cnd: ");
 			int conditionStateCount = player.ConditionStates.Count();
@@ -170,10 +197,10 @@ namespace ZeldaOracle.Game.Debug {
 				if (i < conditionStateCount) {
 					PlayerState state = player.ConditionStates.ElementAt(i);
 					string stateName = state.GetType().Name;
-					Console.WriteLine("{0,-40}", stateName);
+					Console.WriteLine("{0}", stateName);
 				}
 				else
-					Console.WriteLine("{0,-40}", "");
+					Console.WriteLine("{0}", "");
 			}
 			Console.WriteLine("");
 			Console.ForegroundColor = ConsoleColor.White;
@@ -213,9 +240,11 @@ namespace ZeldaOracle.Game.Debug {
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.F1)) {
 				if (!GameManager.IsConsoleOpen)
 					GameManager.IsConsoleOpen = true;
-				else
+				else {
 					printDebugInfoFunctionIndex = (printDebugInfoFunctionIndex + 1) %
 						printDebugInfoFunctions.Length;
+					Console.Clear();
+				}
 			}
 			// F5: Pause gameplay.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.F5))

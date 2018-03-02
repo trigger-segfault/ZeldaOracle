@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Effects {
+
 	public class EffectCreateSomariaBlock : Effect {
 
 		private Point2I tileLocation;
@@ -34,7 +30,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		// Internal methods
 		//-----------------------------------------------------------------------------
 
-		// Return true if a somaria block would break when spawned at the given tile location.
+		/// <summary>Return true if a somaria block would not break when spawned at
+		/// the given tile location.</summary>
 		private bool CanBlockSpawnAtLocation(Point2I location) {
 			if (!RoomControl.IsSideScrolling && IsInAir)
 				return false;
@@ -66,7 +63,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base.Initialize();
 
 			if (CanBlockSpawnAtLocation(tileLocation)) {
-				// Make this effect solid to the player (as if the somaria block has already been spawned).
+				// Make this effect solid to the player (as if the somaria block has
+				// already been spawned)
 				Physics.CollisionBox = new Rectangle2F(-8, -8, 16, 16);
 				Physics.SoftCollisionBox = new Rectangle2F(-8, -8, 16, 16);
 				Physics.Enable(PhysicsFlags.Solid);
@@ -77,13 +75,13 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base.OnDestroy();
 
 			if (CanBlockSpawnAtLocation(tileLocation)) {
-				// Create the somaria block.
+				// Create the somaria block
 				TileSomariaBlock tile = (TileSomariaBlock) Tile.CreateTile(itemCane.SomariaBlockTileData);
 				RoomControl.PlaceTileOnHighestLayer(tile, tileLocation);
 				itemCane.SomariaBlockTile = tile;
 			}
 			else {
-				// Spawn a poof effect.
+				// Spawn a poof effect
 				RoomControl.SpawnEntity(
 					new Effect(GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY, DepthLayer.EffectBlockPoof),
 					position, zPosition);

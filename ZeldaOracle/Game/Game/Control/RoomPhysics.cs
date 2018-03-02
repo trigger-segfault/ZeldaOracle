@@ -278,6 +278,7 @@ namespace ZeldaOracle.Game.Control {
 
 				if (collision.Direction >= 0) {
 					collision.CalcPenetration();
+					collision.InitialPenetration = collision.Penetration;
 					// Do not allow any additional penetration if not already
 					// penetrating
 					collision.AllowedPenetration = GMath.Clamp(

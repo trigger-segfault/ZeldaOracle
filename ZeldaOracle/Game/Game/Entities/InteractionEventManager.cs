@@ -2,6 +2,7 @@
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities {
 	
@@ -148,6 +149,10 @@ namespace ZeldaOracle.Game.Entities {
 	public class WeaponInteractionEventArgs : EventArgs {
 		public ItemWeapon Weapon { get; set; }
 		public UnitTool Tool { get; set; }
+	}
+	
+	public class TileEventArgs : InteractionArgs {
+		public Tile Tile { get; set; }
 	}
 	
 	public class ParryInteractionArgs : InteractionArgs {

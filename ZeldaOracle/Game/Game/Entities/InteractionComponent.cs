@@ -1,7 +1,78 @@
 ﻿using System;
+using System.Collections.Generic;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities {
+
+	public class InteractionCollision {
+
+		private InteractionType type;
+		private Entity actionEntity;
+		private Entity reactionEntity;
+		private EventArgs arguments;
+		private Rectangle2F actionBox;
+		private Rectangle2F reactionBox;
+		private int duration;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		public InteractionCollision() {
+			duration = 0;
+			arguments = null;
+		}
+
+		public bool IsValid() {
+			return (actionEntity.IsAliveAndInRoom &&
+				reactionEntity.IsAliveAndInRoom &&
+				actionEntity.Interactions.IsEnabled &&
+				reactionEntity.Interactions.IsEnabled);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public Entity ActionEntity {
+			get { return actionEntity; }
+			set { actionEntity = value; }
+		}
+
+		public Entity ReactionEntity {
+			get { return reactionEntity; }
+			set { reactionEntity = value; }
+		}
+
+		public Rectangle2F ActionBox {
+			get { return actionBox; }
+			set { actionBox = value; }
+		}
+
+		public Rectangle2F ReactionBox {
+			get { return reactionBox; }
+			set { reactionBox = value; }
+		}
+
+		public InteractionType Type {
+			get { return type; }
+			set { type = value; }
+		}
+
+		public EventArgs Arguments {
+			get { return arguments; }
+			set { arguments = value; }
+		}
+
+		public int Duration {
+			get { return duration; }
+			set { duration = value; }
+		}
+
+		public bool StayAlive { get; set; }
+	}
 	
 	public class InteractionComponent : EntityComponent {
 
@@ -15,6 +86,9 @@ namespace ZeldaOracle.Game.Entities {
 		private InteractionType interactionType;
 		private EventArgs interactionEventArgs;
 
+		private List<InteractionCollision> currentActions;
+		private List<InteractionCollision> currentReactions;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -27,6 +101,8 @@ namespace ZeldaOracle.Game.Entities {
 			interactionManager		= null;
 			interactionType			= InteractionType.None;
 			interactionEventArgs	= null;
+			currentActions			= new List<InteractionCollision>();
+			currentReactions		= new List<InteractionCollision>();
 		}
 
 
@@ -150,9 +226,18 @@ namespace ZeldaOracle.Game.Entities {
 			get { return interactionType; }
 			set { interactionType = value; }
 		}
+
 		public EventArgs InteractionEventArgs {
 			get { return interactionEventArgs; }
 			set { interactionEventArgs = value; }
+		}
+
+		public List<InteractionCollision> CurrentActions {
+			get { return currentActions; }
+		}
+
+		public List<InteractionCollision> CurrentReactions {
+			get { return currentReactions; }
 		}
 	}
 }

@@ -144,6 +144,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 		//private int direction;
 		private Direction direction;
+		private float initialPenetration;
 		private float penetration;
 		private float allowedPenetration;
 		private float lateralPenetration;
@@ -398,6 +399,13 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		public float Penetration {
 			get { return penetration; }
 			set { penetration = value; }
+		}
+		
+		/// <summary>The penetration distance perpendicular to the collision, which was
+		/// detected before resolving any collisions.</summary>
+		public float InitialPenetration {
+			get { return initialPenetration; }
+			set { initialPenetration = value; }
 		}
 		
 		/// <summary>The maximum allowable perpendicular penetration distance.

@@ -32,8 +32,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.DestroyedInHoles);
-			if (tile.HasFlag(TileFlags.Bounces))
-				Physics.Enable(PhysicsFlags.Bounces);
+			Physics.Bounces = tile.HasFlag(TileFlags.Bounces);
 			BounceSound = GameData.SOUND_BOMB_BOUNCE;
 
 			// Interactions
@@ -51,7 +50,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public void Break() {
 			if (tile.BreakAnimation != null) {
-				Effect breakEffect = new Effect(tile.BreakAnimation, tile.BreakLayer, true);
+				Effect breakEffect = new Effect(
+					tile.BreakAnimation, tile.BreakLayer, true);
 				RoomControl.SpawnEntity(breakEffect, Center);
 			}
 			if (tile.BreakSound != null)
