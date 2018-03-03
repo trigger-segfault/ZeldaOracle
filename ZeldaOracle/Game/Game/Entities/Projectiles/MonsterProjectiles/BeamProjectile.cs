@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 	
@@ -19,26 +15,29 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public BeamProjectile() {
-			projectileType			= ProjectileType.Beam;
-			crashAnimation			= null;
-			syncAnimationWithAngle	= true;
+			// Graphics
+			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
 			
-			// General.
-			syncAnimationWithAngle	= true;
-			damage					= 2;
-			flickers				= false;
-
-			// Physics.
-			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-2, -2, 4, 4);
+			// Physics
+			Physics.CollisionBox = new Rectangle2F(-1, -1, 2, 1);
 			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
-			// Graphics.
-			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2F(-2, -2, 4, 4);
+
+			// Projectile
+			syncAnimationWithAngle	= true;
+			projectileType			= ProjectileType.Beam;
+			crashAnimation			= null;
+			syncAnimationWithAngle	= true;
+
+			// Beam Projectile
+			damage					= 2;
+			flickers				= false;
 		}
 
 
@@ -48,23 +47,23 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 
 		public override void Initialize() {
 			base.Initialize();
+
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_BEAM);
-			if (flickers)
-			{
+
+			if (flickers) {
 				Graphics.FlickerAlternateDelay = 1;
 				Graphics.IsFlickering = true;
 			}
-			CheckInitialCollision();
 		}
 
 		public override void Intercept() {
-			Crash(false);
+			Crash();
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			// Disable collisions with the source tile.
-			if (tile != TileOwner)
-				Crash(isInitialCollision);
+		public override void OnCollideSolid(Collision collision) {
+			// Disable collisions with the source tile
+			if (!collision.IsTile || collision.Tile != TileOwner)
+				Crash();
 		}
 
 		public override void OnCollidePlayer(Player player) {

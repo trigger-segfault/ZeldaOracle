@@ -1,5 +1,6 @@
 ﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Tiles;
 
@@ -55,16 +56,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		public override void Initialize() {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MAGIC_ROD_FIRE);
-			CheckInitialCollision();
 		}
 
 		public override void Intercept() {
 			DestroyWithFire();
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+		public override void OnCollideSolid(Collision collision) {
 			// Move 3 pixels into the block from where it collided
-			if (!isInitialCollision)
+			if (collision.IsResolved)
 				position += Physics.PreviousVelocity.Normalized * 3.0f;
 			Intercept();
 		}

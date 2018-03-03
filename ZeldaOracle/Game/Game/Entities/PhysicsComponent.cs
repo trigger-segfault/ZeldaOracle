@@ -30,8 +30,8 @@ namespace ZeldaOracle.Game.Entities {
 		EdgeClipping			= 0x20000,	// Allow clipping into the edges of tiles.
 		DisableSurfaceContact	= 0x40000,	// Do not check for surface interactions such as water, holes, conveyors
 
-
 		CheckRadialCollisions	= 0x80000,
+		ResolveClippingCollisions	= 0x200000,
 
 		// This was added for player ladder climbing in a side-scrolling room,
 		// because when climbing a ladder, it is like the player is on the ground
@@ -1014,6 +1014,11 @@ namespace ZeldaOracle.Game.Entities {
 		public bool OnGroundOverride {
 			get { return HasFlags(PhysicsFlags.OnGroundOverride); }
 			set { SetFlags(PhysicsFlags.OnGroundOverride, value); }
+		}
+		
+		public bool ResolveClippingCollisions {
+			get { return HasFlags(PhysicsFlags.ResolveClippingCollisions); }
+			set { SetFlags(PhysicsFlags.ResolveClippingCollisions, value); }
 		}
 		
 

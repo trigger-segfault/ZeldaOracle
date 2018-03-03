@@ -153,6 +153,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.MovesWithPlatforms		= true;
 			Physics.AllowEdgeClipping		= true;
 			Physics.IsCrushable				= true;
+			Physics.ResolveClippingCollisions= true;
 			Physics.EdgeClipAmount			= 1;
 			Physics.CrushMaxGapSize			= 4;
 			Physics.CustomTileIsNotSolidCondition = delegate(Tile tile) {

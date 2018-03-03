@@ -1,4 +1,5 @@
 ﻿using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Tiles;
 
@@ -45,7 +46,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			}
 
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_SWORD_BEAM);
-			CheckInitialCollision();
 		}
 		
 		public override void Intercept() {
@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			DestroyAndTransform(effect);
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+		public override void OnCollideSolid(Collision collision) {
 			Intercept();
 		}
 	}

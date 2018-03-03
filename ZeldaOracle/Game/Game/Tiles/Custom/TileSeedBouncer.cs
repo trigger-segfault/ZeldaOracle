@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Seed bouncers can be in 8 possible angles, but really only 4
 		// of them are unique (because each angle has an equal opposite angle).
-		private int angle;
+		private Angle angle;
 		
 
 		//-----------------------------------------------------------------------------
@@ -46,11 +46,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void RotateClockwise(int amount = 1) {
-			Angle = Angles.Add(angle, amount, WindingOrder.Clockwise);
+			Angle = Angle.Rotate(amount, WindingOrder.Clockwise);
 		}
 		
 		public void RotateCounterClockwise(int amount = 1) {
-			Angle = Angles.Add(angle, amount, WindingOrder.CounterClockwise);
+			Angle = Angle.Rotate(amount, WindingOrder.CounterClockwise);
 		}
 
 
@@ -73,7 +73,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int Angle {
+		public Angle Angle {
 			get { return angle; }
 			set {
 				angle = value;

@@ -3,6 +3,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 
@@ -118,14 +119,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			BeginReturning();
 		}
 
-		public override void OnCollideRoomEdge() {
-			BeginReturning();
-		}
+		public override void OnCollideSolid(Collision collision) {
+			if (collision.IsTile) {
+				// Spawn cling effect
+				RoomControl.SpawnEntity(new EffectCling(), position, zPosition);
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+				BeginReturning();
+			}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			// Create cling effect.
-			RoomControl.SpawnEntity(new EffectCling(), position, zPosition);
-			AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			BeginReturning();
 		}
 

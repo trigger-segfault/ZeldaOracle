@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
@@ -43,15 +44,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		public override void Initialize() {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_MAGIC);
-			CheckInitialCollision();
 		}
 		
 		public override void Intercept() {
-			Crash(false);
+			Crash();
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			Crash(isInitialCollision);
+		public override void OnCollideSolid(Collision collision) {
+			Crash();
 		}
 
 		public override void OnCollidePlayer(Player player) {

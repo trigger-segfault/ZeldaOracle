@@ -266,7 +266,8 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 			// Find collision edges which are shared among two static solid objects
-			ConnectStaticCollisions(entity);
+			if (entity.Physics.ResolveClippingCollisions)
+				ConnectStaticCollisions(entity);
 
 			// Calculate the penetration direction and distance for each collision
 			for (int i = 0; i < entity.Physics.PotentialCollisions.Count; i++) {
@@ -276,6 +277,8 @@ namespace ZeldaOracle.Game.Control {
 				if (collision.Direction >= 0) {
 					collision.CalcPenetration();
 					collision.InitialPenetration = collision.Penetration;
+					if (collision.IsColliding)
+						entity.Physics.IsColliding = true;
 					// Do not allow any additional penetration if not already
 					// penetrating
 					collision.AllowedPenetration = GMath.Clamp(
@@ -737,6 +740,10 @@ namespace ZeldaOracle.Game.Control {
 			Collision best = null;
 			foreach (Collision collision in entity.Physics.PotentialCollisions) {
 				if (collision.Axis == axis && collision.IsSafeColliding) {
+					if (!entity.Physics.ResolveClippingCollisions &&
+						collision.InitialPenetration > 0.0f)
+						continue;
+
 					if (best == null ||
 						GetPriorityCollision(best, collision) == collision)
 					{

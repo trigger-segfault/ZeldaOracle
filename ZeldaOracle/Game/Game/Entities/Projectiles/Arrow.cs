@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
@@ -57,15 +58,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public override void Initialize() {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
-			CheckInitialCollision();
 		}
 		
 		public override void Intercept() {
-			Crash(false);
+			Crash(true);
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			Crash(isInitialCollision);
+		public override void OnCollideSolid(Collision collision) {
+			Crash(collision.IsResolved);
 		}
 
 		public override void OnCollidePlayer(Player player) {

@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
@@ -85,17 +87,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			player.Hurt(damage, position);
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			Destroy();
-		}
-
-		public override void OnCollideSolidEntity(Entity entity) {
-			//if (entity is MagnetBall) {
+		public override void OnCollideSolid(Collision collision) {
+			// Spawn a poof effect upon colliding with a Magnet Ball
+			if (collision.IsEntity && collision.Entity is MagnetBall) {
 				Effect effect = new Effect(GameData.ANIM_EFFECT_BLOCK_POOF,
-							Entities.DepthLayer.EffectBlockPoof);
+					DepthLayer.EffectBlockPoof);
 				RoomControl.SpawnEntity(effect, Position);
 				AudioSystem.PlaySound(GameData.SOUND_APPEAR_VANISH);
-			//}
+			}
+
 			Destroy();
 		}
 	}

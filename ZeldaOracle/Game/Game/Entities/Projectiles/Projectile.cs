@@ -118,7 +118,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Projectile Methods
 		//-----------------------------------------------------------------------------
 
-		protected void Crash(bool isInitialCollision) {
+		protected void Crash(bool rebounded = false) {
 			if (crashAnimation != null) {
 				// Create crash effect.
 				Effect effect;
@@ -127,8 +127,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					effect = new Effect();
 					effect.CreateDestroyTimer(32);
 					effect.Physics.Enable(PhysicsFlags.HasGravity);
-					if (!isInitialCollision)
-						effect.Physics.Velocity = Angles.ToVector(Angles.Reverse(Angle)) * 0.25f;
+					if (rebounded)
+						effect.Physics.Velocity = Angle.Reverse().ToVector(0.25f);
 					effect.Physics.ZVelocity	= 1.0f;
 					effect.Physics.Gravity		= 0.07f;
 					effect.Graphics.PlayAnimation(crashAnimation);
@@ -150,44 +150,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			OnCrash();
 		}
 
-		protected void CheckInitialCollision() {
-			Tile tile = physics.GetSolidTilesMeeting(CollisionBoxType.Hard).FirstOrDefault();
-			if (tile != null && tile != TileOwner) {
-				if (owner == RoomControl.Player) {
-					tile.OnHitByProjectile(this);
-					if (IsDestroyed)
-						return;
-				}
-				OnCollideTile(tile, true);
-			}
-			/*if (physics.IsPlaceMeetingSolid(position, physics.CollisionBox)) {
-				Point2I tileLocation = RoomControl.GetTileLocation(Position);
-				Tile tile = RoomControl.GetTopTile(tileLocation);
-				if (tile != TileOwner) {
-					if (owner == RoomControl.Player) {
-						tile.OnHitByProjectile(this);
-						if (IsDestroyed)
-							return;
-					}
-					OnCollideTile(tile, true);
-				}
-			}*/
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 
-		public virtual void OnCollideRoomEdge() { }
-
-		public virtual void OnCollideTile(Tile tile, bool isInitialCollision) { }
+		public virtual void OnCollideSolid(Collision collision) { }
 
 		public virtual void OnCollideMonster(Monster monster) { }
 
 		public virtual void OnCollidePlayer(Player player) { }
-
-		public virtual void OnCollideSolidEntity(Entity entity) { }
 
 
 		//-----------------------------------------------------------------------------
@@ -223,34 +195,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Interactions.InteractionBox = Physics.SoftCollisionBox;
 
 			// Check if collided
-			if (physics.IsColliding && eventCollision != null) {
-				eventCollision();
+			if (physics.IsColliding) {
+				eventCollision?.Invoke();
 				if (IsDestroyed)
 					return;
-			}
 
-			// Collide with tiles
-			if (physics.IsColliding) {
-				CollisionType type = CollisionType.RoomEdge;
-				Tile tile = null;
+				Collision solidCollision = physics.GetCollisionInDirection(direction);
+				if (solidCollision == null && Physics.Collisions.Any())
+					solidCollision = Physics.Collisions.First();
 
-				foreach (Collision collision in Physics.Collisions) {
-					type = collision.Source.Type;
-					tile = collision.Tile;
-				}
-
-				if (tile != null && tile != TileOwner) {
-					if (owner == RoomControl.Player) {
-						tile.OnHitByProjectile(this);
-						if (IsDestroyed)
-							return;
-					}
-					OnCollideTile(tile, false);
-					if (IsDestroyed)
-						return;
-				}
-				else if (type == CollisionType.RoomEdge) {
-					OnCollideRoomEdge();
+				if (solidCollision.SolidObject != owner &&
+					solidCollision.SolidObject != tileOwner)
+				{
+					OnCollideSolid(solidCollision);
 					if (IsDestroyed)
 						return;
 				}
