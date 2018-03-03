@@ -51,6 +51,8 @@
         <CommandBinding Command="SelectAll" CanExecute="CanExecuteIsLevelOpen" Executed="OnSelectAllCommand"/>
         <CommandBinding Command="cmd:EditorCommands.Deselect" CanExecute="CanExecuteDeleteDeselect" Executed="OnDeselectCommand"/>
 
+        <CommandBinding Command="cmd:EditorCommands.ViewEditPaths" CanExecute="CanExecuteViewPaths" Executed="OnViewPathsCommands"/>
+
         <CommandBinding Command="cmd:EditorCommands.AddNewLevel" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewLevelCommand"/>
         <CommandBinding Command="cmd:EditorCommands.AddNewDungeon" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewDungeonCommand"/>
         <CommandBinding Command="cmd:EditorCommands.AddNewScript" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewScriptCommand"/>
@@ -95,6 +97,9 @@
                 <Separator/>
                 <local:ImageMenuItem x:Name="menuItemCycleLayerUp" Header="Cycle Layer Up" Source="Resources/Icons/LayerCycleUp.png" Command="cmd:EditorCommands.CycleLayerUp" InputGestureText="Page Up"/>
                 <local:ImageMenuItem x:Name="menuItemCycleLayerDown" Header="Cycle Layer Down" Source="Resources/Icons/LayerCycleDown.png" Command="cmd:EditorCommands.CycleLayerDown" InputGestureText="Page Down"/>
+            </MenuItem>
+            <MenuItem Header="_Level">
+                <local:ImageMenuItem Header="View Paths" Source="Resources/Icons/TilePath.png" Command="cmd:EditorCommands.ViewEditPaths"/>
             </MenuItem>
             <MenuItem Header="_World">
                 <local:ImageMenuItem x:Name="menuItemAddLevel" Header="Add Level..." Source="Resources/Icons/LevelAdd.png" Command="cmd:EditorCommands.AddNewLevel"/>

@@ -111,6 +111,12 @@ namespace ZeldaEditor {
 		public static readonly RoutedUICommand ShiftLevel = new RoutedUICommand(
 			"ShiftLevel", "Shift Level", typeof(EditorCommands));
 
+		/// <summary>The command to view or edit paths.</summary>
+		public static readonly RoutedUICommand ViewEditPaths = new RoutedUICommand(
+			"ViewEditPaths", "View/Edit Paths", typeof(EditorCommands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.P, ModifierKeys.Control | ModifierKeys.Shift) });
+
 
 		//-----------------------------------------------------------------------------
 		// Tools

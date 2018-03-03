@@ -91,6 +91,18 @@ namespace ZeldaOracle.Common.Geometry {
 
 
 		//-----------------------------------------------------------------------------
+		// Static Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs a rectangle from min and max endpoints.</summary>
+		public static Rectangle2F FromEndPoints(Vector2F a, Vector2F b) {
+			Vector2F min = GMath.Min(a, b);
+			Vector2F max = GMath.Max(a, b);
+			return new Rectangle2F(min, max - min);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Geneal Methods
 		//-----------------------------------------------------------------------------
 

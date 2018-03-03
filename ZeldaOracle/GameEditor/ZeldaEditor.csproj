@@ -70,18 +70,6 @@
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -110,12 +98,16 @@
     <Compile Include="Controls\DropDownMenuItem.cs" />
     <Compile Include="Controls\FormatCodesDropdown.cs" />
     <Compile Include="Controls\HistoryListViewItem.cs" />
+    <Compile Include="Controls\HoverImageButton.cs" />
     <Compile Include="Controls\ImageMenuItem.cs" />
     <Compile Include="Controls\ImageTreeViewItem.cs" />
     <Compile Include="Controls\PointUpDown.cs" />
     <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
     <Compile Include="Controls\PropertyGridEditorPointUpDown.cs" />
+    <Compile Include="Controls\TilePathCommandItem.xaml.cs">
+      <DependentUpon>TilePathCommandItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorImages.cs" />
@@ -129,6 +121,7 @@
     <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumFlagPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\PathPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\Point2ISingleAxisPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\TextMessagePropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\WarpPropertyEditor.cs" />
@@ -198,8 +191,14 @@
     <Compile Include="Windows\ShiftLevelWindow.xaml.cs">
       <DependentUpon>ShiftLevelWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\TilePathEditor.xaml.cs">
+      <DependentUpon>TilePathEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WinForms\FocusMessageFilter.cs" />
     <Compile Include="WinForms\SpritePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\TilePathDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WinForms\TilePreview.cs">
@@ -249,6 +248,10 @@
     <Compile Include="WinForms\GraphicsDeviceService.cs" />
     <Compile Include="WinForms\ServiceContainer.cs" />
     <EmbeddedResource Include="Themes\TextMessageHighlighting.xshd" />
+    <Page Include="Controls\TilePathCommandItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -314,6 +317,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\TextMessageEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TilePathEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -643,6 +650,25 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\ToolSelectionMerge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\TilePathRemove.png" />
+    <Resource Include="Resources\Icons\TilePathRemoveHover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\TilePathInsert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\TilePath.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\TilePathAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\TilePathRepeats.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\TilePathInsertHover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

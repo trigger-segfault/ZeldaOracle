@@ -88,6 +88,8 @@ namespace ZeldaEditor.Tools {
 
 		protected override void OnEnd() {
 			LevelDisplay.ClearSelectionBox();
+			EditorControl.EditingTileData = null;
+			UpdateCommands();
 		}
 
 		protected override void OnUpdate() {
@@ -130,9 +132,13 @@ namespace ZeldaEditor.Tools {
 			else
 				baseTile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 
-
 			// Select or deselect the tile.
 			if (e.Button == MouseButtons.Left) {
+				// Set to null by default
+				selectedTile = null;
+				selectedActionTile = null;
+				selectedRoom = null;
+
 				Room room = null;
 				bool roomSelect = false;
 				if (System.Windows.Forms.Control.ModifierKeys.HasFlag(Keys.Shift)) {
@@ -141,10 +147,13 @@ namespace ZeldaEditor.Tools {
 				}
 				
 				if (roomSelect) {
+					selectedRoom = room;
 					if (room != null) {
 						selectedRoom = room;
 						LevelDisplay.SetSelectionBox(room);
 						EditorControl.PropertyGrid.OpenProperties(room);
+						EditorControl.EditingRoom = room;
+						UpdateCommands();
 					}
 				}
 				else if (baseTile != null) {
@@ -152,13 +161,18 @@ namespace ZeldaEditor.Tools {
 						selectedTile = baseTile as TileDataInstance;
 					else if (baseTile is ActionTileDataInstance)
 						selectedActionTile = baseTile as ActionTileDataInstance;
+					selectedRoom = null;
 
 					LevelDisplay.SetSelectionBox(baseTile);
 					EditorControl.PropertyGrid.OpenProperties(baseTile);
+					EditorControl.EditingTileData = baseTile;
+					UpdateCommands();
 				}
 				else {
 					LevelDisplay.ClearSelectionBox();
 					EditorControl.PropertyGrid.CloseProperties();
+					EditorControl.EditingTileData = null;
+					UpdateCommands();
 				}
 			}
 		}

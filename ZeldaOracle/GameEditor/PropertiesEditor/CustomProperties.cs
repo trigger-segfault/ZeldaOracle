@@ -69,6 +69,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			AddEditor<DirectionPropertyEditor>("direction");
 			AddEditor<AnglePropertyEditor>("angle");
 			AddEditor<Point2ISingleAxisPropertyEditor>("single_axis");
+			AddEditor<PathPropertyEditor>("path");
 		}
 
 		public void AddEditor<Editor>(string typeName) where Editor : ITypeEditor {
