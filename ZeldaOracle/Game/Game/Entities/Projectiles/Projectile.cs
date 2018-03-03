@@ -54,10 +54,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			// Interactions
 			Interactions.Enable();
-			Reactions[InteractionType.Sword			].Set(Deflect);
-			Reactions[InteractionType.SwordSpin		].Set(Deflect);
-			Reactions[InteractionType.BiggoronSword	].Set(Deflect);
-			Reactions[InteractionType.Shield		].Set(Deflect);
+			Reactions[InteractionType.Sword			].Set(DeflectReaction);
+			Reactions[InteractionType.SwordSpin		].Set(DeflectReaction);
+			Reactions[InteractionType.BiggoronSword	].Set(DeflectReaction);
+			Reactions[InteractionType.Shield		].Set(DeflectReaction);
 			Reactions[InteractionType.PlayerContact	].Set(
 				delegate(Entity sender, EventArgs args)
 			{
@@ -76,7 +76,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			projectileType	= ProjectileType.Physical;
 		}
 
-		public void Deflect(Entity sender, EventArgs args) {
+		public void DeflectReaction(Entity sender, EventArgs args) {
 			WeaponInteractionEventArgs weaponArgs = (WeaponInteractionEventArgs) args;
 			if (projectileType == ProjectileType.NotDeflectable)
 				return;

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 
@@ -17,18 +11,18 @@ namespace ZeldaOracle.Game.Items {
 
 
 		//-----------------------------------------------------------------------------
-		// Constructor
+		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public ItemBombs() {
-			this.id				= "item_bombs";
-			this.name			= new string[] { "Bombs", "Bombs", "Bombs" };
-			this.description	= new string[] { "Very explosive.", "Very explosive.", "Very explosive." };
-			this.maxLevel		= Item.Level3;
-			this.currentAmmo	= 0;
-			this.bombTracker	= new EntityTracker<Bomb>(1);
-
-			this.flags			= ItemFlags.UsableWhileInHole;
+			id			= "item_bombs";
+			name		= new string[] { "Bombs", "Bombs", "Bombs" };
+			description	= new string[]
+				{ "Very explosive.", "Very explosive.", "Very explosive." };
+			maxLevel	= Item.Level3;
+			currentAmmo	= 0;
+			bombTracker	= new EntityTracker<Bomb>(1);
+			flags		= ItemFlags.UsableWhileInHole;
 
 			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_BOMB,
@@ -39,7 +33,7 @@ namespace ZeldaOracle.Game.Items {
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		public override bool OnButtonPress() {
@@ -56,14 +50,16 @@ namespace ZeldaOracle.Game.Items {
 			}
 			else {
 				// Pickup a bomb from the ground
-				Bomb bomb = bombTracker.GetEntity();
-				if (bomb != null && bomb.IsPickupable && Player.Physics.IsBraceletMeetingEntity(
-					bomb, GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
-				{
-					Player.CarryState.SetCarryObject(bomb);
-					Player.BeginWeaponState(Player.CarryState);
-					bomb.RemoveFromRoom();
-					return true;
+				foreach (Bomb bomb in bombTracker.Entities) {
+					if (bomb != null && Player.Interactions.IsMeetingEntity(
+							bomb, InteractionType.Bracelet,
+							GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
+					{
+						Player.CarryState.SetCarryObject(bomb);
+						Player.BeginWeaponState(Player.CarryState);
+						bomb.RemoveFromRoom();
+						return true;
+					}
 				}
 			}
 			return false;

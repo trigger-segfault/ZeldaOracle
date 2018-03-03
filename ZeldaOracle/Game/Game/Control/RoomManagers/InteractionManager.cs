@@ -188,7 +188,24 @@ namespace ZeldaOracle.Game.Control {
 		public void TriggerInstantReaction(Entity actionEntity, InteractionType type,
 			ReactionCondition condition = null)
 		{
-			Rectangle2F actionBox = actionEntity.Interactions.InteractionBox;
+			TriggerInstantReaction(actionEntity, type,
+				actionEntity.Interactions.InteractionBox,
+				actionEntity.Interactions.InteractionEventArgs, condition);
+		}
+
+		/// <summary>Instantly detect and trigger an reactions for an entity.</summary>
+		public void TriggerInstantReaction(Entity actionEntity, InteractionType type,
+			Rectangle2F actionBox, ReactionCondition condition = null)
+		{
+			TriggerInstantReaction(actionEntity, type, actionBox,
+				actionEntity.Interactions.InteractionEventArgs, condition);
+		}
+
+		/// <summary>Instantly detect and trigger an reactions for an entity.</summary>
+		public void TriggerInstantReaction(Entity actionEntity, InteractionType type,
+			Rectangle2F actionBox, EventArgs arguments,
+			ReactionCondition condition = null)
+		{
 			Rectangle2F positionedActionBox = Rectangle2F.Translate(
 				actionBox, actionEntity.Position);
 
@@ -211,7 +228,7 @@ namespace ZeldaOracle.Game.Control {
 						continue;
 
 					reactionEntity.Interactions.Trigger(type, actualActionEntity,
-						actionEntity.Interactions.InteractionEventArgs);
+						arguments);
 
 					if (!actionEntity.IsAliveAndInRoom ||
 						!actionEntity.Interactions.IsEnabled)
@@ -229,8 +246,16 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		/// <summary>Cause an action to happen for this frame.</summary>
+		public void TriggerReaction(Entity actionEntity,
+			InteractionType type, Rectangle2F actionBox)
+		{
+			DetectReactionsFromEntity(actionEntity,
+				type, actionBox, EventArgs.Empty, false);
+		}
+
+		/// <summary>Cause an action to happen for this frame.</summary>
 		public void TriggerReaction(Entity actionEntity, InteractionType type,
-			Rectangle2F actionBox, EventArgs arguments = null)
+			Rectangle2F actionBox, EventArgs arguments)
 		{
 			DetectReactionsFromEntity(actionEntity, type, actionBox, arguments, false);
 		}

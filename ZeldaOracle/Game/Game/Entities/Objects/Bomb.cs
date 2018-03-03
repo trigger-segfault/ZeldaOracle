@@ -1,6 +1,8 @@
-﻿using ZeldaOracle.Common.Audio;
+﻿using System;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
@@ -39,9 +41,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			soundBounce = GameData.SOUND_BOMB_BOUNCE;
 
 			// Interactions
+			Interactions.Enable();
 			Interactions.InteractionBox	= new Rectangle2I(-4, -9, 8, 8);
-			Physics.BraceletCollisionBox = new Rectangle2I(-4, -9, 8, 8);
-			IsPickupable = true;
+			Reactions[InteractionType.Bracelet].Set(EntityReactions.Pickup);
+			Reactions[InteractionType.Bracelet].CollisionBox = null;
 		}
 
 

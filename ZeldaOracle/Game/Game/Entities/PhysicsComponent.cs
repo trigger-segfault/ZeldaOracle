@@ -60,7 +60,6 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Collision settings
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
-		private Rectangle2F				braceletCollisionBox;
 		private TileCollisionCondition	customTileIsSolidCondition;
 		private TileCollisionCondition	customTileIsNotSolidCondition;
 		private Rectangle2F?			roomEdgeCollisionBox;
@@ -93,8 +92,6 @@ namespace ZeldaOracle.Game.Entities {
 		public PhysicsComponent(Entity entity) :
 			base(entity)
 		{
-			braceletCollisionBox = new Rectangle2F(-1, -1, 2, 2);
-
 			flags				= PhysicsFlags.None;
 			velocity			= Vector2F.Zero;
 			zVelocity			= 0.0f;
@@ -251,7 +248,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Return true if the entity would collide with a tile if it were at
 		/// the given position.</summary>
-		public bool IsPlaceMeetingTile(Vector2F position, Tile tile) {
+		public bool IsPlaceMeetingSolidTile(Vector2F position, Tile tile) {
 			if (CanCollideWithTile(tile)) {
 				return CollisionModel.Intersecting(
 					tile.CollisionModel, tile.Position, collisionBox, position);
@@ -261,7 +258,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Return true if the entity would collide with a tile if it were at
 		/// the given position.</summary>
-		public bool IsPlaceMeetingEntity(Vector2F position, Entity entity,
+		public bool IsPlaceMeetingSolidEntity(Vector2F position, Entity entity,
 			float maxZDistance = 10)
 		{
 			if (CanCollideWithEntity(entity) &
@@ -270,14 +267,6 @@ namespace ZeldaOracle.Game.Entities {
 			{
 				return true;
 			}
-			return false;
-		}
-
-		public bool IsBraceletMeetingEntity(Entity other, Rectangle2F collisionBox,
-			int maxZDistance = 10) {
-			collisionBox.Point += entity.Position;
-			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
-				return collisionBox.Intersects(other.Physics.PositionedBraceletCollisionBox);
 			return false;
 		}
 
@@ -630,19 +619,10 @@ namespace ZeldaOracle.Game.Entities {
 			set { collisionBox = value; }
 		}
 		
-		public Rectangle2F BraceletCollisionBox {
-			get { return braceletCollisionBox; }
-			set { braceletCollisionBox = value; }
-		}
-
 		/// <summary>The "Hard" collision box translated to the entity's current
 		/// position.</summary>
 		public Rectangle2F PositionedCollisionBox {
 			get { return Rectangle2F.Translate(collisionBox, entity.Position); }
-		}
-
-		public Rectangle2F PositionedBraceletCollisionBox {
-			get { return Rectangle2F.Translate(braceletCollisionBox, entity.Position); }
 		}
 
 		public TileCollisionCondition CustomTileIsSolidCondition {

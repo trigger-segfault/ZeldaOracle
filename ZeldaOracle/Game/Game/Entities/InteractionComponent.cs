@@ -1,15 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Entities {
 
-	public static class GeneralReactions {
+	public static class EntityReactions {
 
 		public static void TriggerButtonReaction(
 			Entity a, Entity b, EventArgs args)
 		{
 			a.RoomControl.Player.TriggeredButtonReaction = true;
+		}
+
+		/// <summary>Pickup the entity. This only works if the action entity is the
+		/// player.</summary>
+		public static void Pickup(
+			Entity reactionEntity, Entity actionEntity, EventArgs args)
+		{
+			if (actionEntity is Player) {
+				Player player = (Player) actionEntity;
+				player.CarryState.SetCarryObject(reactionEntity);
+				player.BeginWeaponState(player.CarryState);
+				reactionEntity.RemoveFromRoom();
+			}
 		}
 	}
 
@@ -20,7 +34,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Rectangle2F interactionBox;
 
 		/// <summary>The interaction manager.</summary>
-		private InteractionEventManager interactionManager;
+		private ReactionManager interactionManager;
 
 		private InteractionType interactionType;
 		private EventArgs interactionEventArgs;
@@ -37,7 +51,7 @@ namespace ZeldaOracle.Game.Entities {
 			base(entity)
 		{
 			interactionBox			= Rectangle2F.Zero;
-			interactionManager		= new InteractionEventManager(entity);
+			interactionManager		= new ReactionManager(entity);
 			interactionType			= InteractionType.None;
 			interactionEventArgs	= null;
 			currentActions			= new List<InteractionInstance>();
@@ -60,12 +74,12 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public void EnableInteractionCallbacks() {
 			if (interactionManager == null)
-				interactionManager = new InteractionEventManager(entity);
+				interactionManager = new ReactionManager(entity);
 		}
 
 		/// <summary>Get the interaction handler for the given interaction type.
 		/// </summary>
-		public InteractionHandler GetInteraction(InteractionType type) {
+		public ReactionHandler GetInteraction(InteractionType type) {
 			if (interactionManager == null)
 				return null;
 			return interactionManager[type];
@@ -82,7 +96,7 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Set the reactions to the given interaction type. The reaction
 		/// functions are called in the order they are specified.</summary>
 		public void SetReaction(InteractionType type,
-			params InteractionStaticDelegate[] reactions)
+			params ReactionStaticCallback[] reactions)
 		{
 			EnableInteractionCallbacks();
 			interactionManager.Set(type, reactions);
@@ -91,40 +105,58 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Set the reactions to the given interaction type. The reaction
 		/// functions are called in the order they are specified.</summary>
 		public void SetReaction(InteractionType type,
-			params InteractionMemberDelegate[] reactions)
+			params ReactionMemberCallback[] reactions)
 		{
 			EnableInteractionCallbacks();
 			interactionManager.Set(type, reactions);
 		}
 
 		public void SetReaction(InteractionType type,
-			InteractionStaticDelegate staticReaction,
-			params InteractionMemberDelegate[] memberReactions)
+			ReactionStaticCallback staticReaction,
+			params ReactionMemberCallback[] memberReactions)
 		{
 			EnableInteractionCallbacks();
 			interactionManager.Set(type, staticReaction, memberReactions);
 		}
 
 		public void SetReaction(InteractionType type,
-			InteractionStaticDelegate staticReaction1,
-			InteractionStaticDelegate staticReaction2,
-			params InteractionMemberDelegate[] memberReactions)
+			ReactionStaticCallback staticReaction1,
+			ReactionStaticCallback staticReaction2,
+			params ReactionMemberCallback[] memberReactions)
 		{
 			EnableInteractionCallbacks();
 			interactionManager.Set(type, staticReaction1, staticReaction2, memberReactions);
 		}
 
 		public void SetReaction(InteractionType type,
-			InteractionStaticDelegate staticReaction1,
-			InteractionStaticDelegate staticReaction2,
-			InteractionStaticDelegate staticReaction3,
-			params InteractionMemberDelegate[] memberReactions)
+			ReactionStaticCallback staticReaction1,
+			ReactionStaticCallback staticReaction2,
+			ReactionStaticCallback staticReaction3,
+			params ReactionMemberCallback[] memberReactions)
 		{
 			EnableInteractionCallbacks();
 			interactionManager.Set(type, staticReaction1, staticReaction2,
 				staticReaction3, memberReactions);
 		}
+		
 
+		//-----------------------------------------------------------------------------
+		// Interaction Queries
+		//-----------------------------------------------------------------------------
+
+		public bool IsMeetingEntity(Entity reactionEntity, InteractionType type,
+			Rectangle2F actionBox)
+		{
+			if (!reactionEntity.Interactions.IsEnabled)
+				return false;
+			Rectangle2F rectionBox =
+				reactionEntity.Interactions.GetInteractionBox(type);
+			Rectangle2F positionedRectionBox =
+				Rectangle2F.Translate(rectionBox, reactionEntity.Position);
+			Rectangle2F positionedActionBox =
+				Rectangle2F.Translate(actionBox, Entity.Position);
+			return positionedActionBox.Intersects(positionedRectionBox);
+		}
 		
 
 		//-----------------------------------------------------------------------------
@@ -157,7 +189,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public InteractionEventManager InteractionManager {
+		public ReactionManager ReactionManager {
 			get { return interactionManager; }
 		}
 		

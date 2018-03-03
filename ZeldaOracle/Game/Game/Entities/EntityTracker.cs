@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ZeldaOracle.Game.Entities {
 	public class EntityTracker<T> where T : Entity {
@@ -72,6 +69,17 @@ namespace ZeldaOracle.Game.Entities {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>Iterate the currently tracked, alive entities.</summary>
+		public IEnumerable<T> Entities {
+			get {
+				for (int i = 0; i < entities.Length; i++) {
+					RefreshEntityAtIndex(i);
+					if (entities[i] != null && (entities[i] is T))
+						yield return (T) entities[i];
+				}
+			}
+		}
+
 		public int MaxEntityCount {
 			get { return entities.Length; }
 		}

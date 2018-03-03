@@ -62,7 +62,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			Physics.CollisionBox		= DEFAULT_BOX;
 			Interactions.InteractionBox	= new Rectangle2I(-4, -11, 8, 6);
-			Physics.BraceletCollisionBox	= new Rectangle2I(-6, -12, 12, 12);
+			Interactions.ReactionManager[InteractionType.Bracelet].CollisionBox =
+				new Rectangle2I(-6, -12, 12, 12);
 
 			// TODO: Bigger collision box for cover
 			
@@ -129,7 +130,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			Interactions.SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
 			Interactions.SetReaction(InteractionType.Shovel,			Reactions.Bump);
-			Interactions.SetReaction(InteractionType.Parry,			Reactions.Parry);
 			Interactions.SetReaction(InteractionType.Bracelet,		PickupInteraction);
 			// Seed interations
 			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
@@ -348,7 +348,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					int direction = Directions.NearestFromVector(tile.Center - Physics.PositionedCollisionBox.Center);
 					int axis = Directions.ToAxis(direction);
 					velocity[axis] = 0f;
-					if (Physics.IsPlaceMeetingTile(Position + velocity, tile)) {
+					if (Physics.IsPlaceMeetingSolidTile(Position + velocity, tile)) {
 						velocity = Vector2F.Zero;
 						break;
 					}

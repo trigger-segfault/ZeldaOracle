@@ -20,47 +20,32 @@ namespace ZeldaOracle.Game.Entities {
 		// Weapon Interactions
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Hit by a sword.
-		/// <para/>Default = SenderReactions.Intercept,
-		/// Reactions.DamageByLevel(1, 2, 3)</summary>
+		/// <summary>Hit by a sword.</summary>
 		Sword,
-		/// <summary>Hit by a spinning sword.
-		/// <para/>Default = Reactions.Damage2</summary>
+		/// <summary>Hit by a spinning sword.</summary>
 		SwordSpin,
-		/// <summary>Hit by a biggoron sword.
-		/// <para/>Default = Reactions.Damage3</summary>
+		/// <summary>Hit by a biggoron sword.</summary>
 		BiggoronSword,
-		/// <summary>Hit by a shield.
-		/// <para/>Default = SenderReactions.Bump, Reactions.Bump</summary>
+		/// <summary>Hit by a shield.</summary>
 		Shield,
-		/// <summary>Hit by a shovel being used.
-		/// <para/>Default = Reactions.Bump</summary>
+		/// <summary>Hit by a shovel being used.</summary>
 		Shovel,
-		/// <summary>TODO.
-		/// <para/>Default = Reactions.None</summary>
-		Parry,
-		/// <summary>Attempt to use the bracelet to pickup or grab.
-		/// <para/>Default = Reactions.None</summary>
+		/// <summary>Attempt to use the bracelet to pickup or grab.</summary>
 		Bracelet,
 		
 		//-----------------------------------------------------------------------------
 		// Seed Interactions
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Hit by an ember seed.
-		/// <para/>Default = SenderReactions.Intercept</summary>
+		/// <summary>Hit by an ember seed.</summary>
 		EmberSeed,
-		/// <summary>Hit by a scent seed.
-		/// <para/>Default = SenderReactions.Intercept, Reactions.Damage</summary>
+		/// <summary>Hit by a scent seed.</summary>
 		ScentSeed,
-		/// <summary>Hit by a pegasus seed.
-		/// <para/>Default = SenderReactions.Intercept, Reactions.Stun</summary>
+		/// <summary>Hit by a pegasus seed.</summary>
 		PegasusSeed,
-		/// <summary>Hit by a gale seed.
-		/// <para/>Default = SenderReactions.Intercept</summary>
+		/// <summary>Hit by a gale seed.</summary>
 		GaleSeed,
-		/// <summary>Hit by a mystery seed.
-		/// <para/>Default = Reactions.MysterySeed</summary>
+		/// <summary>Hit by a mystery seed.</summary>
 		MysterySeed,
 		
 		
@@ -68,20 +53,15 @@ namespace ZeldaOracle.Game.Entities {
 		// Projectile Interactions
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Hit by an arrow.
-		/// <para/>Default = SenderReactions.Intercept, Reactions.Damage</summary>
+		/// <summary>Hit by an arrow.</summary>
 		Arrow,
-		/// <summary>Hit by a sword beam projectile.
-		/// <para/>Default = SenderReactions.Destroy, Reactions.Damage</summary>
+		/// <summary>Hit by a sword beam projectile.</summary>
 		SwordBeam,
-		/// <summary>Hit by a projectile from the fire-rod.
-		/// <para/>Default = SenderReactions.Intercept</summary>
+		/// <summary>Hit by a projectile from the fire-rod.</summary>
 		RodFire,
-		/// <summary>Hit by a boomerang.
-		/// <para/>Default = SenderReactions.Intercept, Reactions.Stun</summary>
+		/// <summary>Hit by a boomerang.</summary>
 		Boomerang,
-		/// <summary>Hit by the switch hook.
-		/// <para/>Default = SenderReactions.Intercept, Reactions.SwitchHook</summary>
+		/// <summary>Hit by the switch hook.</summary>
 		SwitchHook,
 
 		
@@ -90,10 +70,9 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The player presses the 'A' button when facing the entity.
-		/// <para/>Default = Reactions.None</summary>
+		/// </summary>
 		ButtonAction,
-		/// <summary>Collides with the player.
-		/// <para/>Default = OnTouchPlayer</summary>
+		/// <summary>Collides with the player.</summary>
 		PlayerContact,
 		
 
@@ -101,25 +80,19 @@ namespace ZeldaOracle.Game.Entities {
 		// Environment
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Touches fire.
-		/// <para/>Default = Reactions.Burn</summary>
+		/// <summary>Touches fire.</summary>
 		Fire,
-		/// <summary>Touches gale.
-		/// <para/>Default = Reactions.Gale</summary>
+		/// <summary>Touches gale.</summary>
 		Gale,
-		/// <summary>Hit by a bomb explosion.
-		/// <para/>Default = Reactions.Damage</summary>
+		/// <summary>Hit by a bomb explosion.</summary>
 		BombExplosion,
-		/// <summary>Hit by a thrown object (thrown tiles, not bombs).
-		/// <para/>Default = Reactions.Damage</summary>
+		/// <summary>Hit by a thrown object (thrown tiles, not bombs).</summary>
 		ThrownObject,
 		/// <summary>Hit by a minecart.</summary>
-		/// <para/>Default = Reactions.SoftKill</summary>
 		MineCart,
 		/// <summary>Hit by a maget ball entity.</summary>
 		MagnetBall,
-		/// <summary>Hit by a block (either moving or spawned on top of).
-		/// <para/>Default = Reactions.Damage</summary>
+		/// <summary>Hit by a block (either moving or spawned on top of).</summary>
 		Block,
 
 
@@ -130,6 +103,7 @@ namespace ZeldaOracle.Game.Entities {
 		//SwordHitShield,			// Their sword hits my shield.
 		//BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
 		//ShieldHitShield,		// Their shield hits my shield.
+		//Parry,
 
 
 		//-----------------------------------------------------------------------------
@@ -164,28 +138,33 @@ namespace ZeldaOracle.Game.Entities {
 	//-----------------------------------------------------------------------------
 	// Interaction Delegates
 	//-----------------------------------------------------------------------------
-
-	public delegate void InteractionMemberDelegate(
-		Entity sender, EventArgs args);
-
-	public delegate void InteractionStaticDelegate(
-		Entity subject, Entity sender, EventArgs args);
 	
+	public delegate void ReactionMemberSimpleCallback();
+
+	public delegate void ReactionMemberCallback(
+		Entity actionEntity, EventArgs args);
+
+	public delegate void ReactionStaticCallback(
+		Entity reactionEntity, Entity actionEntity, EventArgs args);
+
+	public delegate void ReactionStaticSimpleCallback(Entity reactionEntity);
+		
 
 	//-----------------------------------------------------------------------------
 	// Interaction Handler
 	//-----------------------------------------------------------------------------
 
-	public class InteractionHandler {
+	public class ReactionHandler {
 
-		private InteractionStaticDelegate handler;
+		private ReactionStaticCallback handler;
+		private Rectangle2F? collisionBox;
 
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public InteractionHandler() {
+		public ReactionHandler() {
 			handler = null;
 		}
 
@@ -207,43 +186,75 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Clear all interaction handlers.</summary>
-		public InteractionHandler Clear() {
+		public ReactionHandler Clear() {
 			handler = null;
+			return this;
+		}
+			
+		/// <summary>Set the callback for this reaction to a single function.</summary>
+		public ReactionHandler Set(
+			ReactionStaticCallback callback)
+		{
+			handler = callback;
+			return this;
+		}
+		
+		/// <summary>Set the callback for this reaction, clearing any previous ones.
+		/// </summary>
+		public ReactionHandler Set(
+			ReactionStaticSimpleCallback callback)
+		{
+			handler = ToStaticInteractionDelegate(callback);
 			return this;
 		}
 		
 		/// <summary>Set the callback for this reaction to a single function.</summary>
-		public InteractionHandler Set(
-			InteractionMemberDelegate callback)
+		public ReactionHandler Set(
+			ReactionMemberCallback callback)
+		{
+			handler = ToStaticInteractionDelegate(callback);
+			return this;
+		}
+		
+		/// <summary>Set the callback for this reaction, clearing any previous ones.
+		/// </summary>
+		public ReactionHandler Set(
+			ReactionMemberSimpleCallback callback)
 		{
 			handler = ToStaticInteractionDelegate(callback);
 			return this;
 		}
 			
-		/// <summary>Set the callback for this reaction to a single function.</summary>
-		public InteractionHandler Set(
-			InteractionStaticDelegate callback)
-		{
-			handler = callback;
-			return this;
-		}
-			
 		/// <summary>Add a new callback for this interaction.</summary>
-		public InteractionHandler Add(
-			InteractionMemberDelegate callback)
-		{
-			return Add(ToStaticInteractionDelegate(callback));
-		}
-			
-		/// <summary>Add a new callback for this interaction.</summary>
-		public InteractionHandler Add(
-			InteractionStaticDelegate callback)
+		public ReactionHandler Add(
+			ReactionStaticCallback callback)
 		{
 			if (handler == null)
 				handler = callback;
 			else
 				handler += callback;
 			return this;
+		}
+			
+		/// <summary>Add a new callback for this interaction.</summary>
+		public ReactionHandler Add(
+			ReactionStaticSimpleCallback callback)
+		{
+			return Add(ToStaticInteractionDelegate(callback));
+		}
+			
+		/// <summary>Add a new callback for this interaction.</summary>
+		public ReactionHandler Add(
+			ReactionMemberCallback callback)
+		{
+			return Add(ToStaticInteractionDelegate(callback));
+		}
+			
+		/// <summary>Add a new callback for this interaction.</summary>
+		public ReactionHandler Add(
+			ReactionMemberSimpleCallback callback)
+		{
+			return Add(ToStaticInteractionDelegate(callback));
 		}
 
 
@@ -253,12 +264,41 @@ namespace ZeldaOracle.Game.Entities {
 		
 		/// <summary>Convert a member callback, which has an implicit subject, to a
 		/// static callback, which has the subject as a parameter.</summary>
-		private static InteractionStaticDelegate ToStaticInteractionDelegate(
-			InteractionMemberDelegate memberDelegate)
+		private static ReactionStaticCallback ToStaticInteractionDelegate(
+			ReactionMemberCallback memberDelegate)
 		{
 			return delegate(Entity subject, Entity sender, EventArgs args) {
 				memberDelegate.Invoke(sender, args);
 			};
+		}
+		
+		private static ReactionStaticCallback ToStaticInteractionDelegate(
+			ReactionMemberSimpleCallback callback)
+		{
+			return delegate(Entity reactionEntity, Entity actionEntity, EventArgs args) {
+				callback.Invoke();
+			};
+		}
+		
+		private static ReactionStaticCallback ToStaticInteractionDelegate(
+			ReactionStaticSimpleCallback callback)
+		{
+			return delegate(Entity reactionEntity, Entity actionEntity, EventArgs args) {
+				callback.Invoke(reactionEntity);
+			};
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Custom collision box used to detect reactions for this
+		/// interaction type. If this is null, then the entity's InteractionBox will
+		/// be used instead.</summary>
+		public Rectangle2F? CollisionBox {
+			get { return collisionBox; }
+			set { collisionBox = value; }
 		}
 	}
 	
@@ -267,31 +307,30 @@ namespace ZeldaOracle.Game.Entities {
 	// Interaction Manager
 	//-----------------------------------------------------------------------------
 
-	public class InteractionEventManager {
+	public class ReactionManager {
 
-		/// <summary>The subject entity which is interacting.</summary>
+		/// <summary>Reference to the entity for which this class is managing
+		/// reactions.</summary>
 		private Entity entity;
-		/// <summary>List of interaction handlers for each interaction type.</summary>
-		private InteractionHandler[] interactionHandlers;
-
+		/// <summary>List of reaction handlers for each interaction type.</summary>
+		private ReactionHandler[] reactionHandlers;
+		
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Create an interaction manager for the given subject entity.
-		/// </summary>
-		public InteractionEventManager(Entity entity) {
+		/// <summary>Create an reaction manager for the given subject entity.</summary>
+		public ReactionManager(Entity entity) {
 			this.entity = entity;
-			interactionHandlers =
-				new InteractionHandler[(int) InteractionType.Count];
+			reactionHandlers = new ReactionHandler[(int) InteractionType.Count];
 			for (int i = 0; i < (int) InteractionType.Count; i++)
-				interactionHandlers[i] = new InteractionHandler();
+				reactionHandlers[i] = new ReactionHandler();
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Interaction Triggering
+		// Reaction Triggering
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Trigger an interaction with no arguments.</summary>
@@ -299,10 +338,12 @@ namespace ZeldaOracle.Game.Entities {
 			Trigger(type, sender, EventArgs.Empty);
 		}
 
-		/// <summary>Trigger an interaction with the given arguments.</summary>
-		public void Trigger(InteractionType type, Entity sender, EventArgs args) {
-			InteractionHandler handler = Get(type);
-			handler.Trigger(entity, sender, args);
+		/// <summary>Trigger a reaction with the given arguments.</summary>
+		public void Trigger(InteractionType type,
+			Entity actionEntity, EventArgs args)
+		{
+			ReactionHandler handler = Get(type);
+			handler.Trigger(entity, actionEntity, args);
 		}
 
 		
@@ -312,15 +353,15 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Get the interaction handler for the given interaction type.
 		/// </summary>
-		public InteractionHandler Get(InteractionType type) {
-			return interactionHandlers[(int) type];
+		public ReactionHandler Get(InteractionType type) {
+			return reactionHandlers[(int) type];
 		}
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			params InteractionStaticDelegate[] reactions)
+			params ReactionStaticCallback[] reactions)
 		{
-			InteractionHandler handler = Get(type);
+			ReactionHandler handler = Get(type);
 			handler.Clear();
 			for (int i = 0; i < reactions.Length; i++)
 				handler.Add(reactions[i]);
@@ -328,9 +369,9 @@ namespace ZeldaOracle.Game.Entities {
 		
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			params InteractionMemberDelegate[] reactions)
+			params ReactionMemberCallback[] reactions)
 		{
-			InteractionHandler handler = Get(type);
+			ReactionHandler handler = Get(type);
 			handler.Clear();
 			for (int i = 0; i < reactions.Length; i++)
 				handler.Add(reactions[i]);
@@ -338,10 +379,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			InteractionStaticDelegate staticReaction,
-			params InteractionMemberDelegate[] memberReactions)
+			ReactionStaticCallback staticReaction,
+			params ReactionMemberCallback[] memberReactions)
 		{
-			InteractionHandler handler = Get(type);
+			ReactionHandler handler = Get(type);
 			handler.Clear();
 			handler.Add(staticReaction);
 			for (int i = 0; i < memberReactions.Length; i++)
@@ -350,11 +391,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			InteractionStaticDelegate staticReaction1,
-			InteractionStaticDelegate staticReaction2,
-			params InteractionMemberDelegate[] memberReactions)
+			ReactionStaticCallback staticReaction1,
+			ReactionStaticCallback staticReaction2,
+			params ReactionMemberCallback[] memberReactions)
 		{
-			InteractionHandler handler = Get(type);
+			ReactionHandler handler = Get(type);
 			handler.Clear();
 			handler.Add(staticReaction1);
 			handler.Add(staticReaction2);
@@ -364,12 +405,12 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Set the callbacks for the given interaction type.</summary>
 		public void Set(InteractionType type,
-			InteractionStaticDelegate staticReaction1,
-			InteractionStaticDelegate staticReaction2,
-			InteractionStaticDelegate staticReaction3,
-			params InteractionMemberDelegate[] memberReactions)
+			ReactionStaticCallback staticReaction1,
+			ReactionStaticCallback staticReaction2,
+			ReactionStaticCallback staticReaction3,
+			params ReactionMemberCallback[] memberReactions)
 		{
-			InteractionHandler handler = Get(type);
+			ReactionHandler handler = Get(type);
 			handler.Clear();
 			handler.Add(staticReaction1);
 			handler.Add(staticReaction2);
@@ -385,12 +426,13 @@ namespace ZeldaOracle.Game.Entities {
 		
 		/// <summary>Get the interaction handler for the given interaction type.
 		/// </summary>
-		public InteractionHandler this[InteractionType type] {
-			get { return interactionHandlers[(int) type]; }
-			set { interactionHandlers[(int) type] = value; }
+		public ReactionHandler this[InteractionType type] {
+			get { return reactionHandlers[(int) type]; }
+			set { reactionHandlers[(int) type] = value; }
 		}
 		
-		/// <summary>The subject entity which is interacting.</summary>
+		/// <summary>Reference to the entity for which this class is managing
+		/// interactions.</summary>
 		public Entity Entity {
 			get { return entity; }
 			set { entity = value; }

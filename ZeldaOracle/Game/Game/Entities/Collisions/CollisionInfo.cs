@@ -4,27 +4,21 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Collisions {
 
-	/// <summary>
-	/// Types of solid objects that can cause collisions.
-	/// </summary>
+	/// <summary>Types of solid objects that can cause collisions.</summary>
 	public enum CollisionType {
-		None,
+		None = -1,
 		Tile,
 		Entity,
 		RoomEdge,
 	}
 
-	/// <summary>
-	/// Stores the colliding features.
-	/// </summary>
+
+	/// <summary>Stores the colliding features.</summary>
 	public struct CollisionCheck {
 
 		private CollisionType type;
-
 		private Entity physicsEntity;
-
 		private object solidObject;
-
 		private int collisionBoxIndex;
 
 
@@ -99,12 +93,16 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			get { return (type == CollisionType.RoomEdge); }
 		}
 
+		public bool IsInsideCollision {
+			get { return (type == CollisionType.RoomEdge); }
+		}
+
 		public Entity Entity {
-			get { return SolidObject as Entity; }
+			get { return (SolidObject as Entity); }
 		}
 		
 		public Tile Tile {
-			get { return SolidObject as Tile; }
+			get { return (SolidObject as Tile); }
 		}
 
 		public Rectangle2F SolidBox {
@@ -120,17 +118,10 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 				return Rectangle2F.Zero;
 			}
 		}
-
-		public bool IsInsideCollision {
-			get { return type == CollisionType.RoomEdge; }
-		}
 	}
 
-
-
 	
-	/// <summary>
-	/// Information about a collision between an entity and a solid object.
+	/// <summary>Information about a collision between an entity and a solid object.
 	/// </summary>
 	public class Collision {
 
@@ -425,150 +416,6 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		/// this solid object shares an edge with an adjacent solid objects.</summary>
 		public bool[] Connections {
 			get { return connections; }
-		}
-	}
-
-
-
-
-
-
-
-
-	/// <summary>
-	/// TODO: Remove this old collision info
-	/// </summary>
-	public class CollisionInfo {
-
-		// The type of collision if not None (entity, tile or room-edge)
-		private CollisionType type;
-
-		// The object we are colliding with. This is null for room-edge collisions.
-		private object solidObject;
-		
-		// The direction of the collision impact (from the entity's perspective).
-		private int direction;
-		
-		private bool isAutoDodged;
-
-		private bool isMovementCollision;
-		private bool isResolved;
-
-		private float penetration;
-		private Rectangle2F solidBox;
-		private CollisionCheck source;
-
-		
-		//-----------------------------------------------------------------------------
-		// Mutators
-		//-----------------------------------------------------------------------------
-		
-		public void Clear() {
-			type				= CollisionType.None;
-			solidObject			= null;
-			direction			= Directions.Right;
-			isAutoDodged		= false;
-			isMovementCollision	= false;
-			isResolved			= false;
-			penetration			= 0.0f;
-		}
-
-		public void SetTileCollision(Tile tile, int direction) {
-			this.type			= CollisionType.Tile;
-			this.solidObject	= tile;
-			this.direction		= direction;
-		}
-		
-		public void SetEntityCollision(Entity entity, int direction) {
-			this.type			= CollisionType.Entity;
-			this.solidObject	= entity;
-			this.direction		= direction;
-		}
-		
-		public void SetRoomEdgeCollision(int direction) {
-			this.type			= CollisionType.RoomEdge;
-			this.solidObject	= null;
-			this.direction		= direction;
-		}
-		
-		public void SetCollision(object obj, int direction) {
-			this.type			= CollisionType.None;
-			this.solidObject	= obj;
-			this.direction		= direction;
-			if (obj is Tile)
-				this.type = CollisionType.Tile;
-			else if (obj is Entity)
-				this.type = CollisionType.Entity;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public bool IsColliding {
-			get { return (type != CollisionType.None); }
-		}
-
-		public bool IsAutoDodged {
-			get { return isAutoDodged; }
-			set { isAutoDodged = value; }
-		}
-
-		public bool IsCollidingAndNotAutoDodged {
-			get { return (IsColliding && !isAutoDodged); }
-		}
-		
-		public int Axis {
-			get { return Directions.ToAxis(direction); }
-		}
-		
-		public int Direction {
-			get { return direction; }
-			set { direction = value; }
-		}
-
-		public CollisionType Type {
-			get { return type; }
-			set { type = value; }
-		}
-		
-		public object SolidObject {
-			get { return solidObject; }
-			set { solidObject = value; }
-		}
-		
-		public Entity Entity {
-			get { return (type == CollisionType.Entity ? (Entity) solidObject : null); }
-		}
-		
-		public Tile Tile {
-			get { return (type == CollisionType.Tile ? (Tile) solidObject : null); }
-		}
-		
-		public bool IsResolved {
-			get { return isResolved; }
-			set { isResolved = value; }
-		}
-		
-		public bool IsMovementCollision {
-			get { return isMovementCollision; }
-			set { isMovementCollision = value; }
-		}
-		
-		public float Penetration {
-			get { return penetration; }
-			set { penetration = value; }
-		}
-		
-		public Rectangle2F SolidBox {
-			get { return solidBox; }
-			set { solidBox = value; }
-		}
-		
-		public CollisionCheck Source {
-			get { return source; }
-			set { source = value; }
 		}
 	}
 }

@@ -314,7 +314,7 @@
     <Compile Include="Game\Entities\Monsters\MonsterFlyingTile.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPeahat.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPokey.cs" />
-    <Compile Include="Game\Entities\InteractionEventManager.cs" />
+    <Compile Include="Game\Entities\ReactionManager.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterRiverZora.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterMovingWizzrobe.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterGopongaFlower.cs" />

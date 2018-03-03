@@ -118,8 +118,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				SenderReactions.Bump, Reactions.Bump);
 			Interactions.SetReaction(InteractionType.Shovel,
 				Reactions.Bump);
-			Interactions.SetReaction(InteractionType.Parry,
-				Reactions.Parry);
 			Interactions.SetReaction(InteractionType.Bracelet,
 				Reactions.None);
 

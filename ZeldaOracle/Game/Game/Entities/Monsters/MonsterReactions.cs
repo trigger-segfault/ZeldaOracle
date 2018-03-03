@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			//-------------------------------------------------------------------------
 
 			/// <summary>No reaction.</summary>
-			public const InteractionStaticDelegate None = null;
+			public const ReactionStaticCallback None = null;
 
 			/// <summary>Instantly kill the monster.</summary>
 			public static void Kill(Entity subject, Entity sender, EventArgs args) {
@@ -224,7 +224,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			//-------------------------------------------------------------------------
 
 			/// <summary>Damage the monster for the given amount.</summary>
-			public static InteractionStaticDelegate Damage(int amount) {
+			public static ReactionStaticCallback Damage(int amount) {
 				return delegate(Entity subject, Entity sender, EventArgs args) {
 					((Monster) subject).Hurt(amount, sender.Center);
 				};
@@ -232,7 +232,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			/// <summary>Damage the monster for the given amount based on the used item's
 			/// level.</summary>
-			public static InteractionStaticDelegate DamageByLevel(
+			public static ReactionStaticCallback DamageByLevel(
 				int amountLevel1, int amountLevel2, int amountLevel3 = 0)
 			{
 				return delegate(Entity subject, Entity sender, EventArgs args) {
@@ -250,7 +250,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			/// <summary>Silentyly damage the monster for the given amount based on the used item's
 			/// level.</summary>
-			public static InteractionStaticDelegate SilentDamageByLevel(
+			public static ReactionStaticCallback SilentDamageByLevel(
 				int amountLevel1, int amountLevel2, int amountLevel3 = 0) {
 				return delegate (Entity subject, Entity sender, EventArgs args) {
 					int level = (args as WeaponInteractionEventArgs).Weapon.Level;
@@ -267,7 +267,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				};
 			}
 
-			public static InteractionStaticDelegate ContactEffect(Effect effect) {
+			public static ReactionStaticCallback ContactEffect(Effect effect) {
 				return delegate(Entity subject, Entity sender, EventArgs args) {
 					Effect clonedEffect = effect.Clone();
 					InteractionArgs interactionArgs = args as InteractionArgs;

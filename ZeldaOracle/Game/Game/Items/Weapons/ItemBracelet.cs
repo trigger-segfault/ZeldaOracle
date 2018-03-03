@@ -34,33 +34,26 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		
 		/// <summary>Grab, pull, and pickup objects.</summary>
 		public override void OnButtonDown() {
-			// Check for a tile to grab
+			// Attempt to grab a tile
 			if (!Player.IsBeingKnockedBack) {
 				Tile grabTile = Player.GrabState.GetGrabTile();
 				if (grabTile != null) {
 					grabTile.OnGrab(Player.Direction, this);
 					return;
 				}
-				foreach (Entity entity in RoomControl.Entities) {
-					if (entity.IsPickupable && Player.Physics.IsBraceletMeetingEntity(
-						entity, GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
-					{
-						Player.CarryState.SetCarryObject(entity);
-						Player.BeginWeaponState(Player.CarryState);
-						entity.RemoveFromRoom();
-						return;
-					}
-					else if (entity is Monster && Player.Physics.IsBraceletMeetingEntity(
-						entity, GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
-					{
-						((Monster) entity).Interactions.Trigger(InteractionType.Bracelet,
-							Player, new WeaponInteractionEventArgs() {
-								Weapon = this
-						});
-						return;
-					}
-				}
 			}
+		}
+
+		public override bool OnButtonPress() {
+			// Trigger grab interactions
+			Rectangle2F braceletBox =
+				GameSettings.PLAYER_BRACELET_BOXES[Player.Direction];
+			WeaponInteractionEventArgs args = new WeaponInteractionEventArgs() {
+				Weapon = this
+			};
+			RoomControl.InteractionManager.TriggerInstantReaction(
+				Player, InteractionType.Bracelet, braceletBox, args);
+			return (Player.WeaponState == Player.CarryState);
 		}
 	}
 }

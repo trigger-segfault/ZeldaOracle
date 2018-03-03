@@ -29,12 +29,8 @@ namespace ZeldaOracle.Game.Entities {
 		protected Vector2F			position;
 		protected float				zPosition;
 		protected Point2I			centerOffset;
-
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
-		protected Rectangle2F		buttonActionCollisionBox; // Collision box that for button actions
 		protected Sound				soundBounce;
-		protected bool              isGrabbable;
-		protected bool              isPickupable;
 		protected Vector2F          carriedDrawOffset;
 
 		// Attachment
@@ -69,7 +65,6 @@ namespace ZeldaOracle.Game.Entities {
 			previousZPosition			= 0.0f;
 			centerOffset				= Point2I.Zero;
 			actionAlignDistance			= 5;
-			buttonActionCollisionBox	= Rectangle2F.Zero;
 			properties					= null;
 			isPersistentBetweenRooms	= false;
 
@@ -200,8 +195,8 @@ namespace ZeldaOracle.Game.Entities {
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 		}
 
-		/// <summary>Called when the entity falls in lava in side-scroll mode
-		/// .</summary>
+		/// <summary>Called when the entity falls in lava in side-scroll mode.
+		/// </summary>
 		public virtual void OnFallInSideScrollLava() {
 			if (physics.IsDestroyedInHoles) {
 				physics.VelocityX = 0.0f;
@@ -237,7 +232,8 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Called when the entity is picked up.</summary>
 		public virtual void OnPickup() { }
 
-		/// <summary>Called when the entity has been picked up and is now being carried.</summary>
+		/// <summary>Called when the entity has been picked up and is now being
+		/// carried.</summary>
 		public virtual void OnCarry() { }
 
 		/// <summary>Called when the carried entity is thrown.</summary>
@@ -325,29 +321,6 @@ namespace ZeldaOracle.Game.Entities {
 				return aBox.LeftRight.Intersects(bBox.LeftRight);
 			else
 				return aBox.TopBottom.Intersects(bBox.TopBottom);
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Virtual Properties
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Gets or sets if the entity can currently be grabbed.</summary>
-		public bool IsGrabbable {
-			get { return isGrabbable; }
-			set { isGrabbable = value; }
-		}
-
-		/// <summary>Gets or sets if the entity can currently be picked up.</summary>
-		public bool IsPickupable {
-			get { return isPickupable; }
-			set { isPickupable = value; }
-		}
-
-		/// <summary>Gets or sets the extra draw offset applied while carring the entity.</summary>
-		public Vector2F CarriedDrawOffset {
-			get { return carriedDrawOffset; }
-			set { carriedDrawOffset = value; }
 		}
 
 
@@ -478,8 +451,8 @@ namespace ZeldaOracle.Game.Entities {
 			get { return interactions; }
 		}
 
-		public InteractionEventManager Reactions {
-			get { return interactions.InteractionManager; }
+		public ReactionManager Reactions {
+			get { return interactions.ReactionManager; }
 		}
 
 		public bool IsInAir {
@@ -505,14 +478,17 @@ namespace ZeldaOracle.Game.Entities {
 		public Vector2F CenterOffset {
 			get { return centerOffset; }
 		}
+
+		/// <summary>Gets or sets the extra draw offset applied while carrying the
+		/// entity.</summary>
+		public Vector2F CarriedDrawOffset {
+			get { return carriedDrawOffset; }
+			set { carriedDrawOffset = value; }
+		}
 	
 		public int ActionAlignDistance {
 			get { return actionAlignDistance; }
 			set { actionAlignDistance = value; }
-		}
-
-		public Rectangle2F ButtonActionCollisionBox {
-			get { return buttonActionCollisionBox; }
 		}
 
 		public Entity TransformedEntity {

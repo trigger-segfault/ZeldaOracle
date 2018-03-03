@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Entities {
+
 	[Flags]
 	public enum NPCFlags {
 		AlwaysFacePlayer	= 0x1,
@@ -24,18 +20,18 @@ namespace ZeldaOracle.Game.Entities {
 
 	public class NPC : Entity {
 
-		// The direction to face when not near the player.
-		private int direction;
-		// The current direction the NPC is facing.
-		private int faceDirection;
-		// The radius of the diamond shape of tiles where the NPC will face the
-		// player (excluding the center tile).
+		/// <summary>The direction to face when not near the player.</summary>
+		private Direction direction;
+		/// <summary>The current direction the NPC is facing.</summary>
+		private Direction faceDirection;
+		/// <summary>The radius of the diamond shape of tiles where the NPC will face
+		/// the player (excluding the center tile).</summary>
 		private int sightDistance;
-		// The default animation to play.
+		/// <summary>The default animation to play.</summary>
 		private ISprite animationDefault;
-		// The animation to play when being talked to.
+		/// <summary>The animation to play when talking.</summary>
 		private ISprite animationTalk;
-
+		/// <summary>The message to display when talked.</summary>
 		private Message message;
 
 		private NPCFlags flags;
@@ -61,9 +57,11 @@ namespace ZeldaOracle.Game.Entities {
 			Physics.CollisionBox = new Rectangle2F(-8, -11, 16, 13);
 
 			// Interactions
+			Interactions.Enable();
 			Interactions.InteractionBox = new Rectangle2F(-10, -15, 20, 19);
-			buttonActionCollisionBox = Interactions.InteractionBox;
-
+			Reactions[InteractionType.ButtonAction]
+				.Set(Talk).Add(EntityReactions.TriggerButtonReaction);
+			
 			// General
 			actionAlignDistance	= 5;
 			flags = NPCFlags.FacePlayerOnTalk |
@@ -74,7 +72,28 @@ namespace ZeldaOracle.Game.Entities {
 			// Bounding box for talking is 4 pixels beyond the hard collision box (inclusive).
 			// Alignment limit is a max 5 pixels in either direction (inclusive).
 		}
+		
 
+		//-----------------------------------------------------------------------------
+		// Reactions
+		//-----------------------------------------------------------------------------
+
+		public void Talk(Entity actionEntity, EventArgs args) {
+			if (message != null) {
+				if (animationTalk != null) {
+					Graphics.PlayAnimation(animationTalk);
+				}
+				if (flags.HasFlag(NPCFlags.FacePlayerOnTalk)) {
+					if (actionEntity is Player)
+						faceDirection = ((Player) actionEntity).Direction.Reverse();
+					Graphics.SubStripIndex = faceDirection;
+				}
+				GameControl.DisplayMessage(message, delegate() {
+					if (animationTalk != null)
+						Graphics.PlayAnimation(animationDefault);
+				});
+			}
+		}
 		
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
@@ -90,30 +109,12 @@ namespace ZeldaOracle.Game.Entities {
 			Graphics.SubStripIndex			= faceDirection;
 		}
 
-		public override bool OnPlayerAction(int direction) {
-			if (message != null) {
-				if (animationTalk != null) {
-					Graphics.PlayAnimation(animationTalk);
-				}
-				if (flags.HasFlag(NPCFlags.FacePlayerOnTalk)) {
-					faceDirection = Directions.Reverse(direction);
-					Graphics.SubStripIndex = faceDirection;
-				}
-				GameControl.DisplayMessage(message, delegate() {
-					if (animationTalk != null)
-						Graphics.PlayAnimation(animationDefault);
-				});
-				return true;
-			}
-			return false;
-		}
-
 		public override void Update() {
 			faceDirection = direction;
 
 			bool facePlayer = flags.HasFlag(NPCFlags.AlwaysFacePlayer);
 
-			// Check if the player is nearby.
+			// Check if the player is nearby
 			if (!facePlayer && flags.HasFlag(NPCFlags.FacePlayerWhenNear)) {
 				Point2I a = RoomControl.GetTileLocation(Center);
 				Point2I b = RoomControl.GetTileLocation(RoomControl.Player.Center);
@@ -123,21 +124,21 @@ namespace ZeldaOracle.Game.Entities {
 
 			if (facePlayer) {
 				if (flags.HasFlag(NPCFlags.OnlyFaceHorizontal)) {
-					// Face the player horizontally.
-					faceDirection = Directions.Right;
+					// Face the player horizontally
+					faceDirection = Direction.Right;
 					if (RoomControl.Player.Center.X < Center.X)
-						faceDirection = Directions.Left;
+						faceDirection = Direction.Left;
 				}
 				else if (flags.HasFlag(NPCFlags.OnlyFaceVertical)) {
-					// Face the player vertically.
-					faceDirection = Directions.Down;
+					// Face the player vertically
+					faceDirection = Direction.Down;
 					if (RoomControl.Player.Center.Y < Center.Y)
-						faceDirection = Directions.Up;
+						faceDirection = Direction.Up;
 				}
 				else {
 					// Face the player in all directions.
 					Vector2F lookVector = RoomControl.Player.Center - Center;
-					faceDirection = Directions.RoundFromRadians(lookVector.Direction);
+					faceDirection = Direction.FromVector(lookVector);
 				}
 			}
 			
@@ -151,27 +152,32 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
+		
+		/// <summary>The animation to play when being talked to.</summary>
 		public NPCFlags Flags {
 			get { return flags; }
 			set { flags = value; }
 		}
 
-		public int Direction {
+		/// <summary>The direction to face when not near the player.</summary>
+		public Direction Direction {
 			get { return direction; }
 			set { direction = value; }
 		}
 
+		/// <summary>The message to display when talking.</summary>
 		public Message Message {
 			get { return message; }
 			set { message = value; }
 		}
 
+		/// <summary>The default animation to play.</summary>
 		public ISprite DefaultAnimation {
 			get { return animationDefault; }
 			set { animationDefault = value; }
 		}
 
+		/// <summary>The animation to play when talking.</summary>
 		public ISprite TalkAnimation {
 			get { return animationTalk; }
 			set { animationTalk = value; }
