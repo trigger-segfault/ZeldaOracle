@@ -257,10 +257,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			player.Hurt(contactDamage, Center);
 		}
 
-		public virtual void OnSeedHit(SeedEntity seed) {
-			seed.TriggerMonsterReaction(this);
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods

@@ -8,15 +8,24 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 	/// <summary>Seeds shot from the seed-shooter or slingshot.</summary>
 	public class SeedProjectile : SeedEntity {
 
-		private int reboundCounter;
+		/// <summary>True if the projectile should rebound off of walls and seed
+		/// bouncer tiles, crashing after a certain number of rebounds.</summary>
 		private bool reboundOffWalls;
+		/// <summary>Counts the number of rebounds.</summary>
+		private int reboundCounter;
+		/// <summary>The current tile location of the projectile, used to detect when
+		/// it moves into a different tile, in order to check for a new seed bouncer
+		/// tile.</summary>
 		private Point2I tileLocation;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
+		
+		/// <summary>Create a seed projectile of the given seed type. Seeds shot from
+		/// the seed shooter should specify reboundOffWalls as true, while seeds shot
+		/// from the slingshot should specify it as false.</summary>
 		public SeedProjectile(SeedType type, bool reboundOffWalls) :
 			base(type)
 		{
@@ -31,11 +40,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.HalfSolidPassable |
-				PhysicsFlags.LedgePassable);
+				PhysicsFlags.LedgePassable |
+				PhysicsFlags.DisableSurfaceContact);
 			if (reboundOffWalls)
 				Physics.ReboundSolid = true;
 
 			// Interactions
+			Interactions.Enable();
 			Interactions.InteractionBox = new Rectangle2F(-4, -9, 8, 10);
 			
 			// Seed Projectile
@@ -49,25 +60,28 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 		/// <summary>Collide with a seed bouncer tile, and either bounce, crash, or
 		/// pass through it.</summary>
-		private void CollideWithSeedBouncer(TileSeedBouncer seedBouncer) {
+		private void CollideWithSeedBouncer(TileSeedBouncer seedBouncerTile) {
+			// Increment the rebound counter
 			if (reboundOffWalls) {
 				if (IncrementRebound(1))
 					CrashOnCollision(true);
 			}
 
-			AttemptBounce(seedBouncer);
+			// Try to bounce off the tile
+			AttemptBounce(seedBouncerTile);
+
 			// TODO: A 90 degree bounce will increment the rebound counter twice
 		}
 		
 		/// <summary>Try to bounce off of a seed bouncer tile, returning true if the
 		/// bounce was successful.</summary>
-		private bool AttemptBounce(TileSeedBouncer seedBouncer) {
+		private bool AttemptBounce(TileSeedBouncer seedBouncerTile) {
 			// Determine the angle the we are moving in
 			angle = Angle.FromVector(physics.Velocity);
 
 			// Determine the angle to bounce off at
 			Angle newAngle = Angle.Invalid;
-			Angle bouncerAngle = seedBouncer.Angle;
+			Angle bouncerAngle = seedBouncerTile.Angle;
 			Angle plus1 = angle.Rotate(1, WindingOrder.Clockwise);
 			Angle minus1 = angle.Rotate(1, WindingOrder.CounterClockwise);
 			Angle perpendicular = angle.Rotate(2, WindingOrder.Clockwise);
@@ -88,6 +102,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			return false;
 		}
 
+
+		/// <summary>Increment the rebound counter by the given amount. Returns true if
+		/// the projectile has rebounded enough times and should now crash.</summary>
 		private bool IncrementRebound(int count) {
 			if (reboundOffWalls) {
 				reboundCounter += count;
@@ -97,6 +114,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			return false;
 		}
 
+		/// <summary>Crash into a collision. If penetrateIntoWall is true, then the
+		/// projectile will first move 3 pixels deeper into the wall.</summary>
 		private void CrashOnCollision(bool penetrateIntoWall) {
 			// Move 3 pixels into the block from where it collided
 			if (penetrateIntoWall)
@@ -114,15 +133,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			
 			if (RoomControl.IsSideScrolling) {
 				Physics.CollisionBox = new Rectangle2F(-1, 0, 2, 1);
+				Interactions.InteractionBox = Physics.CollisionBox;
 			}
 			else {
 				Physics.CollisionBox = new Rectangle2F(-1, -5, 2, 1);
+				Interactions.InteractionBox = Physics.CollisionBox;
 			}
-			Interactions.InteractionBox = Physics.CollisionBox;
 
 			reboundCounter = 0;
 			tileLocation = new Point2I(-1, -1);
-			Graphics.PlayAnimation(GameData.SPR_ITEM_SEEDS[(int) type]);
+
+			// Use the proper interaction and sprite for the current seed type
+			Interactions.InteractionType =
+				InteractionComponent.GetSeedInteractionType(SeedType);
+			Graphics.PlayAnimation(GameData.SPR_ITEM_SEEDS[(int) SeedType]);
 		}
 
 		public override void OnCollideSolid(Collision collision) {
@@ -149,23 +173,21 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 				CrashOnCollision(collision.IsResolved);
 		}
 
-		public override void OnCollideMonster(Monster monster) {
-			monster.OnSeedHit(this);
-		}
-
 		public override void Update() {
-			Point2I loc = (Point2I) (Physics.PositionedCollisionBox.Center /
-				GameSettings.TILE_SIZE);
+			Point2I newTileLocation = (Point2I)
+				(Physics.PositionedCollisionBox.Center / GameSettings.TILE_SIZE);
 
-			// Check if tile location has changed
-			if (loc != tileLocation) {
-				Rectangle2F rect = new Rectangle2F(loc * GameSettings.TILE_SIZE,
-					new Vector2F(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE));
+			// Check if tile location has changed, to then check for rebounding 
+			// off a seed bouncer tile.
+			if (newTileLocation != tileLocation) {
+				Rectangle2F tileBounds = new Rectangle2F(
+					newTileLocation * GameSettings.TILE_SIZE,
+					new Vector2F(GameSettings.TILE_SIZE));
 
 				// Only change tile locations if the collision box is fully contained
 				// inside the tile
-				if (rect.Contains(physics.PositionedCollisionBox)) {
-					tileLocation = loc;
+				if (tileBounds.Contains(physics.PositionedCollisionBox)) {
+					tileLocation = newTileLocation;
 					
 					// Check for seed bouncers in the new location
 					foreach (Tile tile in

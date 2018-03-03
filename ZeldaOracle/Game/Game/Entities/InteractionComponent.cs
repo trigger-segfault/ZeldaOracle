@@ -27,7 +27,9 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsValid() {
 			return (reactionEntity.IsAliveAndInRoom &&
 				reactionEntity.Interactions.IsEnabled &&
-				(!AutoDetected || (actionEntity.IsAliveAndInRoom &&
+				(!AutoDetected ||
+					(actionEntity.Interactions.InteractionType == type &&
+					actionEntity.IsAliveAndInRoom &&
 					actionEntity.Interactions.IsEnabled)));
 		}
 
@@ -203,6 +205,15 @@ namespace ZeldaOracle.Game.Entities {
 		public void Trigger(InteractionType type, Entity sender, EventArgs args) {
 			if (interactionManager != null)
 				interactionManager.Trigger(type, sender, args);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+		
+		public static InteractionType GetSeedInteractionType(SeedType seedType) {
+			return (InteractionType) ((int) InteractionType.EmberSeed + (int) seedType);
 		}
 
 

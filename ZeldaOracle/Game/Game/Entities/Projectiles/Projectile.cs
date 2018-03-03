@@ -48,32 +48,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		
 		public Projectile() {
-			Physics.Enable(PhysicsFlags.DisableSurfaceContact);
-
+			// Graphics
 			Graphics.IsShadowVisible		= true;
-			graphics.IsGrassEffectVisible	= false;
-			graphics.IsRipplesEffectVisible	= false;
+			Graphics.IsGrassEffectVisible	= false;
+			Graphics.IsRipplesEffectVisible	= false;
 
-			syncAnimationWithAngle		= false;
-			syncAnimationWithDirection	= false;
-
-			owner			= null;
-			tileOwner		= null;
-			eventCollision	= null;
-			eventLand		= null;
-			angle			= 0;
-			direction		= 0;
-
-			crashAnimation		= null;
-			bounceOnCrash		= false;
-
-			projectileType = ProjectileType.Physical;
-
-			// Disable collisions with owner
+			// Physics
+			Physics.Enable(PhysicsFlags.DisableSurfaceContact);
 			Physics.CustomTileIsNotSolidCondition = (Tile tile) => {
+				// Disable collisions with owner
 				return (tile == null || tile != tileOwner);
 			};
 
+			// Interactions
 			Interactions.Enable();
 			Interactions.SetReaction(InteractionType.Sword,			Deflect);
 			Interactions.SetReaction(InteractionType.SwordSpin,		Deflect);
@@ -84,6 +71,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			{
 				OnCollidePlayer(RoomControl.Player);
 			});
+
+			// Projectile
+			syncAnimationWithAngle		= false;
+			syncAnimationWithDirection	= false;
+			owner			= null;
+			tileOwner		= null;
+			eventCollision	= null;
+			eventLand		= null;
+			angle			= 0;
+			direction		= 0;
+			crashAnimation	= null;
+			bounceOnCrash	= false;
+			projectileType	= ProjectileType.Physical;
 		}
 
 		public void Deflect(Entity sender, EventArgs args) {

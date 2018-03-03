@@ -175,7 +175,7 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Instantly detect and trigger an reactions for an entity.</summary>
 		public void TriggerInstantReaction(Entity actionEntity, InteractionType type) {
-			Rectangle2F actionBox = actionEntity.Interactions.PositionedInteractionBox;
+			Rectangle2F actionBox = actionEntity.Interactions.InteractionBox;
 			Rectangle2F positionedActionBox = Rectangle2F.Translate(
 				actionBox, actionEntity.Position);
 

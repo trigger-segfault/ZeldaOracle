@@ -18,10 +18,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 	public class ItemSeedSatchel : SeedBasedItem {
 
-		private EntityTracker<Seed> emberSeedTracker;
-		private EntityTracker<Seed> scentSeedTracker;
-		private EntityTracker<Seed> galeSeedTracker;
-		private EntityTracker<Seed> mysterySeedTracker;
+		private EntityTracker<DroppedSeed> emberSeedTracker;
+		private EntityTracker<DroppedSeed> scentSeedTracker;
+		private EntityTracker<DroppedSeed> galeSeedTracker;
+		private EntityTracker<DroppedSeed> mysterySeedTracker;
 
 
 		//-----------------------------------------------------------------------------
@@ -35,10 +35,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
-			this.emberSeedTracker	= new EntityTracker<Seed>(1);
-			this.scentSeedTracker	= new EntityTracker<Seed>(1);
-			this.galeSeedTracker	= new EntityTracker<Seed>(1);
-			this.mysterySeedTracker	= new EntityTracker<Seed>(1);
+			this.emberSeedTracker	= new EntityTracker<DroppedSeed>(1);
+			this.scentSeedTracker	= new EntityTracker<DroppedSeed>(1);
+			this.galeSeedTracker	= new EntityTracker<DroppedSeed>(1);
+			this.mysterySeedTracker	= new EntityTracker<DroppedSeed>(1);
 
 			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_SATCHEL,
@@ -57,16 +57,16 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Internal methods
 		//-----------------------------------------------------------------------------
 
-		private Seed DropSeed(SeedType type) {
-			Seed seed = ThrowSeed(type);
+		private DroppedSeed DropSeed(SeedType type) {
+			DroppedSeed seed = ThrowSeed(type);
 			seed.Position = Player.Center;
 			seed.Physics.Velocity = Vector2F.Zero;
 			seed.Physics.ZVelocity = 0.0f;
 			return seed;
 		}
 		
-		private Seed ThrowSeed(SeedType type) {
-			Seed seed = new Seed(type);
+		private DroppedSeed ThrowSeed(SeedType type) {
+			DroppedSeed seed = new DroppedSeed(type);
 
 			// Spawn the seed
 			Vector2F velocity = Directions.ToVector(Player.Direction);

@@ -420,7 +420,7 @@
     <Compile Include="Game\Entities\Objects\Bomb.cs" />
     <Compile Include="Game\Entities\Objects\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
-    <Compile Include="Game\Entities\Projectiles\Seeds\Seed.cs" />
+    <Compile Include="Game\Entities\Projectiles\Seeds\DroppedSeed.cs" />
     <Compile Include="Game\Entities\TileDummy.cs" />
     <Compile Include="Game\Entities\Units\UnitTool.cs" />
     <Compile Include="Game\GameData.Rewards.cs" />

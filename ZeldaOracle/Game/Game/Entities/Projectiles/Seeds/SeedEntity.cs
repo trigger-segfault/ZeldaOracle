@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
-	// The base class for the two types of seeds.
-	public class SeedEntity : Projectile {
+	/// <summary>The base class for the two types of seed entities: DroppedSeed and
+	/// SeedProjectile.</summary>
+	public abstract class SeedEntity : Projectile {
 		
-		protected SeedType type;
+		/// <summary>The type of seed (Ember, Scent, Gale, Pegasus, Mystery).</summary>
+		private SeedType type;
 
 
 		//-----------------------------------------------------------------------------
@@ -30,53 +25,45 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 		// Seed Effects
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Intercept the seed, destroying it while spawning the seed effect.
+		/// </summary>
 		public override void Intercept() {
 			DestroyWithEffect();
 		}
-		
-		public void TriggerMonsterReaction(Monster monster) {
-			// Destroy the seed and create the effect.
-			//Entity effect = DestroyWithEffect();
 
-			// Trigger the immediate seed effect actions.
-			if (type == SeedType.Ember)
-				monster.Interactions.Trigger(InteractionType.EmberSeed, this);
-			else if (type == SeedType.Scent)
-				monster.Interactions.Trigger(InteractionType.ScentSeed, this);
-			else if (type == SeedType.Gale)
-				monster.Interactions.Trigger(InteractionType.GaleSeed, this);
-			else if (type == SeedType.Pegasus)
-				monster.Interactions.Trigger(InteractionType.PegasusSeed, this);
-			else if (type == SeedType.Mystery)
-				monster.Interactions.Trigger(InteractionType.MysterySeed, this);
+		/// <summary>Destroy the seed and spawn its regular effect.</summary>
+		public Entity DestroyWithEffect(bool satchelEffect = false) {
+			Entity effectEntity = CreateEffect(type, satchelEffect, Center);
+			DestroyAndTransform(effectEntity);
+			return effectEntity;
 		}
 
-		// Destroy the seed and spawn its regular effect.
+		/// <summary>Destroy the seed and spawn its regular effect, but absorbing the
+		/// effect such as when fire is instantly put out after having spawned.
+		/// </summary>
 		public Entity DestroyWithAbsorbedEffect(bool satchelEffect = false) {
 			Entity effectEntity = DestroyWithEffect(satchelEffect);
 			if (effectEntity is Fire)
 				(effectEntity as Fire).IsAbsorbed = true;
 			return effectEntity;
 		}
-
-		// Destroy the seed and spawn its regular effect.
-		public Entity DestroyWithEffect(bool satchelEffect = false) {
-			Entity effectEntity = CreateEffect(type, satchelEffect, Center);
-			DestroyAndTransform(effectEntity);
-			return effectEntity;
-		}
 		
-		// Destroy the seed and spawn its satchel effect.
+		/// <summary>Destroy the seed and spawn its satchel effect.</summary>
 		public Entity DestroyWithSatchelEffect() {
 			Entity effectEntity = CreateEffect(type, true, Center);
 			DestroyAndTransform(effectEntity);
 			return effectEntity;
 		}
 
-		private Entity CreateEffect(SeedType seedType, bool satchelEffect, Vector2F effectPosition) {
+		/// <summary>Spawn the effect entity for the given seed type. Some seeds will
+		/// have different effects when dropped from the satchel. Returns the spawned
+		/// effect entity.</summary>
+		private Entity CreateEffect(SeedType seedType,
+			bool satchelEffect, Vector2F effectPosition)
+		{
 			Entity effectEntity = null;
-
-			// Create the seed's effect.
+		
+			// Create the seed's effect
 			if (seedType == SeedType.Ember) {
 				effectEntity = new Fire();
 				AudioSystem.PlaySound(GameData.SOUND_FIRE);
@@ -87,16 +74,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 					AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED_POD);
 				}
 				else {
-					effectEntity = new Effect(GameData.ANIM_EFFECT_SEED_SCENT, DepthLayer.EffectSeed);
+					effectEntity = new Effect(
+						GameData.ANIM_EFFECT_SEED_SCENT, DepthLayer.EffectSeed);
 					AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED);
 				}
 			}
 			else if (seedType == SeedType.Mystery) {
-				effectEntity = new Effect(GameData.ANIM_EFFECT_SEED_MYSTERY, DepthLayer.EffectSeed);
+				effectEntity = new Effect(
+					GameData.ANIM_EFFECT_SEED_MYSTERY, DepthLayer.EffectSeed);
 				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
 			}
 			else if (seedType == SeedType.Pegasus) {
-				effectEntity = new Effect(GameData.ANIM_EFFECT_SEED_PEGASUS, DepthLayer.EffectSeed);
+				effectEntity = new Effect(
+					GameData.ANIM_EFFECT_SEED_PEGASUS, DepthLayer.EffectSeed);
 				AudioSystem.PlaySound(GameData.SOUND_FIRE);
 			}
 			else if (seedType == SeedType.Gale) {
@@ -113,6 +103,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>The type of seed (Ember, Scent, Gale, Pegasus, Mystery).</summary>
 		public SeedType SeedType {
 			get { return type; }
 			set { type = value; }
