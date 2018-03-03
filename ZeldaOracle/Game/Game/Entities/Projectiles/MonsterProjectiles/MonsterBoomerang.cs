@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 
 
 		//-----------------------------------------------------------------------------
-		// Constructor
+		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public MonsterBoomerang() {

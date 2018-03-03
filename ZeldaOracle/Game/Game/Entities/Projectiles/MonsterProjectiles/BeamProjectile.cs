@@ -1,4 +1,5 @@
-﻿using ZeldaOracle.Common.Geometry;
+﻿using System;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Players;
 
@@ -26,9 +27,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
-			// Interactions
-			Interactions.InteractionBox = new Rectangle2F(-2, -2, 4, 4);
-
 			// Projectile
 			syncAnimationWithAngle	= true;
 			projectileType			= ProjectileType.Beam;
@@ -36,8 +34,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			syncAnimationWithAngle	= true;
 
 			// Beam Projectile
-			damage					= 2;
-			flickers				= false;
+			damage		= 2;
+			flickers	= false;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Reactions
+		//-----------------------------------------------------------------------------
+
+		public void OnCollidePlayer(Entity sender, EventArgs args) {
+			((Player) sender).Hurt(damage, position);
+			Destroy();
 		}
 
 
@@ -48,12 +56,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		public override void Initialize() {
 			base.Initialize();
 
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_BEAM);
-
 			if (flickers) {
-				Graphics.FlickerAlternateDelay = 1;
 				Graphics.IsFlickering = true;
+				Graphics.FlickerAlternateDelay = 1;
+
+				// Only flickering beams will damage the player
+				Interactions.Enable();
+				Interactions.InteractionBox = new Rectangle2F(-2, -2, 4, 4);
+				Reactions[InteractionType.PlayerContact].Set(OnCollidePlayer);
 			}
+			else {
+				Reactions[InteractionType.PlayerContact].Clear();
+			}
+
+			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_BEAM);
 		}
 
 		public override void Intercept() {
@@ -61,16 +77,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		}
 
 		public override void OnCollideSolid(Collision collision) {
-			// Disable collisions with the source tile
-			if (!collision.IsTile || collision.Tile != TileOwner)
-				Crash();
-		}
-
-		public override void OnCollidePlayer(Player player) {
-			// Only the flickering beams can damage the player
-			if (flickers)
-				player.Hurt(damage, position);
-			Destroy();
+			Crash();
 		}
 
 

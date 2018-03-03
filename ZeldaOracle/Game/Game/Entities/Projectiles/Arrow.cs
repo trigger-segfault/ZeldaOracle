@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	

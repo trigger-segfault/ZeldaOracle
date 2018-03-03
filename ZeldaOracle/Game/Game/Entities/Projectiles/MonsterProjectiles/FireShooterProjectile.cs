@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 
@@ -19,15 +13,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		private int damage;
 		private int timer;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public FireShooterProjectile() {
-			projectileType  = ProjectileType.Magic;
-			crashAnimation  = null;
-			syncAnimationWithDirection = true;
-			damage          = 6;
+			// Graphics
 			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
 
 			// Physics
@@ -39,15 +31,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
+			// Projectile
+			projectileType				= ProjectileType.Magic;
+			crashAnimation				= null;
+			syncAnimationWithDirection	= true;
+			damage						= 6;
+
 			// TODO: Confirm accuracy of collision boxes.
 			// NOTE: Speed is not an identical match as the projectile
 			// speeds up and slows down differently for all 3 phases.
 			// Speed is also designed to slow down once it reached the
 			// tile it was going to collide with in dungeon 5.
 			// AKA: It's speed was only designed for one use scenario.
-
-			phase = 0;
-			timer = 0;
 		}
 
 
@@ -58,13 +53,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		public override void Initialize() {
 			base.Initialize();
 			
+			phase = 0;
+			timer = 0;
+
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_SMALL);
 		}
 
 		public override void Update() {
 			base.Update();
 			
-			if (phase < 2 && timer >= GameSettings.PROJECTILE_FIRE_SHOOTER_PHASE_DURATIONS[phase]) {
+			if (phase < 2 &&
+				timer >= GameSettings.PROJECTILE_FIRE_SHOOTER_PHASE_DURATIONS[phase])
+			{
 				phase++;
 				timer = 0;
 				if (phase == 1) {

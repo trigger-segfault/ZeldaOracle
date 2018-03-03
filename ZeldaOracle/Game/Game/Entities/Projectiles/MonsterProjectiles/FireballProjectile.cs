@@ -13,10 +13,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public FireballProjectile() {
+			// Graphics
+			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
+
+			// Projectile
 			projectileType	= ProjectileType.Magic;
 			crashAnimation	= null;
 			damage			= 2;
-			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
 		}
 
 

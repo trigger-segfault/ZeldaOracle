@@ -2,7 +2,6 @@
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 

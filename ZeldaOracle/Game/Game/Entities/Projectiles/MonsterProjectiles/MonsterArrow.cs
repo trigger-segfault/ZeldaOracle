@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 	
 	public class MonsterArrow : Arrow {
+		
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
 
 		public MonsterArrow() : this(false) {
 		}
@@ -17,6 +18,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			syncAnimationWithDirection	= true;
 		}
 		
+		
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
 		public override void Initialize() {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_ARROW);

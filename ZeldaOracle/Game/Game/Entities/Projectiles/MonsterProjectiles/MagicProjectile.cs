@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 	
@@ -19,21 +11,24 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public MagicProjectile() {
-			// General
-			syncAnimationWithDirection = true;
-			projectileType = ProjectileType.Magic;
+			// Graphics
+			Graphics.DepthLayer = DepthLayer.ProjectileArrow;
 			
 			// Physics
-			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
+			Physics.CollisionBox = new Rectangle2F(-1, -1, 2, 1);
 			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
-			// Graphics
-			Graphics.DepthLayer = DepthLayer.ProjectileArrow;
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2F(-1, -1, 2, 1);
+
+			// Projectile
+			syncAnimationWithDirection = true;
+			projectileType = ProjectileType.Magic;
 		}
 
 

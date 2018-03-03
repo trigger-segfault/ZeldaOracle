@@ -101,7 +101,7 @@ namespace ZeldaOracle.Game.Entities {
 			base(entity)
 		{
 			interactionBox			= Rectangle2F.Zero;
-			interactionManager		= null;
+			interactionManager		= new InteractionEventManager(entity);
 			interactionType			= InteractionType.None;
 			interactionEventArgs	= null;
 			currentActions			= new List<InteractionCollision>();
