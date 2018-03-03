@@ -114,11 +114,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		/// <summary>Performs tile and monster collision checks.</summary>
 		private void CollisionChecks() {
-			// Trigger the thrown tile interaction
-			RoomControl.InteractionManager.TriggerInteractionsOnce(
+			// Trigger the thrown-object interaction
+			RoomControl.InteractionManager.TriggerReaction(
 				this, InteractionType.ThrownObject);
-			if (IsDestroyed)
-				return;
 
 			// Collide with surface tiles
 			Point2I tileLoc = RoomControl.GetTileLocation(position);

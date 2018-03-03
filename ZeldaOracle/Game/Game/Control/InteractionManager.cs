@@ -45,8 +45,10 @@ namespace ZeldaOracle.Game.Control {
 				if (actionEntity.Interactions.IsEnabled &&
 					actionEntity.Interactions.InteractionType != InteractionType.None)
 				{
+					Rectangle2F actionBox = actionEntity.Interactions.InteractionBox;
 					DetectReactionsFromEntity(actionEntity,
-						actionEntity.Interactions.InteractionType);
+						actionEntity.Interactions.InteractionType, actionBox,
+						actionEntity.Interactions.InteractionEventArgs);
 				}
 			}
 			
@@ -86,10 +88,9 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Detect all interaction collisions caused by the given entity and
 		/// interaction type.</summary>
-		private void DetectReactionsFromEntity(
-			Entity actionEntity, InteractionType type)
+		private void DetectReactionsFromEntity(Entity actionEntity,
+			InteractionType type, Rectangle2F actionBox, EventArgs arguments, bool autoDetected = true)
 		{
-			Rectangle2F actionBox = actionEntity.Interactions.InteractionBox;
 			Rectangle2F positionedActionBox = Rectangle2F.Translate(
 				actionBox, actionEntity.Position);
 
@@ -106,11 +107,11 @@ namespace ZeldaOracle.Game.Control {
 					// Udpate or create the interaction between these two entities
 					InteractionCollision interaction = GetInteractionCollision(
 						actionEntity, reactionEntity, type);
-					interaction.StayAlive = true;
-					interaction.ActionBox = actionBox;
-					interaction.ReactionBox = reactionBox;
-					interaction.Arguments =
-						actionEntity.Interactions.InteractionEventArgs;
+					interaction.AutoDetected	= autoDetected;
+					interaction.ActionBox		= actionBox;
+					interaction.ReactionBox		= reactionBox;
+					interaction.Arguments		= arguments;
+					interaction.StayAlive		= true;
 					interaction.Duration++;
 				}
 			}
@@ -171,31 +172,52 @@ namespace ZeldaOracle.Game.Control {
 		
 
 		//-----------------------------------------------------------------------------
-		// Interaction Triggering
+		// Interaction Interface
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Process the interactions that an sender entity triggers upon
-		/// other entities.</summary>
-		public void TriggerInteractionsOnce(Entity sender, InteractionType type) {
-			Rectangle2F senderBox = sender.Interactions.PositionedInteractionBox;
+		/// <summary>Instantly detect and trigger an reactions for an entity.</summary>
+		public void TriggerInstantReaction(Entity actionEntity, InteractionType type) {
+			Rectangle2F actionBox = actionEntity.Interactions.PositionedInteractionBox;
+			Rectangle2F positionedActionBox = Rectangle2F.Translate(
+				actionBox, actionEntity.Position);
 
-			foreach (Entity subject in roomControl.ActiveEntities) {
-				Rectangle2F subjectBox =
-					subject.Interactions.GetInteractionBox(type);
-				subjectBox.Point += subject.Position;
+			// Find all reacting entities
+			foreach (Entity reactionEntity in roomControl.ActiveEntities) {
+				Rectangle2F reactionBox = reactionEntity.Interactions.InteractionBox;
+				Rectangle2F positionedReactionBox = Rectangle2F.Translate(
+					reactionBox, reactionEntity.Position);
 
-				if (sender != subject && subject.Interactions.IsEnabled &&
-					subjectBox.Intersects(senderBox))
+				if (reactionEntity != actionEntity &&
+					reactionEntity.Interactions.IsEnabled &&
+					positionedReactionBox.Intersects(positionedActionBox))
 				{
-					Entity actualSender = sender;
-					if (sender.Parent != null)
-						actualSender = sender.Parent;
-					subject.Interactions.Trigger(type, actualSender,
-						sender.Interactions.InteractionEventArgs);
-					if (sender.IsDestroyed || !sender.Interactions.IsEnabled)
-						return;
+					Entity actualActionEntity = actionEntity;
+					if (actionEntity.Parent != null)
+						actualActionEntity = actionEntity.Parent;
+
+					reactionEntity.Interactions.Trigger(type, actualActionEntity,
+						actionEntity.Interactions.InteractionEventArgs);
+
+					if (!actionEntity.IsAliveAndInRoom ||
+						!actionEntity.Interactions.IsEnabled)
+						break;
 				}
 			}
+		}
+
+		/// <summary>Cause an action to happen for this frame.</summary>
+		public void TriggerReaction(Entity actionEntity, InteractionType type)
+		{
+			DetectReactionsFromEntity(actionEntity, type,
+				actionEntity.Interactions.InteractionBox,
+				actionEntity.Interactions.InteractionEventArgs, false);
+		}
+
+		/// <summary>Cause an action to happen for this frame.</summary>
+		public void TriggerReaction(Entity actionEntity, InteractionType type,
+			Rectangle2F actionBox, EventArgs arguments = null)
+		{
+			DetectReactionsFromEntity(actionEntity, type, actionBox, arguments, false);
 		}
 
 		

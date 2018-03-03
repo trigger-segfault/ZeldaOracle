@@ -85,14 +85,14 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			//	monster.Interactions.Trigger(InteractionType.Shovel, Player);
 			//}
 			Rectangle2F shovelHitBox = new Rectangle2F(-4, -4, 8, 8);
-			shovelHitBox.Point += Player.Center;
 			shovelHitBox.ExtendEdge(Player.Direction, 7);
+			shovelHitBox.Point += Player.CenterOffset;
 
-			foreach (Entity entity in
-				RoomControl.GetInteractingEntities(shovelHitBox))
-			{
-				entity.Interactions.Trigger(InteractionType.Shovel, Player);
-			}
+			EventArgs actionArguments = new WeaponInteractionEventArgs() {
+				Weapon = this
+			};
+			RoomControl.InteractionManager.TriggerReaction(Player,
+				InteractionType.Shovel, shovelHitBox, actionArguments);
 		}
 
 

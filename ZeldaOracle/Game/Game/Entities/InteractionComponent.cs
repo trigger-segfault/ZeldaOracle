@@ -25,10 +25,10 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsValid() {
-			return (actionEntity.IsAliveAndInRoom &&
-				reactionEntity.IsAliveAndInRoom &&
-				actionEntity.Interactions.IsEnabled &&
-				reactionEntity.Interactions.IsEnabled);
+			return (reactionEntity.IsAliveAndInRoom &&
+				reactionEntity.Interactions.IsEnabled &&
+				(!AutoDetected || (actionEntity.IsAliveAndInRoom &&
+					actionEntity.Interactions.IsEnabled)));
 		}
 
 
@@ -72,6 +72,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool StayAlive { get; set; }
+		public bool AutoDetected { get; set; }
 	}
 	
 	public class InteractionComponent : EntityComponent {
