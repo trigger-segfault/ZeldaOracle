@@ -284,8 +284,16 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Return the direction as a polar vector with the given magnitude.
 		/// </summary>
 		public Vector2F ToVector(float magnitude = 1.0f) {
-			float radians = ToRadians();
-			return new Vector2F(GMath.Cos(radians), -GMath.Sin(radians)) * magnitude;
+			if (index == 0)
+				return new Vector2F(magnitude, 0); // right
+			else if (index == 1)
+				return new Vector2F(0, -magnitude); // up
+			else if (index == 2)
+				return new Vector2F(-magnitude, 0); // left
+			else if (index == 3)
+				return new Vector2F(0, magnitude); // down
+			else
+				return Vector2F.Zero; // invalid
 		}
 
 		/// <summary>Return the direction as a point with the given magnitude.
@@ -675,27 +683,45 @@ namespace ZeldaOracle.Common.Geometry {
 				return "up";
 			if (direction == Directions.Down)
 				return "down";
-			return "error";
+			return "invalid";
 		}
 		
 		public static bool TryParse(string value, bool ignoreCase, out int result) {
 			if (ignoreCase)
 				value = value.ToLower();
 			if (value == "right" || value == "east")
-				result = Directions.Right;
+				result = Direction.Right;
 			else if (value == "left" || value == "west")
-				result = Directions.Left;
+				result = Direction.Left;
 			else if (value == "up" || value == "north")
-				result = Directions.Up;
+				result = Direction.Up;
 			else if (value == "down" || value == "south")
-				result = Directions.Down;
+				result = Direction.Down;
 			else {
-				result = -1;
+				result = Direction.Invalid;
 				return false;
 			}
 			return true;
 		}
-		
+
+		public static bool TryParse(string value, bool ignoreCase, out Direction result) {
+			if (ignoreCase)
+				value = value.ToLower();
+			if (value == "right" || value == "east")
+				result = Direction.Right;
+			else if (value == "left" || value == "west")
+				result = Direction.Left;
+			else if (value == "up" || value == "north")
+				result = Direction.Up;
+			else if (value == "down" || value == "south")
+				result = Direction.Down;
+			else {
+				result = Direction.Invalid;
+				return false;
+			}
+			return true;
+		}
+
 		/*public static DirectionMask GetDirectionBit(int direction) {
 			if (direction >= 0 && direction < Count)
 				return (DirectionMask) (1 << direction);

@@ -537,9 +537,30 @@ namespace ZeldaOracle.Game.Tiles {
 			// Update path following.
 			else if (path != null) {
 				TilePathMove move = path.Moves[pathMoveIndex];
-					
-				// Begin the next move in the path after the delay has been passed.
+
+				// Skip any move operations with no distance.
+				// Make sure no extra frames are paused for.
 				if (pathTimer >= move.Delay) {
+					for (int i = 0; i < path.Moves.Count && !move.HasMovement; i++) {
+						pathMoveIndex++;
+						if (pathMoveIndex >= path.Moves.Count) {
+							if (path.Repeats)
+								pathMoveIndex = 0;
+							else {
+								path = null;
+								break;
+							}
+						}
+						pathTimer = 0;
+						move = path.Moves[pathMoveIndex];
+						// It's not a dead move command
+						if (move.Delay > 0)
+							break;
+					}
+				}
+
+				// Begin the next move in the path after the delay has been passed.
+				if (path != null && pathTimer >= move.Delay && move.HasMovement) {
 					Move(move.Direction, move.Distance, move.Speed);
 					pathTimer = 0;
 					pathMoveIndex++;

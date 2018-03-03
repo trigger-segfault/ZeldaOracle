@@ -386,6 +386,22 @@ namespace ZeldaEditor {
 			}
 		}
 
+		private void OnViewPathsCommands(object sender, ExecutedRoutedEventArgs e) {
+			if (editorControl.EditingTileData is TileDataInstance) {
+				var tile = (TileDataInstance) editorControl.EditingTileData;
+				string oldPath = tile.Properties.GetString("path", "");
+				string newPath = TilePathEditor.ShowEditor(this,
+					editorControl, tile.Properties, "path");
+
+				editorControl.PushPropertyAction(tile,
+					"path", oldPath, newPath, ActionExecution.Execute);
+			}
+			else if (editorControl.EditingRoom != null) {
+				TilePathEditor.ShowViewer(this, editorControl,
+					editorControl.EditingRoom);
+			}
+		}
+
 		private void CanAlwaysExecute(object sender, CanExecuteRoutedEventArgs e) {
 			e.CanExecute = true;
 		}
@@ -591,6 +607,12 @@ namespace ZeldaEditor {
 
 		private void OnShowModifiedTilesChecked(object sender, RoutedEventArgs e) {
 			editorControl.ShowModified = dropDownItemShowModified.IsChecked;
+		}
+
+		private void CanExecuteViewPaths(object sender, CanExecuteRoutedEventArgs e) {
+			if (!suppressEvents) return;
+			e.CanExecute = (editorControl.EditingRoom != null ||
+				editorControl.EditingTileData is TileDataInstance);
 		}
 
 		private void CanExecuteCopyCut(object sender, CanExecuteRoutedEventArgs e) {
