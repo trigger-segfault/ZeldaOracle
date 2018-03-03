@@ -1,0 +1,59 @@
+﻿<Window x:Class="ZeldaEditor.Windows.TilePathEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:cmd="clr-namespace:ZeldaEditor"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="Tile Path Editor" Height="400" Width="429" Background="#FFF0F0F0" ResizeMode="NoResize" Icon="/Resources/Icons/TilePath.png" SnapsToDevicePixels="True" UseLayoutRounding="True" ShowInTaskbar="False" SizeToContent="Width">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" CanExecute="CanSave" Executed="OnSave"/>
+    </Window.CommandBindings>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Left">
+            <Border BorderBrush="Black" BorderThickness="1" Margin="10" VerticalAlignment="Top">
+                <WindowsFormsHost x:Name="host" Width="160" Height="144"/>
+            </Border>
+            <StackPanel x:Name="stackPanelView" Margin="14,0,14,0">
+                <CheckBox x:Name="checkBoxAllPaths" Content="Run all Paths" Margin="0,0,0,4" Click="OnRunAllPathsChanged"/>
+                <CheckBox x:Name="checkBoxHighlightPath" Content="Highlight Path" Margin="0,0,0,4" Click="OnHighlightPathChanged"/>
+            </StackPanel>
+            <StackPanel Margin="14,0,14,14">
+                <CheckBox x:Name="checkBoxFadeTiles" Content="Fade Tiles" Margin="0,0,0,4" Click="OnFadeTilesChanged"/>
+                <Button Content="Restart" Margin="0,4,0,0" Height="20" Padding="1,0" Click="OnRestart"/>
+            </StackPanel>
+        </StackPanel>
+        <Border x:Name="borderEditor" BorderBrush="#FF828790" BorderThickness="1,0" Background="White" Width="241">
+            <DockPanel>
+                <ToolBar DockPanel.Dock="Top">
+                    <local:ImageButton x:Name="buttonFinish" ToolTip="Finish editing and save changes" Source="/Resources/Icons/Checkmark.png" Click="OnFinished"/>
+                    <local:ImageButton x:Name="buttonSave" ToolTip="Save changes" Source="/Resources/Icons/Save.png" Command="Save"/>
+                    <local:ImageButton x:Name="buttonDelete" ToolTip="Delete tile path" Source="/Resources/Icons/Delete.png" Click="OnDeleteTilePath" />
+                    <Separator/>
+                    <local:ImageButton x:Name="buttonAdd" Content="Add" Source="/Resources/Icons/TilePathAdd.png" Click="OnAddCommand"/>
+                    <local:ImageToggleButton x:Name="buttonRepeats" Content="Repeats" Source="/ZeldaEditor;component/Resources/Icons/TilePathRepeats.png" Click="OnRepeatsChanged" />
+                </ToolBar>
+                <Border BorderThickness="0,1,0,0" BorderBrush="#FF828790">
+                    <ScrollViewer x:Name="scrollViewer">
+                        <ItemsControl x:Name="itemsControl">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Border>
+    </DockPanel>
+</Window>

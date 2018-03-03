@@ -115,6 +115,9 @@ namespace ZeldaEditor.Control {
 		private bool            roomOnly;
 		private bool			merge;
 
+		private Room editingRoom;
+		private BaseTileDataInstance editingTileData;
+
 		private StoppableTimer					updateTimer;
 		private bool			resourcesLoaded;
 
@@ -554,7 +557,8 @@ namespace ZeldaEditor.Control {
 		public void OpenLevel(Level level) {
 			if (this.level != level) {
 				this.level = level;
-				CurrentTool.Finish();
+				CurrentTool.End();
+				CurrentTool.Begin();
 				LevelDisplay.ChangeLevel();
 				UpdateWindowTitle();
 				PropertyGrid.OpenProperties(level);
@@ -738,6 +742,41 @@ namespace ZeldaEditor.Control {
 			}
 			undoPosition = 0;
 			editorWindow.SelectHistoryItem(undoActions[undoPosition]);
+		}
+
+		/// <summary>Pushes the property change action to the list and
+		/// performs the specified execution.</summary>
+		public void PushPropertyAction(IPropertyObject propertyObject,
+			string propertyName, object oldValue, object newValue,
+			ActionExecution execution = ActionExecution.None)
+		{
+			Property property = propertyObject.Properties.
+				GetProperty(propertyName, true);
+			ActionChangeProperty action = new ActionChangeProperty(
+					propertyObject, property, oldValue, newValue);
+
+			// Special behavior for updating changes to tile size
+			bool isTileSize = (property.Name == "size" &&
+									propertyObject is TileDataInstance);
+			if (isTileSize) {
+				action = new ActionChangeTileSizeProperty(
+					(TileDataInstance) propertyObject, property,
+					(Point2I) oldValue, (Point2I) newValue);
+				PushAction(action, ActionExecution.Execute);
+				return;
+			}
+
+			if (LastAction is ActionChangeProperty) {
+				ActionChangeProperty lastAction =
+						(ActionChangeProperty) LastAction;
+				if (action.PropertyObject == lastAction.PropertyObject &&
+					action.PropertyName == lastAction.PropertyName) {
+					action.OldValue = lastAction.OldValue;
+					PopAction();
+				}
+			}
+
+			PushAction(action, execution);
 		}
 
 
@@ -1139,6 +1178,26 @@ namespace ZeldaEditor.Control {
 
 		public bool IsSelectedTileAnAction {
 			get { return (selectedTileData is ActionTileData); }
+		}
+
+		public Room EditingRoom {
+			get { return editingRoom; }
+			set {
+				editingRoom = value;
+				editingTileData = null;
+			}
+		}
+
+		public BaseTileDataInstance EditingTileData {
+			get { return editingTileData; }
+			set {
+				editingTileData = value;
+				editingRoom = null;
+			}
+		}
+
+		public bool IsEditingTileAnAction {
+			get { return (editingTileData is ActionTileDataInstance); }
 		}
 
 		// Tools ----------------------------------------------------------------------

@@ -415,7 +415,7 @@ namespace ZeldaOracle.Game.Worlds {
 					if (oldRooms != null && x < dimensions.X && y < dimensions.Y)
 						rooms[x, y] = oldRooms[x, y];
 					else
-						rooms[x, y] = new Room(this, x, y, Zone ?? GameData.ZONE_DEFAULT);
+						rooms[x, y] = new Room(this, x, y);
 				}
 			}
 
@@ -434,7 +434,7 @@ namespace ZeldaOracle.Game.Worlds {
 					else if (restoredRooms.ContainsKey(new Point2I(x, y)))
 						rooms[x, y] = restoredRooms[new Point2I(x, y)];
 					else
-						rooms[x, y] = new Room(this, x, y, Zone ?? GameData.ZONE_DEFAULT);
+						rooms[x, y] = new Room(this, x, y);
 				}
 			}
 
@@ -454,7 +454,7 @@ namespace ZeldaOracle.Game.Worlds {
 						rooms[x, y].Location = new Point2I(x, y);
 					}
 					else
-						rooms[x, y] = new Room(this, x, y, Zone ?? Resources.GetResource<Zone>(""));
+						rooms[x, y] = new Room(this, x, y);
 				}
 			}
 		}
@@ -477,7 +477,7 @@ namespace ZeldaOracle.Game.Worlds {
 						rooms[x, y].Location = location;
 					}
 					else
-						rooms[x, y] = new Room(this, location, Zone ?? Resources.GetResource<Zone>(""));
+						rooms[x, y] = new Room(this, location);
 				}
 			}
 		}

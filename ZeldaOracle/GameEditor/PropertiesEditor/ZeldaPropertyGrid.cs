@@ -101,8 +101,12 @@ namespace ZeldaEditor.PropertiesEditor {
 				CustomPropertyDescriptor propertyDescriptor =
 					(CustomPropertyDescriptor) baseDescriptor;
 				Property property = propertyDescriptor.Property;
-				ActionChangeProperty action = new ActionChangeProperty(
-					propertyObject,property, e.OldValue, e.NewValue);
+
+				editorControl.PushPropertyAction(propertyObject,
+					property.Name, e.OldValue, e.NewValue, ActionExecution.None);
+
+				/*ActionChangeProperty action = new ActionChangeProperty(
+					propertyObject, property, e.OldValue, e.NewValue);
 
 				// Special behavior for updating changes to tile size
 				bool isTileSize = (property.Name == "size" &&
@@ -126,7 +130,7 @@ namespace ZeldaEditor.PropertiesEditor {
 					}
 				}
 
-				editorControl.PushAction(action, ActionExecution.None);
+				editorControl.PushAction(action, ActionExecution.None);*/
 			}
 		}
 

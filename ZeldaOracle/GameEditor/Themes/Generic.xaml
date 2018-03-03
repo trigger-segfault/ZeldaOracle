@@ -79,6 +79,56 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
+    <Style TargetType="{x:Type local:HoverImageButton}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Height" Value="22"/>
+        <Setter Property="Padding" Value="2,0,3,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:HoverImageButton}">
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Image x:Name="image" Stretch="None" HorizontalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Source="{TemplateBinding Source}">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" Value="0.5" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            <ContentPresenter x:Name="content" Content="{TemplateBinding Content}" VerticalAlignment="Center" Margin="2,0"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Content" Value="{x:Null}">
+                            <Setter Property="Visibility" TargetName="content" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ToolBarButtonHoverBorder}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ToolBarButtonHover}"/>
+                            <Setter TargetName="image" Property="Source" Value="{Binding Path=SourceHover, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ToolBarButtonHoverBorder}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ToolBarButtonHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ToolBarButtonPressedBorder}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ToolBarButtonPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="{x:Type local:ImageToggleButton}" BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}">
         <Setter Property="Height" Value="22"/>
         <Setter Property="Padding" Value="2,0,3,0"/>
@@ -1976,7 +2026,7 @@
         <Setter Property="IsTabStop"  Value="False" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Right" />
-        <Setter Property="WatermarkTemplate" Value="{StaticResource DefaultWatermarkTemplate}" />
+        <!--<Setter Property="WatermarkTemplate" Value="{StaticResource DefaultWatermarkTemplate}" />-->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PointUpDown}">
@@ -2021,9 +2071,9 @@
                                           TextAlignment="{Binding TextAlignment, RelativeSource={RelativeSource TemplatedParent}}"
                                           TextWrapping="NoWrap" 
                                           TabIndex="{TemplateBinding TabIndex}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Watermark="{Binding Watermark, RelativeSource={RelativeSource TemplatedParent}}"
-                                          WatermarkTemplate="{Binding WatermarkTemplate, RelativeSource={RelativeSource TemplatedParent}}" />
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                          <!--Watermark="{Binding Watermark, RelativeSource={RelativeSource TemplatedParent}}"
+                                          WatermarkTemplate="{Binding WatermarkTemplate, RelativeSource={RelativeSource TemplatedParent}}" />-->
                         </xctk:ButtonSpinner>
                     </xctk:ButtonSpinner>
                     <ControlTemplate.Triggers>

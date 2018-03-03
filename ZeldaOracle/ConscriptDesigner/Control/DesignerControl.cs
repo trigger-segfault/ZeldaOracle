@@ -23,7 +23,9 @@ using Xceed.Wpf.AvalonDock.Layout;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
@@ -428,7 +430,7 @@ namespace ConscriptDesigner.Control {
 
 				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
 				rewardManager = new RewardManager(null);
-				GameData.Initialize(rewardManager);
+				GameData.Initialize(false, rewardManager);
 
 				//Console.WriteLine("Loading Rewards");
 				//rewardManager = new RewardManager(null);
@@ -490,7 +492,8 @@ namespace ConscriptDesigner.Control {
 				string filePath = Path.Combine(folder.OutputFilePath, leftoverFile);
 				if (Directory.Exists(filePath))
 					Directory.Delete(filePath, true);
-				else
+				else if (!PathHelper.IsPathTheSame(filePath,
+					PalettedSpriteDatabase.DatabaseFile))
 					File.Delete(Path.Combine(folder.OutputFilePath, leftoverFile));
 			}
 		}
