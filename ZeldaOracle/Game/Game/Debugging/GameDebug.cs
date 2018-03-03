@@ -624,9 +624,7 @@ namespace ZeldaOracle.Game.Debug {
 			}
 
 			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
-				// Blue soft collision box
-				//g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position,
-					//new Color(0, 0, 255, 150));
+				// Blue interaction box
 				if (entity.Interactions.IsEnabled)
 					g.FillRectangle(entity.Interactions.InteractionBox + entity.Position,
 						new Color(0, 0, 255, 150));

@@ -424,9 +424,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// position.</summary>
 		public void LandOnSurface() {
 			// Break tiles in the way, not if on a color barrier.
-			foreach (Tile tile in Physics.GetTilesMeeting(
-				position, CollisionBoxType.Hard))
-			{
+			foreach (Tile tile in Physics.GetTilesMeeting(position)) {
 				if (tile.IsSolid) {
 					if (tile.IsBreakable)
 						tile.Break(false);
@@ -485,9 +483,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			LandOnSurface();
 
 			// If colliding with a door, then move forward one tile
-			foreach (Tile tile in Physics.GetTilesMeeting(
-				position, CollisionBoxType.Hard))
-			{
+			foreach (Tile tile in Physics.GetTilesMeeting(position)) {
 				if ((tile is TileDoor) && tile.IsSolid) {
 					SetPositionByCenter(tile.Center + Directions.ToVector(
 						((TileDoor) tile).Direction) * GameSettings.TILE_SIZE);

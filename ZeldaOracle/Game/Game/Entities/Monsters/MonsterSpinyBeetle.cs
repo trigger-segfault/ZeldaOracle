@@ -278,7 +278,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Avoid moving into a hazardous or solid tiles
 			foreach (Tile tile in Physics.GetTilesMeeting(
-				Position + Physics.Velocity, CollisionBoxType.Hard))
+				Position + Physics.Velocity))
 			{
 				if (tile.IsHoleWaterOrLava) {
 					if (direction == Directions.Left || direction == Directions.Up) {
@@ -313,9 +313,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Vector2F nextVelocity = Angles.ToVector(moveAngle) * moveSpeed;
 
 			// Avoid moving into a hazardous or solid tiles
-			foreach (Tile tile in Physics.GetTilesMeeting(
-				Position + nextVelocity, CollisionBoxType.Hard))
-			{
+			foreach (Tile tile in Physics.GetTilesMeeting(Position + nextVelocity)) {
 				if (tile.IsHoleWaterOrLava || tile.IsSolid) {
 					StopCharging();
 					return;
@@ -345,9 +343,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Vector2F velocity = Angles.ToVector(moveAngle) * moveSpeed;
 			
 			// Avoid moving into a hazardous tile
-			foreach (Tile tile in Physics.GetTilesMeeting(
-				Position + velocity, CollisionBoxType.Hard))
-			{
+			foreach (Tile tile in Physics.GetTilesMeeting(Position + velocity)) {
 				if (tile.IsHoleWaterOrLava) {
 					int direction = Directions.NearestFromVector(tile.Center - Physics.PositionedCollisionBox.Center);
 					int axis = Directions.ToAxis(direction);

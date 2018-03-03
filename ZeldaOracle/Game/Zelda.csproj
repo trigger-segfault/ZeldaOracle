@@ -283,7 +283,6 @@
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionInfo.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionStyle.cs" />
-    <Compile Include="Game\Entities\Collisions\CollisionTest.cs" />
     <Compile Include="Game\Entities\DamageInfo.cs" />
     <Compile Include="Game\Entities\DepthLayer.cs" />
     <Compile Include="Game\Entities\Effects\EffectCling.cs" />

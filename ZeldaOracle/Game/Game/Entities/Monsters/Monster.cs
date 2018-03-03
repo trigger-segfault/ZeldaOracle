@@ -278,8 +278,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				return false;
 
 			// Check for touching the player
-			if (Physics.IsPlaceMeetingEntity(spawnPosition,
-				RoomControl.Player, CollisionBoxType.Soft))
+			if (Rectangle2F.Translate(Interactions.InteractionBox, spawnPosition)
+				.Intersects(RoomControl.Player.Interactions.InteractionBox))
 				return false;
 
 			return true;
@@ -357,15 +357,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (ignoreZPosition)
 				ZPosition = 0;
 
-			// Check for minecart interactions
-			// TODO: Move this trigger into PlayerMineCartState
-			//if (!isPassable && player.IsInMinecart &&
-			//	physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
-			//	TriggerInteraction(InteractionType.MineCart, player);
-			//	if (IsDestroyed)
-			//		return;
-			//}
-
 			if (isPassable || player.IsPassable || GMath.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
 				return;
 
@@ -425,10 +416,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			bool parry = false;
 
 			// Check collisions with player
-			if (!parry && !IsStunned &&
-				physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
-				Interactions.Trigger(InteractionType.PlayerContact, player);
-			}
+			// ...
 
 			if (ignoreZPosition)
 				ZPosition = tempZPosition;

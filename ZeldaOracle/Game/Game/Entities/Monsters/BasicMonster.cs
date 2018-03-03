@@ -136,16 +136,18 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 	
 		protected virtual bool CanMoveInAngle(int moveAngle) {
-			Vector2F v = GetMovementVelocity(moveAngle, moveSpeed);
-			Vector2F testPosition = position + (v * 1.1f);
+			Vector2F velocity = GetMovementVelocity(moveAngle, moveSpeed);
+			Vector2F testPosition = position + (velocity * 1.1f);
+
+			// Prohibit moving into a solid collision
 			if (Physics.IsPlaceMeetingSolid(testPosition) ||
 				Physics.IsPlaceMeetingRoomEdge(testPosition))
 			{
 				return false;
 			}
 			
-			if (Physics.GetTilesMeeting(testPosition, CollisionBoxType.Hard)
-				.Any(t => t.IsHoleWaterOrLava))
+			// Prohibit moving into a hazard tile
+			if (Physics.GetTilesMeeting(testPosition).Any(t => t.IsHoleWaterOrLava))
 				return false;
 
 			return true;
@@ -290,7 +292,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (avoidHazardTiles) {
 				// Avoid moving into a hazardous tile
 				foreach (Tile tile in Physics.GetTilesMeeting(
-					position + physics.Velocity * 1.1f, CollisionBoxType.Hard)) {
+					position + physics.Velocity * 1.1f)) {
 					if (tile.IsHoleWaterOrLava) {
 						StopCharging();
 						return;
@@ -330,7 +332,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			{
 				// Avoid moving into a hazardous tile
 				foreach (Tile tile in Physics.GetTilesMeeting(
-					position + physics.Velocity * 1.1f, CollisionBoxType.Hard))
+					position + physics.Velocity * 1.1f))
 				{
 					if (tile.IsHoleWaterOrLava) {
 						ChangeDirection();
@@ -439,8 +441,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					else if (chargeType != ChargeType.None) {
 						int directionToPlayer = Direction.FromVector(
 							RoomControl.Player.Center - Center);
-						if (Entity.AreEntitiesCollisionAligned(this, RoomControl.Player,
-							directionToPlayer, CollisionBoxType.Hard))
+						if (Entity.AreEntitiesCollisionAligned(
+							this, RoomControl.Player, directionToPlayer))
 						{
 							StartCharging(directionToPlayer);
 							return;

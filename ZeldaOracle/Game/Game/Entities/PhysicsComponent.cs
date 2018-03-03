@@ -51,13 +51,11 @@ namespace ZeldaOracle.Game.Entities {
 		PassingUp,
 	}
 
-	public class PhysicsComponent {
+	public class PhysicsComponent : EntityComponent {
 
 		public delegate bool TileCollisionCondition(Tile tile);
 
 		// General
-		private Entity					entity;				// The entity this component belongs to.
-		private bool					isEnabled;			// Are physics enabled for the entity?
 		private PhysicsFlags			flags;
 		private float					gravity;			// Gravity in pixels per frame^2
 		private float					maxFallSpeed;
@@ -99,52 +97,49 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		// By default, physics are disabled.
-		public PhysicsComponent(Entity entity) {
-			this.isEnabled			= false;
-			this.flags				= PhysicsFlags.None;
-			this.entity				= entity;
-			this.velocity			= Vector2F.Zero;
-			this.zVelocity			= 0.0f;
-			this.previousVelocity	= Vector2F.Zero;
-			this.previousZVelocity	= 0.0f;
-			this.gravity			= GameSettings.DEFAULT_GRAVITY;
-			this.maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
-			this.collisionBox		= new Rectangle2F(-1, -1, 2, 2);
-			this.softCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
-			this.braceletCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
-			this.topTile			= null;
-			this.topTilePointOffset	= Vector2F.Zero;
-			this.isColliding		= false;
-			this.autoDodgeDistance	= 6;
-			this.autoDodgeSpeed		= 1.0f;
-			this.hasLanded			= false;
-			this.reboundVelocity	= Vector2F.Zero;
-			this.ledgeAltitude		= 0;
-			this.ledgeTileLocation	= new Point2I(-1, -1);
-			this.ledgePassState		= LedgePassState.None;
-			this.ledgePassTile		= null;
-			this.roomEdgeCollisionBoxType		= CollisionBoxType.Hard;
-			this.customTileIsSolidCondition		= null;
-			this.potentialCollisions			= new List<Collision>();
-			this.previousPotentialCollisions	= new List<Collision>();
+		public PhysicsComponent(Entity entity) :
+			base(entity)
+		{
+			braceletCollisionBox = new Rectangle2F(-1, -1, 2, 2);
 
-			this.crushMaxGapSize	= 0;
-			this.edgeClipAmount		= 1;
+			flags				= PhysicsFlags.None;
+			velocity			= Vector2F.Zero;
+			zVelocity			= 0.0f;
+			previousVelocity	= Vector2F.Zero;
+			previousZVelocity	= 0.0f;
+			gravity				= GameSettings.DEFAULT_GRAVITY;
+			maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
+			collisionBox		= new Rectangle2F(-1, -1, 2, 2);
+			softCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
+			topTile				= null;
+			topTilePointOffset	= Vector2F.Zero;
+			isColliding			= false;
+			autoDodgeDistance	= 6;
+			autoDodgeSpeed		= 1.0f;
+			hasLanded			= false;
+			reboundVelocity		= Vector2F.Zero;
+			ledgeAltitude		= 0;
+			ledgeTileLocation	= new Point2I(-1, -1);
+			ledgePassState		= LedgePassState.None;
+			ledgePassTile		= null;
+			roomEdgeCollisionBoxType	= CollisionBoxType.Hard;
+			customTileIsSolidCondition	= null;
+			potentialCollisions			= new List<Collision>();
+			previousPotentialCollisions	= new List<Collision>();
+
+			crushMaxGapSize	= 0;
+			edgeClipAmount	= 1;
 		}
 		
 		//-----------------------------------------------------------------------------
 		// Enable / Disable
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Enable physics with the given physics flags.</summary>
+		/// <summary>Enable the physics component with the given physics flags.
+		/// </summary>
 		public void Enable(PhysicsFlags flags = PhysicsFlags.None) {
-			isEnabled = true;
+			Enable();
 			this.flags |= flags;
-		}
-
-		/// <summary>Disable physics for this entity.</summary>
-		public void Disable() {
-			isEnabled = false;
 		}
 		
 
@@ -165,10 +160,12 @@ namespace ZeldaOracle.Game.Entities {
 		// Flags
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>Returns true if the given physics flags are set.</summary>
 		public bool HasFlags(PhysicsFlags flags) {
 			return ((this.flags & flags) == flags);
 		}
 
+		/// <summary>Set or clear the given physics flags.</summary>
 		public void SetFlags(PhysicsFlags flagsToSet, bool enabled) {
 			if (enabled)
 				flags |= flagsToSet;
@@ -178,26 +175,19 @@ namespace ZeldaOracle.Game.Entities {
 
 		
 		//-----------------------------------------------------------------------------
-		// Collision Iteration
+		// Tile Queries
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Iterate the tiles currently touching this entity.</summary>
-		public IEnumerable<Tile> GetTilesMeeting(CollisionBoxType collisionBoxType) {
-			return GetTilesMeeting(entity.Position, collisionBoxType);
+		/// <summary>Iterate the tiles the would be touching this entity's collision
+		/// box if it were placed at the given position.</summary>
+		public IEnumerable<Tile> GetTilesMeeting(Vector2F position) {
+			return GetTilesMeeting(position, collisionBox);
 		}
 		
-		/// <summary>Iterate the tiles the would be touching this entity if it were
-		/// placed at the given position.</summary>
-		public IEnumerable<Tile> GetTilesMeeting(Vector2F position,
-			CollisionBoxType collisionBoxType)
-		{
-			return GetTilesMeeting(position, GetCollisionBox(collisionBoxType));
-		}
-		
-		/// <summary>Iterate the tiles the would be touching this entity if it were
-		/// placed at the given position.</summary>
-		public IEnumerable<Tile> GetTilesMeeting(Vector2F position,
-			Rectangle2F collisionBox)
+		/// <summary>Iterate the tiles the would be touching this entity's collision
+		/// box if it were placed at the given position.</summary>
+		public IEnumerable<Tile> GetTilesMeeting(
+			Vector2F position, Rectangle2F collisionBox)
 		{
 			// Create rectangular area of nearby tiles to collide with
 			Rectangle2F myBox = collisionBox;
@@ -215,66 +205,16 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 		}
-
-		/// <summary>Iterate the solid tiles currently touching this entity.</summary>
+		
+		/// <summary>Iterate solid tiles which this entity would be colliding with if
+		/// it were placed at the given position and had the given collision box.
+		/// </summary>
 		public IEnumerable<Tile> GetSolidTilesMeeting(
-			CollisionBoxType collisionBoxType)
-		{
-			return GetSolidTilesMeeting(entity.Position,
-				GetCollisionBox(collisionBoxType));
-		}
-		
-		/// <summary>Iterate the solid tiles the would be touching this entity if it
-		/// were placed at the given position.</summary>
-		public IEnumerable<Tile> GetSolidTilesMeeting(Vector2F position,
-			CollisionBoxType collisionBoxType)
-		{
-			return GetSolidTilesMeeting(position,
-				GetCollisionBox(collisionBoxType));
-		}
-		
-		/// <summary>Iterate the solid tiles the would be touching this entity if it
-		/// were placed at the given position.</summary>
-		public IEnumerable<Tile> GetSolidTilesMeeting(Vector2F position,
-			Rectangle2F collisonBox)
+			Vector2F position, Rectangle2F collisonBox)
 		{
 			foreach (Tile tile in GetTilesMeeting(position, collisonBox)) {
 				if (CanCollideWithTile(tile))
 					yield return tile;
-			}
-		}
-
-		// Return a list of solid entities colliding with this entity.
-		public IEnumerable<T> GetSolidEntitiesMeeting<T>(
-			CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity
-		{
-			CollisionTestSettings settings = new CollisionTestSettings(
-				typeof(T), collisionBoxType, maxZDistance);
-			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
-				T other = entity.RoomControl.Entities[i] as T;
-				if (other != null && other.Physics.IsSolid &&
-					CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
-					yield return other;
-			}
-		}
-
-		// Return a list of entities colliding with this entity.
-		public IEnumerable<T> GetEntitiesMeeting<T>(CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity {
-			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), collisionBoxType, maxZDistance);
-			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
-				T other = entity.RoomControl.Entities[i] as T;
-				if (other != null && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
-					yield return other;
-			}
-		}
-
-		// Return a list of entities colliding with this entity.
-		public IEnumerable<T> GetEntitiesMeeting<T>(Rectangle2I myCollisionBox, CollisionBoxType otherCollisionBoxType, int maxZDistance = 10) where T : Entity {
-			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), myCollisionBox, otherCollisionBoxType, maxZDistance);
-			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
-				T other = entity.RoomControl.Entities[i] as T;
-				if (other != null && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
-					yield return other;
 			}
 		}
 
@@ -343,12 +283,13 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Return true if the entity would collide with a tile if it were at
 		/// the given position.</summary>
 		public bool IsPlaceMeetingEntity(Vector2F position, Entity entity,
-			CollisionBoxType collisionBoxType, float maxZDistance = 10)
+			float maxZDistance = 10)
 		{
-			if (CanCollideWithEntity(entity)) {
-				return CollisionTest.PerformCollisionTest(entity, entity,
-					new CollisionTestSettings(null, collisionBoxType,
-					collisionBoxType, maxZDistance)).IsColliding;
+			if (CanCollideWithEntity(entity) &
+				Rectangle2F.Translate(collisionBox, position)
+					.Intersects(entity.Physics.PositionedCollisionBox))
+			{
+				return true;
 			}
 			return false;
 		}
@@ -410,7 +351,7 @@ namespace ZeldaOracle.Game.Entities {
 
 
 		//-----------------------------------------------------------------------------
-		// Collisions
+		// Collision Queries
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns true if the entity is currently colliding in the given
@@ -663,16 +604,6 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public Entity Entity {
-			get { return entity; }
-			set { entity = value; }
-		}
-
-		public bool IsEnabled {
-			get { return isEnabled; }
-			set { isEnabled = value; }
-		}
 
 		public Vector2F Velocity {
 			get { return velocity; }

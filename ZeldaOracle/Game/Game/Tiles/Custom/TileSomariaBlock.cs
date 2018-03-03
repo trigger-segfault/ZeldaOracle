@@ -1,44 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileSomariaBlock : Tile {
 
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
 
 		public TileSomariaBlock() {
 			// TODO: Break when getting crushed by Thwomp. (Only when moving)
 		}
 
-		public override void OnInitialize() {
-			DropList = null;
-			CancelBreakSound = true;
-			CheckSurfaceTile();
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if this tile is touching a solid entity.</summary>
+		private bool IsTouchingSolidEntity() {
+			Rectangle2F bounds = Bounds;
 			CancelBreakSound = false;
-			var settings = new CollisionTestSettings(typeof(Entity),
-				new Rectangle2F(GameSettings.TILE_SIZE), CollisionBoxType.Hard);
 			foreach (Entity entity in RoomControl.Entities) {
-				if (CollisionTest.PerformCollisionTest(Position, entity, settings).IsColliding) {
-					if (entity.Physics.IsSolid && !(entity is EffectCreateSomariaBlock)) {
-						CancelBreakSound = true;
-						Break(false);
-						break;
-					}
-					if (entity is Monster) {
-						Monster monster = (Monster) entity;
-						monster.Interactions.Trigger(InteractionType.Block, new TileDummy(this));
-					}
+				if (entity.Physics.IsSolid &&
+					!(entity is EffectCreateSomariaBlock) &&
+					entity.Physics.PositionedCollisionBox.Intersects(bounds))
+				{
+					return true;
 				}
 			}
+			return false;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
+		public override void OnInitialize() {
+			DropList = null;
+
+			// Check if spawned over a hazard tile
+			CancelBreakSound = true;
+			CheckSurfaceTile();
+			if (IsDestroyed)
+				return;
+
+			// Check if spawned over a solid entity
+			if (IsTouchingSolidEntity()) {
+				CancelBreakSound = true;
+				Break(false);
+			}
+
+			CancelBreakSound = false;
 		}
 
 		public override void OnFallInHole() {
@@ -58,22 +75,14 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void Update() {
-			base.Update();
-			
-			var settings = new CollisionTestSettings(typeof(Entity),
-				new Rectangle2F(GameSettings.TILE_SIZE), CollisionBoxType.Hard);
-			foreach (Entity entity in RoomControl.Entities) {
-				if (CollisionTest.PerformCollisionTest(Position, entity, settings).IsColliding) {
-					if (entity.Physics.IsSolid && !(entity is EffectCreateSomariaBlock)) {
-						Break(false);
-						break;
-					}
-					if (IsMoving && entity is Monster) {
-						Monster monster = (Monster) entity;
-						monster.Interactions.Trigger(InteractionType.Block, new TileDummy(this));
-					}
-				}
+			// Destroy if touched by a solid entity
+			if (IsTouchingSolidEntity()) {
+				CancelBreakSound = true;
+				Break(false);
+				return;
 			}
+			
+			base.Update();
 		}
 
 

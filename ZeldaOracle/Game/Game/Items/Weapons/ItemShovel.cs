@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		private void PerformDig(PlayerState state) {
-			// Look for tiles to dig up.
+			// Look for tiles to dig up
 			float distance = 6.5f;
 			Vector2F center = Player.Center;
 			if (Directions.IsVertical(Player.Direction))
@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Tile tile = RoomControl.GetTopTile(tileLoc);
 
 			if (tile != null && tile.OnDig(Player.Direction)) {
-				// Spawn dirt effect.
+				// Spawn dirt effect
 				Effect effect = new Effect();
 				effect.Graphics.DepthLayer = DepthLayer.EffectDirt;
 				effect.CreateDestroyTimer(15);
@@ -77,17 +77,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 
-			// Check for monster interactions.
-			//Rectangle2I shovelHitBox = new Rectangle2I(-4, -4, 8, 8);
-			//shovelHitBox.Point += (Point2I) Player.CenterOffset;
-			//shovelHitBox.ExtendEdge(Player.Direction, 7);
-			//foreach (Monster monster in Player.Physics.GetEntitiesMeeting<Monster>(shovelHitBox, CollisionBoxType.Soft)) {
-			//	monster.Interactions.Trigger(InteractionType.Shovel, Player);
-			//}
+			// Trigger shovel reactions
+			// Note that these happens even if a tile is dug
 			Rectangle2F shovelHitBox = new Rectangle2F(-4, -4, 8, 8);
 			shovelHitBox.ExtendEdge(Player.Direction, 7);
 			shovelHitBox.Point += Player.CenterOffset;
-
 			EventArgs actionArguments = new WeaponInteractionEventArgs() {
 				Weapon = this
 			};

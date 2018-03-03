@@ -309,19 +309,19 @@ namespace ZeldaOracle.Game.Entities {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		public static bool AreEntitiesAligned(Entity a, Entity b, int direction,
-			float threshold)
+		public static bool AreEntitiesAligned(
+			Entity a, Entity b, int direction, float threshold)
 		{
 			return (GMath.Abs(a.Center - b.Center)[!Directions.IsVertical(direction)] <=
 				threshold);
 		}
 
-		public static bool AreEntitiesCollisionAligned(Entity a, Entity b, int direction,
-			CollisionBoxType collisionType)
+		public static bool AreEntitiesCollisionAligned(
+			Entity a, Entity b, Direction direction)
 		{
-			Rectangle2F aBox = a.Physics.GetCollisionBox(collisionType) + a.Position;
-			Rectangle2F bBox = b.Physics.GetCollisionBox(collisionType) + b.Position;
-			if (Directions.IsVertical(direction))
+			Rectangle2F aBox = a.Physics.PositionedCollisionBox;
+			Rectangle2F bBox = b.Physics.PositionedCollisionBox;
+			if (direction.IsVertical)
 				return aBox.LeftRight.Intersects(bBox.LeftRight);
 			else
 				return aBox.TopBottom.Intersects(bBox.TopBottom);

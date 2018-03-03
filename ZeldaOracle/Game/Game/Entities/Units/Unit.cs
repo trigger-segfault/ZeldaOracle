@@ -290,10 +290,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 					}
 				}
 			}
-
-			// Update tools
-			//foreach (UnitTool tool in tools)
-				//tool.Update();
 			
 			UpdateSubStripIndex();
 
