@@ -37,18 +37,18 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.ReboundRoomEdge			= true;
 
 			// Weapon Interactions
-			Interactions.SetReaction(InteractionType.Sword,			Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Kill);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Kill);
 
 			// Projectile Interactions
-			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.BombExplosion,	MonsterReactions.Kill);
 		}
 		
 		

@@ -39,15 +39,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Interactions
 			Interactions.InteractionBox = new Rectangle2F(-16, -12, 32, 28);//.Inflated(-2, -2);
 			// Weapon Reactions
-			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.Shovel,		Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Bump, MonsterReactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, MonsterReactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shovel,		MonsterReactions.ClingEffect);
 			// Projectile Reactions
 			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, MonsterReactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, MonsterReactions.ClingEffect);
 			
 			// Monster
 			ContactDamage	= 4;

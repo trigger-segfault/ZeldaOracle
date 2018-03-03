@@ -17,13 +17,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveTime.Set(60, 120);
 
 			// Weapon interactions
-			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
-			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Damage2);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, MonsterReactions.DamageByLevel(1, 2, 3));
+			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Damage2);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Damage3);
 			// Projectile interactions
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.Damage);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, Reactions.SilentDamage);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, MonsterReactions.Damage);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, MonsterReactions.SilentDamage);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.ClingEffect);
 		}
 	}
 }

@@ -4,7 +4,7 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Collisions {
 
-	/// <summary>Types of solid objects that can cause collisions.</summary>
+	/// <summary>The types of solid objects that can cause collisions.</summary>
 	public enum CollisionType {
 		None = -1,
 		Tile,
@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 	}
 
 
-	/// <summary>Stores the colliding features.</summary>
+	/// <summary>Stores the colliding features of a collision.</summary>
 	public struct CollisionCheck {
 
 		private CollisionType type;
@@ -121,8 +121,8 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 	}
 
 	
-	/// <summary>Information about a collision between an entity and a solid object.
-	/// </summary>
+	/// <summary>An instance of a collision between an entity and a solid object. This
+	/// class is created and managed by the Room Control's Room Physics.</summary>
 	public class Collision {
 
 		private Entity physicsEntity;
@@ -196,15 +196,6 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			lateralPenetration = CalcLateralPenetration(physicsEntity.Position);
 			if (prevIsColliding && !IsColliding)
 				isResolved = true;
-		}
-
-		public void CalcIsColliding() {
-			//bool newIsColliding = (penetration >
-			//	allowedPenetration + GameSettings.EPSILON &&
-			//	lateralPenetration > allowedLateralPenetration + GameSettings.EPSILON);
-			//if (isColliding && !newIsColliding)
-			//	isResolved = true;
-			//isColliding = newIsColliding;
 		}
 		
 		/// <summary>Returns true if this collision would be penetrating if the physics

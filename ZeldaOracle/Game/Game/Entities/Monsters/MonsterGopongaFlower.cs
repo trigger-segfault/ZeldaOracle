@@ -35,19 +35,19 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.IsDestroyedInHoles	= false;
 
 			// Weapon interactions
-			Interactions.SetReaction(InteractionType.Sword,			Reactions.Kill);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.Shield,			SenderReactions.Bump);
 			Interactions.SetReaction(InteractionType.Shovel,			SenderReactions.Bump);
 			// Seed interactions
 			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
 			// Projectile interactions
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.Kill);
 		}
 
 

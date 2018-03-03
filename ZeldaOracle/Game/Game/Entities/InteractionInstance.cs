@@ -4,7 +4,8 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Game.Entities {
 
 	/// <summary>An instance of an interaction occurring between two entities for a
-	/// specific interaction type.</summary>
+	/// specific interaction type. This class is created and managed by the Room
+	/// Control's Interaction Manager.</summary>
 	public class InteractionInstance {
 
 		private InteractionType type;

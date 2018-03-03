@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Disable the transform-into-cukeman reaction which was set by the
 			// BuzzBlob base class
 			Interactions.SetReaction(InteractionType.MysterySeed,
-				Reactions.MysterySeed);
+				MonsterReactions.MysterySeed);
 			
 			// Create the list of phrases that are said upon talking to this monster
 			catchPhrases = new string[] {

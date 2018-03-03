@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			chargeMinAlignment	= 5;
 
 			// Interactions.
-			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
+			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, MonsterReactions.Damage);
 		}
 	}
 }

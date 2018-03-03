@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Projectile interactions
 			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Damage);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.Damage);
 
 			// Behavior
 			stateMachine = new GenericStateMachine<RiverZoraState>();

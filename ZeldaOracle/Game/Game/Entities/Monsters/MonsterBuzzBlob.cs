@@ -36,15 +36,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Interactions
 			Interactions.InteractionBox = new Rectangle2I(-4, -10, 8, 9);
 			// Interactions (Tools)
-			Interactions.SetReaction(InteractionType.Sword,			Reactions.Electrocute);
-			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Electrocute);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Electrocute);
+			Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.Electrocute);
+			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Electrocute);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Electrocute);
 			// Interactions (Projectiles)
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Damage);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Electrocute);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, MonsterReactions.Damage);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.Electrocute);
 			Interactions.SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TransformIntoCukeman);
-			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.BombExplosion,	MonsterReactions.Kill);
 		}
 
 

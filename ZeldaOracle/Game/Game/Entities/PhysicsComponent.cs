@@ -44,6 +44,11 @@ namespace ZeldaOracle.Game.Entities {
 		PassingDown,
 		PassingUp,
 	}
+	
+	public enum CollisionStyle {
+		Rectangular,
+		Circular,
+	}
 
 	public class PhysicsComponent : EntityComponent {
 

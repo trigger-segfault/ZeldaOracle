@@ -45,29 +45,29 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			ignoreZPosition			= true;
 
 			// Weapon interations
-			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Kill);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Shield,			SenderReactions.Bump,		MonsterReactions.Kill);
 			// Seed interations
-			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.MysterySeed,	SenderReactions.Destroy,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.MysterySeed,	SenderReactions.Destroy,	MonsterReactions.Kill);
 			// Projectile interations
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Destroy,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Destroy,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept,	MonsterReactions.Kill);
 			// Environment interations
-			Interactions.SetReaction(InteractionType.Fire,			Reactions.Kill);
-			Interactions.SetReaction(InteractionType.Gale,			Reactions.Kill);
-			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.Kill);
-			Interactions.SetReaction(InteractionType.MineCart,		Reactions.Kill);
-			Interactions.SetReaction(InteractionType.Block,			Reactions.Kill);
+			Interactions.SetReaction(InteractionType.Fire,			MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Gale,			MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.BombExplosion,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.ThrownObject,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.MineCart,		MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Block,			MonsterReactions.Kill);
 		}
 
 

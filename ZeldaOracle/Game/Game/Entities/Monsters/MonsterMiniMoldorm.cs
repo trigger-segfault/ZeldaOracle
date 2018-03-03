@@ -53,15 +53,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Interactions
 			Interactions.InteractionBox = Physics.CollisionBox.Inflated(-2, -2);
-			// Projectile Interactions
-			Interactions.SetReaction(InteractionType.Gale,			SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Damage);
+			// Projectile Reactions
+			Reactions[InteractionType.Gale].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.GaleSeed].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.PegasusSeed].Set(	SenderReactions.Intercept);
+			Reactions[InteractionType.ScentSeed].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.Fire].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.RodFire].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.Boomerang].Set(SenderReactions.Intercept)
+				.Add(MonsterReactions.ClingEffect);
+			Reactions[InteractionType.SwitchHook].Set(SenderReactions.Intercept)
+				.Add(MonsterReactions.Damage);
 		}
 
 

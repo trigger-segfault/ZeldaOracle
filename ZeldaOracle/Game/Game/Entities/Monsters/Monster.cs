@@ -107,62 +107,45 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected void SetDefaultReactions() {
 			Interactions.ClearReactions();
 
-			// Weapon interations
-			Interactions.SetReaction(InteractionType.Sword,
-				SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
-			Interactions.SetReaction(InteractionType.SwordSpin,
-				Reactions.Damage2);
-			Interactions.SetReaction(InteractionType.BiggoronSword,
-				Reactions.Damage3);
-			Interactions.SetReaction(InteractionType.Shield,
-				SenderReactions.Bump, Reactions.Bump);
-			Interactions.SetReaction(InteractionType.Shovel,
-				Reactions.Bump);
-			Interactions.SetReaction(InteractionType.Bracelet,
-				Reactions.None);
+			// Weapon Reactions
+			Reactions[InteractionType.Sword].Set(SenderReactions.Intercept)
+				.Add(MonsterReactions.DamageByLevel(1, 2, 3));
+			Reactions[InteractionType.SwordSpin].Set(MonsterReactions.Damage2);
+			Reactions[InteractionType.BiggoronSword].Set(MonsterReactions.Damage3);
+			Reactions[InteractionType.Shield]
+				.Set(SenderReactions.Bump).Add(MonsterReactions.Bump);
+			Reactions[InteractionType.Shovel].Set(MonsterReactions.Bump);
 
-			// Seed interations
-			Interactions.SetReaction(InteractionType.EmberSeed,
-				SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.ScentSeed,
-				SenderReactions.Intercept, Reactions.SilentDamage);
-			Interactions.SetReaction(InteractionType.PegasusSeed,
-				SenderReactions.Intercept, Reactions.Stun);
-			Interactions.SetReaction(InteractionType.GaleSeed,
-				SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.MysterySeed,
-				Reactions.MysterySeed);
+			// Seed Reactions
+			Reactions[InteractionType.EmberSeed].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.ScentSeed]
+				.Set(SenderReactions.Intercept).Add(MonsterReactions.SilentDamage);
+			Reactions[InteractionType.PegasusSeed]
+				.Set(SenderReactions.Intercept).Add(MonsterReactions.Stun);
+			Reactions[InteractionType.GaleSeed].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.MysterySeed].Set(MonsterReactions.MysterySeed);
 
-			// Projectile interations
-			Interactions.SetReaction(InteractionType.Arrow,
-				SenderReactions.Destroy, Reactions.Damage);
-			Interactions.SetReaction(InteractionType.SwordBeam,
-				SenderReactions.Destroy, Reactions.Damage);
-			Interactions.SetReaction(InteractionType.RodFire,
-				SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.Boomerang,
-				SenderReactions.Intercept, Reactions.Stun);
-			Interactions.SetReaction(InteractionType.SwitchHook,
-				Reactions.SwitchHook);
+			// Projectile Reactions
+			Reactions[InteractionType.Arrow]
+				.Set(SenderReactions.Destroy).Add(MonsterReactions.Damage);
+			Reactions[InteractionType.SwordBeam]
+				.Set(SenderReactions.Destroy).Add(MonsterReactions.Damage);
+			Reactions[InteractionType.RodFire].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.Boomerang]
+				.Set(SenderReactions.Intercept).Add(MonsterReactions.Stun);
+			Reactions[InteractionType.SwitchHook].Set(MonsterReactions.SwitchHook);
 
-			// Environment interations
-			Interactions.SetReaction(InteractionType.Fire,
-				Reactions.Burn);
-			Interactions.SetReaction(InteractionType.Gale,
-				Reactions.Gale);
-			Interactions.SetReaction(InteractionType.BombExplosion,
-				Reactions.Damage);
-			Interactions.SetReaction(InteractionType.ThrownObject,
-				Reactions.Damage);
-			Interactions.SetReaction(InteractionType.MineCart,
-				Reactions.SoftKill);
-			Interactions.SetReaction(InteractionType.MagnetBall,
-				Reactions.Kill); // TODO: Confirm  this
-			Interactions.SetReaction(InteractionType.Block,
-				Reactions.Damage2);
+			// Environment Reactions
+			Reactions[InteractionType.Fire].Set(MonsterReactions.Burn);
+			Reactions[InteractionType.Gale].Set(MonsterReactions.Gale);
+			Reactions[InteractionType.BombExplosion].Set(MonsterReactions.Damage);
+			Reactions[InteractionType.ThrownObject].Set(MonsterReactions.Damage);
+			Reactions[InteractionType.MineCart].Set(MonsterReactions.SoftKill);
+			Reactions[InteractionType.MagnetBall].Set(MonsterReactions.Kill); // TODO: Confirm  this
+			Reactions[InteractionType.Block].Set(MonsterReactions.Damage2);
 
 			// Player interations
-			Interactions.SetReaction(InteractionType.PlayerContact,
+			Reactions[InteractionType.PlayerContact].Set(
 				delegate(Entity sender, EventArgs args)
 			{
 				if (!IsStunned)

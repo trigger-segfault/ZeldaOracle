@@ -284,7 +284,6 @@ namespace ZeldaOracle.Game.Control {
 					collision.AllowedPenetration = GMath.Clamp(
 						collision.AllowedPenetration,
 						0.0f, collision.Penetration);
-					collision.CalcIsColliding();
 				}
 				else {
 					entity.Physics.PotentialCollisions.RemoveAt(i--);

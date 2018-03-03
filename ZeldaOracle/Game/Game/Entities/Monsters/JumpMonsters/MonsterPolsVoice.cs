@@ -29,21 +29,21 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			//  - TODO: Killed by Music
 
 			// Weapon interactions
-			Interactions.SetReaction(InteractionType.Sword,			Reactions.Bump);
-			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Bump);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Bump);
 			//Interactions.SetReaction(InteractionType.Music,			Reactions.Kill);
 			// Projectile interactions
-			Interactions.SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept, Reactions.None);
-			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept, Reactions.Bump);
-			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, Reactions.Bump);
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Bump);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Bump);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Bump);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Fire,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept, MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.Bump);
 			// Misc interactions
-			Interactions.SetReaction(InteractionType.Block,	Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Block,	MonsterReactions.Bump);
 		}
 
 

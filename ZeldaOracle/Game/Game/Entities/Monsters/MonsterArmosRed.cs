@@ -28,20 +28,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isKnockbackable			= false;
 
 			// Weapon interactions
-			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, MonsterReactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.ParryWithClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Damage3);
 			// Seed interactions
 			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
 			// Projectile interactions
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Stun, Reactions.DamageByLevel(0, 1));
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, MonsterReactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, MonsterReactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, MonsterReactions.Stun, MonsterReactions.DamageByLevel(0, 1));
+			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, MonsterReactions.ClingEffect);
 			// Environment interactions
-			Interactions.SetReaction(InteractionType.Fire,			Reactions.None);
-			Interactions.SetReaction(InteractionType.Gale,			Reactions.None);
-			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Damage2);
+			Reactions[InteractionType.Fire].Clear();
+			Reactions[InteractionType.Gale].Clear();
+			Interactions.SetReaction(InteractionType.BombExplosion,	MonsterReactions.Damage2);
 		}
 	}
 }

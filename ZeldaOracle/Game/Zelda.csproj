@@ -281,8 +281,7 @@
     <Compile Include="Game\Entities\Collectibles\CollectibleReward.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleFairy.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
-    <Compile Include="Game\Entities\Collisions\CollisionInfo.cs" />
-    <Compile Include="Game\Entities\Collisions\CollisionStyle.cs" />
+    <Compile Include="Game\Entities\Collisions\Collision.cs" />
     <Compile Include="Game\Entities\DamageInfo.cs" />
     <Compile Include="Game\Entities\DepthLayer.cs" />
     <Compile Include="Game\Entities\Effects\EffectCling.cs" />
@@ -294,6 +293,7 @@
     <Compile Include="Game\Entities\Effects\EffectFallingObject.cs" />
     <Compile Include="Game\Entities\Effects\ScentPod.cs" />
     <Compile Include="Game\Entities\EntityComponent.cs" />
+    <Compile Include="Game\Entities\ReactionCallbacks.cs" />
     <Compile Include="Game\Entities\InteractionInstance.cs" />
     <Compile Include="Game\Entities\InteractionComponent.cs" />
     <Compile Include="Game\Entities\EntityTracker.cs" />
@@ -345,7 +345,6 @@
     <Compile Include="Game\Entities\Monsters\MonsterSandCrab.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterShroudedStalfos.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterSpikedBeetle.cs" />
-    <Compile Include="Game\Entities\Monsters\MonsterReactions.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterOctorok.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterRope.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterFallInHoleState.cs" />

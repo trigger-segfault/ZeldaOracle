@@ -62,13 +62,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Interactions.SetReaction(InteractionType.BiggoronSword,	KillOrElectrocute);
 
 			// Projectile Interactions
-			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, Reactions.Kill);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
+			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, KillOrElectrocute);
-			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
+			Interactions.SetReaction(InteractionType.BombExplosion,	MonsterReactions.Kill);
 
 			// Behavior
 			stateMachine = new GenericStateMachine<BariState>();
@@ -193,14 +193,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		private void KillOrElectrocute(Entity sender, EventArgs args) {
 			if (stateMachine.CurrentState == BariState.Electrecuting)
-				Reactions.Electrocute(this, sender, args);
+				MonsterReactions.Electrocute(this, sender, args);
 			else
-				Reactions.Kill(this, sender, args);
+				MonsterReactions.Kill(this, sender, args);
 		}
 
 		public override void OnTouchPlayer(Entity sender, EventArgs args) {
 			if (stateMachine.CurrentState == BariState.Electrecuting)
-				Reactions.Electrocute(this, sender, args);
+				MonsterReactions.Electrocute(this, sender, args);
 			else
 				base.OnTouchPlayer(sender, args);
 		}

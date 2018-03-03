@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			physics.DisableSurfaceContact	= true;
 
 			// Weapon interactions
-			Interactions.SetReaction(InteractionType.SwitchHook, Reactions.SwitchHook, WizzrobeSwitchHook);
+			Interactions.SetReaction(InteractionType.SwitchHook, MonsterReactions.SwitchHook, WizzrobeSwitchHook);
 			// Projectile interactions
 			Interactions.SetReaction(InteractionType.Boomerang, SenderReactions.Intercept);
 		}

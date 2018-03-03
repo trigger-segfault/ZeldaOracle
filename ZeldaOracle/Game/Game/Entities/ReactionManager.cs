@@ -102,7 +102,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		//SwordHitShield,			// Their sword hits my shield.
 		//BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
-		//ShieldHitShield,		// Their shield hits my shield.
+		//ShieldHitShield,			// Their shield hits my shield.
 		//Parry,
 
 
@@ -151,12 +151,19 @@ namespace ZeldaOracle.Game.Entities {
 		
 
 	//-----------------------------------------------------------------------------
-	// Interaction Handler
+	// Reaction Handler
 	//-----------------------------------------------------------------------------
 
+	/// <summary>Stores the reaction callback and hit box used for a single interaction
+	/// type.</summary>
 	public class ReactionHandler {
 
-		private ReactionStaticCallback handler;
+		/// <summary>The callback method to invoke when this reaction is triggered.
+		/// </summary>
+		private ReactionStaticCallback callback;
+		/// <summary>Custom hitbox used to detect reactions for this interaction type.
+		/// If this is null, then the entity's default interaction box will be used
+		/// instead.</summary>
 		private Rectangle2F? collisionBox;
 
 		
@@ -165,29 +172,30 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public ReactionHandler() {
-			handler = null;
+			callback = null;
+			collisionBox = null;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Interaction Triggering
+		// Reaction Triggering
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Trigger this interaction's callbacks using the given subject,
 		/// sender, and interaction arguments.</summary>
 		public void Trigger(Entity entity, Entity sender, EventArgs args) {
-			if (handler != null)
-				handler.Invoke(entity, sender, args);
+			if (callback != null)
+				callback.Invoke(entity, sender, args);
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Interaction Configuration
+		// Reaction Callback Setup
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Clear all interaction handlers.</summary>
 		public ReactionHandler Clear() {
-			handler = null;
+			callback = null;
 			return this;
 		}
 			
@@ -195,7 +203,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Set(
 			ReactionStaticCallback callback)
 		{
-			handler = callback;
+			this.callback = callback;
 			return this;
 		}
 		
@@ -204,7 +212,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Set(
 			ReactionStaticSimpleCallback callback)
 		{
-			handler = ToStaticInteractionDelegate(callback);
+			this.callback = ToStaticInteractionDelegate(callback);
 			return this;
 		}
 		
@@ -212,7 +220,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Set(
 			ReactionMemberCallback callback)
 		{
-			handler = ToStaticInteractionDelegate(callback);
+			this.callback = ToStaticInteractionDelegate(callback);
 			return this;
 		}
 		
@@ -221,7 +229,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Set(
 			ReactionMemberSimpleCallback callback)
 		{
-			handler = ToStaticInteractionDelegate(callback);
+			this.callback = ToStaticInteractionDelegate(callback);
 			return this;
 		}
 			
@@ -229,10 +237,10 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Add(
 			ReactionStaticCallback callback)
 		{
-			if (handler == null)
-				handler = callback;
+			if (this.callback == null)
+				this.callback = callback;
 			else
-				handler += callback;
+				this.callback += callback;
 			return this;
 		}
 			
@@ -293,9 +301,9 @@ namespace ZeldaOracle.Game.Entities {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Custom collision box used to detect reactions for this
-		/// interaction type. If this is null, then the entity's InteractionBox will
-		/// be used instead.</summary>
+		/// <summary>Custom hitbox used to detect reactions for this interaction type.
+		/// If this is null, then the entity's default interaction box will be used
+		/// instead.</summary>
 		public Rectangle2F? CollisionBox {
 			get { return collisionBox; }
 			set { collisionBox = value; }
@@ -304,9 +312,11 @@ namespace ZeldaOracle.Game.Entities {
 	
 		
 	//-----------------------------------------------------------------------------
-	// Interaction Manager
+	// Reaction Manager
 	//-----------------------------------------------------------------------------
-
+	
+	/// <summary>Manages an entity's reactions for all possible interaction types.
+	/// </summary>
 	public class ReactionManager {
 
 		/// <summary>Reference to the entity for which this class is managing

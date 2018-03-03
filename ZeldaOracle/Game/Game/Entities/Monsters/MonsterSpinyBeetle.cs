@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Interactions.InteractionBox	= new Rectangle2I(-4, -11, 8, 6);
 			Interactions.ReactionManager[InteractionType.Bracelet].CollisionBox =
 				new Rectangle2I(-6, -12, 12, 12);
-
+			
 			// TODO: Bigger collision box for cover
 			
 			syncAnimationWithDirection = false;
@@ -89,32 +89,32 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				swordLevel = GameControl.Inventory.GetItem("item_sword").Level;
 			int cuttableLevel = CoverProperties.GetInteger("cuttable_sword_level");
 			if (CoverFlags.HasFlag(TileFlags.Cuttable) && swordLevel >= cuttableLevel) {
-				Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept,	Reactions.DamageByLevel(1, 2, 3), BreakCover);
-				Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Damage2,			BreakCover);
-				Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3,			BreakCover);
-				Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy,	Reactions.Damage, BreakCover);
-				Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
+				Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept,	MonsterReactions.DamageByLevel(1, 2, 3), BreakCover);
+				Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Damage2,			BreakCover);
+				Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Damage3,			BreakCover);
+				Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy,	MonsterReactions.Damage, BreakCover);
+				Interactions.SetReaction(InteractionType.ThrownObject,	MonsterReactions.Damage);
 			}
 			else {
-				Interactions.SetReaction(InteractionType.Sword,			Reactions.ClingEffect);
-				Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ClingEffect);
-				Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+				Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.ClingEffect);
+				Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.ClingEffect);
+				Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.ClingEffect);
 				Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-				Interactions.SetReaction(InteractionType.ThrownObject,	Reactions.None);
+				Reactions[InteractionType.ThrownObject].Clear();
 			}
 
 			int boomerangLevel = -1;
 			if (GameControl.Inventory.ItemExists("item_boomerang"))
 				boomerangLevel = GameControl.Inventory.GetItem("item_boomerang").Level;
 			if (CoverFlags.HasFlag(TileFlags.Boomerangable) && boomerangLevel >= Items.Item.Level2) {
-				Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Stun, BreakCover);
+				Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	MonsterReactions.Stun, BreakCover);
 			}
 			else {
 				Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);
 			}
 
 			if (CoverFlags.HasFlag(TileFlags.Burnable)) {
-				Interactions.SetReaction(InteractionType.Fire,			Reactions.Burn);
+				Interactions.SetReaction(InteractionType.Fire,			MonsterReactions.Burn);
 			}
 			else {
 				// TODO: Flames need to go out quickly
@@ -122,29 +122,30 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 
 			if (CoverFlags.HasFlag(TileFlags.Bombable)) {
-				Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.Damage, BreakCover);
+				Reactions[InteractionType.BombExplosion]
+					.Set(MonsterReactions.Damage).Add(BreakCover);
 			}
 			else {
-				Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.None);
+				Reactions[InteractionType.BombExplosion].Clear();
 			}
 
-			Interactions.SetReaction(InteractionType.Shield,			SenderReactions.Bump,		Reactions.Bump);
-			Interactions.SetReaction(InteractionType.Shovel,			Reactions.Bump);
+			Interactions.SetReaction(InteractionType.Shield,		SenderReactions.Bump, MonsterReactions.Bump);
+			Interactions.SetReaction(InteractionType.Shovel,		MonsterReactions.Bump);
 			Interactions.SetReaction(InteractionType.Bracelet,		PickupInteraction);
 			// Seed interations
 			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
+			Interactions.SetReaction(InteractionType.MysterySeed,	MonsterReactions.MysterySeed);
 			// Projectile interations
 			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SwitchHookInteraction);
+			Interactions.SetReaction(InteractionType.SwitchHook,	SwitchHookInteraction);
 			// Environment interations
 			Interactions.SetReaction(InteractionType.Gale,			SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
-			Interactions.SetReaction(InteractionType.Block,			Reactions.None);
+			Interactions.SetReaction(InteractionType.MineCart,		MonsterReactions.SoftKill);
+			Reactions[InteractionType.Block].Clear();
 		}
 
 

@@ -27,8 +27,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			shootPauseDuration	= 30;
 			
 			// Interactions.
-			Interactions.SetReaction(InteractionType.Sword, Reactions.DamageByLevel(1, 2, 2));
-			Interactions.SetReaction(InteractionType.BiggoronSword, Reactions.Damage2);
+			Interactions.SetReaction(InteractionType.Sword, MonsterReactions.DamageByLevel(1, 2, 2));
+			Interactions.SetReaction(InteractionType.BiggoronSword, MonsterReactions.Damage2);
 
 			/*
 			// DEBUG MONSTER SETTINGS.
