@@ -2026,7 +2026,7 @@
         <Setter Property="IsTabStop"  Value="False" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Right" />
-        <Setter Property="WatermarkTemplate" Value="{StaticResource DefaultWatermarkTemplate}" />
+        <!--<Setter Property="WatermarkTemplate" Value="{StaticResource DefaultWatermarkTemplate}" />-->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PointUpDown}">
@@ -2071,9 +2071,9 @@
                                           TextAlignment="{Binding TextAlignment, RelativeSource={RelativeSource TemplatedParent}}"
                                           TextWrapping="NoWrap" 
                                           TabIndex="{TemplateBinding TabIndex}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Watermark="{Binding Watermark, RelativeSource={RelativeSource TemplatedParent}}"
-                                          WatermarkTemplate="{Binding WatermarkTemplate, RelativeSource={RelativeSource TemplatedParent}}" />
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                          <!--Watermark="{Binding Watermark, RelativeSource={RelativeSource TemplatedParent}}"
+                                          WatermarkTemplate="{Binding WatermarkTemplate, RelativeSource={RelativeSource TemplatedParent}}" />-->
                         </xctk:ButtonSpinner>
                     </xctk:ButtonSpinner>
                     <ControlTemplate.Triggers>
