@@ -46,24 +46,28 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public NPC() {
-			// Physics.
-			Physics.Enable(PhysicsFlags.Solid | PhysicsFlags.HasGravity);
-			Physics.CollisionBox = new Rectangle2F(-8, -11, 16, 13);
-			Physics.SoftCollisionBox = new Rectangle2F(-10, -15, 20, 19);
-			buttonActionCollisionBox = Physics.SoftCollisionBox;
-
-			// Graphics.
+			// Graphics
 			Graphics.IsShadowVisible		= true;
 			Graphics.IsGrassEffectVisible	= true;
 			Graphics.IsRipplesEffectVisible	= true;
 			Graphics.DepthLayer				= DepthLayer.PlayerAndNPCs;
 			Graphics.DrawOffset				= new Point2I(-8, -14);
+			centerOffset					= Graphics.DrawOffset + new Point2I(8, 8);
 
-			// General.
-			centerOffset		= Graphics.DrawOffset + new Point2I(8, 8);
+			// Physics
+			Physics.Enable(
+				PhysicsFlags.Solid |
+				PhysicsFlags.HasGravity);
+			Physics.CollisionBox = new Rectangle2F(-8, -11, 16, 13);
+
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2F(-10, -15, 20, 19);
+			buttonActionCollisionBox = Interactions.InteractionBox;
+
+			// General
 			actionAlignDistance	= 5;
-			flags				= NPCFlags.FacePlayerOnTalk | NPCFlags.FacePlayerWhenNear;
-			
+			flags = NPCFlags.FacePlayerOnTalk |
+				NPCFlags.FacePlayerWhenNear;
 			message = null;
 			animationTalk = null;
 

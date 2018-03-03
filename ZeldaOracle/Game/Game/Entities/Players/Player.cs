@@ -142,11 +142,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Physics
 			Physics.CollisionBox			= new Rectangle2F(-4, -10 + 3, 8, 9);
-			Physics.SoftCollisionBox		= new Rectangle2F(-6, -14 + 3, 12, 13);
 			Physics.CollideWithWorld		= true;
 			Physics.CollideWithRoomEdge		= true;
 			Physics.CheckRadialCollisions	= true;
-			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
+			Physics.RoomEdgeCollisionBox	= new Rectangle2F(-6, -14 + 3, 12, 13);
 			Physics.HasGravity				= true;
 			Physics.AutoDodges				= true;
 			Physics.MovesWithConveyors		= true;

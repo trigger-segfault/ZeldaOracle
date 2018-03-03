@@ -39,12 +39,6 @@ namespace ZeldaOracle.Game.Entities {
 		OnGroundOverride		= 0x100000,	// If this is set, IsOnGround will always be true.
 	}
 
-	public enum CollisionBoxType {
-		Hard	= 0,
-		Soft	= 1,
-		Custom	= 2,
-	}
-
 	public enum LedgePassState {
 		None,
 		PassingDown,
@@ -66,11 +60,10 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Collision settings
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
-		private Rectangle2F				softCollisionBox;   // The "soft" collision box, used to collide with items, monsters, room edges, etc.
 		private Rectangle2F				braceletCollisionBox;
 		private TileCollisionCondition	customTileIsSolidCondition;
 		private TileCollisionCondition	customTileIsNotSolidCondition;
-		private CollisionBoxType		roomEdgeCollisionBoxType;
+		private Rectangle2F?			roomEdgeCollisionBox;
 		private int						autoDodgeDistance;	// The maximum distance allowed to dodge collisions.
 		private float					autoDodgeSpeed;		// The speed to move at when dodging collisions.
 		private int						edgeClipAmount;
@@ -110,7 +103,6 @@ namespace ZeldaOracle.Game.Entities {
 			gravity				= GameSettings.DEFAULT_GRAVITY;
 			maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
 			collisionBox		= new Rectangle2F(-1, -1, 2, 2);
-			softCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
 			topTile				= null;
 			topTilePointOffset	= Vector2F.Zero;
 			isColliding			= false;
@@ -122,7 +114,7 @@ namespace ZeldaOracle.Game.Entities {
 			ledgeTileLocation	= new Point2I(-1, -1);
 			ledgePassState		= LedgePassState.None;
 			ledgePassTile		= null;
-			roomEdgeCollisionBoxType	= CollisionBoxType.Hard;
+			roomEdgeCollisionBox		= null;
 			customTileIsSolidCondition	= null;
 			potentialCollisions			= new List<Collision>();
 			previousPotentialCollisions	= new List<Collision>();
@@ -137,22 +129,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Enable the physics component with the given physics flags.
 		/// </summary>
-		public void Enable(PhysicsFlags flags = PhysicsFlags.None) {
+		public void Enable(PhysicsFlags flags) {
 			Enable();
 			this.flags |= flags;
-		}
-		
-
-		//-----------------------------------------------------------------------------
-		// Custom Collision Setup
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Return the collision box of the given type (soft or hard).
-		/// </summary>
-		public Rectangle2F GetCollisionBox(CollisionBoxType type) {
-			if (type == CollisionBoxType.Hard)
-				return collisionBox;
-			return softCollisionBox;
 		}
 
 		
@@ -239,10 +218,10 @@ namespace ZeldaOracle.Game.Entities {
 			myBox.Point += position;
 			myBox.Inflate(2, 2);
 	
-			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
-			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
-			int x2 = (int) (myBox.Right  / (float) GameSettings.TILE_SIZE) + 1;
-			int y2 = (int) (myBox.Bottom / (float) GameSettings.TILE_SIZE) + 1;
+			int x1 = (int) (myBox.Left   / GameSettings.TILE_SIZE);
+			int y1 = (int) (myBox.Top    / GameSettings.TILE_SIZE);
+			int x2 = (int) (myBox.Right  / GameSettings.TILE_SIZE) + 1;
+			int y2 = (int) (myBox.Bottom / GameSettings.TILE_SIZE) + 1;
 
 			Rectangle2I area;
 			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
@@ -294,39 +273,6 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 
-		//public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType,
-		//	int maxZDistance = 10)
-		//{
-		//	if (collisionBoxType == CollisionBoxType.Hard)
-		//		return IsHardMeetingEntity(other);
-		//	return IsSoftMeetingEntity(other, maxZDistance);
-		//}
-
-		/// <summary>Return true this entity and another entitys' soft collision boxes
-		/// are touching.</summary>
-		//public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {
-		//	if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
-		//		return PositionedSoftCollisionBox.Intersects(
-		//			other.Physics.PositionedSoftCollisionBox);
-		//	return false;
-		//}
-
-		//public bool IsHardMeetingEntity(Entity other) {
-		//	if (CanCollideWithEntity(other))
-		//		return PositionedCollisionBox.Intersects(
-		//			other.Physics.PositionedCollisionBox);
-		//	return false;
-		//}
-
-		//public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox,
-		//	int maxZDistance = 10)
-		//{
-		//	collisionBox.Point += entity.Position;
-		//	if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
-		//		return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
-		//	return false;
-		//}
-
 		public bool IsBraceletMeetingEntity(Entity other, Rectangle2F collisionBox,
 			int maxZDistance = 10) {
 			collisionBox.Point += entity.Position;
@@ -334,20 +280,6 @@ namespace ZeldaOracle.Game.Entities {
 				return collisionBox.Intersects(other.Physics.PositionedBraceletCollisionBox);
 			return false;
 		}
-
-		//public bool IsCollidingWith(Entity other, CollisionBoxType collisionBoxType,
-		//	int maxZDistance = 10)
-		//{
-		//	return IsCollidingWith(other, collisionBoxType, collisionBoxType, maxZDistance);
-		//}
-
-		//public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType,
-		//	CollisionBoxType otherBoxType, int maxZDistance = 10)
-		//{
-		//	return CollisionTest.PerformCollisionTest(entity, other,
-		//		new CollisionTestSettings(null, myBoxType,
-		//			otherBoxType, maxZDistance)).IsColliding;
-		//}
 
 
 		//-----------------------------------------------------------------------------
@@ -456,9 +388,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		/// <summary>Collide with the inside edges of a rectangle.
-		/// NOTE: At the moment, this is only used when player is doomed to fall in a hole.
-		/// </summary>
-		public void PerformInsideEdgeCollisions(Rectangle2F collisionBox, Rectangle2F rect) {
+		/// NOTE: At the moment, this is only used when player is doomed to fall in a
+		/// hole.</summary>
+		public void PerformInsideEdgeCollisions(
+			Rectangle2F collisionBox, Rectangle2F rect)
+		{
 			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position);
 
 			if (myBox.Left < rect.Left) {
@@ -669,9 +603,9 @@ namespace ZeldaOracle.Game.Entities {
 			set { autoDodgeSpeed = value; }
 		}
 		
-		public CollisionBoxType RoomEdgeCollisionBoxType {
-			get { return roomEdgeCollisionBoxType; }
-			set { roomEdgeCollisionBoxType = value; }
+		public Rectangle2F RoomEdgeCollisionBox {
+			get { return (roomEdgeCollisionBox ?? collisionBox); }
+			set { roomEdgeCollisionBox = value; }
 		}
 		
 		public int EdgeClipAmount {
@@ -695,14 +629,7 @@ namespace ZeldaOracle.Game.Entities {
 			get { return collisionBox; }
 			set { collisionBox = value; }
 		}
-
-		/// <summary>The "Soft" collision box which is typically used to interact with
-		/// other entities, such as when a player touches a monster.</summary>
-		public Rectangle2F SoftCollisionBox {
-			get { return softCollisionBox; }
-			set { softCollisionBox = value; }
-		}
-
+		
 		public Rectangle2F BraceletCollisionBox {
 			get { return braceletCollisionBox; }
 			set { braceletCollisionBox = value; }
@@ -712,12 +639,6 @@ namespace ZeldaOracle.Game.Entities {
 		/// position.</summary>
 		public Rectangle2F PositionedCollisionBox {
 			get { return Rectangle2F.Translate(collisionBox, entity.Position); }
-		}
-		
-		/// <summary>The "Soft" collision box translated to the entity's current
-		/// position.</summary>
-		public Rectangle2F PositionedSoftCollisionBox {
-			get { return Rectangle2F.Translate(softCollisionBox, entity.Position); }
 		}
 
 		public Rectangle2F PositionedBraceletCollisionBox {

@@ -19,9 +19,16 @@ namespace ZeldaOracle.Game.Entities {
 		public TileDummy(Tile tile) {
 			this.tile = tile;
 			Position = tile.Position;
+
+			// Graphics
 			centerOffset = tile.Size * GameSettings.TILE_SIZE / 2;
+
+			// Physics
 			Physics.CollisionBox = new Rectangle2F(tile.Size * GameSettings.TILE_SIZE);
-			Physics.SoftCollisionBox = Physics.CollisionBox;
+
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox = Physics.CollisionBox;
 		}
 
 	}

@@ -305,7 +305,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Don't check for future collisions and force a popup if player is hit.
 			// Otherwise, if future collision is detected, don't popup.
-			// NOTE: SoftCollisionBox is deprecated
+			// NOTE: SoftCollisionBox is deprecated in favor of Interactions.InteractionBox
 			//if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
 				//Interactions.Trigger(InteractionType.PlayerContact, RoomControl.Player);
 				//return;

@@ -21,19 +21,22 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public CollectibleFairy() {
-			maxMoveSpeed	= 0.8f;
-			aliveDuration	= GameSettings.COLLECTIBLE_FAIRY_ALIVE_DURATION;
-			fadeDelay		= GameSettings.COLLECTIBLE_FAIRY_FADE_DELAY;
-
-			// Physics.
-			Physics.CollisionBox		= new Rectangle2I(-4, -9, 8, 8);
-			Physics.SoftCollisionBox	= new Rectangle2I(-5, -9, 9, 8);
-			Physics.Enable(PhysicsFlags.ReboundRoomEdge);
-
-			// Graphics.
+			// Graphics
 			Graphics.DepthLayer	= DepthLayer.InAirCollectibles;
 			Graphics.DrawOffset	= new Point2I(0, -5);
 			centerOffset		= new Point2I(0, -5);
+
+			// Physics
+			Physics.CollisionBox = new Rectangle2I(-4, -9, 8, 8);
+			Physics.Enable(PhysicsFlags.ReboundRoomEdge);
+
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2I(-5, -9, 9, 8);
+			
+			// Fairy
+			maxMoveSpeed	= 0.8f;
+			aliveDuration	= GameSettings.COLLECTIBLE_FAIRY_ALIVE_DURATION;
+			fadeDelay		= GameSettings.COLLECTIBLE_FAIRY_FADE_DELAY;
 		}
 
 

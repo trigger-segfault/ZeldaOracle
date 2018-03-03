@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 	public class Bomb : Entity {
+
 		private int timer;
 		private int flashDelay;
 		private int fuseTime;
@@ -23,6 +17,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public Bomb() {
+			// Graphics
+			Graphics.IsShadowVisible		= true;
+			Graphics.IsGrassEffectVisible	= false;
+			Graphics.IsRipplesEffectVisible	= false;
+			Graphics.DepthLayer				= DepthLayer.ProjectileBomb;
+			Graphics.DrawOffset				= new Point2I(-8, -13);
+			centerOffset					= new Point2I(0, -3);
+
+			// Physics
+			Physics.CollisionBox = new Rectangle2F(-3, -5, 6, 1);
 			Physics.Enable(
 				PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
@@ -32,20 +36,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.DestroyedInHoles |
 				PhysicsFlags.MoveWithConveyors);
-			
-			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-3, -5, 6, 1);
-			Physics.BraceletCollisionBox	= new Rectangle2I(-4, -9, 8, 8);
-			soundBounce					= GameData.SOUND_BOMB_BOUNCE;
+			soundBounce = GameData.SOUND_BOMB_BOUNCE;
 
+			// Interactions
+			Interactions.InteractionBox	= new Rectangle2I(-4, -9, 8, 8);
+			Physics.BraceletCollisionBox = new Rectangle2I(-4, -9, 8, 8);
 			IsPickupable = true;
-			
-			Graphics.IsShadowVisible		= true;
-			Graphics.IsGrassEffectVisible	= false;
-			Graphics.IsRipplesEffectVisible	= false;
-			Graphics.DepthLayer				= DepthLayer.ProjectileBomb;
-			Graphics.DrawOffset				= new Point2I(-8, -13);
-			centerOffset					= new Point2I(0, -3);
 		}
 
 
@@ -99,7 +95,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				Physics.CollisionBox = new Rectangle2F(-3, -5, 6, 6);
 			else
 				Physics.CollisionBox = new Rectangle2F(-3, -5, 6, 1);
-			Physics.SoftCollisionBox = Physics.CollisionBox;
+			Interactions.InteractionBox = new Rectangle2I(-4, -9, 8, 8);
 
 			timer		= 0;
 			flashDelay	= GameSettings.BOMB_FLICKER_DELAY;

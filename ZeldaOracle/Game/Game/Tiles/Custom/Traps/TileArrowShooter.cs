@@ -37,8 +37,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 						break;
 					}
 				}*/
-				Rectangle2F playerBox = RoomControl.Player.Physics.SoftCollisionBox;
-				playerBox += RoomControl.Player.Position;
+				Rectangle2F playerBox =
+					RoomControl.Player.Interactions.PositionedInteractionBox;
 				if (playerBox.Intersects(ViewBox)) {
 					// Shoot an arrow
 					MonsterArrow projectile = new MonsterArrow(true);

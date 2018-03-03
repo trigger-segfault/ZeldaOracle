@@ -21,25 +21,24 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 		private CollisionType type;
 
+		private Entity physicsEntity;
+
 		private object solidObject;
 
 		private int collisionBoxIndex;
-
-		private CollisionBoxType entityCollisionBoxType;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public CollisionCheck(CollisionType type,
-			object solidObject = null, int collisionBoxIndex = 0,
-			CollisionBoxType entityCollisionBoxType = CollisionBoxType.Hard)
+		public CollisionCheck(Entity physicsEntity, CollisionType type,
+			object solidObject, int collisionBoxIndex)
 		{
 			this.type				= type;
+			this.physicsEntity		= physicsEntity;
 			this.solidObject		= solidObject;
 			this.collisionBoxIndex	= collisionBoxIndex;
-			this.entityCollisionBoxType	= entityCollisionBoxType;
 		}
 
 
@@ -47,19 +46,25 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		// Factory Functions
 		//-----------------------------------------------------------------------------
 
-		public static CollisionCheck CreateTileCollision(Tile tile,
-			int collisionBoxIndex)
+		public static CollisionCheck CreateTileCollision(
+			Entity physicsEntity, Tile tile, int collisionBoxIndex)
 		{
-			return new CollisionCheck(CollisionType.Tile , tile, collisionBoxIndex);
+			return new CollisionCheck(physicsEntity, CollisionType.Tile,
+				tile, collisionBoxIndex);
 		}
 
-		public static CollisionCheck CreateEntityCollision(Entity entity) {
-			return new CollisionCheck(CollisionType.Entity, entity);
+		public static CollisionCheck CreateEntityCollision(
+			Entity physicsEntity, Entity entity)
+		{
+			return new CollisionCheck(physicsEntity, CollisionType.Entity,
+				entity, 0);
 		}
 
-		public static CollisionCheck CreateRoomEdgeCollision(RoomControl roomControl) {
-			return new CollisionCheck(CollisionType.RoomEdge, roomControl, 0,
-				CollisionBoxType.Soft);
+		public static CollisionCheck CreateRoomEdgeCollision(
+			Entity physicsEntity)
+			{
+			return new CollisionCheck(physicsEntity, CollisionType.RoomEdge,
+				physicsEntity.RoomControl, 0);
 		}
 
 
@@ -75,11 +80,6 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		public int CollisionBoxIndex {
 			get { return collisionBoxIndex; }
 			set { collisionBoxIndex = value; }
-		}
-
-		public CollisionBoxType EntityCollisionBoxType {
-			get { return entityCollisionBoxType; }
-			set { entityCollisionBoxType = value; }
 		}
 
 		public CollisionType Type {

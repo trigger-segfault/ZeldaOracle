@@ -300,8 +300,11 @@ namespace ZeldaOracle.Game.Control {
 			if (entity.Physics.CollideWithWorld) {
 				// Find nearby solid entities
 				foreach (Entity other in RoomControl.Entities) {
-					if (other != entity && entity.Physics.CanCollideWithEntity(other)) {
-						yield return CollisionCheck.CreateEntityCollision(other);
+					if (other != entity &&
+						entity.Physics.CanCollideWithEntity(other))
+					{
+						yield return CollisionCheck.CreateEntityCollision(
+							entity, other);
 					}
 				}
 
@@ -314,7 +317,8 @@ namespace ZeldaOracle.Game.Control {
 							Rectangle2I box = tile.CollisionModel.Boxes[i];
 							Rectangle2F tileBox = box;
 							tileBox.Point += tile.Position;
-							yield return CollisionCheck.CreateTileCollision(tile, i);
+							yield return CollisionCheck.CreateTileCollision(
+								entity, tile, i);
 						}
 					}
 					// Collide with ladder tops
@@ -330,14 +334,13 @@ namespace ZeldaOracle.Game.Control {
 							.GetSurfaceTile(tile.Location - new Point2I(0, 1));
 						if (checkAboveTile != null && checkAboveTile.IsLadder)
 							continue;
-						yield return CollisionCheck.CreateTileCollision(tile, 0);
+						yield return CollisionCheck.CreateTileCollision(entity, tile, 0);
 					}
 				}
 			}
 			// Find room edges
 			if (entity.Physics.CollideWithRoomEdge) {
-				yield return CollisionCheck.CreateRoomEdgeCollision(
-					entity.RoomControl);
+				yield return CollisionCheck.CreateRoomEdgeCollision(entity);
 			}
 		}
 		
@@ -350,8 +353,7 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Set the collision box based on the collision type
 			if (source.Type == CollisionType.RoomEdge) {
-				collision.CollisionBox = entity.Physics.GetCollisionBox(
-					entity.Physics.RoomEdgeCollisionBoxType);
+				collision.CollisionBox = entity.Physics.RoomEdgeCollisionBox;
 				collision.SolidBox = entity.RoomControl.RoomBounds;
 			}
 			else if (source.Type == CollisionType.Entity) {
