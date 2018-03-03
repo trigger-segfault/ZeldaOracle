@@ -9,15 +9,17 @@ namespace ZeldaOracle.Game.Control {
 
 	public class InteractionManager : RoomManager {
 		
-		private List<InteractionCollision> interactions;
+		private List<InteractionInstance> interactions;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public InteractionManager(RoomControl roomControl) : base (roomControl) {
-			this.interactions = new List<InteractionCollision>();
+		public InteractionManager(RoomControl roomControl) :
+			base (roomControl)
+		{
+			interactions = new List<InteractionInstance>();
 		}
 
 
@@ -54,6 +56,7 @@ namespace ZeldaOracle.Game.Control {
 			foreach (Entity actionEntity in RoomControl.ActiveEntities) {
 				if (!actionEntity.Interactions.IsEnabled)
 					continue;
+
 				foreach (Collision collision in actionEntity.Physics.Collisions) {
 					if (collision.IsTile && ((collision.Tile.IsMoving &&
 						collision.Direction ==
@@ -61,6 +64,10 @@ namespace ZeldaOracle.Game.Control {
 						(collision.InitialPenetration > 0.0f &&
 						collision.Tile.IsMovable)))
 					{
+						// Create a proxy entity to represent the tile. Tthis means
+						// that Block interactions cannot carry over to the next frame,
+						// since this proxy entity will be different.
+						// TODO: Find a better way to handle interactions with tiles
 						Entity tileProxy = new Entity();
 						tileProxy.Position = collision.Tile.Center;
 						TileEventArgs arguments = new TileEventArgs() {
@@ -68,7 +75,7 @@ namespace ZeldaOracle.Game.Control {
 						};
 
 						// Udpate or create the interaction between these two entities
-						InteractionCollision interaction = GetInteractionCollision(
+						InteractionInstance interaction = GetInteractionInstance(
 							actionEntity, tileProxy, InteractionType.Block);
 						interaction.StayAlive = true;
 						interaction.ActionBox =
@@ -84,7 +91,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
-		/// <summary>Detect all interaction collisions caused by the given entity and
+		/// <summary>Detect all interactions caused by the given entity and
 		/// interaction type.</summary>
 		private void DetectReactionsFromEntity(Entity actionEntity,
 			InteractionType type, Rectangle2F actionBox, EventArgs arguments, bool autoDetected = true)
@@ -103,7 +110,7 @@ namespace ZeldaOracle.Game.Control {
 					positionedReactionBox.Intersects(positionedActionBox))
 				{
 					// Udpate or create the interaction between these two entities
-					InteractionCollision interaction = GetInteractionCollision(
+					InteractionInstance interaction = GetInteractionInstance(
 						actionEntity, reactionEntity, type);
 					interaction.AutoDetected	= autoDetected;
 					interaction.ActionBox		= actionBox;
@@ -115,19 +122,19 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
-		/// <summary>Get the interaction collision between two entities if one exists,
-		/// or else create an new interaction collision.</summary>
-		private InteractionCollision GetInteractionCollision(
+		/// <summary>Get the interaction instance between two entities if one exists,
+		/// or else create an new interaction instance.</summary>
+		private InteractionInstance GetInteractionInstance(
 			Entity actionEntity, Entity reactionEntity, InteractionType type)
 		{
 			// Find a cached reaction
-			InteractionCollision interaction = interactions.FirstOrDefault(
+			InteractionInstance interaction = interactions.FirstOrDefault(
 				i => i.ActionEntity == actionEntity &&
 					i.ReactionEntity == reactionEntity && i.Type == type);
 
 			// If none exists, then create a new reaction
 			if (interaction == null) {
-				interaction = new InteractionCollision() {
+				interaction = new InteractionInstance() {
 					ActionEntity = actionEntity,
 					ReactionEntity = reactionEntity,
 					Type = type,
@@ -143,7 +150,7 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Remove any interactions which are no longer valid.</summary>
 		private void PruneInvalidInteractions() {
 			for (int i = 0; i < interactions.Count; i++) {
-				InteractionCollision interaction = interactions[i];
+				InteractionInstance interaction = interactions[i];
 
 				if (!interaction.StayAlive) {
 					interactions.RemoveAt(i--);
@@ -153,6 +160,8 @@ namespace ZeldaOracle.Game.Control {
 						.CurrentReactions.Remove(interaction);
 				}
 				else {
+					// Mark this interaction to be removed during the next frame,
+					// if it is not refreshed
 					interaction.StayAlive = false;
 				}
 			}
@@ -160,7 +169,7 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Trigger all the occurring interactions.</summary>
 		private void TriggerAllInteractions() {
-			foreach (InteractionCollision interaction in interactions) {
+			foreach (InteractionInstance interaction in interactions) {
 				if (interaction.IsValid()) {
 					interaction.ReactionEntity.Interactions.Trigger(interaction.Type,
 						interaction.ActionEntity, interaction.Arguments);
@@ -173,8 +182,12 @@ namespace ZeldaOracle.Game.Control {
 		// Interaction Interface
 		//-----------------------------------------------------------------------------
 
+		public delegate bool ReactionCondition(Entity reactionEntity);
+
 		/// <summary>Instantly detect and trigger an reactions for an entity.</summary>
-		public void TriggerInstantReaction(Entity actionEntity, InteractionType type) {
+		public void TriggerInstantReaction(Entity actionEntity, InteractionType type,
+			ReactionCondition condition = null)
+		{
 			Rectangle2F actionBox = actionEntity.Interactions.InteractionBox;
 			Rectangle2F positionedActionBox = Rectangle2F.Translate(
 				actionBox, actionEntity.Position);
@@ -192,6 +205,10 @@ namespace ZeldaOracle.Game.Control {
 					Entity actualActionEntity = actionEntity;
 					if (actionEntity.Parent != null)
 						actualActionEntity = actionEntity.Parent;
+
+					// Check the custom condition
+					if (condition != null && condition.Invoke(reactionEntity) == false)
+						continue;
 
 					reactionEntity.Interactions.Trigger(type, actualActionEntity,
 						actionEntity.Interactions.InteractionEventArgs);
@@ -224,7 +241,7 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>List of all occurring interactions.</summary>
-		public List<InteractionCollision> Interactions {
+		public List<InteractionInstance> Interactions {
 			get { return interactions; }
 		}
 	}

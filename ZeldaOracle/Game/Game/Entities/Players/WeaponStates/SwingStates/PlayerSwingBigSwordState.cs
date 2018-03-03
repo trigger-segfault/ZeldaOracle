@@ -74,6 +74,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingBegin() {
+			player.ToolSword.Interactions.InteractionType =
+				InteractionType.BiggoronSword;
 			AudioSystem.PlaySound(GameData.SOUND_BIGGORON_SWORD);
 		}
 

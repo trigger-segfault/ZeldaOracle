@@ -86,22 +86,6 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 
 		public override void Update() {
 			base.Update();
-			
-			// Check for touching collectible items
-			//if (IsPhysicsEnabled) {
-			//	for (int i = 0; i < unit.RoomControl.EntityCount; i++) {
-			//		Entity entity = unit.RoomControl.Entities[i];
-			//		if (entity is Collectible && entity.Physics.IsEnabled &&
-			//			PositionedCollisionBox.Intersects(
-			//				entity.Physics.PositionedSoftCollisionBox))
-			//		{
-			//			Collectible collectible = (Collectible) entity;
-			//			if (collectible.IsCollectible &&
-			//				collectible.IsCollectibleWithItems)
-			//				collectible.Collect();
-			//		}
-			//	}
-			//}
 		}
 
 		

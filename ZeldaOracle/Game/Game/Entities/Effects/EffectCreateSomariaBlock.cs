@@ -66,7 +66,6 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				// Make this effect solid to the player (as if the somaria block has
 				// already been spawned)
 				Physics.CollisionBox = new Rectangle2F(-8, -8, 16, 16);
-				Physics.SoftCollisionBox = new Rectangle2F(-8, -8, 16, 16);
 				Physics.Enable(PhysicsFlags.Solid);
 			}
 		}

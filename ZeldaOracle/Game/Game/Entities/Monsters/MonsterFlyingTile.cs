@@ -18,22 +18,24 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public MonsterFlyingTile() {
-			// General.
+			// General
 			MaxHealth       = 1;
 			ContactDamage   = 2;
 			Color           = MonsterColor.DarkRed;
 
+			// Graphics
+			Graphics.DepthLayer         = DepthLayer.Monsters;
+			Graphics.DepthLayerInAir    = DepthLayer.Monsters;
+
 			// Physics
 			Physics.CollisionBox			= new Rectangle2F(0, -6, 1, 1);
-			Physics.SoftCollisionBox		= new Rectangle2F(-4, -10, 8, 8);
 			Physics.AutoDodges				= false;
 			Physics.HasGravity				= false;
 			Physics.IsDestroyedInHoles		= false;
 			physics.DisableSurfaceContact	= true;
 
-			// Graphics
-			Graphics.DepthLayer         = DepthLayer.Monsters;
-			Graphics.DepthLayerInAir    = DepthLayer.Monsters;
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2F(-4, -10, 8, 8);
 			
 			// Monster & unit settings
 			isKnockbackable			= false;

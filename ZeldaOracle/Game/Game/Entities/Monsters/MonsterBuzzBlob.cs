@@ -24,16 +24,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			stopTime.Set(0, 0);
 			moveTime.Set(50, 80);
 			
-			// Physics
-			Physics.Bounces				= true; // This is here for when the monster is digged up or dropped from the ceiling
-			Physics.ReboundRoomEdge		= true;
-			Physics.ReboundSolid		= true;
-			Physics.SoftCollisionBox	= new Rectangle2I(-4, -10, 8, 9);
-			
 			// Graphics
 			animationMove				= GameData.ANIM_MONSTER_BUZZ_BLOB;
 			syncAnimationWithDirection	= false;
 			
+			// Physics
+			Physics.Bounces				= true; // This is here for when the monster is digged up or dropped from the ceiling
+			Physics.ReboundRoomEdge		= true;
+			Physics.ReboundSolid		= true;
+			
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2I(-4, -10, 8, 9);
 			// Interactions (Tools)
 			Interactions.SetReaction(InteractionType.Sword,			Reactions.Electrocute);
 			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Electrocute);

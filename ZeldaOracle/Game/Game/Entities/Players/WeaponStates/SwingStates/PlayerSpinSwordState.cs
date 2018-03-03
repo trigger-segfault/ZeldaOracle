@@ -73,6 +73,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingBegin() {
+			player.ToolSword.Interactions.InteractionType = InteractionType.SwordSpin;
 			AudioSystem.PlaySound(GameData.SOUND_SWORD_SPIN);
 		}
 

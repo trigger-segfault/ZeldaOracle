@@ -33,12 +33,18 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Physics
 			Physics.CollisionBox		= new Rectangle2I(-2, -2, 4, 4);
-			Physics.SoftCollisionBox	= new Rectangle2I(-2, -2, 4, 4);
 			Physics.MovesWithConveyors	= true;
 
 			// Interactions
 			Interactions.Enable();
 			Interactions.InteractionBox = new Rectangle2I(-2, -2, 4, 4);
+			Interactions.SetReaction(InteractionType.PlayerContact,
+				delegate(Entity sender, EventArgs args)
+			{
+				// TODO: Z-Distance of 9 here?
+				if (IsCollectible)
+					Collect();
+			});
 			Interactions.SetReaction(InteractionType.Sword,
 				delegate(Entity sender, EventArgs args)
 			{
@@ -78,8 +84,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		public virtual void Collect() {
 			Destroy();
-			if (collected != null)
-				collected();
+			collected?.Invoke();
 		}
 
 
@@ -89,13 +94,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		public override void Initialize() {
 			base.Initialize();
-			
 			timer = 0;
 		}
 
 		public override void Update() {
-			physics.SoftCollisionBox = Interactions.InteractionBox;
-
 			// Update timeout timer
 			timer++;
 			if (hasDuration) {
@@ -105,10 +107,6 @@ namespace ZeldaOracle.Game.Entities {
 				else if (timer == fadeDelay)
 					graphics.IsFlickering = true;
 			}
-
-			// Check if colliding with the player.
-			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && IsCollectible)
-				Collect();
 
 			base.Update();
 		}

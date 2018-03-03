@@ -297,8 +297,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			
 			UpdateSubStripIndex();
 
-			// TODO: Remove soft collision box and Is-Passable
-			Interactions.InteractionBox = physics.SoftCollisionBox;
+			// TODO: Remove Is-Passable
 			Interactions.IsEnabled = !isPassable;
 
 			base.Update();

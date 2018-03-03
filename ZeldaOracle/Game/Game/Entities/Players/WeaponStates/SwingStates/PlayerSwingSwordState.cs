@@ -84,6 +84,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
 			allowHold = !player.IsInMinecart;
+			player.ToolSword.Interactions.InteractionType = InteractionType.Sword;
 			AudioSystem.PlayRandomSound(
 				GameData.SOUND_SWORD_SLASH_1,
 				GameData.SOUND_SWORD_SLASH_2,

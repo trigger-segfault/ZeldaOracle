@@ -25,7 +25,31 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public MonsterThwomp() {
-			// General.
+			// Graphics
+			centerOffset		= new Point2I(0, 0);
+			Graphics.DrawOffset	= new Point2I(-16, -16);
+
+			// Physics
+			Physics.CollisionBox		= new Rectangle2F(-15, -16, 30, 8);
+			Physics.HasGravity			= false;
+			Physics.IsSolid				= true;
+			Physics.CollideWithWorld	= false;
+			Physics.CollideWithRoomEdge	= false;
+
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2F(-16, -12, 32, 28);//.Inflated(-2, -2);
+			// Weapon Reactions
+			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.Shovel,		Reactions.ClingEffect);
+			// Projectile Reactions
+			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
+			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
+			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, Reactions.ClingEffect);
+			
+			// Monster
 			ContactDamage	= 4;
 			Color			= MonsterColor.DarkBlue;
 			IsDamageable	= false;
@@ -33,29 +57,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isStunnable		= false;
 			isGaleable		= false;
 			IsKnockbackable	= false;
-
-			centerOffset				= new Point2I(0, 0);
-			Graphics.DrawOffset			= new Point2I(-16, -16);
-			Physics.CollisionBox		= new Rectangle2F(-15, -16, 30, 8);
-			Physics.SoftCollisionBox	= new Rectangle2F(-16, -12, 32, 28);//.Inflated(-2, -2);
-			Physics.HasGravity			= false;
-			Physics.IsSolid				= true;
-			Physics.CollideWithWorld	= false;
-			Physics.CollideWithRoomEdge	= false;
-
-			// TODO: hard collision box should only apply to top, the Thwomp is not
-			// actually supposed to crush the player
-
-			// Weapon Interactions
-			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
-			// Projectile Interactions
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, Reactions.ClingEffect);
 
 			// Behavior
 			stateMachine = new GenericStateMachine<CrushState>();

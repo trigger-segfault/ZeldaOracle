@@ -12,8 +12,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public SwordBeam() {
 			// Physics
-			Physics.CollisionBox		= new Rectangle2F(-1, -4, 2, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
+			Physics.CollisionBox = new Rectangle2F(-1, -4, 2, 1);
 			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
@@ -21,7 +20,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				PhysicsFlags.DestroyedOutsideRoom);
 			
 			// Interactions
+			Interactions.Enable();
 			Interactions.InteractionType = InteractionType.SwordBeam;
+			Interactions.InteractionBox = new Rectangle2F(-1, -1, 2, 1);
 
 			// Projectile
 			syncAnimationWithDirection = true;

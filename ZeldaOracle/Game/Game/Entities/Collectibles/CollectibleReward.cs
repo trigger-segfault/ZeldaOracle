@@ -24,18 +24,18 @@ namespace ZeldaOracle.Game.Entities {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public CollectibleReward(Reward reward, bool isDrop = false, bool isSubmergable = false) {
-			this.reward			= reward;
-			this.showMessage	= !reward.OnlyShowMessageInChest;
-			this.hasDuration	= reward.HasDuration;
-			this.isCollectibleWithItems = reward.IsCollectibleWithItems;
-			this.isDrop			= isDrop;
-			this.isSubmergable	= isSubmergable;
-			this.submerged		= false;
+		public CollectibleReward(Reward reward,
+			bool isDrop = false, bool isSubmergable = false)
+		{
+			// Graphics
+			centerOffset					= new Point2I(0, -5);
+			Graphics.DrawOffset				= new Point2I(-8, -13);
+			Graphics.RipplesDrawOffset		= new Point2I(0, 1);
+			Graphics.IsGrassEffectVisible	= true;
+			Graphics.IsRipplesEffectVisible	= true;
 
-			// Physics.
-			Physics.CollisionBox		= new Rectangle2I(-4, -9, 8, 8);
-			Physics.SoftCollisionBox	= new Rectangle2I(-5, -9, 9, 8);
+			// Physics
+			Physics.CollisionBox = new Rectangle2I(-4, -9, 8, 8);
 			Physics.Enable(
 				PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
@@ -45,12 +45,18 @@ namespace ZeldaOracle.Game.Entities {
 				PhysicsFlags.DestroyedInHoles);
 			soundBounce = reward.BounceSound;
 
-			// Graphics.
-			centerOffset					= new Point2I(0, -5);
-			Graphics.DrawOffset				= new Point2I(-8, -13);
-			Graphics.RipplesDrawOffset		= new Point2I(0, 1);
-			Graphics.IsGrassEffectVisible	= true;
-			Graphics.IsRipplesEffectVisible	= true;
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2I(-5, -9, 9, 8);
+			
+			// Collectible
+			this.reward				= reward;
+			this.isDrop				= isDrop;
+			this.isSubmergable		= isSubmergable;
+			showMessage				= !reward.OnlyShowMessageInChest;
+			hasDuration				= reward.HasDuration;
+			isCollectibleWithItems	= reward.IsCollectibleWithItems;
+			submerged				= false;
 		}
 
 

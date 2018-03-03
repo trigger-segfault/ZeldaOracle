@@ -132,7 +132,7 @@ namespace ZeldaOracle.Game.Debug {
 			Console.WriteLine("Entity Interactions:");
 			Console.ForegroundColor = ConsoleColor.White;
 
-			foreach (InteractionCollision interaction in
+			foreach (InteractionInstance interaction in
 				RoomControl.InteractionManager.Interactions)
 			{
 				Console.Write("{0, 5}: ", interaction.Duration);
@@ -466,8 +466,8 @@ namespace ZeldaOracle.Game.Debug {
 			else if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseTileLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				Monster monster = new MonsterMoblin();
-				monster.Color = MonsterColor.Red;
+				Monster monster = new MonsterCukeman();
+				//monster.Color = MonsterColor.Red;
 
 				//monster.Properties = new Properties();
 				//monster.Properties.Set("cover_tile", "bush");

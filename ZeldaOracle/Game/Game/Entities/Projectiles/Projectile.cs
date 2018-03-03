@@ -177,8 +177,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update() {
-			Interactions.InteractionBox = Physics.SoftCollisionBox;
-
 			// Check if collided
 			if (physics.IsColliding) {
 				Collision solidCollision = physics.GetCollisionInDirection(direction);

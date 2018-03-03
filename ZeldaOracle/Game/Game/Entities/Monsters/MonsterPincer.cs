@@ -42,8 +42,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.CollideWithWorld		= false;
 			Physics.DisableSurfaceContact	= true;
 			Physics.CollisionBox			= new Rectangle2F(-6, -6, 12, 12);
-			Physics.SoftCollisionBox		= Physics.CollisionBox.Inflated(-2, -2);
 
+			// Interactions
+			Interactions.InteractionBox = Physics.CollisionBox.Inflated(-2, -2);
 			// Reactions
 			Interactions.SetReaction(InteractionType.Gale, SenderReactions.Intercept, Reactions.None);
 			Interactions.SetReaction(InteractionType.GaleSeed, SenderReactions.Intercept, Reactions.None);

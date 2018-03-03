@@ -227,8 +227,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Condition States
 			stateShield = new PlayerShieldState();
 
-			// Interaction Callbacks
+			// Interactions
 			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2F(-6, -14 + 3, 12, 13);
 			Interactions.InteractionType = InteractionType.PlayerContact;
 			Interactions.SetReaction(InteractionType.BombExplosion,
 				delegate(Entity sender, EventArgs args)
@@ -665,29 +666,26 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			return false;
 		}
+
+		public bool TriggeredButtonReaction { get; set; }
 		
 		/// <summary>Interact with entities and tiles in front of the player.</summary>
 		private bool ActionObjectInteractions(ActionButtons button) {
 			if (IsBeingKnockedBack)
 				return false;
 
-			// First check entity interactions
-			for (int i = 0; i < RoomControl.EntityCount; i++) {
-				Entity other = RoomControl.Entities[i];
-				if (other != this && !other.IsDestroyed) {
-					Rectangle2F myBox = Rectangle2F.Translate(
-						physics.SoftCollisionBox, position);
-					Rectangle2F otherBox = Rectangle2F.Translate(
-						other.ButtonActionCollisionBox, other.Position);
-					if (myBox.Intersects(otherBox) &&
-						Direction.FromVector(other.Center - Center) == direction)
-					{
-						if (other.OnPlayerAction(direction)) {
-							StopPushing();
-							return true;
-						}
-					}
-				}
+			// First check entity button-press reactions
+			TriggeredButtonReaction = false;
+			RoomControl.InteractionManager.TriggerInstantReaction(
+				this, InteractionType.ButtonAction, delegate(Entity other)
+			{
+				return (Direction.FromVector(other.Center - Center) == direction);
+			});
+			// This variable will be set to true by reaction callbacks if the reaction
+			// triggered a button action
+			if (TriggeredButtonReaction) {
+				StopPushing();
+				return true;
 			}
 
 			// Then check tile interactions

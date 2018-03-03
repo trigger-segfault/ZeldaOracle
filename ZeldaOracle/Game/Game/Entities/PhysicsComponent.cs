@@ -352,68 +352,67 @@ namespace ZeldaOracle.Game.Entities {
 			}
 			return false;
 		}
-		
-		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType,
-			int maxZDistance = 10)
-		{
-			if (collisionBoxType == CollisionBoxType.Hard)
-				return IsHardMeetingEntity(other);
-			return IsSoftMeetingEntity(other, maxZDistance);
-		}
+
+		//public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType,
+		//	int maxZDistance = 10)
+		//{
+		//	if (collisionBoxType == CollisionBoxType.Hard)
+		//		return IsHardMeetingEntity(other);
+		//	return IsSoftMeetingEntity(other, maxZDistance);
+		//}
 
 		/// <summary>Return true this entity and another entitys' soft collision boxes
 		/// are touching.</summary>
-		public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {
-			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
-				return PositionedSoftCollisionBox.Intersects(
-					other.Physics.PositionedSoftCollisionBox);
-			return false;
-		}
+		//public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {
+		//	if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+		//		return PositionedSoftCollisionBox.Intersects(
+		//			other.Physics.PositionedSoftCollisionBox);
+		//	return false;
+		//}
 
-		public bool IsHardMeetingEntity(Entity other) {
-			if (CanCollideWithEntity(other))
-				return PositionedCollisionBox.Intersects(
-					other.Physics.PositionedCollisionBox);
-			return false;
-		}
+		//public bool IsHardMeetingEntity(Entity other) {
+		//	if (CanCollideWithEntity(other))
+		//		return PositionedCollisionBox.Intersects(
+		//			other.Physics.PositionedCollisionBox);
+		//	return false;
+		//}
 
-		public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox,
-			int maxZDistance = 10)
-		{
-			collisionBox.Point += entity.Position;
-			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
-				return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
-			return false;
-		}
+		//public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox,
+		//	int maxZDistance = 10)
+		//{
+		//	collisionBox.Point += entity.Position;
+		//	if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+		//		return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
+		//	return false;
+		//}
 
 		public bool IsBraceletMeetingEntity(Entity other, Rectangle2F collisionBox,
-			int maxZDistance = 10)
-		{
+			int maxZDistance = 10) {
 			collisionBox.Point += entity.Position;
 			if (GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
 				return collisionBox.Intersects(other.Physics.PositionedBraceletCollisionBox);
 			return false;
 		}
 
-		public bool IsCollidingWith(Entity other, CollisionBoxType collisionBoxType,
-			int maxZDistance = 10)
-		{
-			return IsCollidingWith(other, collisionBoxType, collisionBoxType, maxZDistance);
-		}
+		//public bool IsCollidingWith(Entity other, CollisionBoxType collisionBoxType,
+		//	int maxZDistance = 10)
+		//{
+		//	return IsCollidingWith(other, collisionBoxType, collisionBoxType, maxZDistance);
+		//}
 
-		public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType,
-			CollisionBoxType otherBoxType, int maxZDistance = 10)
-		{
-			return CollisionTest.PerformCollisionTest(entity, other,
-				new CollisionTestSettings(null, myBoxType,
-					otherBoxType, maxZDistance)).IsColliding;
-		}
+		//public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType,
+		//	CollisionBoxType otherBoxType, int maxZDistance = 10)
+		//{
+		//	return CollisionTest.PerformCollisionTest(entity, other,
+		//		new CollisionTestSettings(null, myBoxType,
+		//			otherBoxType, maxZDistance)).IsColliding;
+		//}
 
 
 		//-----------------------------------------------------------------------------
 		// Collisions
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Returns true if the entity is currently colliding in the given
 		/// direction.</summary>
 		public bool IsCollidingInDirection(Direction direction) {

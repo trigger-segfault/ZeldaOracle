@@ -61,7 +61,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Color           = MonsterColor.Red;
 			
 			Physics.CollisionBox		= DEFAULT_BOX;
-			Physics.SoftCollisionBox	= new Rectangle2I(-4, -11, 8, 6);
+			Interactions.InteractionBox	= new Rectangle2I(-4, -11, 8, 6);
 			Physics.BraceletCollisionBox	= new Rectangle2I(-6, -12, 12, 12);
 
 			// TODO: Bigger collision box for cover
@@ -305,10 +305,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Don't check for future collisions and force a popup if player is hit.
 			// Otherwise, if future collision is detected, don't popup.
-			if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
-				Interactions.Trigger(InteractionType.PlayerContact, RoomControl.Player);
-				return;
-			}
+			// NOTE: SoftCollisionBox is deprecated
+			//if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
+				//Interactions.Trigger(InteractionType.PlayerContact, RoomControl.Player);
+				//return;
+			//}
 			Vector2F nextVelocity = Angles.ToVector(moveAngle) * moveSpeed;
 
 			// Avoid moving into a hazardous or solid tiles
@@ -374,19 +375,19 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			int direction = Directions.NearestFromVector(vectorToPlayer);
 			if (direction == Directions.Up) {
 				Rectangle2F box = new Rectangle2F(-8, -8, 16, 8) + Position;
-				if (RoomControl.Player.Physics.
-					PositionedSoftCollisionBox.Intersects(box))
+				if (RoomControl.Player.Interactions.
+					PositionedInteractionBox.Intersects(box))
 					StartCharging(direction);
 			}
 			else if (direction == Directions.Down) {
 				RangeF range = new RangeF(Position.X - 8, Position.X + 8);
-				if (RoomControl.Player.Physics.PositionedSoftCollisionBox.
+				if (RoomControl.Player.Interactions.PositionedInteractionBox.
 					LeftRight.Intersects(range))
 					StartCharging(direction);
 			}
 			else {
 				RangeF range = new RangeF(Position.Y - 12, Position.Y + 1);
-				if (RoomControl.Player.Physics.PositionedSoftCollisionBox.
+				if (RoomControl.Player.Interactions.PositionedInteractionBox.
 					TopBottom.Intersects(range))
 					StartCharging(direction);
 			}
@@ -396,10 +397,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			StopCharging();
 			covered = false;
 			SetDefaultReactions();
-			Physics.SoftCollisionBox    = new Rectangle2I(-6, -11, 12, 11);
+			Interactions.InteractionBox = new Rectangle2I(-6, -11, 12, 11);
 			if (shouldBreak) {
 				if (coverTile.BreakAnimation != null) {
-					Effect breakEffect = new Effect(coverTile.BreakAnimation, coverTile.BreakLayer, true);
+					Effect breakEffect = new Effect(
+						coverTile.BreakAnimation, coverTile.BreakLayer, true);
 					RoomControl.SpawnEntity(breakEffect, Center);
 				}
 				if (coverTile.BreakSound != null)

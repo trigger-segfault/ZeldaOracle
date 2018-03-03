@@ -75,7 +75,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Physics
 			Physics.CollisionBox        = new Rectangle2I(-5, -9, 10, 10);
-			Physics.SoftCollisionBox    = new Rectangle2I(-6, -11, 12, 11);
 			Physics.CollideWithWorld    = true;
 			Physics.CollideWithRoomEdge = true;
 			Physics.AutoDodges          = true;
@@ -84,6 +83,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Interactions
 			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2I(-6, -11, 12, 11);
 			SetDefaultReactions();
 
 			// Unit settings

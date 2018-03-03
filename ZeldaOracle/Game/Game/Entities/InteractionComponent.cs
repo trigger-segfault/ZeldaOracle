@@ -4,79 +4,15 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities {
 
-	public class InteractionCollision {
+	public static class GeneralReactions {
 
-		private InteractionType type;
-		private Entity actionEntity;
-		private Entity reactionEntity;
-		private EventArgs arguments;
-		private Rectangle2F actionBox;
-		private Rectangle2F reactionBox;
-		private int duration;
-
-
-		//-----------------------------------------------------------------------------
-		// Constructors
-		//-----------------------------------------------------------------------------
-
-		public InteractionCollision() {
-			duration = 0;
-			arguments = null;
+		public static void TriggerButtonReaction(
+			Entity a, Entity b, EventArgs args)
+		{
+			a.RoomControl.Player.TriggeredButtonReaction = true;
 		}
-
-		public bool IsValid() {
-			return (reactionEntity.IsAliveAndInRoom &&
-				reactionEntity.Interactions.IsEnabled &&
-				(!AutoDetected ||
-					(actionEntity.Interactions.InteractionType == type &&
-					actionEntity.IsAliveAndInRoom &&
-					actionEntity.Interactions.IsEnabled)));
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public Entity ActionEntity {
-			get { return actionEntity; }
-			set { actionEntity = value; }
-		}
-
-		public Entity ReactionEntity {
-			get { return reactionEntity; }
-			set { reactionEntity = value; }
-		}
-
-		public Rectangle2F ActionBox {
-			get { return actionBox; }
-			set { actionBox = value; }
-		}
-
-		public Rectangle2F ReactionBox {
-			get { return reactionBox; }
-			set { reactionBox = value; }
-		}
-
-		public InteractionType Type {
-			get { return type; }
-			set { type = value; }
-		}
-
-		public EventArgs Arguments {
-			get { return arguments; }
-			set { arguments = value; }
-		}
-
-		public int Duration {
-			get { return duration; }
-			set { duration = value; }
-		}
-
-		public bool StayAlive { get; set; }
-		public bool AutoDetected { get; set; }
 	}
-	
+
 	public class InteractionComponent : EntityComponent {
 
 		//private Rectangle2F[] interactionBoxes;
@@ -89,8 +25,8 @@ namespace ZeldaOracle.Game.Entities {
 		private InteractionType interactionType;
 		private EventArgs interactionEventArgs;
 
-		private List<InteractionCollision> currentActions;
-		private List<InteractionCollision> currentReactions;
+		private List<InteractionInstance> currentActions;
+		private List<InteractionInstance> currentReactions;
 
 
 		//-----------------------------------------------------------------------------
@@ -104,8 +40,8 @@ namespace ZeldaOracle.Game.Entities {
 			interactionManager		= new InteractionEventManager(entity);
 			interactionType			= InteractionType.None;
 			interactionEventArgs	= null;
-			currentActions			= new List<InteractionCollision>();
-			currentReactions		= new List<InteractionCollision>();
+			currentActions			= new List<InteractionInstance>();
+			currentReactions		= new List<InteractionInstance>();
 		}
 
 
@@ -244,11 +180,11 @@ namespace ZeldaOracle.Game.Entities {
 			set { interactionEventArgs = value; }
 		}
 
-		public List<InteractionCollision> CurrentActions {
+		public List<InteractionInstance> CurrentActions {
 			get { return currentActions; }
 		}
 
-		public List<InteractionCollision> CurrentReactions {
+		public List<InteractionInstance> CurrentReactions {
 			get { return currentReactions; }
 		}
 	}

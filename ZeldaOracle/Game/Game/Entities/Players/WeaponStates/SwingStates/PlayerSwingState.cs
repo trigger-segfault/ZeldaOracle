@@ -242,7 +242,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 			// Check if it is time to change the swing angle
 			bool changedAngles = false;
-			int time = (int) playerTool.AnimationPlayer.PlaybackTime;
+			int time = (int) playerTool.AnimationPlayer.PlaybackTime + 1;
 			int t = 0;
 			for (int angleIndex = 0;
 				angleIndex < swingAngleDurations.Length; angleIndex++)

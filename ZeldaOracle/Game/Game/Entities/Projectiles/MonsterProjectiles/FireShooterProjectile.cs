@@ -23,13 +23,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
 
 			// Physics
-			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
-			Physics.SoftCollisionBox    = new Rectangle2F(-2, -2, 4, 4);
+			Physics.CollisionBox = new Rectangle2F(-1, -1, 2, 2);
 			Physics.Enable(
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
+
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionBox = new Rectangle2F(-2, -2, 4, 4);
 
 			// Projectile
 			projectileType				= ProjectileType.Magic;
@@ -68,16 +71,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 				phase++;
 				timer = 0;
 				if (phase == 1) {
-					Physics.CollisionBox        = new Rectangle2F(-2, -2, 4, 4);
-					Physics.SoftCollisionBox    = new Rectangle2F(-4, -4, 8, 8);
+					Physics.CollisionBox		= new Rectangle2F(-2, -2, 4, 4);
+					Interactions.InteractionBox	= new Rectangle2F(-4, -4, 8, 8);
 					Physics.Velocity *= 1.5f;
-					Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_MEDIUM);
+					Graphics.PlayAnimation(
+						GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_MEDIUM);
 				}
 				else {
-					Physics.CollisionBox        = new Rectangle2F(-4, -4, 8, 8);
-					Physics.SoftCollisionBox    = new Rectangle2F(-6, -6, 12, 12);
+					Physics.CollisionBox		= new Rectangle2F(-4, -4, 8, 8);
+					Interactions.InteractionBox	= new Rectangle2F(-6, -6, 12, 12);
 					Physics.Velocity *= 0.5f;
-					Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_LARGE);
+					Graphics.PlayAnimation(
+						GameData.ANIM_PROJECTILE_TILE_FIRE_SHOOTER_LARGE);
 				}
 			}
 			timer++;

@@ -37,11 +37,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			movePositions[1]    = tile.Properties.GetInteger("move_distance_2");
 			destination = 0;
 
-			// Graphics
-			centerOffset        = Point2I.FromBoolean(!vertical, length, 1) *
-				GameSettings.TILE_SIZE / 2;
-			Graphics.DrawOffset	= Point2I.Zero;
-
 			// Prevent rogue spike roller movement
 			if (GMath.Sign(movePositions[0]) == GMath.Sign(movePositions[1]))
 				movePositions[1] = 0;
@@ -51,30 +46,37 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			movePositions[1]    += tileLocation;
 			movePositions[1]    *= GameSettings.TILE_SIZE;
 
+			// Graphics
+			centerOffset        = Point2I.FromBoolean(!vertical, length, 1) *
+				GameSettings.TILE_SIZE / 2;
+			Graphics.DrawOffset	= Point2I.Zero;
+
 			// Physics
-			Physics.SoftCollisionBox = new Rectangle2F(
-				2, 3,
-				Point2I.FromBoolean(!vertical, length, 1) * GameSettings.TILE_SIZE - 4);
 			Physics.Flags =	PhysicsFlags.DestroyedOutsideRoom;
 
-			// Weapon interations
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2F(
+				2, 3,
+				(Point2I.FromBoolean(!vertical, length, 1) *
+					GameSettings.TILE_SIZE) - 4);
+			// Weapon Reactions
 			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.ParryWithClingEffect);
 			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
 			Interactions.SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
 			Interactions.SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
-			// Seed interations
+			// Seed Reactions
 			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
-			// Projectile interations
+			// Projectile Reactions
 			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.SwitchHook,		Reactions.None);
-			// Environment interations
+			// Environment Reactions
 			Interactions.SetReaction(InteractionType.Fire,			Reactions.None);
 			Interactions.SetReaction(InteractionType.Gale,			Reactions.None);
 			Interactions.SetReaction(InteractionType.BombExplosion,	Reactions.None);

@@ -47,11 +47,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.HasGravity				= false;
 			Physics.IsDestroyedInHoles		= false;
 			Physics.CollisionBox			= new Rectangle2F(-6, -6, 12, 12);
-			Physics.SoftCollisionBox		= Physics.CollisionBox.Inflated(-2, -2);
 			Physics.DisableSurfaceContact	= true;
 			Physics.ReboundSolid			= true;
 			Physics.ReboundRoomEdge			= true;
 
+			// Interactions
+			Interactions.InteractionBox = Physics.CollisionBox.Inflated(-2, -2);
 			// Projectile Interactions
 			Interactions.SetReaction(InteractionType.Gale,			SenderReactions.Intercept, Reactions.None);
 			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept, Reactions.None);

@@ -35,10 +35,11 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			prepareJumpAnimation	= GameData.ANIM_MONSTER_GEL_PREPARE_JUMP;
 			jumpAnimation			= GameData.ANIM_MONSTER_GEL_JUMP;
 
-			// Physics and graphics
-			Physics.CollisionBox		= new Rectangle2F(-6, -3 - 6, 12, 10);
-			Physics.SoftCollisionBox	= new Rectangle2F(-4, -3 - 6, 8, 8);
-			
+			// Physics
+			Physics.CollisionBox = new Rectangle2F(-6, -3 - 6, 12, 10);
+
+			// Interactions
+			Interactions.InteractionBox = new Rectangle2F(-4, -3 - 6, 8, 8);
 			// Weapon interactions
 			Interactions.SetReaction(InteractionType.Sword,			Reactions.Kill);
 			Interactions.SetReaction(InteractionType.SwordSpin,		Reactions.Kill);

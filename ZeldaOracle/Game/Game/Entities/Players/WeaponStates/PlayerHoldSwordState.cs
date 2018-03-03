@@ -101,6 +101,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			// Equip the sword tool
 			player.EquipTool(player.ToolSword);
+			player.ToolSword.Interactions.InteractionType = InteractionType.Sword;
 			player.ToolSword.AnimationPlayer.SubStripIndex = direction;
 
 			chargeTimer = 0;
