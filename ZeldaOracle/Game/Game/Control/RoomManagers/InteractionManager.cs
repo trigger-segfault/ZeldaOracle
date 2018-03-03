@@ -7,9 +7,8 @@ using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Control {
 
-	public class InteractionManager {
+	public class InteractionManager : RoomManager {
 		
-		private RoomControl roomControl;
 		private List<InteractionCollision> interactions;
 
 
@@ -17,8 +16,7 @@ namespace ZeldaOracle.Game.Control {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public InteractionManager(RoomControl roomControl) {
-			this.roomControl = roomControl;
+		public InteractionManager(RoomControl roomControl) : base (roomControl) {
 			this.interactions = new List<InteractionCollision>();
 		}
 
@@ -41,7 +39,7 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Detect all currently occurring interactions.</summary>
 		private void DetectInteractions() {
-			foreach (Entity actionEntity in roomControl.ActiveEntities) {
+			foreach (Entity actionEntity in RoomControl.ActiveEntities) {
 				if (actionEntity.Interactions.IsEnabled &&
 					actionEntity.Interactions.InteractionType != InteractionType.None)
 				{
@@ -53,7 +51,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Detect interactions for collision with moving blocks
-			foreach (Entity actionEntity in roomControl.ActiveEntities) {
+			foreach (Entity actionEntity in RoomControl.ActiveEntities) {
 				if (!actionEntity.Interactions.IsEnabled)
 					continue;
 				foreach (Collision collision in actionEntity.Physics.Collisions) {
@@ -95,7 +93,7 @@ namespace ZeldaOracle.Game.Control {
 				actionBox, actionEntity.Position);
 
 			// Find all reacting entities
-			foreach (Entity reactionEntity in roomControl.ActiveEntities) {
+			foreach (Entity reactionEntity in RoomControl.ActiveEntities) {
 				Rectangle2F reactionBox = reactionEntity.Interactions.InteractionBox;
 				Rectangle2F positionedReactionBox = Rectangle2F.Translate(
 					reactionBox, reactionEntity.Position);
@@ -182,7 +180,7 @@ namespace ZeldaOracle.Game.Control {
 				actionBox, actionEntity.Position);
 
 			// Find all reacting entities
-			foreach (Entity reactionEntity in roomControl.ActiveEntities) {
+			foreach (Entity reactionEntity in RoomControl.ActiveEntities) {
 				Rectangle2F reactionBox = reactionEntity.Interactions.InteractionBox;
 				Rectangle2F positionedReactionBox = Rectangle2F.Translate(
 					reactionBox, reactionEntity.Position);
@@ -224,14 +222,6 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public RoomControl RoomControl {
-			get { return roomControl; }
-		}
-		
-		public GameControl GameControl {
-			get { return roomControl.GameControl; }
-		}
 
 		/// <summary>List of all occurring interactions.</summary>
 		public List<InteractionCollision> Interactions {

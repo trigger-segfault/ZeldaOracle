@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Translation;
 
 namespace ZeldaOracle.Game.Entities {
 
-	public class RoomGraphics {
+	public class RoomGraphics : RoomManager {
 
 		// Possible Improvement:
 		//  - Use an object pool of Drawing Instructions
@@ -67,7 +62,6 @@ namespace ZeldaOracle.Game.Entities {
 		// Members
 		//-----------------------------------------------------------------------------
 		
-		public RoomControl roomControl;
 		private DrawingInstruction[] layerHeads; // The heads of the drawing instruction queues for each layer.
 		private DrawingInstruction[] layerTails; // The tails of the drawing instruction queues for each layer.
 		private int[] layerCounts;
@@ -77,8 +71,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public RoomGraphics(RoomControl roomControl) {
-			this.roomControl	= roomControl;
+		public RoomGraphics(RoomControl roomControl) : base(roomControl) {
 			this.layerHeads		= new DrawingInstruction[(int) DepthLayer.Count];
 			this.layerTails		= new DrawingInstruction[(int) DepthLayer.Count];
 			this.layerCounts	= new int[(int) DepthLayer.Count];
@@ -319,7 +312,7 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public StyleDefinitions StyleDefinitions {
-			get { return roomControl.Zone.StyleDefinitions; }
+			get { return RoomControl.Zone.StyleDefinitions; }
 		}
 	}
 }

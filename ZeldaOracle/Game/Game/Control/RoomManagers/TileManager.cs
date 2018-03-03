@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -15,9 +13,8 @@ namespace ZeldaOracle.Game.Control {
 		HighestToLowest = 1,
 	}
 
-	public class TileManager {
-
-		private RoomControl roomControl;
+	public class TileManager : RoomManager {
+		
 		private Tile[,,]	tiles;
 		private Point2I		tileGridCellSize;
 		private int			layerCount;
@@ -28,9 +25,8 @@ namespace ZeldaOracle.Game.Control {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileManager(RoomControl roomControl) {
-			this.roomControl		= roomControl;
-			this.tileGridCellSize	= new Point2I(GameSettings.TILE_SIZE);
+		public TileManager(RoomControl roomControl) : base(roomControl) {
+			this.tileGridCellSize = new Point2I(GameSettings.TILE_SIZE);
 		}
 
 		public void Initialize(Room room) {
@@ -306,7 +302,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			if (initializeTile)
-				tile.Initialize(roomControl);
+				tile.Initialize(RoomControl);
 			
 			// Check for covered tiles.
 			Rectangle2F tileBounds = tile.Bounds;
@@ -392,7 +388,7 @@ namespace ZeldaOracle.Game.Control {
 		// Initialize all tiles in the grid.
 		public void InitializeTiles() {
 			foreach (Tile tile in IterateTilesOnce()) {
-				tile.Initialize(roomControl);
+				tile.Initialize(RoomControl);
 				UpdateTileGridArea(tile);
 			}
 			/*foreach (Tile t in GetTiles())
@@ -607,15 +603,7 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public RoomControl RoomControl {
-			get { return roomControl; }
-		}
 		
-		public GameControl GameControl {
-			get { return roomControl.GameControl; }
-		}
-
 		public int GridWidth {
 			get { return gridDimensions.X; }
 		}

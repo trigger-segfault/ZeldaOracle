@@ -7,17 +7,14 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Control {
 
-	public class RoomPhysics {
-
-		private RoomControl roomControl;
-
+	public class RoomPhysics : RoomManager{
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RoomPhysics(RoomControl roomControl) {
-			this.roomControl = roomControl;
+		public RoomPhysics(RoomControl roomControl) : base(roomControl) {
 		}
 
 
@@ -28,8 +25,8 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Process all entity physics for the room.</summary>
 		public void ProcessPhysics() {
 			// Process physics for all entities (except the player)
-			for (int i = 0; i < roomControl.Entities.Count; i++) {
-				Entity entity = roomControl.Entities[i];
+			for (int i = 0; i < RoomControl.Entities.Count; i++) {
+				Entity entity = RoomControl.Entities[i];
 				if (entity != RoomControl.Player && entity.Physics != null &&
 					entity.Physics.IsEnabled)
 				{
@@ -38,10 +35,10 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Process physics for the player last
-			if (roomControl.Player.Physics != null &&
-				roomControl.Player.Physics.IsEnabled)
+			if (RoomControl.Player.Physics != null &&
+				RoomControl.Player.Physics.IsEnabled)
 			{
-				ProcessEntityPhysics(roomControl.Player);
+				ProcessEntityPhysics(RoomControl.Player);
 			}
 		}
 		
@@ -111,7 +108,7 @@ namespace ZeldaOracle.Game.Control {
 							entity.Position + entity.Physics.Velocity));
 
 					foreach (Tile tile in
-						roomControl.TileManager.GetTilesTouching(checkArea))
+						RoomControl.TileManager.GetTilesTouching(checkArea))
 					{
 						if (entity.Physics.CanCollideWithTile(tile) &&
 							tile.CollisionStyle == CollisionStyle.Circular)
@@ -1019,7 +1016,7 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.SurfaceVelocity = Vector2F.Zero;
 
 			// Find the surface tile underneath the entity
-			entity.Physics.TopTile = roomControl.TileManager.GetSurfaceTileAtPosition(
+			entity.Physics.TopTile = RoomControl.TileManager.GetSurfaceTileAtPosition(
 				entity.Position + entity.Physics.TopTilePointOffset,
 				entity.Physics.MovesWithPlatforms);
 			
@@ -1081,7 +1078,7 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Check if the entity is sitting on a hazardous surface
 		/// (water/lava/hole)</summary>
 		private void CheckHazardSurface(Entity entity, Tile previousTopTile) {
-			if (roomControl.IsSideScrolling) {
+			if (RoomControl.IsSideScrolling) {
 				if (entity.Physics.IsInWater &&
 					(previousTopTile == null || !previousTopTile.IsWater))
 				{
@@ -1163,16 +1160,11 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Get the reference to the room controller.</summary>
-		public RoomControl RoomControl {
-			get { return roomControl; }
-		}
-
+		
 		/// <summary>Returns true if the current room is a side-scrolling room.
 		/// </summary>
 		public bool IsSideScrolling {
-			get { return roomControl.IsSideScrolling; }
+			get { return RoomControl.IsSideScrolling; }
 		}
 	}
 }

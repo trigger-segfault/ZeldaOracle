@@ -245,6 +245,7 @@
     <Compile Include="Game\CommonTypes.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
+    <Compile Include="Game\Control\RoomManager.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapRoom.cs" />
     <Compile Include="Game\Control\Menus\CustomSlotItem.cs" />
