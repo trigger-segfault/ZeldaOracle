@@ -131,7 +131,6 @@ namespace ZeldaOracle.Game.Debug {
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine("Entity Interactions:");
 			Console.ForegroundColor = ConsoleColor.White;
-
 			foreach (InteractionInstance interaction in
 				RoomControl.InteractionManager.Interactions)
 			{
@@ -146,6 +145,33 @@ namespace ZeldaOracle.Game.Debug {
 				Console.Write("--> ");
 				Console.ForegroundColor = ConsoleColor.Green;
 				Console.Write(interaction.ReactionEntity.GetType().Name);
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.WriteLine("");
+			}
+			
+			Console.WriteLine("");
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("Protected Interactions:");
+			Console.ForegroundColor = ConsoleColor.White;
+			foreach (ProtectedInteraction protection in
+				RoomControl.InteractionManager.ProtectedInteractions)
+			{
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write(" ");
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(protection.ProtectingEntity.GetType().Name);
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write(" protects ");
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.Write(protection.ProtectedEntity.GetType().Name);
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write(" <--");
+				Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.Write(protection.ProtectedInteractionType.ToString());
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write("-- ");
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Write(protection.InteractionEntity.GetType().Name);
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.WriteLine("");
 			}
@@ -408,7 +434,7 @@ namespace ZeldaOracle.Game.Debug {
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
-			// 0: Spawn a monster.
+			// 0: Spawn a test monster
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.D0) || Keyboard.IsKeyPressed(Keys.Add)) {
 				Monster monster		= new TestMonster();
 				//Monster monster		= new MonsterOctorok();
@@ -634,17 +660,6 @@ namespace ZeldaOracle.Game.Debug {
 				// Yellow origin point
 				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One),
 					new Color(255, 255, 0));
-
-				// Draw collision boxes for unit tools
-				if (entity is Unit) {
-					Unit unit = (Unit) entity;
-					foreach (UnitTool tool in unit.EquippedTools) {
-						if (tool.IsPhysicsEnabled) {
-							g.FillRectangle(tool.PositionedCollisionBox,
-								new Color(255, 0, 255, 150));
-						}
-					}
-				}
 			}
 			else if (EntityDebugInfoMode == EntityDrawInfo.CollisionTests) {
 				Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;

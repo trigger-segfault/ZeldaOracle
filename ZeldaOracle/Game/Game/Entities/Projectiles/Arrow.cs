@@ -30,7 +30,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.DestroyedOutsideRoom);
 
 			// Interactions
-			Interactions.InteractionType = InteractionType.Arrow;
 			Interactions.InteractionBox = new Rectangle2F(-1, -1, 2, 1);
 
 			// Projectile

@@ -113,6 +113,16 @@ namespace ZeldaOracle.Game.Entities.Units {
 				tool.Destroy();
 			}
 		}
+		
+		public void UnequipAllTools() {
+			foreach (UnitTool tool in tools) {
+				tool.IsEquipped = false;
+				tool.OnUnequip();
+				DetachEntity(tool);
+				tool.Destroy();
+			}
+			tools.Clear();
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -263,6 +273,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 		
 		public override void Initialize() {
 			base.Initialize();
+		}
+
+		public override void OnDestroy() {
+			UnequipAllTools();
 		}
 
 		public override void Update() {

@@ -27,6 +27,12 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Arguments used for interactions that the entity triggers.
 		/// </summary>
 		private EventArgs interactionEventArgs;
+		/// <summary>True if the entity's actions should override its parent's actions
+		/// if they have the same reaction entity, essentially "protecting" the parent
+		/// from triggering its action. For example, the player's sword "Sword" action
+		/// will protect the player from triggering its "PlayerContact" action if they
+		/// are both touching the same entity.</summary>
+		private bool protectParentAction;
 
 		// Interaction State ----------------------------------------------------------
 		
@@ -229,6 +235,16 @@ namespace ZeldaOracle.Game.Entities {
 		/// </summary>
 		public List<InteractionInstance> CurrentReactions {
 			get { return currentReactions; }
+		}
+		
+		/// <summary>True if the entity's actions should override its parent's actions
+		/// if they have the same reaction entity, essentially "protecting" the parent
+		/// from triggering its action. For example, the player's sword "Sword" action
+		/// will protect the player from triggering its "PlayerContact" action if they
+		/// are both touching the same entity.</summary>
+		public bool ProtectParentAction {
+			get { return protectParentAction; }
+			set { protectParentAction = value; }
 		}
 	}
 }

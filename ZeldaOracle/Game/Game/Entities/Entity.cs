@@ -509,6 +509,14 @@ namespace ZeldaOracle.Game.Entities {
 			get { return parent; }
 		}
 
+		public Entity RootEntity {
+			get {
+				if (parent != null)
+					return parent.RootEntity;
+				return this;
+			}
+		}
+
 		public List<Entity> Children {
 			get { return children; }
 		}

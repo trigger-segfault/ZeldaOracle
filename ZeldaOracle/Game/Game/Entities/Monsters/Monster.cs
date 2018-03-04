@@ -108,41 +108,45 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Interactions.ClearReactions();
 
 			// Weapon Reactions
-			Reactions[InteractionType.Sword].Set(SenderReactions.Intercept)
-				.Add(MonsterReactions.DamageByLevel(1, 2, 3));
-			Reactions[InteractionType.SwordSpin].Set(MonsterReactions.Damage2);
-			Reactions[InteractionType.BiggoronSword].Set(MonsterReactions.Damage3);
+			Reactions[InteractionType.Sword]
+				.Add(MonsterReactions.DamageByLevel(1, 2, 3))
+				.Add(SenderReactions.Intercept);
+			Reactions[InteractionType.SwordSpin].Add(MonsterReactions.Damage2);
+			Reactions[InteractionType.BiggoronSword].Add(MonsterReactions.Damage3);
+			Reactions[InteractionType.SwordStrafe]
+				.Add(MonsterReactions.DamageByLevel(1, 2, 3))
+				.Add(SenderReactions.Intercept);
 			Reactions[InteractionType.Shield]
-				.Set(SenderReactions.Bump).Add(MonsterReactions.Bump);
-			Reactions[InteractionType.Shovel].Set(MonsterReactions.Bump);
+				.Add(SenderReactions.Bump).Add(MonsterReactions.Bump);
+			Reactions[InteractionType.Shovel].Add(MonsterReactions.Bump);
 
 			// Seed Reactions
-			Reactions[InteractionType.EmberSeed].Set(SenderReactions.Intercept);
+			Reactions[InteractionType.EmberSeed].Add(SenderReactions.Intercept);
 			Reactions[InteractionType.ScentSeed]
-				.Set(SenderReactions.Intercept).Add(MonsterReactions.SilentDamage);
+				.Add(SenderReactions.Intercept).Add(MonsterReactions.SilentDamage);
 			Reactions[InteractionType.PegasusSeed]
-				.Set(SenderReactions.Intercept).Add(MonsterReactions.Stun);
-			Reactions[InteractionType.GaleSeed].Set(SenderReactions.Intercept);
-			Reactions[InteractionType.MysterySeed].Set(MonsterReactions.MysterySeed);
+				.Add(SenderReactions.Intercept).Add(MonsterReactions.Stun);
+			Reactions[InteractionType.GaleSeed].Add(SenderReactions.Intercept);
+			Reactions[InteractionType.MysterySeed].Add(MonsterReactions.MysterySeed);
 
 			// Projectile Reactions
 			Reactions[InteractionType.Arrow]
-				.Set(SenderReactions.Destroy).Add(MonsterReactions.Damage);
+				.Add(SenderReactions.Destroy).Add(MonsterReactions.Damage);
 			Reactions[InteractionType.SwordBeam]
-				.Set(SenderReactions.Destroy).Add(MonsterReactions.Damage);
-			Reactions[InteractionType.RodFire].Set(SenderReactions.Intercept);
+				.Add(SenderReactions.Destroy).Add(MonsterReactions.Damage);
+			Reactions[InteractionType.RodFire].Add(SenderReactions.Intercept);
 			Reactions[InteractionType.Boomerang]
-				.Set(SenderReactions.Intercept).Add(MonsterReactions.Stun);
-			Reactions[InteractionType.SwitchHook].Set(MonsterReactions.SwitchHook);
+				.Add(SenderReactions.Intercept).Add(MonsterReactions.Stun);
+			Reactions[InteractionType.SwitchHook].Add(MonsterReactions.SwitchHook);
 
 			// Environment Reactions
-			Reactions[InteractionType.Fire].Set(MonsterReactions.Burn);
-			Reactions[InteractionType.Gale].Set(MonsterReactions.Gale);
-			Reactions[InteractionType.BombExplosion].Set(MonsterReactions.Damage);
-			Reactions[InteractionType.ThrownObject].Set(MonsterReactions.Damage);
-			Reactions[InteractionType.MineCart].Set(MonsterReactions.SoftKill);
-			Reactions[InteractionType.MagnetBall].Set(MonsterReactions.Kill); // TODO: Confirm  this
-			Reactions[InteractionType.Block].Set(MonsterReactions.Damage2);
+			Reactions[InteractionType.Fire].Add(MonsterReactions.Burn);
+			Reactions[InteractionType.Gale].Add(MonsterReactions.Gale);
+			Reactions[InteractionType.BombExplosion].Add(MonsterReactions.Damage2);
+			Reactions[InteractionType.ThrownObject].Add(MonsterReactions.Damage);
+			Reactions[InteractionType.MineCart].Add(MonsterReactions.SoftKill);
+			Reactions[InteractionType.MagnetBall].Add(MonsterReactions.Kill); // TODO: Confirm  this
+			Reactions[InteractionType.Block].Add(MonsterReactions.Damage2);
 
 			// Player interations
 			Reactions[InteractionType.PlayerContact].Set(

@@ -742,22 +742,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			syncAnimationWithDirection = true;
 			isFrozen			= false;
 
-			// Initialize tools
-			toolShield.Initialize(this);
-			toolSword.Initialize(this);
-			toolVisual.Initialize(this);
-			
 			stateParameters = new PlayerStateParameters();
-
-			//Effect attachment = new Effect(GameData.ANIM_SEED_SHOOTER, DepthLayer.ItemSeedShooter);
-			//attachment.Graphics.SubStripIndex = Angle.Right.Index;
-			//RoomControl.SpawnEntity(attachment);
-			////attachment.Position = position;
-			//attachment.AttachmentOffset = graphics.DrawOffset;
-			//attachment.IsPersistentBetweenRooms = true;
-			////attachment.AttachmentZOffset = 7;
-			////attachment.Graphics.IsShadowVisible = true;
-			//AttachEntity(attachment);
 		}
 
 		public override void OnEnterRoom() {

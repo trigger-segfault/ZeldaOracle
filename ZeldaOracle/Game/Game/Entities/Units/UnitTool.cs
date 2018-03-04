@@ -20,11 +20,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 		protected bool			drawAboveUnit;
 		protected bool			syncAnimationWithDirection;
 		protected Rectangle2I	collisionBox;
-		//protected Point2I		drawOffset;
 		protected UnitToolType	toolType;
-		//private AnimationPlayer	animationPlayer;
 		private bool			isEquipped;
-		private bool			isPhysicsEnabled;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,24 +31,22 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public UnitTool() {
 			unit				= null;
 			drawAboveUnit		= false;
-			//animationPlayer		= new AnimationPlayer();
 			collisionBox		= new Rectangle2I(-1, -1, 2, 2);
 			toolType			= UnitToolType.Visual;
 			isEquipped			= false;
-			isPhysicsEnabled	= true;
 			syncAnimationWithDirection	= true;
 		}
 
 		public void Initialize(Unit unit) {
 			this.unit = unit;
-			OnInitialize();
+			Initialize(unit.RoomControl);
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
-		
+
 		public virtual void OnParry(Unit other, Vector2F contactPoint) {
 		}
 
@@ -64,9 +59,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public virtual void OnHitProjectile(Projectile projectile) {
 		}
 
-		public virtual void OnInitialize() {
-		}
-
 		public virtual void OnEquip() {
 		}
 		
@@ -74,10 +66,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 		}
 
 		public override void Update() {
-			//animationPlayer.Update();
-			//if (syncAnimationWithDirection)
-				//animationPlayer.SubStripIndex = unit.Direction;
-			
 			Graphics.DrawOffset = unit.Graphics.DrawOffset;
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = unit.Direction.Index;
@@ -91,26 +79,13 @@ namespace ZeldaOracle.Game.Entities.Units {
 		//-----------------------------------------------------------------------------
 		
 
-		public void Enable() {
-			isEquipped = true;
-		}
+		//public void Enable() {
+		//	isEquipped = true;
+		//}
 
-		public void Disable() {
-			isEquipped = false;
-		}
-
-		public void EnablePhysics() {
-			isPhysicsEnabled = true;
-		}
-
-		public void EnablePhysics(Rectangle2I collisionBox) {
-			this.collisionBox = collisionBox;
-			isPhysicsEnabled = true;
-		}
-
-		public void DisablePhyscs() {
-			isPhysicsEnabled = false;
-		}
+		//public void Disable() {
+		//	isEquipped = false;
+		//}
 
 
 		//-----------------------------------------------------------------------------
@@ -175,11 +150,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public Unit Unit {
 			get { return unit; }
 			set { unit = value; }
-		}
-		
-		public bool IsPhysicsEnabled {
-			get { return isPhysicsEnabled; }
-			set { isPhysicsEnabled = value; }
 		}
 		
 		public bool IsSword {

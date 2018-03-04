@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Entities.Monsters.Tools;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 
 namespace ZeldaOracle.Game.Debug {
 
@@ -104,8 +105,6 @@ namespace ZeldaOracle.Game.Debug {
 
 			//Graphics.PlayAnimation(GameData.ANIM_MONSTER_MOBLIN);
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_DARKNUT);
-
-			toolSword.Initialize(this);
 		}
 
 		public override void UpdateAI() {
@@ -141,7 +140,7 @@ namespace ZeldaOracle.Game.Debug {
 			if (Keyboard.IsKeyPressed(Keys.NumPad7)) {
 				//ShootFromDirection(new MagicProjectile(), direction, 2.0f);
 				//ShootFromDirection(new RockProjectile(), direction, 2.0f);
-				ShootFromDirection(new Arrow(), direction, 2.0f);
+				ShootFromDirection(new MonsterArrow(), direction, 2.0f);
 			}
 
 			// NumPad /: Equip/Unequip a sword

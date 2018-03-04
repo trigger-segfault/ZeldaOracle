@@ -15,6 +15,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Rectangle2F actionBox;
 		private Rectangle2F reactionBox;
 		private int duration;
+		private bool isProtected;
 		private bool stayAlive;
 		private bool autoDetected;
 
@@ -26,6 +27,8 @@ namespace ZeldaOracle.Game.Entities {
 		public InteractionInstance() {
 			duration = 0;
 			arguments = null;
+			isProtected = false;
+			autoDetected = true;
 		}
 
 
@@ -97,6 +100,13 @@ namespace ZeldaOracle.Game.Entities {
 		public bool StayAlive {
 			get { return stayAlive; }
 			set { stayAlive = value; }
+		}
+
+		/// <summary>Used by the InteractionManager to check if this interaction is
+		/// being protected by another interaction.</summary>
+		public bool IsProtected {
+			get { return isProtected; }
+			set { isProtected = value; }
 		}
 		
 		/// <summary>True if this interaction was automatically detected by the

@@ -60,6 +60,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			
 			// Shoot and track the arrow projectile.
 			Arrow arrow = new Arrow();
+			arrow.Interactions.InteractionType = InteractionType.Arrow;
 			Player.ShootFromDirection(arrow, Player.Direction,
 				GameSettings.PROJECTILE_ARROW_SPEED,
 				Directions.ToVector(Player.Direction) * 8.0f);

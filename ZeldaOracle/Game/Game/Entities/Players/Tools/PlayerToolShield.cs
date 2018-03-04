@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Units;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Game.Items;
 
 namespace ZeldaOracle.Game.Entities.Players.Tools {
 	public class PlayerToolShield : UnitTool {
@@ -22,10 +14,16 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		//-----------------------------------------------------------------------------
 
 		public PlayerToolShield() {
-			toolType = UnitToolType.Shield;
-			IsPhysicsEnabled = true;
+			// Entity
 			IsPersistentBetweenRooms = true;
+			
+			// Interactions
+			Interactions.Enable();
+			Interactions.InteractionType = InteractionType.Shield;
+			Interactions.ProtectParentAction = true;
 
+			// Tool
+			toolType = UnitToolType.Shield;
 			shieldCollisionBoxes = new Rectangle2I[] {
 				new Rectangle2I(14 - 8, 2 - 13, 2, 14),	// Right
 				new Rectangle2I( 7 - 8, 0 - 13, 9, 11),	// Up
@@ -39,34 +37,19 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnInitialize() {
-			base.OnInitialize();
+		public override void Initialize() {
+			base.Initialize();
 
 			itemShield = (ItemShield) unit.GameControl.Inventory.GetItem("item_shield");
 			
-			Interactions.Enable();
-			Interactions.InteractionType = InteractionType.Shield;
 			Interactions.InteractionEventArgs = new WeaponInteractionEventArgs() {
 				Weapon = itemShield,
 				Tool = this,
 			};
 		}
 
-		public override void OnHitProjectile(Projectile projectile) {
-			if (projectile.ProjectileType == ProjectileType.Physical ||
-				projectile.ProjectileType == ProjectileType.Magic ||
-				(projectile.ProjectileType == ProjectileType.Beam && itemShield.Level == Item.Level3))
-			{
-				projectile.Intercept();
-				AudioSystem.PlaySound(GameData.SOUND_SHIELD_DEFLECT);
-			}
-		}
-
-		public override void OnHitMonster(Monster monster) {
-			monster.Interactions.Trigger(InteractionType.Shield, unit, new WeaponInteractionEventArgs() {
-				Weapon = itemShield,
-				Tool = this
-			});
+		public override void OnEquip() {
+			Interactions.InteractionBox = shieldCollisionBoxes[Player.Direction];
 		}
 
 		public override void Update() {

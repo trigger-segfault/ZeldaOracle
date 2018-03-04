@@ -7,9 +7,21 @@ using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Control {
 
+	public class ProtectedInteraction {
+		public Entity ProtectedEntity { get; set; }
+		public Entity InteractionEntity { get; set; }
+		public Entity ProtectingEntity { get; set; }
+		public InteractionType ProtectedInteractionType { get; set; }
+		public InteractionType ProtectingInteractionType { get; set; }
+	}
+
 	public class InteractionManager : RoomManager {
 		
+		/// <summary>List of all occurring interactions.</summary>
 		private List<InteractionInstance> interactions;
+		/// <summary>List of information about protected interactions. For debug
+		/// purposes only.</summary>
+		private List<ProtectedInteraction> protectedInteractions;
 
 
 		//-----------------------------------------------------------------------------
@@ -20,6 +32,7 @@ namespace ZeldaOracle.Game.Control {
 			base (roomControl)
 		{
 			interactions = new List<InteractionInstance>();
+			protectedInteractions = new List<ProtectedInteraction>();
 		}
 
 
@@ -94,7 +107,8 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Detect all interactions caused by the given entity and
 		/// interaction type.</summary>
 		private void DetectReactionsFromEntity(Entity actionEntity,
-			InteractionType type, Rectangle2F actionBox, EventArgs arguments, bool autoDetected = true)
+			InteractionType type, Rectangle2F actionBox, EventArgs arguments,
+			bool autoDetected = true)
 		{
 			Rectangle2F positionedActionBox = Rectangle2F.Translate(
 				actionBox, actionEntity.Position);
@@ -149,10 +163,16 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Remove any interactions which are no longer valid.</summary>
 		private void PruneInvalidInteractions() {
+			// Find interactions which are being protected by other interactions
+			protectedInteractions.Clear();
+			for (int i = 0; i < interactions.Count; i++)
+				FindProtectedInteractions(interactions[i]);
+
+			// Remove protected and invalidated interactions
 			for (int i = 0; i < interactions.Count; i++) {
 				InteractionInstance interaction = interactions[i];
 
-				if (!interaction.StayAlive) {
+				if (!interaction.StayAlive || interaction.IsProtected) {
 					interactions.RemoveAt(i--);
 					interaction.ActionEntity.Interactions
 						.CurrentActions.Remove(interaction);
@@ -160,9 +180,84 @@ namespace ZeldaOracle.Game.Control {
 						.CurrentReactions.Remove(interaction);
 				}
 				else {
-					// Mark this interaction to be removed during the next frame,
-					// if it is not refreshed
+					// Mark this interaction to be removed during the next frame, if it
+					// is not refreshed
 					interaction.StayAlive = false;
+				}
+			}
+		}
+
+		/// <summary>Find any interactions which the given interaction is protecting.
+		/// Due to the fact that interactions have a direction, there are two cases
+		/// where interactions can be protected.</summary>
+		private void FindProtectedInteractions(InteractionInstance interaction) {
+			// Case 1: MonsterSword protects Monster from PlayerSword
+			//
+			//          (action entity)
+			//            PlayerSword
+			//               /    \
+			//              /      \
+			//             /        \
+			//         [Sword]    [Sword]
+			//           /            \
+			//          v              v
+			//  MonsterSword -------> Monster
+			//       (child) protects (parent)
+			//         (reaction entities)
+			//
+			if (interaction.ReactionEntity.Reactions[interaction.Type].ProtectParent) {
+				Entity parent = interaction.ReactionEntity.Parent;
+				if (parent != null && parent.Interactions.IsEnabled) {
+					InteractionInstance parentInteraction =
+						parent.Interactions.CurrentReactions.FirstOrDefault(
+							i => i.ActionEntity == interaction.ActionEntity);
+					if (parentInteraction != null) {
+						parentInteraction.IsProtected = true;
+						
+						// Create the debug info for this protected interaction
+						protectedInteractions.Add(new ProtectedInteraction() {
+							ProtectingEntity = interaction.ReactionEntity,
+							ProtectedEntity = parent,
+							InteractionEntity = interaction.ActionEntity,
+							ProtectedInteractionType = parentInteraction.Type,
+							ProtectingInteractionType = interaction.Type,
+						});
+					}
+				}
+			}
+
+			// Case 2: PlayerSword protects Player from MonsterSword
+			//
+			//         (reaction entity)
+			//            MonsterSword
+			//               ^    ^
+			//              /      \
+			//             /        \
+			//        [Sword]   [PlayerContact]
+			//           /            \
+			//          /              \
+			//   PlayerSword -------> Player
+			//       (child) protects (parent)
+			//          (action entities)
+			//
+			if (interaction.ActionEntity.Interactions.ProtectParentAction) {
+				Entity parent = interaction.ActionEntity.Parent;
+				if (parent != null && parent.Interactions.IsEnabled) {
+					InteractionInstance parentInteraction =
+						parent.Interactions.CurrentActions.FirstOrDefault(
+							i => i.ReactionEntity == interaction.ReactionEntity);
+					if (parentInteraction != null) {
+						parentInteraction.IsProtected = true;
+
+						// Create the debug info for this protected interaction
+						protectedInteractions.Add(new ProtectedInteraction() {
+							ProtectingEntity = interaction.ActionEntity,
+							ProtectedEntity = parent,
+							InteractionEntity = interaction.ReactionEntity,
+							ProtectedInteractionType = parentInteraction.Type,
+							ProtectingInteractionType = interaction.Type,
+						});
+					}
 				}
 			}
 		}
@@ -171,8 +266,9 @@ namespace ZeldaOracle.Game.Control {
 		private void TriggerAllInteractions() {
 			foreach (InteractionInstance interaction in interactions) {
 				if (interaction.IsValid()) {
-					interaction.ReactionEntity.Interactions.Trigger(interaction.Type,
-						interaction.ActionEntity, interaction.Arguments);
+					interaction.ReactionEntity.Interactions.Trigger(
+						interaction.Type, interaction.ActionEntity,
+						interaction.Arguments);
 				}
 			}
 		}
@@ -268,6 +364,12 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>List of all occurring interactions.</summary>
 		public List<InteractionInstance> Interactions {
 			get { return interactions; }
+		}
+
+		/// <summary>List of information about protected interactions. For debug
+		/// purposes only.</summary>
+		public List<ProtectedInteraction> ProtectedInteractions {
+			get { return protectedInteractions; }
 		}
 	}
 }

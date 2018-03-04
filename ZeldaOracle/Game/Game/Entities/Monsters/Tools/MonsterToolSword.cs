@@ -19,7 +19,29 @@ namespace ZeldaOracle.Game.Entities.Monsters.Tools {
 
 		public MonsterToolSword() {
 			toolType = UnitToolType.Sword;
-			IsPhysicsEnabled = true;
+			syncAnimationWithDirection = true;
+
+			// Interactions
+			Interactions.Enable();
+			// Player Interactions
+			Reactions[InteractionType.PlayerContact]
+				.Set(SenderReactions.Damage2);
+			// Weapon Interactions
+			Reactions[InteractionType.Sword]
+				.SetProtectParent(true)
+				.Set(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordSpin]
+				.SetProtectParent(true)
+				.Set(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordStrafe]
+				.SetProtectParent(true)
+				.Set(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.BiggoronSword]
+				.SetProtectParent(true)
+				.Set(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.Shield]
+				.SetProtectParent(true)
+				.Set(MonsterReactions.ParryWithClingEffect);
 		}
 
 		
@@ -27,25 +49,28 @@ namespace ZeldaOracle.Game.Entities.Monsters.Tools {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnInitialize() {
-			base.OnInitialize();
+		public override void Initialize() {
+			base.Initialize();
 		}
 
 		public override void OnEquip() {
-			base.OnEquip();
-			
-			AnimationPlayer.Play(GameData.ANIM_MONSTER_SWORD_HOLD);
-			AnimationPlayer.Pause();
+			Graphics.PlayAnimation(GameData.ANIM_MONSTER_SWORD_HOLD);
+			Graphics.PauseAnimation();
+
+			Interactions.InteractionBox = Rectangle2F.Translate(
+				SWORD_BOXES[unit.Direction], (Point2I) unit.CenterOffset);
 		}
 
 		public override void Update() {
 			// Set the collision box based on facing direction
-			collisionBox = SWORD_BOXES[unit.Direction];
-			collisionBox.Point += (Point2I) unit.CenterOffset;
+			Interactions.InteractionBox = Rectangle2F.Translate(
+				SWORD_BOXES[unit.Direction], (Point2I) unit.CenterOffset);
 			
 			// Change depth based on facing direction
 			DrawAboveUnit = (unit.Direction == Directions.Right ||
 				unit.Direction == Directions.Down);
+
+			Graphics.ColorDefinitions = Unit.Graphics.ColorDefinitions;
 
 			base.Update();
 		}

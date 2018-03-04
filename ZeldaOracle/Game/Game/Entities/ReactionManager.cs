@@ -19,18 +19,21 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Weapon Interactions
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Hit by a sword.</summary>
+		/// <summary>Hit by a sword swing.</summary>
 		Sword,
-		/// <summary>Hit by a spinning sword.</summary>
+		/// <summary>Hit by a sword spin.</summary>
 		SwordSpin,
+		/// <summary>Hit by the sword when the player is simple holding the sword out
+		/// and strafing.</summary>
+		SwordStrafe,
 		/// <summary>Hit by a biggoron sword.</summary>
 		BiggoronSword,
 		/// <summary>Hit by a shield.</summary>
 		Shield,
 		/// <summary>Hit by a shovel being used.</summary>
 		Shovel,
-		/// <summary>Attempt to use the bracelet to pickup or grab.</summary>
+		/// <summary>Touching the player when he attempts to use the Bracelet weapon.
+		/// </summary>
 		Bracelet,
 		
 		//-----------------------------------------------------------------------------
@@ -138,16 +141,18 @@ namespace ZeldaOracle.Game.Entities {
 	//-----------------------------------------------------------------------------
 	// Interaction Delegates
 	//-----------------------------------------------------------------------------
-	
-	public delegate void ReactionMemberSimpleCallback();
 
-	public delegate void ReactionMemberCallback(
-		Entity actionEntity, EventArgs args);
+	public delegate void ReactionCallback(InteractionInstance interaction);
 
 	public delegate void ReactionStaticCallback(
 		Entity reactionEntity, Entity actionEntity, EventArgs args);
 
 	public delegate void ReactionStaticSimpleCallback(Entity reactionEntity);
+	
+	public delegate void ReactionMemberCallback(
+		Entity actionEntity, EventArgs args);
+
+	public delegate void ReactionMemberSimpleCallback();
 		
 
 	//-----------------------------------------------------------------------------
@@ -165,6 +170,12 @@ namespace ZeldaOracle.Game.Entities {
 		/// If this is null, then the entity's default interaction box will be used
 		/// instead.</summary>
 		private Rectangle2F? collisionBox;
+		/// <summary>True if the entity's reaction should override its parent's
+		/// reaction if they have the same action entity, essentially "protecting" the
+		/// parent from its reaction. For example, a monster's sword "Sword" reaction
+		/// will protect the monster from its "Sword" reaction, causing a parry instead
+		/// of damage.</summary>
+		private bool protectParent;
 
 		
 		//-----------------------------------------------------------------------------
@@ -174,6 +185,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler() {
 			callback = null;
 			collisionBox = null;
+			protectParent = false;
 		}
 
 
@@ -212,7 +224,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Set(
 			ReactionStaticSimpleCallback callback)
 		{
-			this.callback = ToStaticInteractionDelegate(callback);
+			this.callback = ToReactionCallback(callback);
 			return this;
 		}
 		
@@ -220,7 +232,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Set(
 			ReactionMemberCallback callback)
 		{
-			this.callback = ToStaticInteractionDelegate(callback);
+			this.callback = ToReactionCallback(callback);
 			return this;
 		}
 		
@@ -229,7 +241,7 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Set(
 			ReactionMemberSimpleCallback callback)
 		{
-			this.callback = ToStaticInteractionDelegate(callback);
+			this.callback = ToReactionCallback(callback);
 			return this;
 		}
 			
@@ -248,51 +260,78 @@ namespace ZeldaOracle.Game.Entities {
 		public ReactionHandler Add(
 			ReactionStaticSimpleCallback callback)
 		{
-			return Add(ToStaticInteractionDelegate(callback));
+			return Add(ToReactionCallback(callback));
 		}
 			
 		/// <summary>Add a new callback for this interaction.</summary>
 		public ReactionHandler Add(
 			ReactionMemberCallback callback)
 		{
-			return Add(ToStaticInteractionDelegate(callback));
+			return Add(ToReactionCallback(callback));
 		}
 			
 		/// <summary>Add a new callback for this interaction.</summary>
 		public ReactionHandler Add(
 			ReactionMemberSimpleCallback callback)
 		{
-			return Add(ToStaticInteractionDelegate(callback));
+			return Add(ToReactionCallback(callback));
+		}
+		
+		/// <summary>Custom hitbox used to detect reactions for this interaction type.
+		/// If this is null, then the entity's default interaction box will be used
+		/// instead.</summary>
+		public ReactionHandler SetCollisionBox(Rectangle2F? collisionBox) {
+			this.collisionBox = collisionBox;
+			return this;
+		}
+		
+		/// <summary>True if the entity's reaction should override its parent's
+		/// reaction if they have the same action entity, essentially "protecting" the
+		/// parent from its reaction. For example, a monster's sword "Sword" reaction
+		/// will protect the monster from its "Sword" reaction, causing a parry instead
+		/// of damage.</summary>
+		public ReactionHandler SetProtectParent(bool protectParent) {
+			this.protectParent = protectParent;
+			return this;
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
-		
-		/// <summary>Convert a member callback, which has an implicit subject, to a
-		/// static callback, which has the subject as a parameter.</summary>
-		private static ReactionStaticCallback ToStaticInteractionDelegate(
-			ReactionMemberCallback memberDelegate)
+
+		private static ReactionCallback ToReactionCallback(
+			ReactionStaticCallback callback)
 		{
-			return delegate(Entity subject, Entity sender, EventArgs args) {
-				memberDelegate.Invoke(sender, args);
+			return delegate(InteractionInstance interaction) {
+				callback.Invoke(interaction.ReactionEntity,
+					interaction.ActionEntity, interaction.Arguments);
 			};
 		}
 		
-		private static ReactionStaticCallback ToStaticInteractionDelegate(
-			ReactionMemberSimpleCallback callback)
-		{
-			return delegate(Entity reactionEntity, Entity actionEntity, EventArgs args) {
-				callback.Invoke();
-			};
-		}
-		
-		private static ReactionStaticCallback ToStaticInteractionDelegate(
+		private static ReactionStaticCallback ToReactionCallback(
 			ReactionStaticSimpleCallback callback)
 		{
 			return delegate(Entity reactionEntity, Entity actionEntity, EventArgs args) {
 				callback.Invoke(reactionEntity);
+			};
+		}
+
+		/// <summary>Convert a member callback, which has an implicit subject, to a
+		/// static callback, which has the subject as a parameter.</summary>
+		private static ReactionStaticCallback ToReactionCallback(
+			ReactionMemberCallback callback)
+		{
+			return delegate(Entity subject, Entity sender, EventArgs args) {
+				callback.Invoke(sender, args);
+			};
+		}
+		
+		private static ReactionStaticCallback ToReactionCallback(
+			ReactionMemberSimpleCallback callback)
+		{
+			return delegate(Entity reactionEntity, Entity actionEntity, EventArgs args) {
+				callback.Invoke();
 			};
 		}
 
@@ -307,6 +346,16 @@ namespace ZeldaOracle.Game.Entities {
 		public Rectangle2F? CollisionBox {
 			get { return collisionBox; }
 			set { collisionBox = value; }
+		}
+		
+		/// <summary>True if the entity's reaction should override its parent's
+		/// reaction if they have the same action entity, essentially "protecting" the
+		/// parent from its reaction. For example, a monster's sword "Sword" reaction
+		/// will protect the monster from its "Sword" reaction, causing a parry instead
+		/// of damage.</summary>
+		public bool ProtectParent {
+			get { return protectParent; }
+			set { protectParent = value; }
 		}
 	}
 	
