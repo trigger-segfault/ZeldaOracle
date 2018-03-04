@@ -123,8 +123,6 @@
     <Compile Include="Common\Audio\SoundInstance.cs" />
     <Compile Include="Common\Content\ResourceReferenceException.cs" />
     <Compile Include="Common\Content\Texture2DLoader.cs" />
-    <Compile Include="Common\Geometry\Orientation.cs" />
-    <Compile Include="Common\Geometry\Axes.cs" />
     <Compile Include="Common\Geometry\CollisionModel.cs" />
     <Compile Include="Common\Content\Resource.cs" />
     <Compile Include="Common\Content\Resources.cs" />
@@ -136,10 +134,8 @@
     <None Include="Common\Debugging\DebugMenuItem.cs" />
     <None Include="Common\Debugging\RadioButtonMenuItem.cs" />
     <None Include="Common\Debugging\ToggleMenuItem.cs" />
-    <Compile Include="Common\Graphics\Flipping.cs" />
     <Compile Include="Common\Graphics\MappedColors.cs" />
     <Compile Include="Common\Graphics\PaletteColors.cs" />
-    <Compile Include="Common\Graphics\Rotating.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Misc.cs" />
     <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Size.cs" />
@@ -172,23 +168,9 @@
     <Compile Include="Common\Scripting\IPropertyObjectContainer.cs" />
     <Compile Include="Common\Scripting\Event.cs" />
     <Compile Include="Common\Scripting\EventCollection.cs" />
-    <Compile Include="Common\Scripting\ScriptingAttributes.cs" />
-    <Compile Include="Common\Geometry\Align.cs" />
-    <Compile Include="Common\Geometry\Angle.cs" />
-    <Compile Include="Common\Geometry\Direction.cs" />
-    <Compile Include="Common\Geometry\GMath.cs" />
-    <Compile Include="Common\Geometry\GRandom.cs" />
-    <Compile Include="Common\Geometry\Line2F.cs" />
-    <Compile Include="Common\Geometry\Point2I.cs" />
-    <Compile Include="Common\Geometry\RangeF.cs" />
-    <Compile Include="Common\Geometry\RangeI.cs" />
-    <Compile Include="Common\Geometry\Rectangle2F.cs" />
-    <Compile Include="Common\Geometry\Rectangle2I.cs" />
-    <Compile Include="Common\Geometry\Vector2F.cs" />
     <Compile Include="Common\Graphics\Sprites\Animation.cs" />
     <Compile Include="Common\Graphics\Sprites\AnimationFrame.cs" />
     <Compile Include="Common\Graphics\AnimationPlayer.cs" />
-    <Compile Include="Common\Graphics\Color.cs" />
     <Compile Include="Common\Graphics\DrawMode.cs" />
     <Compile Include="Common\Graphics\RealFont.cs" />
     <Compile Include="Common\Graphics\GameFont.cs" />
@@ -213,7 +195,6 @@
     <Compile Include="Common\Scripting\Properties.cs" />
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
-    <None Include="Common\Scripting\ZeldaObject.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParamDefinition.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParam.cs" />
@@ -245,9 +226,11 @@
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Common\Util\BinaryExtensions.cs" />
     <Compile Include="Common\Util\EnumHelper.cs" />
+    <Compile Include="Common\Util\GdiCasting.cs" />
     <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Common\Util\PathHelper.cs" />
     <Compile Include="Common\Util\ReflectionHelper.cs" />
+    <Compile Include="Common\Util\XnaCasting.cs" />
     <Compile Include="Game\CommonTypes.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
@@ -627,6 +610,10 @@
     <ProjectReference Include="..\GameAPI\ZeldaAPI.csproj">
       <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
       <Name>ZeldaAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameCommon\ZeldaCommon.csproj">
+      <Project>{0f262418-7e4b-4005-b35e-18a180ac1239}</Project>
+      <Name>ZeldaCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameContent\ZeldaContent.contentproj">
       <Name>ZeldaContent</Name>

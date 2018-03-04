@@ -5,14 +5,18 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
 	/// <summary>The world class containing everything about the game.</summary>
-	public class World : IEventObjectContainer, IEventObject, IIDObject {
+	public class World : IEventObjectContainer, IEventObject, IIDObject,
+		IVariableObjectContainer, IVariableObject
+	{
 
 		private Properties properties;
 		private EventCollection events;
+		private Variables variables;
 		private List<Level> levels;
 		private List<Dungeon> dungeons;
 		private ScriptManager scriptManager;
@@ -34,6 +38,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.events			= new EventCollection(this);
 			this.properties		= new Properties(this);
 			this.properties.BaseProperties = new Properties();
+			this.variables		= new Variables(this);
 
 
 			this.properties.BaseProperties.Set("id", "world_name")
@@ -41,6 +46,10 @@ namespace ZeldaOracle.Game.Worlds {
 
 			this.events.AddEvent("start_game", "Start Game", "Initialization",
 				"Called when the game first starts.", new ScriptParameter("Game", "game"));
+
+			// This will be debug-assigned as "Link" in GameControl.StartGame until we
+			// have an enter name screen.
+			this.variables.AddBuiltIn("player", "");
 		}
 
 
@@ -176,6 +185,19 @@ namespace ZeldaOracle.Game.Worlds {
 					}
 				}
 			}
+		}
+
+		/// <summary>Gets the collection of variables objects in the world.</summary>
+		public IEnumerable<IVariableObject> GetVariableObjects() {
+			yield return this;
+			foreach (Level level in levels) {
+				foreach (IVariableObject variableObject in level.GetVariableObjects()) {
+					yield return variableObject;
+				}
+			}
+			/*foreach (Dungeon dungeon in dungeons) {
+				yield return dungeon;
+			}*/
 		}
 
 
@@ -364,6 +386,11 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Gets the events for the world.</summary>
 		public EventCollection Events {
 			get { return events; }
+		}
+
+		/// <summary>Gets the variables for the world.</summary>
+		public Variables Variables {
+			get { return variables; }
 		}
 
 		/// <summary>Gets the script manager for the world.</summary>

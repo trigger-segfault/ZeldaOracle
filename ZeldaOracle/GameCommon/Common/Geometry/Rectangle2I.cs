@@ -3,19 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-
-using GdiPoint		= System.Drawing.Point;
-using GdiPointF		= System.Drawing.PointF;
-using GdiSize		= System.Drawing.Size;
-using GdiSizeF		= System.Drawing.SizeF;
-using GdiRectangle	= System.Drawing.Rectangle;
-using GdiRectangleF	= System.Drawing.RectangleF;
-
 namespace ZeldaOracle.Common.Geometry {
-
 	/// <summary>The 2D integer precision rectangle with basic operations and functions.</summary>
+	[Serializable]
 	public struct Rectangle2I {
 
 		//-----------------------------------------------------------------------------
@@ -31,10 +21,8 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The position of the rectangle.</summary>
-		[ContentSerializerIgnore]
 		public Point2I Point;
 		/// <summary>The size of the rectangle.</summary>
-		[ContentSerializerIgnore]
 		public Point2I Size;
 
 
@@ -207,7 +195,7 @@ namespace ZeldaOracle.Common.Geometry {
 		// Implicit Conversions
 		//-----------------------------------------------------------------------------
 
-		public static implicit operator Rectangle2I(Rectangle r) {
+		/*public static implicit operator Rectangle2I(Rectangle r) {
 			return new Rectangle2I(r.X, r.Y, r.Width, r.Height);
 		}
 
@@ -221,20 +209,20 @@ namespace ZeldaOracle.Common.Geometry {
 
 		public static implicit operator GdiRectangleF(Rectangle2I r) {
 			return new GdiRectangleF(r.X, r.Y, r.Width, r.Height);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
 		// Explicit Conversions
 		//-----------------------------------------------------------------------------
 
-		public static explicit operator Rectangle2I(GdiRectangleF r) {
+		/*public static explicit operator Rectangle2I(GdiRectangleF r) {
 			return new Rectangle2I((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
 		}
 
 		public static explicit operator Rectangle(Rectangle2I r) {
 			return new Rectangle(r.Point.X, r.Point.Y, r.Size.X, r.Size.Y);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------

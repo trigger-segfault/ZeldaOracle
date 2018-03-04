@@ -18,6 +18,7 @@ using ZeldaOracle.Game.Worlds;
 using MouseButtons = System.Windows.Forms.MouseButtons;
 using System.Windows.Forms;
 using ConscriptDesigner.Anchorables.TilesetEditorTools;
+using ZeldaOracle.Common.Util;
 
 namespace ConscriptDesigner.WinForms {
 	public class TilesetEditorDisplay : ZeldaUniqueGraphicsDeviceControl {
@@ -143,7 +144,7 @@ namespace ConscriptDesigner.WinForms {
 			Cursor = CurrentTool.MouseCursor;
 
 			if (tileset != null) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 				
 				// Notify the current tool.
 				e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
@@ -156,7 +157,7 @@ namespace ConscriptDesigner.WinForms {
 			Cursor = CurrentTool.MouseCursor;
 
 			if (tileset != null) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 
 				// Notify the current tool.
 				e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
@@ -168,7 +169,7 @@ namespace ConscriptDesigner.WinForms {
 			Cursor = CurrentTool.MouseCursor;
 
 			if (tileset != null) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 				
 				// Notify the current tool.
 				e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
@@ -178,7 +179,7 @@ namespace ConscriptDesigner.WinForms {
 
 		private void OnMouseDoubleClick(object sender, MouseEventArgs e) {
 			if (tileset != null) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 
 				// Notify the current tool.
 				e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);

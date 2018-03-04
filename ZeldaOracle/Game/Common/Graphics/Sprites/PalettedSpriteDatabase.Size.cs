@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 using XnaColor = Microsoft.Xna.Framework.Color;
 using XnaRectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -93,24 +94,24 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				XnaColor[] colorData = new XnaColor[originalSprite.SourceRect.Area];
 				Point2I rectSize = originalSprite.SourceRect.Size;
 				//XnaColor[] colorData = new XnaColor[currentImage.Width * currentImage.Height];
-				XnaRectangle rect = (XnaRectangle) originalSprite.SourceRect;
+				XnaRectangle rect = originalSprite.SourceRect.ToXnaRectangle();
 				originalSprite.Image.Texture.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				for (int x = 0; x < rectSize.X; x++) {
 					for (int y = 0; y < rectSize.Y; y++) {
 						int index = x + y * rectSize.X;
-						Color color = (Color)colorData[index];
+						Color color = colorData[index].ToColor();
 
 						// Don't palette ignored colors
 						if (color.A == PaletteDictionary.AlphaIdentifier) {
 							int subtype = (color.R | (color.G << 8)) % 4;
-							colorData[index] = args.DefaultMapping[subtype];
+							colorData[index] = args.DefaultMapping[subtype].ToXnaColor();
 						}
 					}
 				}
 
 				// Save the mapping to the database image
-				rect = (XnaRectangle) CurrentSourceRect;
+				rect = CurrentSourceRect.ToXnaRectangle();
 				currentImage.Texture.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				// Skip all the busywork
@@ -163,7 +164,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				XnaColor[] colorData = new XnaColor[args.SourceRect.Area];
 				Point2I rectSize = args.SourceRect.Size;
 				//XnaColor[] colorData = new XnaColor[currentImage.Width * currentImage.Height];
-				XnaRectangle rect = (XnaRectangle) args.SourceRect;
+				XnaRectangle rect = args.SourceRect.ToXnaRectangle();
 				args.Image.Texture.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 				Point2I chunkSize = args.ChunkSize;
 				if (chunkSize.IsZero)
@@ -183,10 +184,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 								int iy = chunkY * chunkSize.Y + y;
 								if (iy >= rectSize.Y) break;
 								int index = ix + iy * rectSize.X;
-								Color color = (Color) colorData[index];
+								Color color = colorData[index].ToColor();
 								if (color.A == 0) {
 									color = Color.Transparent;
-									colorData[index] = color;
+									colorData[index] = color.ToXnaColor();
 									// If no mapped colors have been encountered yet
 									if (scannedColors.Count == ignoredColors.Count)
 										transparentOnly = true;
@@ -262,11 +263,11 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 									if (ix >= rectSize.X) break;
 									int index = ix + iy * rectSize.X;
 									// Don't palette ignored colors or transparency
-									Color color = (Color) colorData[index];
+									Color color = colorData[index].ToColor();
 									if (color.A == 0)
-										colorData[index] = Color.Transparent;
+										colorData[index] = XnaColor.Transparent;
 									else if (finalColorMapping.ContainsKey(color))
-										colorData[index] = finalColorMapping[color];
+										colorData[index] = finalColorMapping[color].ToXnaColor();
 								}
 							}
 						}
@@ -274,7 +275,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				}
 
 				// Save the mapping to the database image
-				rect = (XnaRectangle) CurrentSourceRect;
+				rect = CurrentSourceRect.ToXnaRectangle();
 				currentImage.Texture.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				// Skip all the busywork

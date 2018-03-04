@@ -15,21 +15,22 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using XnaGame		= Microsoft.Xna.Framework.Game;
-using Color			= Microsoft.Xna.Framework.Color;
-using XnaKeys		= Microsoft.Xna.Framework.Input.Keys;
+using XnaGame = Microsoft.Xna.Framework.Game;
+using Color = Microsoft.Xna.Framework.Color;
+using XnaKeys = Microsoft.Xna.Framework.Input.Keys;
 
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
-using GamePad		= ZeldaOracle.Common.Input.GamePad;
-using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
-using Mouse			= ZeldaOracle.Common.Input.Mouse;
-using Keys			= ZeldaOracle.Common.Input.Keys;
-using Buttons		= ZeldaOracle.Common.Input.Buttons;
-using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
+using GamePad = ZeldaOracle.Common.Input.GamePad;
+using Keyboard = ZeldaOracle.Common.Input.Keyboard;
+using Mouse = ZeldaOracle.Common.Input.Mouse;
+using Keys = ZeldaOracle.Common.Input.Keys;
+using Buttons = ZeldaOracle.Common.Input.Buttons;
+using MouseButtons = ZeldaOracle.Common.Input.MouseButtons;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Main {
 	/// <summary>The class that manages the XNA aspects of the game.</summary>
@@ -240,7 +241,7 @@ namespace ZeldaOracle.Game.Main {
 				Mouse.Enable();
 				Keyboard.Update(gameTime);
 				GamePad.Update(gameTime);
-				Mouse.Update(gameTime, (IsFullScreen ? -new Vector2F(Window.ClientBounds.Location) : Vector2F.Zero));
+				Mouse.Update(gameTime, (IsFullScreen ? -Window.ClientBounds.Location.ToVector2F() : Vector2F.Zero));
 			}
 			else {
 				Keyboard.Disable(false);

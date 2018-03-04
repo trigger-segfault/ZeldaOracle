@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Maps;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Control.Scripting;
@@ -26,11 +27,13 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Game.Control {
 
 	// The main control for the current game session.
-	public class GameControl : ZeldaAPI.Game {
+	public class GameControl : ZeldaAPI.Game, IVariableObject {
 
 		private GameManager		gameManager;
 		private RoomControl		roomControl;
 		private World			world;
+		/// <summary>Save-modified variables.</summary>
+		private Variables		variables;
 		private Player			player;
 		private HUD				hud;
 		private Inventory		inventory;
@@ -73,6 +76,7 @@ namespace ZeldaOracle.Game.Control {
 			this.menuSecondaryItems	= null;
 			this.menuEssences		= null;
 			this.scriptRunner		= null;
+			this.variables          = new Variables(this);
 		}
 
 
@@ -182,6 +186,12 @@ namespace ZeldaOracle.Game.Control {
 
 				// Load the world file.
 				LoadWorld(worldPath, recompile);
+				
+				variables.Clear();
+				variables.SetAll(world.Variables);
+
+				// DEBUG: Until enter name screen exists
+				variables.Set("player", "Link");
 
 				// Begin the starting room.
 				if (test) {
@@ -491,6 +501,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public RoomState CurrentRoomState {
 			get { return roomStateStack.CurrentRoomState; }
+		}
+
+		public Variables Variables {
+			get { return variables; }
 		}
 	}
 }

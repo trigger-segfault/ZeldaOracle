@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using XnaColor = Microsoft.Xna.Framework.Color;
 
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>The subtypes to use for looking up colors in color groups.</summary>
@@ -203,13 +204,14 @@ namespace ZeldaOracle.Common.Graphics {
 			for (int i = 0; i < PaletteDictionary.MaxColorGroups; i++) {
 				int index = i * PaletteDictionary.ColorGroupSize;
 				for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
-					colorData[index + j] = defaultGroup[j];
+					colorData[index + j] = defaultGroup[j].ToXnaColor();
 				}
 			}
 			foreach (var pair in dictionary.GetDictionary()) {
 				int index = pair.Value;
 				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
-					colorData[index + i] = LookupColor(pair.Key, (LookupSubtypes) i);
+					colorData[index + i] =
+						LookupColor(pair.Key, (LookupSubtypes) i).ToXnaColor();
 				}
 			}
 			paletteTexture.SetData(colorData);

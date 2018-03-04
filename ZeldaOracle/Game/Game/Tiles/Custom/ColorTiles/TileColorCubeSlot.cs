@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -61,7 +62,7 @@ namespace ZeldaOracle.Game.Tiles {
 				PuzzleColor prevColor = Color;
 				Properties.Set("color", (int) value);
 				if (prevColor != value) {
-					GameControl.FireEvent(this, "color_change", this, (ZeldaAPI.Color) value);
+					GameControl.FireEvent(this, "color_change", this, value);
 				}
 			}
 		}
@@ -71,9 +72,9 @@ namespace ZeldaOracle.Game.Tiles {
 		// Scripting API
 		//-----------------------------------------------------------------------------
 
-		ZeldaAPI.Color ZeldaAPI.ColorCubeSlot.Color {
+		/*ZeldaAPI.Color ZeldaAPI.ColorCubeSlot.Color {
 			get { return (ZeldaAPI.Color) Color; }
 			set { Color = (PuzzleColor) value; }
-		}
+		}*/
 	}
 }

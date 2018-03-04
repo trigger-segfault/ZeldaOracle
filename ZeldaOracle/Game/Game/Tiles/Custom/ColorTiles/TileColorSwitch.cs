@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -129,8 +130,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// API Implementations
 		//-----------------------------------------------------------------------------
 
-		ZeldaAPI.Color ZeldaAPI.ColorSwitch.Color {
+		/*ZeldaAPI.Color ZeldaAPI.ColorSwitch.Color {
 			get { return (ZeldaAPI.Color)color; }
-		}
+		}*/
 	}
 }

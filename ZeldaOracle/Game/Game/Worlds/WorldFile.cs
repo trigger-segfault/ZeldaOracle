@@ -15,6 +15,8 @@ using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.API;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Worlds {
 
@@ -223,6 +225,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the world's properties.
 			ReadProperties(reader, world.Properties);
+			//if (version >= 4)
+			//	ReadVariables(reader, world.Variables);
 			ReadEvents(reader, world.Events, world);
 
 			// Read the dungeons.
@@ -427,6 +431,8 @@ namespace ZeldaOracle.Game.Worlds {
 							evnt = new Event(eventName, script.Parameters.ToArray());
 						if (script.IsHidden) {
 							events.GetEvent(eventName).Script = script;
+							// Assign the correct parameters
+							script.Parameters = evnt.Parameters;
 							world.RemoveScript(eventScriptID);
 						}
 						else {
@@ -466,7 +472,7 @@ namespace ZeldaOracle.Game.Worlds {
 				return Property.CreateString(name, ReadString(reader));
 			}
 			if (type == PropertyType.Point) {
-				return Property.Create(name, new Point2I(reader.ReadInt32(), reader.ReadInt32()));
+				return Property.Create(name, reader.ReadPoint2I());
 			}
 			else if (type == PropertyType.List) {
 				int count = reader.ReadInt32();
@@ -485,6 +491,37 @@ namespace ZeldaOracle.Game.Worlds {
 
 				list.Count = count;
 				return list;
+			}
+			return null;
+		}
+
+		private Variables ReadVariables(BinaryReader reader, Variables variables) {
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++) {
+				Variable variable = ReadVariable(reader);
+				variable = variables.SetGeneric(variable.Name, variable.ObjectValue);
+			}
+			return variables;
+		}
+
+		private Variable ReadVariable(BinaryReader reader) {
+			VariableType type = (VariableType) reader.ReadInt32();
+			string name = ReadString(reader);
+
+			if (type == VariableType.Integer) {
+				return Variable.Create(name, reader.ReadInt32());
+			}
+			else if (type == VariableType.Float) {
+				return Variable.Create(name, reader.ReadSingle());
+			}
+			else if (type == VariableType.Boolean) {
+				return Variable.Create(name, reader.ReadBoolean());
+			}
+			else if (type == VariableType.String) {
+				return Variable.Create(name, ReadString(reader));
+			}
+			if (type == VariableType.Point) {
+				return Variable.Create(name, reader.ReadPoint2I());
 			}
 			return null;
 		}
@@ -619,17 +656,21 @@ namespace ZeldaOracle.Game.Worlds {
 			else
 				writer.Write((int) 0);
 
-			List<Script> internalScripts = new List<Script>();
+			List<KeyValuePair<Script, Event>> internalScripts =
+				new List<KeyValuePair<Script, Event>>();
 			if (editorMode) {
 				int internalID = 0;
 				foreach (IEventObject eventObject in world.GetEventObjects()) {
 					foreach (Event evnt in eventObject.Events.GetEvents()) {
 						if (evnt.IsDefined) {
-							string existingScript = evnt.GetExistingScript(world.ScriptManager.Scripts);
+							string existingScript =
+								evnt.GetExistingScript(world.ScriptManager.Scripts);
 							if (existingScript == null) {
-								evnt.Script.ID = ScriptManager.CreateInternalScriptName(internalID);
+								evnt.Script.ID = ScriptManager.
+									CreateInternalScriptName(internalID);
 								evnt.InternalScriptID = evnt.Script.ID;
-								internalScripts.Add(evnt.Script);
+								internalScripts.Add(
+									new KeyValuePair<Script, Event>(evnt.Script, evnt));
 								internalID++;
 							}
 							else {
@@ -644,21 +685,31 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write(world.Scripts.Count + internalScripts.Count);
 			foreach (Script script in world.Scripts.Values)
 				WriteScript(writer, script);
-			foreach (Script script in internalScripts)
-				WriteScript(writer, script);
+			foreach (var scriptPair in internalScripts)
+				WriteScript(writer, scriptPair.Key, scriptPair.Value);
 		}
 		
-		private void WriteScript(BinaryWriter writer, Script script) {
+		private void WriteScript(BinaryWriter writer, Script script, Event evnt = null) {
 			// Write the name and source code.
 			WriteString(writer, script.ID);
 			WriteString(writer, script.Code);
 			writer.Write(script.IsHidden);
-			
+
 			// Write the parameters.
-			writer.Write(script.Parameters.Count);
-			for (int i = 0; i < script.Parameters.Count; i++) {
-				WriteString(writer, script.Parameters[i].Type);
-				WriteString(writer, script.Parameters[i].Name);
+			// Force writing event's correct parameters for refactoring purposes.
+			if (evnt != null) {
+				writer.Write(evnt.ParameterCount);
+				for (int i = 0; i < evnt.ParameterCount; i++) {
+					WriteString(writer, evnt.Parameters[i].Type);
+					WriteString(writer, evnt.Parameters[i].Name);
+				}
+			}
+			else {
+				writer.Write(script.Parameters.Count);
+				for (int i = 0; i < script.Parameters.Count; i++) {
+					WriteString(writer, script.Parameters[i].Type);
+					WriteString(writer, script.Parameters[i].Name);
+				}
 			}
 			
 			// Write the errors and warnings.
@@ -740,6 +791,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Write the world's properties.
 			WriteProperties(writer, world.Properties);
+			//WriteVariables(writer, world.Variables);
 			WriteEvents(writer, world.Events);
 
 			// Write the dungeons.
@@ -899,8 +951,7 @@ namespace ZeldaOracle.Game.Worlds {
 				WriteString(writer, property.StringValue);
 			}
 			else if (property.Type == PropertyType.Point) {
-				writer.Write(((Point2I) property.ObjectValue).X);
-				writer.Write(((Point2I) property.ObjectValue).Y);
+				writer.Write(property.PointValue);
 			}
 			else if (property.Type == PropertyType.List) {
 				writer.Write((int) property.Count);
@@ -911,7 +962,36 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 		}
-		
+
+
+		private void WriteVariables(BinaryWriter writer, Variables variables) {
+			writer.Write(variables.CustomCount);
+			foreach (Variable variable in variables.GetCustomVariables()) {
+				WriteVariable(writer, variable);
+			}
+		}
+
+		private void WriteVariable(BinaryWriter writer, Variable variable) {
+			writer.Write((int) variable.Type);
+			WriteString(writer, variable.Name);
+
+			if (variable.Type == VariableType.Integer) {
+				writer.Write(variable.IntValue);
+			}
+			else if (variable.Type == VariableType.Float) {
+				writer.Write(variable.FloatValue);
+			}
+			else if (variable.Type == VariableType.Boolean) {
+				writer.Write(variable.BoolValue);
+			}
+			else if (variable.Type == VariableType.String) {
+				WriteString(writer, variable.StringValue);
+			}
+			else if (variable.Type == VariableType.Point) {
+				writer.Write(variable.PointValue);
+			}
+		}
+
 		private void WriteStrings(BinaryWriter writer) {
 			writer.Write((int) strings.Count);
 			for (int i = 0; i < strings.Count; i++)

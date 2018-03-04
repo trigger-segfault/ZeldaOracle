@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
@@ -21,7 +22,7 @@ namespace ZeldaOracle.Game.Tiles {
 	*/
 	
 	/// <summary>The orientations a minecart track can be in.</summary>
-	public enum MinecartTrackOrientation {
+	/*public enum MinecartTrackOrientation {
 		/// <summary>Track goes from left to right.</summary>
 		Horizontal = 0,
 		/// <summary>Track goes from top to bottom.</summary>
@@ -34,7 +35,7 @@ namespace ZeldaOracle.Game.Tiles {
 		DownLeft,
 		/// <summary>Track goes from bottom to right.</summary>
 		DownRight
-	}
+	}*/
 
 	public static class MinecartTrackOrientationExtensions {
 		public static bool HasDirection(this MinecartTrackOrientation orientation, Direction dir) {

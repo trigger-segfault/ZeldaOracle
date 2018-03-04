@@ -3,18 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-
-using GdiPoint		= System.Drawing.Point;
-using GdiPointF		= System.Drawing.PointF;
-using GdiSize		= System.Drawing.Size;
-using GdiSizeF		= System.Drawing.SizeF;
-using GdiRectangle	= System.Drawing.Rectangle;
-using GdiRectangleF	= System.Drawing.RectangleF;
-
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>The 2D floating precision rectangle with numerous operations and functions.</summary>
+	[Serializable]
 	public struct Rectangle2F {
 
 		//-----------------------------------------------------------------------------
@@ -30,10 +21,8 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The position of the rectangle.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F Point;
 		/// <summary>The size of the rectangle.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F Size;
 
 
@@ -212,7 +201,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Rectangle2F(r.X, r.Y, r.Width, r.Height);
 		}
 
-		public static implicit operator Rectangle2F(Rectangle r) {
+		/*public static implicit operator Rectangle2F(Rectangle r) {
 			return new Rectangle2F(r.X, r.Y, r.Width, r.Height);
 		}
 
@@ -226,14 +215,14 @@ namespace ZeldaOracle.Common.Geometry {
 
 		public static implicit operator GdiRectangleF(Rectangle2F r) {
 			return new GdiRectangleF(r.X, r.Y, r.Width, r.Height);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
 		// Explicit Conversions
 		//-----------------------------------------------------------------------------
 
-		public static explicit operator Rectangle2I(Rectangle2F r) {
+		/*public static explicit operator Rectangle2I(Rectangle2F r) {
 			return new Rectangle2I((int)r.Point.X, (int)r.Point.Y, (int)r.Size.X, (int)r.Size.Y);
 		}
 
@@ -243,7 +232,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		public static explicit operator GdiRectangle(Rectangle2F r) {
 			return new GdiRectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
-		}
+		}*/
 
 		
 		//-----------------------------------------------------------------------------
@@ -443,14 +432,12 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets or sets the width of the rectangle.</summary>
-		[ContentSerializer(ElementName = "W")]
 		public float Width {
 			get { return Size.X; }
 			set { Size.X = value; }
 		}
 
 		/// <summary>Gets or sets the height of the rectangle.</summary>
-		[ContentSerializer(ElementName = "H")]
 		public float Height {
 			get { return Size.Y; }
 			set { Size.Y = value; }

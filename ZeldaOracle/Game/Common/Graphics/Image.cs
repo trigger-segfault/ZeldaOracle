@@ -6,9 +6,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using XnaColor		= Microsoft.Xna.Framework.Color;
+using XnaColor = Microsoft.Xna.Framework.Color;
 
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>An image containing a texture.</summary>
@@ -105,7 +106,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the bounding box of the image.</summary>
 		public Rectangle2I Bounds {
-			get { return texture.Bounds; }
+			get { return texture.Bounds.ToRectangle2I(); }
 		}
 
 		/// <summary>Gets the size of the image.</summary>
