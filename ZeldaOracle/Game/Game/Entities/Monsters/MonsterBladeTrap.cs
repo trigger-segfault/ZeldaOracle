@@ -1,6 +1,4 @@
 ﻿
-using ZeldaOracle.Common.Geometry;
-
 namespace ZeldaOracle.Game.Entities.Monsters {
 
 	public class MonsterBladeTrap : Monster {
@@ -13,23 +11,29 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isStunnable		= false;
 			isGaleable		= false;
 			IsKnockbackable	= false;
-			
-			// Interactions (Tools)
-			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Bump, MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.Shovel,			MonsterReactions.ClingEffect);
-			// Interactions (Projectiles)
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.ClingEffect);
-
-			
-			Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.Shovel,			MonsterReactions.ClingEffect);
+				
+			// Weapon Reactions
+			Reactions[InteractionType.Sword]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordStrafe]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordSpin]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.BiggoronSword]
+				.SetBegin(MonsterReactions.ClingEffect);
+			Reactions[InteractionType.Shield]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.Shovel]
+				.SetBegin(MonsterReactions.ClingEffect);
+			// Projectile Reactions
+			Reactions[InteractionType.Arrow]
+				.Set(SenderReactions.Intercept);
+			Reactions[InteractionType.SwordBeam]
+				.Set(SenderReactions.Intercept);
+			Reactions[InteractionType.Boomerang]
+				.Set(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwitchHook]
+				.Set(MonsterReactions.ParryWithClingEffect);
 		}
 
 		public override void Initialize() {

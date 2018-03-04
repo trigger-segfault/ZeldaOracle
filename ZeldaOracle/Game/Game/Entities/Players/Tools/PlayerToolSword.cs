@@ -29,12 +29,17 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 			toolType = UnitToolType.Sword;
 		}
 		
-		public void Intercept() {
+		public bool Intercept() {
 			// Stab if holding sword
-			if (Player.WeaponState == Player.HoldSwordState)
+			if (Player.WeaponState == Player.HoldSwordState) {
 				Player.HoldSwordState.Stab(false);
-			else if (Player.WeaponState == Player.SwingSwordState)
+				return true;
+			}
+			else if (Player.WeaponState == Player.SwingSwordState) {
 				Player.SwingSwordState.AllowSwordHold = false;
+				return true;
+			}
+			return false;
 		}
 
 		

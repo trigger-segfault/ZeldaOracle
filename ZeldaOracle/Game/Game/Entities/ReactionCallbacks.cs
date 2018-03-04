@@ -152,44 +152,67 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		/// <summary>Bump the monster and sender.</summary>
-		public static void Parry(Entity subject, Entity sender, EventArgs args) {
-			Monster monster = (Monster) subject.RootEntity;
-			monster.Bump(sender.RootEntity.Center);
-			Unit unitSender = sender.RootEntity as Unit;
+		public static void Parry(InteractionInstance interaction) {
+			Entity actionRoot = interaction.ActionEntity.RootEntity;
+			Entity reactionRoot = interaction.ReactionEntity.RootEntity;
 
-			if (unitSender != null && !unitSender.IsBeingKnockedBack) {
-				unitSender.Bump(monster.Center);
-				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
-			}
+			// Bump and/or intercept the action entity
+			Unit actionUnit = actionRoot as Unit;
+			if (actionUnit != null && actionUnit.IsKnockbackable &&
+				!actionUnit.IsBeingKnockedBack)
+				actionUnit.Bump(reactionRoot.Center);
+			if (interaction.ActionEntity is IInterceptable)
+				((IInterceptable) interaction.ActionEntity).Intercept();
+
+			// Bump and/or intercept the reaction unit
+			Unit reactionUnit = reactionRoot as Unit;
+			if (reactionUnit != null && reactionUnit.IsKnockbackable &&
+				!reactionUnit.IsBeingKnockedBack)
+				reactionUnit.Bump(actionRoot.Center);
+			if (interaction.ReactionEntity is IInterceptable)
+				((IInterceptable) interaction.ReactionEntity).Intercept();
 		}
 
 		/// <summary>Bump the monster and sender.</summary>
-		public static void ParryWithClingEffect(Entity subject, Entity sender,
-			EventArgs args)
-		{
+		public static void ParryWithClingEffect(InteractionInstance interaction) {
 			bool cling = false;
+			Entity actionRoot = interaction.ActionEntity.RootEntity;
+			Entity reactionRoot = interaction.ReactionEntity.RootEntity;
 
-			// Bump the action unit
-			Unit actionUnit = subject.RootEntity as Unit;
-			if (actionUnit != null && !actionUnit.IsBeingKnockedBack) {
-				actionUnit.Bump(sender.RootEntity.Center);
+			// Bump and/or intercept the action entity
+			Unit actionUnit = actionRoot as Unit;
+			if (actionUnit != null && actionUnit.IsKnockbackable &&
+				!actionUnit.IsBeingKnockedBack)
+			{
+				actionUnit.Bump(reactionRoot.Center);
 				cling = true;
 			}
-
-			// Bump the reaction unit
-			Unit reactionUnit = sender.RootEntity as Unit;
-			if (reactionUnit != null && !reactionUnit.IsBeingKnockedBack) {
-				reactionUnit.Bump(actionUnit.Center);
-				cling = true;
+			if (interaction.ActionEntity is IInterceptable) {
+				if (((IInterceptable) interaction.ActionEntity).Intercept())
+					cling = true;
 			}
 
-			// Spawn the cling effect if either unit was knocked back
+			// Bump and/or intercept the reaction unit
+			Unit reactionUnit = reactionRoot as Unit;
+			if (reactionUnit != null && reactionUnit.IsKnockbackable &&
+				!reactionUnit.IsBeingKnockedBack)
+			{
+				reactionUnit.Bump(actionRoot.Center);
+				cling = true;
+			}
+			if (interaction.ReactionEntity is IInterceptable) {
+				if (((IInterceptable) interaction.ReactionEntity).Intercept())
+					cling = true;
+			}
+
+			// Spawn the cling effect if either unit was intercepted or knocked-back
 			if (cling) {
 				Effect effect = new EffectCling();
-				Vector2F effectPos = (actionUnit.Center + reactionUnit.Center) * 0.5f;
-				if (args is InteractionArgs)
-					effectPos = (args as InteractionArgs).ContactPoint;
-				actionUnit.RoomControl.SpawnEntity(effect, effectPos);
+				Vector2F effectPos = (actionRoot.Center +
+					reactionRoot.RootEntity.Center) * 0.5f;
+				if (interaction.Arguments is InteractionArgs)
+					effectPos = ((InteractionArgs) interaction.Arguments).ContactPoint;
+				interaction.RoomControl.SpawnEntity(effect, effectPos);
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 		}

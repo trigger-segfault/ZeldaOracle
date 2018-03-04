@@ -27,8 +27,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 		/// <summary>Intercept the seed, destroying it while spawning the seed effect.
 		/// </summary>
-		public override void Intercept() {
+		public override bool Intercept() {
 			DestroyWithEffect();
+			return true;
 		}
 
 		/// <summary>Destroy the seed and spawn its regular effect.</summary>

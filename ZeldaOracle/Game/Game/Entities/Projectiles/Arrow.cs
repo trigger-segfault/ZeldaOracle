@@ -51,8 +51,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
 		}
 		
-		public override void Intercept() {
+		public override bool Intercept() {
 			Crash(true);
+			return true;
 		}
 
 		public override void OnCollideSolid(Collision collision) {

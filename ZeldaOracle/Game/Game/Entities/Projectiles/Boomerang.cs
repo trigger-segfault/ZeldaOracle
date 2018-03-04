@@ -114,8 +114,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			physics.Velocity = angle.ToVector(moveSpeed);
 		}
 
-		public override void Intercept() {
-			BeginReturning();
+		public override bool Intercept() {
+			if (stateMachine.CurrentState != BoomerangState.Returning) {
+				stateMachine.BeginState(BoomerangState.Returning);
+				return true;
+			}
+			return false;
 		}
 
 		public override void OnCollideSolid(Collision collision) {

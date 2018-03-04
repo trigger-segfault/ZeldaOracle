@@ -28,9 +28,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isKnockbackable			= false;
 
 			// Weapon interactions
-			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, MonsterReactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Damage3);
+			Reactions[InteractionType.Sword]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordStrafe]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordSpin]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.BiggoronSword].Set(MonsterReactions.Damage3);
 			// Seed interactions
 			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
 			// Projectile interactions

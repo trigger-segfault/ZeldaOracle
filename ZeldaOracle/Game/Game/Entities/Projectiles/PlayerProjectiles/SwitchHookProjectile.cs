@@ -253,8 +253,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			stateMachine.InitializeOnState(SwitchHookState.Extending);
 		}
 
-		public override void Intercept() {
-			stateMachine.BeginState(SwitchHookState.Returning);
+		public override bool Intercept() {
+			if (stateMachine.CurrentState != SwitchHookState.Returning) {
+				stateMachine.BeginState(SwitchHookState.Returning);
+				return true;
+			}
+			return false;
 		}
 
 		public override void Update() {

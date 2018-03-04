@@ -72,8 +72,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_BEAM);
 		}
 
-		public override void Intercept() {
+		public override bool Intercept() {
 			Crash();
+			return true;
 		}
 
 		public override void OnCollideSolid(Collision collision) {

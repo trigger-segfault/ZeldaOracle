@@ -265,8 +265,11 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Trigger all the occurring interactions.</summary>
 		private void TriggerAllInteractions() {
 			foreach (InteractionInstance interaction in interactions) {
-				if (interaction.IsValid())
+				if (interaction.IsValid()) {
+					if (interaction.Duration == 1)
+						interaction.ReactionEntity.Interactions.TriggerBegin(interaction);
 					interaction.ReactionEntity.Interactions.Trigger(interaction);
+				}
 			}
 		}
 		

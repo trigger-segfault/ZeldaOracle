@@ -42,6 +42,8 @@ namespace ZeldaOracle.Game {
 	}
 	
 	public interface IInterceptable {
-		void Intercept();
+		/// <summary>Intercept the object. Returns true if the object was successfully
+		/// intercpted.</summary>
+		bool Intercept();
 	}
 }

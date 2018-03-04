@@ -48,11 +48,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_SWORD_BEAM);
 		}
 		
-		public override void Intercept() {
+		public override bool Intercept() {
 			// Spawn a silent cling effect
 			Effect effect = new EffectCling(true);
 			RoomControl.SpawnEntity(effect, position, zPosition);
 			DestroyAndTransform(effect);
+			return true;
 		}
 
 		public override void OnCollideSolid(Collision collision) {

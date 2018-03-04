@@ -87,15 +87,29 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.Bounces	= false;
 
 			SetDefaultReactions();
-			Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.ParryWithClingEffect);
-			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.Shield,			OnShieldHit);
-			Interactions.SetReaction(InteractionType.Shovel,			OnShovelHit);
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.ClingEffect);
+			
+			// Weapon Reactions
+			Reactions[InteractionType.Sword]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordStrafe]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwordSpin]
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.BiggoronSword]
+				.SetBegin(MonsterReactions.ClingEffect);
+			Reactions[InteractionType.Shield]
+				.SetBegin(OnShieldHit);
+			Reactions[InteractionType.Shovel]
+				.SetBegin(OnShieldHit);
+			// Projectile Reactions
+			Reactions[InteractionType.Arrow]
+				.Set(SenderReactions.Intercept);
+			Reactions[InteractionType.SwordBeam]
+				.Set(SenderReactions.Intercept);
+			Reactions[InteractionType.Boomerang]
+				.Set(MonsterReactions.ParryWithClingEffect);
+			Reactions[InteractionType.SwitchHook]
+				.Set(MonsterReactions.ParryWithClingEffect);
 		}
 
 		private void InitReactionsFlipped() {
@@ -106,7 +120,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.Bounces	= true;
 
 			SetDefaultReactions();
-			Interactions.SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, MonsterReactions.Kill);
+			Reactions[InteractionType.SwitchHook]
+				.Set(SenderReactions.Intercept)
+				.Add(MonsterReactions.Kill);
 		}
 		
 		private void OnShieldHit(Entity sender, EventArgs args) {

@@ -166,6 +166,8 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>The callback method to invoke when this reaction is triggered.
 		/// </summary>
 		private ReactionCallback callback;
+		private ReactionCallback callbackBegin;
+		private ReactionCallback callbackEnd;
 		/// <summary>Custom hitbox used to detect reactions for this interaction type.
 		/// If this is null, then the entity's default interaction box will be used
 		/// instead.</summary>
@@ -183,9 +185,11 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public ReactionHandler() {
-			callback = null;
-			collisionBox = null;
-			protectParent = false;
+			callback		= null;
+			callbackBegin	= null;
+			callbackEnd		= null;
+			collisionBox	= null;
+			protectParent	= false;
 		}
 
 
@@ -196,8 +200,15 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Trigger this interaction's callbacks using the given subject,
 		/// sender, and interaction arguments.</summary>
 		public void Trigger(InteractionInstance interaction) {
-			if (callback != null)
-				callback.Invoke(interaction);
+			callback?.Invoke(interaction);
+		}
+
+		public void TriggerBegin(InteractionInstance interaction) {
+			callbackBegin?.Invoke(interaction);
+		}
+
+		public void TriggerEnd(InteractionInstance interaction) {
+			callbackEnd?.Invoke(interaction);
 		}
 
 
@@ -208,8 +219,56 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Clear all interaction handlers.</summary>
 		public ReactionHandler Clear() {
 			callback = null;
+			callbackBegin = null;
+			callbackEnd = null;
 			return this;
 		}
+		
+			
+		public ReactionHandler SetBegin(ReactionCallback callback) {
+			callbackBegin = callback;
+			return this;
+		}
+		public ReactionHandler SetBegin(ReactionStaticCallback callback) {
+			callbackBegin = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler SetBegin(ReactionStaticSimpleCallback callback) {
+			callbackBegin = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler SetBegin(ReactionMemberCallback callback) {
+			callbackBegin = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler SetBegin(ReactionMemberSimpleCallback callback) {
+			callbackBegin = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler AddBegin(ReactionCallback callback) {
+			if (callbackBegin == null)
+				callbackBegin = callback;
+			else
+				callbackBegin += callback;
+			return this;
+		}
+		public ReactionHandler AddBegin(ReactionStaticCallback callback) {
+			AddBegin(ToReactionCallback(callback));
+			return this;
+		}
+		public ReactionHandler AddBegin(ReactionStaticSimpleCallback callback) {
+			AddBegin(ToReactionCallback(callback));
+			return this;
+		}
+		public ReactionHandler AddBegin(ReactionMemberCallback callback) {
+			AddBegin(ToReactionCallback(callback));
+			return this;
+		}
+		public ReactionHandler AddBegin(ReactionMemberSimpleCallback callback) {
+			AddBegin(ToReactionCallback(callback));
+			return this;
+		}
+
 			
 		/// <summary>Set the callback for this reaction to a single function.</summary>
 		public ReactionHandler Set(ReactionCallback callback) {

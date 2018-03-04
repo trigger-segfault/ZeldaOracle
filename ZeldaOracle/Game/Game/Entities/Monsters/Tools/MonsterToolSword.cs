@@ -29,19 +29,19 @@ namespace ZeldaOracle.Game.Entities.Monsters.Tools {
 			// Weapon Interactions
 			Reactions[InteractionType.Sword]
 				.SetProtectParent(true)
-				.Set(MonsterReactions.ParryWithClingEffect);
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			Reactions[InteractionType.SwordSpin]
 				.SetProtectParent(true)
-				.Set(MonsterReactions.ParryWithClingEffect);
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			Reactions[InteractionType.SwordStrafe]
 				.SetProtectParent(true)
-				.Set(MonsterReactions.ParryWithClingEffect);
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			Reactions[InteractionType.BiggoronSword]
 				.SetProtectParent(true)
-				.Set(MonsterReactions.ParryWithClingEffect);
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			Reactions[InteractionType.Shield]
 				.SetProtectParent(true)
-				.Set(MonsterReactions.ParryWithClingEffect);
+				.SetBegin(MonsterReactions.ParryWithClingEffect);
 		}
 
 		

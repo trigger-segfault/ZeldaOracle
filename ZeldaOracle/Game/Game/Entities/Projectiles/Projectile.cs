@@ -97,8 +97,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 		}
 
-		public virtual void Intercept() {
+		public virtual bool Intercept() {
 			Destroy();
+			return true;
 		}
 
 		protected virtual void OnCrash() { }

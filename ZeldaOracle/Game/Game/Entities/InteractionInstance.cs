@@ -1,5 +1,6 @@
 ﻿using System;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Entities {
 
@@ -115,6 +116,11 @@ namespace ZeldaOracle.Game.Entities {
 		public bool AutoDetected {
 			get { return autoDetected; }
 			set { autoDetected = value; }
+		}
+
+		/// <summary>Get a reference to the Room Control.</summary>
+		public RoomControl RoomControl {
+			get { return actionEntity.RoomControl; }
 		}
 	}
 }

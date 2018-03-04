@@ -33,10 +33,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		// Intercept Methods
 		//-----------------------------------------------------------------------------
 
-		public void InterceptAndAbsorb() {
+		public bool InterceptAndAbsorb() {
 			// Spawn fire
 			Fire fire = DestroyWithFire();
 			fire.IsAbsorbed = true;
+			return true;
 		}
 
 		private Fire DestroyWithFire() {
@@ -57,8 +58,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MAGIC_ROD_FIRE);
 		}
 
-		public override void Intercept() {
+		public override bool Intercept() {
 			DestroyWithFire();
+			return true;
 		}
 
 		public override void OnCollideSolid(Collision collision) {

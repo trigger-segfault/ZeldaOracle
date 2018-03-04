@@ -154,6 +154,12 @@ namespace ZeldaOracle.Game.Entities {
 		public void Trigger(InteractionInstance interaction) {
 			reactionManager[interaction.Type].Trigger(interaction);
 		}
+		public void TriggerBegin(InteractionInstance interaction) {
+			reactionManager[interaction.Type].TriggerBegin(interaction);
+		}
+		public void TriggerEnd(InteractionInstance interaction) {
+			reactionManager[interaction.Type].TriggerEnd(interaction);
+		}
 
 		/// <summary>Trigger a reaction for.</summary>
 		//public void Trigger(InteractionType type, Entity actionEntity) {
