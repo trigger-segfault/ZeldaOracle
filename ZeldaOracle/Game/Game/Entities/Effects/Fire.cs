@@ -3,7 +3,7 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Effects {
 
-	public class Fire : Effect {
+	public class Fire : Effect, IInterceptable {
 
 		private int timer;
 		private bool isAbsorbed;
@@ -30,7 +30,17 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			// Fire
 			isAbsorbed = false;
 		}
+
 		
+		//-----------------------------------------------------------------------------
+		// Implementations
+		//-----------------------------------------------------------------------------
+		
+		public bool Intercept() {
+			isAbsorbed = true;
+			return true;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -42,7 +52,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		}
 
 		public override void OnDestroyTimerDone() {
-			// Burn tiles.
+			// Burn tiles
 			Point2I location = RoomControl.GetTileLocation(position);
 			if (RoomControl.IsTileInBounds(location)) {
 				Tile tile = RoomControl.GetTopTile(location);

@@ -96,9 +96,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				Interactions.SetReaction(InteractionType.ThrownObject,	MonsterReactions.Damage);
 			}
 			else {
-				Interactions.SetReaction(InteractionType.Sword,			MonsterReactions.ClingEffect);
-				Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.ClingEffect);
-				Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.ClingEffect);
+				Reactions[InteractionType.Sword]
+					.Set(MonsterReactions.ParryWithClingEffect);
+				Reactions[InteractionType.SwordSpin]
+					.Set(MonsterReactions.ParryWithClingEffect);
+				Reactions[InteractionType.BiggoronSword]
+					.Set(MonsterReactions.ParryWithClingEffect);
 				Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
 				Reactions[InteractionType.ThrownObject].Clear();
 			}

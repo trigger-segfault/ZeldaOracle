@@ -245,7 +245,11 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_FLYING_TILE_NEXT_OFFSET					= 60;
 		public const int				MONSTER_ARMOS_BREATH_LIFE_DURATION				= 60;
 		public const float				MONSTER_SPIKE_ROLLER_MOVE_SPEED					= 0.75f;
-
+		public const float				MONSTER_IRON_MASK_MAGNETIC_PULL_RANGE			= 60.0f;
+		public const int				MONSTER_IRON_MASK_UNMASK_DELAY					= 60;
+		public const int				MONSTER_IRON_MASK_MASK_DISSAPEAR_DELAY			= 28;
+		public const float				MONSTER_IRON_MASK_MASK_MOVE_SPEED				= 2.0f;
+		
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.
 		public const int				TILE_BUTTON_UNCOVER_RELEASE_DELAY		= 27;	// Delay between being uncovered and becoming released.

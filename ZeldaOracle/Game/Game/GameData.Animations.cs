@@ -126,7 +126,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_MONSTER_PINCER_EYES;
 		public static Animation ANIM_MONSTER_MINI_MOLDORM_HEAD;
 		public static Animation ANIM_MONSTER_IRON_MASK;
-		public static Animation ANIM_MONSTER_IRON_MASK_NAKED;
+		public static Animation ANIM_MONSTER_IRON_MASK_UNMASKED;
 		public static Animation ANIM_MONSTER_IRON_MASK_MASK;
 		public static Animation ANIM_MONSTER_BUZZ_BLOB;
 		public static Animation ANIM_MONSTER_BUZZ_BLOB_ELECTROCUTE;

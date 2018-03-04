@@ -27,25 +27,36 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isBurnable				= false;
 			isKnockbackable			= false;
 
-			// Weapon interactions
+			// Weapon Reactions
 			Reactions[InteractionType.Sword]
 				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			Reactions[InteractionType.SwordStrafe]
 				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			Reactions[InteractionType.SwordSpin]
 				.SetBegin(MonsterReactions.ParryWithClingEffect);
-			Reactions[InteractionType.BiggoronSword].Set(MonsterReactions.Damage3);
-			// Seed interactions
-			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
-			// Projectile interactions
-			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, MonsterReactions.ClingEffect);
-			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, MonsterReactions.Stun, MonsterReactions.DamageByLevel(0, 1));
-			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept, MonsterReactions.ClingEffect);
-			// Environment interactions
+			Reactions[InteractionType.BiggoronSword]
+				.Set(MonsterReactions.Damage3);
+			// Seed Reactions
+			Reactions[InteractionType.GaleSeed]
+				.Set(SenderReactions.Intercept);
+			// Projectile Reactions
+			Reactions[InteractionType.Arrow]
+				.Set(SenderReactions.Destroy)
+				.Add(MonsterReactions.ClingEffect);
+			Reactions[InteractionType.SwordBeam]
+				.Set(SenderReactions.Destroy)
+				.Add(MonsterReactions.ClingEffect);
+			Reactions[InteractionType.Boomerang]
+				.Set(SenderReactions.Intercept)
+				.Add(MonsterReactions.Stun)
+				.Add(MonsterReactions.DamageByLevel(0, 1));
+			Reactions[InteractionType.SwitchHook]
+				.Set(MonsterReactions.ParryWithClingEffect);
+			// Environment Reactions
 			Reactions[InteractionType.Fire].Clear();
 			Reactions[InteractionType.Gale].Clear();
-			Interactions.SetReaction(InteractionType.BombExplosion,	MonsterReactions.Damage2);
+			Reactions[InteractionType.BombExplosion]
+				.Set(MonsterReactions.Damage2);
 		}
 	}
 }

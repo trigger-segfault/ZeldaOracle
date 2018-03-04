@@ -492,7 +492,7 @@ namespace ZeldaOracle.Game.Debug {
 			else if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseTileLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				Monster monster = new MonsterCukeman();
+				Monster monster = new MonsterIronMask();
 				//monster.Color = MonsterColor.Red;
 
 				//monster.Properties = new Properties();
@@ -593,6 +593,32 @@ namespace ZeldaOracle.Game.Debug {
 		private static void DrawEntity(Graphics2D g, Entity entity) {
 			
 			if (EntityDebugInfoMode != EntityDrawInfo.None) {
+			}
+
+			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
+				// Blue interaction box
+				if (entity.Interactions.IsEnabled) {
+					Color color = Color.Blue;
+					if (entity.Interactions.CurrentActions.Count > 0)
+						color = Color.Red;
+					if (entity.Interactions.CurrentReactions.Count > 0) {
+						if (entity.Interactions.CurrentActions.Count > 0)
+							color = Color.Yellow;
+						else
+							color = Color.Green;
+					}
+					g.FillRectangle(
+						entity.Interactions.PositionedInteractionBox, color * 0.5f);
+					g.DrawRectangle(
+						entity.Interactions.PositionedInteractionBox, 1, color);
+				}
+				// Yellow origin point
+				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One),
+					Color.Yellow);
+			}
+			else if (EntityDebugInfoMode == EntityDrawInfo.CollisionTests) {
+				Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
+				
 				// Draw all collisions
 				foreach (Collision collision in entity.Physics.PotentialCollisions) {
 					Color color = Color.Red;
@@ -647,22 +673,6 @@ namespace ZeldaOracle.Game.Debug {
 					r.ExtendEdge(Directions.Reverse(edgeDirection), penetrationEdgeWidth);
 					g.FillRectangle(r, color);
 				}
-			}
-
-			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
-				// Blue interaction box
-				if (entity.Interactions.IsEnabled)
-					g.FillRectangle(entity.Interactions.InteractionBox + entity.Position,
-						new Color(0, 0, 255, 150));
-				// Red hard collision box
-				g.FillRectangle(entity.Physics.CollisionBox + entity.Position,
-					new Color(255, 0, 0, 150));
-				// Yellow origin point
-				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One),
-					new Color(255, 255, 0));
-			}
-			else if (EntityDebugInfoMode == EntityDrawInfo.CollisionTests) {
-				Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
 
 				if (entity.Physics.IsEnabled &&
 					entity.Physics.CollideWithWorld || entity is Player)

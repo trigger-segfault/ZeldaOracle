@@ -38,6 +38,7 @@ SETTILE (11, 2), "monster_blade_trap_green";
 
 SETTILE (2, 3), "monster_darknut_red";
 SETTILE (3, 3), "monster_darknut_blue";
+SETTILE (5, 3), "monster_iron_mask";
 SETTILE (6, 3), "monster_stalfos_blue";
 SETTILE (7, 3), "monster_stalfos_green";
 SETTILE (8, 3), "monster_stalfos_red";

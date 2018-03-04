@@ -4,7 +4,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	public class MonsterBladeTrap : Monster {
 		
 		public MonsterBladeTrap() {
-			// General.
+			// General
 			ContactDamage	= 2;
 			isDamageable	= false;
 			isBurnable		= false;

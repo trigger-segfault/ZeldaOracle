@@ -97,18 +97,7 @@ namespace ZeldaOracle.Game.Entities {
 		MagnetBall,
 		/// <summary>Hit by a block (either moving or spawned on top of).</summary>
 		Block,
-
-
-		//-----------------------------------------------------------------------------
-		// UNUSED:
-		//-----------------------------------------------------------------------------
-
-		//SwordHitShield,			// Their sword hits my shield.
-		//BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
-		//ShieldHitShield,			// Their shield hits my shield.
-		//Parry,
-
-
+		
 		//-----------------------------------------------------------------------------
 
 		Count,
@@ -177,7 +166,7 @@ namespace ZeldaOracle.Game.Entities {
 		/// parent from its reaction. For example, a monster's sword "Sword" reaction
 		/// will protect the monster from its "Sword" reaction, causing a parry instead
 		/// of damage.</summary>
-		private bool protectParent;
+		private bool protectParentReactions;
 
 		
 		//-----------------------------------------------------------------------------
@@ -185,11 +174,11 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public ReactionHandler() {
-			callback		= null;
-			callbackBegin	= null;
-			callbackEnd		= null;
-			collisionBox	= null;
-			protectParent	= false;
+			callback				= null;
+			callbackBegin			= null;
+			callbackEnd				= null;
+			collisionBox			= null;
+			protectParentReactions	= false;
 		}
 
 
@@ -266,6 +255,51 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		public ReactionHandler AddBegin(ReactionMemberSimpleCallback callback) {
 			AddBegin(ToReactionCallback(callback));
+			return this;
+		}
+		
+			
+		public ReactionHandler SetEnd(ReactionCallback callback) {
+			callbackEnd = callback;
+			return this;
+		}
+		public ReactionHandler SetEnd(ReactionStaticCallback callback) {
+			callbackEnd = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler SetEnd(ReactionStaticSimpleCallback callback) {
+			callbackEnd = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler SetEnd(ReactionMemberCallback callback) {
+			callbackEnd = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler SetEnd(ReactionMemberSimpleCallback callback) {
+			callbackEnd = ToReactionCallback(callback);
+			return this;
+		}
+		public ReactionHandler AddEnd(ReactionCallback callback) {
+			if (callbackEnd == null)
+				callbackEnd = callback;
+			else
+				callbackEnd += callback;
+			return this;
+		}
+		public ReactionHandler AddEnd(ReactionStaticCallback callback) {
+			AddEnd(ToReactionCallback(callback));
+			return this;
+		}
+		public ReactionHandler AddEnd(ReactionStaticSimpleCallback callback) {
+			AddEnd(ToReactionCallback(callback));
+			return this;
+		}
+		public ReactionHandler AddEnd(ReactionMemberCallback callback) {
+			AddEnd(ToReactionCallback(callback));
+			return this;
+		}
+		public ReactionHandler AddEnd(ReactionMemberSimpleCallback callback) {
+			AddEnd(ToReactionCallback(callback));
 			return this;
 		}
 
@@ -349,8 +383,8 @@ namespace ZeldaOracle.Game.Entities {
 		/// parent from its reaction. For example, a monster's sword "Sword" reaction
 		/// will protect the monster from its "Sword" reaction, causing a parry instead
 		/// of damage.</summary>
-		public ReactionHandler SetProtectParent(bool protectParent) {
-			this.protectParent = protectParent;
+		public ReactionHandler SetProtectParent(bool protectParentReactions) {
+			this.protectParentReactions = protectParentReactions;
 			return this;
 		}
 
@@ -410,9 +444,9 @@ namespace ZeldaOracle.Game.Entities {
 		/// parent from its reaction. For example, a monster's sword "Sword" reaction
 		/// will protect the monster from its "Sword" reaction, causing a parry instead
 		/// of damage.</summary>
-		public bool ProtectParent {
-			get { return protectParent; }
-			set { protectParent = value; }
+		public bool ProtectParentReactions {
+			get { return protectParentReactions; }
+			set { protectParentReactions = value; }
 		}
 	}
 	

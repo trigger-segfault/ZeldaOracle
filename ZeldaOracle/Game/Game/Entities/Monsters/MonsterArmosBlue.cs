@@ -23,7 +23,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Projectile interactions
 			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Destroy, MonsterReactions.Damage);
 			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy, MonsterReactions.SilentDamage);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, MonsterReactions.ClingEffect);
+			Reactions[InteractionType.SwitchHook]
+				.Set(MonsterReactions.ParryWithClingEffect);
 		}
 	}
 }

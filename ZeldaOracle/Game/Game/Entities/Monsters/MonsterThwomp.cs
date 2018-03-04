@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Reactions[InteractionType.SwordSpin]
 				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			Reactions[InteractionType.BiggoronSword]
-				.SetBegin(MonsterReactions.ParryWithClingEffect);
+				.SetBegin(MonsterReactions.ClingEffect);
 			Reactions[InteractionType.Shovel]
 				.SetBegin(MonsterReactions.ParryWithClingEffect);
 			// Projectile Reactions

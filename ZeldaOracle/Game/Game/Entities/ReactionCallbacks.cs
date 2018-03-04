@@ -208,8 +208,7 @@ namespace ZeldaOracle.Game.Entities {
 			// Spawn the cling effect if either unit was intercepted or knocked-back
 			if (cling) {
 				Effect effect = new EffectCling();
-				Vector2F effectPos = (actionRoot.Center +
-					reactionRoot.RootEntity.Center) * 0.5f;
+				Vector2F effectPos = (actionRoot.Center + reactionRoot.Center) * 0.5f;
 				if (interaction.Arguments is InteractionArgs)
 					effectPos = ((InteractionArgs) interaction.Arguments).ContactPoint;
 				interaction.RoomControl.SpawnEntity(effect, effectPos);
@@ -263,17 +262,13 @@ namespace ZeldaOracle.Game.Entities {
 		}
 			
 		/// <summary>Create a cling effect with sound.</summary>
-		public static void ClingEffect(Entity subject, Entity sender,
-			EventArgs args)
-		{
-			Monster monster = (Monster) subject.RootEntity;
+		public static void ClingEffect(InteractionInstance interaction) {
 			Effect effect = new EffectCling();
-				
-			Vector2F effectPos = (monster.Center + sender.RootEntity.Center) * 0.5f;
-			if (args is InteractionArgs)
-				effectPos = (args as InteractionArgs).ContactPoint;
-
-			monster.RoomControl.SpawnEntity(effect, effectPos);
+			Vector2F effectPos = (interaction.ActionEntity.RootEntity.Center +
+				interaction.ReactionEntity.RootEntity.Center) * 0.5f;
+			if (interaction.Arguments is InteractionArgs)
+				effectPos = ((InteractionArgs) interaction.Arguments).ContactPoint;
+			interaction.RoomControl.SpawnEntity(effect, effectPos);
 			AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 		}
 

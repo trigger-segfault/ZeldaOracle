@@ -293,6 +293,8 @@
     <Compile Include="Game\Entities\Effects\EffectFallingObject.cs" />
     <Compile Include="Game\Entities\Effects\ScentPod.cs" />
     <Compile Include="Game\Entities\EntityComponent.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterIronMask.cs" />
+    <Compile Include="Game\Entities\Monsters\Tools\MonsterToolShield.cs" />
     <Compile Include="Game\Entities\ReactionCallbacks.cs" />
     <Compile Include="Game\Entities\InteractionInstance.cs" />
     <Compile Include="Game\Entities\InteractionComponent.cs" />

@@ -33,7 +33,13 @@ namespace ZeldaOracle.Game.Entities {
 		/// will protect the player from triggering its "PlayerContact" action if they
 		/// are both touching the same entity.</summary>
 		private bool protectParentAction;
-
+		/// <summary>True if the entity's reactions should override its parent's
+		/// reactions if they have the same action entity, essentially "protecting" the
+		/// parent from its reaction. For example, a monster's sword "Sword" reaction
+		/// will protect the monster from its "Sword" reaction, causing a parry instead
+		/// of damage.</summary>
+		private bool protectParentReactions;
+		
 		// Interaction State ----------------------------------------------------------
 		
 		/// <summary>List of Interaction Instances which the entity triggered upon
@@ -57,6 +63,8 @@ namespace ZeldaOracle.Game.Entities {
 			interactionEventArgs	= EventArgs.Empty;
 			currentActions			= new List<InteractionInstance>();
 			currentReactions		= new List<InteractionInstance>();
+			protectParentAction		= false;
+			protectParentReactions	= false;
 		}
 
 
@@ -257,6 +265,16 @@ namespace ZeldaOracle.Game.Entities {
 		public bool ProtectParentAction {
 			get { return protectParentAction; }
 			set { protectParentAction = value; }
+		}
+
+		/// <summary>True if the entity's reactions should override its parent's
+		/// reactions if they have the same action entity, essentially "protecting" the
+		/// parent from its reaction. For example, a monster's sword "Sword" reaction
+		/// will protect the monster from its "Sword" reaction, causing a parry instead
+		/// of damage.</summary>
+		public bool ProtectParentReactions {
+			get { return protectParentReactions; }
+			set { protectParentReactions = value; }
 		}
 	}
 }

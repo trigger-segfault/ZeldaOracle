@@ -178,6 +178,7 @@ namespace ZeldaOracle.Game.Control {
 						.CurrentActions.Remove(interaction);
 					interaction.ReactionEntity.Interactions
 						.CurrentReactions.Remove(interaction);
+					interaction.ReactionEntity.Interactions.TriggerEnd(interaction);
 				}
 				else {
 					// Mark this interaction to be removed during the next frame, if it
@@ -205,7 +206,10 @@ namespace ZeldaOracle.Game.Control {
 			//       (child) protects (parent)
 			//         (reaction entities)
 			//
-			if (interaction.ReactionEntity.Reactions[interaction.Type].ProtectParent) {
+			if (interaction.ReactionEntity.Interactions.ProtectParentReactions ||
+				interaction.ReactionEntity.Reactions[interaction.Type]
+					.ProtectParentReactions)
+			{
 				Entity parent = interaction.ReactionEntity.Parent;
 				if (parent != null && parent.Interactions.IsEnabled) {
 					InteractionInstance parentInteraction =
