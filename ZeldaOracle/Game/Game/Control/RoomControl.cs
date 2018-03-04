@@ -843,7 +843,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 		}
-		
+		/*
 		public void TriggerInteractions(Entity sender, InteractionType type) {
 			Rectangle2F box = sender.Interactions.PositionedInteractionBox;
 			foreach (Entity entity in ActiveEntities) {
@@ -875,7 +875,7 @@ namespace ZeldaOracle.Game.Control {
 					yield return entity;
 				}
 			}
-		}
+		}*/
 		
 		public IEnumerable<Entity> ActiveEntities {
 			get {

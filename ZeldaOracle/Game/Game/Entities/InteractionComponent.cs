@@ -149,17 +149,23 @@ namespace ZeldaOracle.Game.Entities {
 		// Interaction Triggering
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Trigger a reaction for.</summary>
-		public void Trigger(InteractionType type, Entity actionEntity) {
-			if (reactionManager != null)
-				reactionManager.Trigger(type, actionEntity);
+		/// <summary>Trigger the entity's reaction callback for the given interaction
+		/// instance.</summary>
+		public void Trigger(InteractionInstance interaction) {
+			reactionManager[interaction.Type].Trigger(interaction);
 		}
 
-		/// <summary>Trigger a reaction with the given arguments.</summary>
-		public void Trigger(InteractionType type, Entity actionEntity, EventArgs args) {
-			if (reactionManager != null)
-				reactionManager.Trigger(type, actionEntity, args);
-		}
+		/// <summary>Trigger a reaction for.</summary>
+		//public void Trigger(InteractionType type, Entity actionEntity) {
+		//	if (reactionManager != null)
+		//		reactionManager.Trigger(type, actionEntity);
+		//}
+
+		///// <summary>Trigger a reaction with the given arguments.</summary>
+		//public void Trigger(InteractionType type, Entity actionEntity, EventArgs args) {
+		//	if (reactionManager != null)
+		//		reactionManager.Trigger(type, actionEntity, args);
+		//}
 		
 
 		//-----------------------------------------------------------------------------

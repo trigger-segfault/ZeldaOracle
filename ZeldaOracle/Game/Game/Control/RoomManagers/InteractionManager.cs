@@ -265,11 +265,8 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Trigger all the occurring interactions.</summary>
 		private void TriggerAllInteractions() {
 			foreach (InteractionInstance interaction in interactions) {
-				if (interaction.IsValid()) {
-					interaction.ReactionEntity.Interactions.Trigger(
-						interaction.Type, interaction.ActionEntity,
-						interaction.Arguments);
-				}
+				if (interaction.IsValid())
+					interaction.ReactionEntity.Interactions.Trigger(interaction);
 			}
 		}
 		
@@ -315,17 +312,22 @@ namespace ZeldaOracle.Game.Control {
 					reactionEntity.Interactions.IsEnabled &&
 					positionedReactionBox.Intersects(positionedActionBox))
 				{
-					Entity actualActionEntity = actionEntity;
-					if (actionEntity.Parent != null)
-						actualActionEntity = actionEntity.Parent;
-
 					// Check the custom condition
 					if (condition != null && condition.Invoke(reactionEntity) == false)
 						continue;
 
-					reactionEntity.Interactions.Trigger(type, actualActionEntity,
-						arguments);
+					// Create and trigger the interaction instance
+					InteractionInstance interaction = new InteractionInstance() {
+						Type			= type,
+						ActionEntity	= actionEntity,
+						ReactionEntity	= reactionEntity,
+						ActionBox		= actionBox,
+						ReactionBox		= reactionBox,
+						Arguments		= arguments,
+					};
+					reactionEntity.Interactions.Trigger(interaction);
 
+					// Break if the entity was destroyed or disabled its interactions
 					if (!actionEntity.IsAliveAndInRoom ||
 						!actionEntity.Interactions.IsEnabled)
 						break;

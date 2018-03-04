@@ -167,20 +167,29 @@ namespace ZeldaOracle.Game.Entities {
 		public static void ParryWithClingEffect(Entity subject, Entity sender,
 			EventArgs args)
 		{
-			Unit monster = subject.RootEntity as Unit;
-			if (monster != null && !monster.IsBeingKnockedBack)
-				monster.Bump(sender.RootEntity.Center);
+			bool cling = false;
 
-			Unit unitSender = sender.RootEntity as Unit;
-			if (unitSender != null && !unitSender.IsBeingKnockedBack) {
-				unitSender.Bump(monster.Center);
+			// Bump the action unit
+			Unit actionUnit = subject.RootEntity as Unit;
+			if (actionUnit != null && !actionUnit.IsBeingKnockedBack) {
+				actionUnit.Bump(sender.RootEntity.Center);
+				cling = true;
+			}
 
-				// Spawn the cling effect
+			// Bump the reaction unit
+			Unit reactionUnit = sender.RootEntity as Unit;
+			if (reactionUnit != null && !reactionUnit.IsBeingKnockedBack) {
+				reactionUnit.Bump(actionUnit.Center);
+				cling = true;
+			}
+
+			// Spawn the cling effect if either unit was knocked back
+			if (cling) {
 				Effect effect = new EffectCling();
-				Vector2F effectPos = (monster.Center + unitSender.Center) * 0.5f;
+				Vector2F effectPos = (actionUnit.Center + reactionUnit.Center) * 0.5f;
 				if (args is InteractionArgs)
 					effectPos = (args as InteractionArgs).ContactPoint;
-				monster.RoomControl.SpawnEntity(effect, effectPos);
+				actionUnit.RoomControl.SpawnEntity(effect, effectPos);
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 		}
@@ -203,9 +212,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 			
 		/// <summary>Trigger a random seed effect.</summary>
-		public static void MysterySeed(Entity subject, Entity sender,
-			EventArgs args)
-		{
+		public static void MysterySeed(InteractionInstance interaction) {
 			// Randomly choose between Burn, Stun, damage, and Gale
 			SeedType seedType = GRandom.Choose(
 				SeedType.Ember, SeedType.Scent, SeedType.Pegasus, SeedType.Gale);
@@ -214,11 +221,11 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Let the seed knock which seed type it turned into so it spawns
 			// the correct effect
-			((SeedEntity) sender.RootEntity).SeedType = seedType;
+			((SeedEntity) interaction.ActionEntity.RootEntity).SeedType = seedType;
 
 			// Trigger the actual chose seed interaction
-			((Monster) subject.RootEntity).Interactions.Trigger(
-				interactionType, sender, args);
+			((Monster) interaction.ReactionEntity.RootEntity)
+				.Interactions.Trigger(interaction);
 		}
 			
 		/// <summary>Switch places with the monster (Only for switch-hook

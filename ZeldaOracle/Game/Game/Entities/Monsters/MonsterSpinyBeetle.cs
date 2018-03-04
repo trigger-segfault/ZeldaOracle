@@ -137,7 +137,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
-			Interactions.SetReaction(InteractionType.MysterySeed,	MonsterReactions.MysterySeed);
+			Reactions[InteractionType.MysterySeed].Set(MonsterReactions.MysterySeed);
 			// Projectile interations
 			Interactions.SetReaction(InteractionType.Arrow,			SenderReactions.Intercept);
 			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);

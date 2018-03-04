@@ -17,12 +17,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			animationMove = GameData.ANIM_MONSTER_CUKEMAN;
 
 			// Interactions
-			Interactions.SetReaction(InteractionType.ButtonAction,
-				EntityReactions.TriggerButtonReaction, SayCatchPhrase);
+			Reactions[InteractionType.ButtonAction]
+				.Set(EntityReactions.TriggerButtonReaction).Add(SayCatchPhrase);
 			// Disable the transform-into-cukeman reaction which was set by the
 			// BuzzBlob base class
-			Interactions.SetReaction(InteractionType.MysterySeed,
-				MonsterReactions.MysterySeed);
+			Reactions[InteractionType.MysterySeed].Set(MonsterReactions.MysterySeed);
 			
 			// Create the list of phrases that are said upon talking to this monster
 			catchPhrases = new string[] {
