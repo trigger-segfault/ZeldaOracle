@@ -8,6 +8,8 @@ using XnaColor = Microsoft.Xna.Framework.Color;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.API;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Graphics {
 
@@ -92,7 +94,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Color color) {
-			spriteBatch.Draw(texture, NewPos(position), color);
+			spriteBatch.Draw(texture, NewPos(position), color.ToXnaColor());
 		}
 
 		/// <summary>Draws the scaled image at the specified position.</summary>
@@ -102,8 +104,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws the scaled image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, float scale, Color color) {
-			spriteBatch.Draw(texture, NewPos(position), null, color, 0f, Vector2.Zero,
-				scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NewPos(position), null, color.ToXnaColor(),
+				0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 		}
 		
 		// Position & Source Rect -----------------------------------------------------
@@ -117,7 +119,8 @@ namespace ZeldaOracle.Common.Graphics {
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect,
 			Color color)
 		{
-			spriteBatch.Draw(texture, NewPos(position), (Rectangle) sourceRect, color);
+			spriteBatch.Draw(texture, NewPos(position), sourceRect.ToXnaRectangle(),
+				color.ToXnaColor());
 		}
 
 		/// <summary>Draws part of the scaled image at the specified position.</summary>
@@ -131,8 +134,8 @@ namespace ZeldaOracle.Common.Graphics {
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect,
 			float scale, Color color)
 		{
-			spriteBatch.Draw(texture, NewPos(position), (Rectangle) sourceRect, color, 0f,
-				Vector2.Zero, scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NewPos(position), sourceRect.ToXnaRectangle(),
+				color.ToXnaColor(), 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 		}
 		
 		// Destination Rect -----------------------------------------------------------
@@ -144,7 +147,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws the image at the specified region.</summary>
 		public void DrawImage(Texture2D texture, Rectangle2F destinationRect, Color color) {
-			spriteBatch.Draw(texture, NewRect(destinationRect), color);
+			spriteBatch.Draw(texture, NewRect(destinationRect), color.ToXnaColor());
 		}
 		
 		/// <summary>Draws part of the image at the specified region.</summary>
@@ -157,8 +160,9 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Draws part of the image at the specified region.</summary>
 		public void DrawImage(Texture2D texture, Rectangle2F destinationRect,
 			Rectangle2F sourceRect, Color color) {
-			spriteBatch.Draw(texture, NewRect(destinationRect), (Rectangle) sourceRect,
-				color, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, NewRect(destinationRect),
+				sourceRect.ToXnaRectangle(), color.ToXnaColor(), 0f, Vector2.Zero,
+				SpriteEffects.None, 0f);
 		}
 		
 		// Transformation -------------------------------------------------------------
@@ -167,17 +171,18 @@ namespace ZeldaOracle.Common.Graphics {
 		public void DrawImage(Texture2D texture, Vector2F position, Vector2F origin,
 			Vector2F scale, float rotation, Flip flip, Color color)
 		{
-			spriteBatch.Draw(texture, NewPos(position), null, color,
-				GMath.CorrectAngle(rotation), (Vector2) origin, (Vector2) scale,
-				(SpriteEffects) flip, 0f);
+			spriteBatch.Draw(texture, NewPos(position), null, color.ToXnaColor(),
+				GMath.CorrectAngle(rotation), origin.ToXnaVector2(),
+				scale.ToXnaVector2(), (SpriteEffects) flip, 0f);
 		}
 
 		/// <summary>Draws the transformed image at the specified region.</summary>
 		public void DrawImage(Texture2D texture, Rectangle2F destinationRect,
 			Vector2F origin, float rotation, Flip flip, Color color)
 		{
-			spriteBatch.Draw(texture, NewRect(destinationRect), null, color,
-				GMath.CorrectAngle(rotation), (Vector2) origin, (SpriteEffects) flip, 0f);
+			spriteBatch.Draw(texture, NewRect(destinationRect), null,
+				color.ToXnaColor(), GMath.CorrectAngle(rotation),
+				origin.ToXnaVector2(), (SpriteEffects) flip, 0f);
 		}
 
 		/// <summary>Draws part of the transformed image at the specified position.</summary>
@@ -185,9 +190,9 @@ namespace ZeldaOracle.Common.Graphics {
 			Vector2F origin, Vector2F scale, float rotation, Flip flip,
 			Color color)
 		{
-			spriteBatch.Draw(texture, NewPos(position), (Rectangle) sourceRect,
-				color, GMath.CorrectAngle(rotation), (Vector2) origin, (Vector2) scale,
-				(SpriteEffects) flip, 0f);
+			spriteBatch.Draw(texture, NewPos(position), sourceRect.ToXnaRectangle(),
+				color.ToXnaColor(), GMath.CorrectAngle(rotation),
+				origin.ToXnaVector2(), scale.ToXnaVector2(), (SpriteEffects) flip, 0f);
 		}
 
 		/// <summary>Draws part of the transformed image at the specified region.</summary>
@@ -195,8 +200,9 @@ namespace ZeldaOracle.Common.Graphics {
 			Rectangle2F sourceRect, Vector2F origin, float rotation, Flip flip,
 			Color color)
 		{
-			spriteBatch.Draw(texture, NewRect(destinationRect), (Rectangle) sourceRect,
-				color, GMath.CorrectAngle(rotation), (Vector2) origin,
+			spriteBatch.Draw(texture, NewRect(destinationRect),
+				sourceRect.ToXnaRectangle(), color.ToXnaColor(),
+				GMath.CorrectAngle(rotation), origin.ToXnaVector2(),
 				(SpriteEffects) flip, 0f);
 		}
 
@@ -321,8 +327,8 @@ namespace ZeldaOracle.Common.Graphics {
 			while (part != null) {
 				if (!part.Image.IsDisposed)
 					spriteBatch.Draw(part.Image, NewPos(position) +
-						(Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-						color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+						part.DrawOffset.ToXnaVector2(), part.SourceRect.ToXnaRectangle(),
+						color.ToXnaColor(), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 				part = part.NextPart;
 			}
 		}
@@ -334,11 +340,12 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			SpritePart part = sprite.GetParts(settings);
 			while (part != null) {
-				destination.Point = NewPos(destination.Point) + (Vector2) part.DrawOffset;
+				destination.Point = NewPos(destination.Point).ToVector2F() +
+					part.DrawOffset;
 				if (!part.Image.IsDisposed)
-					spriteBatch.Draw(part.Image, (Rectangle) destination,
-						(Rectangle) part.SourceRect, color, 0f, Vector2.Zero,
-						SpriteEffects.None, 0f);
+					spriteBatch.Draw(part.Image, destination.ToXnaRectangle(),
+						part.SourceRect.ToXnaRectangle(), color.ToXnaColor(), 0f,
+						Vector2.Zero, SpriteEffects.None, 0f);
 				part = part.NextPart;
 			}
 		}
@@ -355,7 +362,7 @@ namespace ZeldaOracle.Common.Graphics {
 			Align alignment, Color color)
 		{
 			spriteBatch.DrawString(font, text,
-				NewStringPos(position, font, text, alignment), color);
+				NewStringPos(position, font, text, alignment), color.ToXnaColor());
 		}
 
 		/// <summary>Draws the string at the specified position.</summary>
@@ -364,7 +371,8 @@ namespace ZeldaOracle.Common.Graphics {
 			Flip flip = Flip.None)
 		{
 			spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment),
-				color, rotation, (Vector2)origin, scale, (SpriteEffects) flip, 0f);
+				color.ToXnaColor(), rotation, origin.ToXnaVector2(), scale,
+				(SpriteEffects) flip, 0f);
 		}
 
 		/// <summary>Draws the string at the specified position.</summary>
@@ -373,33 +381,35 @@ namespace ZeldaOracle.Common.Graphics {
 			Flip flip = Flip.None)
 		{
 			spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment),
-				color, (float)rotation, (Vector2) origin, (Vector2) scale,
-				(SpriteEffects) flip, 0f);
+				color.ToXnaColor(), (float)rotation, origin.ToXnaVector2(),
+				scale.ToXnaVector2(), (SpriteEffects) flip, 0f);
 		}
 		
 		// Game Fonts -----------------------------------------------------------------
 
 		/// <summary>Draws a game string of any type at the specified position.</summary>
 		public void DrawString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color)
+			ColorOrPalette color, Variables variables = null)
 		{
-			DrawString(font, text, position, color, Align.TopLeft, Vector2F.Zero);
+			DrawString(font, text, position, color, Align.TopLeft, Vector2F.Zero,
+				variables);
 		}
 
 		/// <summary>Draws a game string of any type at the specified position.</summary>
 		public void DrawString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Align alignment)
+			ColorOrPalette color, Align alignment, Variables variables = null)
 		{
-			DrawString(font, text, position, color, alignment, Vector2F.Zero);
+			DrawString(font, text, position, color, alignment, Vector2F.Zero, variables);
 		}
 
 		/// <summary>Draws a game string of any type at the specified position.</summary>
 		public void DrawString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Align alignment, Vector2F area)
+			ColorOrPalette color, Align alignment, Vector2F area,
+			Variables variables = null)
 		{
 			if (text.IsString)
-				DrawLetterString(font, FormatCodes.FormatString(text.String), position,
-					color, alignment, area);
+				DrawLetterString(font, FormatCodes.FormatString(text.String, variables),
+					position, color, alignment, area);
 			else if (text.IsLetterString)
 				DrawLetterString(font, text.LetterString, position, color, alignment,
 					area);
@@ -410,7 +420,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
 		public void DrawLetterString(GameFont font, LetterString letterString,
-			Vector2F position, ColorOrPalette color)
+			Vector2F position, ColorOrPalette color, Variables variables = null)
 		{
 			DrawLetterString(font, letterString, position, color, Align.TopLeft,
 				Vector2F.Zero);
@@ -418,7 +428,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
 		public void DrawLetterString(GameFont font, LetterString letterString,
-			Vector2F position, ColorOrPalette color, Align alignment)
+			Vector2F position, ColorOrPalette color, Align alignment,
+			Variables variables = null)
 		{
 			DrawLetterString(font, letterString, position, color, alignment,
 				Vector2F.Zero);
@@ -426,7 +437,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
 		public void DrawLetterString(GameFont font, LetterString letterString,
-			Vector2F position, ColorOrPalette color, Align alignment, Vector2F area)
+			Vector2F position, ColorOrPalette color, Align alignment, Vector2F area,
+			Variables variables = null)
 		{
 			Vector2F size = font.MeasureString(letterString);
 			position = Alignment.AlignVector(position, area, size, alignment);
@@ -438,30 +450,30 @@ namespace ZeldaOracle.Common.Graphics {
 						position.Y,
 						font.CharacterSize
 					)),
-					(Rectangle) font.GetCharacterCell(letterString[i].Char),
+					font.GetCharacterCell(letterString[i].Char).ToXnaRectangle(),
 					(letterString[i].Color == Letter.DefaultColor ? color.MappedColor :
-						letterString[i].MappedColor),
+						letterString[i].MappedColor).ToXnaColor(),
 					0f, Vector2.Zero, SpriteEffects.None, 0f);
 			}
 		}
 		
 		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
 		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color)
+			ColorOrPalette color, Variables variables = null)
 		{
-			DrawWrappedString(font, text, position, color, Align.TopLeft, Vector2F.Zero);
+			DrawWrappedString(font, text, position, color, Align.TopLeft, Vector2F.Zero, variables);
 		}
 
 		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
 		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Align alignment)
+			ColorOrPalette color, Align alignment, Variables variables = null)
 		{
-			DrawWrappedString(font, text, position, color, alignment, Vector2F.Zero);
+			DrawWrappedString(font, text, position, color, alignment, Vector2F.Zero, variables);
 		}
 
 		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
 		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Align alignment, Vector2F area)
+			ColorOrPalette color, Align alignment, Vector2F area, Variables variables = null)
 		{
 			if (text.IsString)
 				DrawWrappedLetterString(font, font.WrapString(text.String, (int) area.X),
@@ -507,9 +519,9 @@ namespace ZeldaOracle.Common.Graphics {
 							position.Y + j * (font.CharacterHeight + font.LineSpacing),
 							font.CharacterSize
 						)),
-						(Rectangle) font.GetCharacterCell(letterString[i].Char),
+						font.GetCharacterCell(letterString[i].Char).ToXnaRectangle(),
 						(letterString[i].Color == Letter.DefaultColor ? color.MappedColor :
-							letterString[i].MappedColor),
+							letterString[i].MappedColor).ToXnaColor(),
 						0f, Vector2.Zero, SpriteEffects.None, 0f);
 				}
 			}
@@ -564,7 +576,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Clears the render target.</summary>
 		public void Clear(ColorOrPalette color) {
-			spriteBatch.GraphicsDevice.Clear(color.MappedColor);
+			spriteBatch.GraphicsDevice.Clear(color.MappedColor.ToXnaColor());
 		}
 
 
@@ -661,17 +673,17 @@ namespace ZeldaOracle.Common.Graphics {
 		/// precision settings.</summary>
 		private Vector2 NewPos(Vector2F position) {
 			if (useTranslation)
-				return (UseIntegerPrecision ? (Vector2) GMath.Round(position + translation) :
-					(Vector2) (position + translation));
+				return (UseIntegerPrecision ? GMath.Round(position + translation) :
+					(position + translation)).ToXnaVector2();
 			else
-				return (Vector2) position;
+				return position.ToXnaVector2();
 		}
 
 		/// <summary>Translates the position of the string based on the
 		/// translation and precision settings.</summary>
 		private Vector2 NewStringPos(Vector2F position, SpriteFont font, string text,
 			Align alignment) {
-			Vector2F stringSize = font.MeasureString(text);
+			Vector2F stringSize = font.MeasureString(text).ToVector2F();
 			bool intAlign = (alignment & Align.Int) != 0;
 			if (((alignment & Align.Left) != 0) == ((alignment & Align.Right) != 0))
 				position.X -= (intAlign ? (int) (stringSize.X / 2f) : (stringSize.X / 2f));
@@ -683,21 +695,21 @@ namespace ZeldaOracle.Common.Graphics {
 				position.Y -= stringSize.Y;
 
 			if (useTranslation)
-				return (UseIntegerPrecision ? (Vector2) GMath.Floor(position + translation) :
-					(Vector2) (position + translation));
+				return (UseIntegerPrecision ? GMath.Floor(position + translation) :
+					(position + translation)).ToXnaVector2();
 			else
-				return (Vector2) position;
+				return position.ToXnaVector2();
 		}
 
 		/// <summary>Translates the rectangle based on the translation and
 		/// precision settings.</summary>
 		private Rectangle NewRect(Rectangle2F destinationRect) {
 			if (useTranslation)
-				return (UseIntegerPrecision ? (Rectangle) new Rectangle2F(GMath.Round(
+				return (UseIntegerPrecision ? new Rectangle2F(GMath.Round(
 					destinationRect.Point + translation), GMath.Round(destinationRect.Size)) :
-					(Rectangle) (destinationRect + translation));
+					(destinationRect + translation)).ToXnaRectangle();
 			else
-				return (Rectangle) destinationRect;
+				return destinationRect.ToXnaRectangle();
 		}
 
 

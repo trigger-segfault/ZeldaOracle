@@ -21,7 +21,6 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		Entrance	= 1,
 		Stairs		= 2,
 		
-		[ScriptingAttributes.Hidden]
 		[Browsable(false)]
 		Count		= 3,
 	}

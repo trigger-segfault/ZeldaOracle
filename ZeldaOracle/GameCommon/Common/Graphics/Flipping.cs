@@ -9,7 +9,9 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Rotate 180 degrees about the Y axis before rendering.</summary>
 		Horizontal = 1,
 		/// <summary>Rotate 180 degrees about the X axis before rendering.</summary>
-		Vertical = 2
+		Vertical = 2,
+		/// <summary>Flip both vertically and horizontally.</summary>
+		Both = Horizontal | Vertical
 	}
 
 	/// <summary>Extensions for the Flip enumeration.</summary>

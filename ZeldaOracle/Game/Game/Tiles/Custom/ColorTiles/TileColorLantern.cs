@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
@@ -90,7 +91,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Fire the color change event.
 				if (prevColor != value) {
-					GameControl.FireEvent(this, "color_change", this, (ZeldaAPI.Color) value);
+					GameControl.FireEvent(this, "color_change", this, value);
 				}
 
 				if (value == PuzzleColor.Red)
@@ -112,9 +113,9 @@ namespace ZeldaOracle.Game.Tiles {
 		// Scripting API
 		//-----------------------------------------------------------------------------
 
-		ZeldaAPI.Color ZeldaAPI.ColorLantern.Color {
+		/*ZeldaAPI.Color ZeldaAPI.ColorLantern.Color {
 			get { return (ZeldaAPI.Color) Color; }
 			set { Color = (PuzzleColor) value; }
-		}
+		}*/
 	}
 }

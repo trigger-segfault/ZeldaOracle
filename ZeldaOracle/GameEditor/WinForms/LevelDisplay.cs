@@ -31,6 +31,7 @@ using Matrix = Microsoft.Xna.Framework.Matrix;
 using SurfaceFormat = Microsoft.Xna.Framework.Graphics.SurfaceFormat;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaEditor.Util;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.WinForms {
 
@@ -554,12 +555,13 @@ namespace ZeldaEditor.WinForms {
 		
 		public void UpdateLevel() {
 			if (editorControl.IsLevelOpen) {
-				this.AutoScrollMinSize = Level.Dimensions * (Level.RoomSize * GameSettings.TILE_SIZE + editorControl.RoomSpacing);
+				this.AutoScrollMinSize = (Level.Dimensions * (Level.RoomSize *
+					GameSettings.TILE_SIZE + editorControl.RoomSpacing)).ToGdiSize();
 				this.HorizontalScroll.Value = 0;
 				this.VerticalScroll.Value = 0;
 			}
 			else {
-				this.AutoScrollMinSize = Point2I.One;
+				this.AutoScrollMinSize = Point2I.One.ToGdiSize();
 				this.HorizontalScroll.Value = 0;
 				this.VerticalScroll.Value = 0;
 			}
@@ -591,7 +593,7 @@ namespace ZeldaEditor.WinForms {
 			Cursor = editorControl.CurrentTool.MouseCursor;
 
 			if (editorControl.IsLevelOpen) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 
 				if (editorControl.PlayerPlaceMode) {
 					// Test the world after placing the player.
@@ -617,7 +619,7 @@ namespace ZeldaEditor.WinForms {
 			Cursor = CurrentTool.MouseCursor;
 
 			if (editorControl.IsLevelOpen) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 
 				// Notify the current tool.
 				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {
@@ -631,7 +633,7 @@ namespace ZeldaEditor.WinForms {
 			Cursor = CurrentTool.MouseCursor;
 
 			if (editorControl.IsLevelOpen) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 				cursorTileSize = Point2I.One;
 
 				// Find the highlighted room/tile coordinates.
@@ -666,7 +668,7 @@ namespace ZeldaEditor.WinForms {
 
 		private void OnMouseDoubleClick(object sender, MouseEventArgs e) {
 			if (editorControl.IsLevelOpen) {
-				Point2I mousePos = ScrollPosition + e.Location;
+				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
 
 				// Notify the current tool.
 				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {

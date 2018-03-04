@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using ZeldaOracle.Game.API;
 
 namespace ZeldaAPI {
 	/// <summary>Access to a single room within a level.</summary>
@@ -52,8 +53,10 @@ namespace ZeldaAPI {
 		bool AllMonstersDead();
 
 		//TileData GetTileData(string id);
-		
-    }
+
+		/// <summary>Gets the variables for the room.</summary>
+		Variables Variables { get; }
+	}
 
 	/// <summary>Access to a tile's tile data.</summary>
 	public interface TileData {

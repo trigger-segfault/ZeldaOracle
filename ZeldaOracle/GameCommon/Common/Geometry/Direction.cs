@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 
 namespace ZeldaOracle.Common.Geometry {
@@ -11,9 +11,10 @@ namespace ZeldaOracle.Common.Geometry {
 		CounterClockwise = 0,
 		Clockwise = 1,
 	}
-	
+
 
 	/// <summary>Struct used to represent an axis-aligned direction.</summary>
+	[Serializable]
 	public struct Direction {
 
 		//-----------------------------------------------------------------------------

@@ -339,6 +339,16 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 		}
 
+		/// <summary>The property value as a point.</summary>
+		public Point2I PointValue {
+			get { return (Point2I) objectValue; }
+			set {
+				objectValue = value;
+				if (properties != null)
+					RunAction(properties.PropertyObject, value);
+			}
+		}
+
 		// Lists ---------------------------------------------------------------------
 
 		/// <summary>The next sibling property (if this property is part of a list).</summary>

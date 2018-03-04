@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.API;
 
 namespace ZeldaOracle.Common.Translation {
 
@@ -117,13 +118,13 @@ namespace ZeldaOracle.Common.Translation {
 				return FormatCodeType.String;
 			else if (noColorStringCodes.ContainsKey(code))
 				return FormatCodeType.NoColorString;
-			else if (code.StartsWith("var:"))
+			else if (code.StartsWith("var:") || code.StartsWith("fvar:"))
 				return FormatCodeType.Variable;
 			return FormatCodeType.None;
 		}
 
 		/// <summary>Gets the string representation of the code.</summary>
-		public static string GetFormatCodeString(string code) {
+		public static string GetFormatCodeString(string code, Variables variables = null) {
 			if (stringCodes.ContainsKey(code)) {
 				return stringCodes[code];
 			}
@@ -131,8 +132,28 @@ namespace ZeldaOracle.Common.Translation {
 				return noColorStringCodes[code];
 			}
 			else if (code.StartsWith("var:")) {
-				string varName = code.Substring(4);
-				// return the variable as text
+				// See if formatting for the variable was specified
+				string varCode = code.Substring(4);
+				string[] nameFormat = varCode.Split(new char[] { ':' }, 2);
+				string varName = nameFormat[0];
+				string format = (nameFormat.Length == 2 ? nameFormat[1] : null);
+				if (variables != null && variables.Contains(varName)) {
+					Variable v = variables.GetVariable(varName);
+					return v.FormatValue(format);
+				}
+				return "<" + varName + ">";
+			}
+			else if (code.StartsWith("fvar:")) {
+				// Apply Format Codes to the variable
+				string varCode = code.Substring(4);
+				string[] nameFormat = varCode.Split(new char[] { ':' }, 2);
+				string varName = nameFormat[0];
+				string format = (nameFormat.Length == 2 ? nameFormat[1] : null);
+				if (variables != null && variables.Contains(varName)) {
+					Variable v = variables.GetVariable(varName);
+					return GetFormatCodeString(v.FormatValue(format), variables);
+				}
+				return "<" + GetFormatCodeString(varName, variables) + ">";
 			}
 			return "";
 		}
@@ -154,15 +175,15 @@ namespace ZeldaOracle.Common.Translation {
 		}
 
 		/// <summary>Returns the text formatted without any format codes in.</summary>
-		public static LetterString FormatString(string text) {
+		public static LetterString FormatString(string text, Variables variables) {
 			int caretPosition = 0;
-			return FormatString(text, ref caretPosition);
+			return FormatString(text, ref caretPosition, variables);
 		}
 
 		/// <summary>Returns the text formatted without any format codes in.</summary>
 		/// <param name="caretPosition">Used to convert the input caret position to the
 		/// output caret position after formatting.</param>
-		public static LetterString FormatString(string text, ref int caretPosition) {
+		public static LetterString FormatString(string text, ref int caretPosition, Variables variables = null) {
 			int originalCaretPosition = caretPosition;
 			int currentCharacter = 0;
 			ColorOrPalette currentColor = Letter.DefaultColor;
@@ -182,13 +203,17 @@ namespace ZeldaOracle.Common.Translation {
 					if (text[currentCharacter] == '>') {
 						// End string code
 						FormatCodeType codeType = FormatCodes.GetFormatCodeType(currentCode);
-						if (codeType == FormatCodeType.String || codeType == FormatCodeType.Variable) {
+						if (codeType == FormatCodeType.String) {
 							string stringCode = FormatCodes.GetFormatCodeString(currentCode);
 							letterString.AddRange(stringCode, currentColor);
 						}
 						else if (codeType == FormatCodeType.NoColorString) {
 							string stringCode = FormatCodes.GetFormatCodeString(currentCode);
 							letterString.AddRange(stringCode, Color.White);
+						}
+						else if (codeType == FormatCodeType.Variable) {
+							string stringCode = FormatCodes.GetFormatCodeString(currentCode, variables);
+							letterString.AddRange(stringCode, currentColor);
 						}
 						else if (codeType == FormatCodeType.Color) {
 							ColorOrPalette colorCode = FormatCodes.GetFormatCodeColor(currentCode);

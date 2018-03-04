@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Game.API;
 
 namespace ZeldaAPI {
 
@@ -32,37 +33,37 @@ namespace ZeldaAPI {
 	/// <summary>Access to a color cube slot tile.</summary>
 	public interface ColorCubeSlot : Tile {
 		/// <summary>The color of the tile based on the color cube on top of it.</summary>
-		Color Color { get; set; }
+		PuzzleColor Color { get; set; }
 	}
 
 	/// <summary>Access to a lanturn tile with a colored flame.</summary>
 	public interface ColorLantern : Tile {
 		/// <summary>The color of the lanturn's flame.</summary>
-		Color Color { get; set; }
+		PuzzleColor Color { get; set; }
 	}
 
 	/// <summary>Access to a tile that can change colors by jumping on it.</summary>
 	public interface ColorJumpPad : Tile {
 		/// <summary>The color of the jump pad.</summary>
-		Color Color { get; set; }
+		PuzzleColor Color { get; set; }
 	}
 
 	/// <summary>Access to a color tile.</summary>
 	public interface ColorTile : Tile {
 		/// <summary>Gets the color of the color tile.</summary>
-		Color Color { get; set; }
+		PuzzleColor Color { get; set; }
 	}
 
 	/// <summary>Access to a puzzle-colored statue tile.</summary>
 	public interface ColorStatue : Tile {
 		/// <summary>The color of the statue.</summary>
-		Color Color { get; }
+		PuzzleColor Color { get; }
 	}
 
 	/// <summary>Access to a color block tile.</summary>
 	public interface ColorBlock : Tile {
 		/// <summary>Gets the color of the color block.</summary>
-		Color Color { get; }
+		PuzzleColor Color { get; }
 	}
 
 	/// <summary>Access to a door tile.</summary>
@@ -96,7 +97,7 @@ namespace ZeldaAPI {
 	public interface ColorSwitch : Tile {
 		/// <summary>Gets the color of the color switch tile. This can only be
 		/// red or blue.</summary>
-		Color Color { get; }
+		PuzzleColor Color { get; }
 	}
 
 	/// <summary>Access to a rotatable plate for bouncing seeds off of.</summary>

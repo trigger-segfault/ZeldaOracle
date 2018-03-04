@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaAPI;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	/// <summary>The color cube's sprite index has the value of one of these orientations.</summary>
-	public enum ColorCubeOrientation {
+	/*public enum ColorCubeOrientation {
 		/// <summary>Blue on top with yellow on the side.</summary>
 		BlueYellow = 0,
 		/// <summary>Blue on top with red on the side.</summary>
@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Tiles {
 		RedBlue,
 		/// <summary>Red on top with yellow on the side.</summary>
 		RedYellow
-	}
+	}*/
 
 	public class TileColorCube : Tile {
 

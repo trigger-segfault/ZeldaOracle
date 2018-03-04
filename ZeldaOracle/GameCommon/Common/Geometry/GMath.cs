@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Microsoft.Xna.Framework;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game;
-
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>A static class for advanced game-related mathematical functions and calculations.</summary>
 	public static class GMath {
@@ -37,16 +33,7 @@ namespace ZeldaOracle.Common.Geometry {
 		public const float QuarterAngle = HalfPi;
 		/// <summary>Eighth of a full angle in radians.</summary>
 		public const float EighthAngle = QuarterPi;
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Sets if all trigonometric functions will use degrees instead of radians.</summary>
-		public static bool UsingDegrees { get; set; } = true;
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Basic
 		//-----------------------------------------------------------------------------
@@ -273,6 +260,11 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Restricts the value to be within the specified range.</summary>
+		public static int Clamp(int value, RangeI range) {
+			return Math.Max(range.Min, Math.Min(range.Max, value));
+		}
+
+		/// <summary>Restricts the value to be within the specified range.</summary>
 		public static uint Clamp(uint value, uint min, uint max) {
 			return Math.Max(min, Math.Min(max, value));
 		}
@@ -293,6 +285,11 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Restricts the value to be within the specified range.</summary>
+		public static float Clamp(float value, RangeF range) {
+			return Math.Max(range.Min, Math.Min(range.Max, value));
+		}
+
+		/// <summary>Restricts the value to be within the specified range.</summary>
 		public static double Clamp(double value, double min, double max) {
 			return Math.Max(min, Math.Min(max, value));
 		}
@@ -304,42 +301,50 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Restricts the vector to be within the specified range.</summary>
 		public static Vector2F Clamp(Vector2F value, Vector2F min, Vector2F max) {
-			return new Vector2F(Math.Max(min.X, Math.Min(max.X, value.X)), Math.Max(min.Y, Math.Min(max.Y, value.Y)));
+			return new Vector2F(Math.Max(min.X, Math.Min(max.X, value.X)),
+								Math.Max(min.Y, Math.Min(max.Y, value.Y)));
 		}
 
 		/// <summary>Restricts the vector to be within the specified range.</summary>
 		public static Vector2F Clamp(Vector2F value, float minX, float minY, Vector2F max) {
-			return new Vector2F(Math.Max(minX, Math.Min(max.X, value.X)), Math.Max(minY, Math.Min(max.Y, value.Y)));
+			return new Vector2F(Math.Max(minX, Math.Min(max.X, value.X)),
+								Math.Max(minY, Math.Min(max.Y, value.Y)));
 		}
 
 		/// <summary>Restricts the vector to be within the specified range.</summary>
 		public static Vector2F Clamp(Vector2F value, Vector2F min, float maxX, float maxY) {
-			return new Vector2F(Math.Max(min.X, Math.Min(maxX, value.X)), Math.Max(min.Y, Math.Min(maxY, value.Y)));
+			return new Vector2F(Math.Max(min.X, Math.Min(maxX, value.X)),
+								Math.Max(min.Y, Math.Min(maxY, value.Y)));
 		}
 
 		/// <summary>Restricts the vector to be within the specified range.</summary>
 		public static Vector2F Clamp(Vector2F value, float minX, float minY, float maxX, float maxY) {
-			return new Vector2F(Math.Max(minX, Math.Min(maxX, value.X)), Math.Max(minY, Math.Min(maxY, value.Y)));
+			return new Vector2F(Math.Max(minX, Math.Min(maxX, value.X)),
+								Math.Max(minY, Math.Min(maxY, value.Y)));
 		}
 
 		/// <summary>Restricts the point to be within the specified range.</summary>
 		public static Point2I Clamp(Point2I value, Point2I min, Point2I max) {
-			return new Point2I(Math.Max(min.X, Math.Min(max.X, value.X)), Math.Max(min.Y, Math.Min(max.Y, value.Y)));
+			return new Point2I(Math.Max(min.X, Math.Min(max.X, value.X)),
+								Math.Max(min.Y, Math.Min(max.Y, value.Y)));
 		}
 
 		/// <summary>Restricts the point to be within the specified range.</summary>
 		public static Point2I Clamp(Point2I value, int minX, int minY, Point2I max) {
-			return new Point2I(Math.Max(minX, Math.Min(max.X, value.X)), Math.Max(minY, Math.Min(max.Y, value.Y)));
+			return new Point2I(Math.Max(minX, Math.Min(max.X, value.X)),
+								Math.Max(minY, Math.Min(max.Y, value.Y)));
 		}
 
 		/// <summary>Restricts the point to be within the specified range.</summary>
 		public static Point2I Clamp(Point2I value, Point2I min, int maxX, int maxY) {
-			return new Point2I(Math.Max(min.X, Math.Min(maxX, value.X)), Math.Max(min.Y, Math.Min(maxY, value.Y)));
+			return new Point2I(Math.Max(min.X, Math.Min(maxX, value.X)),
+								Math.Max(min.Y, Math.Min(maxY, value.Y)));
 		}
 
 		/// <summary>Restricts the point to be within the specified range.</summary>
 		public static Point2I Clamp(Point2I value, int minX, int minY, int maxX, int maxY) {
-			return new Point2I(Math.Max(minX, Math.Min(maxX, value.X)), Math.Max(minY, Math.Min(maxY, value.Y)));
+			return new Point2I(Math.Max(minX, Math.Min(maxX, value.X)),
+								Math.Max(minY, Math.Min(maxY, value.Y)));
 		}
 
 		/// <summary>Clamp the vector within a rectangular area.</summary>
@@ -360,7 +365,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
 		public static sbyte Sign(sbyte a) {
-			return (sbyte)Math.Sign(a);
+			return (sbyte) Math.Sign(a);
 		}
 
 		/// <summary>Returns a value indicating the sign of the specified number.</summary>
@@ -393,22 +398,26 @@ namespace ZeldaOracle.Common.Geometry {
 			return Math.Sign(a);
 		}
 
-		/// <summary>Returns the coordinates indicating the sign of the specified vector.</summary>
+		/// <summary>Returns the coordinates indicating the sign of the specified
+		/// vector.</summary>
 		public static Vector2F Sign(Vector2F a) {
 			return new Vector2F(Math.Sign(a.X), Math.Sign(a.Y));
 		}
 
-		/// <summary>Returns the coordinates indicating the sign of the specified vector.</summary>
+		/// <summary>Returns the coordinates indicating the sign of the specified
+		/// vector.</summary>
 		public static Vector2F Sign(float aX, float aY) {
 			return new Vector2F(Math.Sign(aX), Math.Sign(aY));
 		}
 
-		/// <summary>Returns the coordinates indicating the sign of the specified point.</summary>
+		/// <summary>Returns the coordinates indicating the sign of the specified
+		/// point.</summary>
 		public static Point2I Sign(Point2I a) {
 			return new Point2I(Math.Sign(a.X), Math.Sign(a.Y));
 		}
 
-		/// <summary>Returns the coordinates indicating the sign of the specified point.</summary>
+		/// <summary>Returns the coordinates indicating the sign of the specified
+		/// point.</summary>
 		public static Point2I Sign(int aX, int aY) {
 			return new Point2I(Math.Sign(aX), Math.Sign(aY));
 		}
@@ -577,123 +586,130 @@ namespace ZeldaOracle.Common.Geometry {
 
 		// Floor ----------------------------------------------------------------------
 
-		/// <summary>Returns the largest integer less than or equal to the specified number.</summary>
+		/// <summary>Returns the largest integer less than or equal to the specified
+		/// number.</summary>
 		public static float Floor(float a) {
-			return (float)Math.Floor(a);
+			return (float) Math.Floor(a);
 		}
 
-		/// <summary>Returns the largest integer less than or equal to the specified number, with the base unit.</summary>
+		/// <summary>Returns the largest integer less than or equal to the specified
+		/// number, with the base unit.</summary>
 		public static float Floor(float a, float unit) {
-			return (float)Math.Floor(a / unit) * unit;
+			return (float) Math.Floor(a / unit) * unit;
 		}
 
-		/// <summary>Returns the largest integer less than or equal to the specified number.</summary>
+		/// <summary>Returns the largest integer less than or equal to the specified
+		/// number.</summary>
 		public static double Floor(double a) {
 			return Math.Floor(a);
 		}
 
-		/// <summary>Returns the largest integer less than or equal to the specified number, with the base unit.</summary>
+		/// <summary>Returns the largest integer less than or equal to the specified
+		/// number, with the base unit.</summary>
 		public static double Floor(double a, double unit) {
 			return Math.Floor(a / unit) * unit;
 		}
 
-		/// <summary>Returns the largest integer less than or equal to the specified number.</summary>
+		/// <summary>Returns the largest integer less than or equal to the specified
+		/// number.</summary>
 		public static decimal Floor(decimal a) {
-			#if WINDOWS
 			return Math.Floor(a);
-			#else
-			return (decimal)Math.Floor((double)a);
-			#endif
 		}
 
-		/// <summary>Returns the largest integer less than or equal to the specified number, with the base unit.</summary>
+		/// <summary>Returns the largest integer less than or equal to the specified
+		/// number, with the base unit.</summary>
 		public static decimal Floor(decimal a, decimal unit) {
-			#if WINDOWS
 			return Math.Floor(a / unit) * unit;
-			#else
-			return (decimal)(Math.Floor((double)a / (double)unit) * (double)unit);
-			#endif
 		}
 
-		/// <summary>Returns the largest point less than or equal to the specified vector.</summary>
+		/// <summary>Returns the largest point less than or equal to the specified
+		/// vector.</summary>
 		public static Vector2F Floor(Vector2F a) {
-			return new Vector2F((float)Math.Floor(a.X), (float)Math.Floor(a.Y));
+			return new Vector2F((float) Math.Floor(a.X), (float) Math.Floor(a.Y));
 		}
 
-		/// <summary>Returns the largest point less than or equal to the specified vector, with the base unit.</summary>
+		/// <summary>Returns the largest point less than or equal to the specified
+		/// vector, with the base unit.</summary>
 		public static Vector2F Floor(Vector2F a, float unit) {
-			return new Vector2F((float)Math.Floor(a.X / unit) * unit, (float)Math.Floor(a.Y / unit) * unit);
+			return new Vector2F((float) Math.Floor(a.X / unit) * unit,
+								(float) Math.Floor(a.Y / unit) * unit);
 		}
-		/// <summary>Returns the largest point less than or equal to the specified vector, with the base unit.</summary>
+		/// <summary>Returns the largest point less than or equal to the specified
+		/// vector, with the base unit.</summary>
 		public static Vector2F Floor(Vector2F a, Vector2F unit) {
-			return new Vector2F((float)Math.Floor(a.X / unit.X) * unit.X, (float)Math.Floor(a.Y / unit.Y) * unit.Y);
+			return new Vector2F((float) Math.Floor(a.X / unit.X) * unit.X,
+								(float) Math.Floor(a.Y / unit.Y) * unit.Y);
 		}
 		
 		// Ceiling --------------------------------------------------------------------
 		
-		/// <summary>Returns the smallest integer greater than or equal to the specified number.</summary>
+		/// <summary>Returns the smallest integer greater than or equal to the
+		/// specified number.</summary>
 		public static float Ceiling(float a) {
-			return (float)Math.Ceiling(a);
+			return (float) Math.Ceiling(a);
 		}
 
-		/// <summary>Returns the smallest integer greater than or equal to the specified number, with the base unit.</summary>
+		/// <summary>Returns the smallest integer greater than or equal to the
+		/// specified number, with the base unit.</summary>
 		public static float Ceiling(float a, float unit) {
-			return (float)Math.Ceiling(a / unit) * unit;
+			return (float) Math.Ceiling(a / unit) * unit;
 		}
 
-		/// <summary>Returns the smallest integer greater than or equal to the specified number.</summary>
+		/// <summary>Returns the smallest integer greater than or equal to the
+		/// specified number.</summary>
 		public static double Ceiling(double a) {
 			return Math.Ceiling(a);
 		}
 
-		/// <summary>Returns the smallest integer greater than or equal to the specified number, with the base unit.</summary>
+		/// <summary>Returns the smallest integer greater than or equal to the
+		/// specified number, with the base unit.</summary>
 		public static double Ceiling(double a, double unit) {
 			return Math.Ceiling(a / unit) * unit;
 		}
 
-		/// <summary>Returns the smallest integer greater than or equal to the specified number.</summary>
+		/// <summary>Returns the smallest integer greater than or equal to the
+		/// specified number.</summary>
 		public static decimal Ceiling(decimal a) {
-			#if WINDOWS
 			return Math.Ceiling(a);
-			#else
-			return (decimal)Math.Ceiling((double)a);
-			#endif
 		}
 
-		/// <summary>Returns the smallest integer greater than or equal to the specified number, with the base unit.</summary>
+		/// <summary>Returns the smallest integer greater than or equal to the
+		/// specified number, with the base unit.</summary>
 		public static decimal Ceiling(decimal a, decimal unit) {
-			#if WINDOWS
 			return Math.Ceiling(a / unit) * unit;
-			#else
-			return (decimal)(Math.Ceiling((double)a / (double)unit) * (double)unit);
-			#endif
 		}
 
-		/// <summary>Returns the smallest point greater than or equal to the specified vector.</summary>
+		/// <summary>Returns the smallest point greater than or equal to the
+		/// specified vector.</summary>
 		public static Vector2F Ceiling(Vector2F a) {
-			return new Vector2F((float)Math.Ceiling(a.X), (float)Math.Ceiling(a.Y));
+			return new Vector2F((float) Math.Ceiling(a.X), (float) Math.Ceiling(a.Y));
 		}
 
-		/// <summary>Returns the smallest point greater than or equal to the specified vector, with the base unit.</summary>
+		/// <summary>Returns the smallest point greater than or equal to the specified
+		/// vector, with the base unit.</summary>
 		public static Vector2F Ceiling(Vector2F a, float unit) {
-			return new Vector2F((float)Math.Ceiling(a.X / unit) * unit, (float)Math.Ceiling(a.Y / unit) * unit);
+			return new Vector2F((float) Math.Ceiling(a.X / unit) * unit,
+								(float) Math.Ceiling(a.Y / unit) * unit);
 		}
 
-		/// <summary>Returns the smallest point greater than or equal to the specified vector, with the base unit.</summary>
+		/// <summary>Returns the smallest point greater than or equal to the specified
+		/// vector, with the base unit.</summary>
 		public static Vector2F Ceiling(Vector2F a, Vector2F unit) {
-			return new Vector2F((float)Math.Ceiling(a.X / unit.X) * unit.X, (float)Math.Ceiling(a.Y / unit.Y) * unit.Y);
+			return new Vector2F((float) Math.Ceiling(a.X / unit.X) * unit.X,
+								(float) Math.Ceiling(a.Y / unit.Y) * unit.Y);
 		}
 
 		// Round ----------------------------------------------------------------------
 
 		/// <summary>Rounds the specified number to the nearest integral value.</summary>
 		public static float Round(float a) {
-			return (float)Math.Round(a);
+			return (float) Math.Round(a);
 		}
 
-		/// <summary>Rounds the specified number to the nearest integral value, with the base unit.</summary>
+		/// <summary>Rounds the specified number to the nearest integral value, with
+		/// the base unit.</summary>
 		public static float Round(float a, float unit) {
-			return (float)Math.Round(a / unit) * unit;
+			return (float) Math.Round(a / unit) * unit;
 		}
 
 		/// <summary>Rounds the specified number to the nearest integral value.</summary>
@@ -701,7 +717,8 @@ namespace ZeldaOracle.Common.Geometry {
 			return Math.Round(a);
 		}
 
-		/// <summary>Rounds the specified number to the nearest integral value, with the base unit.</summary>
+		/// <summary>Rounds the specified number to the nearest integral value, with
+		/// the base unit.</summary>
 		public static double Round(double a, double unit) {
 			return Math.Round(a / unit) * unit;
 		}
@@ -711,130 +728,97 @@ namespace ZeldaOracle.Common.Geometry {
 			return Math.Round(a);
 		}
 
-		/// <summary>Rounds the specified number to the nearest integral value, with the base unit.</summary>
+		/// <summary>Rounds the specified number to the nearest integral value, with
+		/// the base unit.</summary>
 		public static decimal Round(decimal a, decimal unit) {
 			return Math.Round(a / unit) * unit;
 		}
 
 		/// <summary>Rounds the specified vector to the nearest integral coordinates.</summary>
 		public static Vector2F Round(Vector2F a) {
-			return new Vector2F((float)Math.Round(a.X), (float)Math.Round(a.Y));
+			return new Vector2F((float) Math.Round(a.X), (float) Math.Round(a.Y));
 		}
 
-		/// <summary>Rounds the specified vector to the nearest integral coordinates, with the base unit.</summary>
+		/// <summary>Rounds the specified vector to the nearest integral coordinates,
+		/// with the base unit.</summary>
 		public static Vector2F Round(Vector2F a, float unit) {
-			return new Vector2F((float)Math.Round(a.X / unit) * unit, (float)Math.Round(a.Y / unit) * unit);
+			return new Vector2F((float) Math.Round(a.X / unit) * unit,
+								(float) Math.Round(a.Y / unit) * unit);
 		}
 
-		/// <summary>Rounds the specified vector to the nearest integral coordinates, with the base unit.</summary>
+		/// <summary>Rounds the specified vector to the nearest integral coordinates,
+		/// with the base unit.</summary>
 		public static Vector2F Round(Vector2F a, Vector2F unit) {
-			return new Vector2F((float)Math.Round(a.X / unit.X) * unit.X, (float)Math.Round(a.Y / unit.Y) * unit.Y);
+			return new Vector2F((float) Math.Round(a.X / unit.X) * unit.X,
+								(float) Math.Round(a.Y / unit.Y) * unit.Y);
 		}
 		
 		// Truncate -------------------------------------------------------------------
 
 		/// <summary>Rounds the specified value to the nearest integer towards zero.</summary>
 		public static float Truncate(float a) {
-			#if WINDOWS
-			return (float)Math.Truncate(a);
-			#else
-			return (a > 0.0f ? (float)Math.Floor(  a) :
-							   (float)Math.Ceiling(a));
-			#endif
+			return (float) Math.Truncate(a);
 		}
 
-		/// <summary>Rounds the specified value to the nearest integer towards zero, with the base unit.</summary>
+		/// <summary>Rounds the specified value to the nearest integer towards zero,
+		/// with the base unit.</summary>
 		public static float Truncate(float a, float unit) {
-			#if WINDOWS
-			return (float)Math.Truncate(a / unit) * unit;
-			#else
-			return (a > 0.0f ? (float)Math.Floor(  a / unit) * unit :
-							   (float)Math.Ceiling(a / unit) * unit);
-			#endif
+			return (float) Math.Truncate(a / unit) * unit;
 		}
 
 		/// <summary>Rounds the specified value to the nearest integer towards zero.</summary>
 		public static double Truncate(double a) {
-			#if WINDOWS
 			return Math.Truncate(a);
-			#else
-			return (a > 0.0d ? Math.Floor(  a) :
-							   Math.Ceiling(a));
-			#endif
 		}
 
-		/// <summary>Rounds the specified value to the nearest integer towards zero, with the base unit.</summary>
+		/// <summary>Rounds the specified value to the nearest integer towards zero,
+		/// with the base unit.</summary>
 		public static double Truncate(double a, double unit) {
-			#if WINDOWS
 			return Math.Truncate(a / unit) * unit;
-			#else
-			return (a > 0.0d ? Math.Floor(  a / unit) * unit :
-							   Math.Ceiling(a / unit) * unit);
-			#endif
 		}
 
 		/// <summary>Rounds the specified value to the nearest integer towards zero.</summary>
 		public static decimal Truncate(decimal a) {
-			#if WINDOWS
 			return Math.Truncate(a);
-			#else
-			return (a > 0.0m ? (decimal)Math.Floor(  (double)a) :
-							   (decimal)Math.Ceiling((double)a));
-			#endif
 		}
 
-		/// <summary>Rounds the specified value to the nearest integer towards zero, with the base unit.</summary>
+		/// <summary>Rounds the specified value to the nearest integer towards zero,
+		/// with the base unit.</summary>
 		public static decimal Truncate(decimal a, decimal unit) {
-			#if WINDOWS
 			return Math.Truncate(a / unit) * unit;
-			#else
-			return (a > 0.0m ? (decimal)(Math.Floor(  (double)a / (double)unit) * (double)unit) :
-							   (decimal)(Math.Ceiling((double)a / (double)unit) * (double)unit));
-			#endif
 		}
 
 		/// <summary>Rounds the specified vector to the nearest point towards zero.</summary>
 		public static Vector2F Truncate(Vector2F a) {
-			#if WINDOWS
-			return new Vector2F((float)Math.Truncate(a.X), (float)Math.Truncate(a.Y));
-			#else
-			return new Vector2D(a.X > 0.0f ? (float)Math.Floor(a.X) : (float)Math.Ceiling(a.X),
-								a.Y > 0.0f ? (float)Math.Floor(a.Y) : (float)Math.Ceiling(a.Y));
-			#endif
+			return new Vector2F((float) Math.Truncate(a.X), (float) Math.Truncate(a.Y));
 		}
 
-		/// <summary>Rounds the specified vector to the nearest point towards zero, with the base unit.</summary>
+		/// <summary>Rounds the specified vector to the nearest point towards zero,
+		/// with the base unit.</summary>
 		public static Vector2F Truncate(Vector2F a, float unit) {
-			#if WINDOWS
-			return new Vector2F((float)Math.Truncate(a.X / unit) * unit,
-								(float)Math.Truncate(a.Y / unit) * unit);
-			#else
-			return new Vector2D(a.X > 0.0f ? (float)Math.Floor(a.X / unit) * unit : (float)Math.Ceiling(a.X / unit) * unit,
-								a.Y > 0.0f ? (float)Math.Floor(a.Y / unit) * unit : (float)Math.Ceiling(a.Y / unit) * unit);
-			#endif
+			return new Vector2F((float) Math.Truncate(a.X / unit) * unit,
+								(float) Math.Truncate(a.Y / unit) * unit);
 		}
 
-		/// <summary>Rounds the specified vector to the nearest point towards zero, with the base unit.</summary>
+		/// <summary>Rounds the specified vector to the nearest point towards zero,
+		/// with the base unit.</summary>
 		public static Vector2F Truncate(Vector2F a, Vector2F unit) {
-			#if WINDOWS
-			return new Vector2F((float)Math.Truncate(a.X / unit.X) * unit.X,
-								(float)Math.Truncate(a.Y / unit.Y) * unit.Y);
-			#else
-			return new Vector2D(a.X > 0.0f ? (float)Math.Floor(a.X / unit.X) * unit.X : (float)Math.Ceiling(a.X / unit.X) * unit.X,
-								a.Y > 0.0f ? (float)Math.Floor(a.Y / unit.Y) * unit.Y : (float)Math.Ceiling(a.Y / unit.Y) * unit.Y);
-			#endif
+			return new Vector2F((float) Math.Truncate(a.X / unit.X) * unit.X,
+								(float) Math.Truncate(a.Y / unit.Y) * unit.Y);
 		}
 		
 		// Atruncate ------------------------------------------------------------------
 
 		/// <summary>Rounds the specified value to the farthest integer from zero.</summary>
 		public static float Atruncate(float a) {
-			return (a < 0.0f ? (float)Math.Floor(a) : (float)Math.Ceiling(a));
+			return (a < 0.0f ? (float) Math.Floor(a) : (float) Math.Ceiling(a));
 		}
 
-		/// <summary>Rounds the specified value to the farthest integer from zero, with the base unit.</summary>
+		/// <summary>Rounds the specified value to the farthest integer from zero, with
+		/// the base unit.</summary>
 		public static float Atruncate(float a, float unit) {
-			return (a < 0.0f ? (float)Math.Floor(a / unit) * unit : (float)Math.Ceiling(a / unit) * unit);
+			return (a < 0.0f ?	(float) Math.Floor(a / unit) * unit :
+								(float) Math.Ceiling(a / unit) * unit);
 		}
 
 		/// <summary>Rounds the specified value to the farthest integer from zero.</summary>
@@ -842,46 +826,48 @@ namespace ZeldaOracle.Common.Geometry {
 			return (a < 0.0d ? Math.Floor(a) : Math.Ceiling(a));
 		}
 
-		/// <summary>Rounds the specified value to the farthest integer from zero, with the base unit.</summary>
+		/// <summary>Rounds the specified value to the farthest integer from zero, with
+		/// the base unit.</summary>
 		public static double Atruncate(double a, double unit) {
 			return (a < 0.0d ? Math.Floor(a / unit) * unit : Math.Ceiling(a / unit) * unit);
 		}
 
 		/// <summary>Rounds the specified value to the farthest integer from zero.</summary>
 		public static decimal Atruncate(decimal a) {
-			#if WINDOWS
 			return (a < 0.0m ? Math.Floor(a) : Math.Ceiling(a));
-			#else
-			return (a < 0.0m ? (decimal)Math.Floor((double)a) : (decimal)Math.Ceiling((double)a));
-			#endif
 		}
 
-		/// <summary>Rounds the specified value to the farthest integer from zero, with the base unit.</summary>
+		/// <summary>Rounds the specified value to the farthest integer from zero, with
+		/// the base unit.</summary>
 		public static decimal Atruncate(decimal a, decimal unit) {
-			#if WINDOWS
-			return (a < 0.0m ? Math.Floor(a / unit) * unit : Math.Ceiling(a / unit) * unit);
-			#else
-			return (a < 0.0m ? (decimal)(Math.Floor(  (double)a / (double)unit) * (double)unit) :
-							   (decimal)(Math.Ceiling((double)a / (double)unit) * (double)unit));
-			#endif
+			return (a < 0.0m ?  Math.Floor(a / unit) * unit :
+								Math.Ceiling(a / unit) * unit);
 		}
 
 		/// <summary>Rounds the specified vector to the farthest point from zero.</summary>
 		public static Vector2F Atruncate(Vector2F a) {
-			return new Vector2F(a.X < 0.0f ? (float)Math.Floor(a.X) : (float)Math.Ceiling(a.X),
-								a.Y < 0.0f ? (float)Math.Floor(a.Y) : (float)Math.Ceiling(a.Y));
+			return new Vector2F(a.X < 0.0f ? (float) Math.Floor(a.X) :
+											 (float) Math.Ceiling(a.X),
+								a.Y < 0.0f ? (float) Math.Floor(a.Y) :
+											 (float) Math.Ceiling(a.Y));
 		}
 
-		/// <summary>Rounds the specified vector to the farthest point from zero, with the base unit.</summary>
+		/// <summary>Rounds the specified vector to the farthest point from zero, with
+		/// the base unit.</summary>
 		public static Vector2F Atruncate(Vector2F a, float unit) {
-			return new Vector2F(a.X < 0.0f ? (float)Math.Floor(a.X / unit) * unit : (float)Math.Ceiling(a.X / unit) * unit,
-								a.Y < 0.0f ? (float)Math.Floor(a.Y / unit) * unit : (float)Math.Ceiling(a.Y / unit) * unit);
+			return new Vector2F(a.X < 0.0f ? (float) Math.Floor(a.X / unit) * unit :
+											 (float) Math.Ceiling(a.X / unit) * unit,
+								a.Y < 0.0f ? (float) Math.Floor(a.Y / unit) * unit :
+											 (float) Math.Ceiling(a.Y / unit) * unit);
 		}
 
-		/// <summary>Rounds the specified vector to the farthest point from zero, with the base unit.</summary>
+		/// <summary>Rounds the specified vector to the farthest point from zero, with
+		/// the base unit.</summary>
 		public static Vector2F Atruncate(Vector2F a, Vector2F unit) {
-			return new Vector2F(a.X < 0.0f ? (float)Math.Floor(a.X / unit.X) * unit.X : (float)Math.Ceiling(a.X / unit.X) * unit.X,
-								a.Y < 0.0f ? (float)Math.Floor(a.Y / unit.Y) * unit.Y : (float)Math.Ceiling(a.Y / unit.Y) * unit.Y);
+			return new Vector2F(a.X < 0.0f ? (float) Math.Floor(a.X / unit.X) * unit.X :
+											 (float) Math.Ceiling(a.X / unit.X) * unit.X,
+								a.Y < 0.0f ? (float) Math.Floor(a.Y / unit.Y) * unit.Y :
+											 (float) Math.Ceiling(a.Y / unit.Y) * unit.Y);
 		}
 
 
@@ -893,27 +879,27 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the specified number raised to the specified power.</summary>
 		public static int Pow(int x, int y) {
-			return (int)Math.Pow(x, y);
+			return (int) Math.Pow(x, y);
 		}
 
 		/// <summary>Returns the specified number raised to the specified power.</summary>
 		public static uint Pow(uint x, uint y) {
-			return (uint)Math.Pow(x, y);
+			return (uint) Math.Pow(x, y);
 		}
 
 		/// <summary>Returns the specified number raised to the specified power.</summary>
 		public static long Pow(long x, long y) {
-			return (long)Math.Pow(x, y);
+			return (long) Math.Pow(x, y);
 		}
 
 		/// <summary>Returns the specified number raised to the specified power.</summary>
 		public static ulong Pow(ulong x, ulong y) {
-			return (ulong)Math.Pow(x, y);
+			return (ulong) Math.Pow(x, y);
 		}
 
 		/// <summary>Returns the specified number raised to the specified power.</summary>
 		public static float Pow(float x, float y) {
-			return (float)Math.Pow(x, y);
+			return (float) Math.Pow(x, y);
 		}
 
 		/// <summary>Returns the specified number raised to the specified power.</summary>
@@ -923,29 +909,29 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the specified vector raised to the specified power.</summary>
 		public static Vector2F Pow(Vector2F x, float y) {
-			return new Vector2F((float)Math.Pow(x.X, y), (float)Math.Pow(x.Y, y));
+			return new Vector2F((float) Math.Pow(x.X, y), (float) Math.Pow(x.Y, y));
 		}
 
 		/// <summary>Returns the specified vector raised to the specified power.</summary>
 		public static Vector2F Pow(Vector2F x, Vector2F y) {
-			return new Vector2F((float)Math.Pow(x.X, y.X), (float)Math.Pow(x.Y, y.Y));
+			return new Vector2F((float) Math.Pow(x.X, y.X), (float) Math.Pow(x.Y, y.Y));
 		}
 
 		/// <summary>Returns the specified point raised to the specified power.</summary>
 		public static Point2I Pow(Point2I x, int y) {
-			return new Point2I((int)Math.Pow(x.X, y), (int)Math.Pow(x.Y, y));
+			return new Point2I((int) Math.Pow(x.X, y), (int) Math.Pow(x.Y, y));
 		}
 
 		/// <summary>Returns the specified point raised to the specified power.</summary>
 		public static Point2I Pow(Point2I x, Point2I y) {
-			return new Point2I((int)Math.Pow(x.X, y.X), (int)Math.Pow(x.Y, y.Y));
+			return new Point2I((int) Math.Pow(x.X, y.X), (int) Math.Pow(x.Y, y.Y));
 		}
 
 		// Root -----------------------------------------------------------------------
 
 		/// <summary>Returns a specified number lowered to the specified root.</summary>
 		public static float Root(float x, float y) {
-			return (float)Math.Pow(x, 1.0f / y);
+			return (float) Math.Pow(x, 1.0f / y);
 		}
 
 		/// <summary>Returns a specified number lowered to the specified root.</summary>
@@ -955,19 +941,21 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns a specified vector lowered to the specified root.</summary>
 		public static Vector2F Root(Vector2F x, float y) {
-			return new Vector2F((float)Math.Pow(x.X, 1.0d / y), (float)Math.Pow(x.Y, 1.0d / y));
+			return new Vector2F((float) Math.Pow(x.X, 1.0d / y),
+								(float) Math.Pow(x.Y, 1.0d / y));
 		}
 
 		/// <summary>Returns a specified vector lowered to the specified root.</summary>
 		public static Vector2F Root(Vector2F x, Vector2F y) {
-			return new Vector2F((float)Math.Pow(x.X, 1.0d / y.X), (float)Math.Pow(x.Y, 1.0d / y.Y));
+			return new Vector2F((float) Math.Pow(x.X, 1.0d / y.X),
+								(float) Math.Pow(x.Y, 1.0d / y.Y));
 		}
 
 		// Sqrt -----------------------------------------------------------------------
 
 		/// <summary>Returns the square root of a specified number.</summary>
 		public static float Sqrt(float x) {
-			return (float)Math.Sqrt(x);
+			return (float) Math.Sqrt(x);
 		}
 
 		/// <summary>Returns the square root of a specified number.</summary>
@@ -977,14 +965,14 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the square root of a specified vector.</summary>
 		public static Vector2F Sqrt(Vector2F x) {
-			return new Vector2F((float)Math.Sqrt(x.X), (float)Math.Sqrt(x.Y));
+			return new Vector2F((float) Math.Sqrt(x.X), (float) Math.Sqrt(x.Y));
 		}
 
 		// Cbrt -----------------------------------------------------------------------
 
 		/// <summary>Returns the cube root of a specified number.</summary>
 		public static float Cbrt(float x) {
-			return (float)Math.Pow(x, 1.0f / 3.0f);
+			return (float) Math.Pow(x, 1.0f / 3.0f);
 		}
 
 		/// <summary>Returns the cube root of a specified number.</summary>
@@ -994,14 +982,15 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the cube root of a specified vector.</summary>
 		public static Vector2F Cbrt(Vector2F x) {
-			return new Vector2F((float)Math.Pow(x.X, 1.0f / 3.0f), (float)Math.Pow(x.Y, 1.0f / 3.0f));
+			return new Vector2F((float) Math.Pow(x.X, 1.0f / 3.0f),
+								(float) Math.Pow(x.Y, 1.0f / 3.0f));
 		}
 
 		// Exp ------------------------------------------------------------------------
 
 		/// <summary>Returns e raised to the specified power.</summary>
 		public static float Exp(float x) {
-			return (float)Math.Exp(x);
+			return (float) Math.Exp(x);
 		}
 
 		/// <summary>Returns e raised to the specified power.</summary>
@@ -1011,16 +1000,19 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns e raised to the specified power coordinates.</summary>
 		public static Vector2F Exp(Vector2F x) {
-			return new Vector2F((float)Math.Exp(x.X), (float)Math.Exp(x.Y));
+			return new Vector2F((float) Math.Exp(x.X), (float) Math.Exp(x.Y));
 		}
+		
 
-		//========== LOGARITHM ===========
+		//-----------------------------------------------------------------------------
+		// Logarithm
+		//-----------------------------------------------------------------------------
 
 		// Log e ----------------------------------------------------------------------
 
 		/// <summary>Returns the natural (base e) logarithm of the specified number.</summary>
 		public static float Log(float d) {
-			return (float)Math.Log(d);
+			return (float) Math.Log(d);
 		}
 
 		/// <summary>Returns the natural (base e) logarithm of the specified number.</summary>
@@ -1030,14 +1022,14 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the natural (base e) logarithm of the specified vector.</summary>
 		public static Vector2F Log(Vector2F d) {
-			return new Vector2F((float)Math.Log(d.X), (float)Math.Log(d.Y));
+			return new Vector2F((float) Math.Log(d.X), (float) Math.Log(d.Y));
 		}
 		
 		// Log (base) -----------------------------------------------------------------
 
 		/// <summary>Returns the specified base logarithm of the specified number.</summary>
 		public static float Log(float a, float newBase) {
-			return (float)Math.Log(a, newBase);
+			return (float) Math.Log(a, newBase);
 		}
 
 		/// <summary>Returns the specified base logarithm of the specified number.</summary>
@@ -1047,19 +1039,21 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the specified base logarithm of the specified vector.</summary>
 		public static Vector2F Log(Vector2F a, float newBase) {
-			return new Vector2F((float)Math.Log(a.X, newBase), (float)Math.Log(a.Y, newBase));
+			return new Vector2F((float) Math.Log(a.X, newBase),
+								(float) Math.Log(a.Y, newBase));
 		}
 
 		/// <summary>Returns the specified base logarithm of the specified vector.</summary>
 		public static Vector2F Log(Vector2F a, Vector2F newBase) {
-			return new Vector2F((float)Math.Log(a.X, newBase.X), (float)Math.Log(a.Y, newBase.Y));
+			return new Vector2F((float) Math.Log(a.X, newBase.X),
+								(float) Math.Log(a.Y, newBase.Y));
 		}
 
 		// Pow 10 ---------------------------------------------------------------------
 
 		/// <summary>Returns the base 10 logarithm of the specified number.</summary>
 		public static float Log10(float d) {
-			return (float)Math.Log10(d);
+			return (float) Math.Log10(d);
 		}
 
 		/// <summary>Returns the base 10 logarithm of the specified number.</summary>
@@ -1069,7 +1063,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the base 10 logarithm of the specified vector.</summary>
 		public static Vector2F Log10(Vector2F d) {
-			return new Vector2F((float)Math.Log10(d.X), (float)Math.Log10(d.Y));
+			return new Vector2F((float) Math.Log10(d.X), (float) Math.Log10(d.Y));
 		}
 
 
@@ -1143,7 +1137,8 @@ namespace ZeldaOracle.Common.Geometry {
 			return value;
 		}
 		
-		/// <summary>Return the modular distance from one angle to another using the given winding order.</summary>
+		/// <summary>Return the modular distance from one angle to another using the
+		/// given winding order.</summary>
 		public static float DeltaDirection(float source, float destination,
 			WindingOrder windingOrder = WindingOrder.CounterClockwise)
 		{
@@ -1164,7 +1159,9 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Returns the change in direction between two angles.</summary>
-		public static double DeltaDirection(double source, double destination, WindingOrder windingOrder = WindingOrder.CounterClockwise) {
+		public static double DeltaDirection(double source, double destination,
+			WindingOrder windingOrder = WindingOrder.CounterClockwise)
+		{
 			source = Plusdir(source);
 			destination = Plusdir(destination);
 			if (windingOrder == WindingOrder.Clockwise) {
@@ -1250,12 +1247,14 @@ namespace ZeldaOracle.Common.Geometry {
 			return Math.Atan(d);
 		}
 		
-		/// <summary>Returns the angle whose tangent is the quotient of two specified numbers.</summary>
+		/// <summary>Returns the angle whose tangent is the quotient of two specified
+		/// numbers.</summary>
 		public static float Atan2(float y, float x) {
 			return (float) Math.Atan2(y, x);
 		}
 
-		/// <summary>Returns the angle whose tangent is the quotient of two specified numbers.</summary>
+		/// <summary>Returns the angle whose tangent is the quotient of two specified
+		/// numbers.</summary>
 		public static double Atan2(double y, double x) {
 			return Math.Atan2(y, x);
 		}
@@ -1297,7 +1296,7 @@ namespace ZeldaOracle.Common.Geometry {
 		// Graphics
 		//-----------------------------------------------------------------------------
 
-		public static Point2I FlipAndRotate(Point2I drawOffset, Flip flip, Rotation rotation, Point2I size, Rectangle2I bounds) {
+		/*public static Point2I FlipAndRotate(Point2I drawOffset, Flip flip, Rotation rotation, Point2I size, Rectangle2I bounds) {
 			return FlipAndRotate(drawOffset, flip, rotation, (Vector2F) (bounds.Size - size) / 2f - bounds.Point);
 		}
 
@@ -1319,7 +1318,7 @@ namespace ZeldaOracle.Common.Geometry {
 				tempDrawOffset.Y = -tempDrawOffset.Y;
 
 			return (Point2I) GMath.Floor(tempDrawOffset + origin);
-		}
+		}*/
 
 		/// <summary>Returns the corrected angle for use with XNA drawing functions.</summary>
 		public static float CorrectAngle(float angle) {

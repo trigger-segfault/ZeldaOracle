@@ -55,5 +55,8 @@
     <Keywords foreground="#F87808">
       <Word>&lt;orange&gt;</Word>
     </Keywords>
+    <Rule fontStyle="italic">
+      &lt;f?var\:.*&gt;
+    </Rule>
   </RuleSet>
 </SyntaxDefinition>

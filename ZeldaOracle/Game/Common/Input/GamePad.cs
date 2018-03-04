@@ -5,13 +5,14 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
-using XnaGamePad	= Microsoft.Xna.Framework.Input.GamePad;
-using XnaButtons	= Microsoft.Xna.Framework.Input.Buttons;
-using XnaPlayer		= Microsoft.Xna.Framework.PlayerIndex;
+using XnaGamePad = Microsoft.Xna.Framework.Input.GamePad;
+using XnaButtons = Microsoft.Xna.Framework.Input.Buttons;
+using XnaPlayer = Microsoft.Xna.Framework.PlayerIndex;
 
 using ZeldaOracle.Common.Input.Controls;
 using ZeldaOracle.Common.Geometry;
-using GamePad		= ZeldaOracle.Common.Input.GamePad;
+using GamePad = ZeldaOracle.Common.Input.GamePad;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Input {
 	/// <summary>A static class for keeping track of gamepad button states.</summary>
@@ -136,11 +137,11 @@ namespace ZeldaOracle.Common.Input {
 
 				Vector2F stick = Vector2F.Zero;
 
-				stick = XnaGamePad.GetState(player).ThumbSticks.Left;
+				stick = XnaGamePad.GetState(player).ThumbSticks.Left.ToVector2F();
 				stick.Y *= -1;
 				sticks[i, (int) AnalogSticks.LeftStick].Update(1, stick);
 
-				stick = XnaGamePad.GetState(player).ThumbSticks.Right;
+				stick = XnaGamePad.GetState(player).ThumbSticks.Right.ToVector2F();
 				stick.Y *= -1;
 				sticks[i, (int) AnalogSticks.RightStick].Update(1, stick);
 

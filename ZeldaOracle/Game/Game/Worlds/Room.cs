@@ -10,9 +10,10 @@ using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
+using ZeldaOracle.Game.API;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Room : IEventObjectContainer, IEventObject {
+	public class Room : IEventObjectContainer, IEventObject, IVariableObject {
 
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
@@ -20,6 +21,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private List<ActionTileDataInstance>	actionData;
 		//private Zone							zone;
 		private Properties						properties;
+		private Variables						variables;
 		private EventCollection					events;
 
 
@@ -36,6 +38,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.events		= new EventCollection(this);
 			this.properties	= new Properties(this);
 			this.properties.BaseProperties = new Properties();
+			this.variables	= new Variables(this);
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this room.");
@@ -476,7 +479,11 @@ namespace ZeldaOracle.Game.Worlds {
 				properties.PropertyObject = this;
 			}
 		}
-		
+
+		public Variables Variables {
+			get { return variables; }
+		}
+
 		public EventCollection Events {
 			get { return events; }
 		}

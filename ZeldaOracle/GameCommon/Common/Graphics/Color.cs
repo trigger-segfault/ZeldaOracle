@@ -1,13 +1,10 @@
 ﻿using System;
 
-using XnaColor		= Microsoft.Xna.Framework.Color;
-
-using GdiColor		= System.Drawing.Color;
-
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>A structure for storing color data.</summary>
+	[Serializable]
 	public struct Color {
 
 		//-----------------------------------------------------------------------------
@@ -73,9 +70,9 @@ namespace ZeldaOracle.Common.Graphics {
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.R	= (byte)GMath.Clamp(red, 0, 255);
-				this.G	= (byte)GMath.Clamp(green, 0, 255);
-				this.B	= (byte)GMath.Clamp(blue, 0, 255);
+				this.R	= (byte) GMath.Clamp(red, 0, 255);
+				this.G	= (byte) GMath.Clamp(green, 0, 255);
+				this.B	= (byte) GMath.Clamp(blue, 0, 255);
 				this.A	= 255;
 			}
 		}
@@ -86,14 +83,14 @@ namespace ZeldaOracle.Common.Graphics {
 				this.R = 0;
 				this.G = 0;
 				this.B = 0;
-				this.A = (byte)GMath.Clamp(alpha, 0, 255);
+				this.A = (byte) GMath.Clamp(alpha, 0, 255);
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.R	= (byte)GMath.Clamp(red, 0, 255);
-				this.G	= (byte)GMath.Clamp(green, 0, 255);
-				this.B	= (byte)GMath.Clamp(blue, 0, 255);
-				this.A	= (byte)GMath.Clamp(alpha, 0, 255);
+				this.R	= (byte) GMath.Clamp(red, 0, 255);
+				this.G	= (byte) GMath.Clamp(green, 0, 255);
+				this.B	= (byte) GMath.Clamp(blue, 0, 255);
+				this.A	= (byte) GMath.Clamp(alpha, 0, 255);
 			}
 		}
 
@@ -107,9 +104,9 @@ namespace ZeldaOracle.Common.Graphics {
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.R	= (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
-				this.G	= (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
-				this.B	= (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
+				this.R	= (byte) (GMath.Clamp(red, 0f, 1f) * 255f);
+				this.G	= (byte) (GMath.Clamp(green, 0f, 1f) * 255f);
+				this.B	= (byte) (GMath.Clamp(blue, 0f, 1f) * 255f);
 				this.A	= 255;
 			}
 		}
@@ -120,14 +117,14 @@ namespace ZeldaOracle.Common.Graphics {
 				this.R	= 0;
 				this.G	= 0;
 				this.B	= 0;
-				this.A	= (byte)(GMath.Clamp(alpha, 0f, 1f) * 255f);
+				this.A	= (byte) (GMath.Clamp(alpha, 0f, 1f) * 255f);
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.R	= (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
-				this.G	= (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
-				this.B	= (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
-				this.A	= (byte)(GMath.Clamp(alpha, 0f, 1f) * 255f);
+				this.R	= (byte) (GMath.Clamp(red, 0f, 1f) * 255f);
+				this.G	= (byte) (GMath.Clamp(green, 0f, 1f) * 255f);
+				this.B	= (byte) (GMath.Clamp(blue, 0f, 1f) * 255f);
+				this.A	= (byte) (GMath.Clamp(alpha, 0f, 1f) * 255f);
 			}
 		}
 
@@ -141,9 +138,9 @@ namespace ZeldaOracle.Common.Graphics {
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.R	= (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
-				this.G	= (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
-				this.B	= (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
+				this.R	= (byte) (GMath.Clamp(red, 0.0, 1.0) * 255.0);
+				this.G	= (byte) (GMath.Clamp(green, 0.0, 1.0) * 255.0);
+				this.B	= (byte) (GMath.Clamp(blue, 0.0, 1.0) * 255.0);
 				this.A	= 255;
 			}
 		}
@@ -154,14 +151,14 @@ namespace ZeldaOracle.Common.Graphics {
 				this.R	= 0;
 				this.G	= 0;
 				this.B	= 0;
-				this.A	= (byte)(GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
+				this.A	= (byte) (GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.R	= (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
-				this.G	= (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
-				this.B	= (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
-				this.A	= (byte)(GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
+				this.R	= (byte) (GMath.Clamp(red, 0.0, 1.0) * 255.0);
+				this.G	= (byte) (GMath.Clamp(green, 0.0, 1.0) * 255.0);
+				this.B	= (byte) (GMath.Clamp(blue, 0.0, 1.0) * 255.0);
+				this.A	= (byte) (GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
 			}
 		}
 
@@ -203,7 +200,8 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Returns true if the specified color has the same rgba values.</summary>
 		public override bool Equals(object obj) {
 			if (obj is Color)
-				return (R == ((Color)obj).R && G == ((Color)obj).G && B == ((Color)obj).B && A == ((Color)obj).A);
+				return (R == ((Color)obj).R && G == ((Color)obj).G &&
+						B == ((Color)obj).B && A == ((Color)obj).A);
 			return false;
 		}
 
@@ -298,7 +296,7 @@ namespace ZeldaOracle.Common.Graphics {
 		// Conversions
 		//-----------------------------------------------------------------------------
 
-		public static explicit operator Color(XnaColor c) {
+		/*public static explicit operator Color(XnaColor c) {
 			return new Color(c.R, c.G, c.B, c.A);
 		}
 
@@ -312,7 +310,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public static implicit operator GdiColor(Color c) {
 			return GdiColor.FromArgb(c.A, c.R, c.G, c.B);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -321,7 +319,8 @@ namespace ZeldaOracle.Common.Graphics {
 		
 		/// <summary>Gets the packed color with all the values inside an unsigned int.</summary>
 		public uint PackedColor {
-			get { return (((uint)A) << 12) + (((uint)R) << 8) + (((uint)G) << 8) + ((uint)B); }
+			get { return (((uint) A) << 12) + (((uint) R) << 8) +
+						 (((uint) G) <<  8) + (((uint) B)); }
 		}
 		
 		/// <summary>Gets or sets hue of the color.</summary>
@@ -342,9 +341,9 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Gets or sets the saturation of the color.</summary>
 		public int Sat {
 			get {
-				byte max = (byte)((int)GMath.Max(R, GMath.Max(G, B)) * 100 / 255);
-				byte min = (byte)((int)GMath.Min(R, GMath.Min(G, B)) * 100 / 255);
-				byte c = (byte)(max - min);
+				byte max = (byte) ((int) GMath.Max(R, GMath.Max(G, B)) * 100 / 255);
+				byte min = (byte) ((int) GMath.Min(R, GMath.Min(G, B)) * 100 / 255);
+				byte c = (byte) (max - min);
 				return (c != 0 ? c * 100 / max : 0);
 			}
 			set { SetHSV(Hue, value, Val); }
@@ -352,7 +351,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets or sets the value of the color.</summary>
 		public int Val {
-			get { return ((int)GMath.Max(R, GMath.Max(G, B)) * 100 / 255); }
+			get { return ((int) GMath.Max(R, GMath.Max(G, B)) * 100 / 255); }
 			set { SetHSV(Hue, Sat, value); }
 		}
 
@@ -368,28 +367,28 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Sets the rgb values of the color.</summary>
 		public void SetRGB(int red, int green, int blue) {
-			R = (byte)GMath.Clamp(red, 0, 255);
-			G = (byte)GMath.Clamp(green, 0, 255);
-			B = (byte)GMath.Clamp(blue, 0, 255);
+			R = (byte) GMath.Clamp(red, 0, 255);
+			G = (byte) GMath.Clamp(green, 0, 255);
+			B = (byte) GMath.Clamp(blue, 0, 255);
 		}
 
 		/// <summary>Sets the rgb values of the color.</summary>
 		public void SetRGB(float red, float green, float blue) {
-			R = (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
-			G = (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
-			B = (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
+			R = (byte) (GMath.Clamp(red, 0f, 1f) * 255f);
+			G = (byte) (GMath.Clamp(green, 0f, 1f) * 255f);
+			B = (byte) (GMath.Clamp(blue, 0f, 1f) * 255f);
 		}
 
 		/// <summary>Sets the rgb values of the color.</summary>
 		public void SetRGB(double red, double green, double blue) {
-			R = (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
-			G = (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
-			B = (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
+			R = (byte) (GMath.Clamp(red, 0.0, 1.0) * 255.0);
+			G = (byte) (GMath.Clamp(green, 0.0, 1.0) * 255.0);
+			B = (byte) (GMath.Clamp(blue, 0.0, 1.0) * 255.0);
 		}
 		
 		/// <summary>Sets the hsv values of the color.</summary>
 		public void SetHSV(int hue, int sat, int val) {
-			SetHSV((float)hue / 360f, (float)sat / 100f, (float)val / 100f);
+			SetHSV(hue / 360f, sat / 100f, val / 100f);
 		}
 
 		/// <summary>Sets the hsv values of the color.</summary>
@@ -400,10 +399,10 @@ namespace ZeldaOracle.Common.Graphics {
 			float hue2 = hue * 6f;
 			float hueI = (float)GMath.Floor(hue2);
 
-			byte b0 = (byte)(255f * val);
-			byte b1 = (byte)(255f * val * (1f - sat));
-			byte b2 = (byte)(255f * val * (1f - sat * (hue2 - hueI)));
-			byte b3 = (byte)(255f * val * (1f - sat * (1f - (hue2 - hueI))));
+			byte b0 = (byte) (255f * val);
+			byte b1 = (byte) (255f * val * (1f - sat));
+			byte b2 = (byte) (255f * val * (1f - sat * (hue2 - hueI)));
+			byte b3 = (byte) (255f * val * (1f - sat * (1f - (hue2 - hueI))));
 
 			switch ((int)hueI) {
 			case 0: R = b0; G = b3; B = b1; break;
@@ -417,7 +416,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Sets the hsv values of the color.</summary>
 		public void SetHSV(double hue, double sat, double val) {
-			SetHSV((float)hue, (float)sat, (float)val);
+			SetHSV((float) hue, (float) sat, (float) val);
 		}
 
 

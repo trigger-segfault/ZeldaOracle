@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>A font containing a sprite font.</summary>
@@ -65,12 +66,13 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Returns the width and height of a string.</summary>
 		public Vector2F MeasureString(string text) {
-			return (Vector2F)spriteFont.MeasureString(text);
+			return spriteFont.MeasureString(text).ToVector2F();
 		}
 
 		/// <summary>Returns the width and height of a string.</summary>
 		public Rectangle2F MeasureStringBounds(string text, Align alignment) {
-			Rectangle2F stringBounds = new Rectangle2F(Vector2F.Zero, spriteFont.MeasureString(text));
+			Rectangle2F stringBounds = new Rectangle2F(Vector2F.Zero,
+				spriteFont.MeasureString(text).ToVector2F());
 			bool intAlign = (alignment & Align.Int) != 0;
 			if (((alignment & Align.Left) != 0) == ((alignment & Align.Right) != 0))
 				stringBounds.X -= (intAlign ? (int)(stringBounds.Width / 2.0f) : (stringBounds.Width / 2.0f));

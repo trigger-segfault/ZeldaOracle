@@ -49,7 +49,9 @@ namespace ZeldaEditor.Tools {
 		public override void Delete() {
 			if (selectedTile != null && selectedTile.Room.ContainsTile(selectedTile)) {
 				ActionPlace action = ActionPlace.CreatePlaceAction(selectedTile.Room.Level, selectedTile.Layer, null);
-				action.AddOverwrittenTile(selectedTile.Location + selectedTile.Room.Location * selectedTile.Room.Size, selectedTile);
+				Point2I location = selectedTile.Location + selectedTile.Room.Location * selectedTile.Room.Size;
+				action.AddOverwrittenTile(location, selectedTile);
+				action.AddPlacedTile(location);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
 			else if (selectedActionTile != null && selectedActionTile.Room.ContainsActionTile(selectedActionTile)) {

@@ -393,6 +393,10 @@
       <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
       <Name>Xceed.Wpf.Toolkit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameCommon\ZeldaCommon.csproj">
+      <Project>{0f262418-7e4b-4005-b35e-18a180ac1239}</Project>
+      <Name>ZeldaCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameEditor\ZeldaEditor.csproj">
       <Project>{ab05c473-9789-441a-b32f-e86154b91c09}</Project>
       <Name>ZeldaEditor</Name>
