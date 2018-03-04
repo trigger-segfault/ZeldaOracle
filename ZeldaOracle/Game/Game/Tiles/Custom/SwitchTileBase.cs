@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Players;
+﻿using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public class SwitchTileBase : Tile {
 
 		private bool switchState;
+		private int toggleDelayTimer;
 
 
 		//-----------------------------------------------------------------------------
@@ -38,6 +31,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool Toggle() {
+			if (toggleDelayTimer > 0)
+				return false;
+			toggleDelayTimer = 8;
+
 			bool switchOnce = Properties.Get("switch_once", false);
 			bool hasSwitched = Properties.Get("has_switched", false);
 			
@@ -107,6 +104,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnInitialize() {
 			switchState = Properties.Get("switch_state", false);
 			SetSwitchState(switchState);
+			toggleDelayTimer = 0;
+		}
+
+		public override void Update() {
+			if (toggleDelayTimer > 0)
+				toggleDelayTimer--;
+			base.Update();
 		}
 
 

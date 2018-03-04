@@ -11,6 +11,32 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 	public class PlayerMagnetGlovesState : PlayerState {
 
+		//-----------------------------------------------------------------------------
+		// Internal Types
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Player condition state to make him hover for a short delay, so he
+		/// doesn't instantly fall into a hole when reversing polarity from a Magnetic
+		/// Spinner Tile.</summary>
+		private class HoverState : PlayerState {
+			private int timer;
+
+			public HoverState() {
+				StateParameters.DisableSurfaceContact = true;
+			}
+			public override void OnBegin(PlayerState previousState) {
+				timer = 0;
+			}
+			public override void Update() {
+				timer++;
+				if (timer++ > 8)
+					End();
+			}
+			public void Refresh() {
+				timer = 0;
+			}
+		}
+
 		private enum MagnetState {
 			Idle,
 			PullingBall,
@@ -18,11 +44,17 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			AttachedToSpinner,
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
 		private GenericStateMachine<MagnetState> subStateMachine;
 		private ItemMagnetGloves weapon;
-		private AnimationPlayer effectAnimation;
 		private object magneticObject;
 		private Rectangle2F alignBox;
+		private HoverState hoverDelayPlayerState;
+		private Entity magnetEffect;
 
 
 		//-----------------------------------------------------------------------------
@@ -30,14 +62,21 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerMagnetGlovesState() {
-			StateParameters.ProhibitJumping			= true;
-			StateParameters.EnableStrafing			= true;
-			StateParameters.ProhibitRoomTransitions	= true;
-			PlayerAnimations.Default				= GameData.ANIM_PLAYER_AIM_WALK;
+			StateParameters.ProhibitJumping	= true;
+			StateParameters.EnableStrafing	= true;
+			PlayerAnimations.Default		= GameData.ANIM_PLAYER_AIM_WALK;
 
-			effectAnimation = new AnimationPlayer();
 			alignBox = new Rectangle2F(-10, -12, 20, 19);
+			
+			// Create player condition state
+			hoverDelayPlayerState = new HoverState();
 
+			// Setup magnet effect animation entity
+			magnetEffect = new Entity();
+			magnetEffect.Graphics.DepthLayer = DepthLayer.EffectMagnetGloves;
+			magnetEffect.IsPersistentBetweenRooms = true;
+
+			// Setup sub-state machine
 			subStateMachine = new GenericStateMachine<MagnetState>();
 			subStateMachine.AddState(MagnetState.Idle)
 				.OnUpdate(OnUpdateIdleState);
@@ -77,7 +116,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		private void OnBeginPullTileState() {
-			player.Physics.DisableSurfaceContact			= true;
+			StateParameters.DisableSurfaceContact			= true;
 			StateParameters.ProhibitMovementControlOnGround	= true;
 			StateParameters.ProhibitMovementControlInAir	= RoomControl.IsSideScrolling;
 			StateParameters.DisableGravity					= RoomControl.IsSideScrolling;
@@ -104,7 +143,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		private void OnEndPullTileState() {
-			player.Physics.DisableSurfaceContact			= false;
+			StateParameters.DisableSurfaceContact			= false;
 			StateParameters.ProhibitMovementControlOnGround	= false;
 			StateParameters.ProhibitMovementControlInAir	= false;
 			StateParameters.DisableGravity					= false;
@@ -155,21 +194,27 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Check if the tile is a Magnet Spinner and if we can attach to it
 			if (magneticTile.Polarity != Polarity && distance <= 14 &&
-				(magneticTile is TileMagnetSpinner) &&
-				!((TileMagnetSpinner) magneticTile).IsRotating)
+				magneticTile is TileMagnetSpinner)
 			{
-				subStateMachine.EndCurrentState();
-				player.SetPositionByCenter(magneticTile.Center -
-					Directions.ToVector(player.Direction) *
-					GameSettings.TILE_SIZE);
-				subStateMachine.BeginState(MagnetState.AttachedToSpinner);
+				if (!hoverDelayPlayerState.IsActive)
+					player.BeginConditionState(hoverDelayPlayerState);
+				else
+					hoverDelayPlayerState.Refresh();
+
+				if (!((TileMagnetSpinner) magneticTile).IsRotating) {
+					subStateMachine.EndCurrentState();
+					player.SetPositionByCenter(magneticTile.Center -
+						Directions.ToVector(player.Direction) *
+						GameSettings.TILE_SIZE);
+					subStateMachine.BeginState(MagnetState.AttachedToSpinner);
+				}
 			}
 		}
 
 		private void OnBeginAttachedToSpinnerState() {
 			player.Physics.Velocity = Vector2F.Zero;
 
-			player.Physics.DisableSurfaceContact			= true;
+			StateParameters.DisableSurfaceContact			= true;
 			StateParameters.ProhibitMovementControlOnGround	= true;
 			StateParameters.ProhibitMovementControlInAir	= RoomControl.IsSideScrolling;
 			StateParameters.DisableGravity					= RoomControl.IsSideScrolling;
@@ -184,7 +229,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			TileMagnetSpinner spinner = (TileMagnetSpinner) magneticObject;
 			spinner.OnPlayerDetach();
 
-			player.Physics.DisableSurfaceContact			= false;
+			StateParameters.DisableSurfaceContact			= false;
 			StateParameters.ProhibitMovementControlOnGround	= false;
 			StateParameters.ProhibitMovementControlInAir	= false;
 			StateParameters.DisableGravity					= false;
@@ -197,6 +242,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// The Magnet Spinner tile will detach the player when its next rotation
 			// is complete
+
+			hoverDelayPlayerState.Refresh();
 		}
 		
 		private void OnBeginPullBallState() {
@@ -377,14 +424,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			player.Direction = player.UseDirection;
 
-			// Initialize the magnet effect
+			// Attach a magnetic effect to the player
 			Animation animation;
 			if (Polarity == Polarity.North)
 				animation = GameData.ANIM_EFFECT_MAGNET_GLOVES_NORTH;
 			else
 				animation = GameData.ANIM_EFFECT_MAGNET_GLOVES_SOUTH;
-			effectAnimation.Play(animation);
-			effectAnimation.SubStripIndex = player.Direction;
+			magnetEffect.Graphics.PlayAnimation(animation);
+			magnetEffect.Graphics.SubStripIndex = player.Direction;
+			player.AttachEntity(magnetEffect);
 
 			// Begin the idle sub-state
 			magneticObject = null;
@@ -394,6 +442,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnEnd(PlayerState newState) {
 			// End pulling the magnetic object
 			subStateMachine.EndCurrentState();
+			magnetEffect.Destroy();
 			AudioSystem.PlaySound(GameData.SOUND_MAGNET_GLOVES_STOP);
 		}
 
@@ -402,8 +451,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			subStateMachine.Update();
 
 			// Udpate the magnet effect animation
-			effectAnimation.SubStripIndex = player.Direction;
-			effectAnimation.Update();
+			magnetEffect.Graphics.SubStripIndex = player.Direction;
 
 			// Loop the magnet gloves sound while this update method is called
 			AudioSystem.LoopSoundWhileActive(GameData.SOUND_MAGNET_GLOVES_LOOP);
@@ -419,10 +467,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void DrawOver(RoomGraphics g) {
 			// Draw the magnet effect
-			effectAnimation.SubStripIndex = player.Direction;
-			g.DrawAnimationPlayer(effectAnimation, player.Position -
-				new Vector2F(0, player.ZPosition),
-				DepthLayer.EffectMagnetGloves);
+			//effectAnimation.SubStripIndex = player.Direction;
+			//g.DrawAnimationPlayer(effectAnimation, player.Position -
+				//new Vector2F(0, player.ZPosition),
+				//DepthLayer.EffectMagnetGloves);
 		}
 
 

@@ -279,7 +279,9 @@ namespace ZeldaOracle.Game.Debug {
 			// F6: Step gameplay by one frame.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.F6) && GameManager.IsGamePaused)
 				GameManager.NextFrame();
-
+			// Ctrl+M: Mute/unmute
+			if (ctrl && Keyboard.IsKeyPressed(Keys.M))
+				AudioSystem.IsMasterMuted = !AudioSystem.IsMasterMuted;
 			// Ctrl+U: Toggle side scrolling
 			if (ctrl && Keyboard.IsKeyPressed(Keys.I))
 				RoomControl.IsSideScrolling = !RoomControl.IsSideScrolling;
@@ -731,41 +733,6 @@ namespace ZeldaOracle.Game.Debug {
 			Rectangle2F bounds = new Rectangle2F(0, 0,
 				GameSettings.VIEW_WIDTH * GameManager.GameScale,
 				GameSettings.VIEW_HEIGHT * GameManager.GameScale);
-			
-			/*
-			Vector2F cursorPos = new Vector2F(16, bounds.Bottom - 24);
-			Player player = RoomControl.Player;
-			
-			string weaponStateName = "";
-			if (player.WeaponState != null)
-				weaponStateName = player.WeaponState.GetType().Name;
-			string controlStateName = "";
-			if (player.ControlState != null)
-				controlStateName = player.ControlState.GetType().Name;
-			string environmentStateName = "";
-			if (player.EnvironmentState != null)
-				environmentStateName = player.EnvironmentState.GetType().Name;
-
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-
-			g.DrawString(GameData.FONT_SMALL, weaponStateName, cursorPos, Color.Red);
-			cursorPos.Y -= 24;
-			g.DrawString(GameData.FONT_SMALL, controlStateName, cursorPos, Color.Cyan);
-			cursorPos.Y -= 24;
-			g.DrawString(GameData.FONT_SMALL, environmentStateName, cursorPos, Color.Yellow);
-			cursorPos.Y -= 24;
-
-			cursorPos.Y += 24 * 3;
-			cursorPos.X += 250;
-
-			foreach (PlayerState state in player.ConditionStates) {
-				string stateName = state.GetType().Name;
-				g.DrawString(GameData.FONT_SMALL, stateName, cursorPos, Color.Green);
-				cursorPos.Y -= 24;
-			}
-
-			g.End();
-			*/
 		}
 	}
 }

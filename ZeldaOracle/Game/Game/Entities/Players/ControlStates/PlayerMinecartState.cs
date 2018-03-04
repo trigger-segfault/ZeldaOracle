@@ -137,7 +137,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		/// <summary>Update the player's position relative to the minecart.</summary>
 		private void UpdatePlayerPosition() {
 			// Determine player offset based on minecart animation
-			if (minecart.Graphics.AnimationPlayer.PlaybackTime < 6) { // TODO: Magic number
+			if ((minecart.Graphics.AnimationPlayer.PlaybackTime + 1) % 12 >= 6) { // TODO: Magic number
 				if (direction.IsHorizontal)
 					playerOffset = new Vector2F(0, -8);
 				else

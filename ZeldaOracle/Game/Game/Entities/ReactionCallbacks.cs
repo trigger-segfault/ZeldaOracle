@@ -173,7 +173,7 @@ namespace ZeldaOracle.Game.Entities {
 				((IInterceptable) interaction.ReactionEntity).Intercept();
 		}
 
-		/// <summary>Bump the monster and sender.</summary>
+		/// <summary>Kncokback and/or intercept both entities in the interaction.</summary>
 		public static void ParryWithClingEffect(InteractionInstance interaction) {
 			bool cling = false;
 			Entity actionRoot = interaction.ActionEntity.RootEntity;

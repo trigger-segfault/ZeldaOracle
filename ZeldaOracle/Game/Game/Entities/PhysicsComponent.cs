@@ -578,7 +578,8 @@ namespace ZeldaOracle.Game.Entities {
 				if (flags.HasFlag(PhysicsFlags.OnGroundOverride))
 					return false;
 				if (entity.RoomControl.IsSideScrolling)
-					return !IsCollidingInDirection(Direction.Down);
+					return (!IsCollidingInDirection(Direction.Down) ||
+						velocity.Y - zVelocity < 0.0f);
 				return (entity.ZPosition > 0.0f || zVelocity > 0.0f);
 			}
 		}
