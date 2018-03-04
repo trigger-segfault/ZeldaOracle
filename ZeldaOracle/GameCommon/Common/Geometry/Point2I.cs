@@ -3,16 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-
-using GdiPoint		= System.Drawing.Point;
-using GdiPointF		= System.Drawing.PointF;
-using GdiSize		= System.Drawing.Size;
-using GdiSizeF		= System.Drawing.SizeF;
-using GdiRectangle	= System.Drawing.Rectangle;
-using GdiRectangleF	= System.Drawing.RectangleF;
-
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>The 2D integer precision point with basic operations and functions.</summary>
 	[Serializable]
@@ -310,7 +300,7 @@ namespace ZeldaOracle.Common.Geometry {
 		// Implicit Conversions
 		//-----------------------------------------------------------------------------
 
-		public static implicit operator Point2I(Point p) {
+		/*public static implicit operator Point2I(Point p) {
 			return new Point2I(p.X, p.Y);
 		}
 
@@ -336,7 +326,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		public static implicit operator GdiSizeF(Point2I p) {
 			return new GdiSizeF(p.X, p.Y);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -347,7 +337,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Point2I(i);
 		}
 
-		public static explicit operator Point(Point2I p) {
+		/*public static explicit operator Point(Point2I p) {
 			return new Point(p.X, p.Y);
 		}
 
@@ -361,7 +351,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		public static explicit operator Point2I(GdiSizeF s) {
 			return new Point2I((int)s.Width, (int)s.Height);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -383,7 +373,6 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets or sets the direction of the point.</summary>
-		[ContentSerializerIgnore]
 		public float Direction {
 			get {
 				if (X == 0 && Y == 0)
@@ -398,7 +387,6 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets or sets the length of the point.</summary>
-		[ContentSerializerIgnore]
 		public float Length {
 			get {
 				return GMath.Sqrt((X * X) + (Y * Y));
@@ -417,7 +405,6 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets or sets the x or y coordinate from the index.</summary>
-		[ContentSerializerIgnore]
 		public int this[int index] {
 			get {
 				if (index == Axes.X)
@@ -438,7 +425,6 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets or sets the x or y coordinate from the boolean.</summary>
-		[ContentSerializerIgnore]
 		public int this[bool yaxis] {
 			get {
 				if (yaxis)
@@ -455,13 +441,11 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Returns true if the point is positioned at (0, 0).</summary>
-		[ContentSerializerIgnore]
 		public bool IsZero {
 			get { return (X == 0 && Y == 0); }
 		}
 
 		/// <summary>Returns the perpendicular point.</summary>
-		[ContentSerializerIgnore]
 		public Point2I Perpendicular {
 			get { return new Point2I(-Y, X); }
 		}

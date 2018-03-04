@@ -47,6 +47,7 @@ namespace ZeldaEditor.Windows {
 		public static void Initialize() {
 			Assembly[] assemblies = new Assembly[] {
 				typeof(ZeldaAPI.Tile).Assembly,
+				typeof(ZeldaOracle.Common.Geometry.Point2I).Assembly,
 				typeof(object).Assembly,
 				typeof(Uri).Assembly,
 				typeof(Enumerable).Assembly

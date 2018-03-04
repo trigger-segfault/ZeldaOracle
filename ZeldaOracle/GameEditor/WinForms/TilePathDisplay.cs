@@ -10,6 +10,7 @@ using ZeldaEditor.Control;
 using ZeldaEditor.Util;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
@@ -123,7 +124,7 @@ namespace ZeldaEditor.WinForms {
 			this.paths = new List<TilePathInfo>();
 			this.pathTiles = new HashSet<TileDataInstance>();
 
-			Size = room.Size * GameSettings.TILE_SIZE;
+			Size = (room.Size * GameSettings.TILE_SIZE).ToGdiSize();
 
 			foreach (var tileData in room.GetTiles()) {
 				if (tileData == tile || !string.IsNullOrWhiteSpace(

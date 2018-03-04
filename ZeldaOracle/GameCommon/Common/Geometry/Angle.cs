@@ -1,9 +1,10 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 
 namespace ZeldaOracle.Common.Geometry {
-	
+
 	/// <summary>Struct used to represent an axis-aligned or diagonal angle.</summary>
+	[Serializable]
 	public struct Angle {
 
 		//-----------------------------------------------------------------------------

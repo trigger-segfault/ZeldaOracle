@@ -11,11 +11,11 @@ namespace ZeldaOracle.Common.Scripting {
 	[Serializable]
 	/// <summary>A collection of properties.</summary>
 	public class Properties {
-		[NonSerialized]
 		/// <summary>The object that holds these properties.</summary>
-		private IPropertyObject propertyObject;
 		[NonSerialized]
+		private IPropertyObject propertyObject;
 		/// <summary>The properties from which these properties derive from (can be null).</summary>
+		[NonSerialized]
 		private Properties baseProperties;
 		/// <summary>The property map.</summary>
 		private Dictionary<string, Property> map;

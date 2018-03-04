@@ -361,6 +361,10 @@
       <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
       <Name>ZeldaAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameCommon\ZeldaCommon.csproj">
+      <Project>{0f262418-7e4b-4005-b35e-18a180ac1239}</Project>
+      <Name>ZeldaCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Game\Zelda.csproj">
       <Project>{899daec0-cf01-4b30-a6e4-a0db613978bd}</Project>
       <Name>Zelda</Name>

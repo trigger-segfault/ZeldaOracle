@@ -32,6 +32,7 @@ namespace ZeldaOracleBuilder {
 		private static readonly string[] RequiredGameBinaries = {
 			"ZeldaOracle.exe",
 			"ZeldaOracle.exe.config",
+			"ZeldaCommon.dll",
 			"ZeldaAPI.dll",
 			"ZeldaAPI.xml"
 		};

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game.API;
 
 namespace ZeldaOracle.Common.Graphics {
 
@@ -94,13 +95,17 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns the wrapped and formatted string of the text.</summary>
-		public WrappedLetterString WrapString(string text, int width) {
+		public WrappedLetterString WrapString(string text, int width,
+			Variables variables = null)
+		{
 			int caretLine = 0;
-			return WrapString(text, width, 0, out caretLine);
+			return WrapString(text, width, 0, out caretLine, variables);
 		}
 
 		/// <summary>Returns the wrapped and formatted string of the text.</summary>
-		public WrappedLetterString WrapString(string text, int width, int caretPosition, out int caretLine) {
+		public WrappedLetterString WrapString(string text, int width, int caretPosition,
+			out int caretLine, Variables variables = null)
+		{
 			try {
 				caretLine = -1;
 
@@ -120,7 +125,7 @@ namespace ZeldaOracle.Common.Graphics {
 				string caretChar = (caretPosition >= text.Length ? "end" : "" + text[caretPosition]);
 				char[] charArray = text.ToCharArray();
 
-				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition);
+				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition, variables);
 				string caret2Char = (caretPosition >= letterString.Length ? "end" : "" + letterString[caretPosition].Char);
 				//Console.WriteLine("'" + caretChar + "' - '" + caret2Char + "'");
 

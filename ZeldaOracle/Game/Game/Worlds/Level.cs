@@ -6,6 +6,7 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 
@@ -20,7 +21,9 @@ namespace ZeldaOracle.Game.Worlds {
 		Twin
 	}
 
-	public class Level : IEventObjectContainer, IEventObject, IIDObject {
+	public class Level : IEventObjectContainer, IEventObject, IIDObject,
+		IVariableObjectContainer, IVariableObject
+	{
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
 		private int			roomLayerCount; // The number of tile layers for each room in the level.
@@ -28,6 +31,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Room[,]		rooms;			// The grid of rooms.
 		//private Zone		zone;
 		private Properties	properties;
+		private Variables	variables;
 		private EventCollection events;
 
 
@@ -43,6 +47,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.events         = new EventCollection(this);
 			this.properties     = new Properties(this);
 			this.properties.BaseProperties  = new Properties();
+			this.variables		= new Variables(this);
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this level.", false, false);
@@ -141,6 +146,17 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 		}
+
+		public IEnumerable<IVariableObject> GetVariableObjects() {
+			yield return this;
+			foreach (Room room in rooms) {
+				yield return room;
+				/*foreach (IVariableObject variableObject in room.GetVariableObjects()) {
+					yield return variableObject;
+				}*/
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Level Coordinates
@@ -566,6 +582,10 @@ namespace ZeldaOracle.Game.Worlds {
 				properties = value;
 				properties.PropertyObject = this;
 			}
+		}
+
+		public Variables Variables {
+			get { return variables; }
 		}
 
 		public Zone Zone {

@@ -52,7 +52,7 @@ TILE "temp_color_jump_pad";
 	SPRITEINDEX 1, "tile_color_jump_pad_yellow";
 	SPRITEINDEX 2, "tile_color_jump_pad_blue";
 	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the jump pad.");
-	EVENT		color_change, "Color Change", "Color", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
+	EVENT		color_change, "Color Change", "Color", "Occurs when the pad's color changes.", (ColorJumpPad, tile, PuzzleColor, color);
 END;
 TILE "temp_color_tile";
 	TYPE		TileColorTile;
@@ -346,7 +346,7 @@ TILE "color_lantern";
 	SOLID		block;
 	SAMESPRITE;
 	PROPERTIES	(integer, color, -1, "Color", ("enum", "PuzzleColor"), "Color", "The color of the lantern flames.");
-	EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
+	EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, PuzzleColor, color);
 END;
 
 # Color Cube Slot ---------------------------------------------
@@ -354,7 +354,7 @@ END;
 TILE "color_cube_slot";
 	TYPE		TileColorCubeSlot;
 	SAMESPRITE;
-	EVENT		color_change, "Color Change", "Color", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
+	EVENT		color_change, "Color Change", "Color", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, PuzzleColor, color);
 END;
 
 # Minecart Tracks ---------------------------------------------

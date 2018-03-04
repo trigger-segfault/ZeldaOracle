@@ -4,18 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-
-using GdiPoint		= System.Drawing.Point;
-using GdiPointF		= System.Drawing.PointF;
-using GdiSize		= System.Drawing.Size;
-using GdiSizeF		= System.Drawing.SizeF;
-using GdiRectangle	= System.Drawing.Rectangle;
-using GdiRectangleF	= System.Drawing.RectangleF;
-
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>The 2D floating precision vector with numerous operations and functions.</summary>
+	[Serializable]
 	public struct Vector2F {
 
 		//-----------------------------------------------------------------------------
@@ -128,12 +119,8 @@ namespace ZeldaOracle.Common.Geometry {
 		public override bool Equals(object obj) {
 			if (obj is Vector2F)
 				return (X == ((Vector2F)obj).X && Y == ((Vector2F)obj).Y);
-			else if (obj is Vector2)
-				return (X == ((Vector2)obj).X && Y == ((Vector2)obj).Y);
 			else if (obj is Point2I)
 				return (X == ((Point2I)obj).X && Y == ((Point2I)obj).Y);
-			else if (obj is Point)
-				return (X == ((Point)obj).X && Y == ((Point)obj).Y);
 			return false;
 		}
 
@@ -364,7 +351,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Convert from a Microsfot.Xna.Framework.Vector2 to a Vector2F.</summary>
-		public static implicit operator Vector2F(Vector2 v) {
+		/*public static implicit operator Vector2F(Vector2 v) {
 			return new Vector2F(v.X, v.Y);
 		}
 
@@ -401,7 +388,7 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Convert from a Vector2F to a System.Drawing.SizeF.</summary>
 		public static implicit operator GdiSizeF(Vector2F v) {
 			return new GdiSizeF(v.X, v.Y);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -414,7 +401,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Convert from a Vector2F to a Microsfot.Xna.Framework.Vector2.</summary>
-		public static explicit operator Vector2(Vector2F v) {
+		/*public static explicit operator Vector2(Vector2F v) {
 			return new Vector2(v.X, v.Y);
 		}
 
@@ -431,7 +418,7 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Convert from a Vector2F to a System.Drawing.Size.</summary>
 		public static explicit operator GdiSize(Vector2F v) {
 			return new GdiSize((int)v.X, (int)v.Y);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -440,7 +427,6 @@ namespace ZeldaOracle.Common.Geometry {
 		
 
 		/// <summary>Gets or sets the direction of the vector.</summary>
-		[ContentSerializerIgnore]
 		public float Direction {
 			get {
 				if (IsZero)
@@ -455,7 +441,6 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets or sets the length of the vector.</summary>
-		[ContentSerializerIgnore]
 		public float Length {
 			get { return GMath.Sqrt((X * X) + (Y * Y)); }
 			set {
@@ -472,13 +457,11 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets the squared length of the vector.</summary>
-		[ContentSerializerIgnore]
 		public float LengthSquared {
 			get { return ((X * X) + (Y * Y)); }
 		}
 
 		/// <summary>Gets or sets the x or y coordinate from the index.</summary>
-		[ContentSerializerIgnore]
 		public float this[int index] {
 			get {
 				if (index == Axes.X)
@@ -499,7 +482,6 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets or sets the x or y coordinate from the boolean.</summary>
-		[ContentSerializerIgnore]
 		public float this[bool yaxis] {
 			get {
 				if (yaxis)
@@ -516,19 +498,16 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Returns true if the vector is positioned at (0, 0).</summary>
-		[ContentSerializerIgnore]
 		public bool IsZero {
 			get { return (X == 0f && Y == 0f); }
 		}
 
 		/// <summary>Returns the inverse of the vector.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F Inverse {
 			get { return new Vector2F((X == 0f ? 0f : 1f / X), (Y == 0f ? 0f : 1f / Y)); }
 		}
 
 		/// <summary>Returns the normalized vector.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F Normalized {
 			get {
 				float length = GMath.Sqrt((X * X) + (Y * Y));
@@ -539,7 +518,6 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Returns the perpendicular vector.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F Perpendicular {
 			get { return new Vector2F(-Y, X); }
 		}

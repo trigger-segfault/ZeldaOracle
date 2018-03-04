@@ -108,7 +108,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			this.animateRoom		= true;
 
 			this.message			= message;
-			this.wrappedString		= GameData.FONT_LARGE.WrapString(message.Text, 128);
+			this.wrappedString		= null;
 
 			this.linesPerWindow		= linesPerWindow;
 			this.readerPosition		= readerPosition;
@@ -124,7 +124,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			this.wordIndex			= 0;
 			
 			this.heartPieceDisplay	= false;
-			this.piecesOfHeart	= piecesOfHeart;
+			this.piecesOfHeart		= piecesOfHeart;
 		}
 
 		/// <summary>Constructs a text reader with the specified message text.</summary>
@@ -138,6 +138,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
+			wrappedString	= GameData.FONT_LARGE.WrapString(
+				message.Text, 128, GameControl.Variables);
 			timer = 1;
 			state = TextReaderState.WritingLine;
 			windowLinesLeft	= linesPerWindow;

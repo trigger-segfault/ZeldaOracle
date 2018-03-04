@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 
@@ -193,7 +194,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public PuzzleColor ColorSwitchColor {
-			get { return (PuzzleColor) properties.GetInteger("color_switch_color", (int) PuzzleColor.Blue); }
+			get { return properties.GetEnum("color_switch_color", PuzzleColor.Blue); }
 			set { properties.Set("color_switch_color", (int) value); }
 		}
 

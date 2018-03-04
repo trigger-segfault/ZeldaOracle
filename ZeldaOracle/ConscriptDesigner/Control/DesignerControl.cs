@@ -67,7 +67,6 @@ namespace ConscriptDesigner.Control {
 		private static ObservableCollection<string> previewEntityPalettes;
 		private static Stopwatch animationWatch;
 		private static int previewScale;
-		private static StoppableTimer animationTimer;
 
 		//private static string resourceAutoCompleteType;
 		private static bool playAnimations;
@@ -98,10 +97,6 @@ namespace ConscriptDesigner.Control {
 				TimeSpan.FromSeconds(3),
 				DispatcherPriority.ApplicationIdle,
 				delegate { CheckForOutdatedFiles(); });
-			/*animationTimer = StoppableTimer.StartNew(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.Render,
-				Update);*/
 			/*updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
 			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
 			animationTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);

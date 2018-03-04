@@ -61,6 +61,16 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 	}
 
+	public struct ScriptStart {
+		public int Index { get; }
+		public string ID { get; }
+
+		public ScriptStart(int index, string id) {
+			Index = index;
+			ID = id;
+		}
+	}
+
 	[Serializable]
 	public class Script : IIDObject {
 

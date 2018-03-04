@@ -18,6 +18,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles.Internal;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Tiles.Custom.Monsters;
+using ZeldaOracle.Game.API;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -30,11 +31,12 @@ namespace ZeldaOracle.Game.Control {
 	}
 
 	// Handles the main Zelda gameplay within a room.
-	public class RoomControl : GameState, ZeldaAPI.Room {
+	public class RoomControl : GameState, ZeldaAPI.Room, IVariableObject {
 
 		private Room				room;
 		private Point2I				roomLocation;
 		private Dungeon				dungeon;
+		private Variables			variables;
 
 		private List<Entity>		entities;
 		private List<ActionTile>	actionTiles;
@@ -101,6 +103,7 @@ namespace ZeldaOracle.Game.Control {
 			currentRoomTicks		= 0;
 			tilePaletteOverride		= null;
 			entityPaletteOverride	= null;
+			variables				= new Variables(this);
 
 			visualEffectUnderwater	= new RoomVisualEffect();
 			visualEffectUnderwater.RoomControl = this;
@@ -326,6 +329,8 @@ namespace ZeldaOracle.Game.Control {
 				visualEffect = visualEffectUnderwater;
 			else
 				visualEffect = null;
+
+			this.variables.SetAll(room.Variables);
 
 			// Discover the room
 			room.IsDiscovered = true;
@@ -785,9 +790,9 @@ namespace ZeldaOracle.Game.Control {
 				door.Close(instantaneous, rememberState);
 		}
 		
-		public void SetDoorStates(ZeldaAPI.DoorState state, bool rememberState = false) {
+		public void SetDoorStates(DoorState state, bool rememberState = false) {
 			foreach (TileDoor door in GetTilesOfType<TileDoor>()) {
-				if (state == ZeldaAPI.DoorState.Opened)
+				if (state == DoorState.Opened)
 					door.Open(true, rememberState);
 				else
 					door.Close(true, rememberState);
@@ -1028,6 +1033,10 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Useful for keeping track of the current room through properties.</summary>
 		public int RoomNumber {
 			get { return roomNumber; }
+		}
+
+		public Variables Variables {
+			get { return variables; }
 		}
 	}
 }

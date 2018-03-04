@@ -6,6 +6,7 @@ using ZeldaAPI;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -44,8 +45,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// API Implementations
 		//-----------------------------------------------------------------------------
 
-		ZeldaAPI.Color ZeldaAPI.ColorStatue.Color {
+		/*ZeldaAPI.Color ZeldaAPI.ColorStatue.Color {
 			get { return (ZeldaAPI.Color)Properties.Get("color", (int)PuzzleColor.Red); }
-		}
+		}*/
 	}
 }

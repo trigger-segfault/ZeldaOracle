@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>The 2D floating precision line with numerous operations and functions.</summary>
+	[Serializable]
 	public struct Line2F {
 
 		//========== CONSTANTS ===========
@@ -18,10 +16,8 @@ namespace ZeldaOracle.Common.Geometry {
 		//=========== MEMBERS ============
 
 		/// <summary>The first endpoint of the line.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F End1;
 		/// <summary>The second endpoint of the line.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F End2;
 
 		//========= CONSTRUCTORS =========
@@ -226,28 +222,24 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Gets or sets the size of the line.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F Size {
 			get { return End2 - End1; }
 			set { End2 = End1 + value; }
 		}
 
 		/// <summary>Gets or sets the width of the line.</summary>
-		[ContentSerializerIgnore]
 		public float Width {
 			get { return End2.X - End1.X; }
 			set { End2.X = End1.X + value; }
 		}
 
 		/// <summary>Gets or sets the height of the line.</summary>
-		[ContentSerializerIgnore]
 		public float Height {
 			get { return End2.Y - End1.Y; }
 			set { End2.Y = End1.Y + value; }
 		}
 
 		/// <summary>Gets or sets the first or second endpoint from the index.</summary>
-		[ContentSerializerIgnore]
 		public Vector2F this[int endpoint] {
 			get {
 				if (endpoint < 0 || endpoint > 1)
@@ -268,14 +260,12 @@ namespace ZeldaOracle.Common.Geometry {
 		// Line
 
 		/// <summary>Gets or sets the direction of the line.</summary>
-		[ContentSerializerIgnore]
 		public float Direction {
 			get { return End1.DirectionTo(End2); }
 			set { End2 = End1 + Vector2F.FromPolar(Length, value); }
 		}
 
 		/// <summary>Gets or sets the length of the line.</summary>
-		[ContentSerializerIgnore]
 		public float Length {
 			get { return End1.DistanceTo(End2); }
 			set { End2 = End1 + Vector2F.FromPolar(value, Direction); }

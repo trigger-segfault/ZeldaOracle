@@ -64,7 +64,7 @@ namespace ZeldaEditor.Control {
 		/// modified because a resource was located.</summary>
 		private bool                worldFileLocatedResource;
 		private Level               level;
-		private Tileset				tileset;
+		private Tileset             tileset;
 		private Zone                zone;
 		private RewardManager       rewardManager;
 		private Inventory           inventory;
@@ -103,30 +103,31 @@ namespace ZeldaEditor.Control {
 		private bool            showGrid;
 		private bool            showModified;
 		private bool            highlightMouseTile;
-		private Tileset			selectedTileset;
-		private Point2I			selectedTilesetLocation;
-		private BaseTileData	selectedTileData;
-		private string			tileSearchFilter;
+		private Tileset         selectedTileset;
+		private Point2I         selectedTilesetLocation;
+		private BaseTileData    selectedTileData;
+		private string          tileSearchFilter;
 		private bool            playerPlaceMode;
-		private bool			startLocationMode;
-		private bool			showStartLocation;
+		private bool            startLocationMode;
+		private bool            showStartLocation;
 		private bool            showActions;
 		private bool            singleLayer;
 		private bool            roomOnly;
-		private bool			merge;
+		private bool            merge;
 
 		private Room editingRoom;
 		private BaseTileDataInstance editingTileData;
 
-		private StoppableTimer					updateTimer;
-		private bool			resourcesLoaded;
+		private StoppableTimer                  updateTimer;
+		private bool            resourcesLoaded;
 
 		private bool                        needsRecompiling;
 		private Task<ScriptCompileResult>   compileTask;
-		private CancellationTokenSource     compileCancellationToken;
+		private List<ScriptStart>			scriptStarts;
+		private Thread						compileThread;
 		private ScriptCompileCallback       compileCallback;
-		private List<string>                scriptsToRecompile;
-		private List<Event>                 eventsToRecompile;
+		private HashSet<string>				scriptsToRecompile;
+		private HashSet<Event>				eventsToRecompile;
 		private bool                        isCompilingForScriptEditor;
 		private Script                      currentCompilingScript;
 
@@ -162,8 +163,8 @@ namespace ZeldaEditor.Control {
 			this.needsRecompiling   = false;
 			this.compileTask        = null;
 			this.compileCallback    = null;
-			this.scriptsToRecompile = new List<string>();
-			this.eventsToRecompile = new List<Event>();
+			this.scriptsToRecompile = new HashSet<string>();
+			this.eventsToRecompile = new HashSet<Event>();
 			this.isCompilingForScriptEditor = false;
 			this.eventCache  = new List<Event>();
 			this.eventCacheTask = null;
@@ -171,6 +172,7 @@ namespace ZeldaEditor.Control {
 			this.currentCompilingScript = null;
 			this.noScriptErrors     = false;
 			this.noScriptWarnings   = false;
+			this.scriptStarts		= new List<ScriptStart>();
 
 			this.currentLayer               = 0;
 			this.currentToolIndex           = 0;
@@ -183,17 +185,17 @@ namespace ZeldaEditor.Control {
 			this.showActions                 = false;
 			this.highlightMouseTile         = true;
 			this.selectedTileset            = null;
-			this.selectedTilesetLocation	= Point2I.Zero;
-			this.selectedTileData			= null;
-			this.tileSearchFilter			= "";
+			this.selectedTilesetLocation    = Point2I.Zero;
+			this.selectedTileData           = null;
+			this.tileSearchFilter           = "";
 			this.playerPlaceMode            = false;
-			this.startLocationMode			= false;
-			this.showStartLocation			= true;
-			this.singleLayer				= false;
-			this.roomOnly					= false;
-			this.merge						= false;
+			this.startLocationMode          = false;
+			this.showStartLocation          = true;
+			this.singleLayer                = false;
+			this.roomOnly                   = false;
+			this.merge                      = false;
 
-			this.resourcesLoaded			= false;
+			this.resourcesLoaded            = false;
 		}
 
 		public void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
@@ -265,7 +267,7 @@ namespace ZeldaEditor.Control {
 
 			needsNewEventCache = true;
 			needsRecompiling = true;
-			
+
 			string[] args = Environment.GetCommandLineArgs();
 			if (args.Length > 1) {
 				if (args[1] == "-dev") {
@@ -423,6 +425,8 @@ namespace ZeldaEditor.Control {
 				undoPosition = -1;
 				PushAction(new ActionOpenWorld(), ActionExecution.None);
 				IsModified          = worldFileLocatedResource;
+
+				CheckAllScriptsIndividually();
 			}
 			else {
 				// Display the error.
@@ -515,7 +519,7 @@ namespace ZeldaEditor.Control {
 			}
 
 			//if (tileset.SpriteSheet != null) {
-				// Setup zone combo box for the new tileset.
+			// Setup zone combo box for the new tileset.
 			//	UpdateZones();
 			//}
 		}
@@ -600,7 +604,7 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 		// Helpers
 		//-----------------------------------------------------------------------------
-		
+
 		public void ShowExceptionMessage(Exception ex, string verb, string name) {
 			var result = TriggerMessageBox.Show(editorWindow, MessageIcon.Error, "An error occurred while trying to " +
 				verb + " '" + name + "'! Would you like to see the error?", MessageBoxButton.YesNo);
@@ -748,8 +752,7 @@ namespace ZeldaEditor.Control {
 		/// performs the specified execution.</summary>
 		public void PushPropertyAction(IPropertyObject propertyObject,
 			string propertyName, object oldValue, object newValue,
-			ActionExecution execution = ActionExecution.None)
-		{
+			ActionExecution execution = ActionExecution.None) {
 			Property property = propertyObject.Properties.
 				GetProperty(propertyName, true);
 			ActionChangeProperty action = new ActionChangeProperty(
@@ -789,10 +792,17 @@ namespace ZeldaEditor.Control {
 				return;
 
 			compileCallback = callback;
-			int scriptStart;
-			string code = world.ScriptManager.CreateTestScriptCode(script, script.Code, out scriptStart);
-			compileCancellationToken = new CancellationTokenSource();
-			compileTask = Task.Run(() => world.ScriptManager.Compile(code, false, scriptStart), compileCancellationToken.Token);
+			compileTask = Task.Run(() => {
+				compileThread = Thread.CurrentThread;
+				try {
+					int scriptStart;
+					string code = world.ScriptManager.CreateTestScriptCode(script, script.Code, out scriptStart);
+					return world.ScriptManager.Compile(code, false, scriptStart);
+				}
+				catch (ThreadAbortException) {
+					return null;
+				}
+			});
 			if (!scriptEditor)
 				editorWindow.SetStatusBarTask("Compiling scripts...");
 		}
@@ -827,10 +837,28 @@ namespace ZeldaEditor.Control {
 
 		// Internal -------------------------------------------------------------------
 
+		private void CheckAllScriptsIndividually() {
+			foreach (Script script in world.ScriptManager.Scripts.Values) {
+				if (!scriptsToRecompile.Contains(script.ID)) {
+					scriptsToRecompile.Add(script.ID);
+				}
+			}
+			foreach (Event evnt in world.GetDefinedEvents()) {
+				if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
+					Script script = evnt.Script;
+					if (!eventsToRecompile.Contains(evnt)) {
+						eventsToRecompile.Add(evnt);
+					}
+				}
+			}
+		}
+
 		private void UpdateScriptCompiling() {
 			if (compileTask != null) {
 				if (compileTask.IsCompleted) {
 					compileCallback(compileTask.Result);
+					scriptStarts.Clear();
+					compileThread = null;
 					compileTask = null;
 				}
 			}
@@ -848,9 +876,16 @@ namespace ZeldaEditor.Control {
 		}
 
 		private void CompileAllScriptsAsync(ScriptCompileCallback callback) {
-			compileCancellationToken = new CancellationTokenSource();
 			compileCallback = callback;
-			compileTask = Task.Run(() => world.ScriptManager.CompileScripts(world, true), compileCancellationToken.Token);
+			compileTask = Task.Run(() => {
+				compileThread = Thread.CurrentThread;
+				try {
+					return world.ScriptManager.CompileScripts(world, true, scriptStarts);
+				}
+				catch (ThreadAbortException) {
+					return null;
+				}
+			});
 			editorWindow.SetStatusBarTask("Compiling scripts...");
 			currentCompilingScript = null;
 		}
@@ -858,7 +893,7 @@ namespace ZeldaEditor.Control {
 		private void OnCompileCompleted(ScriptCompileResult result) {
 			needsRecompiling = false;
 			compileTask = null;
-			compileCancellationToken = null;
+			compileThread = null;
 
 			world.ScriptManager.RawAssembly = result.RawAssembly;
 
@@ -877,7 +912,7 @@ namespace ZeldaEditor.Control {
 
 		private void OnCompileScriptCompleted(ScriptCompileResult result) {
 			compileTask = null;
-			compileCancellationToken = null;
+			compileThread = null;
 
 			currentCompilingScript.Errors   = result.Errors;
 			currentCompilingScript.Warnings = result.Warnings;
@@ -892,12 +927,14 @@ namespace ZeldaEditor.Control {
 		private void CompileNextScript() {
 			Script script = null;
 			if (scriptsToRecompile.Any()) {
-				script = world.GetScript(scriptsToRecompile.First());
-				scriptsToRecompile.RemoveAt(0);
+				string first = scriptsToRecompile.First();
+				script = world.GetScript(first);
+				scriptsToRecompile.Remove(first);
 			}
 			else if (eventsToRecompile.Any()) {
+				Event first = eventsToRecompile.First();
 				script = eventsToRecompile.First().Script;
-				eventsToRecompile.RemoveAt(0);
+				eventsToRecompile.Remove(first);
 			}
 			if (script != null) {
 				CompileScriptAsync(script, OnCompileScriptCompleted, false);
@@ -907,10 +944,10 @@ namespace ZeldaEditor.Control {
 
 
 		private bool CancelCompilation(bool scriptEditor = false) {
-			if (compileTask != null && !compileTask.IsCompleted && compileCancellationToken != null) {
+			if (compileTask != null && !compileTask.IsCompleted && compileThread != null) {
 				if (scriptEditor || !isCompilingForScriptEditor) {
-					compileCancellationToken.Cancel();
-					compileCancellationToken = null;
+					compileThread.Abort();
+					compileThread = null;
 					compileTask = null;
 					currentCompilingScript = null;
 					return true;
