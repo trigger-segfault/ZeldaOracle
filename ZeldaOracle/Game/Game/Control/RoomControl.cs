@@ -348,7 +348,7 @@ namespace ZeldaOracle.Game.Control {
 			else
 				visualEffect = null;
 
-			variables.SetAll(room.Variables);
+			variables.SetAll(room.Vars);
 
 			// Discover the room
 			room.IsDiscovered = true;
@@ -960,7 +960,7 @@ namespace ZeldaOracle.Game.Control {
 			get { return roomNumber; }
 		}
 
-		public Variables Variables {
+		public Variables Vars {
 			get { return variables; }
 		}
 	}

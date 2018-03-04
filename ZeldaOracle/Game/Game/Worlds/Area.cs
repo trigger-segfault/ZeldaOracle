@@ -2,54 +2,71 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Geometry;
+using System.Threading.Tasks;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.API;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.ActionTiles;
+using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Dungeon : IEventObject, IIDObject {
+	public class Area : IEventObject, IIDObject, IVariableObject {
 		private World world;
 		private Properties properties;
+		private Variables variables;
 		private EventCollection events;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Dungeon() {
-			this.events		= new EventCollection(this);
-			this.properties	= new Properties(this);
-			this.properties.BaseProperties	= new Properties();
+		public Area() {
+			this.events     = new EventCollection(this);
+			this.properties = new Properties(this);
+			this.properties.BaseProperties  = new Properties();
+			this.variables	= new Variables(this);
 
-			properties.BaseProperties.Set("id",			"")
+			// General
+			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this dungeon.", false, false);
-			properties.BaseProperties.Set("name",		"")
-				.SetDocumentation("Name", "", "", "General", "The name of this dungeon in-game.");
-			properties.BaseProperties.Set("small_keys",	0)
-				.SetDocumentation("Small Keys Held", "", "", "Progress", "The number of held small keys for this dungeon.");
-			properties.BaseProperties.Set("boss_key",	false)
-				.SetDocumentation("Boss Key Obtained", "", "", "Progress", "True if the boss key for this dungeon has been obtained.");
-			properties.BaseProperties.Set("map",		false)
-				.SetDocumentation("Map Obtained", "", "", "Progress", "True if the map for this dungeon has been obtained.");
-			properties.BaseProperties.Set("compass",	false)
-				.SetDocumentation("Compass Obtained", "", "", "Progress", "True if the compass for this dungeon has been obtained.");
+			properties.BaseProperties.Set("name", "")
+				.SetDocumentation("Name", "", "", "General", "The readable name of this area in-game.");
+
+			// Settings
+			properties.BaseProperties.Set("dungeon", false)
+				.SetDocumentation("Is Dungeon", "", "", "Settings", "True if this area is treated as a dungeon.");
+			properties.BaseProperties.Set("dungeon_level", -1)
+				.SetDocumentation("Dungeon Level", "", "", "Settings", "The level of the dungeon to display on the map. -1 means no level is displayed.");
+			properties.BaseProperties.Set("map_type", "none")
+				.SetDocumentation("Map Type", "map_type", "", "Settings", "The type of map to display for this area.");
+			properties.BaseProperties.Set("respawn_mode", "none")
+				.SetDocumentation("Room Respawn Mode", "enum", typeof(RoomRespawnMode), "Settings", "The type of map to display for this area.");
+			// Note area name is only displayed on certain warp
+			// points so that setting goes in WarpAction.
+
+			// Puzzle
 			properties.BaseProperties.Set("color_switch_color", (int) PuzzleColor.Blue)
-				.SetDocumentation("Color Switch Color", "enum", "PuzzleColor", "Puzzle", "");
+				.SetDocumentation("Color Switch Color", "enum", typeof(PuzzleColor), "Puzzle", "");
+
+			// Dungeon
+			properties.BaseProperties.Set("small_keys", 0)
+				.SetDocumentation("Small Keys Held", "", "", "Progress", "The number of held small keys for this dungeon.", false, false);
+			properties.BaseProperties.Set("boss_key", false)
+				.SetDocumentation("Boss Key Obtained", "", "", "Progress", "True if the boss key for this dungeon has been obtained.", false, false);
+			properties.BaseProperties.Set("map", false)
+				.SetDocumentation("Map Obtained", "", "", "Progress", "True if the map for this dungeon has been obtained.", false, false);
+			properties.BaseProperties.Set("compass", false)
+				.SetDocumentation("Compass Obtained", "", "", "Progress", "True if the compass for this dungeon has been obtained.", false, false);
+			properties.BaseProperties.Set("completed", false)
+				.SetDocumentation("Is Completed", "", "", "Progress", "True if the dungeon has been completed.", false, false);
 		}
 
-		public Dungeon(string id, string name) : 
-			this()
-		{
+		public Area(string id, string name) :
+			this() {
 			properties.Set("id", id);
 			properties.Set("name", name);
 		}
 
-		public Dungeon(Dungeon copy) : 
-			this()
-		{
+		public Area(Area copy) :
+			this() {
 			properties.SetAll(copy.properties);
 			events.SetAll(copy.events);
 		}
@@ -60,7 +77,7 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		// Return a sorted list of all the floors in the dungeon.
-		public DungeonFloor[] GetFloors() {
+		public DungeonFloor[] GetDungeonFloors() {
 			int lowestFloorNumber = int.MaxValue;
 			int highestFloorNumber = int.MinValue;
 			bool foundAny = false;
@@ -105,27 +122,27 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return properties.GetInteger("small_keys", 0); }
 			set { properties.Set("small_keys", value); }
 		}
-		
+
 		public bool HasBossKey {
 			get { return properties.GetBoolean("boss_key", false); }
 			set { properties.Set("boss_key", value); }
 		}
-		
+
 		public bool HasMap {
 			get { return properties.GetBoolean("map", false); }
 			set { properties.Set("map", value); }
 		}
-		
+
 		public bool HasCompass {
 			get { return properties.GetBoolean("compass", false); }
 			set { properties.Set("compass", value); }
 		}
-		
+
 		public string ID {
 			get { return properties.GetString("id", ""); }
-			 set { properties.Set("id", value); }
+			set { properties.Set("id", value); }
 		}
-		
+
 		public string Name {
 			get { return properties.GetString("name", ""); }
 			set { properties.Set("name", value); }
@@ -149,7 +166,7 @@ namespace ZeldaOracle.Game.Worlds {
 				return lowest;
 			}
 		}
-		
+
 		public int HighestFloorNumber {
 			get {
 				int highest = Int32.MinValue;
@@ -168,6 +185,10 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public EventCollection Events {
 			get { return events; }
+		}
+
+		public Variables Vars {
+			get { return variables; }
 		}
 	}
 }

@@ -83,7 +83,7 @@ namespace ZeldaOracle.Game.Tiles {
 			// Sync color with dungeon.
 			syncWithDungeon = Properties.GetBoolean("sync_with_dungeon", false);
 			if (syncWithDungeon && RoomControl.Dungeon != null) {
-				SetSwitchState(RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Blue);
+				SetSwitchState(RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Red);
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (syncWithDungeon && args.Level != null) {
 				Dungeon dungeon = args.Level.Dungeon;
 				if (dungeon != null)
-					switchState = dungeon.ColorSwitchColor == PuzzleColor.Blue;
+					switchState = dungeon.ColorSwitchColor == PuzzleColor.Red;
 			}
 			//ISprite sprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
 			//if (switchState)

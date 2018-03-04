@@ -124,7 +124,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				actionTileData.Properties.Set("ignore_monster", parameters.GetBool(4));
 
 				// Make sure the monster type exists.
-				GameUtil.GetTypeWithBase<Monster>(parameters.GetString(2), true);
+				GameUtil.FindTypeWithBase<Monster>(parameters.GetString(2), true);
 
 				MonsterColor color;
 				if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
@@ -162,9 +162,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				string typeName = parameters.GetString(0);
 				if (tileData != null)
-					baseTileData.Type = GameUtil.GetTypeWithBase<Tile>(typeName, true);
+					baseTileData.Type = GameUtil.FindTypeWithBase<Tile>(typeName, true);
 				else
-					baseTileData.Type = GameUtil.GetTypeWithBase<ActionTile>(typeName, true);
+					baseTileData.Type = GameUtil.FindTypeWithBase<ActionTile>(typeName, true);
 			});
 			//=====================================================================================
 			AddCommand("FLAGS", (int) Modes.Tile,

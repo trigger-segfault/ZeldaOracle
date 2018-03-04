@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		public void ResetDescription() {
 			ISlotItem item = currentSlotGroup.CurrentSlot.SlotItem;
-			description = FormatCodes.FormatString(item != null ? item.Name : "", GameControl.Variables);
+			description = FormatCodes.FormatString(item != null ? item.Name : "", GameControl.Vars);
 			textPosition = 0;
 			textTimer = 0;
 			textStart = 0;
@@ -115,7 +115,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 					textStart = (16 - description.Length) * 8;
 				}
 
-				description.AddRange(FormatCodes.FormatString(item.Description, GameControl.Variables));
+				description.AddRange(FormatCodes.FormatString(item.Description, GameControl.Vars));
 			}
 		}
 

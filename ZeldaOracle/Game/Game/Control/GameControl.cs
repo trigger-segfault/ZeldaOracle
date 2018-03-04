@@ -188,7 +188,7 @@ namespace ZeldaOracle.Game.Control {
 				LoadWorld(worldPath, recompile);
 				
 				variables.Clear();
-				variables.SetAll(world.Variables);
+				variables.SetAll(world.Vars);
 
 				// DEBUG: Until enter name screen exists
 				variables.Set("player", "Link");
@@ -503,7 +503,7 @@ namespace ZeldaOracle.Game.Control {
 			get { return roomStateStack.CurrentRoomState; }
 		}
 
-		public Variables Variables {
+		public Variables Vars {
 			get { return variables; }
 		}
 	}

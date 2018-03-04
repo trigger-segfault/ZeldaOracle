@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 				"The index of the substrip for dynamic animations.", true, false);
 			
 			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
-				.SetDocumentation("Reset Condition", "enum", "TileResetCondition", "General",
+				.SetDocumentation("Reset Condition", "enum", typeof(TileResetCondition), "General",
 				"The condition for when the tile resets its properties.");
 		}
 

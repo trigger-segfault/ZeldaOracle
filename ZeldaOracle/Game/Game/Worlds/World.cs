@@ -389,7 +389,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		/// <summary>Gets the variables for the world.</summary>
-		public Variables Variables {
+		public Variables Vars {
 			get { return variables; }
 		}
 

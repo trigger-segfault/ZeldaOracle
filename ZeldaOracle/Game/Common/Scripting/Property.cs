@@ -136,18 +136,38 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>Create the documentation for this property.</summary>
-		public Property SetDocumentation(string readableName, string editorType, string editorSubType, string category,
-				string description, bool isReadOnly = false, bool isBrowsable = true)
+		public Property SetDocumentation(string readableName, string editorType,
+			string editorSubType, string category, string description,
+			bool isReadOnly = false, bool isBrowsable = true)
 		{
-			documentation = new PropertyDocumentation(readableName,
-				editorType, editorSubType, category, description, isReadOnly, isBrowsable);
+			documentation = new PropertyDocumentation(readableName, editorType,
+				editorSubType, category, description, isReadOnly, isBrowsable);
 			return this;
 		}
 
 		/// <summary>Create the documentation for this property.</summary>
-		public Property SetDocumentation(string readableName, string category, string description)
+		public Property SetDocumentation(string readableName, string editorType,
+			Type editorSubType, string category, string description,
+			bool isReadOnly = false, bool isBrowsable = true)
 		{
-			documentation = new PropertyDocumentation(readableName, "", "", category, description, false, true);
+			documentation = new PropertyDocumentation(readableName, editorType,
+				editorSubType.Name, category, description, isReadOnly, isBrowsable);
+			return this;
+		}
+
+		/// <summary>Adds property documentation solely to set IsBrowsable to false.</summary>
+		public Property SetHidden() {
+			documentation = new PropertyDocumentation(name, "", "", "Misc", "",
+				false, true);
+			return this;
+		}
+
+		/// <summary>Create the documentation for this property.</summary>
+		public Property SetDocumentation(string readableName, string category,
+			string description)
+		{
+			documentation = new PropertyDocumentation(readableName, "", "", category,
+				description, false, true);
 			return this;
 		}
 

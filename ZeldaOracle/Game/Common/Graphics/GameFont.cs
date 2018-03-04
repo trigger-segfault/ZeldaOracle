@@ -96,15 +96,15 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Returns the wrapped and formatted string of the text.</summary>
 		public WrappedLetterString WrapString(string text, int width,
-			Variables variables = null)
+			Variables vars = null)
 		{
 			int caretLine = 0;
-			return WrapString(text, width, 0, out caretLine, variables);
+			return WrapString(text, width, 0, out caretLine, vars);
 		}
 
 		/// <summary>Returns the wrapped and formatted string of the text.</summary>
 		public WrappedLetterString WrapString(string text, int width, int caretPosition,
-			out int caretLine, Variables variables = null)
+			out int caretLine, Variables vars = null)
 		{
 			try {
 				caretLine = -1;
@@ -125,7 +125,7 @@ namespace ZeldaOracle.Common.Graphics {
 				string caretChar = (caretPosition >= text.Length ? "end" : "" + text[caretPosition]);
 				char[] charArray = text.ToCharArray();
 
-				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition, variables);
+				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition, vars);
 				string caret2Char = (caretPosition >= letterString.Length ? "end" : "" + letterString[caretPosition].Char);
 				//Console.WriteLine("'" + caretChar + "' - '" + caret2Char + "'");
 

@@ -30,9 +30,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		
 		// TODO: Move these generic methods somewhere else.
 		public static T ConstructObject<T>(string typeName) where T : class {
-			Type type = Assembly.GetExecutingAssembly().GetTypes().First(x => x.Name == typeName);
-			if (type == null)
-				return null;
+			Type type = GameUtil.FindTypeWithBase<Monster>(typeName, false);
 			return ConstructObject<T>(type);
 		}
 
