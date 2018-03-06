@@ -52,17 +52,17 @@ namespace ZeldaOracle.Game.Control.Menus {
 			for (int y = 0; y < gridSize.Y; y++) {
 				for (int x = 0; x < gridSize.X; x++) {
 					if (x == 0)
-						slots[x, y].SetConnection(Directions.Left, slots[gridSize.X - 1, (y + gridSize.Y - 1) % gridSize.Y]);
+						slots[x, y].SetConnection(Direction.Left, slots[gridSize.X - 1, (y + gridSize.Y - 1) % gridSize.Y]);
 					else
-						slots[x, y].SetConnection(Directions.Left, slots[x - 1, y]);
+						slots[x, y].SetConnection(Direction.Left, slots[x - 1, y]);
 
 					if (x == gridSize.X - 1)
-						slots[x, y].SetConnection(Directions.Right, slots[0, (y + 1) % gridSize.Y]);
+						slots[x, y].SetConnection(Direction.Right, slots[0, (y + 1) % gridSize.Y]);
 					else
-						slots[x, y].SetConnection(Directions.Right, slots[x + 1, y]);
+						slots[x, y].SetConnection(Direction.Right, slots[x + 1, y]);
 
-					slots[x, y].SetConnection(Directions.Up, slots[x, (y + gridSize.Y - 1) % gridSize.Y]);
-					slots[x, y].SetConnection(Directions.Down, slots[x, (y + 1) % gridSize.Y]);
+					slots[x, y].SetConnection(Direction.Up, slots[x, (y + gridSize.Y - 1) % gridSize.Y]);
+					slots[x, y].SetConnection(Direction.Down, slots[x, (y + 1) % gridSize.Y]);
 				}
 			}
 		}
@@ -193,8 +193,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 							ammoSlotGroup.GetSlotAt(i).SlotItem = ammo[i];
 						}
 						for (int i = 0; i < ammo.Count; i++) {
-							ammoSlotGroup.GetSlotAt(i).SetConnection(Directions.Left, ammoSlotGroup.GetSlotAt((i + ammo.Count - 1) % ammo.Count));
-							ammoSlotGroup.GetSlotAt(i).SetConnection(Directions.Right, ammoSlotGroup.GetSlotAt((i + 1) % ammo.Count));
+							ammoSlotGroup.GetSlotAt(i).SetConnection(Direction.Left, ammoSlotGroup.GetSlotAt((i + ammo.Count - 1) % ammo.Count));
+							ammoSlotGroup.GetSlotAt(i).SetConnection(Direction.Right, ammoSlotGroup.GetSlotAt((i + 1) % ammo.Count));
 						}
 						ammoSlotGroup.SetCurrentSlot(ammoSlotGroup.GetSlotAt(currentAmmoIndex));
 					}

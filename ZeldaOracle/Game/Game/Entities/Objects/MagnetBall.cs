@@ -7,7 +7,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 	public class MagnetBall : Entity {
 
 		private Polarity polarity;
-		private int direction;
+		private Direction direction;
 		private bool isMoving;
 		private bool isLedgeJumping;
 
@@ -54,10 +54,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Begin falling off of a ledge.</summary>
-		private void BeginLedgeJump(int ledgeDirection, Tile ledgeTile) {
+		private void BeginLedgeJump(Direction ledgeDirection, Tile ledgeTile) {
 			isLedgeJumping = true;
 			physics.ZVelocity = 1.8f;
-			physics.Velocity = Directions.ToVector(ledgeDirection) * 1.0f;
+			physics.Velocity = ledgeDirection.ToVector(1.0f);
 			physics.CollideWithWorld = false;
 			Interactions.Disable();
 		}
@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 			isLedgeJumping	= false;
 			isMoving		= false;
-			direction		= Directions.Right;
+			direction		= Direction.Right;
 		}
 
 		public override void Update() {
@@ -105,8 +105,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 				// Slow down
 				if (!isMoving) {
-					int axis = Directions.ToAxis(direction);
-					Vector2F directionVector = Directions.ToVector(direction);
+					Vector2F directionVector = direction.ToVector();
 					if (physics.Velocity.Dot(directionVector) > 0.0f) 
 						physics.Velocity -= directionVector *
 							GameSettings.MAGNET_BALL_DECELERATION;
@@ -118,11 +117,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				foreach (Collision collision in Physics.Collisions) {
 					if (collision.IsTile && !collision.IsDodged) {
 						Tile tile = collision.Tile;
-						if (Directions.ToVector(tile.LedgeDirection)
+						if (tile.LedgeDirection.ToVector()
 								.Dot(Center - tile.Center) < 0.0f &&
 							tile.LedgeDirection == collision.Direction &&
 							tile.IsLedge && !tile.IsInMotion)
+						{
 							BeginLedgeJump(tile.LedgeDirection, tile);
+						}
 					}
 				}
 
@@ -155,7 +156,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		
 		/// <summary>The last-known movement direction caused by the magnet gloves.
 		/// </summary>
-		public int Direction {
+		public Direction Direction {
 			get { return direction; }
 			set { direction = value; }
 		}

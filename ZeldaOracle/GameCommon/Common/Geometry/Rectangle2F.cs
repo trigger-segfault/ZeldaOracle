@@ -244,11 +244,11 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public float GetEdge(int direction) {
-			if (direction == Directions.Right)
+			if (direction == Direction.Right)
 				return Right;
-			if (direction == Directions.Left)
+			if (direction == Direction.Left)
 				return Left;
-			if (direction == Directions.Up)
+			if (direction == Direction.Up)
 				return Top;
 			return Bottom;
 		}
@@ -365,13 +365,13 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 	
 		public void ExtendEdge(int direction, float amount) {
-			if (direction == Directions.Right || direction == Directions.Left)
+			if (direction == Direction.Right || direction == Direction.Left)
 				Size.X += amount;
-			if (direction == Directions.Down || direction == Directions.Up)
+			if (direction == Direction.Down || direction == Direction.Up)
 				Size.Y += amount;
-			if (direction == Directions.Left)
+			if (direction == Direction.Left)
 				Point.X -= amount;
-			if (direction == Directions.Up)
+			if (direction == Direction.Up)
 				Point.Y -= amount;
 		}
 

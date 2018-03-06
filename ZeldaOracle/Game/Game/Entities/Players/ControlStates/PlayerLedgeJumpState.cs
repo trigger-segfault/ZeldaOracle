@@ -10,7 +10,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		protected Vector2F	velocity;
 		protected bool		ledgeExtendsToNextRoom;
 		protected bool		hasRoomChanged;
-		protected int		direction;
+		protected Direction		direction;
 		protected Vector2F	landingPosition;
 
 		//-----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int LedgeJumpDirection {
+		public Direction LedgeJumpDirection {
 			get { return direction; }
 			set { direction = value; }
 		}

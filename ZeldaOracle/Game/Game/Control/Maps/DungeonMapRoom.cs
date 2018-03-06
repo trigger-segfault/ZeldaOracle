@@ -95,9 +95,9 @@ namespace ZeldaOracle.Game.Control.Maps {
 						freeOnRight = false;;
 				}
 				if (freeOnRight)
-					connected[Directions.Right] = 1;
+					connected[Direction.Right] = 1;
 				if (freeOnLeft)
-					connected[Directions.Left] = 1;
+					connected[Direction.Left] = 1;
 			}
 			for (int x = 0; x < room.Width; x++) {
 				bool freeOnUp = true;
@@ -111,9 +111,9 @@ namespace ZeldaOracle.Game.Control.Maps {
 						freeOnDown = false;
 				}
 				if (freeOnUp)
-					connected[Directions.Up] = 1;
+					connected[Direction.Up] = 1;
 				if (freeOnDown)
-					connected[Directions.Down] = 1;
+					connected[Direction.Down] = 1;
 			}
 
 			int spiteIndex = (connected[0]) + (connected[1] << 1) + (connected[2] << 2) + (connected[3] << 3);

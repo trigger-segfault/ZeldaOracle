@@ -59,14 +59,14 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int Direction {
-			get { return Properties.GetInteger("direction", Directions.Down); }
+		public Direction Direction {
+			get { return Properties.GetInteger("direction", Direction.Down); }
 		}
 
 		public Rectangle2F ViewBox {
 			get {
 				Vector2F start, distance;
-				if (Direction == Directions.Left || Direction == Directions.Up) {
+				if (Direction == Direction.Left || Direction == Direction.Up) {
 					start = Vector2F.Zero;
 					distance = Position;
 				}

@@ -137,7 +137,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 		
 		protected void FaceRandomDirection() {
-			//direction = GRandom.NextInt(Directions.Count);
+			//direction = GRandom.NextInt(Direction.Count);
 
 			moveAngleIndex = (moveAngleIndex + 1 + GRandom.NextInt(numMoveAngles - 1)) % numMoveAngles;
 			if (numMoveAngles == 4)

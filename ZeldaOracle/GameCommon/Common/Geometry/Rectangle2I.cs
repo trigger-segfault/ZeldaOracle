@@ -313,23 +313,23 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 
 		public int GetEdge(int direction) {
-			if (direction == Directions.Right)
+			if (direction == Direction.Right)
 				return Right;
-			if (direction == Directions.Left)
+			if (direction == Direction.Left)
 				return Left;
-			if (direction == Directions.Up)
+			if (direction == Direction.Up)
 				return Top;
 			return Bottom;
 		}
 
 		public void ExtendEdge(int direction, int amount) {
-			if (direction == Directions.Right || direction == Directions.Left)
+			if (direction == Direction.Right || direction == Direction.Left)
 				Size.X += amount;
-			if (direction == Directions.Down || direction == Directions.Up)
+			if (direction == Direction.Down || direction == Direction.Up)
 				Size.Y += amount;
-			if (direction == Directions.Left)
+			if (direction == Direction.Left)
 				Point.X -= amount;
-			if (direction == Directions.Up)
+			if (direction == Direction.Up)
 				Point.Y -= amount;
 		}
 

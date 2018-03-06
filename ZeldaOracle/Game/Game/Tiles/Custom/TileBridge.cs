@@ -131,7 +131,7 @@ namespace ZeldaOracle.Game.Tiles {
 			return -1;
 		}
 
-		private TileBridge GetConnectedTile(int direction) {
+		private TileBridge GetConnectedTile(Direction direction) {
 			return GetConnectedTile(Location + Directions.ToPoint(direction));
 		}
 

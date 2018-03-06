@@ -56,7 +56,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			else {
 				// Poll movement keys
 				bool isArrowDown = false;
-				for (int dir = 0; dir < Directions.Count && !isArrowDown; dir++) {
+				for (int dir = 0; dir < Direction.Count && !isArrowDown; dir++) {
 					if (Controls.Arrows[dir].IsDown())
 						isArrowDown = true;
 				}

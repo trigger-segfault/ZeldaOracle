@@ -536,9 +536,9 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static int CombineAxisDirections(int directionH, int directionV) {
-			if (directionH == Directions.Left)
-				return (directionV == Directions.Up ? Angles.UpLeft : Angles.DownLeft);
-			return (directionV == Directions.Up ? Angles.UpRight : Angles.DownRight);
+			if (directionH == Direction.Left)
+				return (directionV == Direction.Up ? Angles.UpLeft : Angles.DownLeft);
+			return (directionV == Direction.Up ? Angles.UpRight : Angles.DownRight);
 		}
 				
 		public static int NearestFromVector(Vector2F vector) {

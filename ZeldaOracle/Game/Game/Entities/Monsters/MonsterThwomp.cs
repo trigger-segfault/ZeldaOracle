@@ -106,7 +106,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Check for crushing
 			if (Entity.AreEntitiesAligned(this, RoomControl.Player,
-				Directions.Down, GameSettings.MONSTER_THWOMP_CRUSH_MIN_ALIGNMENT))
+				Direction.Down, GameSettings.MONSTER_THWOMP_CRUSH_MIN_ALIGNMENT))
 			{
 				stateMachine.BeginState(CrushState.Crush);
 			}

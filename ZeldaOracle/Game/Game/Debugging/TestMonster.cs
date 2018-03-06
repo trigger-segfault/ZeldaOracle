@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Debug {
 			moveSpeed		= 0.75f;
 			isMoving		= false;
 			moveAxes		= new bool[] { false, false };
-			moveDirection	= Directions.Right;
+			moveDirection	= Direction.Right;
 			moveAngle		= Angles.Right;
 
 			toolSword = new MonsterToolSword();
@@ -111,9 +111,9 @@ namespace ZeldaOracle.Game.Debug {
 			isMoving = false;
 
 			// Check movement keys.
-			if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
+			if (!CheckMoveKey(Direction.Left) && !CheckMoveKey(Direction.Right))
 				moveAxes[Axes.X] = false;
-			if (!CheckMoveKey(Directions.Up) && !CheckMoveKey(Directions.Down))
+			if (!CheckMoveKey(Direction.Up) && !CheckMoveKey(Direction.Down))
 				moveAxes[Axes.Y] = false;
 
 			direction = moveDirection;

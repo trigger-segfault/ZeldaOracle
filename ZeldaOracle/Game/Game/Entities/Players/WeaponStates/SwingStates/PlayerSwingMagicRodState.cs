@@ -40,9 +40,9 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 				// Adjust the projectile spawn position based on player direction.
 				if (Directions.IsHorizontal(player.Direction))
 					fire.Position += new Vector2F(0, 4);
-				else if (player.Direction == Directions.Up)
+				else if (player.Direction == Direction.Up)
 					fire.Position -= new Vector2F(4, 0);
-				else if (player.Direction == Directions.Down)
+				else if (player.Direction == Direction.Down)
 					fire.Position += new Vector2F(3, 0);
 
 				player.RoomControl.SpawnEntity(fire);

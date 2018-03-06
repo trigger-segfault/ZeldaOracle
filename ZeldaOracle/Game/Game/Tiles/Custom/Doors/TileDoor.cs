@@ -105,13 +105,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Find the location of the adjacent door tile.
 				Point2I doorLocation = Location;
-				if (dir == Directions.Down)
+				if (dir == Direction.Down)
 					doorLocation.Y = 0;
-				else if (dir == Directions.Up)
+				else if (dir == Direction.Up)
 					doorLocation.Y = adjacentRoom.Height - 1;
-				else if (dir == Directions.Right)
+				else if (dir == Direction.Right)
 					doorLocation.X = 0;
-				else if (dir == Directions.Left)
+				else if (dir == Direction.Left)
 					doorLocation.X = adjacentRoom.Width - 1;
 
 				// Look for a tile of the same type among the tile layers.

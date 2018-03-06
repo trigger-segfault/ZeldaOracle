@@ -94,8 +94,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				return;
 
 			// Check for climbing to the bottom of a ladder
-			if (player.Physics.IsCollidingInDirection(Directions.Down) &&
-				player.Movement.IsMovingInDirection(Directions.Down))
+			if (player.Physics.IsCollidingInDirection(Direction.Down) &&
+				player.Movement.IsMovingInDirection(Direction.Down))
 			{
 				End();
 				return;

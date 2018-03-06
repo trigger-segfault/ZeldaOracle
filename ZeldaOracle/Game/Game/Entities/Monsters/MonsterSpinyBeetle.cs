@@ -263,7 +263,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			int axis = Directions.ToAxis(direction);
 
 			if (moveTimer == 1) {
-				if (direction == Directions.Left || direction == Directions.Up) {
+				if (direction == Direction.Left || direction == Direction.Up) {
 					velocity = Vector2F.FromIndex(axis, GMath.Floor(
 						Position[axis]) - position[axis]);
 				}
@@ -285,7 +285,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				Position + Physics.Velocity))
 			{
 				if (tile.IsHoleWaterOrLava) {
-					if (direction == Directions.Left || direction == Directions.Up) {
+					if (direction == Direction.Left || direction == Direction.Up) {
 						position[axis] = tile.Bounds.BottomRight[axis] -
 							Graphics.DrawOffset[axis];
 					}
@@ -373,13 +373,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.Velocity = Vector2F.Zero;
 			Vector2F vectorToPlayer = RoomControl.Player.Center - Center;
 			int direction = Directions.NearestFromVector(vectorToPlayer);
-			if (direction == Directions.Up) {
+			if (direction == Direction.Up) {
 				Rectangle2F box = new Rectangle2F(-8, -8, 16, 8) + Position;
 				if (RoomControl.Player.Interactions.
 					PositionedInteractionBox.Intersects(box))
 					StartCharging(direction);
 			}
-			else if (direction == Directions.Down) {
+			else if (direction == Direction.Down) {
 				RangeF range = new RangeF(Position.X - 8, Position.X + 8);
 				if (RoomControl.Player.Interactions.PositionedInteractionBox.
 					LeftRight.Intersects(range))

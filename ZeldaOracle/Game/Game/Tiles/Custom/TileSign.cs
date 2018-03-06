@@ -16,10 +16,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		// Called when the player presses A on this tile, when facing the given direction.
-		public override bool OnAction(int direction) {
+		public override bool OnAction(Direction direction) {
 			string text = "";
 
-			if (direction == Directions.Up)
+			if (direction == Direction.Up)
 				text = Properties.GetString("text", GameSettings.TEXT_UNDEFINED);
 			else
 				text = "You can't read it from there!";

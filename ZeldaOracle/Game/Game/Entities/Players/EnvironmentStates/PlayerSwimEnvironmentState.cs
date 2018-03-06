@@ -160,7 +160,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					new Vector2F(GameSettings.TILE_SIZE / 2) - player.CenterOffset;
 
 				// Change to standing animation and face downwards.
-				player.Direction = Directions.Down;
+				player.Direction = Direction.Down;
 				player.BeginEnvironmentState(player.UnderwaterState);
 				player.IntegrateStateParameters();
 				player.Graphics.PlayAnimation(player.Animations.Default);

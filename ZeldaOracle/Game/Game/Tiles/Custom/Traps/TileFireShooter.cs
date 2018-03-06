@@ -37,8 +37,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int Direction {
-			get { return Properties.GetInteger("direction", Directions.Down); }
+		public Direction Direction {
+			get { return Properties.GetInteger("direction", Direction.Down); }
 		}
 
 		public bool IsSecondaryTile {

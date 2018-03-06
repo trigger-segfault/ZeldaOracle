@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			float speed = GameSettings.PLAYER_LEAP_LEDGE_JUMP_DISTANCE /
 							GameSettings.PLAYER_LEAP_LEDGE_JUMP_DURATION;
 
-			velocity = Directions.ToVector(direction) * speed;
+			velocity = direction.ToVector(speed);
 			player.Physics.ZVelocity = jumpSpeed;
 			player.Physics.Velocity = velocity;
 			player.Position += velocity;

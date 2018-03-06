@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			}
 		}
 
-		public override bool OnDig(int direction) {
+		public override bool OnDig(Direction direction) {
 			if (IsMoving)
 				return false;
 

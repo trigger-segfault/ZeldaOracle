@@ -96,7 +96,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			}
 		}
 
-		public void NextSlot(int direction) {
+		public void NextSlot(Direction direction) {
 			ISlotConnection connection = currentSlotGroup.CurrentSlot.GetConnectionAt(direction);
 
 			if (connection != null) {

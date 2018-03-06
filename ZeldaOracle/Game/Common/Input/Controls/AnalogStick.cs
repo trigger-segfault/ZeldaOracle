@@ -55,10 +55,10 @@ namespace ZeldaOracle.Common.Input.Controls {
 				this.position = position;
 
 				// Update the directional controls
-				directions[Directions.Right].Update(time, position.X > DirectionDeadZone.X);
-				directions[Directions.Down].Update(time, position.Y > DirectionDeadZone.Y);
-				directions[Directions.Left].Update(time, position.X < -DirectionDeadZone.X);
-				directions[Directions.Up].Update(time, position.Y < -DirectionDeadZone.Y);
+				directions[Direction.Right].Update(time, position.X > DirectionDeadZone.X);
+				directions[Direction.Down].Update(time, position.Y > DirectionDeadZone.Y);
+				directions[Direction.Left].Update(time, position.X < -DirectionDeadZone.X);
+				directions[Direction.Up].Update(time, position.Y < -DirectionDeadZone.Y);
 			}
 			else if (disabledState == DisableState.DisabledUntilRelease) {
 				if (position.IsZero) {
@@ -140,22 +140,22 @@ namespace ZeldaOracle.Common.Input.Controls {
 
 		/// <summary>The right control of the analog stick.</summary>
 		public InputControl Right {
-			get { return directions[Directions.Right]; }
+			get { return directions[Direction.Right]; }
 		}
 
 		/// <summary>The down control of the analog stick.</summary>
 		public InputControl Down {
-			get { return directions[Directions.Down]; }
+			get { return directions[Direction.Down]; }
 		}
 
 		/// <summary>The Left control of the analog stick.</summary>
 		public InputControl Left {
-			get { return directions[Directions.Left]; }
+			get { return directions[Direction.Left]; }
 		}
 
 		/// <summary>The up control of the analog stick.</summary>
 		public InputControl Up {
-			get { return directions[Directions.Up]; }
+			get { return directions[Direction.Up]; }
 		}
 	}
 }

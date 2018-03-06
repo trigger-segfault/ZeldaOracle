@@ -30,13 +30,13 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>Loads the controls from settings.</summary>
 		public static void LoadControls(UserSettings userSettings) {
 			Controls.arrows = new MultiGameButton[4];
-			Controls.arrows[Directions.Up]      = CreateMultiGameButton(userSettings,
+			Controls.arrows[Direction.Up]      = CreateMultiGameButton(userSettings,
 				userSettings.Keyboard.Up, userSettings.GamePad.Up);
-			Controls.arrows[Directions.Down]    = CreateMultiGameButton(userSettings,
+			Controls.arrows[Direction.Down]    = CreateMultiGameButton(userSettings,
 				userSettings.Keyboard.Down, userSettings.GamePad.Down);
-			Controls.arrows[Directions.Left]    = CreateMultiGameButton(userSettings,
+			Controls.arrows[Direction.Left]    = CreateMultiGameButton(userSettings,
 				userSettings.Keyboard.Left, userSettings.GamePad.Left);
-			Controls.arrows[Directions.Right]   = CreateMultiGameButton(userSettings,
+			Controls.arrows[Direction.Right]   = CreateMultiGameButton(userSettings,
 				userSettings.Keyboard.Right, userSettings.GamePad.Right);
 
 			if (userSettings.GamePad.Enabled)
@@ -93,19 +93,13 @@ namespace ZeldaOracle.Game.Main {
 		}
 
 		/// <summary>Gets the arrow controls.</summary>
-		public static InputControl GetArrowControl(int direction) {
+		public static InputControl GetArrowControl(Direction direction) {
 			return arrows[direction].Button;
 		}
 
 		/// <summary>Gets the analog direction controls.</summary>
-		public static bool GetAnalogDirection(int direction) {
-			switch (direction) {
-			case Directions.Right:	return analogMovement.Position.X > 0f;
-			case Directions.Down:	return analogMovement.Position.Y > 0f;
-			case Directions.Left:	return analogMovement.Position.X < 0f;
-			case Directions.Up:		return analogMovement.Position.Y < 0f;
-			}
-			return false;
+		public static bool GetAnalogDirection(Direction direction) {
+			return analogMovement.Position.Dot(direction.ToVector()) > 0.0f;
 		}
 
 
@@ -150,21 +144,21 @@ namespace ZeldaOracle.Game.Main {
 
 		/// <summary>Gets the up button.</summary>
 		public static InputControl Up {
-			get { return arrows[Directions.Up].Button; }
+			get { return arrows[Direction.Up].Button; }
 		}
 		/// <summary>Gets the down button.</summary>
 		public static InputControl Down {
-			get { return arrows[Directions.Down].Button; }
+			get { return arrows[Direction.Down].Button; }
 		}
 
 		/// <summary>Gets the left button.</summary>
 		public static InputControl Left {
-			get { return arrows[Directions.Left].Button; }
+			get { return arrows[Direction.Left].Button; }
 		}
 
 		/// <summary>Gets the right button.</summary>
 		public static InputControl Right {
-			get { return arrows[Directions.Right].Button; }
+			get { return arrows[Direction.Right].Button; }
 		}
 
 		/// <summary>Gets the analog movement control.</summary>

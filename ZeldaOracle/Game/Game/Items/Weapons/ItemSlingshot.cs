@@ -55,9 +55,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			// Determine the seed spawn position based on player facing direction.
 			Vector2F seedPos;
-			if (direction == Directions.Up)
+			if (direction == Direction.Up)
 				seedPos = Directions.ToVector(direction) * 1;
-			else if (direction == Directions.Down)
+			else if (direction == Direction.Down)
 				seedPos = Directions.ToVector(direction) * 8;
 			else
 				seedPos = new Vector2F(0, 6) + (Directions.ToVector(direction) * 4);

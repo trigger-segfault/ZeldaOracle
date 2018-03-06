@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Tile Flags", "enum_flags", "TileFlags", "General", "");
 			properties.Set("solidity", (int) TileSolidType.NotSolid)
 				.SetDocumentation("Solid Type", "enum", "TileSolidType", "General", "");
-			properties.Set("ledge_direction", Directions.Down)
+			properties.Set("ledge_direction", Direction.Down)
 				.SetDocumentation("Ledge Direction", "direction", "", "General", "");
 			//properties.Set("collision_model", "")
 			//	.SetDocumentation("Collision Model", "collision_model", "", "General", "");
@@ -241,7 +241,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public int LedgeDirection {
-			get { return properties.GetInteger("ledge_direction", Directions.Down); }
+			get { return properties.GetInteger("ledge_direction", Direction.Down); }
 			set { properties.Set("ledge_direction", value); }
 		}
 

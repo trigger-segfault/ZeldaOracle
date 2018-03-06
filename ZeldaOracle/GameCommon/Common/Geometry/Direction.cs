@@ -579,13 +579,13 @@ namespace ZeldaOracle.Common.Geometry {
 				direction -= addAmount;
 			else
 				direction += addAmount;
-			return GMath.Wrap(direction, Directions.Count);
+			return GMath.Wrap(direction, Direction.Count);
 		}
 
 		
 		// Return the opposite of the given direction.
 		public static int Reverse(int direction) {
-			return ((direction + Directions.Count / 2) % Directions.Count);
+			return ((direction + Direction.Count / 2) % Direction.Count);
 		}
 		
 		// Return true if the given direction is horizontal (left or right).
@@ -600,17 +600,17 @@ namespace ZeldaOracle.Common.Geometry {
 
 		// Return the given direction flipped horizontally over the y-axis.
 		public static int FlipHorizontal(int direction) {
-			return (Directions.West + Directions.Count - direction) % Directions.Count;
+			return (Directions.West + Direction.Count - direction) % Direction.Count;
 		}
 		
 		// Return the given direction flipped vertically over the x-axis.
 		public static int FlipVertical(int direction) {
-			return (Directions.Count - direction) % Directions.Count;
+			return (Direction.Count - direction) % Direction.Count;
 		}
 		
 		// Return a unit vector as a point in the given direction.
 		public static Point2I ToPoint(int direction) {
-			direction = direction % Directions.Count;
+			direction = direction % Direction.Count;
 			if (direction == Right)
 				return new Point2I(1, 0);
 			else if (direction == Up)
@@ -622,7 +622,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		// Return a unit vector in the given direction.
 		public static Vector2F ToVector(int direction) {
-			direction = direction % Directions.Count;
+			direction = direction % Direction.Count;
 			if (direction == Right)
 				return new Vector2F(1.0f, 0.0f);
 			else if (direction == Up)
@@ -644,13 +644,13 @@ namespace ZeldaOracle.Common.Geometry {
 
 		public static int FromPoint(Point2I point) {
 			if (point.X > 0)
-				return Directions.Right;
+				return Direction.Right;
 			if (point.Y < 0)
-				return Directions.Up;
+				return Direction.Up;
 			if (point.X < 0)
-				return Directions.Left;
+				return Direction.Left;
 			if (point.Y > 0)
-				return Directions.Down;
+				return Direction.Down;
 			return -1;
 		}
 		
@@ -658,31 +658,31 @@ namespace ZeldaOracle.Common.Geometry {
 			// Cheap algorithm for turning a vector into an axis-aligned direction.
 			if (GMath.Abs(vector.X) >= GMath.Abs(vector.Y)) {
 				if (vector.X < 0)
-					return Directions.Left;
+					return Direction.Left;
 				else if (vector.X > 0)
-					return Directions.Right;
+					return Direction.Right;
 				else
 					return -1;
 			}
 			else if (vector.Y < 0)
-				return Directions.Up;
+				return Direction.Up;
 			else
-				return Directions.Down;
+				return Direction.Down;
 		}
 
 		public static int RoundFromRadians(float radians) {
 			int dir = (int) GMath.Round(radians / GMath.QuarterAngle);
-			return GMath.Wrap(dir, Directions.Count);
+			return GMath.Wrap(dir, Direction.Count);
 		}
 
 		public static string ToString(int direction) {
-			if (direction == Directions.Right)
+			if (direction == Direction.Right)
 				return "right";
-			if (direction == Directions.Left)
+			if (direction == Direction.Left)
 				return "left";
-			if (direction == Directions.Up)
+			if (direction == Direction.Up)
 				return "up";
-			if (direction == Directions.Down)
+			if (direction == Direction.Down)
 				return "down";
 			return "invalid";
 		}

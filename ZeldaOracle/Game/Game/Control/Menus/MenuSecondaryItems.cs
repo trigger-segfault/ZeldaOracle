@@ -50,28 +50,28 @@ namespace ZeldaOracle.Game.Control.Menus {
 			for (int y = 0; y < gridSize.Y; y++) {
 				for (int x = 0; x < gridSize.X; x++) {
 					if (x == 0 && y == gridSize.Y - 1)
-						slots[x, y].SetConnection(Directions.Left, ringBagSlot);
+						slots[x, y].SetConnection(Direction.Left, ringBagSlot);
 					else if (x == 0)
-						slots[x, y].SetConnection(Directions.Left, slots[gridSize.X - 1, (y + gridSize.Y - 1) % gridSize.Y]);
+						slots[x, y].SetConnection(Direction.Left, slots[gridSize.X - 1, (y + gridSize.Y - 1) % gridSize.Y]);
 					else
-						slots[x, y].SetConnection(Directions.Left, slots[x - 1, y]);
+						slots[x, y].SetConnection(Direction.Left, slots[x - 1, y]);
 
 					if (x == gridSize.X - 1 && y == gridSize.Y - 2)
-						slots[x, y].SetConnection(Directions.Right, ringBagSlot);
+						slots[x, y].SetConnection(Direction.Right, ringBagSlot);
 					else if (x == gridSize.X - 1)
-						slots[x, y].SetConnection(Directions.Right, slots[0, (y + 1) % gridSize.Y]);
+						slots[x, y].SetConnection(Direction.Right, slots[0, (y + 1) % gridSize.Y]);
 					else
-						slots[x, y].SetConnection(Directions.Right, slots[x + 1, y]);
+						slots[x, y].SetConnection(Direction.Right, slots[x + 1, y]);
 
-					slots[x, y].SetConnection(Directions.Up, slots[x, (y + gridSize.Y - 1) % gridSize.Y]);
-					slots[x, y].SetConnection(Directions.Down, slots[x, (y + 1) % gridSize.Y]);
+					slots[x, y].SetConnection(Direction.Up, slots[x, (y + gridSize.Y - 1) % gridSize.Y]);
+					slots[x, y].SetConnection(Direction.Down, slots[x, (y + 1) % gridSize.Y]);
 				}
 			}
 
-			ringBagSlot.SetConnection(Directions.Left, slots[gridSize.X - 1, gridSize.Y - 2]);
-			ringBagSlot.SetConnection(Directions.Right, slots[0, gridSize.Y - 1]);
-			ringBagSlot.SetConnection(Directions.Up, slots[0, gridSize.Y - 2]);
-			ringBagSlot.SetConnection(Directions.Down, slots[0, 0]);
+			ringBagSlot.SetConnection(Direction.Left, slots[gridSize.X - 1, gridSize.Y - 2]);
+			ringBagSlot.SetConnection(Direction.Right, slots[0, gridSize.Y - 1]);
+			ringBagSlot.SetConnection(Direction.Up, slots[0, gridSize.Y - 2]);
+			ringBagSlot.SetConnection(Direction.Down, slots[0, 0]);
 		}
 
 

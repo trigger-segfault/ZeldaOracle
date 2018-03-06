@@ -19,7 +19,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void UpdateAI() {
 			if (isMoving)
-				speed = (Directions.IsHorizontal(direction) ? 1.25f : 0.25f);
+				speed = (direction.IsHorizontal ? 1.25f : 0.25f);
 			base.UpdateAI();
 		}
 	}

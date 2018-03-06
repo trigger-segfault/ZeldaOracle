@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			return false;
 		}
 
-		public override void OnPushing(int direction) {
+		public override void OnPushing(Direction direction) {
 			if (!IsMoving && IsPushableDirection(direction) &&
 				GameControl.Inventory.IsWeaponButtonDown(
 				GameControl.Inventory.GetItem("item_bracelet")))
@@ -118,8 +118,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		//-----------------------------------------------------------------------------
 
 		// Moves the roller.
-		private bool MoveRoller(int direction) {
-			if (IsVertical != Directions.IsVertical(direction))
+		private bool MoveRoller(Direction direction) {
+			if (direction.IsVertical != IsVertical)
 				return false;
 
 			if (Move(direction, 1, GameSettings.TILE_ROLLER_MOVE_SPEED)) {
@@ -131,14 +131,13 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			return false;
 		}
 
-		private bool IsPushableDirection(int direction) {
-			switch (direction) {
-			case Directions.Right:	return !IsVertical && CurrentPosition >= StartPosition;
-			case Directions.Up:		return  IsVertical && CurrentPosition <= StartPosition;
-			case Directions.Left:	return !IsVertical && CurrentPosition <= StartPosition;
-			case Directions.Down:	return  IsVertical && CurrentPosition >= StartPosition;
-			}
-			return false;
+		private bool IsPushableDirection(Direction direction) {
+			if (direction.IsVertical != IsVertical)
+				return false;
+			if (direction == Direction.Right || direction == Direction.Down)
+				return (CurrentPosition >= StartPosition);
+			else
+				return (CurrentPosition <= StartPosition);
 		}
 
 		private void ResetReturnTimer() {
@@ -173,8 +172,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			get { return Properties.GetBoolean("vertical", false); }
 		}
 
-		private int ReturnDirection {
-			get { return Directions.FromPoint(startLocation - Location); }
+		private Direction ReturnDirection {
+			get { return Direction.FromPoint(startLocation - Location); }
 		}
 
 		private int StartPosition {

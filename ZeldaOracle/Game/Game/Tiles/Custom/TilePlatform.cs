@@ -33,9 +33,9 @@ namespace ZeldaOracle.Game.Tiles {
 			path = new TilePath();
 			path.Repeats = true;
 
-			path.AddMove(Directions.Down,	1, 0.5f, 0);
-			path.AddMove(Directions.Up,		4, 0.5f, 0);
-			path.AddMove(Directions.Down,	3, 0.5f, 0);
+			path.AddMove(Direction.Down,	1, 0.5f, 0);
+			path.AddMove(Direction.Up,		4, 0.5f, 0);
+			path.AddMove(Direction.Down,	3, 0.5f, 0);
 			*/
 			CollisionModel = new CollisionModel(
 				new Rectangle2I(Size * GameSettings.TILE_SIZE));

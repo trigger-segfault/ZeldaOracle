@@ -91,7 +91,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnInitialize() {
 			base.OnInitialize();
 
-			direction		= Properties.GetInteger("direction", Directions.Down);
+			direction		= Properties.GetInteger("direction", Direction.Down);
 			extendDistance	= 0.0f;
 			isBeingPulled	= false;
 
@@ -105,13 +105,13 @@ namespace ZeldaOracle.Game.Tiles {
 			collisionBox.ExtendEdge(direction, 5);
 			CollisionModel = new CollisionModel(collisionBox);
 
-			if (direction == Directions.Right)
+			if (direction == Direction.Right)
 				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_RIGHT);
-			else if (direction == Directions.Up)
+			else if (direction == Direction.Up)
 				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_UP);
-			else if (direction == Directions.Left)
+			else if (direction == Direction.Left)
 				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_LEFT);
-			else if (direction == Directions.Down)
+			else if (direction == Direction.Down)
 				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_DOWN);
 		}
 
@@ -160,15 +160,15 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int direction = args.Properties.GetInteger("direction", Directions.Down);
+			int direction = args.Properties.GetInteger("direction", Direction.Down);
 			ISprite sprite = null;
-			if (direction == Directions.Right)
+			if (direction == Direction.Right)
 				sprite = GameData.SPR_TILE_PULL_HANDLE_RIGHT;
-			else if (direction == Directions.Up)
+			else if (direction == Direction.Up)
 				sprite = GameData.SPR_TILE_PULL_HANDLE_UP;
-			else if (direction == Directions.Left)
+			else if (direction == Direction.Left)
 				sprite = GameData.SPR_TILE_PULL_HANDLE_LEFT;
-			else if (direction == Directions.Down)
+			else if (direction == Direction.Down)
 				sprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
 			g.DrawSprite(
 				sprite,

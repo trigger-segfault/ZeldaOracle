@@ -186,7 +186,7 @@ namespace ZeldaOracle.Game {
 			MODEL_LEAP_LEDGE_UP		= new CollisionModel(new Rectangle2I(0, 0, 16, 4));
 			MODEL_LEAP_LEDGE_LEFT	= new CollisionModel(new Rectangle2I(0, 0, 4, 16));
 			MODEL_LEAP_LEDGE_DOWN	= new CollisionModel(new Rectangle2I(0, 12, 16, 4));
-			MODEL_LEAP_LEDGES = new CollisionModel[Directions.Count] {
+			MODEL_LEAP_LEDGES = new CollisionModel[Direction.Count] {
 				MODEL_LEAP_LEDGE_RIGHT,
 				MODEL_LEAP_LEDGE_UP,
 				MODEL_LEAP_LEDGE_LEFT,
@@ -247,7 +247,7 @@ namespace ZeldaOracle.Game {
 				.SetDocumentation("Die", "script", "", "", "Occurs when the monster dies.");
 
 
-			etd.Properties.Set("substrip_index", Directions.Down);
+			etd.Properties.Set("substrip_index", Direction.Down);
 
 			Resources.AddResource(id, etd);
 			return etd;

@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Distance	= 0;
 			Speed		= 1.0f;
 			Delay		= 0;
-			Direction	= Directions.Right;
+			Direction	= Direction.Right;
 		}
 	}
 

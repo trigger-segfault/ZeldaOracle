@@ -453,8 +453,8 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		/// <summary>Transition to a room adjacent to the current one.</summary>
-		public void EnterAdjacentRoom(int direction) {
-			Point2I nextLocation = roomLocation + Directions.ToPoint(direction);
+		public void EnterAdjacentRoom(Direction direction) {
+			Point2I nextLocation = roomLocation + direction.ToPoint();
 
 			// Transition to the room
 			if (Level.ContainsRoom(nextLocation)) {
@@ -577,7 +577,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Update tile and entity graphics
 			if (GameControl.AnimateRoom) {
-				tileManager.UpdateTiles();
+				tileManager.UpdateTileGraphics();
 				entityManager.UpdateEntityGraphics();
 			}
 

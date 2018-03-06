@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			InputControl grabButton = player.Inventory.GetSlotButton(bracelet.CurrentEquipSlot);
-			InputControl pullButton = Controls.GetArrowControl(Directions.Reverse(player.Direction));
+			InputControl pullButton = Controls.GetArrowControl(player.Direction.Reverse());
 			
 			timer--;
 

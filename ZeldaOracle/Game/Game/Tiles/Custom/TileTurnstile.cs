@@ -148,7 +148,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (player.IsOnGround) {
 				int direction = -1;
 
-				for (int dir = 0; dir < Directions.Count; dir++) {
+				for (int dir = 0; dir < Direction.Count; dir++) {
 					Rectangle2F sideRect = Rectangle2F.Translate(sideRects[dir], Position);
 
 					if (player.Physics.PositionedCollisionBox.Intersects(sideRect)) {

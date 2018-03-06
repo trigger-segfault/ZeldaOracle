@@ -29,7 +29,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Get the direction from the origin to a position along an axis. For
-		/// example, the direction to +1 along the X-Axis would be Directions.Right.
+		/// example, the direction to +1 along the X-Axis would be Direction.Right.
 		/// </summary>
 		public static Direction GetDirection(int axis, float positionOnAxis) {
 			if (axis == Axes.X)

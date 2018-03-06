@@ -173,11 +173,11 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 		/// <summary>Return the position along the axis of the collision-face for a
 		/// collision with this solid object in the given direction.</summary>
-		public float GetEdge(int direction) {
+		public float GetEdge(Direction direction) {
 			if (source.IsInsideCollision)
 				return SolidBox.GetEdge(direction);
 			else
-				return SolidBox.GetEdge(Directions.Reverse(direction));
+				return SolidBox.GetEdge(direction.Reverse());
 		}
 		
 		/// <summary>Calculate the perpendicular and latera penetration distances.
@@ -229,7 +229,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			Rectangle2F entityBox = Rectangle2F.Translate(
 				collisionBox, entityPosition);
 			return (entityBox.GetEdge(direction) - GetEdge(direction)) *
-				Directions.ToVector(direction)[Axis];
+				direction.ToVector()[Axis];
 		}
 
 

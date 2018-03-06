@@ -26,10 +26,10 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		//-----------------------------------------------------------------------------
 		
 		// Called when the player presses A on this tile, when facing the given direction.
-		public override bool OnAction(int direction) {
+		public override bool OnAction(Direction direction) {
 			if (!IsLooted) {
 
-				if (direction == Directions.Up) {
+				if (direction == Direction.Up) {
 					string rewardName = Properties.GetString("reward", "rupees_1");
 					Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 					RoomControl.GameControl.PushRoomState(

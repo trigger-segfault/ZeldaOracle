@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 			
-			Direction = Directions.Up;
+			Direction = Direction.Up;
 
 			// Start moving in a random angle
 			float randomAngle = GRandom.NextFloat(GMath.FullAngle);
@@ -96,10 +96,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Check for rebound collisions to update movement vector.
 			// We cannot rely on using Physics.Velocity because facing direction does 
 			// not always sync with physics velocity.
-			for (int i = 0; i < 4; i++) {
-				int axis = Directions.ToAxis(i);
-				if (physics.IsCollidingInDirection(i))
-					moveVector[axis] = -moveVector[axis];
+			foreach (Direction dir in Direction.Range) {
+				if (physics.IsCollidingInDirection(dir))
+					moveVector[dir.Axis] = -moveVector[dir.Axis];
 			}
 
 			// Rotate velocity

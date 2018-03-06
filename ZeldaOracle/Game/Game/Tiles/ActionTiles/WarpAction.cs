@@ -75,14 +75,14 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 			// Position the player.
 			if (warpType == WarpType.Entrance) {
-				if (edgeDirection == Directions.Down)
+				if (edgeDirection == Direction.Down)
 					player.Position += Directions.ToVector(edgeDirection) * 8.0f;
 				else
 					player.Position += Directions.ToVector(edgeDirection) * 16.0f;
 				player.Direction = Directions.Reverse(edgeDirection);
 			}
 			else {
-				int faceDirection = Properties.GetInteger("face_direction", Directions.Down);
+				int faceDirection = Properties.GetInteger("face_direction", Direction.Down);
 				player.Direction = faceDirection;
 			}
 
@@ -103,7 +103,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Create the game-state when entering a room through this warp point.
 		public GameState CreateEnterState() {
 			int distance = 19;
-			if (edgeDirection == Directions.Down)
+			if (edgeDirection == Direction.Down)
 				distance += 8;
 			if (warpType == WarpType.Entrance)
 				return RoomEnterExitState.CreateEnter(Directions.Reverse(edgeDirection), distance, null);
@@ -112,7 +112,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		// Create the room transition state for this warp point.
 		public RoomTransition CreateTransition(ActionTileDataInstance destination) {
-			int dir = destination.Properties.GetInteger("face_direction", Directions.Down);
+			int dir = destination.Properties.GetInteger("face_direction", Direction.Down);
 			if (warpType == WarpType.Stairs)
 				return new RoomTransitionFade();
 			return new RoomTransitionSplit();

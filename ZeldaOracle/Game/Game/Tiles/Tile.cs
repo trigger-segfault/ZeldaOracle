@@ -261,7 +261,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Called when the player presses A on this tile, when facing the given direction.
 		// Return true if player controls should be disabled for the rest of the frame.
-		public virtual bool OnAction(int direction) { return false; }
+		public virtual bool OnAction(Direction direction) { return false; }
 
 		// Called when the player hits this tile with the sword.
 		public virtual void OnSwordHit(ItemWeapon swordItem) {
@@ -324,7 +324,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		// Called when the player digs the tile with the shovel.
-		public virtual bool OnDig(int direction) {
+		public virtual bool OnDig(Direction direction) {
 			if (isMoving || !IsDigable)
 				return false;
 
@@ -358,7 +358,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		// Called while the player is trying to push the tile but before it's actually moved.
-		public virtual void OnPushing(int direction) { }
+		public virtual void OnPushing(Direction direction) { }
 
 		// Called when the player jumps and lands on the tile.
 		public virtual void OnLand(Point2I startTile) { }
@@ -1155,7 +1155,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Direction LedgeDirection {
-			get { return properties.GetInteger("ledge_direction", Directions.Down); }
+			get { return properties.GetInteger("ledge_direction", Direction.Down); }
 		}
 
 		public Polarity Polarity {
@@ -1195,7 +1195,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool IsFloating {
 			get {
 				if (roomControl.IsSideScrolling) {
-					Tile ssSurfaceTile = roomControl.TileManager.GetTopTile(Location + Directions.ToPoint(Directions.Down));
+					Tile ssSurfaceTile = roomControl.TileManager.GetTopTile(Location + Directions.ToPoint(Direction.Down));
 					return (ssSurfaceTile == null || !ssSurfaceTile.IsSolid || ssSurfaceTile.IsInMotion);
 					// TODO: Check if collision box does not have a flat surface on top?
 				}

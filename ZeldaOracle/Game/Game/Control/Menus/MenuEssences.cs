@@ -47,10 +47,10 @@ namespace ZeldaOracle.Game.Control.Menus {
 			}
 
 			for (int i = 0; i < 8; i++) {
-				group1.GetSlotAt(i).SetConnection(Directions.Up, group1.GetSlotAt((i + 7) % 8));
-				group1.GetSlotAt(i).SetConnection(Directions.Down, group1.GetSlotAt((i + 1) % 8));
-				group1.GetSlotAt(i).SetConnection(Directions.Left, group2);
-				group1.GetSlotAt(i).SetConnection(Directions.Right, group2);
+				group1.GetSlotAt(i).SetConnection(Direction.Up, group1.GetSlotAt((i + 7) % 8));
+				group1.GetSlotAt(i).SetConnection(Direction.Down, group1.GetSlotAt((i + 1) % 8));
+				group1.GetSlotAt(i).SetConnection(Direction.Left, group2);
+				group1.GetSlotAt(i).SetConnection(Direction.Right, group2);
 			}
 
 			//group2.AddSlot(new Point2I(112, 8), 32);
@@ -64,10 +64,10 @@ namespace ZeldaOracle.Game.Control.Menus {
 			group2.GetSlotAt(1).SlotItem = new CustomSlotItem("Save Screen", "Go to the Save Screen.", GameData.SPR_HUD_SAVE_BUTTON);
 
 			for (int i = 0; i < 2; i++) {
-				group2.GetSlotAt(i).SetConnection(Directions.Up, group2.GetSlotAt((i + 1) % 2));
-				group2.GetSlotAt(i).SetConnection(Directions.Down, group2.GetSlotAt((i + 1) % 2));
-				group2.GetSlotAt(i).SetConnection(Directions.Left, group1);
-				group2.GetSlotAt(i).SetConnection(Directions.Right, group1);
+				group2.GetSlotAt(i).SetConnection(Direction.Up, group2.GetSlotAt((i + 1) % 2));
+				group2.GetSlotAt(i).SetConnection(Direction.Down, group2.GetSlotAt((i + 1) % 2));
+				group2.GetSlotAt(i).SetConnection(Direction.Left, group1);
+				group2.GetSlotAt(i).SetConnection(Direction.Right, group1);
 			}
 		}
 

@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 			// Keep directional animations
 			if (player.StateParameters.AlwaysFaceUp) {
-				player.Direction = Directions.Up;
+				player.Direction = Direction.Up;
 			}
 			else if (player.StateParameters.AlwaysFaceLeftOrRight) {
 				if (player.Direction == Direction.Up)

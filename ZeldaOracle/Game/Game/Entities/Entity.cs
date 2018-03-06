@@ -306,9 +306,9 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public static bool AreEntitiesAligned(
-			Entity a, Entity b, int direction, float threshold)
+			Entity a, Entity b, Direction direction, float threshold)
 		{
-			return (GMath.Abs(a.Center - b.Center)[!Directions.IsVertical(direction)] <=
+			return (GMath.Abs(a.Center - b.Center)[direction.IsHorizontal] <=
 				threshold);
 		}
 
@@ -378,11 +378,11 @@ namespace ZeldaOracle.Game.Entities {
 			get {
 				if (Physics.IsEnabled) {
 					bool horizontal = GMath.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
-											(!Physics.IsCollidingInDirection(Directions.Left) &&
-											!Physics.IsCollidingInDirection(Directions.Right));
+											(!Physics.IsCollidingInDirection(Direction.Left) &&
+											!Physics.IsCollidingInDirection(Direction.Right));
 					bool vertical = GMath.Abs(Physics.SurfaceVelocity.Y) > GameSettings.EPSILON &&
-											(!Physics.IsCollidingInDirection(Directions.Up) &&
-											!Physics.IsCollidingInDirection(Directions.Down));
+											(!Physics.IsCollidingInDirection(Direction.Up) &&
+											!Physics.IsCollidingInDirection(Direction.Down));
 					Vector2F surfacePosition = Vector2F.Zero;
 					if (horizontal)	surfacePosition.X = Physics.SurfacePosition.X;
 					if (vertical)	surfacePosition.Y = Physics.SurfacePosition.Y;

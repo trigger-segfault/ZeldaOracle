@@ -90,8 +90,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void Update() {
 			InputControl grabButton = player.Inventory
 				.GetSlotButton(bracelet.CurrentEquipSlot);
-			InputControl pullButton = Controls.Arrows[
-				Directions.Reverse(player.Direction)];
+			InputControl pullButton = Controls.Arrows[player.Direction.Reverse()];
 
 			if (GetGrabTile() != tile || !grabButton.IsDown()) {
 				End();

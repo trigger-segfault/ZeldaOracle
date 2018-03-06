@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 		//-----------------------------------------------------------------------------
 
 		// Sets a single slot connections.
-		public void SetConnection(int direction, ISlotConnection connection) {
+		public void SetConnection(Direction direction, ISlotConnection connection) {
 			connections[direction] = connection;
 		}
 
@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 		}
 
 		// Gets the slot connection in the specified direction.
-		public ISlotConnection GetConnectionAt(int direction) {
+		public ISlotConnection GetConnectionAt(Direction direction) {
 			return connections[direction];
 		}
 

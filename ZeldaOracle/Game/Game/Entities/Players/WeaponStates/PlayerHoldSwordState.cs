@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private Animation weaponAnimation;
 		private ItemWeapon weapon;
 		private int chargeTimer;
-		private int direction;
+		private Direction direction;
 		protected UnitTool playerTool;
 
 
@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			weaponAnimation	= GameData.ANIM_SWORD_HOLD;
 			weapon			= null;
 			chargeTimer		= 0;
-			direction		= Directions.Right;
+			direction		= Direction.Right;
 			playerTool		= null;
 
 			StateParameters.ProhibitEnteringMinecart	= true;
@@ -72,7 +72,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Create cling effect
 				if (!tile.IsDestroyed && tile.ClingWhenStabbed) {
 					Effect clingEffect = new EffectCling(true);
-					Vector2F pos = player.Center + (13 * Directions.ToVector(direction));
+					Vector2F pos = player.Center + direction.ToVector(13);
 					player.RoomControl.SpawnEntity(clingEffect, pos);
 					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 				}

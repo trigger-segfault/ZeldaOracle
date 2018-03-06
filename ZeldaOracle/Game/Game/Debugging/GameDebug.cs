@@ -292,13 +292,13 @@ namespace ZeldaOracle.Game.Debug {
 
 			// Ctrl+Shift+Arrows: Instantly change rooms.
 			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Up))
-				ChangeRooms(Directions.Up);
+				ChangeRooms(Direction.Up);
 			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Down))
-				ChangeRooms(Directions.Down);
+				ChangeRooms(Direction.Down);
 			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Right))
-				ChangeRooms(Directions.Right);
+				ChangeRooms(Direction.Right);
 			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Left))
-				ChangeRooms(Directions.Left);
+				ChangeRooms(Direction.Left);
 			// Ctrl+Y: Cycle current room's zone
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Y)) {
 				List<string> zoneNames = Resources.GetResourceKeyList<Zone>();

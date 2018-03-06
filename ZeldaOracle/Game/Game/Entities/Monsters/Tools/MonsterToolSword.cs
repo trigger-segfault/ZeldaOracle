@@ -67,8 +67,8 @@ namespace ZeldaOracle.Game.Entities.Monsters.Tools {
 				SWORD_BOXES[unit.Direction], (Point2I) unit.CenterOffset);
 			
 			// Change depth based on facing direction
-			DrawAboveUnit = (unit.Direction == Directions.Right ||
-				unit.Direction == Directions.Down);
+			DrawAboveUnit = (unit.Direction == Direction.Right ||
+				unit.Direction == Direction.Down);
 
 			Graphics.ColorDefinitions = Unit.Graphics.ColorDefinitions;
 

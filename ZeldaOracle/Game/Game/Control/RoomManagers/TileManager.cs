@@ -573,8 +573,6 @@ namespace ZeldaOracle.Game.Control {
 				{
 					Rectangle2F tBounds = t.Bounds;
 					if (t != tile) {
-						if (t.Location == new Point2I(3, 3) && tile.IsMoving)
-							Console.WriteLine("{0}, {1}", tileBoundsNew.Contains(tBounds), tileBoundsOld.Contains(tBounds));
 						if (tileBoundsNew.Contains(tBounds) && !tileBoundsOld.Contains(tBounds))
 							t.OnCoverComplete(tile);
 						else if (tileBoundsNew.Intersects(tBounds) && !tileBoundsOld.Intersects(tBounds))

@@ -123,16 +123,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Determine the magnetic pull direction
 			Tile magneticTile = (Tile) magneticObject;
-			int moveDirection = player.Direction;
+			Direction moveDirection = player.Direction;
 			if (Polarity == magneticTile.Polarity)
-				moveDirection = Directions.Reverse(moveDirection);
-			int axis = Directions.ToAxis(moveDirection);
+				moveDirection = player.Direction.Reverse();
+			int axis = moveDirection.Axis;
 
 			// If the player is moving in the opposite direction of the megetic
 			// pull direction, then flip his velocity
-			if (player.Physics.Velocity.Dot(
-				Directions.ToVector(moveDirection)) < 0.0f)
-			{
+			if (player.Physics.Velocity.Dot(moveDirection.ToVector()) < 0.0f) {
 				Vector2F newVelocity = player.Physics.Velocity;
 				newVelocity[axis] = -newVelocity[axis];
 				player.Physics.Velocity = newVelocity;
@@ -154,7 +152,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (CheckMagneticObject())
 				return;
 
-			int axis = Directions.ToAxis(player.Direction);
+			int axis = player.Direction.Axis;
 			Tile magneticTile = (Tile) magneticObject;
 				
 			// Check if the player is jumping and can move while jumping
@@ -173,8 +171,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			float distance = GMath.Abs(
 				magneticTile.Center[axis] - player.Center[axis]);
 			if (distance > 32.0f)
-				velocity = Directions.ToVector(player.Direction) *
-					GameSettings.PLAYER_MAGNET_GLOVE_MOVE_SPEED;
+				velocity = player.Direction.ToVector(
+					GameSettings.PLAYER_MAGNET_GLOVE_MOVE_SPEED);
 			else {
 				velocity = (magneticTile.Center - player.Center).Normalized *
 					GameSettings.PLAYER_MAGNET_GLOVE_MOVE_SPEED;
@@ -203,8 +201,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (!((TileMagnetSpinner) magneticTile).IsRotating) {
 					subStateMachine.EndCurrentState();
 					player.SetPositionByCenter(magneticTile.Center -
-						Directions.ToVector(player.Direction) *
-						GameSettings.TILE_SIZE);
+						player.Direction.ToVector(GameSettings.TILE_SIZE));
 					subStateMachine.BeginState(MagnetState.AttachedToSpinner);
 				}
 			}
@@ -250,7 +247,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			ball.IsMoving = true;
 			ball.Direction = player.Direction;
 			if (ball.Polarity != Polarity)
-				ball.Direction = Directions.Reverse(ball.Direction);
+				ball.Direction = player.Direction.Reverse();
 		}
 
 		private void OnEndPullBallState() {
@@ -264,7 +261,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				return;
 
 			MagnetBall ball = (MagnetBall) magneticObject;
-			int axis = Directions.ToAxis(player.Direction);
+			int axis = player.Direction.Axis;
 			int lateralAxis = Axes.GetOpposite(axis);
 			float distance = GMath.Abs(ball.Center[axis] - player.Center[axis]);
 
@@ -276,8 +273,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			{
 				// Move away/toward the player
 				velocity[axis] = ball.Physics.Velocity[axis];
-				velocity += Directions.ToVector(ball.Direction) *
-					GameSettings.MAGNET_BALL_ACCELERATION;
+				velocity += ball.Direction.ToVector(
+					GameSettings.MAGNET_BALL_ACCELERATION);
 				velocity[axis] = GMath.Clamp(velocity[axis],
 					-GameSettings.MAGNET_BALL_MAX_MOVE_SPEED,
 					GameSettings.MAGNET_BALL_MAX_MOVE_SPEED);
@@ -339,7 +336,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		/// <summary>Get the nearest magnetic object in front of and aligned with the 
 		/// player, or null if none was found.</summary>
 		private object GetMagneticObject() {
-			int axis = Directions.ToAxis(player.Direction);
+			int axis = player.Direction.Axis;
 			int lateralAxis = Axes.GetOpposite(axis);
 			RangeF lateralRange = alignBox.GetAxisRange(lateralAxis);
 			lateralRange.Min -= GameSettings.EPSILON;
@@ -363,8 +360,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				if (ball.IsOnGround &&
 					lateralRange.Contains(ballToPlayer[lateralAxis]) &&
-					Directions.NearestFromVector(
-						ball.Center - player.Center) == player.Direction &&
+					Direction.FromVector(ball.Center - player.Center) ==
+						player.Direction &&
 					(bestObject == null || distance < bestDistance))
 				{
 					bestDistance = distance;

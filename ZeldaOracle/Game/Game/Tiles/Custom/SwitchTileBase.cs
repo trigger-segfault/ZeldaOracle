@@ -1,4 +1,5 @@
-﻿using ZeldaOracle.Common.Scripting;
+﻿using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
@@ -65,7 +66,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Toggle();
 		}
 
-		public override bool OnDig(int direction) {
+		public override bool OnDig(Direction direction) {
 			Toggle();
 			return false;
 		}
