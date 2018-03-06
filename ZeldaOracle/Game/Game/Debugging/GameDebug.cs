@@ -113,15 +113,16 @@ namespace ZeldaOracle.Game.Debug {
 			Console.WriteLine("Entity Heirarchy:");
 			Console.ForegroundColor = ConsoleColor.White;
 
-			for (int i = 0; i < RoomControl.EntityCount; i++) {
-				Entity entity = RoomControl.Entities[i];
+			List<Entity> entities = RoomControl.EntityManager.EntityUpdateOrder;
+			for (int i = 0; i < entities.Count; i++) {
+				Entity entity = entities[i];
 				if (entity.Parent == null)
 					PrintEntityDebugInfo(entity, " ");
 			}
 		}
 
 		public static void PrintEntityDebugInfo(Entity entity, string tabs) {
-			Console.WriteLine("{0, 3}.{1}{2}",
+			Console.WriteLine("{0, 4}.{1}{2}",
 				entity.EntityIndex, tabs, entity.GetType().Name);
 			foreach (Entity child in entity.Children) {
 				PrintEntityDebugInfo(child, tabs + "  ");

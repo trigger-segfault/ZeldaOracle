@@ -17,9 +17,6 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		//-----------------------------------------------------------------------------
 
 		public PlayerToolSword() {
-			// Entity
-			IsPersistentBetweenRooms = true;
-			
 			// Interactions
 			Interactions.Enable();
 			Interactions.InteractionType = InteractionType.Sword;

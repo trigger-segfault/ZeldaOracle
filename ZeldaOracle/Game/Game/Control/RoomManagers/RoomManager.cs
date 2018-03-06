@@ -1,4 +1,6 @@
 ﻿
+using ZeldaOracle.Game.Entities.Players;
+
 namespace ZeldaOracle.Game.Control {
 
 	/// <summary>Base class for room management, contained by a RoomControl.</summary>
@@ -28,6 +30,11 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Get the reference to the game controller.</summary>
 		public GameControl GameControl {
 			get { return roomControl.GameControl; }
+		}
+
+		/// <summary>Get the reference to the player entity.</summary>
+		public Player Player {
+			get { return roomControl.Player; }
 		}
 	}
 }

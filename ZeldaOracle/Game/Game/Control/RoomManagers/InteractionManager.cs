@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Detect all currently occurring interactions.</summary>
 		private void DetectInteractions() {
-			foreach (Entity actionEntity in RoomControl.ActiveEntities) {
+			foreach (Entity actionEntity in RoomControl.AliveEntities) {
 				if (actionEntity.Interactions.IsEnabled &&
 					actionEntity.Interactions.InteractionType != InteractionType.None)
 				{
@@ -66,7 +66,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Detect interactions for collision with moving blocks
-			foreach (Entity actionEntity in RoomControl.ActiveEntities) {
+			foreach (Entity actionEntity in RoomControl.AliveEntities) {
 				if (!actionEntity.Interactions.IsEnabled)
 					continue;
 
@@ -114,7 +114,7 @@ namespace ZeldaOracle.Game.Control {
 				actionBox, actionEntity.Position);
 
 			// Find all reacting entities
-			foreach (Entity reactionEntity in RoomControl.ActiveEntities) {
+			foreach (Entity reactionEntity in RoomControl.AliveEntities) {
 				Rectangle2F reactionBox = reactionEntity.Interactions.InteractionBox;
 				Rectangle2F positionedReactionBox = Rectangle2F.Translate(
 					reactionBox, reactionEntity.Position);
@@ -310,7 +310,7 @@ namespace ZeldaOracle.Game.Control {
 				actionBox, actionEntity.Position);
 
 			// Find all reacting entities
-			foreach (Entity reactionEntity in RoomControl.ActiveEntities) {
+			foreach (Entity reactionEntity in RoomControl.AliveEntities) {
 				Rectangle2F reactionBox = reactionEntity.Interactions.InteractionBox;
 				Rectangle2F positionedReactionBox = Rectangle2F.Translate(
 					reactionBox, reactionEntity.Position);

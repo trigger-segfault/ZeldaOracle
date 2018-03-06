@@ -1,6 +1,7 @@
 ﻿using ZeldaOracle.Game.Entities.Units;
 
 namespace ZeldaOracle.Game.Entities.Players.Tools {
+
 	public class PlayerToolVisual : UnitTool {
 
 
@@ -11,7 +12,6 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		public PlayerToolVisual() {
 			toolType = UnitToolType.Visual;
 			syncAnimationWithDirection = false;
-			IsPersistentBetweenRooms = true;
 		}
 
 	}

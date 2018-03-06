@@ -74,7 +74,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Setup magnet effect animation entity
 			magnetEffect = new Entity();
 			magnetEffect.Graphics.DepthLayer = DepthLayer.EffectMagnetGloves;
-			magnetEffect.IsPersistentBetweenRooms = true;
 
 			// Setup sub-state machine
 			subStateMachine = new GenericStateMachine<MagnetState>();

@@ -42,21 +42,17 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		}
 
 		protected void SetupNewRoom(bool setupPalette) {
-			// Move the player from the old room to the new room.
-			// RoomControl.BeginRoom() will update the player's RoomControl
-			// reference.
-
-			// Transfer all persistent entities to the new RoomControl
+			// Get a list of persistent entities to transfer to the new Room Control
 			List<Entity> persistentEntities = new List<Entity>();
 			for (int i = 0; i < OldRoomControl.Entities.Count; i++) {
 				Entity entity = OldRoomControl.Entities[i];
-				if (entity.IsPersistentBetweenRooms) {
+				if (entity.IsPersistentBetweenRooms || entity == GameControl.Player) {
 					persistentEntities.Add(entity);
 					OldRoomControl.Entities.RemoveAt(i--);
 				}
 			}
-			//OldRoomControl.Entities.Remove(Player);
 
+			// Begin the new room with the persistent entities
 			NewRoomControl.BeginRoom(persistentEntities);
 
 			if (eventSetupNewRoom != null)
@@ -65,7 +61,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			NewRoomControl.ViewControl.CenterOn(
 				Player.DrawCenter + Player.ViewFocusOffset);
 
-			// Mark the player's respawn point in the new room.
+			// Mark the player's respawn point in the new room
 			Player.MarkRespawn();
 
 			Player.OnEnterRoom();

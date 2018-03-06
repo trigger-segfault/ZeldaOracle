@@ -7,7 +7,7 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Control {
 
-	public class RoomPhysics : RoomManager{
+	public class RoomPhysics : RoomManager {
 		
 
 		//-----------------------------------------------------------------------------

@@ -194,7 +194,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return (isOpen && !isPlayerBlockingClose); }
 		}
 
-		public int Direction {
+		public Direction Direction {
 			 get { return Properties.GetInteger("direction", 0); }
 		}
 	}

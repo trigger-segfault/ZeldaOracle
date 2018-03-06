@@ -360,6 +360,7 @@ namespace ZeldaOracle.Game.Entities {
 		/// </summary>
 		public bool IsInRoom {
 			get { return isInRoom; }
+			set { isInRoom = value; }
 		}
 
 		/// <summary>Returns true if the entity is still alive and being managed by

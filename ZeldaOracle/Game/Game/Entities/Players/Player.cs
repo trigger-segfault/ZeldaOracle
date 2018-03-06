@@ -467,7 +467,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			BeginControlState(stateRespawnDeath);
 		}
 
-		///<summary>Mark the player's current position/direction as where he should respawn.</summary>
+		///<summary>Mark the player's current position/direction as where he should
+		///respawn.</summary>
 		public void MarkRespawn() {
 			respawnPosition		= position;
 			respawnDirection	= direction;
@@ -484,8 +485,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// If colliding with a door, then move forward one tile
 			foreach (Tile tile in Physics.GetTilesMeeting(position)) {
 				if ((tile is TileDoor) && tile.IsSolid) {
-					SetPositionByCenter(tile.Center + Directions.ToVector(
-						((TileDoor) tile).Direction) * GameSettings.TILE_SIZE);
+					SetPositionByCenter(tile.Center +
+						((TileDoor) tile).Direction.ToVector(GameSettings.TILE_SIZE));
 					break;
 				}
 			}
@@ -596,10 +597,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 		
 		private bool IsOnHazardTile() {
-			return	physics.IsInHole ||
-					(physics.IsInWater && !swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater)) ||
-					(physics.IsInOcean && !swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean)) ||
-					(physics.IsInLava  && !swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava));
+			return physics.IsInHole ||
+				(physics.IsInWater &&
+					!swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater)) ||
+				(physics.IsInOcean &&
+					!swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean)) ||
+				(physics.IsInLava  &&
+					!swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava));
 		}
 
 		/// <summary>Custom collision function for colliding with room edges.</summary>
@@ -813,7 +817,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void OnLand() {
 			base.OnLand();
 
-			// Notify the tile we landed on.
+			// Notify the tile we landed on
 			Tile tile = RoomControl.GetTopTile(RoomControl.GetTileLocation(Position));
 			if (tile != null)
 				tile.OnLand(movement.JumpStartTile);
@@ -823,7 +827,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
 
-			if (RoomControl.DeathOutOfBounds && Position.Y + 3 >= RoomControl.RoomBounds.Bottom) {
+			if (RoomControl.DeathOutOfBounds &&
+				Position.Y + 3 >= RoomControl.RoomBounds.Bottom)
+			{
 				RespawnDeathInstantaneous();
 			}
 			else {
