@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		private void Explode() {
 			BombExplosion bombExplosion = new BombExplosion();
-			RoomControl.SpawnEntity(bombExplosion, Center, zPosition);
+			RoomControl.SpawnEntity(bombExplosion, Center, ZPosition);
 			AudioSystem.PlaySound(GameData.SOUND_BOMB_EXPLODE);
 
 			// Explode nearby top tiles.

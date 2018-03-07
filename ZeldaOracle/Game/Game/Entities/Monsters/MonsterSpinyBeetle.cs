@@ -213,8 +213,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		private void PickupInteraction(Entity sender, EventArgs args) {
-			RoomControl.Player.CarryState.SetCarryObject(coverTile);
-			RoomControl.Player.BeginWeaponState(RoomControl.Player.CarryState);
+			RoomControl.Player.PickupTile(coverTile);
 			Uncover(false);
 		}
 

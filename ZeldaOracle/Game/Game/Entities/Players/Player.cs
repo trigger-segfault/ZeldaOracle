@@ -410,8 +410,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public void OnJump() {
-			if (eventJump != null)
-				eventJump(this);
+			eventJump?.Invoke(this);
+		}
+
+		/// <summary>Pickup the given entity.</summary>
+		public void PickupEntity(Entity entity) {
+			stateCarry.SetCarriedObject(entity);
+			BeginWeaponState(stateCarry);
+		}
+
+		/// <summary>Pickup the given tile, removing it from the tile grid.</summary>
+		public void PickupTile(Tile tile) {
+			if (tile.IsAlive) {
+				tile.SpawnDrop();
+				RoomControl.RemoveTile(tile);
+			}
+			stateCarry.SetCarriedObject(tile);
+			BeginWeaponState(stateCarry);
 		}
 
 

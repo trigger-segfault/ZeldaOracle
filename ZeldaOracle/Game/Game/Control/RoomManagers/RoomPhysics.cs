@@ -28,7 +28,8 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = 0; i < RoomControl.Entities.Count; i++) {
 				Entity entity = RoomControl.Entities[i];
 				if (entity != RoomControl.Player && entity.Physics != null &&
-					entity.Physics.IsEnabled)
+					entity.Physics.IsEnabled &&
+					entity.Parent == null)
 				{
 					ProcessEntityPhysics(entity);
 				}

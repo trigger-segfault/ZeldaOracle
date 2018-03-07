@@ -43,8 +43,7 @@ namespace ZeldaOracle.Game.Items {
 					UseAmmo();
 					Bomb bomb = new Bomb();
 					bombTracker.TrackEntity(bomb);
-					Player.CarryState.SetCarryObject(bomb);
-					Player.BeginWeaponState(Player.CarryState);
+					Player.PickupEntity(bomb);
 					return true;
 				}
 			}
@@ -56,9 +55,7 @@ namespace ZeldaOracle.Game.Items {
 							GameSettings.PLAYER_BRACELET_BOXES[Player.Direction],
 							Player.Interactions.InteractionZRange)))
 					{
-						Player.CarryState.SetCarryObject(bomb);
-						Player.BeginWeaponState(Player.CarryState);
-						bomb.RemoveFromRoom();
+						Player.PickupEntity(bomb);
 						return true;
 					}
 				}

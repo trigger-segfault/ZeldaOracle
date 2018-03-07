@@ -37,9 +37,7 @@ namespace ZeldaOracle.Game.Entities {
 		{
 			if (actionEntity.RootEntity is Player) {
 				Player player = (Player) actionEntity.RootEntity;
-				player.CarryState.SetCarryObject(reactionEntity);
-				player.BeginWeaponState(player.CarryState);
-				reactionEntity.RemoveFromRoom();
+				player.PickupEntity(reactionEntity);
 			}
 		}
 	}

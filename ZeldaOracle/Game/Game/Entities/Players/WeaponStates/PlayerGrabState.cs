@@ -55,13 +55,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			Item item = player.Inventory.GetItem("item_bracelet");
 
 			if (tile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
-				player.CarryState.SetCarryObject(tile);
-				player.BeginWeaponState(player.CarryState);
-				tile.SpawnDrop();
-				player.RoomControl.RemoveTile(tile);
+				player.PickupTile(tile);
 				return true;
 			}
-
 			return false;
 		}
 

@@ -92,6 +92,9 @@ namespace ZeldaOracle.Game.Entities {
 		public void AttachEntity(Entity child) {
 			child.parent = this;
 			children.Add(child);
+			
+			child.Physics.Velocity = Vector2F.Zero;
+			child.Physics.ZVelocity = 0.0f;
 
 			// Make sure the entity is in the room
 			if (!child.IsAlive || child.roomControl != roomControl)
@@ -102,6 +105,8 @@ namespace ZeldaOracle.Game.Entities {
 			if (children.Contains(child)) {
 				child.parent = null;
 				children.Remove(child);
+				child.position = position + child.attachmentOffset;
+				child.zPosition = zPosition + child.attachmentZOffset;
 			}
 		}
 
@@ -376,7 +381,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Vector2F DrawPosition {
 			get {
-				if (Physics.IsEnabled) {
+				if (Physics.IsEnabled && parent == null) {
 					bool horizontal = GMath.Abs(Physics.SurfaceVelocity.X) > GameSettings.EPSILON &&
 											(!Physics.IsCollidingInDirection(Direction.Left) &&
 											!Physics.IsCollidingInDirection(Direction.Right));

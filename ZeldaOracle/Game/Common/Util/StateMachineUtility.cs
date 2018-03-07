@@ -228,8 +228,12 @@ namespace ZeldaOracle.Common.Util {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns the ID of the current state.</summary>
-		public IDType CurrentState {
-			get { return currentState.ID; }
+		public IDType? CurrentState {
+			get {
+				if (currentState == null)
+					return null;
+				return currentState.ID;
+			}
 		}
 	}
 
