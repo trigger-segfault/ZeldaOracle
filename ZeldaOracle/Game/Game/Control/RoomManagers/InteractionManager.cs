@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Control {
 				if (actionEntity.Interactions.IsEnabled &&
 					actionEntity.Interactions.InteractionType != InteractionType.None)
 				{
-					Rectangle2F actionBox = actionEntity.Interactions.InteractionBox;
+					HitBox actionBox = actionEntity.Interactions.HitBox;
 					DetectReactionsFromEntity(actionEntity,
 						actionEntity.Interactions.InteractionType, actionBox,
 						actionEntity.Interactions.InteractionEventArgs);
@@ -92,11 +92,11 @@ namespace ZeldaOracle.Game.Control {
 							actionEntity, tileProxy, InteractionType.Block);
 						interaction.StayAlive = true;
 						interaction.ActionBox =
-							actionEntity.Interactions.InteractionBox;
-						interaction.ReactionBox = Rectangle2F.Translate(
+							actionEntity.Interactions.HitBox;
+						interaction.ReactionBox = new HitBox(Rectangle2F.Translate(
 							collision.Tile.CollisionModel.Boxes[
 								collision.Source.CollisionBoxIndex],
-							collision.Tile.Position);
+							collision.Tile.Position), new RangeF(0, 32));
 						interaction.Arguments =arguments;
 						interaction.Duration++;
 					}
@@ -107,17 +107,17 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Detect all interactions caused by the given entity and
 		/// interaction type.</summary>
 		private void DetectReactionsFromEntity(Entity actionEntity,
-			InteractionType type, Rectangle2F actionBox, EventArgs arguments,
+			InteractionType type, HitBox actionBox, EventArgs arguments,
 			bool autoDetected = true)
 		{
-			Rectangle2F positionedActionBox = Rectangle2F.Translate(
-				actionBox, actionEntity.Position);
+			HitBox positionedActionBox = HitBox.Translate(
+				actionBox, actionEntity.Position, actionEntity.ZPosition);
 
 			// Find all reacting entities
 			foreach (Entity reactionEntity in RoomControl.AliveEntities) {
-				Rectangle2F reactionBox = reactionEntity.Interactions.InteractionBox;
-				Rectangle2F positionedReactionBox = Rectangle2F.Translate(
-					reactionBox, reactionEntity.Position);
+				HitBox reactionBox = reactionEntity.Interactions.HitBox;
+				HitBox positionedReactionBox = HitBox.Translate(
+					reactionBox, reactionEntity.Position, reactionEntity.ZPosition);
 
 				if (reactionEntity != actionEntity &&
 					reactionEntity.Interactions.IsEnabled &&
@@ -289,13 +289,13 @@ namespace ZeldaOracle.Game.Control {
 			ReactionCondition condition = null)
 		{
 			TriggerInstantReaction(actionEntity, type,
-				actionEntity.Interactions.InteractionBox,
+				actionEntity.Interactions.HitBox,
 				actionEntity.Interactions.InteractionEventArgs, condition);
 		}
 
 		/// <summary>Instantly detect and trigger an reactions for an entity.</summary>
 		public void TriggerInstantReaction(Entity actionEntity, InteractionType type,
-			Rectangle2F actionBox, ReactionCondition condition = null)
+			HitBox actionBox, ReactionCondition condition = null)
 		{
 			TriggerInstantReaction(actionEntity, type, actionBox,
 				actionEntity.Interactions.InteractionEventArgs, condition);
@@ -303,17 +303,17 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Instantly detect and trigger an reactions for an entity.</summary>
 		public void TriggerInstantReaction(Entity actionEntity, InteractionType type,
-			Rectangle2F actionBox, EventArgs arguments,
+			HitBox actionBox, EventArgs arguments,
 			ReactionCondition condition = null)
 		{
-			Rectangle2F positionedActionBox = Rectangle2F.Translate(
-				actionBox, actionEntity.Position);
+			HitBox positionedActionBox = HitBox.Translate(
+				actionBox, actionEntity.Position, actionEntity.ZPosition);
 
 			// Find all reacting entities
 			foreach (Entity reactionEntity in RoomControl.AliveEntities) {
-				Rectangle2F reactionBox = reactionEntity.Interactions.InteractionBox;
-				Rectangle2F positionedReactionBox = Rectangle2F.Translate(
-					reactionBox, reactionEntity.Position);
+				HitBox reactionBox = reactionEntity.Interactions.HitBox;
+				HitBox positionedReactionBox = HitBox.Translate(
+					reactionBox, reactionEntity.Position, reactionEntity.ZPosition);
 
 				if (reactionEntity != actionEntity &&
 					reactionEntity.Interactions.IsEnabled &&
@@ -346,13 +346,13 @@ namespace ZeldaOracle.Game.Control {
 		public void TriggerReaction(Entity actionEntity, InteractionType type)
 		{
 			DetectReactionsFromEntity(actionEntity, type,
-				actionEntity.Interactions.InteractionBox,
+				actionEntity.Interactions.HitBox,
 				actionEntity.Interactions.InteractionEventArgs, false);
 		}
 
 		/// <summary>Cause an action to happen for this frame.</summary>
 		public void TriggerReaction(Entity actionEntity,
-			InteractionType type, Rectangle2F actionBox)
+			InteractionType type, HitBox actionBox)
 		{
 			DetectReactionsFromEntity(actionEntity,
 				type, actionBox, EventArgs.Empty, false);
@@ -360,7 +360,7 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Cause an action to happen for this frame.</summary>
 		public void TriggerReaction(Entity actionEntity, InteractionType type,
-			Rectangle2F actionBox, EventArgs arguments)
+			HitBox actionBox, EventArgs arguments)
 		{
 			DetectReactionsFromEntity(actionEntity, type, actionBox, arguments, false);
 		}

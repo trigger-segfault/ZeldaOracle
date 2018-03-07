@@ -43,6 +43,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			// Interactions
 			Interactions.Enable();
 			Interactions.InteractionBox	= new Rectangle2I(-4, -9, 8, 8);
+			Interactions.InteractionZRange = new RangeF(-5, 5);
 			Reactions[InteractionType.Bracelet].Set(EntityReactions.Pickup);
 			Reactions[InteractionType.Bracelet].CollisionBox = null;
 		}

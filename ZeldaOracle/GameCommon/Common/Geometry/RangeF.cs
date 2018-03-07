@@ -97,7 +97,7 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 
 		public bool Intersects(RangeF other) {
-			return (Max > other.Min && Min < other.Max);
+			return (Max > other.Min && other.Max > Min);
 		}
 
 		

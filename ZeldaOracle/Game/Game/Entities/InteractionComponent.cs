@@ -4,6 +4,41 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities {
 
+	/// <summary>A 3D hit-box, consisting of a 2D rectangle and a Z-range. Used to
+	/// detect if two enteties are touching for interaction processing.</summary>
+	public struct HitBox {
+
+		private Rectangle2F box;
+		private RangeF zRange;
+
+		public HitBox(Rectangle2F box, RangeF zRange) {
+			this.box = box;
+			this.zRange = zRange;
+		}
+
+		public bool Intersects(HitBox other) {
+			return (box.Intersects(other.box) && zRange.Intersects(other.zRange));
+		}
+
+		public static HitBox Translate(HitBox box, Vector2F xy, float z) {
+			HitBox result = new HitBox();
+			result.box = Rectangle2F.Translate(box.box, xy);
+			result.zRange = new RangeF(box.zRange.Min + z, box.zRange.Max + z);
+			return result;
+		}
+
+		public Rectangle2F XYBox {
+			get { return box; }
+			set { box = value; }
+		}
+
+		public RangeF ZRange {
+			get { return zRange; }
+			set { zRange = value; }
+		}
+	}
+
+
 	/// <summary>The entity component that has settings for how an entity interacts
 	/// with other entities.</summary>
 	public class InteractionComponent : EntityComponent {
@@ -21,6 +56,7 @@ namespace ZeldaOracle.Game.Entities {
 		/// for detecting that specific interaction type, which will be used instead of
 		/// the default interaction box.</summary>
 		private Rectangle2F interactionBox;
+		private RangeF interactionZRange;
 		/// <summary>The interaction type which the entity triggers reactions for.
 		/// </summary>
 		private InteractionType interactionType;
@@ -58,6 +94,7 @@ namespace ZeldaOracle.Game.Entities {
 			base(entity)
 		{
 			interactionBox			= Rectangle2F.Zero;
+			interactionZRange		= new RangeF(-1, 4);
 			reactionManager			= new ReactionManager(entity);
 			interactionType			= InteractionType.None;
 			interactionEventArgs	= EventArgs.Empty;
@@ -74,8 +111,12 @@ namespace ZeldaOracle.Game.Entities {
 
 		/// <summary>Get the hitbox used to detect reactions for the given interaction
 		/// type.</summary>
-		public Rectangle2F GetInteractionBox(InteractionType interactionType) {
-			return interactionBox;
+		public HitBox GetHitBox(InteractionType interactionType) {
+			ReactionHandler handler = reactionManager[interactionType];
+			HitBox hitBox = HitBox;
+			if (handler.CollisionBox != null)
+				hitBox.XYBox = handler.CollisionBox.Value;
+			return hitBox;
 		}
 
 
@@ -138,17 +179,17 @@ namespace ZeldaOracle.Game.Entities {
 		// Interaction Queries
 		//-----------------------------------------------------------------------------
 
-		public bool IsMeetingEntity(Entity reactionEntity, InteractionType type,
-			Rectangle2F actionBox)
+		public bool IsMeetingEntity(Entity reactionEntity,
+			InteractionType type, HitBox actionBox)
 		{
 			if (!reactionEntity.Interactions.IsEnabled)
 				return false;
-			Rectangle2F rectionBox =
-				reactionEntity.Interactions.GetInteractionBox(type);
-			Rectangle2F positionedRectionBox =
-				Rectangle2F.Translate(rectionBox, reactionEntity.Position);
-			Rectangle2F positionedActionBox =
-				Rectangle2F.Translate(actionBox, Entity.Position);
+			HitBox rectionBox =
+				reactionEntity.Interactions.GetHitBox(type);
+			HitBox positionedRectionBox = HitBox.Translate(rectionBox,
+				reactionEntity.Position, reactionEntity.ZPosition);
+			HitBox positionedActionBox = HitBox.Translate(actionBox,
+				Entity.Position, Entity.ZPosition);
 			return positionedActionBox.Intersects(positionedRectionBox);
 		}
 		
@@ -224,7 +265,20 @@ namespace ZeldaOracle.Game.Entities {
 			get { return interactionBox; }
 			set { interactionBox = value; }
 		}
-		
+
+		public RangeF InteractionZRange {
+			get { return interactionZRange; }
+			set { interactionZRange = value; }
+		}
+
+		public HitBox HitBox {
+			get { return new HitBox(interactionBox, interactionZRange); }
+			set {
+				interactionBox = value.XYBox;
+				interactionZRange = value.ZRange;
+			}
+		}
+
 		/// <summary>The interaction box translated to the entity's current position.
 		/// </summary>
 		public Rectangle2F PositionedInteractionBox {

@@ -85,8 +85,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			EventArgs actionArguments = new WeaponInteractionEventArgs() {
 				Weapon = this
 			};
+			HitBox hitBox = new HitBox(shovelHitBox,
+				Player.Interactions.InteractionZRange);
 			RoomControl.InteractionManager.TriggerReaction(Player,
-				InteractionType.Shovel, shovelHitBox, actionArguments);
+				InteractionType.Shovel, hitBox, actionArguments);
 		}
 
 

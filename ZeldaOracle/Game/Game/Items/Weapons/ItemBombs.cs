@@ -52,8 +52,9 @@ namespace ZeldaOracle.Game.Items {
 				// Pickup a bomb from the ground
 				foreach (Bomb bomb in bombTracker.Entities) {
 					if (bomb != null && Player.Interactions.IsMeetingEntity(
-							bomb, InteractionType.Bracelet,
-							GameSettings.PLAYER_BRACELET_BOXES[Player.Direction]))
+						bomb, InteractionType.Bracelet, new HitBox(
+							GameSettings.PLAYER_BRACELET_BOXES[Player.Direction],
+							Player.Interactions.InteractionZRange)))
 					{
 						Player.CarryState.SetCarryObject(bomb);
 						Player.BeginWeaponState(Player.CarryState);

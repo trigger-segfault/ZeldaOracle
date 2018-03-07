@@ -51,8 +51,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			WeaponInteractionEventArgs args = new WeaponInteractionEventArgs() {
 				Weapon = this
 			};
+			HitBox hitBox = new HitBox(braceletBox,
+				Player.Interactions.InteractionZRange);
 			RoomControl.InteractionManager.TriggerInstantReaction(
-				Player, InteractionType.Bracelet, braceletBox, args);
+				Player, InteractionType.Bracelet, hitBox, args);
 			return (Player.WeaponState == Player.CarryState);
 		}
 	}

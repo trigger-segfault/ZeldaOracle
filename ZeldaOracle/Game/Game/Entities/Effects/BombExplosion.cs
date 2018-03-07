@@ -21,6 +21,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			// Interactions
 			Interactions.Enable();
 			Interactions.InteractionBox	= new Rectangle2F(-12, -12, 24, 24);
+			Interactions.InteractionZRange = new RangeF(-32, 32);
 		}
 		
 

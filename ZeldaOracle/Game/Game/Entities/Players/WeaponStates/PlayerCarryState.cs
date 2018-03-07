@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
-using ZeldaOracle.Game.Main;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Control;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
+
 	public class PlayerCarryState : PlayerState {
 		
 		private bool isPickingUp; // Is the pickup animation playing?
@@ -114,6 +102,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnBegin(PlayerState previousState) {
 			carryEntity.Initialize(player.RoomControl);
+			carryEntity.Physics.Velocity = Vector2F.Zero;
+			carryEntity.Physics.ZVelocity = 0.0f;
 
 			isObjectDropped = false;
 			

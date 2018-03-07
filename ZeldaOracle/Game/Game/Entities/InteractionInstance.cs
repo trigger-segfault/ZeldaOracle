@@ -13,8 +13,8 @@ namespace ZeldaOracle.Game.Entities {
 		private Entity actionEntity;
 		private Entity reactionEntity;
 		private EventArgs arguments;
-		private Rectangle2F actionBox;
-		private Rectangle2F reactionBox;
+		private HitBox actionBox;
+		private HitBox reactionBox;
 		private int duration;
 		private bool isProtected;
 		private bool stayAlive;
@@ -71,13 +71,13 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		/// <summary>The interaction-box for the action entity.</summary>
-		public Rectangle2F ActionBox {
+		public HitBox ActionBox {
 			get { return actionBox; }
 			set { actionBox = value; }
 		}
 
 		/// <summary>The interaction-box for the reaction entity.</summary>
-		public Rectangle2F ReactionBox {
+		public HitBox ReactionBox {
 			get { return reactionBox; }
 			set { reactionBox = value; }
 		}

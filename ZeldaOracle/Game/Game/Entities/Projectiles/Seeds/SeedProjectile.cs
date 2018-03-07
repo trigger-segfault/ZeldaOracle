@@ -1,6 +1,5 @@
 ﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Collisions;
-using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
@@ -48,6 +47,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			// Interactions
 			Interactions.Enable();
 			Interactions.InteractionBox = new Rectangle2F(-4, -9, 8, 10);
+			Interactions.InteractionZRange = new RangeF(-5, 2);
 			
 			// Seed Projectile
 			this.reboundOffWalls = reboundOffWalls;

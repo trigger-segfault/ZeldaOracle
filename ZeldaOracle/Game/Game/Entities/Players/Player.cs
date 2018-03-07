@@ -229,6 +229,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Interactions
 			Interactions.Enable();
 			Interactions.InteractionBox = new Rectangle2F(-6, -14 + 3, 12, 13);
+			Interactions.InteractionZRange = new RangeF(-1, 4);
 			Interactions.InteractionType = InteractionType.PlayerContact;
 			Interactions.SetReaction(InteractionType.BombExplosion,
 				delegate(Entity sender, EventArgs args)
