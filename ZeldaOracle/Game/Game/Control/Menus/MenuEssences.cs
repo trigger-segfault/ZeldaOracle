@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Common.Content;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.GameStates;
-using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 
@@ -69,6 +62,19 @@ namespace ZeldaOracle.Game.Control.Menus {
 				group2.GetSlotAt(i).SetConnection(Direction.Left, group1);
 				group2.GetSlotAt(i).SetConnection(Direction.Right, group1);
 			}
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Item Management
+		//-----------------------------------------------------------------------------
+
+		public void AddItem(ItemEssence essence) {
+			GetEssenceSlotAt(essence.EssenceSlot).SlotItem = essence;
+		}
+
+		public void RemoveItem(ItemEssence essence) {
+			GetEssenceSlotAt(essence.EssenceSlot).SlotItem = null;
 		}
 
 

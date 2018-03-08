@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		public override void OnPushing(Direction direction) {
 			if (!IsMoving && IsPushableDirection(direction) &&
 				GameControl.Inventory.IsWeaponButtonDown(
-				GameControl.Inventory.GetItem("item_bracelet")))
+					GameControl.Inventory.GetWeapon("item_bracelet")))
 			{
 				ResetReturnTimer();
 				// Let the update method know that we're still pushing the tile

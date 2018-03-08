@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Control.Menus {
+
 	public class Slot : ISlotConnection {
 
 		private ISlotConnection[] connections;
@@ -24,7 +21,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			this.group			= group;
 			this.position		= position;
 			this.width			= width;
-			this.connections	= new ISlotConnection[4];
+			this.connections	= new ISlotConnection[Direction.Count];
 			this.item			= null;
 			this.disabled		= false;
 		}

@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.GameStates;
-using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 
@@ -29,101 +23,213 @@ namespace ZeldaOracle.Game.Control.Menus {
 		public MenuWeapons(GameManager gameManager)
 			: base(gameManager)
 		{
-			//this.backgroundSprite	= Resources.GetImage("UI/menu_weapons_a");
-			this.background = GameData.SPR_BACKGROUND_MENU_WEAPONS;
+			background = GameData.SPR_BACKGROUND_MENU_WEAPONS;
 
-			this.ammoSlot			= 0;
-			this.ammoMenuSize		= new Point2I(16, 8);
-			this.ammoSlotGroup		= null;
-			this.oldEquippedWeapons		= new ItemWeapon[2];
+			ammoSlot			= 0;
+			ammoMenuSize		= new Point2I(16, 8);
+			ammoSlotGroup		= null;
+			oldEquippedWeapons	= new ItemWeapon[2];
 
 			SlotGroup group = new SlotGroup();
 			currentSlotGroup = group;
-			this.slotGroups.Add(group);
+			slotGroups.Add(group);
 			Slot[,] slots = new Slot[4, 4];
-
 			Point2I gridSize = new Point2I(4, 4);
 
+			// Create the slot grid
 			for (int y = 0; y < gridSize.Y; y++) {
 				for (int x = 0; x < gridSize.X; x++) {
-					slots[x, y] = group.AddSlot(new Point2I(24 + 32 * x, 8 + 24 * y), 24);
+					slots[x, y] = group.AddSlot(
+						new Point2I(24 + 32 * x, 8 + 24 * y), 24);
 				}
 			}
+
+			// Setep the slot connections
 			for (int y = 0; y < gridSize.Y; y++) {
 				for (int x = 0; x < gridSize.X; x++) {
+					// Horizontal connections will wrap to the next/previous rows
 					if (x == 0)
-						slots[x, y].SetConnection(Direction.Left, slots[gridSize.X - 1, (y + gridSize.Y - 1) % gridSize.Y]);
+						slots[x, y].SetConnection(Direction.Left,
+							slots[gridSize.X - 1, (y + gridSize.Y - 1) % gridSize.Y]);
 					else
 						slots[x, y].SetConnection(Direction.Left, slots[x - 1, y]);
-
 					if (x == gridSize.X - 1)
-						slots[x, y].SetConnection(Direction.Right, slots[0, (y + 1) % gridSize.Y]);
+						slots[x, y].SetConnection(Direction.Right,
+							slots[0, (y + 1) % gridSize.Y]);
 					else
 						slots[x, y].SetConnection(Direction.Right, slots[x + 1, y]);
 
-					slots[x, y].SetConnection(Direction.Up, slots[x, (y + gridSize.Y - 1) % gridSize.Y]);
-					slots[x, y].SetConnection(Direction.Down, slots[x, (y + 1) % gridSize.Y]);
+					// Vertical connections wrap around
+					slots[x, y].SetConnection(Direction.Up,
+						slots[x, (y + gridSize.Y - 1) % gridSize.Y]);
+					slots[x, y].SetConnection(Direction.Down,
+						slots[x, (y + 1) % gridSize.Y]);
 				}
 			}
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Item Management
+		//-----------------------------------------------------------------------------
+
+		public bool AddToInventory(ItemWeapon weapon) {
+			if (weapon.IsTwoHanded &&
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_A] == null &&
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_A] == null)
+			{
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_A] = weapon;
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_B] = weapon;
+				weapon.Equip(Inventory.SLOT_A);
+				return true;
+			}
+			else if (!weapon.IsTwoHanded &&
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_A] == null)
+			{
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_A] = weapon;
+				weapon.Equip(Inventory.SLOT_A);
+				return true;
+			}
+			else if (!weapon.IsTwoHanded &&
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_B] == null)
+			{
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_B] = weapon;
+				weapon.Equip(Inventory.SLOT_B);
+				return true;
+			}
+			else {
+				// Find an empty slot in the inventory grid
+				Slot emptySlot = NextAvailableSlot;
+				if (emptySlot != null) {
+					emptySlot.SlotItem = weapon;
+					return true;
+				}
+				else {
+					// No room for the item
+					return false;
+				}
+			}
+		}
+
+		public void RemoveFromInventory(ItemWeapon weapon) {
+			// Clear all slots containing the weapon
+			if (GameControl.Inventory.EquippedWeapons[Inventory.SLOT_A] == weapon)
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_A] = null;
+			if (GameControl.Inventory.EquippedWeapons[Inventory.SLOT_B] == weapon)
+				GameControl.Inventory.EquippedWeapons[Inventory.SLOT_B] = null;
+			SlotGroup slots = slotGroups[0];
+			for (int i = 0; i < slots.NumSlots; i++) {
+				if (slots[i].SlotItem == weapon)
+					slots[i].SlotItem = null;
+			}
+			weapon.Unequip();
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Weapon Equipping
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>Equip the given weapon for the desired equip slot (A or B). This
 		/// will first find the item in the inventory, then swap it with the item
 		/// currently equipped in the slot.</summary>
-		public void EquipWeapon(ItemWeapon equippedWeapon, int equipSlot) {
-			int otherEquipSlot = 1 - equipSlot;
-
+		public bool EquipWeapon(ItemWeapon equippedWeapon, int equipSlot) {
 			// Do nothing if this weapon type is already equipped in the correct slot
 			if (GameControl.Inventory.EquippedWeapons[equipSlot] == equippedWeapon)
-				return;
+				return true;
 
-			// If the weapon is equipped but in the wrong slot, then swap the slots of
-			// the two equipped weapons
-			if (GameControl.Inventory.EquippedWeapons[otherEquipSlot] ==
+			// If the weapon is equipped but in the wrong slot, then simply swap the
+			// slots of the two equipped weapons
+			if (GameControl.Inventory.EquippedWeapons[1 - equipSlot] ==
 				equippedWeapon)
 			{
-				ItemWeapon placeholder =
-					GameControl.Inventory.EquippedWeapons[equipSlot];
-				GameControl.Inventory.EquippedWeapons[equipSlot] = 
-					GameControl.Inventory.EquippedWeapons[otherEquipSlot];
-				GameControl.Inventory.EquippedWeapons[otherEquipSlot] = placeholder;
+				SwapEquippedWeaponSlots();
+				return true;
 			}
 
-			// Find the inventory slot which contains the weapon of this type
-			Slot swapSlot = null;
+			// Find the inventory slot which contains this weapon
+			Slot inventorySlot = null;
 			SlotGroup slotGroup = slotGroups[0];
 			for (int i = 0; i < slotGroup.NumSlots; i++) {
 				if (slotGroup[i].SlotItem == equippedWeapon)
-					swapSlot = slotGroup[i];
+					inventorySlot = slotGroup[i];
 			}
-			if (swapSlot == null)
-				return;
+			if (inventorySlot == null)
+				return false;
 
-			// Swap the weapon between the equip slot and the inventory slot
-			//ItemWeapon equippedWeapon = (ItemWeapon) swapSlot.SlotItem;
-			ItemWeapon unequippedWeapon = GameControl.Inventory.EquippedWeapons[equipSlot];
-			swapSlot.SlotItem = unequippedWeapon;
-			GameControl.Inventory.EquippedWeapons[equipSlot] = equippedWeapon;
-			unequippedWeapon.Unequip();
+			// Equip the weapon from the slot
+			return EquipWeaponFromSlot(inventorySlot, equipSlot);
+		}
 
-			// Handle unequipping two handed weapons by nullifying the other slot
-			if (unequippedWeapon.IsTwoHanded)
-				GameControl.Inventory.EquippedWeapons[otherEquipSlot] = null;
+		/// <summary>Equip the weapon in an inventory slot for the desired equip slot
+		/// (A or B). This will swap it with the item currently equipped in the slot.
+		/// </summary>
+		private bool EquipWeaponFromSlot(Slot swapSlot, int equipSlot) {
+			int otherEquipSlot = 1 - equipSlot;
+			ItemWeapon weaponToEquip = swapSlot.SlotItem as ItemWeapon;
+			ItemWeapon[] equippedWeapons = GameControl.Inventory.EquippedWeapons;
+			
+			// Get a list of currently equipped weapons that we'll need to unequip
+			List<ItemWeapon> weaponsToUnequip = new List<ItemWeapon>();
+			if (equippedWeapons[equipSlot] != null)
+				weaponsToUnequip.Add(equippedWeapons[equipSlot]);
+			if (weaponToEquip != null && weaponToEquip.IsTwoHanded &&
+				equippedWeapons[otherEquipSlot] != null &&
+				!equippedWeapons[otherEquipSlot].IsTwoHanded)
+				weaponsToUnequip.Add(equippedWeapons[otherEquipSlot]);
 
-			// Handle equipping two handed weapons by replacing the other equip slot
-			if (equippedWeapon.IsTwoHanded) {
-				if (GameControl.Inventory.EquippedWeapons[1 - equipSlot] != null)
-					NextAvailableSlot.SlotItem =
-						GameControl.Inventory.EquippedWeapons[otherEquipSlot];
-				GameControl.Inventory.EquippedWeapons[1 - equipSlot] = equippedWeapon;
+			// If we need to unequip two weapons, then find an empty slot to put the
+			// second weapon in. If there are none, then cancel the equip action.
+			// Note that if the inventory is completely full, then two-handed weapons
+			// can never be equipped.
+			if (weaponsToUnequip.Count == 2) {
+				Slot emptySlot = NextAvailableSlot;
+				if (emptySlot != null) {
+					emptySlot.SlotItem = weaponsToUnequip[1];
+				equippedWeapons[otherEquipSlot] = null;
+				}
+				else {
+					swapSlot.SlotItem = weaponToEquip;
+					return false;
+				}
 			}
 
-			unequippedWeapon.Equip(equipSlot);
+			// Unequip the first weapon
+			if (weaponsToUnequip.Count >= 1) {
+				swapSlot.SlotItem = weaponsToUnequip[0];
+				if (weaponsToUnequip[0].IsTwoHanded)
+					equippedWeapons[otherEquipSlot] = null;
+			}
+			else
+				swapSlot.SlotItem = null;
+
+			// Equip the weapon from the slot
+			equippedWeapons[equipSlot] = weaponToEquip;
+			if (weaponToEquip != null && weaponToEquip.IsTwoHanded)
+				equippedWeapons[otherEquipSlot] = weaponToEquip;
+			
+			// Invoke the ItemEquipment callbacks
+			for (int i = 0; i < weaponsToUnequip.Count; i++)
+				weaponsToUnequip[i].Unequip();
+			weaponToEquip?.Equip(equipSlot);
+			return true;
+		}
+
+		/// <summary>Swap equip slots of the two equipped weapons.</summary>
+		private void SwapEquippedWeaponSlots() {
+			ItemWeapon placeHolder = GameControl.Inventory.EquippedWeapons[0];
+			GameControl.Inventory.EquippedWeapons[0] = 
+				GameControl.Inventory.EquippedWeapons[1];
+			GameControl.Inventory.EquippedWeapons[1] = placeHolder;
+		}
+
+		/// <summary>Equip the weapon in the currently selected inventory slot.
+		/// </summary>
+		private bool EquipWeaponFromCursor(int equipSlot) {
+			bool success = EquipWeaponFromSlot(
+				slotGroups[0].CurrentSlot, equipSlot);
+			ResetDescription();
+			return success;
 		}
 
 
@@ -199,7 +305,9 @@ namespace ZeldaOracle.Game.Control.Menus {
 						ammoSlotGroup.SetCurrentSlot(ammoSlotGroup.GetSlotAt(currentAmmoIndex));
 					}
 					else {
+						AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
 						EquipWeaponFromCursor(slot);
+						ResetDescription();
 					}
 				}
 			}
@@ -223,7 +331,9 @@ namespace ZeldaOracle.Game.Control.Menus {
 						if (weapon.GetAmmoAt(i) == selectedAmmo)
 							weapon.CurrentAmmo = i;
 					}
+					AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
 					EquipWeaponFromCursor(ammoSlot);
+					ResetDescription();
 					inSubMenu = false;
 					ammoSlotGroup = null;
 					currentSlotGroup = slotGroups[0];
@@ -257,44 +367,12 @@ namespace ZeldaOracle.Game.Control.Menus {
 			}
 		}
 
-		private void EquipWeaponFromCursor(int slot) {
-			ItemWeapon weapon = slotGroups[0].CurrentSlot.SlotItem as ItemWeapon;
-			AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
-			
-			if (GameControl.Inventory.EquippedWeapons[slot] != null) {
-				if (GameControl.Inventory.EquippedWeapons[slot].IsTwoHanded)
-					GameControl.Inventory.EquippedWeapons[1 - slot] = null;
-
-				ItemWeapon placeholder = GameControl.Inventory.EquippedWeapons[slot];
-				GameControl.Inventory.EquippedWeapons[slot] = weapon;
-				slotGroups[0].CurrentSlot.SlotItem = placeholder;
-				if (placeholder != null)
-					placeholder.Unequip();
-				if (weapon != null)
-					weapon.Equip(slot);
-			}
-			else {
-				GameControl.Inventory.EquippedWeapons[slot] = weapon;
-				slotGroups[0].CurrentSlot.SlotItem = null;
-				if (weapon != null)
-					weapon.Equip(slot);
-			}
-
-			if (weapon != null && weapon.IsTwoHanded) {
-				if (GameControl.Inventory.EquippedWeapons[1 - slot] != null)
-					NextAvailableSlot.SlotItem = GameControl.Inventory.EquippedWeapons[1 - slot];
-				GameControl.Inventory.EquippedWeapons[1 - slot] = weapon;
-			}
-			
-			ResetDescription();
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public Slot NextAvailableSlot {
+		private Slot NextAvailableSlot {
 			get {
 				for (int i = 0; i < slotGroups[0].NumSlots; i++) {
 					if (slotGroups[0].GetSlotAt(i).SlotItem == null)
@@ -305,7 +383,10 @@ namespace ZeldaOracle.Game.Control.Menus {
 		}
 
 		private bool IsAmmoMenuFullyOpen {
-			get { return (ammoMenuSize.X == (ammoSlotGroup.NumSlots * 24 + 8) && ammoMenuSize.Y == 32); }
+			get {
+				return (ammoMenuSize.X == (ammoSlotGroup.NumSlots * 24 + 8) &&
+					ammoMenuSize.Y == 32);
+			}
 		}
 
 		private bool DrawAmmoMenuAtTop {

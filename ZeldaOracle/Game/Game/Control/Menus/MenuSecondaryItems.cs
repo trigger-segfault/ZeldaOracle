@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Common.Content;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.GameStates;
-using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 
@@ -72,6 +65,19 @@ namespace ZeldaOracle.Game.Control.Menus {
 			ringBagSlot.SetConnection(Direction.Right, slots[0, gridSize.Y - 1]);
 			ringBagSlot.SetConnection(Direction.Up, slots[0, gridSize.Y - 2]);
 			ringBagSlot.SetConnection(Direction.Down, slots[0, 0]);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Item Management
+		//-----------------------------------------------------------------------------
+
+		public void AddItem(ItemSecondary secondaryItem) {
+			GetSecondarySlotAt(secondaryItem.SecondarySlot).SlotItem = secondaryItem;
+		}
+
+		public void RemoveItem(ItemSecondary secondaryItem) {
+			GetSecondarySlotAt(secondaryItem.SecondarySlot).SlotItem = null;
 		}
 
 

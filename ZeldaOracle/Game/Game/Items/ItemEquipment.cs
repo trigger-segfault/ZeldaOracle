@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.Items {
 		// Draws the item inside the inventory.
 		protected override void DrawSprite(Graphics2D g, Point2I position) {
 			ISprite spr = sprite[level];
-			if (inventory.IsWeaponEquipped(this) && spriteEquipped != null)
+			if (isEquipped && spriteEquipped != null)
 				spr = spriteEquipped[level];
 			g.DrawSprite(spr, position);
 		}

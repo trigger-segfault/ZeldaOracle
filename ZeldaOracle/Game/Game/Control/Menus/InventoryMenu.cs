@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.GameStates.Transitions;
-using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control.Menus {
@@ -95,6 +89,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			if (IsActive)
 				DrawDescription(g);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Description

@@ -86,5 +86,10 @@ namespace ZeldaOracle.Game.Control.Menus {
 		public Slot this[int index] {
 			get { return slots[index]; }
 		}
+
+		/// <summary>Get the list of slots.</summary>
+		public List<Slot> Slots {
+			get { return slots; }
+		}
 	}
 }

@@ -245,8 +245,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Begin a new condition state. There can be any number of condition
-		/// states occurring at once</summary>
+		/// states occurring at once.</summary>
 		public void BeginConditionState(PlayerState state) {
+			// Prune any completed condition states
+			for (int i = 0; i < conditionStateMachines.Count; i++) {
+				if (!conditionStateMachines[i].IsActive)
+					conditionStateMachines.RemoveAt(i--);
+			}
+
+			// Begin the new condition state
 			PlayerStateMachine stateMachine = new PlayerStateMachine(this);
 			conditionStateMachines.Add(stateMachine);
 			stateMachine.BeginState(state);
@@ -519,8 +526,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public void InterruptWeapons() {
-			for (int i = 0; i < EquippedUsableItems.Length; i++) {
-				ItemWeapon item = EquippedUsableItems[i];
+			for (int i = 0; i < EquippedWeapons.Length; i++) {
+				ItemWeapon item = EquippedWeapons[i];
 				if (item != null) {
 					item.Interrupt();
 					if (item.IsTwoHanded)
@@ -536,8 +543,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		/// <summary>Update items by checking if their buttons are pressed.<summary>
 		private void UpdateEquippedItems() {
-			for (int i = 0; i < EquippedUsableItems.Length; i++) {
-				ItemWeapon item = EquippedUsableItems[i];
+			for (int i = 0; i < EquippedWeapons.Length; i++) {
+				ItemWeapon item = EquippedWeapons[i];
 				if (item != null && item.IsUsable()) {
 					if (Inventory.GetSlotButton(i).IsDown())
 						item.OnButtonDown();
@@ -665,7 +672,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool ActionUseWeapon(ActionButtons button) {
 			int slot = (button == ActionButtons.A ?
 				Inventory.SLOT_A : Inventory.SLOT_B);
-			ItemWeapon weapon = EquippedUsableItems[slot];
+			ItemWeapon weapon = Inventory.EquippedWeapons[slot];
 			if (weapon != null && weapon.IsUsable()) {
 				if (weapon.OnButtonPress())
 					return true;
@@ -979,7 +986,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return GameControl.Inventory; }
 		}
 
-		public ItemWeapon[] EquippedUsableItems {
+		public ItemWeapon[] EquippedWeapons {
 			get { return Inventory.EquippedWeapons; }
 		}
 
