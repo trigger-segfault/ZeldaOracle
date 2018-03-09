@@ -36,10 +36,7 @@ namespace ZeldaOracle.Game.Control {
 
 		private Room				room;
 		private Point2I				roomLocation;
-		private Dungeon				dungeon;
-		private Variables			variables;
-
-		private List<Entity>		entities;
+		
 		private List<ActionTile>	actionTiles;
 		private List<TimedEvent>	scheduledEvents;
 
@@ -59,14 +56,12 @@ namespace ZeldaOracle.Game.Control {
 		private bool				roomCleared;
 		private bool				hasSoftKills;
 		private HashSet<Monster>	lingeringMonsters;
-		private int					entityIndexCounter;
 		private bool				isUnderwater;
 		private bool				isSideScrolling;
 		/// <summary>True if the player dies upon falling to the bottom of the room.
 		/// </summary>
 		private bool				deathOutOfBounds;
-
-		private ViewControl			viewControl;
+		
 		private RoomVisualEffect	visualEffect;
 		private RoomVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
@@ -367,7 +362,6 @@ namespace ZeldaOracle.Game.Control {
 		public void BeginRoom(Room room, List<Entity> entities) {
 			this.room			= room;
 			roomLocation		= room.Location;
-			dungeon				= room.Dungeon;
 			isSideScrolling		= room.Zone.IsSideScrolling;
 			isUnderwater		= room.Zone.IsUnderwater;
 			deathOutOfBounds	= room.DeathOutOfBounds;
@@ -883,61 +877,6 @@ namespace ZeldaOracle.Game.Control {
 				T t = entity as T;
 				if (t != null)
 					yield return t;
-			}
-		}
-		
-		public IEnumerable<Entity> GetInteractingEntities(Entity sender, InteractionType type) {
-			Rectangle2F box = sender.Interactions.PositionedInteractionBox;
-			foreach (Entity entity in ActiveEntities) {
-				if (entity.Interactions.IsEnabled &&
-					entity.Interactions.PositionedInteractionBox.Intersects(box))
-				{
-					yield return entity;
-					if (sender.IsDestroyed)
-						break;
-				}
-			}
-		}
-		/*
-		public void TriggerInteractions(Entity sender, InteractionType type) {
-			Rectangle2F box = sender.Interactions.PositionedInteractionBox;
-			foreach (Entity entity in ActiveEntities) {
-				if (entity.Interactions.IsEnabled &&
-					entity.Interactions.PositionedInteractionBox.Intersects(box))
-				{
-					entity.Interactions.Trigger(InteractionType.BombExplosion, sender);
-					if (sender.IsDestroyed)
-						break;
-				}
-			}
-		}
-		
-		public IEnumerable<Entity> GetInteractingEntities(Vector2F point) {
-			foreach (Entity entity in ActiveEntities) {
-				if (entity.Interactions.IsEnabled &&
-					entity.Interactions.PositionedInteractionBox.Contains(point))
-				{
-					yield return entity;
-				}
-			}
-		}
-		
-		public IEnumerable<Entity> GetInteractingEntities(Rectangle2F box) {
-			foreach (Entity entity in ActiveEntities) {
-				if (entity.Interactions.IsEnabled &&
-					entity.Interactions.PositionedInteractionBox.Intersects(box))
-				{
-					yield return entity;
-				}
-			}
-		}*/
-		
-		public IEnumerable<Entity> ActiveEntities {
-			get {
-				for (int i = 0; i < entityCount; i++) {
-					if (entities[i].IsAlive && entities[i].IsInRoom)
-						yield return entities[i];
-				}
 			}
 		}
 
