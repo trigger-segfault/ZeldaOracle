@@ -74,6 +74,7 @@ TILE "monster_beamos";
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
 	SPRITE		"monster_beamos";
+	SHARED		true;
 	ENTITYDRAW	true;
 	PROPERTIES	(boolean, ignore_monster, true);
 END;

@@ -18,9 +18,16 @@ namespace ZeldaOracle.Common.Scripting {
 			Type = "";
 			Name = "";
 		}
+
 		/// <summary>Constructs a script parameter with the specified type and name.</summary>
 		public ScriptParameter(string type, string name) {
 			this.Type = type;
+			this.Name = name;
+		}
+
+		/// <summary>Constructs a script parameter with the specified type and name.</summary>
+		public ScriptParameter(Type type, string name) {
+			this.Type = type.Name;
 			this.Name = name;
 		}
 	}

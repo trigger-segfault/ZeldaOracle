@@ -84,7 +84,8 @@ namespace ZeldaEditor.Windows {
 				layerCount = 3;
 				roomSize = (Point2I)(comboBoxRoomSizes.SelectedItem as ComboBoxItem).Tag;
 				zone = ZeldaOracle.Common.Content.Resources.GetResource<Zone>((string)comboBoxZones.SelectedItem);
-				action = new ActionCreateLevel(newID, dimensions, layerCount, roomSize, zone);
+				Level level = new Level(id, dimensions, layerCount, roomSize, zone);
+				action = new ActionCreateLevel(level);
 				DialogResult = true;
 				Close();
 			}

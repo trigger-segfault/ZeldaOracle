@@ -97,5 +97,10 @@ namespace ZeldaOracle.Game.GameStates {
 		public override GameState CurrentGameState {
 			get { return CurrentState.CurrentGameState; }
 		}
+
+		/// <summary>Gets the number of game states in the queue.</summary>
+		public int Count {
+			get { return states.Count; }
+		}
 	}
 }

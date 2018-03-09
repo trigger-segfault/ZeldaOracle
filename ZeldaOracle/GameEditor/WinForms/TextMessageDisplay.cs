@@ -27,6 +27,8 @@ namespace ZeldaEditor.WinForms {
 			Finished
 		}
 
+		private const int MaxWidth = 144;
+
 		private static ContentManager content;
 		private static Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
 		private StoppableTimer dispatcherTimer;
@@ -49,6 +51,8 @@ namespace ZeldaEditor.WinForms {
 		private TextReaderState state;
 		// The timer used to update the arrow sprite.
 		private int arrowTimer;
+
+		private int spacing = 1;
 
 		private Stopwatch watch;
 
@@ -309,20 +313,46 @@ namespace ZeldaEditor.WinForms {
 
 			// Draw the finished writting lines.
 			for (int i = 0; i < windowLine; i++) {
-				if (state == TextReaderState.PushingLine && timer >= 2)
-					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i + 8), TextColor);
+				/*if (state == TextReaderState.PushingLine && timer >= 2)
+					g.DrawLetterString(GameData.FONT_LARGE,
+						wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i + 8), TextColor);
 				else
-					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i), TextColor);
+					g.DrawLetterString(GameData.FONT_LARGE,
+						wrappedString.Lines[currentLine - windowLine + i],
+						pos + new Point2I(8, 6 + 16 * i), TextColor);*/
+				g.DrawLetterString(GameData.FONT_LARGE,
+					wrappedString.Lines[currentLine - windowLine + i],
+					pos + GetLineOffset(currentLine - windowLine + i), TextColor);
 			}
 			// Draw the currently writting line.
-			if (currentLine < wrappedString.LineCount)
-				g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine].Substring(0, currentChar), pos + new Point2I(8, 6 + 16 * windowLine), TextColor);
+			if (currentLine < wrappedString.LineCount) {
+				g.DrawLetterString(GameData.FONT_LARGE,
+					wrappedString.Lines[currentLine].Substring(0, currentChar),
+					pos + GetLineOffset(currentLine), TextColor);
+			}
 
 			// Draw the next line arrow.
-			if ((state == TextReaderState.PressToContinue || state ==  TextReaderState.PressToEndParagraph) && arrowTimer >= 16)
+			if ((state == TextReaderState.PressToContinue ||
+				state ==  TextReaderState.PressToEndParagraph) && arrowTimer >= 16)
+			{
 				g.DrawSprite(GameData.SPR_HUD_TEXT_NEXT_ARROW, pos + new Point2I(136, 16 * linesPerWindow));
+			}
 
 			g.End();
+		}
+
+		private Point2I GetLineOffset(int lineIndex) {
+			int width = (MaxWidth - spacing * 16) / 8;
+			int length = wrappedString.LineLengths[lineIndex] / 8;
+			int winLine = lineIndex - currentLine + windowLine;
+			Point2I offset = new Point2I(spacing * 8, 6 + 16 * winLine);
+			if (state == TextReaderState.PushingLine && timer >= 2)
+				offset.Y += 8;
+			switch (wrappedString.Lines[lineIndex].MessageAlignment) {
+			case Align.Center: offset.X += ((width - length) / 2) * 8; break;
+			case Align.Right: offset.X += (width - length) * 8; break;
+			}
+			return offset;
 		}
 	}
 }

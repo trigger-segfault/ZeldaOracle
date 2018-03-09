@@ -140,12 +140,12 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return properties.HasModifiedProperties; }
 		}
 
-		public bool HasDefinedEvents {
-			get { return events.HasDefinedEvents; }
-		}
-
 		public bool HasModifiedModifiedProperties {
 			get { return modifiedProperties.HasModifiedProperties; }
+		}
+
+		public bool HasDefinedEvents {
+			get { return events.HasDefinedEvents; }
 		}
 
 		public bool HasPreviewSprite {
@@ -161,8 +161,51 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public TileResetCondition ResetCondition {
-			get { return properties.GetEnum("reset_condition", TileResetCondition.LeaveRoom); }
-			set { properties.Set("reset_condition", (int) value); }
+			get { return properties.GetEnum("reset_condition",
+				TileResetCondition.LeaveRoom); }
+			set { properties.SetEnum("reset_condition", value); }
+		}
+
+		/// <summary>Gets or sets if the tile is shared between child rooms.</summary>
+		public bool IsShared {
+			get { return properties.Get("shared", false); }
+			set { properties.Set("shared", value); }
+		}
+
+		/// <summary>Gets or sets if the tile is enabled and spawns during room start.</summary>
+		public bool IsEnabled {
+			get { return properties.Get("enabled", true); }
+			set { properties.Set("enabled", value); }
+		}
+
+		/// <summary>Gets or sets if the tile is enabled in the modified properties.</summary>
+		public bool IsModifiedEnabled {
+			get { return modifiedProperties.Get("enabled", true); }
+			set { modifiedProperties.Set("enabled", value); }
+		}
+		
+		// Special Tiles --------------------------------------------------------------
+
+		/// <summary>Returns true if the tile should be treated as a monster.</summary>
+		public bool IsMonster {
+			get { return properties.Contains("monster_id"); }
+		}
+
+		/// <summary>Gets or sets the ID unique to each monster in the room.</summary>
+		public int MonsterID {
+			get { return modifiedProperties.Get("monster_id", 0); }
+			set { modifiedProperties.Set("monster_id", value); }
+		}
+
+		/// <summary>Gets if the tile is an unlooted reward tile.</summary>
+		public bool IsUnlootedReward {
+			get { return properties.ContainsEquals("looted", false); }
+		}
+
+		/// <summary>Gets or sets if the tile is looted.</summary>
+		public bool IsLooted {
+			get { return modifiedProperties.Get("looted", false); }
+			set { modifiedProperties.Set("looted", value); }
 		}
 	}
 }

@@ -15,6 +15,7 @@ namespace ZeldaOracle.Game {
 		public const int					TILE_SIZE					= 16;	// Tile size in texels.
 		public static readonly Point2I		ROOM_SIZE_SMALL				= new Point2I(10, 8);
 		public static readonly Point2I		ROOM_SIZE_LARGE				= new Point2I(15, 11);
+		public const int					ROOM_RESPAWN_VISIT_COUNT	= 8;
 		public const int					DEFAULT_TILE_LAYER_COUNT	= 3;
 
 		// Display

@@ -60,6 +60,20 @@ namespace ZeldaOracle.Common.Scripting {
 				this.category = "Misc";
 		}
 
+		public PropertyDocumentation(string readableName, string editorType, Type editorSubType,
+				string category, string description, bool isReadOnly = false, bool isBrowsable = true)
+		{
+			this.readableName	= readableName;
+			this.editorType		= editorType;
+			this.editorSubType	= editorSubType.Name;
+			this.category		= category;
+			this.description	= description;
+			this.isReadOnly		= isReadOnly;
+			this.isBrowsable	= isBrowsable;
+			if (string.IsNullOrWhiteSpace(this.category))
+				this.category = "Misc";
+		}
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -96,11 +110,13 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Can the property be edited using the property editor?<summary>
 		public bool IsReadOnly {
 			get { return isReadOnly; }
+			set { isReadOnly = false; }
 		}
 
 		/// <summary>Is the property not shown in the property editor?<summary>
 		public bool IsBrowsable {
 			get { return isBrowsable; }
+			set { isBrowsable = false; }
 		}
 	}
 }

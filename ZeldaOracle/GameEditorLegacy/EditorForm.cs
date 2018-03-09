@@ -546,8 +546,8 @@ namespace ZeldaEditor {
 		private void buttonAddDungeon_Click(object sender, EventArgs e) {
 			using (DungeonAddForm form = new DungeonAddForm(editorControl.World)) {
 				if (form.ShowDialog(this) == DialogResult.OK) {
-					Dungeon dungeon = form.CreateDungeon();
-					editorControl.World.AddDungeon(dungeon);
+					Area dungeon = form.CreateDungeon();
+					editorControl.World.AddArea(dungeon);
 					editorControl.RefreshWorldTreeView();
 				}
 			}

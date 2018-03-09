@@ -6,7 +6,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Control {
+namespace ZeldaOracle.Game.Control.RoomManagers {
 
 	public enum TileLayerOrder {
 		LowestToHighest = 0,

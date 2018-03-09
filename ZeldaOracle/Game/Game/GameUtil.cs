@@ -19,6 +19,18 @@ namespace ZeldaOracle.Game {
 			return GMath.Round(a - GameSettings.BIAS);
 		}
 
+		/// <summary>Returns true if the specified type has the specified base.</summary>
+		public static bool TypeHasBase<BaseType>(Type type) {
+			return TypeHasBase(typeof(BaseType), type);
+		}
+
+		/// <summary>Returns true if the specified type has the specified base.</summary>
+		public static bool TypeHasBase(Type baseType, Type type) {
+			if (baseType == null || type == null)
+				return false;
+			return baseType.IsAssignableFrom(type);
+		}
+
 		/// <summary>Returns the type with the specified name. Throws an exception
 		/// if the type could not be found or did not inherit from the base type.</summary>
 		public static Type FindTypeWithBase<BaseType>(string typeName, bool ignoreCase) {
@@ -43,13 +55,9 @@ namespace ZeldaOracle.Game {
 			}
 
 			if (type != null) {
-				Type typeSearch = type;
-				do {
-					if (typeSearch.Equals(baseType))
-						return type;
-					typeSearch = typeSearch.BaseType;
-				} while (typeSearch != null);
-				throw new Exception("The type '" + typeName + "' does not inherit from '" + baseType.Name + "'!");
+				if (!baseType.IsAssignableFrom(type))
+					throw new Exception("The type '" + typeName + "' does not inherit from '" + baseType.Name + "'!");
+				return type;
 			}
 			else {
 				throw new Exception("No type exists with the name '" + typeName + "'!");

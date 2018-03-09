@@ -29,8 +29,8 @@ namespace ZeldaEditor {
 		// Methods
 		//-----------------------------------------------------------------------------
 		
-		public Dungeon CreateDungeon() {
-			return new Dungeon(textBoxID.Text, textBoxName.Text);
+		public Area CreateDungeon() {
+			return new Area(textBoxID.Text, textBoxName.Text);
 		}
 
 		
@@ -40,7 +40,7 @@ namespace ZeldaEditor {
 
 		private void buttonAdd_Click(object sender, EventArgs e) {
 			// Verify the ID is unique.
-			if (world.GetDungeon(textBoxID.Text) != null) {
+			if (world.GetArea(textBoxID.Text) != null) {
 				MessageBox.Show("A dungeon with the ID '" + textBoxID.Text + "' already exists!",
 					Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}

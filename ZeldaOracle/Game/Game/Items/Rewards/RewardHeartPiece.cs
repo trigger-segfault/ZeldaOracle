@@ -35,15 +35,17 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			if (gameControl.Inventory.PiecesOfHeart == 3) {
 				gameControl.DisplayMessage(
 					message,
+					null,
 					new RoomStateAction(() => {
 						IncrementPiecesOfHeart(gameControl);
 					}),
-					new RoomStateTextReader(GameSettings.HEART_CONTAINER_TEXT)
+					new RoomStateTextReader(GameSettings.HEART_CONTAINER_TEXT, null)
 				);
 			}
 			else {
 				gameControl.DisplayMessage(
 					message,
+					null,
 					new RoomStateAction(() => {
 						IncrementPiecesOfHeart(gameControl);
 					})

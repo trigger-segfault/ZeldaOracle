@@ -53,6 +53,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
+			base.OnInitialize();
 			spawnTimer	= -1;
 		}
 

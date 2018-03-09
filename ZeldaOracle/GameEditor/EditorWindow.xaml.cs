@@ -346,32 +346,30 @@ namespace ZeldaEditor {
 			image.HorizontalAlignment = HorizontalAlignment.Left;
 			image.VerticalAlignment = VerticalAlignment.Top;
 			tilePreview.UpdateTile(null);
-			hostTilePreview.Visibility = Visibility.Hidden;
 			if (obj is Room) {
 				Room room = obj as Room;
 				image.Source = EditorImages.Room;
 				propertyPreviewImage.Content = image;
 				propertyPreviewName.Text = "Room[" + room.Location.X + ", " + room.Location.Y + "]";
+				hostTilePreview.Visibility = Visibility.Hidden;
 			}
 			else if (obj is Level) {
 				image.Source = EditorImages.Level;
 				propertyPreviewImage.Content = image;
 				propertyPreviewName.Text = (obj as Level).ID;
+				hostTilePreview.Visibility = Visibility.Hidden;
 			}
-			else if (obj is Dungeon) {
-				image.Source = EditorImages.Dungeon;
+			else if (obj is Area) {
+				image.Source = EditorImages.Area;
 				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as Dungeon).ID;
+				propertyPreviewName.Text = (obj as Area).ID;
+				hostTilePreview.Visibility = Visibility.Hidden;
 			}
 			else if (obj is World) {
 				image.Source = EditorImages.World;
 				propertyPreviewImage.Content = image;
 				propertyPreviewName.Text = (obj as World).ID;
-			}
-			else if (obj is Zone) {
-				image.Source = null;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as Zone).ID;
+				hostTilePreview.Visibility = Visibility.Hidden;
 			}
 			else if (obj is BaseTileDataInstance) {
 				hostTilePreview.Visibility = Visibility.Visible;
@@ -555,8 +553,8 @@ namespace ZeldaEditor {
 				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
-		private void OnAddNewDungeonCommand(object sender, ExecutedRoutedEventArgs e) {
-			EditorAction action = AddNewDungeonWindow.Show(this, editorControl);
+		private void OnAddNewAreaCommand(object sender, ExecutedRoutedEventArgs e) {
+			EditorAction action = AddNewAreaWindow.Show(this, editorControl);
 			if (action != null) {
 				editorControl.PushAction(action, ActionExecution.Execute);
 			}
@@ -607,6 +605,10 @@ namespace ZeldaEditor {
 
 		private void OnShowModifiedTilesChecked(object sender, RoutedEventArgs e) {
 			editorControl.ShowModified = dropDownItemShowModified.IsChecked;
+		}
+
+		private void OnShowSharedTilesChecked(object sender, RoutedEventArgs e) {
+			editorControl.ShowShared = dropDownItemShowShared.IsChecked;
 		}
 
 		private void CanExecuteViewPaths(object sender, CanExecuteRoutedEventArgs e) {

@@ -10,6 +10,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		private bool isAttached;
 		private int attachTimer;
 		private PlayerDisarmedState disarmedPlayerState;
+		private MonsterGel offspringSibling;
 
 
 		//-----------------------------------------------------------------------------
@@ -52,6 +53,8 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			// Misc interactions
 			Interactions.SetReaction(InteractionType.Block,			MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.ThrownObject,	MonsterReactions.Kill);
+
+			offspringSibling = null;
 		}
 
 		
@@ -147,6 +150,27 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 					attachTimer--;
 				base.UpdateAI();
 			}
+		}
+
+		public override void OnDie() {
+			base.OnDie();
+
+			// The other Gel will no longer be counted for "respawn clear"
+			if (offspringSibling != null && offspringSibling.IsAlive) {
+				offspringSibling.IgnoreRespawn = true;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets or sets the offspring sibling for this Gel. When one is
+		/// killed the other no longer prevents the room from being "respawn cleared".</summary>
+		public MonsterGel OffspringSibling {
+			get { return offspringSibling; }
+			set { offspringSibling = value; }
 		}
 	}
 }

@@ -344,6 +344,11 @@ namespace ZeldaOracle.Game.Entities {
 			set { roomControl = value; }
 		}
 
+		/// <summary>Gets the area control this entity belongs to.</summary>
+		public AreaControl AreaControl {
+			get { return roomControl.AreaControl; }
+		}
+
 		/// <summary>Returns true if the entity has been initialized.</summary>
 		public bool IsInitialized {
 			get { return (roomControl != null); }

@@ -1,15 +1,15 @@
-﻿<Window x:Class="ZeldaEditor.Windows.AddNewDungeonWindow"
+﻿<Window x:Class="ZeldaEditor.Windows.AddNewAreaWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZeldaEditor.Windows"
         mc:Ignorable="d"
-        Title="Add New Dungeon" Height="142" Width="300" SnapsToDevicePixels="True" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" UseLayoutRounding="True" Background="#FFF0F0F0" WindowStyle="ToolWindow">
+        Title="Add New Area" Height="142" Width="300" SnapsToDevicePixels="True" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" UseLayoutRounding="True" Background="#FFF0F0F0" WindowStyle="ToolWindow">
     <Grid>
         <Label Content="ID:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,8,0,0" Width="52" HorizontalContentAlignment="Right"/>
-        <TextBox x:Name="textBoxDungeonID" VerticalAlignment="Top" Margin="67,10,10,0"/>
-        <TextBox x:Name="textBoxDungeonName" VerticalAlignment="Top" Margin="67,38,10,0"/>
+        <TextBox x:Name="textBoxAreaID" VerticalAlignment="Top" Margin="67,10,10,0"/>
+        <TextBox x:Name="textBoxAreaName" VerticalAlignment="Top" Margin="67,38,10,0"/>
         <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,36,0,0" Width="52" HorizontalContentAlignment="Right"/>
         <Button Content="Cancel" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="80"/>
         <Button Content="Add" IsDefault="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,97,10" Width="80" Click="OnAdd"/>

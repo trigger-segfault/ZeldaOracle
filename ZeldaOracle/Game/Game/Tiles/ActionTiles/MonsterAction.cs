@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		
+
 		// TODO: Move these generic methods somewhere else.
 		public static T ConstructObject<T>(string typeName) where T : class {
 			Type type = GameUtil.FindTypeWithBase<Monster>(typeName, false);
@@ -44,12 +44,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		protected override void Initialize() {
 			base.Initialize();
 
-			bool isDead = properties.GetBoolean("dead", false);
-
 			Monster monster = null;
-
+			
 			// Construct the monster object
-			if (!isDead) {
+			if (CanSpawn) {
 				string monsterTypeStr = Properties.GetString("monster_type", "");
 				monster = ConstructObject<Monster>(monsterTypeStr);
 				if (monster == null)
@@ -105,8 +103,36 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the class type of the monster.</summary>
 		public Type MonsterType {
 			get { return typeof(MonsterOctorok); }
+		}
+
+		/// <summary>Gets or sets if this monster is dead.</summary>
+		public bool IsDead {
+			get { return Properties.Get("dead", false); }
+			set { Properties.Set("dead", value); }
+		}
+
+		/// <summary>Gets if the monster is ignored in room clear counts.</summary>
+		public bool IgnoreMonster {
+			get { return Properties.Get("ignore_monster", false); }
+		}
+
+		/// <summary>Gets the respawn type of the monster.</summary>
+		public MonsterRespawnType RespawnType {
+			get { return Properties.GetEnum("respawn_type", MonsterRespawnType.Normal); }
+		}
+
+		/// <summary>Gets if the monster can spawn.</summary>
+		public bool CanSpawn {
+			get { return !IsDead && !RoomControl.IsMonsterDead(MonsterID); }
+		}
+
+		/// <summary>Gets the ID unique to each monster in the room.</summary>
+		public int MonsterID {
+			get { return Properties.Get("monster_id", 0); }
+			set { Properties.Set("monster_id", value); }
 		}
 	}
 }

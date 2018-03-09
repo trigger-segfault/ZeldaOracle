@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Area.cs" />
     <Compile Include="CustomScriptBase.cs" />
     <Compile Include="Game.cs" />
     <None Include="TileEnums.cs" />

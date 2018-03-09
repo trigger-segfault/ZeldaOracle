@@ -79,11 +79,11 @@ namespace ZeldaEditor {
 			new InputGestureCollection() {
 				new KeyGesture(Key.L, ModifierKeys.Control | ModifierKeys.Shift) });
 
-		/// <summary>The command to add a new dungeon.</summary>
-		public static readonly RoutedUICommand AddNewDungeon = new RoutedUICommand(
-			"AddNewDungeon", "Add New Dungeon", typeof(EditorCommands),
+		/// <summary>The command to add a new area.</summary>
+		public static readonly RoutedUICommand AddNewArea = new RoutedUICommand(
+			"AddNewArea", "Add New Area", typeof(EditorCommands),
 			new InputGestureCollection() {
-				new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift) });
+				new KeyGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift) });
 
 		/// <summary>The command to add a new script.</summary>
 		public static readonly RoutedUICommand AddNewScript = new RoutedUICommand(

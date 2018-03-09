@@ -17,19 +17,19 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.TreeViews {
 	
-	public class DungeonTreeViewItem : IWorldTreeViewItem {
+	public class AreaTreeViewItem : IWorldTreeViewItem {
 
-		private Dungeon dungeon;
+		private Area area;
 		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 		
-		public DungeonTreeViewItem(Dungeon dungeon) {
-			this.dungeon = dungeon;
-			Source  = EditorImages.Dungeon;
-			Header				= dungeon.ID;
-			Tag				= "script";
+		public AreaTreeViewItem(Area area) {
+			this.area = area;
+			Source  = EditorImages.Area;
+			Header				= area.ID;
+			Tag					= "area";
 		}
 
 
@@ -38,44 +38,45 @@ namespace ZeldaEditor.TreeViews {
 		//-----------------------------------------------------------------------------
 
 		public override void Open(EditorControl editorControl) {
-			// Open the dungeon's properties.
-			editorControl.OpenProperties(dungeon);
+			// Open the areas's properties.
+			editorControl.OpenProperties(area);
 		}
 
 		public override void Delete(EditorControl editorControl) {
 			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Warning,
-				"Are you sure you want to delete the dungeon '" + dungeon.ID + "'?", "Confirm",
+				"Are you sure you want to delete the area '" + area.ID + "'?", "Confirm",
 				MessageBoxButton.YesNo);
 
 			if (result == MessageBoxResult.Yes) {
-				ActionDeleteDungeon action = new ActionDeleteDungeon(dungeon);
+				ActionDeleteArea action = new ActionDeleteArea(area);
 				editorControl.PushAction(action, ActionExecution.Execute);
-				/*editorControl.World.RemoveDungeon(dungeon);
-				editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+				/*editorControl.World.RemoveArea(area);
+				editorControl.EditorWindow.TreeViewWorld.RefreshAreas();
 				editorControl.IsModified = true;*/
 			}
 		}
 
 		public override void Rename(EditorControl editorControl, string name) {
-			editorControl.World.RenameDungeon(dungeon, name);
-			Header = dungeon.ID;
+			editorControl.World.RenameArea(area, name);
+			Header = area.ID;
 			editorControl.IsModified = true;
 		}
 
 		public override void Duplicate(EditorControl editorControl) {
-			// Dummy dungeon for the rename window
-			Dungeon duplicate = new Dungeon();
+			// Dummy area for the rename window
+			Area duplicate = new Area();
 			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
 			if (newName != null) {
-				EditorAction action = new ActionDuplicateDungeon(dungeon, newName);
+				duplicate = new Area(area);
+				EditorAction action = new ActionDuplicateArea(area, duplicate);
 				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
 
-		public Dungeon Dungeon {
-			get { return dungeon; }
+		public Area Area {
+			get { return area; }
 		}
 
-		public override IIDObject IDObject { get { return dungeon; } }
+		public override IIDObject IDObject { get { return area; } }
 	}
 }

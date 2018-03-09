@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			sprite			= null;
 			position		= Point2I.Zero;
 			size			= Point2I.One;
-			
+
 			// TODO: Switch this to color
 			/*properties.Set("image_variant", 0)
 				.SetDocumentation("Image Variant ID", "", "", "Internal",

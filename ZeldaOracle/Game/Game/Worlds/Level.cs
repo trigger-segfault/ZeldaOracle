@@ -40,22 +40,22 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public Level() {
-			this.world          = null;
-			this.roomSize       = Point2I.Zero;
-			this.dimensions     = Point2I.Zero;
+			this.world			= null;
+			this.roomSize		= Point2I.Zero;
+			this.dimensions		= Point2I.Zero;
 
-			this.events         = new EventCollection(this);
-			this.properties     = new Properties(this);
-			this.properties.BaseProperties  = new Properties();
+			this.events			= new EventCollection(this);
+			this.properties		= new Properties(this);
+			this.properties.BaseProperties	= new Properties();
 			this.variables		= new Variables(this);
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this level.", false, false);
 
-			properties.BaseProperties.Set("dungeon", "")
-				.SetDocumentation("Dungeon", "dungeon", "", "Dungeon", "The dungeon this level belongs to.");
-			properties.BaseProperties.Set("dungeon_floor", 0)
-				.SetDocumentation("Dungeon Floor", "", "", "Dungeon", "The floor in the dungeon this level belongs to.");
+			properties.BaseProperties.Set("area", "")
+				.SetDocumentation("Area", "area", "", "Area", "The default area this level belongs to.");
+			properties.BaseProperties.Set("floor_number", 0)
+				.SetDocumentation("Floor Number", "", "", "Area", "The floor number that will diplay in the dungeon map. Use 0 or higher for above floors and -1 or lower for below floors.");
 
 			properties.BaseProperties.Set("discovered", false)
 				.SetDocumentation("Discovered", "", "", "Progress", "True if the level has been visited at least once.");
@@ -66,6 +66,8 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Connected Level Above", "level", "", "Level", "The level that is above this one.");
 			properties.BaseProperties.Set("connected_level_below", "")
 				.SetDocumentation("Connected Level Below", "level", "", "Level", "The level that is below this one.");
+			properties.BaseProperties.Set("parent_level", "")
+				.SetDocumentation("Parent Level", "level", "", "Parenting", "The level that this level shares certain settings with like room clearing.");
 		}
 
 		public Level(int width, int height, Point2I roomSize) :
@@ -91,11 +93,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public Level(string id, Point2I dimensions, int layerCount, Point2I roomSize, Zone zone) :
 			this()
 		{
-			this.roomSize       = roomSize;
-			this.roomLayerCount = layerCount;
-			this.dimensions     = Point2I.Zero;
+			this.roomSize		= roomSize;
+			this.roomLayerCount	= layerCount;
+			this.dimensions		= Point2I.Zero;
 
-			properties.Set("id", id);
+			ID = id;
 
 			Zone = zone;
 
@@ -366,8 +368,8 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int x = roomArea.Left; x < roomArea.Right; x++) {
 					for (int y = roomArea.Top; y < roomArea.Bottom; y++) {
 						Room room = rooms[x, y];
-						for (int i = 0; i < room.ActionData.Count; i++) {
-							ActionTileDataInstance actionTile = room.ActionData[i];
+						for (int i = 0; i < room.ActionCount; i++) {
+							ActionTileDataInstance actionTile = room.GetActionTileAt(i);
 							Rectangle2I tileBounds = actionTile.GetBounds();
 							tileBounds.Point += room.Location * roomSize * GameSettings.TILE_SIZE;
 							if (pixelArea.Contains(tileBounds.Point))
@@ -596,8 +598,6 @@ namespace ZeldaOracle.Game.Worlds {
 				else
 					properties.Set("zone", "");
 			}
-			//get { return zone; }
-			//set { zone = value; }
 		}
 
 		public string ID {
@@ -605,18 +605,45 @@ namespace ZeldaOracle.Game.Worlds {
 			set { properties.Set("id", value); }
 		}
 		
-		public Dungeon Dungeon {
-			get { return world.GetDungeon(properties.GetString("dungeon", "")); }
+		public Area Area {
+			get {
+				Area area = world.GetArea(properties.GetString("area", ""));
+				return area ?? world.DefaultArea;
+			}
 			set {
 				if (value == null)
-					properties.Set("dungeon", "");
+					properties.Set("area", "");
 				else
-					properties.Set("dungeon", value.ID);
+					properties.Set("area", value.ID);
 			}
 		}
-		public string DungeonID {
-			get { return properties.GetString("dungeon", ""); }
-			set { properties.Set("dungeon", value); }
+
+		public string AreaID {
+			get { return properties.GetString("area", ""); }
+			set { properties.Set("area", value); }
+		}
+
+		/// <summary>Gets or sets the parent level that this level shares
+		/// certain settings with like room clearing.</summary>
+		public Level ParentLevel {
+			get { return world.GetLevel(properties.GetString("parent_level", "")); }
+			set {
+				if (value == null)
+					properties.Set("parent_level", "");
+				else
+					properties.Set("parent_level", value.ID);
+			}
+		}
+
+		/// <summary>Returns the root parented level for this level.
+		/// This value can be itself.</summary>
+		public Level RootLevel {
+			get {
+				Level parentLevel = ParentLevel;
+				if (parentLevel != null)
+					return parentLevel;//.RootLevel;
+				return this;
+			}
 		}
 		
 		public Level ConnectedLevelAbove {
@@ -639,9 +666,9 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 		
-		public int DungeonFloor {
-			get { return properties.GetInteger("dungeon_floor", 0); }
-			set { properties.Set("dungeon_floor", value); }
+		public int FloorNumber {
+			get { return properties.GetInteger("floor_number", 0); }
+			set { properties.Set("floor_number", value); }
 		}
 		
 		public bool IsDiscovered {

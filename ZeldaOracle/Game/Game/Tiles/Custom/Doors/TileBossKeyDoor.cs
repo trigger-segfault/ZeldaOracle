@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override bool OnPush(int direction, float movementSpeed) {
-			Dungeon dungeon = RoomControl.Dungeon;
+			Area dungeon = RoomControl.Area;
 
 			if (dungeon.HasBossKey) {
 				Open();

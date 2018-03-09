@@ -53,7 +53,7 @@ TILE "temp_color_switch";
 	SPRITEINDEX	1, "tile_color_switch_red";
 	PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
 				(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
-				(boolean, sync_with_dungeon,	false,	"Sync With Dungeon",	"", "", "Will the color switch's state be syncronized with other color switches in the dungeon?");
+				(boolean, sync_with_area,	false,	"Sync With Area",	"", "", "Will the color switch's state be syncronized with other color switches in the area?");
 	EVENT		toggle, "Toggle", "Switch", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
 END;
 
@@ -124,14 +124,14 @@ TILE "roller_horizontal";
 	SPRITEINDEX	0, "tile_roller_horizontal";
 	SPRITEINDEX	1, "tile_roller_horizontal_roll";
 	PROPERTY	(vertical, false);
-	DOCUMENTS	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the roller in tiles.");
+	DOCUMENT	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the roller in tiles.");
 END;
 TILE "roller_vertical";
 	CLONE		"temp_roller";
 	SPRITEINDEX	0, "tile_roller_vertical";
 	SPRITEINDEX	1, "tile_roller_vertical_roll";
 	PROPERTY	(vertical, true);
-	DOCUMENTS	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the roller in tiles.");
+	DOCUMENT	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the roller in tiles.");
 END;
 
 # Spike Roller ------------------------------------------------
@@ -143,7 +143,7 @@ TILE "spike_roller_horizontal";
 	SPRITEINDEX 2, "tile_spike_roller_horizontal_mid";
 	SPRITEINDEX 3, "tile_spike_roller_horizontal_bottom";
 	PROPERTY	(vertical, false);
-	DOCUMENTS	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the spike roller in tiles.");
+	DOCUMENT	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the spike roller in tiles.");
 END;
 TILE "spike_roller_vertical";
 	CLONE		"temp_spike_roller";
@@ -152,7 +152,7 @@ TILE "spike_roller_vertical";
 	SPRITEINDEX 2, "tile_spike_roller_vertical_mid";
 	SPRITEINDEX 3, "tile_spike_roller_vertical_right";
 	PROPERTY	(vertical, true);
-	DOCUMENTS	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the spike roller in tiles.");
+	DOCUMENT	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the spike roller in tiles.");
 END;
 
 # Arrow Cannon ------------------------------------------------

@@ -5,7 +5,7 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Control {
+namespace ZeldaOracle.Game.Control.RoomManagers {
 
 	public class RoomPhysics : RoomManager {
 		

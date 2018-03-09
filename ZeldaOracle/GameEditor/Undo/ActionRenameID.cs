@@ -30,9 +30,9 @@ namespace ZeldaEditor.Undo {
 				editorControl.World.RenameLevel((Level)idObject, oldID);
 				editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 			}
-			else if (idObject is Dungeon) {
-				editorControl.World.RenameDungeon((Dungeon)idObject, oldID);
-				editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
+			else if (idObject is Area) {
+				editorControl.World.RenameArea((Area)idObject, oldID);
+				editorControl.EditorWindow.WorldTreeView.RefreshAreas();
 			}
 			else if (idObject is Script) {
 				editorControl.World.RenameScript((Script)idObject, oldID);
@@ -50,9 +50,9 @@ namespace ZeldaEditor.Undo {
 				editorControl.World.RenameLevel((Level)idObject, newID);
 				editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 			}
-			else if (idObject is Dungeon) {
-				editorControl.World.RenameDungeon((Dungeon)idObject, newID);
-				editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
+			else if (idObject is Area) {
+				editorControl.World.RenameArea((Area)idObject, newID);
+				editorControl.EditorWindow.WorldTreeView.RefreshAreas();
 			}
 			else if (idObject is Script) {
 				editorControl.World.RenameScript((Script)idObject, newID);

@@ -30,6 +30,7 @@ using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Monsters.JumpMonsters;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
+using ZeldaOracle.Game.Control.RoomManagers;
 
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
@@ -340,9 +341,9 @@ namespace ZeldaOracle.Game.Debug {
 
 			// C: Change color barrier color.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.C)) {
-				if (RoomControl.Dungeon != null) {
-					PuzzleColor c = (RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Blue ? PuzzleColor.Red : PuzzleColor.Blue);
-					RoomControl.Dungeon.ColorSwitchColor = c;
+				if (RoomControl.Area != null) {
+					PuzzleColor c = (RoomControl.Area.ColorSwitchColor == PuzzleColor.Blue ? PuzzleColor.Red : PuzzleColor.Blue);
+					RoomControl.Area.ColorSwitchColor = c;
 					if (RoomControl.GetTilesOfType<TileColorBarrier>().Any())
 						gameControl.PushRoomState(new RoomStateColorBarrier(c));
 				}
@@ -361,9 +362,9 @@ namespace ZeldaOracle.Game.Debug {
 			// INSERT: Fill all ammo.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.Insert)) {
 				gameControl.Inventory.FillAllAmmo();
-				Dungeon dungeon = gameControl.RoomControl.Dungeon;
+				Area dungeon = gameControl.RoomControl.Area;
 				if (dungeon != null) {
-					dungeon.NumSmallKeys = GMath.Min(dungeon.NumSmallKeys + 3, 9);
+					dungeon.SmallKeyCount = GMath.Min(dungeon.SmallKeyCount + 3, 9);
 					dungeon.HasMap		= true;
 					dungeon.HasCompass	= true;
 					dungeon.HasBossKey	= true;

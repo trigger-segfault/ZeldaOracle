@@ -11,6 +11,8 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.API;
+using ZeldaOracle.Game.Tiles.Custom.Monsters;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Room : IEventObjectContainer, IEventObject, IVariableObject {
@@ -19,7 +21,6 @@ namespace ZeldaOracle.Game.Worlds {
 		private Point2I							location;	// Location within the level.
 		private TileDataInstance[,,]			tileData;	// 3D grid of tile data (x, y, layer)
 		private List<ActionTileDataInstance>	actionData;
-		//private Zone							zone;
 		private Properties						properties;
 		private Variables						variables;
 		private EventCollection					events;
@@ -46,6 +47,10 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Music", "song", "", "General", "The music to play in this room. Select none to choose the default music.", true, false);
 			properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "General", "The zone type for this room.");
+			properties.BaseProperties.SetEnum("spawn_mode", MonsterSpawnMode.Normal)
+				.SetDocumentation("Monster Spawn Mode", "enum", typeof(MonsterSpawnMode), "General", "The method for spawning monsters in this room.");
+			//properties.BaseProperties.Set("area", "")
+			//	.SetDocumentation("Area", "area", "", "Area", "The area this room belongs to.");
 
 			properties.BaseProperties.Set("discovered", false)
 				.SetDocumentation("Discovered", "Progress", "True if the room has been visited at least once.");
@@ -56,6 +61,13 @@ namespace ZeldaOracle.Game.Worlds {
 
 			properties.BaseProperties.Set("death_out_of_bounds", false)
 				.SetDocumentation("Death out of Bounds", "Side-Scrolling", "True if the player dies and respawns when falling off the edge of the map.");
+
+			properties.BaseProperties.Set("parent_level", "")
+				.SetDocumentation("Parent Level", "level", "", "Parenting", "The level that this level shares certain settings with like room clearing.");
+			properties.BaseProperties.Set("parent_location", -Point2I.One)
+				.SetDocumentation("Parent Location", "Parenting", "The location that this room shares certain settings with like room clearing.");
+			properties.BaseProperties.Set("disable_parent", false)
+				.SetDocumentation("Disable Parenting", "Parenting", "All parenting inherited from level will be disabled.");
 
 
 			events.AddEvent("room_start", "Room Start", "Transition", "Occurs when the room begins.");
@@ -154,12 +166,38 @@ namespace ZeldaOracle.Game.Worlds {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		public TileDataInstance GetTile(Point2I location, int layer) {
-			return tileData[location.X, location.Y, layer];
+		// Tiles ----------------------------------------------------------------------
+
+		public TileDataInstance GetTile(Point2I location, int layer,
+			bool includeParented = false)
+		{
+			TileDataInstance tile = tileData[location.X, location.Y, layer];
+			if (tile != null || !includeParented)
+				return tile;
+
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null)
+				return parentRoom.GetSharedTile(location, layer);
+
+			return null;
 		}
 
-		public TileDataInstance GetTile(int x, int y, int layer) {
-			return tileData[x, y, layer];
+		public TileDataInstance GetTile(int x, int y, int layer,
+			bool includeParented = false)
+		{
+			return GetTile(new Point2I(x, y), layer);
+		}
+
+		public TileDataInstance GetSharedTile(Point2I location, int layer) {
+			TileDataInstance tile = tileData[location.X, location.Y, layer];
+			if (tile != null && tile.IsShared)
+				return tile;
+
+			/*Room parentRoom = ParentRoom;
+			if (parentRoom != null)
+				return parentRoom.GetSharedTile(location, layer);*/
+
+			return null;
 		}
 
 		public IEnumerable<TileDataInstance> GetTilesInArea(Rectangle2I area, int layer) {
@@ -175,58 +213,69 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public bool ContainsTile(TileDataInstance tile) {
+		public bool ContainsTile(TileDataInstance tile,
+			bool includeParented = false)
+		{
+			if (tile == tileData[tile.Location.X, tile.Location.Y, tile.Layer])
+				return true;
+
+			if (!includeParented || !tile.IsShared)
+				return false;
+			
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				return parentRoom.ContainsSharedTile(tile);
+			}
+			return false;
+		}
+
+		/// <summary>Returns true if this room contains a shared tile at the location.</summary>
+		public bool ContainsSharedTile(TileDataInstance tile) {
+			if (!tile.IsShared)
+				return false;
+
 			return (tile == tileData[tile.Location.X, tile.Location.Y, tile.Layer]);
+			//	return true;
+
+			/*Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				return parentRoom.ContainsSharedTile(tile);
+			}
+			return false;*/
 		}
 
-		public bool ContainsActionTile(ActionTileDataInstance actionTile) {
-			return actionData.Contains(actionTile);
-		}
-
-		public ActionTileDataInstance FindActionTileByID(string actionTileID) {
-			return actionData.Find(actionTile => actionTile.ID == actionTileID);
-		}
-
-		public TileDataInstance FindTileOfTypeByID<TileType>(string tileID) {
-			for (int layer = 0; layer < LayerCount; layer++) {
-				for (int x = 0; x < Width; x++) {
-					for (int y = 0; y < Height; y++) {
-						TileDataInstance tile = tileData[x, y, layer];
-						if (tile != null && tile.IsAtLocation(x, y) &&
-							tile.ID == tileID && tile.Type.Equals(typeof(TileType)))
-							return tile;
-					}
-				}
+		public TileDataInstance FindTileOfTypeByID<TileType>(string tileID,
+			bool includeParented = true)
+		{
+			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+				if (tile.ID == tileID && GameUtil.TypeHasBase<TileType>(tile.Type))
+					return tile;
 			}
 			return null;
 		}
 
-		public TileDataInstance FindTileByID(string tileID) {
-			for (int layer = 0; layer < LayerCount; layer++) {
-				for (int x = 0; x < Width; x++) {
-					for (int y = 0; y < Height; y++) {
-						TileDataInstance tile = tileData[x, y, layer];
-						if (tile != null && tile.IsAtLocation(x, y) && tile.ID == tileID)
-							return tile;
-					}
-				}
+		public TileDataInstance FindTileByID(string tileID,
+			bool includeParented = true)
+		{
+			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+				if (tile.ID == tileID)
+					return tile;
 			}
 			return null;
 		}
 
-		public IEnumerable<TileDataInstance> FindTilesByID(string tileID) {
-			for (int layer = 0; layer < LayerCount; layer++) {
-				for (int x = 0; x < Width; x++) {
-					for (int y = 0; y < Height; y++) {
-						TileDataInstance tile = tileData[x, y, layer];
-						if (tile != null && tile.IsAtLocation(x, y) && tile.ID == tileID)
-							yield return tile;
-					}
-				}
+		public IEnumerable<TileDataInstance> FindTilesByID(string tileID,
+			bool includeParented = true)
+		{
+			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+				if (tile.ID == tileID)
+					yield return tile;
 			}
 		}
 
-		public IEnumerable<TileDataInstance> GetTiles() {
+		/// <summary>Gets all tiles in the room.</summary>
+		public IEnumerable<TileDataInstance> GetTiles(bool includeParented = false) {
+			// Get this rooms tiles
 			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
 					for (int y = 0; y < Height; y++) {
@@ -236,27 +285,262 @@ namespace ZeldaOracle.Game.Worlds {
 					}
 				}
 			}
+
+			if (!includeParented)
+				yield break;
+
+			// Get the parent room's shared tiles
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (TileDataInstance tile in parentRoom.GetSharedTiles()) {
+					if (IsTileAreaClear(tile))
+						yield return tile;
+				}
+			}
 		}
 
-		public bool HasUnopenedTreasure() {
-			foreach (TileDataInstance tile in GetTiles()) {
-				if (tile.Type == typeof(TileChest) && !tile.Properties.GetBoolean("looted", false))
-					return true;
-				if (tile.Type == typeof(TileReward) && !tile.Properties.GetBoolean("looted", false))
-					return true;
+		/// <summary>Gets all tiles in the room's layer.</summary>
+		public IEnumerable<TileDataInstance> GetTileLayer(int layer,
+			bool includeParented = false)
+		{
+			// Get this rooms tiles
+			for (int x = 0; x < Width; x++) {
+				for (int y = 0; y < Height; y++) {
+					TileDataInstance tile = tileData[x, y, layer];
+					if (tile != null && tile.IsAtLocation(x, y))
+						yield return tile;
+				}
 			}
+
+			if (!includeParented)
+				yield break;
+
+			// Get the parent room's shared tiles
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (TileDataInstance tile in parentRoom.GetSharedTiles()) {
+					if (IsTileAreaClear(tile))
+						yield return tile;
+				}
+			}
+		}
+
+		/// <summary>Gets all shared parented tiles in the room.</summary>
+		public IEnumerable<TileDataInstance> GetParentTiles() {
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (TileDataInstance tile in parentRoom.GetSharedTiles()) {
+					if (IsTileAreaClear(tile))
+						yield return tile;
+				}
+			}
+		}
+
+		/// <summary>Gets all shared parented tiles in the room.</summary>
+		public IEnumerable<TileDataInstance> GetParentTileLayer(int layer) {
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (TileDataInstance tile in
+					parentRoom.GetSharedTileLayer(layer))
+				{
+					if (IsTileAreaClear(tile))
+						yield return tile;
+				}
+			}
+		}
+
+		/// <summary>Gets all shared current and parented tiles in the room.</summary>
+		public IEnumerable<TileDataInstance> GetSharedTiles() {
+			// Get the this room's non-unique tiles
+			foreach (TileDataInstance tile in GetTiles()) {
+				if (tile.IsShared)
+					yield return tile;
+			}
+
+			// Get the parent room's shared tiles
+			/*Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (TileDataInstance tile in
+					parentRoom.GetSharedTiles())
+				{
+					if (IsTileAreaClear(tile))
+						yield return tile;
+				}
+			}*/
+		}
+
+		/// <summary>Gets all shared current and parented tiles in the room's layer.</summary>
+		public IEnumerable<TileDataInstance> GetSharedTileLayer(int layer) {
+			// Get the this room's non-unique tiles
+			foreach (TileDataInstance tile in GetTileLayer(layer)) {
+				if (tile.IsShared)
+					yield return tile;
+			}
+
+			// Get the parent room's shared tiles
+			/*Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (TileDataInstance tile in
+					parentRoom.GetSharedTileLayer(layer)) {
+					if (IsTileAreaClear(tile))
+						yield return tile;
+				}
+			}*/
+		}
+
+		/// <summary>Checks if the area used by this tile is unoccupied.</summary>
+		private bool IsTileAreaClear(TileDataInstance tile) {
+			Point2I size = tile.Size;
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					if (tileData[x, y, tile.Layer] != null)
+						return false;
+				}
+			}
+			return true;
+		}
+
+		// Action Tiles ---------------------------------------------------------------
+
+		/// <summary>Gets all action tiles in the room.</summary>
+		public IEnumerable<ActionTileDataInstance> GetActionTiles(
+			bool includeParented = false)
+		{
+			// Get this rooms action tiles
+			foreach (ActionTileDataInstance action in actionData) {
+				yield return action;
+			}
+
+			if (!includeParented)
+				yield break;
+
+			// Get the parent room's shared action tiles
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (ActionTileDataInstance action in
+					parentRoom.GetSharedActionTiles())
+				{
+					yield return action;
+				}
+			}
+		}
+
+		/// <summary>Gets the action tile at the specified index in the list.</summary>
+		public ActionTileDataInstance GetActionTileAt(int index) {
+			return actionData[index];
+		}
+
+		/// <summary>Gets all shared parented action tiles in the room.</summary>
+		public IEnumerable<ActionTileDataInstance> GetParentActionTiles() {
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				return parentRoom.GetSharedActionTiles();
+			}
+			return Enumerable.Empty<ActionTileDataInstance>();
+		}
+
+		/// <summary>Gets all shared current and parented action tiles in the room.</summary>
+		public IEnumerable<ActionTileDataInstance> GetSharedActionTiles() {
+			// Get the this room's shared action tiles
+			foreach (ActionTileDataInstance action in actionData) {
+				if (action.IsShared)
+					yield return action;
+			}
+
+			// Get the parent room's shared action tiles
+			/*Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				foreach (ActionTileDataInstance action in
+					parentRoom.GetSharedActionTiles())
+				{
+					yield return action;
+				}
+			}*/
+		}
+
+		/// <summary>Returns true if this room contains the action tile.</summary>
+		public bool ContainsActionTile(ActionTileDataInstance action,
+			bool includeParented = false)
+		{
+			if (actionData.Contains(action))
+				return true;
+
+			if (!includeParented || !action.IsShared)
+				return false;
+
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null)
+				return parentRoom.ContainsSharedActionTile(action);
+
 			return false;
 		}
 
+		/// <summary>Returns true if this room contains the shared action tile.</summary>
+		public bool ContainsSharedActionTile(ActionTileDataInstance action) {
+			if (!action.IsShared)
+				return false;
+			
+			return actionData.Contains(action);
 
-		//-----------------------------------------------------------------------------
-		// Tile Management
-		//-----------------------------------------------------------------------------
+			/*Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				return parentRoom.ContainsSharedActionTile(tile);
+			}
+			return false;*/
+		}
+
+		public ActionTileDataInstance FindActionTileByID(string actionTileID,
+			bool includeParented = true)
+		{
+			var action = actionData.Find(actionTile => actionTile.ID == actionTileID);
+			if (action != null)
+				return action;
+
+			if (!includeParented)
+				return null;
+
+			Room parentRoom = ParentRoom;
+			if (parentRoom != null) {
+				return parentRoom.actionData.Find(actionTile =>
+					actionTile.ID == actionTileID && actionTile.IsShared);
+			}
+
+			return null;
+		}
+
+		// All Tiles ------------------------------------------------------------------
+
+		/// <summary>Gets all tiles and action tiles in the room.</summary>
+		public IEnumerable<BaseTileDataInstance> GetAllTiles(
+			bool includeParented = false)	
+		{
+			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+				yield return tile;
+			}
+
+			foreach (ActionTileDataInstance action in GetActionTiles(includeParented)) {
+				yield return action;
+			}
+		}
+
+		/// <summary>Returns true if any unlooted reward tiles exist in the room.</summary>
+		public bool HasUnlootedRewards() {
+			return GetAllTiles(true).Any(t => t.IsUnlootedReward);
+		}
+
 		
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+
+		// Tiles ----------------------------------------------------------------------
+
+		/// <summary>Places the tile at the specified location.</summary>
 		public void PlaceTile(TileDataInstance tile, int x, int y, int layer) {
 			PlaceTile(tile, new Point2I(x, y), layer);
 		}
 
+		/// <summary>Places the tile at the specified location.</summary>
 		public void PlaceTile(TileDataInstance tile, Point2I location, int layer) {
 			Point2I size = (tile != null ? tile.Size : Point2I.One);
 			for (int x = 0; x < size.X; x++) {
@@ -278,6 +562,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Removes the tile from the room.</summary>
 		public void RemoveTile(TileDataInstance tile) {
 			if (tile.Room == this) {
 				Point2I size = tile.Size;
@@ -291,18 +576,21 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public void RemoveTile(Point2I location, int layer) {
-			TileDataInstance tile = tileData[location.X, location.Y, layer];
-			if (tile != null)
-				RemoveTile(tile);
-		}
-
+		/// <summary>Removes the tile at the specified location from the room.</summary>
 		public void RemoveTile(int x, int y, int layer) {
 			TileDataInstance tile = tileData[x, y, layer];
 			if (tile != null)
 				RemoveTile(tile);
 		}
 
+		/// <summary>Removes the tile at the specified location from the room.</summary>
+		public void RemoveTile(Point2I location, int layer) {
+			TileDataInstance tile = tileData[location.X, location.Y, layer];
+			if (tile != null)
+				RemoveTile(tile);
+		}
+
+		/// <summary>Removes the tile or action tile at the specified location from the room.</summary>
 		public void Remove(BaseTileDataInstance tile) {
 			if (tile is TileDataInstance)
 				RemoveTile((TileDataInstance) tile);
@@ -310,30 +598,23 @@ namespace ZeldaOracle.Game.Worlds {
 				RemoveActionTile((ActionTileDataInstance) tile);
 		}
 
-		public TileDataInstance CreateTile(TileData data, Point2I location, int layer) {
-			return CreateTile(data, location.X, location.Y, layer);
+		/// <summary>Creates a tile at the specified location in the room.</summary>
+		public TileDataInstance CreateTile(TileData data, int x, int y, int layer) {
+			return CreateTile(data, new Point2I(x, y), layer);
 		}
 
-		public TileDataInstance CreateTile(TileData data, int x, int y, int layer) {
+		/// <summary>Creates a tile at the specified location in the room.</summary>
+		public TileDataInstance CreateTile(TileData data, Point2I location, int layer) {
 			TileDataInstance dataInstance = null;
 			if (data != null) {
-				dataInstance = new TileDataInstance(data, x, y, layer);
+				dataInstance = new TileDataInstance(data, location, layer);
 				dataInstance.Room = this;
 			}
-			PlaceTile(dataInstance, new Point2I(x, y), layer);
+			PlaceTile(dataInstance, location, layer);
 			return dataInstance;
 		}
 
-		public ActionTileDataInstance CreateActionTile(ActionTileData data, int x, int y) {
-			return CreateActionTile(data, new Point2I(x, y));
-		}
-
-		public ActionTileDataInstance CreateActionTile(ActionTileData data, Point2I position) {
-			ActionTileDataInstance dataInstance = new ActionTileDataInstance(data, position);
-			AddActionTile(dataInstance);
-			return dataInstance;
-		}
-
+		/// <summary>Updates the area the tile contains in the room based on its size.</summary>
 		public void UpdateTileSize(TileDataInstance tile, Point2I oldSize) {
 			if (ContainsTile(tile)) {
 				Point2I newSize = tile.Size;
@@ -343,16 +624,38 @@ namespace ZeldaOracle.Game.Worlds {
 				PlaceTile(tile, tile.Location, tile.Layer);
 			}
 		}
-		
+
+		// Action Tiles ---------------------------------------------------------------
+
+		/// <summary>Creates an action tile at the specified position in the room.</summary>
+		public ActionTileDataInstance CreateActionTile(ActionTileData data, int x, int y) {
+			return CreateActionTile(data, new Point2I(x, y));
+		}
+
+		/// <summary>Creates an action tile at the specified position in the room.</summary>
+		public ActionTileDataInstance CreateActionTile(ActionTileData data, Point2I position) {
+			ActionTileDataInstance dataInstance = new ActionTileDataInstance(data, position);
+			AddActionTile(dataInstance);
+			return dataInstance;
+		}
+
+		/// <summary>Adds an action tile to the room.</summary>
 		public void AddActionTile(ActionTileDataInstance actionTile) {
 			actionData.Add(actionTile);
 			actionTile.Room = this;
 		}
 		
+		/// <summary>Removes the action tile from the room.</summary>
 		public void RemoveActionTile(ActionTileDataInstance actionTile) {
 			actionData.Remove(actionTile);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Resizes the number of tile layers in the room.</summary>
 		internal void ResizeLayerCount(int newLayerCount) {
 			TileDataInstance[,,] oldTileData = tileData;
 			tileData = new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, newLayerCount];
@@ -366,35 +669,46 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Special In-Game Methods
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>Called when the room is left by the player.</summary>
 		public void OnLeaveRoom() {
-			// Reset tile states
+			// Reset tile states and respawn "Always" monsters
 			foreach (TileDataInstance tile in GetTiles()) {
 				if (tile.ResetCondition == TileResetCondition.LeaveRoom)
 					tile.ResetState();
 			}
 
-			// Reset action tile states
+			// Reset action tile states and respawn "Always" monsters
 			foreach (ActionTileDataInstance tile in actionData) {
 				if (tile.ResetCondition == TileResetCondition.LeaveRoom)
 					tile.ResetState();
 			}
 		}
 
+		/// <summary>Called when the area is left by the player.</summary>
 		public void OnLeaveArea() {
-			// Reset tile states
+			// Reset tile states and respawn "Normal" monsters
 			foreach (TileDataInstance tile in GetTiles()) {
 				if (tile.ResetCondition == TileResetCondition.LeaveArea)
 					tile.ResetState();
 			}
 
-			// Reset action tile states
+			// Reset action tile states and respawn "Normal" monsters
 			foreach (ActionTileDataInstance tile in actionData) {
 				if (tile.ResetCondition == TileResetCondition.LeaveArea)
 					tile.ResetState();
+			}
+		}
+
+		/// <summary>Assigns a unique ID to all monsters in the room.</summary>
+		internal void AssignMonsterIDs() {
+			foreach (BaseTileDataInstance tile in GetAllTiles()) {
+				if (tile.IsMonster && tile.MonsterID == 0)
+					tile.MonsterID = level.World.NextMonsterID();
 			}
 		}
 
@@ -402,57 +716,24 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public TileDataInstance[,,] TileData {
-			get { return tileData; }
-			set { tileData = value; }
-		}
-
-		public List<ActionTileDataInstance> ActionData {
-			get { return actionData; }
-			set { actionData = value; }
-		}
-
+		
+		/// <summary>Gets or sets the level containing this room.</summary>
 		public Level Level {
 			get { return level; }
 			set { level = value; }
 		}
-
+		
+		/// <summary>Gets or sets the location of the room in the level.</summary>
 		public Point2I Location {
 			get { return location; }
 			set { location = value; }
 		}
 
-		public Point2I Size {
-			get { return new Point2I(tileData.GetLength(0), tileData.GetLength(1)); }
-		}
-
-		public int Width {
-			get { return tileData.GetLength(0); }
-		}
-
-		public int Height {
-			get { return tileData.GetLength(1); }
-		}
-
-		public int LayerCount {
-			get { return tileData.GetLength(2); }
-		}
-
-		public int BottomLayer {
-			get { return 0; }
-		}
-
-		public int TopLayer {
-			get { return (level.RoomLayerCount - 1); }
-		}
-
+		/// <summary>Gets or sets the zone assigned to this room.</summary>
 		public Zone Zone {
 			get {
 				Zone zone = properties.GetResource<Zone>("zone", null);
-				if (zone != null)
-					return zone;
-				return level.Zone;
+				return zone ?? level.Zone;
 			}
 			set {
 				if (value != null)
@@ -462,16 +743,134 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets the area assigned to this room.</summary>
+		public Area Area {
+			get { return level.Area; }
+		}
 
+		/// <summary>Gets or sets the ID of this room.</summary>
 		public string ID {
 			get { return properties.GetString("id"); }
 			set { properties.Set("id", value); }
 		}
 
-		public Dungeon Dungeon {
-			get { return level.Dungeon; }
+		// Dimensions -----------------------------------------------------------------
+
+		/// <summary>Gets the size of the room in tiles.</summary>
+		public Point2I Size {
+			get { return new Point2I(tileData.GetLength(0), tileData.GetLength(1)); }
 		}
 
+		/// <summary>Gets the width of the room in tiles.</summary>
+		public int Width {
+			get { return tileData.GetLength(0); }
+		}
+
+		/// <summary>Gets the height of the room in tiles.</summary>
+		public int Height {
+			get { return tileData.GetLength(1); }
+		}
+
+		// Tiles ----------------------------------------------------------------------
+		
+		/// <summary>Gets the number of tile layers in the room.</summary>
+		public int LayerCount {
+			get { return tileData.GetLength(2); }
+		}
+
+		/// <summary>Gets the index of the bottom tile layer in the room.</summary>
+		public int BottomLayer {
+			get { return 0; }
+		}
+
+		/// <summary>Gets the index of the top tile layer in the room.</summary>
+		public int TopLayer {
+			get { return (level.RoomLayerCount - 1); }
+		}
+
+		/// <summary>Gets the number of action tiles in the room.</summary>
+		public int ActionCount {
+			get { return actionData.Count; }
+		}
+		
+		// Parenting ------------------------------------------------------------------
+
+		/// <summary>Gets or sets if the room should disable any parenting inherited
+		/// from its level.</summary>
+		public bool DisableParenting {
+			get { return properties.Get("disable_parent", false); }
+			set { properties.Set("disable_parent", true); }
+		}
+
+		/// <summary>Gets or sets the parent level that this level shares
+		/// certain settings with like room clearing.</summary>
+		public Level ParentLevel {
+			get {
+				if (DisableParenting)
+					return null;
+				Level parentLevel = level.World.GetLevel(
+					properties.GetString("parent_level", ""));
+				return parentLevel ?? level.ParentLevel;
+			}
+			set {
+				if (value == null)
+					properties.Set("parent_level", "");
+				else
+					properties.Set("parent_level", value.ID);
+			}
+		}
+
+		/// <summary>Gets or sets the parent room location that this room
+		/// shares certain settings with like room clearing.</summary>
+		public Point2I ParentLocation {
+			get {
+				if (DisableParenting)
+					return -Point2I.One;
+				return properties.GetPoint("parent_location", -Point2I.One);
+			}
+			set { properties.Set("parent_location", value); }
+		}
+
+		/// <summary>Gets the root location of the room.</summary>
+		public Point2I RootLocation {
+			get {
+				Point2I parentLocation = ParentLocation;
+				if (parentLocation != -Point2I.One)
+					return parentLocation;
+				return location;
+			}
+		}
+
+		/// <summary>Gets the parent room identifier that this room shares
+		/// certain settings with like room clearing.</summary>
+		public Room ParentRoom {
+			get {
+				Level parentLevel = ParentLevel ?? level;
+				Point2I parentLocation = ParentLocation;
+				if (parentLocation == -Point2I.One)
+					parentLocation = location;
+
+				if ((parentLevel != level || parentLocation != location) &&
+					parentLevel.ContainsRoom(parentLocation))
+					return parentLevel.GetRoomAt(parentLocation);
+				return null;
+			}
+		}
+
+		/// <summary>Gets the root room identifier that this room shares
+		/// certain settings with like room clearing.</summary>
+		public Room RootRoom {
+			get {
+				Room parentRoom = ParentRoom;
+				if (parentRoom != null)
+					return parentRoom;//.RootRoom;
+				return this;
+			}
+		}
+
+		// Properties -----------------------------------------------------------------
+
+		/// <summary>Gets or sets the properties for the room.</summary>
 		public Properties Properties {
 			get { return properties; }
 			set {
@@ -480,32 +879,52 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets the variables for the room.</summary>
 		public Variables Vars {
 			get { return variables; }
 		}
 
+		/// <summary>Gets the events for the room.</summary>
 		public EventCollection Events {
 			get { return events; }
 		}
-		
+
+		// Settings -------------------------------------------------------------------
+
+		/// <summary>Gets or sets if the root room has been discovered.</summary>
 		public bool IsDiscovered {
-			get { return properties.GetBoolean("discovered", false); }
-			set { properties.Set("discovered", value); }
-		}
-		
-		public bool IsHiddenFromMap {
-			get { return properties.GetBoolean("hidden_from_map", false); }
-			set { properties.Set("hidden_from_map", value); }
-		}
-		
-		public bool IsBossRoom {
-			get { return properties.GetBoolean("boss_room", false); }
-			set { properties.Set("boss_room", value); }
+			get { return RootRoom.properties.GetBoolean("discovered", false); }
+			set { RootRoom.properties.Set("discovered", value); }
 		}
 
+		/// <summary>Gets or sets if the root room is hidden from the map.</summary>
+		public bool IsHiddenFromMap {
+			get { return RootRoom.properties.GetBoolean("hidden_from_map", false); }
+			set { RootRoom.properties.Set("hidden_from_map", value); }
+		}
+
+		/// <summary>Gets or sets if the root room is a boss room.</summary>
+		public bool IsBossRoom {
+			get { return RootRoom.properties.GetBoolean("boss_room", false); }
+			set { RootRoom.properties.Set("boss_room", value); }
+		}
+
+		/// <summary>Gets or sets if the player dies when falling out of bounds
+		/// while in side-scrolling mode.</summary>
 		public bool DeathOutOfBounds {
 			get { return properties.GetBoolean("death_out_of_bounds", false); }
 			set { properties.Set("death_out_of_bounds", value); }
+		}
+
+		/// <summary>Gets or sets the spawn methods for monsters in this room.</summary>
+		public MonsterSpawnMode SpawnMode {
+			get {
+				var spawnMode = properties.GetEnum("spawn_mode", MonsterSpawnMode.Random);
+				if (spawnMode != MonsterSpawnMode.Normal)
+					return spawnMode;
+				return Area.SpawnMode;
+			}
+			set { properties.SetEnum("spawn_mode", value); }
 		}
 	}
 }

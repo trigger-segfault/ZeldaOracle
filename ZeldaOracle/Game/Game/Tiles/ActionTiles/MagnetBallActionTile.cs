@@ -73,8 +73,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		//-----------------------------------------------------------------------------
 
 		public Polarity Polarity {
-			get { return properties.GetEnum<Polarity>("polarity", Polarity.North); }
-			set { properties.Set("polarity", (int) value); }
+			get { return properties.GetEnum("polarity", Polarity.North); }
+			set { properties.SetEnum("polarity", value); }
 		}
 	}
 }

@@ -5,7 +5,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Collisions;
 
-namespace ZeldaOracle.Game.Control {
+namespace ZeldaOracle.Game.Control.RoomManagers {
 
 	public class ProtectedInteraction {
 		public Entity ProtectedEntity { get; set; }

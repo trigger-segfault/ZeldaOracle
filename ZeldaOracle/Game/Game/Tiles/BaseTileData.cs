@@ -53,6 +53,9 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
 				.SetDocumentation("Reset Condition", "enum", typeof(TileResetCondition), "General",
 				"The condition for when the tile resets its properties.");
+
+			properties.Set("shared", false)
+				.SetDocumentation("Is Shared", "Parenting", "This tile will appear in all child rooms if its area is unoccupied.");
 		}
 
 		public BaseTileData(BaseTileData copy) {
@@ -142,8 +145,20 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileResetCondition ResetCondition {
-			get { return properties.GetEnum<TileResetCondition>("reset_condition", TileResetCondition.LeaveRoom); }
-			set { properties.Set("reset_condition", (int) value); }
+			get { return properties.GetEnum("reset_condition",
+				TileResetCondition.LeaveRoom); }
+			set { properties.SetEnum("reset_condition", value); }
+		}
+
+		/// <summary>Gets or sets if the tile is shared between child rooms.</summary>
+		public bool IsShared {
+			get { return properties.Get("shared", false); }
+			set { properties.Set("shared", value); }
+		}
+
+		/// <summary>Returns true if the tile should be treated as a monster.</summary>
+		public bool IsMonster {
+			get { return properties.Contains("monster_id"); }
 		}
 	}
 }

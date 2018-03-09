@@ -221,8 +221,8 @@ namespace ZeldaEditor.WinForms {
 			if (room == null)
 				return null;
 			Point2I roomOffset = GetRoomDrawPosition(room);
-			for (int i = 0; i < room.ActionData.Count; i++) {
-				ActionTileDataInstance actionTile = room.ActionData[i];
+			for (int i = 0; i < room.ActionCount; i++) {
+				ActionTileDataInstance actionTile = room.GetActionTileAt(i);
 				Rectangle2I tileRect = new Rectangle2I(actionTile.Position + roomOffset, actionTile.Size * GameSettings.TILE_SIZE);
 				if (tileRect.Contains(point))
 					return actionTile;
@@ -369,50 +369,59 @@ namespace ZeldaEditor.WinForms {
 
 			TileDataDrawing.DrawTile(g, action, position, room.Zone, drawColor);
 		}
-		
+
+		private Color GetLayerColor(int layer, bool shared) {
+			if (shared && !editorControl.ShowShared)
+				return Color.Transparent;
+			if (!editorControl.ActionMode) {
+				if (editorControl.CurrentLayer > layer) {
+					if (editorControl.BelowTileDrawMode == TileDrawModes.Hide)
+						return Color.Transparent;
+					if (editorControl.BelowTileDrawMode == TileDrawModes.Fade)
+						return FadeBelowColor;
+				}
+				else if (editorControl.CurrentLayer < layer) {
+					if (editorControl.AboveTileDrawMode == TileDrawModes.Hide)
+						return Color.Transparent;
+					if (editorControl.AboveTileDrawMode == TileDrawModes.Fade)
+						return FadeAboveColor;
+				}
+			}
+			return NormalColor;
+		}
+
+		private Color GetActionColor(bool shared) {
+			if (shared && !editorControl.ShowShared)
+				return Color.Transparent;
+			return NormalColor;
+		}
+
 		// Draw an entire room.
 		private void DrawRoom(Graphics2D g, Room room) {
 			TileDataDrawing.Room = room;
 			Point2I roomStartTile = room.Location * Level.RoomSize;
 			Point2I roomStartPixel = roomStartTile * GameSettings.TILE_SIZE;
 
-			// Draw white background.
+			// Draw white background
 			g.FillRectangle(new Rectangle2I(Point2I.Zero, room.Size * GameSettings.TILE_SIZE), Color.White);
 
-			// Draw tile layers.
+			// Draw tile layers
 			for (int layer = 0; layer < room.LayerCount; layer++) {
-				// Determine color/transparency for layer based on layer visibility.
-				Color color = NormalColor;
-				if (!editorControl.ActionMode) {
-					if (editorControl.CurrentLayer > layer) {
-						if (editorControl.BelowTileDrawMode == TileDrawModes.Hide)
-							continue; //color = HideColor;
-						else if (editorControl.BelowTileDrawMode == TileDrawModes.Fade)
-							color = FadeBelowColor;
-					}
-					else if (editorControl.CurrentLayer < layer) {
-						if (editorControl.AboveTileDrawMode == TileDrawModes.Hide)
-							continue; //color = HideColor;
-						else if (editorControl.AboveTileDrawMode == TileDrawModes.Fade)
-							color = FadeAboveColor;
-					}
-				}
-				
-				// Draw the tile grid for this layer.
-				for (int x = 0; x < room.Width; x++) {
-					for (int y = 0; y < room.Height; y++) {
-						TileDataInstance tile = room.GetTile(x, y, layer);
-						Point2I position = new Point2I(x, y) * GameSettings.TILE_SIZE;
-						Point2I levelCoord = roomStartTile + new Point2I(x, y);
-						if (tile != null && tile.IsAtLocation(x, y) && !CurrentTool.DrawHideTile(tile, room, levelCoord, layer)) {
-							DrawTile(g, room, tile, position, color);
-						}
-
-						//CurrentTool.DrawTile(g, room, position, levelCoord, layer);
+				foreach (var tile in room.GetTileLayer(
+					layer, EditorControl.ShowShared))
+				{
+					Color color = GetLayerColor(layer, tile.Room != room);
+					if (color.IsTransparent)
+						continue;
+					
+					Point2I position = tile.Location * GameSettings.TILE_SIZE;
+					Point2I levelCoord = roomStartTile + tile.Location;
+					if (!CurrentTool.DrawHideTile(tile, room, levelCoord, layer)) {
+						DrawTile(g, room, tile, position, color);
 					}
 				}
 
-				// Draw the tile grid for this layer.
+				// Draw the tool tiles for this layer.
 				for (int x = 0; x < room.Width; x++) {
 					for (int y = 0; y < room.Height; y++) {
 						Point2I position = new Point2I(x, y) * GameSettings.TILE_SIZE;
@@ -422,12 +431,15 @@ namespace ZeldaEditor.WinForms {
 					}
 				}
 			}
-
-			// Draw action tiles.
+			
+			// Draw action tiles
 			if (editorControl.ShowActions || editorControl.ShouldDrawActions) {
-				for (int i = 0; i < room.ActionData.Count; i++) {
-					if (!CurrentTool.DrawHideActionTile(room.ActionData[i], room, roomStartPixel + room.ActionData[i].Position)) {
-						DrawActionTile(g, room, room.ActionData[i], room.ActionData[i].Position, Color.White);
+				foreach (var action in room.GetActionTiles(editorControl.ShowShared)) {
+					Color color = GetActionColor(action.Room != room);
+					if (color.IsTransparent)
+						continue;
+					if (!CurrentTool.DrawHideActionTile(action, room, roomStartPixel + action.Position)) {
+						DrawActionTile(g, room, action, action.Position, color);
 					}
 				}
 			}

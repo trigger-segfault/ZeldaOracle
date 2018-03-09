@@ -7,6 +7,8 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Scripting;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Game.Worlds {
 	/// <summary>The world class containing everything about the game.</summary>
@@ -18,11 +20,18 @@ namespace ZeldaOracle.Game.Worlds {
 		private EventCollection events;
 		private Variables variables;
 		private List<Level> levels;
-		private List<Dungeon> dungeons;
+		private List<Area> areas;
 		private ScriptManager scriptManager;
 		private int startLevelIndex;
 		private Point2I startRoomLocation;
 		private Point2I startTileLocation;
+
+		/// <summary>Keep an instance of a default area to use when the level does not
+		/// have one assigned.</summary>
+		private Area defaultArea;
+
+		/// <summary>The next unqiue monster ID used for linking.</summary>
+		private int nextMonsterID;
 
 
 		//-----------------------------------------------------------------------------
@@ -31,7 +40,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Constructs an empty world.</summary>
 		public World() {
-			this.dungeons		= new List<Dungeon>();
+			this.areas		= new List<Area>();
 			this.levels			= new List<Level>();
 			this.scriptManager	= new ScriptManager();
 
@@ -40,6 +49,10 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 			this.variables		= new Variables(this);
 
+			this.defaultArea	= new Area();
+			this.defaultArea.World = this;
+
+			this.nextMonsterID  = int.MaxValue;
 
 			this.properties.BaseProperties.Set("id", "world_name")
 				.SetDocumentation("ID", "", "", "General", "The ID used for saves to identify the world.", true, true);
@@ -93,42 +106,75 @@ namespace ZeldaOracle.Game.Worlds {
 		public int IndexOfLevel(string levelID) {
 			return levels.FindIndex(level => level.ID == levelID);
 		}
+		
+		// Sub-Levels -----------------------------------------------------------------
 
-		// Dungeons -------------------------------------------------------------------
-
-		/// <summary>Gets the collection of dungeons.</summary>
-		public IEnumerable<Dungeon> GetDungeons() {
-			return dungeons;
+		/// <summary>Gets the collection of all rooms in the levels.</summary>
+		public IEnumerable<Room> GetRooms() {
+			foreach (Level level in levels) {
+				foreach (Room room in level.GetRooms()) {
+					yield return room;
+				}
+			}
 		}
 
-		/// <summary>Gets the dungeon with the specified ID.</summary>
-		public Dungeon GetDungeon(string dungeonID) {
-			return dungeons.Find(dungeon => { return dungeon.Properties.GetString("id") == dungeonID; });
+		/// <summary>Gets the collection of all tiles in the levels.</summary>
+		public IEnumerable<TileDataInstance> GetTiles() {
+			foreach (Level level in levels) {
+				foreach (Room room in level.GetRooms()) {
+					foreach (var tile in room.GetTiles()) {
+						yield return tile;
+					}
+				}
+			}
 		}
 
-		/// <summary>Gets the dungeon at the specified index.</summary>
-		public Dungeon GetDungeonAt(int index) {
-			return dungeons[index];
+		/// <summary>Gets the collection of all tiles in the levels.</summary>
+		public IEnumerable<ActionTileDataInstance> GetActionTiles() {
+			foreach (Level level in levels) {
+				foreach (Room room in level.GetRooms()) {
+					foreach (var tile in room.GetActionTiles(false)) {
+						yield return tile;
+					}
+				}
+			}
 		}
 
-		/// <summary>Returns true if the dungeon exists in the collection.</summary>
-		public bool ContainsDungeon(Dungeon dungeon) {
-			return dungeons.Contains(dungeon);
+		// Areas ----------------------------------------------------------------------
+
+		/// <summary>Gets the collection of areas.</summary>
+		public IEnumerable<Area> GetAreas() {
+			return areas;
 		}
 
-		/// <summary>Returns true if a dungeon with the specified ID exists.</summary>
-		public bool ContainsDungeon(string dungeonID) {
-			return (GetDungeon(dungeonID) != null);
+		/// <summary>Gets the area with the specified ID.</summary>
+		public Area GetArea(string areaID) {
+			return areas.Find(area => { return area.Properties.GetString("id") == areaID; });
 		}
 
-		/// <summary>Gets the index of the specified dungeon.</summary>
-		public int IndexOfDungeon(Dungeon dungeon) {
-			return dungeons.IndexOf(dungeon);
+		/// <summary>Gets the area at the specified index.</summary>
+		public Area GetAreaAt(int index) {
+			return areas[index];
 		}
 
-		/// <summary>Gets the index of the dungeon with the specified ID.</summary>
-		public int IndexOfDungeon(string dungeonID) {
-			return dungeons.FindIndex(dungeon => dungeon.ID == dungeonID);
+		/// <summary>Returns true if the area exists in the collection.</summary>
+		public bool ContainsArea(Area area) {
+			return areas.Contains(area);
+		}
+
+		/// <summary>Returns true if a area with the specified ID exists.</summary>
+		public bool ContainsArea(string areaID) {
+			return (GetArea(areaID) != null);
+		}
+
+		/// <summary>Gets the index of the specified area.</summary>
+		public int IndexOfArea(Area area) {
+			return areas.IndexOf(area);
+		}
+
+		/// <summary>Gets the index of the area with the specified ID.</summary>
+		public int IndexOfArea(string areaID) {
+			return areas.FindIndex(area => area.ID == areaID);
 		}
 
 		// Scripts --------------------------------------------------------------------
@@ -158,8 +204,8 @@ namespace ZeldaOracle.Game.Worlds {
 					yield return propertyObject;
 				}
 			}
-			foreach (Dungeon dungeon in dungeons) {
-				yield return dungeon;
+			foreach (Area area in areas) {
+				yield return area;
 			}
 		}
 
@@ -171,15 +217,22 @@ namespace ZeldaOracle.Game.Worlds {
 					yield return eventObject;
 				}
 			}
-			foreach (Dungeon dungeon in dungeons) {
-				yield return dungeon;
+			foreach (Area area in areas) {
+				yield return area;
 			}
 		}
 
-		/// <summary>Gets the collection of defined eventsin the world.</summary>
+		/// <summary>Gets the collection of defined events in the world.</summary>
 		public IEnumerable<Event> GetDefinedEvents() {
 			foreach (IEventObject eventObject in GetEventObjects()) {
 				foreach (Event evnt in eventObject.Events.GetEvents()) {
+					if (evnt.IsDefined) {
+						yield return evnt;
+					}
+				}
+			}
+			foreach (Area area in areas) {
+				foreach (Event evnt in area.Events.GetEvents()) {
 					if (evnt.IsDefined) {
 						yield return evnt;
 					}
@@ -195,9 +248,9 @@ namespace ZeldaOracle.Game.Worlds {
 					yield return variableObject;
 				}
 			}
-			/*foreach (Dungeon dungeon in dungeons) {
-				yield return dungeon;
-			}*/
+			foreach (Area area in areas) {
+				yield return area;
+			}
 		}
 
 
@@ -219,7 +272,7 @@ namespace ZeldaOracle.Game.Worlds {
 			level.World = this;
 		}
 
-		/// <summary>Removes the specified dungeon.</summary>
+		/// <summary>Removes the specified level.</summary>
 		public void RemoveLevel(Level level) {
 			levels.Remove(level);
 		}
@@ -236,7 +289,7 @@ namespace ZeldaOracle.Game.Worlds {
 			levels.RemoveAt(index);
 		}
 
-		/// <summary>Renames the specified dungeon.</summary>
+		/// <summary>Renames the specified level.</summary>
 		public bool RenameLevel(Level level, string newLevelID) {
 			if (level.ID != newLevelID) {
 				if (ContainsLevel(newLevelID)) {
@@ -247,12 +300,12 @@ namespace ZeldaOracle.Game.Worlds {
 			return true;
 		}
 
-		/// <summary>Renames the dungeon with the specified ID.</summary>
+		/// <summary>Renames the level with the specified ID.</summary>
 		public bool RenameLevel(string oldLevelID, string newLevelID) {
 			return RenameLevel(GetLevel(oldLevelID), newLevelID);
 		}
 
-		/// <summary>Renames the dungeon at the specified index.</summary>
+		/// <summary>Renames the level at the specified index.</summary>
 		public bool RenameLevelAt(int index, string newLevelID) {
 			return RenameLevel(levels[index], newLevelID);
 		}
@@ -273,67 +326,67 @@ namespace ZeldaOracle.Game.Worlds {
 			levels.RemoveAt(oldIndex);
 			levels.Insert(newIndex, level);
 		}
+		
+		// Areas ----------------------------------------------------------------------
 
-		// Dungeons -------------------------------------------------------------------
-
-		/// <summary>Adds the dungeon to the end of the list.</summary>
-		public void AddDungeon(Dungeon dungeon) {
-			dungeons.Add(dungeon);
-			dungeon.World = this;
+		/// <summary>Adds the area to the end of the list.</summary>
+		public void AddArea(Area area) {
+			areas.Add(area);
+			area.World = this;
 		}
 
-		/// <summary>Inserts the dungeon at the specified index.</summary>
-		public void InsertDungeon(int index, Dungeon dungeon) {
-			dungeons.Insert(index, dungeon);
-			dungeon.World = this;
+		/// <summary>Inserts the area at the specified index.</summary>
+		public void InsertArea(int index, Area area) {
+			areas.Insert(index, area);
+			area.World = this;
 		}
 
-		/// <summary>Removes the specified dungeon.</summary>
-		public void RemoveDungeon(Dungeon dungeon) {
-			dungeons.Remove(dungeon);
+		/// <summary>Removes the specified area.</summary>
+		public void RemoveArea(Area area) {
+			areas.Remove(area);
 		}
 
-		/// <summary>Removes the dungeon with the specified ID.</summary>
-		public void RemoveDungeon(string dungeonID) {
-			int index = dungeons.FindIndex(dungeon => dungeon.ID == dungeonID);
+		/// <summary>Removes the area with the specified ID.</summary>
+		public void RemoveArea(string areaID) {
+			int index = areas.FindIndex(area => area.ID == areaID);
 			if (index != -1)
-				dungeons.RemoveAt(index);
+				areas.RemoveAt(index);
 		}
 
-		/// <summary>Renames the dungeon at the specified index.</summary>
-		public void RemoveDungeonAt(int index) {
-			dungeons.RemoveAt(index);
+		/// <summary>Renames the area at the specified index.</summary>
+		public void RemoveAreaAt(int index) {
+			areas.RemoveAt(index);
 		}
 
-		/// <summary>Renames the specified dungeon.</summary>
-		public bool RenameDungeon(Dungeon dungeon, string newDungeonID) {
-			if (dungeon.ID != newDungeonID) {
-				if (ContainsDungeon(newDungeonID)) {
+		/// <summary>Renames the specified area.</summary>
+		public bool RenameArea(Area area, string newAreaID) {
+			if (area.ID != newAreaID) {
+				if (ContainsArea(newAreaID)) {
 					return false;
 				}
-				dungeon.ID = newDungeonID;
+				area.ID = newAreaID;
 			}
 			return true;
 		}
 
-		/// <summary>Renames the dungeon with the specified ID.</summary>
-		public bool RenameDungeon(string oldDungeonID, string newDungeonID) {
-			return RenameDungeon(GetDungeon(oldDungeonID), newDungeonID);
+		/// <summary>Renames the area with the specified ID.</summary>
+		public bool RenameArea(string oldAreaID, string newAreaID) {
+			return RenameArea(GetArea(oldAreaID), newAreaID);
 		}
 
-		/// <summary>Renames the dungeon at the specified index.</summary>
-		public bool RenameDungeonAt(int index, string newDungeonID) {
-			return RenameDungeon(dungeons[index], newDungeonID);
+		/// <summary>Renames the area at the specified index.</summary>
+		public bool RenameAreaAt(int index, string newAreaID) {
+			return RenameArea(areas[index], newAreaID);
 		}
 
-		/// <summary>Moves the dungeon at the specified index to the new index.</summary>
-		public void MoveDungeon(int oldIndex, int newIndex, bool relative) {
+		/// <summary>Moves the area at the specified index to the new index.</summary>
+		public void MoveArea(int oldIndex, int newIndex, bool relative) {
 			if (relative)
 				newIndex = oldIndex + newIndex;
 
-			Dungeon dungeon = dungeons[oldIndex];
-			dungeons.RemoveAt(oldIndex);
-			dungeons.Insert(newIndex, dungeon);
+			Area area = areas[oldIndex];
+			areas.RemoveAt(oldIndex);
+			areas.Insert(newIndex, area);
 		}
 
 		// Scripts --------------------------------------------------------------------
@@ -361,6 +414,35 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Renames the script with the specified ID.</summary>
 		public bool RenameScript(string oldScriptID, string newScriptID) {
 			return scriptManager.RenameScript(oldScriptID, newScriptID);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// In-Game Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Assigns unique IDs to every monster in the game for respawn
+		/// purposes.</summary>
+		public void AssignMonsterIDs() {
+			foreach (Room room in GetRooms()) {
+				room.AssignMonsterIDs();
+				/*if (room.CanLinkMonsters && !room.AreMonstersLinked) {
+					Room rootRoom = room.RootRoom;
+					if (rootRoom == room) {
+						room.LinkInitialMonsters();
+					}
+					else if (rootRoom.CanLinkMonsters) {
+						if (!room.AreMonstersLinked)
+							rootRoom.LinkInitialMonsters();
+						room.LinkMonsters(rootRoom);
+					}
+				}*/
+			}
+		}
+
+		/// <summary>Gets the next unique monster ID for linking.</summary>
+		public int NextMonsterID() {
+			return nextMonsterID--;
 		}
 
 
@@ -399,14 +481,14 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		/// <summary>Gets the collection of levels for the world.</summary>
-		public List<Level> Levels {
+		/*public List<Level> Levels {
 			get { return levels; }
-		}
+		}*/
 
-		/// <summary>Gets the collection of dungeons for the world.</summary>
-		public List<Dungeon> Dungeons {
-			get { return dungeons; }
-		}
+		/// <summary>Gets the collection of areas for the world.</summary>
+		/*public List<Area> Areas {
+			get { return areas; }
+		}*/
 
 		/// <summary>Gets the collection of scripts for the world.</summary>
 		public ReadOnlyDictionary<string, Script> Scripts {
@@ -418,14 +500,19 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return levels.Count; }
 		}
 
-		/// <summary>Gets the number of dungeons stored in the world.</summary>
-		public int DungeonCount {
-			get { return dungeons.Count; }
+		/// <summary>Gets the number of areas stored in the world.</summary>
+		public int AreaCount {
+			get { return areas.Count; }
 		}
 
 		/// <summary>Gets the number of scripts stored in the script manager.</summary>
 		public int ScriptCount {
 			get { return scriptManager.ScriptCount; }
+		}
+
+		/// <summary>Gets the default area for this world when none is supplied.</summary>
+		public Area DefaultArea {
+			get { return defaultArea; }
 		}
 
 		// Startup --------------------------------------------------------------------

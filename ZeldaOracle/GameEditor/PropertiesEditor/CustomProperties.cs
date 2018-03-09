@@ -60,7 +60,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			AddEditor<ResourcePropertyEditor<ISprite>>("sprite");
 			AddEditor<ResourcePropertyEditor<Zone>>("zone");
 			AddEditor<RewardPropertyEditor>("reward");
-			AddEditor<DungeonPropertyEditor>("dungeon");
+			AddEditor<AreaPropertyEditor>("area");
 			AddEditor<LevelPropertyEditor>("level");
 			AddEditor<EnumPropertyEditor>("enum");
 			AddEditor<EnumFlagPropertyEditor>("enum_flags");

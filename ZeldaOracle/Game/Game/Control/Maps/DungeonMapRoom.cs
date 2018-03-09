@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 			// Create the map room object.
 			DungeonMapRoom mapRoom = new DungeonMapRoom() {
 				room			= room,
-				hasTreasure		= room.HasUnopenedTreasure(),
+				hasTreasure		= room.HasUnlootedRewards(),
 				isDiscovered	= room.IsDiscovered,
 				isBossRoom		= room.IsBossRoom,
 				location		= room.Location,

@@ -12,19 +12,19 @@ namespace ZeldaEditor.Undo {
 	public class ActionDuplicateLevel : EditorAction {
 
 		private Level level;
-		private string newLevelName;
+		private Level newLevel;
 
-		public ActionDuplicateLevel(Level level, string newLevelName) {
+		public ActionDuplicateLevel(Level level, Level newLevel) {
 			ActionName = "Duplicate '" + level.ID + "' Level";
 			ActionIcon = EditorImages.LevelDuplicate;
 			this.level = level;
-			this.newLevelName = newLevelName;
+			this.newLevel = newLevel;
 		}
 
 		public override void Undo(EditorControl editorControl) {
-			int index = editorControl.World.IndexOfLevel(newLevelName);
+			int index = editorControl.World.IndexOfLevel(newLevel);
 			editorControl.World.RemoveLevelAt(index);
-			if (editorControl.Level.ID == newLevelName) {
+			if (editorControl.Level == newLevel) {
 				if (editorControl.World.LevelCount == 0) {
 					editorControl.CloseLevel();
 				}
@@ -38,10 +38,8 @@ namespace ZeldaEditor.Undo {
 		}
 
 		public override void Redo(EditorControl editorControl) {
-			Level duplicate = new Level(level);
-			duplicate.ID = newLevelName;
-			editorControl.World.AddLevel(duplicate);
-			editorControl.OpenLevel(duplicate);
+			editorControl.World.AddLevel(newLevel);
+			editorControl.OpenLevel(newLevel);
 			editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 			if (level.Events.HasDefinedEvents)
 				editorControl.NeedsNewEventCache = true;

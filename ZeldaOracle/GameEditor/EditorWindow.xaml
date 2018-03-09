@@ -54,7 +54,7 @@
         <CommandBinding Command="cmd:EditorCommands.ViewEditPaths" CanExecute="CanExecuteViewPaths" Executed="OnViewPathsCommands"/>
 
         <CommandBinding Command="cmd:EditorCommands.AddNewLevel" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewLevelCommand"/>
-        <CommandBinding Command="cmd:EditorCommands.AddNewDungeon" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewDungeonCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.AddNewArea" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewAreaCommand"/>
         <CommandBinding Command="cmd:EditorCommands.AddNewScript" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewScriptCommand"/>
 
         <CommandBinding Command="cmd:EditorCommands.History" CanExecute="CanExecuteIsWorldOpen" Executed="OnHistoryCommand"/>
@@ -126,7 +126,7 @@
             <local:ImageToggleButton x:Name="buttonStartLocation" Source="Resources/Icons/StartLocation.png" ToolTip="Set Start Location" Command="cmd:EditorCommands.StartLocation"/>
             <Separator/>
             <local:ImageButton x:Name="buttonAddLevel" Source="Resources/Icons/LevelAdd.png" ToolTip="Add New Level (Ctrl+Shift+L)" Command="cmd:EditorCommands.AddNewLevel"/>
-            <local:ImageButton x:Name="buttonAddDungeon" Source="Resources/Icons/DungeonAdd.png" ToolTip="Add New Dungeon (Ctrl+Shift+D)" Command="cmd:EditorCommands.AddNewDungeon"/>
+            <local:ImageButton x:Name="buttonAddArea" Source="Resources/Icons/AreaAdd.png" ToolTip="Add New Area (Ctrl+Shift+A)" Command="cmd:EditorCommands.AddNewArea"/>
             <local:ImageButton x:Name="buttonAddScript" Source="Resources/Icons/ScriptAdd.png" ToolTip="Add New Script (Ctrl+Shift+X)" Command="cmd:EditorCommands.AddNewScript"/>
             <Separator/>
             <local:ImageToggleButton x:Name="buttonShowHistory" Source="Resources/Icons/History.png" ToolTip="History Window" Command="cmd:EditorCommands.History" />
@@ -170,6 +170,7 @@
                     <MenuItem x:Name="dropDownItemShowExtras" Header="Show Extras" IsCheckable="True" IsChecked="True" Click="OnShowExtrasChecked"/>
                     <MenuItem x:Name="dropDownItemShowStartLocation" Header="Show Start Location" IsCheckable="True" IsChecked="True" Click="OnShowStartLocationChecked"/>
                     <MenuItem x:Name="dropDownItemShowRoomBorders" Header="Show Room Borders" IsCheckable="True" IsChecked="True" Click="OnShowRoomBordersChecked"/>
+                    <MenuItem x:Name="dropDownItemShowShared" Header="Show Shared Tiles" IsCheckable="True" Click="OnShowSharedTilesChecked" IsChecked="True"/>
                     <MenuItem x:Name="dropDownItemShowModified" Header="Show Modified Tiles" IsCheckable="True" Click="OnShowModifiedTilesChecked"/>
                     <MenuItem x:Name="dropDownItemShowActions" Header="Show Actions" IsCheckable="True" Click="OnShowActionsChecked"/>
                 </MenuItem>

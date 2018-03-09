@@ -22,7 +22,7 @@ using System.Windows.Data;
 using System.Windows;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
-	public class DungeonPropertyEditor : ComboBoxEditor {
+	public class AreaPropertyEditor : ComboBoxEditor {
 
 		protected EditorControl EditorControl {
 			get { return PropertyDescriptor.EditorControl; }
@@ -36,12 +36,12 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 		protected override IEnumerable CreateItemsSource(PropertyItem item) {
 			World world = EditorControl.World;
-			string[] dungeonIds = new string[world.DungeonCount + 1];
-			dungeonIds[0] = "(none)";
-			for (int i = 0; i < world.DungeonCount; i++) {
-				dungeonIds[i + 1] = world.GetDungeonAt(i).ID;
+			string[] areaIDs = new string[world.AreaCount + 1];
+			areaIDs[0] = "(none)";
+			for (int i = 0; i < world.AreaCount; i++) {
+				areaIDs[i + 1] = world.GetAreaAt(i).ID;
 			}
-			return dungeonIds;
+			return areaIDs;
 		}
 	}
 }
