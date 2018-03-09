@@ -25,8 +25,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				ItemFlags.UsableInMinecart |
 				ItemFlags.UsableWhileJumping |
 				ItemFlags.UsableWithSword |
-				ItemFlags.UsableWhileInHole |
-				ItemFlags.TwoHanded;
+				ItemFlags.UsableWhileInHole;
 
 			boomerangTracker = new EntityTracker<Boomerang>(1);
 
