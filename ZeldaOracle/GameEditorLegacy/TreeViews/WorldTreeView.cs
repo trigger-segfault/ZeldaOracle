@@ -142,7 +142,7 @@ namespace ZeldaEditor.TreeViews {
 		public void RefreshDungeons() {
 			dungeonsNode.Nodes.Clear();
 			
-			foreach (Dungeon dungeon in editorControl.World.GetDungeons()) {
+			foreach (Area dungeon in editorControl.World.GetAreas()) {
 				DungeonTreeNode dungeonNode = new DungeonTreeNode(dungeon);
 				//dungeonNode.ContextMenuStrip = editorControl.EditorForm.contextMenuDungeonNode;
 				dungeonsNode.Nodes.Add(dungeonNode);

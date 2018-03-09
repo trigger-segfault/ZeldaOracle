@@ -56,7 +56,8 @@ namespace ZeldaEditor.TreeViews {
 			Level duplicate = new Level();
 			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
 			if (newName != null) {
-				EditorAction action = new ActionDuplicateLevel(level, newName);
+				duplicate = new Level(level);
+				EditorAction action = new ActionDuplicateLevel(level, duplicate);
 				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}

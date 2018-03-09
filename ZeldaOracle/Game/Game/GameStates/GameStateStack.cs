@@ -45,11 +45,13 @@ namespace ZeldaOracle.Game.GameStates {
 				End();
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-        public void Push(GameState state) {
+		/// <summary>Pushes a single game state to the stack.</summary>
+		public void Push(GameState state) {
 			if (IsActive) {
 				DeleteInactiveStates();
 				if (!IsActive)
@@ -63,12 +65,14 @@ namespace ZeldaOracle.Game.GameStates {
 				DeleteInactiveStates();
 			}
         }
-		
-        public void Pop() {
+
+		/// <summary>Pops a single game state from the stack.</summary>
+		public void Pop() {
 			Pop(1);
         }
-		
-        public void Pop(int amount) {
+
+		/// <summary>Pops the specified amount of game states from the stack.</summary>
+		public void Pop(int amount) {
 			if (IsActive) {
 				DeleteInactiveStates();
 				if (!IsActive)
@@ -86,6 +90,12 @@ namespace ZeldaOracle.Game.GameStates {
 				}
 			}
         }
+
+		/// <summary>Clears all game states from the stack.</summary>
+		public void Clear() {
+			while (states.Any())
+				Pop(1);
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -137,7 +147,8 @@ namespace ZeldaOracle.Game.GameStates {
 		public override GameState CurrentGameState {
 			get { return states.Last().CurrentGameState; }
 		}
-
+		
+		/// <summary>Gets the number of game states in the stack.</summary>
 		public int Count {
 			get { return states.Count; }
 		}

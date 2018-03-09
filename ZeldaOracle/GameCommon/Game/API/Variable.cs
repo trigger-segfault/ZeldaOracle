@@ -20,6 +20,27 @@ namespace ZeldaOracle.Game.API {
 	/// multiple types including lists of other variables.</summary>
 	[Serializable]
 	public class Variable {
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The list of all names reserved due to being C# object methods.</summary>
+		private static readonly HashSet<string> ReservedNames = new HashSet<string>() {
+			"Equals",
+			"Finalize",
+			"GetHashCode",
+			"GetType",
+			"MemberwiseClone",
+			"ReferenceEquals",
+			"ToString"
+		};
+
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
 		/// <summary>True if the variable is built-in and cannot be renamed or removed.</summary>
 		private bool builtIn;
 		/// <summary>The name of the variable.</summary>
@@ -119,6 +140,8 @@ namespace ZeldaOracle.Game.API {
 
 		/// <summary>Create a boolean property with the given value.</summary>
 		public static Variable Create(string name, object value, bool builtIn = false) {
+			if (!IsValidName(name))
+				throw new ArgumentException("Invalid variable name!");
 			Variable v = new Variable(name, TypeToVariableType(value.GetType()), builtIn);
 			v.objectValue = value;
 			return v;
@@ -152,6 +175,28 @@ namespace ZeldaOracle.Game.API {
 			if (type == typeof(Point2I))
 				return VariableType.Point;
 			return VariableType.Integer;
+		}
+
+		/// <summary>Returns true if the specified name is a valid variable name.</summary>
+		public static bool IsValidName(string varName) {
+			// Empty names are not allowed
+			if (varName.Length == 0)
+				return false;
+
+			// Reserved names cannot be implemented into the object class
+			if (ReservedNames.Contains(varName))
+				return false;
+
+			// First characters can't have digits
+			if (!char.IsLetter(varName[0]) && varName[0] != '_')
+				return false;
+
+			// Remaining characters can have digits
+			for (int i = 1; i < varName.Length; i++) {
+				if (!char.IsLetterOrDigit(varName[i]) && varName[i] != '_')
+					return false;
+			}
+			return true;
 		}
 
 

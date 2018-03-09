@@ -48,8 +48,8 @@ namespace ZeldaEditor.Windows {
 				if (target is Level) {
 					containedID = world.GetLevel(newID);
 				}
-				else if (target is Dungeon) {
-					containedID = world.GetDungeon(newID);
+				else if (target is Area) {
+					containedID = world.GetArea(newID);
 				}
 				else if (target is Script) {
 					if (!ScriptManager.IsValidScriptName(newID)) {

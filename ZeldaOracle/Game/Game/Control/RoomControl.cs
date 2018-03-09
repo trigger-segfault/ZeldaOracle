@@ -19,6 +19,7 @@ using ZeldaOracle.Game.Tiles.Internal;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Tiles.Custom.Monsters;
 using ZeldaOracle.Game.API;
+using ZeldaOracle.Game.Control.RoomManagers;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -35,12 +36,12 @@ namespace ZeldaOracle.Game.Control {
 
 		private Room				room;
 		private Point2I				roomLocation;
-		private Dungeon				dungeon;
-		private Variables			variables;
 		
 		private List<ActionTile>	actionTiles;
 		private List<TimedEvent>	scheduledEvents;
 
+		private AreaControl			areaControl;
+		private ViewControl			viewControl;
 		private int					requestedTransitionDirection;
 
 		// Room Managers
@@ -52,13 +53,15 @@ namespace ZeldaOracle.Game.Control {
 		private RoomGraphics		roomGraphics;
 
 		private bool				allMonstersDead;
+		private bool				roomCleared;
+		private bool				hasSoftKills;
+		private HashSet<Monster>	lingeringMonsters;
 		private bool				isUnderwater;
 		private bool				isSideScrolling;
 		/// <summary>True if the player dies upon falling to the bottom of the room.
 		/// </summary>
 		private bool				deathOutOfBounds;
-
-		private ViewControl			viewControl;
+		
 		private RoomVisualEffect	visualEffect;
 		private RoomVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
@@ -86,10 +89,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public RoomControl() {
 			room					= null;
-			dungeon					= null;
 			roomLocation			= Point2I.Zero;
 			actionTiles				= new List<ActionTile>();
 			scheduledEvents			= new List<TimedEvent>();
+			areaControl				= null;
 			viewControl				= new ViewControl();
 			entityManager			= new EntityManager(this);
 			tileManager				= new TileManager(this);
@@ -107,7 +110,8 @@ namespace ZeldaOracle.Game.Control {
 			currentRoomTicks		= 0;
 			tilePaletteOverride		= null;
 			entityPaletteOverride	= null;
-			variables				= new Variables(this);
+
+			lingeringMonsters		= new HashSet<Monster>();
 
 			visualEffectUnderwater	= new RoomVisualEffect();
 			visualEffectUnderwater.RoomControl = this;
@@ -275,8 +279,10 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Place a tile in the tile grid at the given location and layer.
 		/// </summary>
-		public void PlaceTile(Tile tile, Point2I location, int layer) {
-			tileManager.PlaceTile(tile, location, layer);
+		public void PlaceTile(Tile tile, Point2I location, int layer,
+			bool initializeTile = true)
+		{
+			tileManager.PlaceTile(tile, location, layer, initializeTile);
 		}
 		
 		/// <summary>Place a tile in highest empty layer at the given location.
@@ -315,6 +321,24 @@ namespace ZeldaOracle.Game.Control {
 			});
 		}
 
+		/// <summary>Marks the room as containing monsters with soft kills,
+		/// preventing it from being cleared.</summary>
+		public void AddSoftKill(Monster monster) {
+			// Only set if monster counts towards respawn clearing
+			if (!monster.IgnoreMonster && !monster.IgnoreRespawn)
+				hasSoftKills = true;
+		}
+
+		/// <summary>Adds a lingering monster that can keep its presense after death.</summary>
+		public void AddLingeringMonster(Monster monster) {
+			lingeringMonsters.Add(monster);
+		}
+
+		/// <summary>Remove a lingering monster so that it no longer keeps its presense.</summary>
+		public void RemoveLingeringMonster(Monster monster) {
+			lingeringMonsters.Remove(monster);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Room Setup & Destroy
@@ -338,7 +362,6 @@ namespace ZeldaOracle.Game.Control {
 		public void BeginRoom(Room room, List<Entity> entities) {
 			this.room			= room;
 			roomLocation		= room.Location;
-			dungeon				= room.Dungeon;
 			isSideScrolling		= room.Zone.IsSideScrolling;
 			isUnderwater		= room.Zone.IsUnderwater;
 			deathOutOfBounds	= room.DeathOutOfBounds;
@@ -348,7 +371,14 @@ namespace ZeldaOracle.Game.Control {
 			else
 				visualEffect = null;
 
-			variables.SetAll(room.Variables);
+			if (this.areaControl == null)
+				areaControl = GameControl.GetAreaControl(Area);
+
+			// Monster respawning
+			RespawnManager.VisitRoom(room);
+			/*if (RespawnManager.VisitRoom(room)) {
+				//room.OnRespawn();
+			}*/
 
 			// Discover the room
 			room.IsDiscovered = true;
@@ -362,35 +392,44 @@ namespace ZeldaOracle.Game.Control {
 
 			// Create the tile grid
 			tileManager.Initialize(room);
-			for (int x = 0; x < room.Width; x++) {
+			foreach (TileDataInstance data in room.GetTiles(true)) {
+				Tile tile = null;
+				if (data.IsModifiedEnabled)
+					tile = Tile.CreateTile(data);
+				else if (data.Layer == 0 && data.TileBelow != null)
+					tile = Tile.CreateTile(data.TileBelow);
+				else if (data.Layer == 0 && Zone.DefaultTileData != null)
+					tile = Tile.CreateTile(Zone.DefaultTileData);
+				if (tile != null)
+					PlaceTile(tile, data.Location, data.Layer, false);
+			}
+			/*for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
 					for (int i = 0; i < room.LayerCount; i++) {
 						TileDataInstance data = room.TileData[x, y, i];
 
 						if (data != null && data.IsAtLocation(x, y)) {
+							Tile tile = null;
 							if (data.ModifiedProperties.GetBoolean("enabled", true)) {
-								// Place the tile
-								Tile tile = Tile.CreateTile(data);
-								PlaceTile(tile, x, y, i, false);
+								tile = Tile.CreateTile(data);
 							}
 							else if (i == 0 && data.TileBelow != null) {
-								Tile tile = Tile.CreateTile(data.TileBelow);
-								PlaceTile(tile, x, y, i, false);
+								tile = Tile.CreateTile(data.TileBelow);
 							}
 							else if (i == 0 && Zone.DefaultTileData != null) {
-								Tile tile = Tile.CreateTile(Zone.DefaultTileData);
-								PlaceTile(tile, x, y, i, false);
+								tile = Tile.CreateTile(Zone.DefaultTileData);
 							}
+							if (tile != null)
+								PlaceTile(tile, x, y, i, false);
 						}
 					}
 				}
-			}
+			}*/
 
 			// Create the action tiles
-			actionTiles.Capacity = room.ActionData.Count;
-			for (int i = 0; i < room.ActionData.Count; i++) {
-				ActionTileDataInstance data  = room.ActionData[i];
-				if (data.Properties.GetBoolean("enabled", true)) {
+			actionTiles.Capacity = room.ActionCount;
+			foreach (ActionTileDataInstance data in room.GetActionTiles(true)) {
+				if (data.IsModifiedEnabled) {
 					ActionTile actionTile = ActionTile.CreateAction(data);
 					actionTiles.Add(actionTile);
 				}
@@ -398,6 +437,8 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Initialize grid tiles and action tiles
 			tileManager.InitializeTiles();
+			
+			// Initialize the action tiles
 			for (int i = 0; i < actionTiles.Count; i++)
 				actionTiles[i].Initialize(this);
 			tileManager.PostInitializeTiles();
@@ -406,11 +447,17 @@ namespace ZeldaOracle.Game.Control {
 			viewControl.Bounds = RoomBounds;
 			viewControl.ViewSize = GameSettings.VIEW_SIZE;
 			viewControl.CenterOn(Player.DrawCenter + Player.ViewFocusOffset);
+			
+			// Assign the area control which calls begin and end events if areas
+			// have been changed.
+			GameControl.AreaControl = areaControl;
 
-			// Fire the RoomStart event.
+			// Fire the RoomStart event
 			GameControl.FireEvent(room, "room_start");
 
 			allMonstersDead = false;
+			roomCleared = IsRoomRespawnCleared();
+
 			currentRoomTicks = 0;
 		}
 
@@ -449,7 +496,7 @@ namespace ZeldaOracle.Game.Control {
 			TransitionToRoom(endPoint.Room, 
 				startPoint.CreateTransition(endPoint),
 				startPoint.CreateExitState(),
-				null, endPoint);
+				null, endPoint, startPoint.ShowAreaName);
 		}
 
 		/// <summary>Transition to a room adjacent to the current one.</summary>
@@ -464,17 +511,19 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		public void TransitionToRoom(Room nextRoom, RoomTransition transition,
-			GameState exitState, GameState enterState, ActionTileDataInstance warpTile)
+			GameState exitState, GameState enterState, ActionTileDataInstance warpTile,
+			bool showAreaName = false)
 		{
 			// Create the new room control
 			RoomControl newControl = new RoomControl();
 			newControl.gameManager	= gameManager;
 			newControl.room			= nextRoom;
 			newControl.roomLocation	= nextRoom.Location;
+			newControl.areaControl  = GameControl.GetAreaControl(nextRoom.Area);
 
 			// Also set this here to prevent flickering of small keys in HUD
-			newControl.dungeon = nextRoom.Dungeon;
-			
+			//newControl.dungeon = nextRoom.Dungeon;
+
 			//               [Exit]                       [Enter]
 			// [RoomOld] -> [RoomOld] -> [Transition] -> [RoomNew] -> [RoomNew]
 			
@@ -492,8 +541,26 @@ namespace ZeldaOracle.Game.Control {
 					if (actionTile != null)
 						enterState = actionTile.CreateEnterState();
 				}
+
+				GameStateQueue queue = new GameStateQueue();
+
+				// Push the enter state
 				if (enterState != null)
-					gameManager.PushGameState(enterState); // Push the enter state
+					queue.Add(enterState);
+
+				// Show the area message
+				if (showAreaName) {
+					queue.Add(new GameStateAction(delegate {
+						string message = newControl.areaControl.EnterMessage;
+						TextReaderArgs args = new TextReaderArgs() {
+							Spacing = 2
+						};
+						GameControl.DisplayMessage(message, args);
+					}));
+				}
+
+				if (queue.Count != 0)
+					gameManager.PushGameState(queue);
 			});
 			GameState preTransitionState = new GameStateAction(
 				delegate(GameStateAction actionState)
@@ -581,9 +648,18 @@ namespace ZeldaOracle.Game.Control {
 				entityManager.UpdateEntityGraphics();
 			}
 
+			// Room clearing is slightly different from all monsters dead as some
+			// monsters count as dead for respawn purposes when children remain.
+			// I.E. Only one Red Zole's Gel is left.
+			if (!roomCleared && IsRoomRespawnCleared()) {
+				roomCleared = true;
+				RespawnManager.ClearRoom(room);
+			}
+
 			bool nextAllMonstersDead = AllMonstersDead();
-			if (nextAllMonstersDead && !allMonstersDead)
+			if (nextAllMonstersDead && !allMonstersDead) {
 				GameControl.FireEvent(room, "all_monsters_dead");
+			}
 			allMonstersDead = nextAllMonstersDead;
 		}
 
@@ -775,9 +851,9 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void SpawnTile(string id, bool staySpawned = false) {
-			foreach (TileDataInstance tileData in Room.FindTilesByID(id))
+			foreach (TileDataInstance tileData in Room.FindTilesByID(id, true))
 				SpawnTile(tileData, staySpawned);
-			foreach (ActionTileDataInstance actionTileData in Room.ActionData)
+			foreach (ActionTileDataInstance actionTileData in Room.GetActionTiles(true))
 				SpawnActionTile(actionTileData, staySpawned);
 		}
 
@@ -803,16 +879,52 @@ namespace ZeldaOracle.Game.Control {
 					yield return t;
 			}
 		}
-		
+
+		/// <summary>Returns true if all monsters that are not ignorable are gone
+		/// from the room.</summary>
 		public bool AllMonstersDead() {
-			return	!GetEntitiesOfType<Monster>().Any(m => m.NeedsClearing) &&
+			return	!lingeringMonsters.Any(m => m.NeedsClearing) &&
+					!GetEntitiesOfType<Monster>().Any(m => m.NeedsClearing) &&
 					!GetTilesOfType<TileMonster>().Any(t => t.NeedsClearing);
 		}
 
-		
+		/// <summary>A deviation of AllMonstersDead used only for marking the room as
+		/// cleared even when monsters remain.</summary>
+		public bool IsRoomRespawnCleared() {
+			return	!hasSoftKills &&
+					!lingeringMonsters.Any(m => m.NeedsClearing ||
+					m.IgnoreRespawn) &&
+					!GetEntitiesOfType<Monster>().Any(m => m.NeedsClearing ||
+					m.IgnoreRespawn) &&
+					!GetTilesOfType<TileMonster>().Any(t => t.NeedsClearing);
+		}
+
+		/// <summary>Checks if a monster with the specified ID is cleared.
+		/// Monster IDs are unique to each "root" room.</summary>
+		public bool IsMonsterDead(int monsterID) {
+			return RespawnManager.IsMonsterDead(room, monsterID);
+		}
+
+		/// <summary>Registers a monster with the specified ID as cleared.
+		/// Monster IDs are unique to each "root" room.</summary>
+		public void ClearMonster(int monsterID) {
+			RespawnManager.ClearMonster(room, monsterID);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Gets the current area control.</summary>
+		public AreaControl AreaControl {
+			get { return GameControl.AreaControl; }
+		}
+
+		/// <summary>The current area.</summary>
+		public Area Area {
+			get { return room.Area; }
+		}
 
 		/// <summary>The current level.</summary>
 		public Level Level {
@@ -877,8 +989,9 @@ namespace ZeldaOracle.Game.Control {
 			get { return interactionManager; }
 		}
 
-		public Dungeon Dungeon {
-			get { return dungeon; }
+		/// <summary>Gets the manager for clearing and respawning rooms.</summary>
+		public RespawnManager RespawnManager {
+			get { return areaControl.RespawnManager; }
 		}
 
 		/// <summary>Called after the player respawns.</summary>
@@ -960,8 +1073,13 @@ namespace ZeldaOracle.Game.Control {
 			get { return roomNumber; }
 		}
 
-		public Variables Variables {
-			get { return variables; }
+		public Variables Vars {
+			get { return room.Vars; }
+		}
+
+		/// <summary>Gets if the room is cleared in the respawn manager.</summary>
+		public bool IsCleared {
+			get { return RespawnManager.IsRoomCleared(room); }
 		}
 	}
 }

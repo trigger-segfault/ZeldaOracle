@@ -39,23 +39,21 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public override void OnCollect(GameControl gameControl) {
 			// TEMP: hard coded dungeon reward possibilities.
-			Dungeon dungeon = gameControl.RoomControl.Dungeon;
-
-			if (dungeon != null) {
-				if (id == "small_key") {
-					dungeon.NumSmallKeys++;
-					AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
-				}
-				else if (id == "boss_key") {
-					dungeon.HasBossKey = true;
-					AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
-				}
-				else if (id == "map") {
-					dungeon.HasMap = true;
-				}
-				else if (id == "compass") {
-					dungeon.HasCompass = true;
-				}
+			Area area = gameControl.RoomControl.Area;
+			
+			if (id == "small_key") {
+				area.SmallKeyCount++;
+				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
+			}
+			else if (id == "boss_key") {
+				area.HasBossKey = true;
+				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
+			}
+			else if (id == "map") {
+				area.HasMap = true;
+			}
+			else if (id == "compass") {
+				area.HasCompass = true;
 			}
 		}
 

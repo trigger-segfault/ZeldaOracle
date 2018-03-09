@@ -818,7 +818,12 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return roomControl; }
 			set { roomControl = value; }
 		}
-		
+
+		/// <summary>Gets the area control this tile belongs to.</summary>
+		public AreaControl AreaControl {
+			get { return roomControl.AreaControl; }
+		}
+
 		public GameControl GameControl {
 			get { return roomControl.GameControl; }
 		}

@@ -185,7 +185,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 								if (iy >= rectSize.Y) break;
 								int index = ix + iy * rectSize.X;
 								Color color = colorData[index].ToColor();
-								if (color.A == 0) {
+								if (color.IsTransparent) {
 									color = Color.Transparent;
 									colorData[index] = color.ToXnaColor();
 									// If no mapped colors have been encountered yet
@@ -209,7 +209,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 									else if (color == Color.Black) {
 										// All groups are valid here
 									}
-									else if (color.A == 0) {
+									else if (color.IsTransparent) {
 										transparentOnly = (scannedColors.Count + 1 > ignoredColors.Count);
 										if (args.Dictionary.PaletteType != PaletteTypes.Entity && !transparentOnly) {
 											throw new UnspecifiedColorException(color, args.SourceRect.Point + new Point2I(ix, iy));
@@ -264,7 +264,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 									int index = ix + iy * rectSize.X;
 									// Don't palette ignored colors or transparency
 									Color color = colorData[index].ToColor();
-									if (color.A == 0)
+									if (color.IsTransparent)
 										colorData[index] = XnaColor.Transparent;
 									else if (finalColorMapping.ContainsKey(color))
 										colorData[index] = finalColorMapping[color].ToXnaColor();

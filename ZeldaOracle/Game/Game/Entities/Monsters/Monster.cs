@@ -10,6 +10,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters.States;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -56,6 +57,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private MonsterStunState		stateStun;
 		private MonsterFallInHoleState	stateFallInHole;
 		private MonsterGaleState		stateGale;*/
+
+		// Property settings that should not modify the properties
+		/// <summary>The ID of the monster used for respawn identification.</summary>
+		private int monsterID;
+		/// <summary>True if the monster does not need to be killed in order to
+		/// clear the room.</summary>
+		private bool ignoreMonster;
+		/// <summary>True if the monster if ignored for room respawn but still counts
+		/// towards the room's cleared event.</summary>
+		private bool ignoreRespawn;
 
 
 
@@ -313,12 +324,26 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Begin the default monster state
 			BeginNormalState();
 			previousState = state;
+
+			monsterID		= Properties.Get("monster_id", 0);
+			ignoreMonster	= Properties.Get("ignore_monster", false);
+			ignoreRespawn	= ignoreMonster;
 		}
 
 		public override void Die() {
 			CreateDeathEffect();
-			if (!softKill)
-				Properties.Set("dead", true);
+			// Dead is now only used for permenant deaths. Everything else is
+			// tracked by the area's respawn manager.
+			if (!softKill) {
+				if (RespawnMode == MonsterRespawnType.Never)
+					Properties.Set("dead", true);
+				else if (RespawnMode == MonsterRespawnType.Normal)
+					RoomControl.ClearMonster(MonsterID);
+			}
+			else {
+				// Prevent the room from being "respawn cleared"
+				RoomControl.AddSoftKill(this);
+			}
 			base.Die();
 		}
 
@@ -453,13 +478,69 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		/// <summary>True if this monster is not counted towards clearing a room.</summary>
 		public bool IgnoreMonster {
-			get { return Properties.Get("ignore_monster", false); }
-			set { Properties.Set("ignore_monster", value); }
+			//get { return Properties.Get("ignore_monster", false); }
+			//set { Properties.Set("ignore_monster", value); }
+			get { return ignoreMonster; }
+			set { ignoreMonster = value; }
+		}
+
+		/// <summary>True if the monster if ignored for room respawn but still counts
+		/// towards the room's cleared event.</summary>
+		public bool IgnoreRespawn {
+			get { return ignoreRespawn; }
+			set { ignoreRespawn = value; }
+		}
+
+		/// <summary>Gets the respawn type of the monster.</summary>
+		public MonsterRespawnType RespawnType {
+			get { return Properties.GetEnum("respawn_type", MonsterRespawnType.Normal); }
+		}
+
+		/// <summary>Gets if the monster monster should be marked as dead in properties.</summary>
+		/*public bool IsPermenantDeath {
+			get {
+				return (RespawnType == MonsterRespawnType.Never ||
+					(AreaControl.RespawnMode == RoomRespawnMode.Never &&
+					RespawnType == MonsterRespawnType.Normal));
+			}
+		}*/
+
+		/// <summary>Gets if the monster monster should be marked as dead in properties.</summary>
+		/*public bool AlwaysRespawns {
+			get {
+				return (RespawnType == MonsterRespawnType.Always ||
+					AreaControl.RespawnMode == RoomRespawnMode.Always) &&
+					!IsPermenantDeath;
+			}
+		}*/
+
+		/// <summary>Gets the monsters respawn type combined with the
+		/// area's respawn mode.</summary>
+		public MonsterRespawnType RespawnMode {
+			get {
+				if (RespawnType == MonsterRespawnType.Normal) {
+					switch (AreaControl.RespawnMode) {
+					case RoomRespawnMode.Never: return MonsterRespawnType.Never;
+					case RoomRespawnMode.Always: return MonsterRespawnType.Always;
+					default: return MonsterRespawnType.Normal;
+					}
+				}
+				return RespawnType;
+			}
+		}
+
+		/// <summary>Gets the ID unique to each monster in the room.
+		/// An ID of -1 means the monster is never registered for death.</summary>
+		public int MonsterID {
+			//get { return Properties.Get("monster_id", -1); }
+			//set { Properties.Set("monster_id", value); }
+			get { return monsterID; }
+			set { monsterID = value; }
 		}
 
 		/// <summary>True if this monster needs to be killed in order to clear the room.</summary>
 		public bool NeedsClearing {
-			get { return !IgnoreMonster && IsAlive; }
+			get { return !IgnoreMonster /*&& IsAlive*/; }
 		}
 	}
 }

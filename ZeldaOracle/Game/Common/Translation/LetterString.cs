@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Common.Translation {
@@ -272,6 +273,8 @@ namespace ZeldaOracle.Common.Translation {
 		
 		/// <summary>The list of letters in the game string.</summary>
 		private List<Letter> letters;
+		/// <summary>The horizontal alignment of the string in the message box.</summary>
+		private Align messageAlign;
 
 
 		//-----------------------------------------------------------------------------
@@ -281,18 +284,21 @@ namespace ZeldaOracle.Common.Translation {
 		/// <summary>Constructs the default letter string.</summary>
 		public LetterString() {
 			this.letters = new List<Letter>();
+			this.messageAlign = Align.Left;
 		}
 
 		/// <summary>Constructs a copy of the letter string.</summary>
 		public LetterString(LetterString letterString) {
 			this.letters = new List<Letter>();
 			this.letters.AddRange(letterString.letters);
+			this.messageAlign = letterString.messageAlign;
 		}
 
 		/// <summary>Constructs a copy of the letter string.</summary>
 		public LetterString(Letter letter) {
 			this.letters = new List<Letter>();
 			this.letters.Add(letter);
+			this.messageAlign = Align.Left;
 		}
 
 		/// <summary>Constructs a letter string from a string.</summary>
@@ -301,6 +307,7 @@ namespace ZeldaOracle.Common.Translation {
 			for (int i = 0; i < text.Length; i++) {
 				this.letters.Add(new Letter(text[i]));
 			}
+			this.messageAlign = Align.Left;
 		}
 
 		/// <summary>Constructs a letter string from a colored string.</summary>
@@ -309,12 +316,14 @@ namespace ZeldaOracle.Common.Translation {
 			for (int i = 0; i < text.Length; i++) {
 				this.letters.Add(new Letter(text[i], color));
 			}
+			this.messageAlign = Align.Left;
 		}
 
 		/// <summary>Constructs a letter string from a character.</summary>
 		public LetterString(char character) {
 			this.letters = new List<Letter>();
 			this.letters.Add(new Letter(character));
+			this.messageAlign = Align.Left;
 		}
 
 
@@ -635,5 +644,11 @@ namespace ZeldaOracle.Common.Translation {
 			get { return (letters.Count == 0); }
 		}
 
+		/// <summary>Gets or sets the horizontal alignment of the string in the
+		/// message box.</summary>
+		public Align MessageAlignment {
+			get { return messageAlign; }
+			set { messageAlign = value; }
+		}
 	}
 }

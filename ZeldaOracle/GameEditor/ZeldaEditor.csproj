@@ -118,7 +118,7 @@
     <Compile Include="PropertiesEditor\CustomEditors\AnglePropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\BooleanPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\DirectionPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\AreaPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumFlagPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\PathPropertyEditor.cs" />
@@ -144,12 +144,12 @@
     <Compile Include="Undo\ActionChangeProperty.cs" />
     <Compile Include="Undo\ActionChangeTileSizeProperty.cs" />
     <Compile Include="Undo\ActionCreateLevel.cs" />
-    <Compile Include="Undo\ActionDeleteDungeon.cs" />
+    <Compile Include="Undo\ActionDeleteArea.cs" />
     <Compile Include="Undo\ActionDeleteLevel.cs" />
-    <Compile Include="Undo\ActionDuplicateDungeon.cs" />
+    <Compile Include="Undo\ActionDuplicateArea.cs" />
     <Compile Include="Undo\ActionDuplicateLevel.cs" />
     <Compile Include="Undo\ActionPlaceAction.cs" />
-    <Compile Include="Undo\ActionMoveDungeon.cs" />
+    <Compile Include="Undo\ActionMoveArea.cs" />
     <Compile Include="Undo\ActionMoveLevel.cs" />
     <Compile Include="Undo\ActionNewWorld.cs" />
     <Compile Include="Undo\ActionOpenWorld.cs" />
@@ -157,7 +157,7 @@
     <Compile Include="Undo\ActionSelection.cs" />
     <Compile Include="Undo\ActionShiftLevel.cs" />
     <Compile Include="Undo\ActionSquare.cs" />
-    <Compile Include="Undo\ActionCreateDungeon.cs" />
+    <Compile Include="Undo\ActionCreateArea.cs" />
     <Compile Include="Undo\ActionChangeScript.cs" />
     <Compile Include="Undo\EditorAction.cs" />
     <Compile Include="Undo\ActionPlace.cs" />
@@ -165,8 +165,8 @@
     <Compile Include="Util\AlphanumComparatorFast.cs" />
     <Compile Include="Util\WpfHelper.cs" />
     <Compile Include="Util\StoppableTimer.cs" />
-    <Compile Include="Windows\AddNewDungeonWindow.xaml.cs">
-      <DependentUpon>AddNewDungeonWindow.xaml</DependentUpon>
+    <Compile Include="Windows\AddNewAreaWindow.xaml.cs">
+      <DependentUpon>AddNewAreaWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\AddNewLevelWindow.xaml.cs">
       <DependentUpon>AddNewLevelWindow.xaml</DependentUpon>
@@ -217,7 +217,7 @@
     <Compile Include="Tools\ToolPointer.cs" />
     <Compile Include="Tools\ToolSelection.cs" />
     <Compile Include="Tools\ToolSquare.cs" />
-    <Compile Include="TreeViews\DungeonTreeViewItem.cs" />
+    <Compile Include="TreeViews\AreaTreeViewItem.cs" />
     <Compile Include="TreeViews\IWorldTreeViewItem.cs" />
     <Compile Include="TreeViews\LevelTreeViewItem.cs" />
     <Compile Include="TreeViews\ScriptTreeViewItem.cs" />
@@ -268,7 +268,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Resource>
-    <Page Include="Windows\AddNewDungeonWindow.xaml">
+    <Page Include="Windows\AddNewAreaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -673,6 +673,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\TilePathInsertHover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Area.png" />
+    <Resource Include="Resources\Icons\AreaAdd.png" />
+    <Resource Include="Resources\Icons\AreaDelete.png" />
+    <Resource Include="Resources\Icons\AreaDuplicate.png" />
+    <Resource Include="Resources\Icons\AreaGroup.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

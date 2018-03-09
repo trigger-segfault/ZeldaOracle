@@ -14,6 +14,7 @@ namespace ZeldaEditor.Undo {
 		private Level level;
 		private Point2I distance;
 		private Dictionary<Point2I, Room> cutoffRooms;
+		private Dictionary<Point2I, Room> cutinRooms;
 
 		public ActionShiftLevel(Level level, Point2I distance) {
 			ActionName = "Shift Level";
@@ -21,23 +22,48 @@ namespace ZeldaEditor.Undo {
 			this.level = level;
 			this.distance = distance;
 			this.cutoffRooms = new Dictionary<Point2I, Room>();
+			this.cutinRooms = new Dictionary<Point2I, Room>();
 			int startX = (distance.X > 0 ? level.Width - distance.X : 0);
 			int startY = (distance.Y > 0 ? level.Height - distance.Y : 0);
 			for (int x = startX; x < startX + Math.Abs(distance.X); x++) {
 				for (int y = 0; y < level.Height; y++) {
-					AddRoom(new Point2I(x, y), level.GetRoomAt(x, y));
+					AddCutoffRoom(new Point2I(x, y), level.GetRoomAt(x, y));
 				}
 			}
 			for (int y = startY; y < startY + Math.Abs(distance.Y); y++) {
 				for (int x = 0; x < level.Width; x++) {
-					AddRoom(new Point2I(x, y), level.GetRoomAt(x, y));
+					AddCutoffRoom(new Point2I(x, y), level.GetRoomAt(x, y));
 				}
 			}
 		}
 
-		public void AddRoom(Point2I point, Room room) {
+		private void AddCutoffRoom(Point2I point, Room room) {
 			if (!cutoffRooms.ContainsKey(point))
 				cutoffRooms.Add(point, room);
+		}
+
+		private void AddCutinRoom(Point2I point, Room room) {
+			if (!cutinRooms.ContainsKey(point))
+				cutinRooms.Add(point, room);
+		}
+
+		public override void Execute(EditorControl editorControl) {
+			level.ShiftRooms(distance);
+			// Store the newly created rooms to keep links to property objects
+			int startX = (distance.X <= 0 ? level.Width + distance.X : 0);
+			int startY = (distance.Y <= 0 ? level.Height + distance.Y : 0);
+			for (int x = startX; x < startX + Math.Abs(distance.X); x++) {
+				for (int y = 0; y < level.Height; y++) {
+					AddCutinRoom(new Point2I(x, y), level.GetRoomAt(x, y));
+				}
+			}
+			for (int y = startY; y < startY + Math.Abs(distance.Y); y++) {
+				for (int x = 0; x < level.Width; x++) {
+					AddCutinRoom(new Point2I(x, y), level.GetRoomAt(x, y));
+				}
+			}
+			editorControl.OpenLevel(level);
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Undo(EditorControl editorControl) {
@@ -47,8 +73,8 @@ namespace ZeldaEditor.Undo {
 		}
 
 		public override void Redo(EditorControl editorControl) {
+			level.ShiftRooms(distance, cutinRooms);
 			editorControl.OpenLevel(level);
-			level.ShiftRooms(distance);
 			editorControl.NeedsNewEventCache = true;
 		}
 

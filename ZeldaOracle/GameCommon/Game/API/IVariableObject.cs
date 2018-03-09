@@ -9,6 +9,6 @@ namespace ZeldaOracle.Game.API {
 	public interface IVariableObject {
 
 		/// <summary>Gets the collection of Zelda variables.</summary>
-		Variables Variables { get; }
+		Variables Vars { get; }
 	}
 }

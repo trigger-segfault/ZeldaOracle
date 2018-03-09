@@ -55,7 +55,7 @@ namespace ZeldaAPI {
 		//TileData GetTileData(string id);
 
 		/// <summary>Gets the variables for the room.</summary>
-		Variables Variables { get; }
+		Variables Vars { get; }
 	}
 
 	/// <summary>Access to a tile's tile data.</summary>

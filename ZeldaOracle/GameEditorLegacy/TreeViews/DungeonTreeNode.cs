@@ -14,14 +14,14 @@ namespace ZeldaEditor.TreeViews {
 	
 	public class DungeonTreeNode : IWorldTreeViewNode {
 
-		private Dungeon dungeon;
+		private Area dungeon;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public DungeonTreeNode(Dungeon dungeon) {
+		public DungeonTreeNode(Area dungeon) {
 			this.dungeon = dungeon;
 			ImageIndex			= 6;
 			SelectedImageIndex	= 6;
@@ -46,7 +46,7 @@ namespace ZeldaEditor.TreeViews {
 				MessageBoxDefaultButton.Button2);
 
 			if (result == DialogResult.Yes) {
-				editorControl.World.RemoveDungeon(dungeon);
+				editorControl.World.RemoveArea(dungeon);
 				editorControl.RefreshWorldTreeView();
 			}
 		}
@@ -56,9 +56,9 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Duplicate(EditorControl editorControl, string suffix) {
-			Dungeon duplicate = new Dungeon(dungeon);
+			Area duplicate = new Area(dungeon);
 			duplicate.Name += suffix;
-			editorControl.World.AddDungeon(dungeon);
+			editorControl.World.AddArea(dungeon);
 			editorControl.RefreshWorldTreeView();
 		}
 	}

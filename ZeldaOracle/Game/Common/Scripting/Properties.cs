@@ -130,60 +130,41 @@ namespace ZeldaOracle.Common.Scripting {
 
 
 		//-----------------------------------------------------------------------------
+		// Matching
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the two properties match. (Does not check base properties.)</summary>
+		public bool Matches(Properties properties) {
+			Properties more = this;
+			Properties less = properties;
+			if (properties.map.Count > map.Count) {
+				more = properties;
+				less = this;
+			}
+			foreach (var pair in more.map) {
+				if (!less.ContainsEquals(pair.Key, pair.Value.ObjectValue))
+					return false;
+			}
+			return true;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Contains Equals
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsEquals(string name, string value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.String && p.StringValue == value);
+		/// <summary>Return true if there exists a property with the given name that
+		/// equates to the given value.</summary>
+		public bool ContainsEquals(string name, object value) {
+			Property v = GetProperty(name, true);
+			return (v != null && v.EqualsValue(value));
 		}
 
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsEquals(string name, int value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.Integer && p.IntValue == value);
-		}
-
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsEquals(string name, float value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.Float && p.FloatValue == value);
-		}
-
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsEquals(string name, bool value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.Boolean && p.BoolValue == value);
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Contains NOT Equals
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsNotEquals(string name, string value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.String && p.StringValue != value);
-		}
-
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsNotEquals(string name, int value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.Integer && p.IntValue != value);
-		}
-
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsNotEquals(string name, float value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.Float && p.FloatValue != value);
-		}
-
-		/// <summary>Return true if there exists a property with the given name that equates to the given value.</summary>
-		public bool ContainsNotEquals(string name, bool value) {
-			Property p = GetProperty(name, true);
-			return (p != null && p.Type == PropertyType.Boolean && p.BoolValue != value);
+		/// <summary>Return true if there exists a property with the given name that
+		/// does not equate to the given value.</summary>
+		public bool ContainsNotEquals(string name, object value) {
+			Property v = GetProperty(name, true);
+			return (v != null && !v.EqualsValue(value));
 		}
 
 
@@ -205,6 +186,23 @@ namespace ZeldaOracle.Common.Scripting {
 				return (E) Enum.Parse(typeof(E), p.StringValue);
 			else
 				throw new InvalidOperationException("Property type does not support enums.");
+		}
+
+		/// <summary>Tries to get an enum property value.</summary>
+		public E TryGetEnum<E>(string name) where E : struct {
+			Property p = GetProperty(name, true);
+			if (p != null) {
+				try {
+					if (p.Type == PropertyType.Integer)
+						return (E) Enum.ToObject(typeof(E), p.IntValue);
+					else if (p.Type == PropertyType.String)
+						return (E) Enum.Parse(typeof(E), p.StringValue, true);
+					else
+						throw new InvalidOperationException("Property type does not support enums.");
+				}
+				catch { }
+			}
+			return default(E);
 		}
 
 		/// <summary>Get a string property value.</summary>
@@ -261,6 +259,23 @@ namespace ZeldaOracle.Common.Scripting {
 					return (E) Enum.Parse(typeof(E), p.StringValue, true);
 				else
 					throw new InvalidOperationException("Property type does not support enums.");
+			}
+			return defaultValue;
+		}
+
+		/// <summary>Tries to get an enum property value with a default value fallback.</summary>
+		public E TryGetEnum<E>(string name, E defaultValue) where E : struct {
+			Property p = GetProperty(name, true);
+			if (p != null) {
+				try {
+					if (p.Type == PropertyType.Integer)
+						return (E) Enum.ToObject(typeof(E), p.IntValue);
+					else if (p.Type == PropertyType.String)
+						return (E) Enum.Parse(typeof(E), p.StringValue, true);
+					else
+						throw new InvalidOperationException("Property type does not support enums.");
+				}
+				catch { }
 			}
 			return defaultValue;
 		}
@@ -365,11 +380,27 @@ namespace ZeldaOracle.Common.Scripting {
 		// Property Setters
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Sets the property's value as an resource name.</summary>
 		public Property SetAsResource<T>(string name, T resource) where T : class {
 			string resourceName = "";
 			if (resource != null)
 				resourceName = Resources.GetResourceName<T>(resource);
 			return Set(name, resourceName);
+		}
+
+		/// <summary>Sets the property's value as an enum.</summary>
+		public Property SetEnum<E>(string name, E value,
+			PropertyType defaultType = PropertyType.String) where E : struct {
+			Property p = GetProperty(name, true);
+			PropertyType type = defaultType;
+			if (p != null)
+				type = p.Type;
+			if (type == PropertyType.Integer)
+				return SetProperty(name, (int) (object) value, false);
+			else if (type == PropertyType.String)
+				return SetProperty(name, value.ToString(), false);
+			else
+				throw new InvalidOperationException("Property type does not support enums.");
 		}
 
 		public Property Set(string name, Property property) {
@@ -427,6 +458,12 @@ namespace ZeldaOracle.Common.Scripting {
 		public void SetDocumentation(string name, string readableName, string editorType,
 			string editorSubType, string category, string description, bool isEditable = true, bool isHidden = false)
 		{
+			SetDocumentation(name, new PropertyDocumentation(readableName,
+				editorType, editorSubType, category, description, isEditable, isHidden));
+		}
+
+		public void SetDocumentation(string name, string readableName, string editorType,
+			Type editorSubType, string category, string description, bool isEditable = true, bool isHidden = false) {
 			SetDocumentation(name, new PropertyDocumentation(readableName,
 				editorType, editorSubType, category, description, isEditable, isHidden));
 		}

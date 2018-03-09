@@ -229,11 +229,11 @@ namespace ZeldaOracle.Game.Worlds {
 			//	ReadVariables(reader, world.Variables);
 			ReadEvents(reader, world.Events, world);
 
-			// Read the dungeons.
+			// Read the areas.
 			int dungoenCount = reader.ReadInt32();
 			for (int i = 0; i < dungoenCount; i++) {
-				Dungeon dungeon = ReadDungeon(reader, world);
-				world.AddDungeon(dungeon);
+				Area area = ReadArea(reader, world);
+				world.AddArea(area);
 			}
 
 			// Read the levels.
@@ -291,11 +291,11 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		private Dungeon ReadDungeon(BinaryReader reader, World world) {
-			Dungeon dungeon = new Dungeon();
-			ReadProperties(reader, dungeon.Properties);
-			ReadEvents(reader, dungeon.Events, world);
-			return dungeon;
+		private Area ReadArea(BinaryReader reader, World world) {
+			Area area = new Area();
+			ReadProperties(reader, area.Properties);
+			ReadEvents(reader, area.Events, world);
+			return area;
 		}
 
 		private Level ReadLevel(BinaryReader reader, World world) {
@@ -567,7 +567,7 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int i = 0; i < typeCount; i++) {
 				int index	= reader.ReadInt32();
 				string name	= strings[index];
-				Type type	= GameUtil.GetTypeWithBase<Tile>(name, false);
+				Type type	= GameUtil.FindTypeWithBase<Tile>(name, false);
 				tileTypes.Add(new ResourceInfo<Type>(type, index));
 			}
 		}
@@ -786,28 +786,28 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void WriteWorld(BinaryWriter writer, World world) {
-			// Write the scripts.
+			// Write the scripts
 			WriteScripts(writer, world);
 
-			// Write the world's properties.
+			// Write the world's properties
 			WriteProperties(writer, world.Properties);
 			//WriteVariables(writer, world.Variables);
 			WriteEvents(writer, world.Events);
 
-			// Write the dungeons.
-			writer.Write(world.DungeonCount);
-			for (int i = 0; i < world.DungeonCount; i++)
-					WriteDungeon(writer, world.GetDungeonAt(i));
+			// Write the area
+			writer.Write(world.AreaCount);
+			for (int i = 0; i < world.AreaCount; i++)
+				WriteArea(writer, world.GetAreaAt(i));
 
-			// Write the level data.
+			// Write the level data
 			writer.Write(world.LevelCount);
 			for (int i = 0; i < world.LevelCount; i++)
 				WriteLevel(writer, world.GetLevelAt(i));
 		}
 
-		private void WriteDungeon(BinaryWriter writer, Dungeon dungeon) {
-			WriteProperties(writer, dungeon.Properties);
-			WriteEvents(writer, dungeon.Events);
+		private void WriteArea(BinaryWriter writer, Area area) {
+			WriteProperties(writer, area.Properties);
+			WriteEvents(writer, area.Events);
 		}
 
 		private void WriteLevel(BinaryWriter writer, Level level) {
@@ -876,9 +876,9 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 
 			// Write action tile data.
-			writer.Write(room.ActionData.Count);
-			for (int i = 0; i < room.ActionData.Count; i++) {
-				ActionTileDataInstance actionTile = room.ActionData[i];
+			writer.Write(room.ActionCount);
+			for (int i = 0; i < room.ActionCount; i++) {
+				ActionTileDataInstance actionTile = room.GetActionTileAt(i);
 				WriteActionTileData(writer, actionTile);
 			}
 		}

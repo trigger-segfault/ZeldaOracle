@@ -68,7 +68,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.color		= Color;
 			this.isRaised	= (color == PuzzleColor.Blue);
 
-			Dungeon dungeon = RoomControl.Dungeon;
+			Area dungeon = RoomControl.Area;
 			if (dungeon != null)
 				this.isRaised = (dungeon.ColorSwitchColor == color);
 

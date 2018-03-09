@@ -79,6 +79,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				// Setup script object member variables.
 				scriptObject.game = gameControl;
 				scriptObject.room = gameControl.RoomControl;
+				scriptObject.area = gameControl.AreaControl;
 
 				// Invoke the method.
 				methodInfo.Invoke(scriptObject, parameters);

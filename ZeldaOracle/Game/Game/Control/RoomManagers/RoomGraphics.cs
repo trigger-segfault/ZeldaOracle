@@ -4,6 +4,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game.Control.RoomManagers;
 
 namespace ZeldaOracle.Game.Entities {
 

@@ -13,6 +13,6 @@ namespace ZeldaAPI {
 		bool IsAdvancedGame { get; set; }
 
 		/// <summary>Gets the variables for the game.</summary>
-		Variables Variables { get; }
+		Variables Vars { get; }
 	}
 }

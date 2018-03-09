@@ -21,7 +21,7 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileColorSwitch : SwitchTileBase, ZeldaAPI.ColorSwitch {
 
 		private PuzzleColor color;
-		private bool syncWithDungeon;
+		private bool syncWithArea;
 
 
 		//-----------------------------------------------------------------------------
@@ -39,10 +39,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnToggle(bool switchState) {
 
-			// Sync color switch across dungeon.
-			if (syncWithDungeon && RoomControl.Dungeon != null) {
-				Dungeon dungeon = RoomControl.Dungeon;
-				dungeon.ColorSwitchColor = color;
+			// Sync color switch across area
+			if (syncWithArea && RoomControl.Area != null) {
+				Area area = RoomControl.Area;
+				area.ColorSwitchColor = color;
 
 				// Raise/lower color barriers if there are any.
 				if (RoomControl.GetTilesOfType<TileColorBarrier>().Any()) {
@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Sync other color switches in the same room.
 				foreach (TileColorSwitch tile in RoomControl.GetTilesOfType<TileColorSwitch>()) {
-					if (tile != this && tile.SyncWithDungeon)
+					if (tile != this && tile.SyncWithArea)
 						tile.SetSwitchState(SwitchState);
 				}
 			}
@@ -80,10 +80,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnInitialize() {
 			base.OnInitialize();
 			
-			// Sync color with dungeon.
-			syncWithDungeon = Properties.GetBoolean("sync_with_dungeon", false);
-			if (syncWithDungeon && RoomControl.Dungeon != null) {
-				SetSwitchState(RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Blue);
+			// Sync color with area
+			syncWithArea = Properties.GetBoolean("sync_with_area", false);
+			if (syncWithArea && RoomControl.Area != null) {
+				SetSwitchState(RoomControl.Area.ColorSwitchColor == PuzzleColor.Red);
 			}
 		}
 
@@ -94,12 +94,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			bool syncWithDungeon = args.Properties.GetBoolean("sync_with_dungeon", false);
+			bool syncWithArea = args.Properties.GetBoolean("sync_with_area", false);
 			bool switchState = args.Properties.GetBoolean("switch_state", false);
-			if (syncWithDungeon && args.Level != null) {
-				Dungeon dungeon = args.Level.Dungeon;
-				if (dungeon != null)
-					switchState = dungeon.ColorSwitchColor == PuzzleColor.Blue;
+			if (syncWithArea && args.Level != null) {
+				Area area = args.Level.Area;
+				if (area != null)
+					switchState = area.ColorSwitchColor == PuzzleColor.Red;
 			}
 			//ISprite sprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
 			//if (switchState)
@@ -121,8 +121,8 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return color; }
 		}
 
-		public bool SyncWithDungeon {
-			get { return syncWithDungeon; }
+		public bool SyncWithArea {
+			get { return syncWithArea; }
 		}
 
 

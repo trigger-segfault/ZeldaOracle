@@ -17,9 +17,9 @@ namespace ZeldaOracle.Common.Graphics {
 		public static readonly Color Transparent		= new Color(0, 0, 0, 0);
 
 		/// <summary>R:255 G:255 B:255 A:255.</summary>
-		public static readonly Color White      = new Color(255, 255, 255, 255);
+		public static readonly Color White      = new Color(255, 255, 255);
 		/// <summary>R:128 G:128 B:128 A:255.</summary>
-		public static readonly Color Gray       = new Color(128, 128, 128, 255);
+		public static readonly Color Gray       = new Color(128, 128, 128);
 		/// <summary>R:0 G:0 B:0 A:255.</summary>
 		public static readonly Color Black      = new Color(0, 0, 0, 255);
 
@@ -41,6 +41,9 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>R:255 G:0 B:255 A:255.</summary>
 		public static readonly Color Magenta	= new Color(255, 0, 255);
 
+		/// <summary>R:248 G:248 B:248 A:255.</summary>
+		public static readonly Color GBCWhite	= new Color(248, 248, 248);
+
 
 		//-----------------------------------------------------------------------------
 		// Members
@@ -59,107 +62,29 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>Constructs a color with the specified values.</summary>
-		public Color(int red, int green, int blue, bool asHsv = false) {
-			if (asHsv) {
-				this.R = 0;
-				this.G = 0;
-				this.B = 0;
-				this.A = 255;
-				this.SetHSV(red, green, blue);
-			}
-			else {
-				this.R	= (byte) GMath.Clamp(red, 0, 255);
-				this.G	= (byte) GMath.Clamp(green, 0, 255);
-				this.B	= (byte) GMath.Clamp(blue, 0, 255);
-				this.A	= 255;
-			}
+		public Color(int red, int green, int blue, int alpha = 255) {
+			this.R	= (byte) GMath.Clamp(red,   0, 255);
+			this.G	= (byte) GMath.Clamp(green, 0, 255);
+			this.B	= (byte) GMath.Clamp(blue,  0, 255);
+			this.A	= (byte) GMath.Clamp(alpha, 0, 255);
 		}
 
 		/// <summary>Constructs a color with the specified values.</summary>
-		public Color(int red, int green, int blue, int alpha, bool asHsv = false) {
-			if (asHsv) {
-				this.R = 0;
-				this.G = 0;
-				this.B = 0;
-				this.A = (byte) GMath.Clamp(alpha, 0, 255);
-				this.SetHSV(red, green, blue);
-			}
-			else {
-				this.R	= (byte) GMath.Clamp(red, 0, 255);
-				this.G	= (byte) GMath.Clamp(green, 0, 255);
-				this.B	= (byte) GMath.Clamp(blue, 0, 255);
-				this.A	= (byte) GMath.Clamp(alpha, 0, 255);
-			}
+		public Color(float red, float green, float blue, float alpha = 1f) {
+			this.R	= (byte) (GMath.Clamp(red,   0f, 1f) * 255f);
+			this.G	= (byte) (GMath.Clamp(green, 0f, 1f) * 255f);
+			this.B	= (byte) (GMath.Clamp(blue,  0f, 1f) * 255f);
+			this.A	= (byte) (GMath.Clamp(alpha, 0f, 1f) * 255f);
 		}
 
 		/// <summary>Constructs a color with the specified values.</summary>
-		public Color(float red, float green, float blue, bool asHsv = false) {
-			if (asHsv) {
-				this.R = 0;
-				this.G = 0;
-				this.B = 0;
-				this.A = 255;
-				this.SetHSV(red, green, blue);
-			}
-			else {
-				this.R	= (byte) (GMath.Clamp(red, 0f, 1f) * 255f);
-				this.G	= (byte) (GMath.Clamp(green, 0f, 1f) * 255f);
-				this.B	= (byte) (GMath.Clamp(blue, 0f, 1f) * 255f);
-				this.A	= 255;
-			}
-		}
-
-		/// <summary>Constructs a color with the specified values.</summary>
-		public Color(float red, float green, float blue, float alpha, bool asHsv = false) {
-			if (asHsv) {
-				this.R	= 0;
-				this.G	= 0;
-				this.B	= 0;
-				this.A	= (byte) (GMath.Clamp(alpha, 0f, 1f) * 255f);
-				this.SetHSV(red, green, blue);
-			}
-			else {
-				this.R	= (byte) (GMath.Clamp(red, 0f, 1f) * 255f);
-				this.G	= (byte) (GMath.Clamp(green, 0f, 1f) * 255f);
-				this.B	= (byte) (GMath.Clamp(blue, 0f, 1f) * 255f);
-				this.A	= (byte) (GMath.Clamp(alpha, 0f, 1f) * 255f);
-			}
-		}
-
-		/// <summary>Constructs a color with the specified values.</summary>
-		public Color(double red, double green, double blue, bool asHsv = false) {
-			if (asHsv) {
-				this.R = 0;
-				this.G = 0;
-				this.B = 0;
-				this.A = 255;
-				this.SetHSV(red, green, blue);
-			}
-			else {
-				this.R	= (byte) (GMath.Clamp(red, 0.0, 1.0) * 255.0);
-				this.G	= (byte) (GMath.Clamp(green, 0.0, 1.0) * 255.0);
-				this.B	= (byte) (GMath.Clamp(blue, 0.0, 1.0) * 255.0);
-				this.A	= 255;
-			}
-		}
-
-		/// <summary>Constructs a color with the specified values.</summary>
-		public Color(double red, double green, double blue, double alpha, bool asHsv = false) {
-			if (asHsv) {
-				this.R	= 0;
-				this.G	= 0;
-				this.B	= 0;
-				this.A	= (byte) (GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
-				this.SetHSV(red, green, blue);
-			}
-			else {
-				this.R	= (byte) (GMath.Clamp(red, 0.0, 1.0) * 255.0);
-				this.G	= (byte) (GMath.Clamp(green, 0.0, 1.0) * 255.0);
-				this.B	= (byte) (GMath.Clamp(blue, 0.0, 1.0) * 255.0);
-				this.A	= (byte) (GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
-			}
+		public Color(double red, double green, double blue, double alpha = 0.0) {
+			this.R	= (byte) (GMath.Clamp(red,   0.0, 1.0) * 255.0);
+			this.G	= (byte) (GMath.Clamp(green, 0.0, 1.0) * 255.0);
+			this.B	= (byte) (GMath.Clamp(blue,  0.0, 1.0) * 255.0);
+			this.A	= (byte) (GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
 		}
 
 		/// <summary>Constructs a copy of the specified color.</summary>
@@ -168,6 +93,34 @@ namespace ZeldaOracle.Common.Graphics {
 			this.G	= color.G;
 			this.B	= color.B;
 			this.A	= color.A;
+		}
+
+		//-----------------------------------------------------------------------------
+		// Static Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Creates a color from hue, saturation, and value channels.</summary>
+		/// <param name="hue">A value between 0 and 360.</param>
+		/// <param name="sat">A value between 0 and 100.</param>
+		/// <param name="val">A value between 0 and 100.</param>
+		public Color FromHSV(int hue, int sat, int val, int alpha = 255) {
+			Color color = new Color(255, 255, 255, alpha);
+			color.SetHSV(hue, sat, val);
+			return color;
+		}
+
+		/// <summary>Creates a color from hue, saturation, and value channels.</summary>
+		public Color FromHSV(float hue, float sat, float val, float alpha = 1f) {
+			Color color = new Color(1f, 1f, 1f, alpha);
+			color.SetHSV(hue, sat, val);
+			return color;
+		}
+
+		/// <summary>Creates a color from hue, saturation, and value channels.</summary>
+		public Color FromHSV(double hue, double sat, double val, double alpha = 1f) {
+			Color color = new Color(1, 1, 1, alpha);
+			color.SetHSV(hue, sat, val);
+			return color;
 		}
 
 
@@ -311,56 +264,6 @@ namespace ZeldaOracle.Common.Graphics {
 		public static implicit operator GdiColor(Color c) {
 			return GdiColor.FromArgb(c.A, c.R, c.G, c.B);
 		}*/
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-		
-		/// <summary>Gets the packed color with all the values inside an unsigned int.</summary>
-		public uint PackedColor {
-			get { return (((uint) A) << 12) + (((uint) R) << 8) +
-						 (((uint) G) <<  8) + (((uint) B)); }
-		}
-		
-		/// <summary>Gets or sets hue of the color.</summary>
-		public int Hue {
-			get {
-				byte max = GMath.Max(R, GMath.Max(G, B));
-
-				if (max == R)
-					return   0 + ((int)(G - B) * 60 / 255);
-				else if (max == G)
-					return 120 + ((int)(B - R) * 60 / 255);
-				else
-					return 240 + ((int)(R - G) * 60 / 255);
-			}
-			set { SetHSV(value, Sat, Val); }
-		}
-
-		/// <summary>Gets or sets the saturation of the color.</summary>
-		public int Sat {
-			get {
-				byte max = (byte) ((int) GMath.Max(R, GMath.Max(G, B)) * 100 / 255);
-				byte min = (byte) ((int) GMath.Min(R, GMath.Min(G, B)) * 100 / 255);
-				byte c = (byte) (max - min);
-				return (c != 0 ? c * 100 / max : 0);
-			}
-			set { SetHSV(Hue, value, Val); }
-		}
-
-		/// <summary>Gets or sets the value of the color.</summary>
-		public int Val {
-			get { return ((int) GMath.Max(R, GMath.Max(G, B)) * 100 / 255); }
-			set { SetHSV(Hue, Sat, value); }
-		}
-
-		/// <summary>Gets the total of the RGB channels.</summary>
-		public int Total {
-			get { return R + G + B; }
-		}
-
-
 		//-----------------------------------------------------------------------------
 		// Management
 		//-----------------------------------------------------------------------------
@@ -385,8 +288,11 @@ namespace ZeldaOracle.Common.Graphics {
 			G = (byte) (GMath.Clamp(green, 0.0, 1.0) * 255.0);
 			B = (byte) (GMath.Clamp(blue, 0.0, 1.0) * 255.0);
 		}
-		
+
 		/// <summary>Sets the hsv values of the color.</summary>
+		/// <param name="hue">A value between 0 and 360.</param>
+		/// <param name="sat">A value between 0 and 100.</param>
+		/// <param name="val">A value between 0 and 100.</param>
 		public void SetHSV(int hue, int sat, int val) {
 			SetHSV(hue / 360f, sat / 100f, val / 100f);
 		}
@@ -437,6 +343,61 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Converts the color to a 15-bit GameBoy Color color.</summary>
 		public static Color ToGBCColor(Color color) {
 			return new Color(color.R & 0xF8, color.G & 0xF8, color.B & 0xF8);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the packed color with all the values inside an unsigned int.</summary>
+		public uint PackedColor {
+			get {
+				return (((uint) A) << 12) + (((uint) R) << 8) +
+					   (((uint) G) <<  8) + (((uint) B));
+			}
+		}
+
+		/// <summary>Gets or sets hue of the color.</summary>
+		public int Hue {
+			get {
+				byte max = GMath.Max(R, GMath.Max(G, B));
+
+				if (max == R)
+					return 0 + ((int) (G - B) * 60 / 255);
+				else if (max == G)
+					return 120 + ((int) (B - R) * 60 / 255);
+				else
+					return 240 + ((int) (R - G) * 60 / 255);
+			}
+			set { SetHSV(value, Sat, Val); }
+		}
+
+		/// <summary>Gets or sets the saturation of the color.</summary>
+		public int Sat {
+			get {
+				byte max = (byte) ((int) GMath.Max(R, GMath.Max(G, B)) * 100 / 255);
+				byte min = (byte) ((int) GMath.Min(R, GMath.Min(G, B)) * 100 / 255);
+				byte c = (byte) (max - min);
+				return (c != 0 ? c * 100 / max : 0);
+			}
+			set { SetHSV(Hue, value, Val); }
+		}
+
+		/// <summary>Gets or sets the value of the color.</summary>
+		public int Val {
+			get { return ((int) GMath.Max(R, GMath.Max(G, B)) * 100 / 255); }
+			set { SetHSV(Hue, Sat, value); }
+		}
+
+		/// <summary>Gets the total of the RGB channels.</summary>
+		public int Total {
+			get { return R + G + B; }
+		}
+
+		/// <summary>Returns true if the color is fully transparent.</summary>
+		public bool IsTransparent {
+			get { return A == 0; }
 		}
 	}
 }

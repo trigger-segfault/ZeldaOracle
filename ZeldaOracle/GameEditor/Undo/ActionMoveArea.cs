@@ -9,28 +9,28 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaEditor.Undo {
-	public class ActionMoveDungeon : EditorAction {
+	public class ActionMoveArea : EditorAction {
 
-		private Dungeon dungeon;
+		private Area area;
 		private int distance;
 
-		public ActionMoveDungeon(Dungeon dungeon, int distance) {
-			ActionName = "Move '" + dungeon.ID + "' Dungeon";
+		public ActionMoveArea(Area area, int distance) {
+			ActionName = "Move '" + area.ID + "' Area";
 			ActionIcon = (distance < 0 ? EditorImages.MoveUp : EditorImages.MoveDown);
-			this.dungeon = dungeon;
+			this.area = area;
 			this.distance = distance;
 		}
 
 		public override void Undo(EditorControl editorControl) {
-			int index = editorControl.World.IndexOfDungeon(dungeon);
-			editorControl.World.MoveDungeon(index, -distance, true);
-			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
+			int index = editorControl.World.IndexOfArea(area);
+			editorControl.World.MoveArea(index, -distance, true);
+			editorControl.EditorWindow.WorldTreeView.RefreshAreas();
 		}
 
 		public override void Redo(EditorControl editorControl) {
-			int index = editorControl.World.IndexOfDungeon(dungeon);
-			editorControl.World.MoveDungeon(index, distance, true);
-			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
+			int index = editorControl.World.IndexOfArea(area);
+			editorControl.World.MoveArea(index, distance, true);
+			editorControl.EditorWindow.WorldTreeView.RefreshAreas();
 		}
 
 		public override bool IgnoreAction { get { return distance == 0; } }

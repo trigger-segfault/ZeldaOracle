@@ -2,7 +2,7 @@
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 
-namespace ZeldaOracle.Game.Control {
+namespace ZeldaOracle.Game.Control.RoomManagers {
 	
 	/// <summary>Manages the list of entities in a room.</summary>
 	public class EntityManager : RoomManager {

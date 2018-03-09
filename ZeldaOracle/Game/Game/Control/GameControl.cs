@@ -31,9 +31,8 @@ namespace ZeldaOracle.Game.Control {
 
 		private GameManager		gameManager;
 		private RoomControl		roomControl;
+		private AreaControl		areaControl;
 		private World			world;
-		/// <summary>Save-modified variables.</summary>
-		private Variables		variables;
 		private Player			player;
 		private HUD				hud;
 		private Inventory		inventory;
@@ -47,6 +46,7 @@ namespace ZeldaOracle.Game.Control {
 		private ScriptRunner	scriptRunner;
 		private Room			lastRoomOnMap;
 		private int				nextRoomNumber;
+		private int				nextMonsterID;
 
 		// Menus
 		private MenuWeapons			menuWeapons;
@@ -76,7 +76,6 @@ namespace ZeldaOracle.Game.Control {
 			this.menuSecondaryItems	= null;
 			this.menuEssences		= null;
 			this.scriptRunner		= null;
-			this.variables          = new Variables(this);
 		}
 
 
@@ -97,12 +96,14 @@ namespace ZeldaOracle.Game.Control {
 				world.ScriptManager.CompileAndWriteAssembly(null);
 			}
 			scriptRunner.OnLoadWorld(world);
+			world.AssignMonsterIDs();
 		}
 
 		// Start a new game.
 		public void StartGame() {
 			roomTicks = 0;
 			nextRoomNumber = 0;
+			nextMonsterID = int.MaxValue;
 
 			// Setup the player beforehand so certain classes such as the HUD can reference it
 			player = new Player();
@@ -186,12 +187,9 @@ namespace ZeldaOracle.Game.Control {
 
 				// Load the world file.
 				LoadWorld(worldPath, recompile);
-				
-				variables.Clear();
-				variables.SetAll(world.Variables);
 
 				// DEBUG: Until enter name screen exists
-				variables.Set("player", "Link");
+				Vars.Set("player", "Link");
 
 				// Begin the starting room.
 				if (test) {
@@ -214,6 +212,8 @@ namespace ZeldaOracle.Game.Control {
 					roomControl.BeginRoom(world.StartRoom);
 				}
 			}
+
+
 			GameData.PaletteShader.TilePalette = roomControl.Zone.Palette;
 			GameData.PaletteShader.TileRatio = 0f;
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
@@ -272,32 +272,42 @@ namespace ZeldaOracle.Game.Control {
 		// Text Messages
 		//-----------------------------------------------------------------------------
 
-		public void DisplayMessage(Message message) {
-			PushRoomState(new RoomStateTextReader(message, piecesOfHeart: inventory.PiecesOfHeart));
+		public void DisplayMessage(Message message, TextReaderArgs args = null) {
+			PushRoomState(new RoomStateTextReader(message, args,
+				 inventory.PiecesOfHeart));
 		}
 
-		public void DisplayMessage(string text) {
-			DisplayMessage(new Message(text));
+		public void DisplayMessage(string text, TextReaderArgs args = null) {
+			DisplayMessage(new Message(text), args);
 		}
 		
-		public void DisplayMessage(Message message, Action completeAction) {
+		public void DisplayMessage(Message message, TextReaderArgs args,
+			Action completeAction)
+		{
 			PushRoomState(new RoomStateQueue(
-				new RoomStateTextReader(message, piecesOfHeart: inventory.PiecesOfHeart),
+				new RoomStateTextReader(message, args, inventory.PiecesOfHeart),
 				new RoomStateAction(completeAction)));
 		}
 
-		public void DisplayMessage(string text, Action completeAction) {
-			DisplayMessage(new Message(text), completeAction);
+		public void DisplayMessage(string text, TextReaderArgs args,
+			Action completeAction)
+		{
+			DisplayMessage(new Message(text), args, completeAction);
 		}
 
-		public void DisplayMessage(Message message, params RoomState[] completeStates) {
-			var queue = new RoomStateQueue(new RoomStateTextReader(message, piecesOfHeart: inventory.PiecesOfHeart));
+		public void DisplayMessage(Message message, TextReaderArgs args,
+			params RoomState[] completeStates)
+		{
+			var queue = new RoomStateQueue(new RoomStateTextReader(message, args,
+				inventory.PiecesOfHeart));
 			queue.AddRange(completeStates);
 			PushRoomState(queue);
 		}
 
-		public void DisplayMessage(string text, params RoomState[] completeStates) {
-			DisplayMessage(new Message(text), completeStates);
+		public void DisplayMessage(string text, TextReaderArgs args,
+			params RoomState[] completeStates)
+		{
+			DisplayMessage(new Message(text), args, completeStates);
 		}
 
 
@@ -308,8 +318,8 @@ namespace ZeldaOracle.Game.Control {
 		public void OpenMenu(Menu currentMenu, Menu menu) {
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, currentMenu),
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeOut, currentMenu),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeIn, menu),
 				menu
 			);
 		}
@@ -317,8 +327,8 @@ namespace ZeldaOracle.Game.Control {
 		public void OpenMenu(Menu menu) {
 			AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
 			gameManager.QueueGameStates(
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeOut, roomControl),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeIn, menu),
 				menu
 			);
 			menuWeapons.OnOpen();
@@ -330,8 +340,8 @@ namespace ZeldaOracle.Game.Control {
 			AudioSystem.PlaySound(GameData.SOUND_MENU_CLOSE);
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, menu),
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, roomControl),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeOut, menu),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeIn, roomControl),
 				roomControl
 			);
 			menuWeapons.OnClose();
@@ -340,15 +350,23 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void OpenMapScreen() {
-			if (lastRoomOnMap != null && lastRoomOnMap.Dungeon != null) {
-				ScreenDungeonMap mapScreen = mapDungeon;
-				AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
-				gameManager.QueueGameStates(
-					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
-					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, mapScreen),
-					mapScreen
-				);
-				mapScreen.OnOpen();
+			if (lastRoomOnMap != null && lastRoomOnMap.Area != null) {
+				MapScreen mapScreen = null;
+				if (AreaControl.Area.MapType == MapType.Dungeon) {
+					mapScreen = mapDungeon;
+				}
+				else if (AreaControl.Area.MapType == MapType.Overworld) {
+					//mapScreen = mapOverworld
+				}
+				if (mapScreen != null) {
+					AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
+					gameManager.QueueGameStates(
+						new TransitionFade(Color.GBCWhite, 20, FadeType.FadeOut, roomControl),
+						new TransitionFade(Color.GBCWhite, 20, FadeType.FadeIn, mapScreen),
+						mapScreen
+					);
+					mapScreen.OnOpen();
+				}
 			}
 		}
 
@@ -357,8 +375,8 @@ namespace ZeldaOracle.Game.Control {
 			AudioSystem.PlaySound(GameData.SOUND_MENU_CLOSE);
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, mapScreen),
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, roomControl),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeOut, mapScreen),
+				new TransitionFade(Color.GBCWhite, 20, FadeType.FadeIn, roomControl),
 				roomControl
 			);
 			mapScreen.OnClose();
@@ -366,11 +384,39 @@ namespace ZeldaOracle.Game.Control {
 
 
 		//-----------------------------------------------------------------------------
-		// Room state management
+		// Area Management
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Call this when a room begins. If the supplied area does not match
+		/// the current area then area-reset will take effect.</summary>
+		/*public void BeginArea(Area area) {
+			if (areaControl != null && areaControl.Area != area) {
+				if (areaControl != null)
+					areaControl.EndArea();
+				areaControl = new AreaControl(this, area);
+				areaControl.BeginArea();
+			}
+		}*/
+
+		/// <summary>Returns the existing area control if the areas match or creates
+		/// a new one.</summary>
+		public AreaControl GetAreaControl(Area area) {
+			if (areaControl == null || areaControl.Area != area)
+				return new AreaControl(this, area);
+			return areaControl;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Room State Management
 		//-----------------------------------------------------------------------------
 
 		public int NextRoomNumber() {
 			return nextRoomNumber++;
+		}
+
+		public int NextMonsterID() {
+			return nextMonsterID--;
 		}
 
 		public void UpdateRoomState() {
@@ -415,6 +461,9 @@ namespace ZeldaOracle.Game.Control {
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set {
+				if (roomControl == value)
+					return;
+
 				// Leave the previous room
 				roomControl.Room.OnLeaveRoom();
 
@@ -428,6 +477,24 @@ namespace ZeldaOracle.Game.Control {
 
 				if (!roomControl.Room.IsHiddenFromMap)
 					lastRoomOnMap = roomControl.Room;
+			}
+		}
+
+		/// <summary>Gets the current area control. This should be assigned to
+		/// during BeginRoom</summary>
+		public AreaControl AreaControl {
+			get { return areaControl; }
+			set {
+				if (areaControl == value)
+					return;
+
+				// Leave the previous area
+				if (areaControl != null)
+					areaControl.EndArea();
+				
+				// Begin the new area
+				areaControl = value;
+				areaControl.BeginArea();
 			}
 		}
 
@@ -503,8 +570,8 @@ namespace ZeldaOracle.Game.Control {
 			get { return roomStateStack.CurrentRoomState; }
 		}
 
-		public Variables Variables {
-			get { return variables; }
+		public Variables Vars {
+			get { return world.Vars; }
 		}
 	}
 }

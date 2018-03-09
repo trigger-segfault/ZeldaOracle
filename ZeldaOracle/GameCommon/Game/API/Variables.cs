@@ -114,7 +114,7 @@ namespace ZeldaOracle.Game.API {
 			return (v != null && v.EqualsValue(value));
 		}
 		
-		/// <summary>Return true if there exists a property with the given name that
+		/// <summary>Return true if there exists a variable with the given name that
 		/// does not equate to the given value.</summary>
 		public bool ContainsNotEquals(string name, object value) {
 			Variable v = GetVariable(name);

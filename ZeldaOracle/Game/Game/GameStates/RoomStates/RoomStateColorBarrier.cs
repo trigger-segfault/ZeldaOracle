@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 			AudioSystem.PlaySound(GameData.SOUND_BARRIER);
 
-			RoomControl.Dungeon.ColorSwitchColor = raiseColor;
+			RoomControl.Area.ColorSwitchColor = raiseColor;
 
 			// Raise or lower all color barriers.
 			foreach (Tile tile in RoomControl.TileManager.GetTiles()) {

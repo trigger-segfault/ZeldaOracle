@@ -35,14 +35,14 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 		public override void CreateList(ListBox listBox, object value) {
 			listBox.Items.Add("(none)");
-			foreach (Dungeon dungeon in EditorControl.World.GetDungeons())
+			foreach (Area dungeon in EditorControl.World.GetAreas())
 				listBox.Items.Add(dungeon.ID);
 		}
 
 		public override object OnItemSelected(ListBox listBox, int index, object value) {
-			Dungeon dungeon = null;
+			Area dungeon = null;
 			if (index > 0)
-				dungeon = EditorControl.World.GetDungeon((string) listBox.Items[index]);
+				dungeon = EditorControl.World.GetArea((string) listBox.Items[index]);
 			return (dungeon != null ? dungeon.ID : "");
 		}
 	}

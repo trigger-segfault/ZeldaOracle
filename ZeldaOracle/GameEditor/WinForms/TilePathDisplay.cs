@@ -316,7 +316,9 @@ namespace ZeldaEditor.WinForms {
 		private void DrawRoomActions(Graphics2D g) {
 			// Draw action tiles.
 			Color color = FadeTiles ? FadeAboveColor : Color.White;
-			foreach (ActionTileDataInstance action in room.ActionData) {
+			foreach (ActionTileDataInstance action in
+				room.GetActionTiles(editorControl.ShowShared))
+			{
 				TileDataDrawing.DrawTile(g, action, action.Position, room.Zone, color);
 			}
 		}

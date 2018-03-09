@@ -29,18 +29,18 @@ namespace ZeldaEditor.TreeViews {
 		private EditorControl editorControl;
 		private ImageTreeViewItem worldNode;
 		private ImageTreeViewItem levelsNode;
-		private ImageTreeViewItem dungeonsNode;
+		private ImageTreeViewItem areasNode;
 		private ImageTreeViewItem scriptsNode;
 
 		private TreeViewItem internalScriptsNode;
 
 		private TreeViewItem customScriptWorldNode;
-		private TreeViewItem customScriptDungeonNode;
+		private TreeViewItem customScriptAreaNode;
 		private Dictionary<string, TreeViewItem> customScriptLevelNodes;
 
 		private ContextMenu contextMenuWorld;
 		private ContextMenu contextMenuLevel;
-		private ContextMenu contextMenuDungeon;
+		private ContextMenu contextMenuArea;
 		private ContextMenu contextMenuScript;
 		private ContextMenu contextMenuEvent;
 
@@ -57,7 +57,7 @@ namespace ZeldaEditor.TreeViews {
 
 			InitWorldContextMenu();
 			InitLevelContextMenu();
-			InitDungeonContextMenu();
+			InitAreaContextMenu();
 			InitScriptContextMenu();
 			InitEventContextMenu();
 
@@ -162,33 +162,33 @@ namespace ZeldaEditor.TreeViews {
 			EditorCommands.ShiftLevel.Execute(level, null);
 		}
 
-		private void InitDungeonContextMenu() {
+		private void InitAreaContextMenu() {
 			ImageMenuItem menuItem;
-			contextMenuDungeon = new ContextMenu();
-			menuItem = new ImageMenuItem(EditorImages.DungeonAdd, "Create Dungeon");
+			contextMenuArea = new ContextMenu();
+			menuItem = new ImageMenuItem(EditorImages.AreaAdd, "Create Area");
 			menuItem.Click += OnAdd;
-			contextMenuDungeon.Items.Add(menuItem);
-			menuItem = new ImageMenuItem(EditorImages.DungeonDuplicate, "Duplicate");
+			contextMenuArea.Items.Add(menuItem);
+			menuItem = new ImageMenuItem(EditorImages.AreaDuplicate, "Duplicate");
 			menuItem.Click += OnDuplicate;
-			contextMenuDungeon.Items.Add(menuItem);
+			contextMenuArea.Items.Add(menuItem);
 
-			contextMenuDungeon.Items.Add(new Separator());
+			contextMenuArea.Items.Add(new Separator());
 
-			menuItem = new ImageMenuItem(EditorImages.DungeonDelete, "Delete");
+			menuItem = new ImageMenuItem(EditorImages.AreaDelete, "Delete");
 			menuItem.Click += OnDelete;
-			contextMenuDungeon.Items.Add(menuItem);
+			contextMenuArea.Items.Add(menuItem);
 
-			contextMenuDungeon.Items.Add(new Separator());
+			contextMenuArea.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.Rename, "Rename");
 			menuItem.Click += OnRename;
-			contextMenuDungeon.Items.Add(menuItem);
+			contextMenuArea.Items.Add(menuItem);
 
-			contextMenuDungeon.Items.Add(new Separator());
+			contextMenuArea.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.Edit, "Edit");
 			menuItem.Click += OnEdit;
-			contextMenuDungeon.Items.Add(menuItem);
+			contextMenuArea.Items.Add(menuItem);
 		}
 
 
@@ -289,13 +289,13 @@ namespace ZeldaEditor.TreeViews {
 				internalScriptsNode.Items.Clear();
 				
 				TreeViewItem newCustomScriptWorldNode = new FolderTreeViewItem("World", IsNodeExpanded(customScriptWorldNode));
-				TreeViewItem newCustomScriptDungeonNode = new FolderTreeViewItem("Dungeons", IsNodeExpanded(customScriptDungeonNode));
+				TreeViewItem newCustomScriptAreaNode = new FolderTreeViewItem("Areas", IsNodeExpanded(customScriptAreaNode));
 				Dictionary<string, TreeViewItem> newCustomScriptLevelNodes = new Dictionary<string, TreeViewItem>();
 
 				foreach (Event evnt in editorControl.EventCache) {
 					IEventObject eventObject = evnt.Events.EventObject;
 					string level = null;
-					string dungeon = null;
+					string area = null;
 					EventTreeViewItem eventNode = new EventTreeViewItem(evnt, editorControl);
 					eventNode.ContextMenu = contextMenuEvent;
 					if (eventObject is BaseTileDataInstance) {
@@ -307,8 +307,8 @@ namespace ZeldaEditor.TreeViews {
 					else if (eventObject is Level) {
 						level = ((Level)eventObject).ID;
 					}
-					else if (eventObject is Dungeon) {
-						dungeon = ((Dungeon)eventObject).ID;
+					else if (eventObject is Area) {
+						area = ((Area)eventObject).ID;
 					}
 					if (level != null) {
 						if (!newCustomScriptLevelNodes.ContainsKey(level)) {
@@ -319,22 +319,22 @@ namespace ZeldaEditor.TreeViews {
 						}
 						newCustomScriptLevelNodes[level].Items.Add(eventNode);
 					}
-					else if (dungeon != null) {
-						newCustomScriptDungeonNode.Items.Add(eventNode);
+					else if (area != null) {
+						newCustomScriptAreaNode.Items.Add(eventNode);
 					}
 					else {
 						newCustomScriptWorldNode.Items.Add(eventNode);
 					}
 				}
 				customScriptWorldNode = newCustomScriptWorldNode;
-				customScriptDungeonNode = newCustomScriptDungeonNode;
+				customScriptAreaNode = newCustomScriptAreaNode;
 				customScriptLevelNodes = newCustomScriptLevelNodes;
 
 				if (customScriptWorldNode.Items.Count > 0) {
 					internalScriptsNode.Items.Add(customScriptWorldNode);
 				}
-				if (customScriptDungeonNode.Items.Count > 0) {
-					internalScriptsNode.Items.Add(customScriptDungeonNode);
+				if (customScriptAreaNode.Items.Count > 0) {
+					internalScriptsNode.Items.Add(customScriptAreaNode);
 				}
 				foreach (TreeViewItem levelNode in customScriptLevelNodes.Values) {
 					internalScriptsNode.Items.Add(levelNode);
@@ -358,17 +358,17 @@ namespace ZeldaEditor.TreeViews {
 			return (node != null ? node.IsExpanded : defaultExpanded);
 		}
 
-		public void RefreshDungeons() {
+		public void RefreshAreas() {
 			if (treeView.Items.Count == 0) {
 				RefreshTree();
 				return;
 			}
-			dungeonsNode.Items.Clear();
+			areasNode.Items.Clear();
 
-			foreach (Dungeon dungeon in editorControl.World.GetDungeons()) {
-				DungeonTreeViewItem dungeonNode = new DungeonTreeViewItem(dungeon);
-				dungeonNode.ContextMenu = contextMenuDungeon;
-				dungeonsNode.Items.Add(dungeonNode);
+			foreach (Area area in editorControl.World.GetAreas()) {
+				AreaTreeViewItem areaNode = new AreaTreeViewItem(area);
+				areaNode.ContextMenu = contextMenuArea;
+				areasNode.Items.Add(areaNode);
 			}
 		}
 
@@ -384,7 +384,7 @@ namespace ZeldaEditor.TreeViews {
 					CreateTreeSkeleton();
 
 				RefreshLevels();
-				RefreshDungeons();
+				RefreshAreas();
 				RefreshScripts(true, true);
 			}
 			UpdateButtons();
@@ -414,12 +414,12 @@ namespace ZeldaEditor.TreeViews {
 				levelsNode          = new ImageTreeViewItem(EditorImages.LevelGroup, "Levels", true);
 				levelsNode.Tag      = "levels";
 			}
-			if (dungeonsNode != null) {
-				dungeonsNode.Items.Clear();
+			if (areasNode != null) {
+				areasNode.Items.Clear();
 			}
 			else {
-				dungeonsNode        = new ImageTreeViewItem(EditorImages.DungeonGroup, "Dungeons", true);
-				dungeonsNode.Tag    = "dungeons";
+				areasNode        = new ImageTreeViewItem(EditorImages.AreaGroup, "Areas", true);
+				areasNode.Tag    = "areas";
 			}
 			if (scriptsNode != null) {
 				scriptsNode.Items.Clear();
@@ -433,7 +433,7 @@ namespace ZeldaEditor.TreeViews {
 			treeView.Items.Clear();
 			treeView.Items.Add(worldNode);
 			worldNode.Items.Add(levelsNode);
-			worldNode.Items.Add(dungeonsNode);
+			worldNode.Items.Add(areasNode);
 			worldNode.Items.Add(scriptsNode);
 
 			worldNode.ContextMenu = contextMenuWorld;
@@ -516,8 +516,8 @@ namespace ZeldaEditor.TreeViews {
 			if (treeView.SelectedItem is LevelTreeViewItem) {
 				EditorCommands.AddNewLevel.Execute(null, null);
 			}
-			else if (treeView.SelectedItem is DungeonTreeViewItem) {
-				EditorCommands.AddNewDungeon.Execute(null, null);
+			else if (treeView.SelectedItem is AreaTreeViewItem) {
+				EditorCommands.AddNewArea.Execute(null, null);
 			}
 			else if (treeView.SelectedItem is ScriptTreeViewItem) {
 				EditorCommands.AddNewScript.Execute(null, null);
@@ -547,8 +547,8 @@ namespace ZeldaEditor.TreeViews {
 			if (treeView.SelectedItem is LevelTreeViewItem) {
 				action = new ActionMoveLevel((treeView.SelectedItem as LevelTreeViewItem).Level, direction);
 			}
-			else if (treeView.SelectedItem is DungeonTreeViewItem) {
-				action = new ActionMoveDungeon((treeView.SelectedItem as DungeonTreeViewItem).Dungeon, direction);
+			else if (treeView.SelectedItem is AreaTreeViewItem) {
+				action = new ActionMoveArea((treeView.SelectedItem as AreaTreeViewItem).Area, direction);
 			}
 			if (action != null) {
 				//editorControl.RefreshWorldTreeView();

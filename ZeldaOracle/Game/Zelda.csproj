@@ -232,9 +232,13 @@
     <Compile Include="Common\Util\ReflectionHelper.cs" />
     <Compile Include="Common\Util\XnaCasting.cs" />
     <Compile Include="Game\CommonTypes.cs" />
+    <Compile Include="Game\Control\AreaControl.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\RoomManagers\EntityManager.cs" />
+    <Compile Include="Game\Control\Maps\MapScreen.cs" />
+    <Compile Include="Game\Control\RoomManagers\AreaManager.cs" />
+    <Compile Include="Game\Control\RoomManagers\RespawnManager.cs" />
     <Compile Include="Game\Control\RoomManagers\RoomManager.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapRoom.cs" />
@@ -285,6 +289,8 @@
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\Minecart.cs" />
+    <Compile Include="Game\Worlds\MonsterSpawnMode.cs" />
+    <Compile Include="Game\Worlds\RoomRespawnMode.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\JumpMonster.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
@@ -590,10 +596,12 @@
     <Compile Include="Game\Tiles\TileFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Common\Scripting\IPropertyObject.cs" />
-    <Compile Include="Game\Worlds\Dungeon.cs" />
+    <Compile Include="Game\Worlds\Area.cs" />
+    <Compile Include="Game\Worlds\DungeonFloor.cs" />
     <Compile Include="Game\Worlds\LevelTileCoord.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
+    <Compile Include="Game\Worlds\RoomIdentifier.cs" />
     <Compile Include="Game\Worlds\TileGrid.cs" />
     <Compile Include="Game\Worlds\TileGrid.Reference.cs" />
     <Compile Include="Game\Worlds\World.cs" />

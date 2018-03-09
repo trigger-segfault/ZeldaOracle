@@ -124,7 +124,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				actionTileData.Properties.Set("ignore_monster", parameters.GetBool(4));
 
 				// Make sure the monster type exists.
-				GameUtil.GetTypeWithBase<Monster>(parameters.GetString(2), true);
+				GameUtil.FindTypeWithBase<Monster>(parameters.GetString(2), true);
 
 				MonsterColor color;
 				if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
@@ -162,9 +162,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				string typeName = parameters.GetString(0);
 				if (tileData != null)
-					baseTileData.Type = GameUtil.GetTypeWithBase<Tile>(typeName, true);
+					baseTileData.Type = GameUtil.FindTypeWithBase<Tile>(typeName, true);
 				else
-					baseTileData.Type = GameUtil.GetTypeWithBase<ActionTile>(typeName, true);
+					baseTileData.Type = GameUtil.FindTypeWithBase<ActionTile>(typeName, true);
 			});
 			//=====================================================================================
 			AddCommand("FLAGS", (int) Modes.Tile,
@@ -226,7 +226,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"(string name, string value)",
 				CommandProperty);
 			//=====================================================================================
-			AddCommand("DOCUMENTS", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+			AddCommand("LOCKPROP", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+				"string name",
+				CommandLockProperty);
+			//=====================================================================================
+			AddCommand("DOCUMENT", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"(string name, string readableName, string editorType, string category, " +
 					"string description, bool browsable = true)",
 				"(string name, string readableName, (string editorType, string editorSubtype), " +
@@ -486,6 +490,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				tileData.DrawAsEntity = parameters.GetBool(0);
 			});
 			//=====================================================================================
+			AddCommand("SHARED", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+				"bool shared",
+			delegate (CommandParam parameters) {
+				baseTileData.IsShared = parameters.GetBool(0);
+			});
+			//=====================================================================================
 			AddCommand("MODEL", (int) Modes.Root,
 				"string modeName",
 			delegate (CommandParam parameters) {
@@ -539,6 +549,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 			object value = ParsePropertyValue(param[1], property.Type);
 			baseTileData.Properties.SetGeneric(name, value);
+		}
+
+		private void CommandLockProperty(CommandParam param) {
+			string name = param.GetString(0);
+			Property property = baseTileData.Properties.GetProperty(name, true);
+			if (property == null)
+				ThrowCommandParseError("Property with name '" + name + "' does not exist!");
+
+			if (!property.HasDocumentation)
+				property.Documentation = new PropertyDocumentation();
+
+			property.Documentation.IsBrowsable = false;
+			property.Documentation.IsReadOnly = true;
 		}
 
 		private void CommandDocumentation(CommandParam param) {

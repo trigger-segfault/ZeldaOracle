@@ -11,26 +11,18 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaEditor.Undo {
 	public class ActionCreateLevel : EditorAction {
 		
-		private string id;
-		private Point2I dimensions;
-		private int layerCount;
-		private Point2I roomSize;
-		private Zone zone;
+		private Level level;
 
-		public ActionCreateLevel(string id, Point2I dimensions, int layerCount, Point2I roomSize, Zone zone) {
-			ActionName = "Create '" + id + "' Level";
+		public ActionCreateLevel(Level level) {
+			ActionName = "Create '" + level.ID + "' Level";
 			ActionIcon = EditorImages.LevelAdd;
-			this.id = id;
-			this.dimensions = dimensions;
-			this.layerCount = layerCount;
-			this.roomSize = roomSize;
-			this.zone = zone;
+			this.level = level;
 		}
 
 		public override void Undo(EditorControl editorControl) {
-			int levelIndex = editorControl.World.IndexOfLevel(id);
-			editorControl.World.RemoveLevel(id);
-			if (editorControl.Level.ID == id) {
+			int levelIndex = editorControl.World.IndexOfLevel(level);
+			editorControl.World.RemoveLevelAt(levelIndex);
+			if (editorControl.Level == level) {
 				if (editorControl.World.LevelCount == 0) {
 					editorControl.CloseLevel();
 				}
@@ -42,7 +34,6 @@ namespace ZeldaEditor.Undo {
 		}
 
 		public override void Redo(EditorControl editorControl) {
-			Level level = new Level(id, dimensions, layerCount, roomSize, zone);
 			editorControl.World.AddLevel(level);
 			editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 			editorControl.OpenLevel(level);

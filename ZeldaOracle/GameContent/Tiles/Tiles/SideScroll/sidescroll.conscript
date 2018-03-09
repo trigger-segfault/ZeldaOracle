@@ -240,7 +240,7 @@ TILE "ss_rotating_platform"; SAMESPRITE; SOLID block; END;
 TILE "temp_ss_conveyor_belt";
 	TYPE		TileConveyorBelt;
 	SOLID		block;
-	DOCUMENTS	(size, "Length", ("single_axis", "horizontal:1"), "Conveyor Belt", "The length of the conveyor belt in tiles.");
+	DOCUMENT	(size, "Length", ("single_axis", "horizontal:1"), "Conveyor Belt", "The length of the conveyor belt in tiles.");
 END;
 
 TILE "ss_conveyor_belt_right";

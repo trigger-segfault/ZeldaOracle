@@ -28,10 +28,16 @@ namespace ZeldaOracle.Common.Translation {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/// <summary>The character used to mark a new paragraph.</summary>
-		public const char ParagraphCharacter = (char)253;
 		/// <summary>The character used to mark a heart piece display.</summary>
-		public const char HeartPieceCharacter = (char)254;
+		public const char HeartPieceCharacter = (char) 254;
+		/// <summary>The character used to mark a new paragraph.</summary>
+		public const char ParagraphCharacter = (char) 253;
+		/// <summary>The character to align the current line to the left.</summary>
+		public const char AlignLeftCharacter = (char) 252;
+		/// <summary>The character to align the current line to the center.</summary>
+		public const char AlignCenterCharacter = (char) 251;
+		/// <summary>The character to align the current line to the right.</summary>
+		public const char AlignRightCharacter = (char) 250;
 
 
 		//-----------------------------------------------------------------------------
@@ -62,47 +68,50 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.colorCodes.Add("blue", EntityColors.Blue); //#FF1880F8
 			FormatCodes.colorCodes.Add("orange", EntityColors.Orange); //#FFF87808
 
-			FormatCodes.stringCodes.Add("triangle", "" + (char)1);
-			FormatCodes.stringCodes.Add("square", "" + (char)2);
-			FormatCodes.stringCodes.Add("heart", "" + (char)3);
-			FormatCodes.stringCodes.Add("diamond", "" + (char)4);
-			FormatCodes.stringCodes.Add("club", "" + (char)5);
-			FormatCodes.stringCodes.Add("spade", "" + (char)6);
-			FormatCodes.stringCodes.Add("circle", "" + (char)7);
-			FormatCodes.stringCodes.Add("male", "" + (char)11);
-			FormatCodes.stringCodes.Add("female", "" + (char)12);
-			FormatCodes.stringCodes.Add("music", "" + (char)13);
-			FormatCodes.stringCodes.Add("music-beam", "" + (char)14);
-			FormatCodes.stringCodes.Add("rupee", "" + (char)15);
-			FormatCodes.stringCodes.Add("right-tri", "" + (char)16);
-			FormatCodes.stringCodes.Add("left-tri", "" + (char)17);
-			FormatCodes.stringCodes.Add("invalid", "" + (char)18);
-			FormatCodes.stringCodes.Add("!!", "" + (char)19);
-			FormatCodes.stringCodes.Add("pilcrow", "" + (char)20);
-			FormatCodes.stringCodes.Add("section", "" + (char)21);
-			FormatCodes.stringCodes.Add("cursor", "" + (char)22);
-			FormatCodes.stringCodes.Add("1", "" + (char)23);
-			FormatCodes.stringCodes.Add("up", "" + (char)24);
-			FormatCodes.stringCodes.Add("down", "" + (char)25);
-			FormatCodes.stringCodes.Add("right", "" + (char)26);
-			FormatCodes.stringCodes.Add("left", "" + (char)27);
-			FormatCodes.stringCodes.Add("2", "" + (char)28);
-			FormatCodes.stringCodes.Add("3", "" + (char)29);
-			FormatCodes.stringCodes.Add("up-tri", "" + (char)30);
-			FormatCodes.stringCodes.Add("down-tri", "" + (char)31);
-			FormatCodes.stringCodes.Add("house", "" + (char)127);
+			FormatCodes.stringCodes.Add("triangle",		"" + (char) 1);
+			FormatCodes.stringCodes.Add("square",		"" + (char) 2);
+			FormatCodes.stringCodes.Add("heart",		"" + (char) 3);
+			FormatCodes.stringCodes.Add("diamond",		"" + (char) 4);
+			FormatCodes.stringCodes.Add("club",			"" + (char) 5);
+			FormatCodes.stringCodes.Add("spade",		"" + (char) 6);
+			FormatCodes.stringCodes.Add("circle",		"" + (char) 7);
+			FormatCodes.stringCodes.Add("male",			"" + (char) 11);
+			FormatCodes.stringCodes.Add("female",		"" + (char) 12);
+			FormatCodes.stringCodes.Add("music",		"" + (char) 13);
+			FormatCodes.stringCodes.Add("music-beam",	"" + (char) 14);
+			FormatCodes.stringCodes.Add("rupee",		"" + (char) 15);
+			FormatCodes.stringCodes.Add("right-tri",	"" + (char) 16);
+			FormatCodes.stringCodes.Add("left-tri",		"" + (char) 17);
+			FormatCodes.stringCodes.Add("invalid",		"" + (char) 18);
+			FormatCodes.stringCodes.Add("!!",			"" + (char) 19);
+			FormatCodes.stringCodes.Add("pilcrow",		"" + (char) 20);
+			FormatCodes.stringCodes.Add("section",		"" + (char) 21);
+			FormatCodes.stringCodes.Add("cursor",		"" + (char) 22);
+			FormatCodes.stringCodes.Add("1",			"" + (char) 23);
+			FormatCodes.stringCodes.Add("up",			"" + (char) 24);
+			FormatCodes.stringCodes.Add("down",			"" + (char) 25);
+			FormatCodes.stringCodes.Add("right",		"" + (char) 26);
+			FormatCodes.stringCodes.Add("left",			"" + (char) 27);
+			FormatCodes.stringCodes.Add("2",			"" + (char) 28);
+			FormatCodes.stringCodes.Add("3",			"" + (char) 29);
+			FormatCodes.stringCodes.Add("up-tri",		"" + (char) 30);
+			FormatCodes.stringCodes.Add("down-tri",		"" + (char) 31);
+			FormatCodes.stringCodes.Add("house",		"" + (char) 127);
 			FormatCodes.stringCodes.Add("<", "<");
 			FormatCodes.stringCodes.Add("n", "\n");
 
-			FormatCodes.stringCodes.Add("a", "" + (char)128 + (char)129);
-			FormatCodes.stringCodes.Add("b", "" + (char)130 + (char)131);
-			FormatCodes.stringCodes.Add("x", "" + (char)132 + (char)133);
-			FormatCodes.stringCodes.Add("y", "" + (char)134 + (char)135);
+			FormatCodes.stringCodes.Add("a", "" + (char) 128 + (char) 129);
+			FormatCodes.stringCodes.Add("b", "" + (char) 130 + (char) 131);
+			FormatCodes.stringCodes.Add("x", "" + (char) 132 + (char) 133);
+			FormatCodes.stringCodes.Add("y", "" + (char) 134 + (char) 135);
 
 			FormatCodes.stringCodes.Add("p", "" + ParagraphCharacter);
 			FormatCodes.stringCodes.Add("heart-piece", "" + HeartPieceCharacter);
+			FormatCodes.stringCodes.Add("align-left", "" + AlignLeftCharacter);
+			FormatCodes.stringCodes.Add("align-center", "" + AlignCenterCharacter);
+			FormatCodes.stringCodes.Add("align-right", "" + AlignRightCharacter);
 
-			FormatCodes.noColorStringCodes.Add("dpad", "" + (char)136);
+			FormatCodes.noColorStringCodes.Add("dpad", "" + (char) 136);
 		}
 
 

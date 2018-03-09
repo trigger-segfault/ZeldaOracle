@@ -27,9 +27,9 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 	public class WarpAction : ActionTile {
 
-		public WarpType warpType;
-		public bool warpEnabled;
-		public int edgeDirection;
+		private WarpType warpType;
+		private bool warpEnabled;
+		private int edgeDirection;
 
 
 		//-----------------------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			warpType		= (WarpType) Enum.Parse(typeof(WarpType), typeName, true);
 			collisionBox	= new Rectangle2I(2, 6, 12, 12);
 			warpEnabled		= !IsTouchingPlayer();
-			
+
 			// Find the closest room edge.
 			edgeDirection = -1;
 			Rectangle2I roomBounds = RoomControl.RoomBounds;
@@ -221,5 +221,11 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets or sets if the area name should be shown upon warping.</summary>
+		public bool ShowAreaName {
+			get { return properties.Get("show_area_name", false); }
+			set { properties.Set("show_area_name", value); }
+		}
 	}
 }

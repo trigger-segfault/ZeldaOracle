@@ -44,7 +44,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			warps.Add("(none)");
 			if (level != null) {
 				foreach (Room room in level.Rooms) {
-					foreach (var actionTile in room.ActionData) {
+					foreach (var actionTile in room.GetActionTiles(true)) {
 						string id = actionTile.ID;
 						if (actionTile.Type == typeof(WarpAction) && id != "" && !warps.Contains(id)) {
 							warps.Add(id);

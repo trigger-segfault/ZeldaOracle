@@ -42,6 +42,8 @@ namespace ZeldaOracle.Common.Scripting {
 			this.description    = description;
 			this.isReadOnly     = false;
 			this.isBrowsable    = true;
+			if (string.IsNullOrWhiteSpace(this.category))
+				this.category = "Misc";
 		}
 
 		public PropertyDocumentation(string readableName, string editorType, string editorSubType,
@@ -54,6 +56,22 @@ namespace ZeldaOracle.Common.Scripting {
 			this.description	= description;
 			this.isReadOnly		= isReadOnly;
 			this.isBrowsable	= isBrowsable;
+			if (string.IsNullOrWhiteSpace(this.category))
+				this.category = "Misc";
+		}
+
+		public PropertyDocumentation(string readableName, string editorType, Type editorSubType,
+				string category, string description, bool isReadOnly = false, bool isBrowsable = true)
+		{
+			this.readableName	= readableName;
+			this.editorType		= editorType;
+			this.editorSubType	= editorSubType.Name;
+			this.category		= category;
+			this.description	= description;
+			this.isReadOnly		= isReadOnly;
+			this.isBrowsable	= isBrowsable;
+			if (string.IsNullOrWhiteSpace(this.category))
+				this.category = "Misc";
 		}
 
 		//-----------------------------------------------------------------------------
@@ -64,14 +82,17 @@ namespace ZeldaOracle.Common.Scripting {
 		public string ReadableName {
 			get { return readableName; }
 		}
+
 		/// <summary>Gets the editor type of the property.</summary>
 		public string EditorType {
 			get { return editorType; }
 		}
+
 		/// <summary>Gets the editor subtype used for enum and enum_flags editor types.</summary>
 		public string EditorSubType {
 			get { return editorSubType; }
 		}
+
 		/// <summary>Gets the category of the property.</summary>
 		public string Category {
 			get {
@@ -80,17 +101,22 @@ namespace ZeldaOracle.Common.Scripting {
 				return category;
 			}
 		}
+
 		/// <summary>Gets the description of what the property does.</summary>
 		public string Description {
 			get { return description; }
 		}
+
 		/// <summary>Can the property be edited using the property editor?<summary>
 		public bool IsReadOnly {
 			get { return isReadOnly; }
+			set { isReadOnly = false; }
 		}
+
 		/// <summary>Is the property not shown in the property editor?<summary>
 		public bool IsBrowsable {
 			get { return isBrowsable; }
+			set { isBrowsable = false; }
 		}
 	}
 }

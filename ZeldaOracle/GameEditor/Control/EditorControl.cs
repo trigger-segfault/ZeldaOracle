@@ -111,6 +111,7 @@ namespace ZeldaEditor.Control {
 		private bool            startLocationMode;
 		private bool            showStartLocation;
 		private bool            showActions;
+		private bool			showShared;
 		private bool            singleLayer;
 		private bool            roomOnly;
 		private bool            merge;
@@ -174,28 +175,29 @@ namespace ZeldaEditor.Control {
 			this.noScriptWarnings   = false;
 			this.scriptStarts		= new List<ScriptStart>();
 
-			this.currentLayer               = 0;
-			this.currentToolIndex           = 0;
-			this.previousToolIndex          = 0;
-			this.aboveTileDrawMode          = TileDrawModes.Fade;
-			this.belowTileDrawMode          = TileDrawModes.Fade;
-			this.showRewards                = true;
-			this.showGrid                   = false;
-			this.showModified               = false;
-			this.showActions                 = false;
-			this.highlightMouseTile         = true;
-			this.selectedTileset            = null;
-			this.selectedTilesetLocation    = Point2I.Zero;
-			this.selectedTileData           = null;
-			this.tileSearchFilter           = "";
-			this.playerPlaceMode            = false;
-			this.startLocationMode          = false;
-			this.showStartLocation          = true;
-			this.singleLayer                = false;
-			this.roomOnly                   = false;
-			this.merge                      = false;
+			this.currentLayer				= 0;
+			this.currentToolIndex			= 0;
+			this.previousToolIndex			= 0;
+			this.aboveTileDrawMode			= TileDrawModes.Fade;
+			this.belowTileDrawMode			= TileDrawModes.Fade;
+			this.showRewards				= true;
+			this.showGrid					= false;
+			this.showModified				= false;
+			this.showActions				= false;
+			this.showShared					= true;
+			this.highlightMouseTile			= true;
+			this.selectedTileset			= null;
+			this.selectedTilesetLocation	= Point2I.Zero;
+			this.selectedTileData			= null;
+			this.tileSearchFilter			= "";
+			this.playerPlaceMode			= false;
+			this.startLocationMode			= false;
+			this.showStartLocation			= true;
+			this.singleLayer				= false;
+			this.roomOnly					= false;
+			this.merge						= false;
 
-			this.resourcesLoaded            = false;
+			this.resourcesLoaded			= false;
 		}
 
 		public void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
@@ -1345,6 +1347,11 @@ namespace ZeldaEditor.Control {
 		public bool ShowActions {
 			get { return showActions; }
 			set { showActions = value; }
+		}
+
+		public bool ShowShared {
+			get { return showShared; }
+			set { showShared = value; }
 		}
 
 		public bool ShowGrid {

@@ -88,7 +88,7 @@ namespace ZeldaOracle.Game.Entities {
 						faceDirection = ((Player) actionEntity).Direction.Reverse();
 					Graphics.SubStripIndex = faceDirection;
 				}
-				GameControl.DisplayMessage(message, delegate() {
+				GameControl.DisplayMessage(message, null, delegate() {
 					if (animationTalk != null)
 						Graphics.PlayAnimation(animationDefault);
 				});

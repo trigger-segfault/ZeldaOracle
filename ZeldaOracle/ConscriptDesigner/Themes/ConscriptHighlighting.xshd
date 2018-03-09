@@ -251,7 +251,8 @@
       <Word>CONVEYOR</Word>
       <Word>PROPERTIES</Word>
       <Word>PROPERTY</Word>
-      <Word>DOCUMENTS</Word>
+      <Word>LOCKPROP</Word>
+      <Word>DOCUMENT</Word>
       <Word>EVENT</Word>
       <Word>SPRITE</Word>
       <Word>SAMESPRITE</Word>
@@ -276,6 +277,7 @@
       <Word>LEAPLEDGE</Word>
       <Word>BASICLEDGE</Word>
       <Word>TILEBELOW</Word>
+      <Word>SHARED</Word>
     </Keywords>
 
     <!--ZoneSR-->

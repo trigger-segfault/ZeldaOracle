@@ -30,7 +30,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			CustomPropertyDescriptor propertyDescriptor = (CustomPropertyDescriptor)propertyItem.PropertyDescriptor;
 			baseType = propertyDescriptor.Property.Type;
 			string typeName = propertyDescriptor.Documentation.EditorSubType;
-			enumType = GetTypeByName(typeName);
+			enumType = GameUtil.FindType(typeName, false);
 			return GetValues(enumType);
 		}
 
@@ -47,16 +47,6 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 				}
 			}
 			return list.ToArray();
-		}
-
-		private static Type GetTypeByName(string className) {
-			Type[] assemblyTypes = typeof(Property).Assembly.GetTypes();
-			for (int j = 0; j < assemblyTypes.Length; j++) {
-				if (assemblyTypes[j].Name == className) {
-					return assemblyTypes[j];
-				}
-			}
-			throw new Exception("Unknown editor subtype");
 		}
 
 		protected override IValueConverter CreateValueConverter() {

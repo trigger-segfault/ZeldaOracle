@@ -32,10 +32,10 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override bool OnPush(int direction, float movementSpeed) {
-			Dungeon dungeon = RoomControl.Dungeon;
+			Area dungeon = RoomControl.Area;
 
-			if (dungeon.NumSmallKeys > 0) {
-				dungeon.NumSmallKeys--;
+			if (dungeon.SmallKeyCount > 0) {
+				dungeon.SmallKeyCount--;
 				Open();
 
 				AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);

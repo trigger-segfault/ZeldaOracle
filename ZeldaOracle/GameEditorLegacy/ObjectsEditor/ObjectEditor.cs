@@ -149,7 +149,7 @@ namespace ZeldaEditor.ObjectsEditor {
 				baseTypeName = "Level";
 			else if (propertyObject is World)
 				baseTypeName = "World";
-			else if (propertyObject is Dungeon)
+			else if (propertyObject is Area)
 				baseTypeName = "Dungeon";
 			else if (propertyObject is Script)
 				baseTypeName = "Script";

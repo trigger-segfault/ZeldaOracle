@@ -5,13 +5,17 @@
 ACTIONTILE "monster";
 	TYPE		MonsterAction;
 	SPRITE		"monster_octorok";
-	RESETWHEN	LeaveArea;
+	RESETWHEN	Never;
+	LOCKPROP	reset_condition;
+	SHARED		true;
 	PROPERTIES	(integer, color,		0, "Color", ("enum", "MonsterColor"), "Monster", "The color of the monster."),
-				(integer, respawn_type,	0, "Respawn Type", ("enum", "MonsterRespawnType"), "Monster", "How a monster respawns."),
+				(integer, respawn_type,	2, "Respawn Type", ("enum", "MonsterRespawnType"), "Monster", "How a monster respawns."),
 				(string,  monster_type, MonsterOctorok, "Monster Type", "", "Monster", "The type of monster."),
 				(boolean, dead, false),
 				(boolean, ignore_monster, false, "Ignore Monster", "",
-					"Monster", "True if the monster is not counted towards clearing the room.");
+					"Monster", "True if the monster is not counted towards clearing the room."),
+				(integer, monster_id, 0, "Monster ID", "",
+					"Monster", "An ID unique to each monster in a room used to manage which monsters are dead. An ID of 0 will use an ID unique to every other monster in the game.");
 
 	EVENT		die, "Die", "Monster", "Occurs when the monster dies.", (Monster, monster);
 END;
@@ -22,7 +26,12 @@ END;
 #==============================================================================
 
 TILE "tile_monster";
-	PROPERTIES
-		(boolean, ignore_monster, false, "Ignore Monster", "",
-			"Monster", "True if the monster is not counted towards clearing the room.");
+	RESETWHEN	Never;
+	LOCKPROP	reset_condition;
+	PROPERTIES	(integer, respawn_type,	2, "Respawn Type", ("enum", "MonsterRespawnType"), "Monster", "How a monster respawns."),
+				(boolean, dead, false),
+				(boolean, ignore_monster, false, "Ignore Monster", "",
+					"Monster", "True if the monster is not counted towards clearing the room."),
+				(integer, monster_id, 0, "Monster ID", "",
+					"Monster", "An ID unique to each monster in a room used to manage which monsters are dead. An ID of 0 will use an ID unique to every other monster in the game.");
 END;

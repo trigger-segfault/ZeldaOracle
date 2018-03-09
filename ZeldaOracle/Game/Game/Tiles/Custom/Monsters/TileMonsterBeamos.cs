@@ -69,6 +69,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 		
 		public override void OnInitialize() {
+			base.OnInitialize();
 			shootTimer	= 0;
 			shooting	= false;
 			angle		= Angles.Up;

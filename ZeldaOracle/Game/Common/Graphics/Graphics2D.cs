@@ -389,26 +389,26 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws a game string of any type at the specified position.</summary>
 		public void DrawString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Variables variables = null)
+			ColorOrPalette color, Variables vars = null)
 		{
 			DrawString(font, text, position, color, Align.TopLeft, Vector2F.Zero,
-				variables);
+				vars);
 		}
 
 		/// <summary>Draws a game string of any type at the specified position.</summary>
 		public void DrawString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Align alignment, Variables variables = null)
+			ColorOrPalette color, Align alignment, Variables vars = null)
 		{
-			DrawString(font, text, position, color, alignment, Vector2F.Zero, variables);
+			DrawString(font, text, position, color, alignment, Vector2F.Zero, vars);
 		}
 
 		/// <summary>Draws a game string of any type at the specified position.</summary>
 		public void DrawString(GameFont font, DrawableString text, Vector2F position,
 			ColorOrPalette color, Align alignment, Vector2F area,
-			Variables variables = null)
+			Variables vars = null)
 		{
 			if (text.IsString)
-				DrawLetterString(font, FormatCodes.FormatString(text.String, variables),
+				DrawLetterString(font, FormatCodes.FormatString(text.String, vars),
 					position, color, alignment, area);
 			else if (text.IsLetterString)
 				DrawLetterString(font, text.LetterString, position, color, alignment,
@@ -420,7 +420,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
 		public void DrawLetterString(GameFont font, LetterString letterString,
-			Vector2F position, ColorOrPalette color, Variables variables = null)
+			Vector2F position, ColorOrPalette color)
 		{
 			DrawLetterString(font, letterString, position, color, Align.TopLeft,
 				Vector2F.Zero);
@@ -428,8 +428,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
 		public void DrawLetterString(GameFont font, LetterString letterString,
-			Vector2F position, ColorOrPalette color, Align alignment,
-			Variables variables = null)
+			Vector2F position, ColorOrPalette color, Align alignment)
 		{
 			DrawLetterString(font, letterString, position, color, alignment,
 				Vector2F.Zero);
@@ -437,8 +436,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
 		public void DrawLetterString(GameFont font, LetterString letterString,
-			Vector2F position, ColorOrPalette color, Align alignment, Vector2F area,
-			Variables variables = null)
+			Vector2F position, ColorOrPalette color, Align alignment, Vector2F area)
 		{
 			Vector2F size = font.MeasureString(letterString);
 			position = Alignment.AlignVector(position, area, size, alignment);
@@ -459,21 +457,21 @@ namespace ZeldaOracle.Common.Graphics {
 		
 		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
 		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Variables variables = null)
+			ColorOrPalette color, Variables vars = null)
 		{
-			DrawWrappedString(font, text, position, color, Align.TopLeft, Vector2F.Zero, variables);
+			DrawWrappedString(font, text, position, color, Align.TopLeft, Vector2F.Zero, vars);
 		}
 
 		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
 		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Align alignment, Variables variables = null)
+			ColorOrPalette color, Align alignment, Variables vars = null)
 		{
-			DrawWrappedString(font, text, position, color, alignment, Vector2F.Zero, variables);
+			DrawWrappedString(font, text, position, color, alignment, Vector2F.Zero, vars);
 		}
 
 		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
 		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position,
-			ColorOrPalette color, Align alignment, Vector2F area, Variables variables = null)
+			ColorOrPalette color, Align alignment, Vector2F area, Variables vars = null)
 		{
 			if (text.IsString)
 				DrawWrappedLetterString(font, font.WrapString(text.String, (int) area.X),

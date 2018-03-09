@@ -130,13 +130,13 @@ namespace ZeldaOracle.Game.Control {
 		// Draws the ruppes and dungeon keys.
 		private void DrawRupees(Graphics2D g) {
 			int advancedOffset = (gameControl.IsAdvancedGame ? 8 : 0);
-			Dungeon dungeon = gameControl.RoomControl.Dungeon;
+			Area area = gameControl.RoomControl.Area;
 
-			if (dungeon != null) {
+			if (area.MapType == MapType.Dungeon) {
 				// Display the small key count.
 				g.DrawSprite(GameData.SPR_HUD_KEY, new Point2I(80 - advancedOffset, 0));
 				g.DrawSprite(GameData.SPR_HUD_X, new Point2I(88 - advancedOffset, 0));
-				g.DrawString(GameData.FONT_SMALL, dungeon.NumSmallKeys.ToString(), new Point2I(96 - advancedOffset, 0), EntityColors.Black);
+				g.DrawString(GameData.FONT_SMALL, area.SmallKeyCount.ToString(), new Point2I(96 - advancedOffset, 0), EntityColors.Black);
 			}
 			else {
 				// Display rupee icon.

@@ -28,6 +28,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
+			base.OnInitialize();
 			order = Properties.GetInteger("order", 0);
 		}
 

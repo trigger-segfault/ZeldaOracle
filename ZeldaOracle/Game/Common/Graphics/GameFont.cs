@@ -96,15 +96,15 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Returns the wrapped and formatted string of the text.</summary>
 		public WrappedLetterString WrapString(string text, int width,
-			Variables variables = null)
+			Variables vars = null)
 		{
 			int caretLine = 0;
-			return WrapString(text, width, 0, out caretLine, variables);
+			return WrapString(text, width, 0, out caretLine, vars);
 		}
 
 		/// <summary>Returns the wrapped and formatted string of the text.</summary>
 		public WrappedLetterString WrapString(string text, int width, int caretPosition,
-			out int caretLine, Variables variables = null)
+			out int caretLine, Variables vars = null)
 		{
 			try {
 				caretLine = -1;
@@ -119,18 +119,20 @@ namespace ZeldaOracle.Common.Graphics {
 				int wordLength = 0;
 				int wordLineCount = 0;
 				bool firstChar = true;
+				Align align = Align.Left;
 
 				//caretPosition = Math.Min(text.Length, caretPosition + 1);
 
 				string caretChar = (caretPosition >= text.Length ? "end" : "" + text[caretPosition]);
 				char[] charArray = text.ToCharArray();
 
-				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition, variables);
+				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition, vars);
 				string caret2Char = (caretPosition >= letterString.Length ? "end" : "" + letterString[caretPosition].Char);
 				//Console.WriteLine("'" + caretChar + "' - '" + caret2Char + "'");
 
 				while (currentCharacter < letterString.Length) {
 					lines.Add(new LetterString());
+					lines[currentLine].MessageAlignment = align;
 					lineLengths.Add(0);
 
 					// Remove starting spaces in the line.
@@ -149,10 +151,16 @@ namespace ZeldaOracle.Common.Graphics {
 					wordLineCount = 0;
 					firstChar = true;
 
+					char c;
+
 					do {
-						if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
-							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n' ||
-							letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter) {
+						c = (currentCharacter >= letterString.Length ?
+							'\0' : letterString[currentCharacter].Char);
+
+						if (currentCharacter >= letterString.Length || c == ' ' ||
+							c == FormatCodes.ParagraphCharacter || c == '\n' ||
+							c == FormatCodes.HeartPieceCharacter)
+						{
 							if (wordLineCount > 0)
 								lines[currentLine].Add(' ');
 							lines[currentLine].AddRange(word);
@@ -163,11 +171,11 @@ namespace ZeldaOracle.Common.Graphics {
 							wordStart = currentCharacter + 1;
 							word.Clear();
 							if (currentCharacter < letterString.Length &&
-								(letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n' ||
-								letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter))
+								(c == FormatCodes.ParagraphCharacter || c == '\n' ||
+								c == FormatCodes.HeartPieceCharacter))
 							{
-								if (letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter ||
-									letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter)
+								if (c == FormatCodes.ParagraphCharacter ||
+									c == FormatCodes.HeartPieceCharacter)
 									lines[currentLine].Add(letterString[currentCharacter]);
 								if (currentCharacter == caretPosition)
 									caretLine = currentLine;// + (letterString[currentCharacter].Char == '\n' ? 1 : 0);
@@ -177,11 +185,18 @@ namespace ZeldaOracle.Common.Graphics {
 							if (currentCharacter >= letterString.Length)
 								break;
 						}
-						/*else if (lineLengths[currentLine] + wordLength + characterSpacing + CharacterWidth > width && width >= CharacterWidth && wordStart == lineStart) {
-							// Cuttoff a word if it has continued since the beginning of the line
-							word[word.Length - 1] = new Letter('-', word[word.Length - 2].Color);
-							wordStart = currentCharacter - 1;
-						}*/
+						else if (c == FormatCodes.AlignLeftCharacter) {
+							align = Align.Left;
+							lines[currentLine].MessageAlignment = align;
+						}
+						else if (c == FormatCodes.AlignCenterCharacter) {
+							align = Align.Center;
+							lines[currentLine].MessageAlignment = align;
+						}
+						else if (c == FormatCodes.AlignRightCharacter) {
+							align = Align.Right;
+							lines[currentLine].MessageAlignment = align;
+						}
 						else {
 							word.Add(letterString[currentCharacter]);
 							wordLength += (firstChar ? 0 : characterSpacing) + CharacterWidth;

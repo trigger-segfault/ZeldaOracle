@@ -45,17 +45,17 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("size", Point2I.One)
 				.SetDocumentation("Size", "General", "");
 			properties.Set("flags", (int) TileFlags.Default)
-				.SetDocumentation("Tile Flags", "enum_flags", "TileFlags", "General", "");
+				.SetDocumentation("Tile Flags", "enum_flags", typeof(TileFlags), "General", "");
 			properties.Set("solidity", (int) TileSolidType.NotSolid)
-				.SetDocumentation("Solid Type", "enum", "TileSolidType", "General", "");
+				.SetDocumentation("Solid Type", "enum", typeof(TileSolidType), "General", "");
 			properties.Set("ledge_direction", Direction.Down)
 				.SetDocumentation("Ledge Direction", "direction", "", "General", "");
 			//properties.Set("collision_model", "")
 			//	.SetDocumentation("Collision Model", "collision_model", "", "General", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
-				.SetDocumentation("Environment Type", "enum", "TileEnvironmentType", "General", "");
+				.SetDocumentation("Environment Type", "enum", typeof(TileEnvironmentType), "General", "");
 			properties.Set("polarity", (int) Polarity.None)
-				.SetDocumentation("Polarity", "enum", "Polarity", "General", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
+				.SetDocumentation("Polarity", "enum", typeof(Polarity), "General", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
 			properties.Set("disable_on_destroy", false)
 				.SetDocumentation("Disable on Destroy", "General", "");
 

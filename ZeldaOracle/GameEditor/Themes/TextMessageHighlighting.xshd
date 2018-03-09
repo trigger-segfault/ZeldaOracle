@@ -42,6 +42,14 @@
       <Word>&lt;n&gt;</Word>
       <Word>&lt;p&gt;</Word>
     </Keywords>
+    
+    <!-- Alignment Keywords -->
+    <Keywords fontStyle="italic" fontWeight="bold">
+      <Word>&lt;align-left&gt;</Word>
+      <Word>&lt;align-center&gt;</Word>
+      <Word>&lt;align-right&gt;</Word>
+    </Keywords>
+    
     <!-- Color Keywords -->
     <Keywords foreground="#F80828">
       <Word>&lt;red&gt;</Word>
@@ -55,6 +63,8 @@
     <Keywords foreground="#F87808">
       <Word>&lt;orange&gt;</Word>
     </Keywords>
+
+    <!-- Variable Keywords -->
     <Rule fontStyle="italic">
       &lt;f?var\:.*&gt;
     </Rule>

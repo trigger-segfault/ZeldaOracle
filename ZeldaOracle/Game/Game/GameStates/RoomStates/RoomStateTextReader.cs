@@ -22,6 +22,17 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		Bottom
 	}
 
+	/// <summary>Arguments for the room state text reader.</summary>
+	public class TextReaderArgs {
+		/// <summary>The spacing between the window vertical window edges and the text.</summary>
+		public int Spacing { get; set; } = 1;
+		/// <summary>The position of the text reader on the screen.</summary>
+		public TextReaderPosition ReaderPosition { get; set; } =
+			TextReaderPosition.Unset;
+		/// <summary>The number of lines to use for this window.</summary>
+		public int LinesPerWindow { get; set; } = 2;
+	}
+
 	/// <summary>A game state for displaying a message box.</summary>
 	public class RoomStateTextReader : RoomState {
 
@@ -50,6 +61,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private const int HeartPieceDelay = 30;
 		/// <summary>The delay after the heart piece increments.</summary>
 		private const int HeartPieceParagraphDelay = 2;
+		/// <summary>The maximum width of the message box.</summary>
+		private const int MaxWidth = 144;
 
 
 		//-----------------------------------------------------------------------------
@@ -67,6 +80,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private int linesPerWindow;
 		/// <summary>The position of the text reader on the screen.</summary>
 		private TextReaderPosition readerPosition;
+		/// <summary>The spacing between the window vertical window edges and the text.</summary>
+		private int spacing;
 
 		// Updating
 		/// <summary>The current state of the text reader.</summary>
@@ -101,17 +116,21 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs a text reader with the specified message.</summary>
-		public RoomStateTextReader(Message message, int linesPerWindow = 2, int piecesOfHeart = 0,
-			TextReaderPosition readerPosition = TextReaderPosition.Unset)
+		public RoomStateTextReader(Message message, TextReaderArgs args,
+			int piecesOfHeart = 0)
 		{
+			if (args == null)
+				args = new TextReaderArgs();
+
 			this.updateRoom			= false;
 			this.animateRoom		= true;
 
 			this.message			= message;
 			this.wrappedString		= null;
 
-			this.linesPerWindow		= linesPerWindow;
-			this.readerPosition		= readerPosition;
+			this.linesPerWindow		= args.LinesPerWindow;
+			this.readerPosition		= args.ReaderPosition;
+			this.spacing			= args.Spacing;
 
 			this.state				= TextReaderState.WritingLine;
 			this.firstUpdate		= true;
@@ -128,9 +147,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		}
 
 		/// <summary>Constructs a text reader with the specified message text.</summary>
-		public RoomStateTextReader(string text, int linesPerWindow = 2, int piecesOfHeart = 0,
-			TextReaderPosition readerPosition = TextReaderPosition.Unset)
-			: this(new Message(text), linesPerWindow, piecesOfHeart, readerPosition) { }
+		public RoomStateTextReader(string text, TextReaderArgs args,
+			int piecesOfHeart = 0)
+			: this(new Message(text), args, piecesOfHeart) { }
 		
 
 		//-----------------------------------------------------------------------------
@@ -139,7 +158,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 		public override void OnBegin() {
 			wrappedString	= GameData.FONT_LARGE.WrapString(
-				message.Text, 128, GameControl.Variables);
+				message.Text, MaxWidth - spacing * 16, GameControl.Vars);
 			timer = 1;
 			state = TextReaderState.WritingLine;
 			windowLinesLeft	= linesPerWindow;
@@ -295,24 +314,44 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				break;
 			}
 
-			g.FillRectangle(new Rectangle2I(pos, new Point2I(144, 8 + 16 * linesPerWindow)), EntityColors.Black);
+			g.FillRectangle(new Rectangle2I(pos,
+				new Point2I(MaxWidth, 8 + 16 * linesPerWindow)), EntityColors.Black);
+
+			int x = spacing * 8;
+			//Point2I alignPos;
 
 			// Draw the finished writting lines.
 			for (int i = 0; i < windowLine; i++) {
+				/*alignPos = pos + GetLineOffset(currentLine - windowLine + i);
 				if (state == TextReaderState.PushingLine && timer >= 2)
-					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i + 8), TextColor);
+					g.DrawLetterString(GameData.FONT_LARGE,
+						wrappedString.Lines[currentLine - windowLine + i],
+						alignPos + new Point2I(x, 6 + 16 * i + 8), TextColor);
 				else
-					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i), TextColor);
+					g.DrawLetterString(GameData.FONT_LARGE,
+						wrappedString.Lines[currentLine - windowLine + i],
+						alignPos + new Point2I(x, 6 + 16 * i), TextColor);*/
+				g.DrawLetterString(GameData.FONT_LARGE,
+					wrappedString.Lines[currentLine - windowLine + i],
+					pos + GetLineOffset(currentLine - windowLine + i), TextColor);
 			}
 			// Draw the currently writting line.
-			g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine].Substring(0, currentChar), pos + new Point2I(8, 6 + 16 * windowLine), TextColor);
+			//alignPos = pos + GetLineOffset(currentLine);
+			g.DrawLetterString(GameData.FONT_LARGE,
+				wrappedString.Lines[currentLine].Substring(0, currentChar),
+				pos + GetLineOffset(currentLine), TextColor);
 
 			// Draw the next line arrow.
-			if ((state == TextReaderState.PressToContinue || state ==  TextReaderState.PressToEndParagraph) && arrowTimer >= 16 && timer == 0)
-				g.DrawSprite(GameData.SPR_HUD_TEXT_NEXT_ARROW, pos + new Point2I(136, 16 * linesPerWindow));
+			if ((state == TextReaderState.PressToContinue ||
+				state ==  TextReaderState.PressToEndParagraph) &&
+				arrowTimer >= 16 && timer == 0)
+			{
+				g.DrawSprite(GameData.SPR_HUD_TEXT_NEXT_ARROW,
+					pos + new Point2I(136, 16 * linesPerWindow));
+			}
 
 			if (heartPieceDisplay) {
-				Point2I heartPiecePos = pos + new Point2I(144 - 24, 8);
+				Point2I heartPiecePos = pos + new Point2I(MaxWidth - 24, 8);
 				for (int i = 0; i < 4; i++) {
 					ISprite sprite = GameData.SPR_HUD_MESSAGE_HEART_PIECES_EMPTY[i];
 					if (piecesOfHeart > i)
@@ -324,5 +363,18 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			g.PopTranslation();
 		}
 
+		private Point2I GetLineOffset(int lineIndex) {
+			int width = (MaxWidth - spacing * 16) / 8;
+			int length = wrappedString.LineLengths[lineIndex] / 8;
+			int winLine = lineIndex - currentLine + windowLine;
+			Point2I offset = new Point2I(spacing * 8, 6 + 16 * winLine);
+			if (state == TextReaderState.PushingLine && timer >= 2)
+				offset.Y += 8;
+			switch (wrappedString.Lines[lineIndex].MessageAlignment) {
+			case Align.Center:	offset.X += ((width - length) / 2) * 8;	break;
+			case Align.Right:	offset.X += (width - length) * 8;		break;
+			}
+			return offset;
+		}
 	}
 }

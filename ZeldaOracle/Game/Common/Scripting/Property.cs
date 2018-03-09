@@ -109,6 +109,13 @@ namespace ZeldaOracle.Common.Scripting {
 			return objectValue.Equals(other.objectValue);
 		}
 
+		/// <summary>Return true of this and another property have the equivilent values.</summary>
+		public bool EqualsValue(object other) {
+			if (type != TypeToPropertyType(other.GetType()))
+				return false;
+			return objectValue.Equals(other);
+		}
+
 		/// <summary>Get the child at the given index (if this is a list).</summary>
 		public Property GetChild(int index) {
 			if (type != PropertyType.List)
@@ -136,18 +143,38 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>Create the documentation for this property.</summary>
-		public Property SetDocumentation(string readableName, string editorType, string editorSubType, string category,
-				string description, bool isReadOnly = false, bool isBrowsable = true)
+		public Property SetDocumentation(string readableName, string editorType,
+			string editorSubType, string category, string description,
+			bool isReadOnly = false, bool isBrowsable = true)
 		{
-			documentation = new PropertyDocumentation(readableName,
-				editorType, editorSubType, category, description, isReadOnly, isBrowsable);
+			documentation = new PropertyDocumentation(readableName, editorType,
+				editorSubType, category, description, isReadOnly, isBrowsable);
 			return this;
 		}
 
 		/// <summary>Create the documentation for this property.</summary>
-		public Property SetDocumentation(string readableName, string category, string description)
+		public Property SetDocumentation(string readableName, string editorType,
+			Type editorSubType, string category, string description,
+			bool isReadOnly = false, bool isBrowsable = true)
 		{
-			documentation = new PropertyDocumentation(readableName, "", "", category, description, false, true);
+			documentation = new PropertyDocumentation(readableName, editorType,
+				editorSubType, category, description, isReadOnly, isBrowsable);
+			return this;
+		}
+
+		/// <summary>Adds property documentation solely to set IsBrowsable to false.</summary>
+		public Property SetHidden() {
+			documentation = new PropertyDocumentation(name, "", "", "Misc", "",
+				false, true);
+			return this;
+		}
+
+		/// <summary>Create the documentation for this property.</summary>
+		public Property SetDocumentation(string readableName, string category,
+			string description)
+		{
+			documentation = new PropertyDocumentation(readableName, "", "", category,
+				description, false, true);
 			return this;
 		}
 
