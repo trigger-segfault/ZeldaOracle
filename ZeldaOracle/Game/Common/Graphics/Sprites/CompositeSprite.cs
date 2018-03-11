@@ -55,6 +55,21 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			return firstPart;
 		}
 
+		/// <summary>Gets all sprites contained by this sprite including this one.</summary>
+		public IEnumerable<ISprite> GetAllSprites() {
+			yield return this;
+			foreach (ISprite sprite in sprites) {
+				foreach (ISprite subsprite in sprite.GetAllSprites()) {
+					yield return subsprite;
+				}
+			}
+		}
+
+		/// <summary>Returns true if this sprite contains the specified sprite.</summary>
+		public bool ContainsSubSprite(ISprite sprite) {
+			return GetAllSprites().Contains(sprite);
+		}
+
 		/// <summary>Clones the sprite.</summary>
 		public ISprite Clone() {
 			return new CompositeSprite(this);
@@ -125,43 +140,51 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Adds the offset sprite to the list after making a copy of it.</summary>
 		public void AddOffsetSprite(OffsetSprite sprite) {
+			if (sprite != null && sprite.ContainsSubSprite(this))
+				throw new SpriteContainmentException(this, sprite.Sprite);
 			sprites.Add(new OffsetSprite(sprite));
 		}
 
 		/// <summary>Adds a new sprite to the list.</summary>
 		public void AddSprite(ISprite sprite, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Add(new OffsetSprite(sprite, clipping, flip, rotation));
+			AddOffsetSprite(new OffsetSprite(sprite, clipping, flip, rotation));
 		}
 
 		/// <summary>Adds a new sprite to the list.</summary>
 		public void AddSprite(ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Add(new OffsetSprite(sprite, drawOffset, clipping, flip, rotation));
+			AddOffsetSprite(new OffsetSprite(sprite, drawOffset, clipping, flip, rotation));
 		}
 
 		/// <summary>Inserts the offset sprite into the list after making a copy of it.</summary>
 		public void InsertOffsetSprite(int index, OffsetSprite sprite) {
+			if (sprite != null && sprite.ContainsSubSprite(this))
+				throw new SpriteContainmentException(this, sprite.Sprite);
 			sprites.Insert(index, new OffsetSprite(sprite));
 		}
 
 		/// <summary>Inserts a new sprite into the list.</summary>
 		public void InsertSprite(int index, ISprite sprite, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Insert(index, new OffsetSprite(sprite, clipping, flip, rotation));
+			InsertOffsetSprite(index, new OffsetSprite(sprite, clipping, flip, rotation));
 		}
 
 		/// <summary>Inserts a new sprite into the list.</summary>
 		public void InsertSprite(int index, ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Insert(index, new OffsetSprite(sprite, drawOffset, clipping, flip, rotation));
+			InsertOffsetSprite(index, new OffsetSprite(sprite, drawOffset, clipping, flip, rotation));
 		}
 
 		/// <summary>Replaces the sprite at the specified index in the list and keeps
 		/// its offset settings.</summary>
 		public void ReplaceSprite(int index, ISprite sprite) {
+			if (sprite != null && sprite.ContainsSubSprite(this))
+				throw new SpriteContainmentException(this, sprite);
 			sprites[index].Sprite = sprite;
 		}
 
 		/// <summary>Replaces the sprite at the specified index in the list and changes
 		/// its offset settings.</summary>
 		public void ReplaceSprite(int index, ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			if (sprite != null && sprite.ContainsSubSprite(this))
+				throw new SpriteContainmentException(this, sprite);
 			sprites[index].Sprite = sprite;
 			sprites[index].DrawOffset = drawOffset;
 			sprites[index].Clipping = clipping;
