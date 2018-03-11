@@ -373,6 +373,9 @@ namespace ZeldaOracle.Game.Control {
 
 			if (this.areaControl == null)
 				areaControl = GameControl.GetAreaControl(Area);
+			
+			viewControl.RoomBounds = RoomBounds;
+			viewControl.SetTarget(Player);
 
 			// Monster respawning
 			RespawnManager.VisitRoom(room);
@@ -444,9 +447,7 @@ namespace ZeldaOracle.Game.Control {
 			tileManager.PostInitializeTiles();
 			
 			// Setup view
-			viewControl.Bounds = RoomBounds;
-			viewControl.ViewSize = GameSettings.VIEW_SIZE;
-			viewControl.CenterOn(Player.DrawCenter + Player.ViewFocusOffset);
+			viewControl.CenterOnTarget();
 			
 			// Assign the area control which calls begin and end events if areas
 			// have been changed.
@@ -682,7 +683,7 @@ namespace ZeldaOracle.Game.Control {
 			UpdateObjects();
 
 			// Update view to follow player
-			viewControl.PanTo(Player.DrawCenter + Player.ViewFocusOffset);
+			//viewControl.PanTo(Player.DrawCenter + Player.ViewFocusOffset);
 			
 			if (requestedTransitionDirection >= 0) {
 				// Call the event RoomTransitioning
@@ -716,6 +717,8 @@ namespace ZeldaOracle.Game.Control {
 				else if (Controls.Select.IsPressed())
 					GameControl.OpenMapScreen();
 			}
+
+			ViewControl.UpdatMovement();
 		}
 
 		public void DrawRoom(Graphics2D g, Vector2F position,
@@ -730,8 +733,7 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(GameData.SPR_HUD_BACKGROUND, viewRect);
 			}
 
-			Vector2F viewTranslation = -GameUtil.Bias(viewControl.ViewPosition);
-
+			Vector2F viewTranslation = -GameUtil.Bias(viewControl.Camera.TopLeft);
 			g.PushTranslation(viewTranslation);
 
 			if (roomDrawing.HasFlag(RoomDrawing.DrawBelow)) {
@@ -971,6 +973,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public ViewControl ViewControl {
 			get { return viewControl; }
+		}
+
+		public Camera Camera {
+			get { return viewControl.Camera; }
 		}
 
 		/// <summary>The room's entity manager.</summary>

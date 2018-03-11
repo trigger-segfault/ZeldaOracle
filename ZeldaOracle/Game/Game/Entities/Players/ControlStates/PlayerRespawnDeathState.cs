@@ -65,7 +65,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private void OnUpdateViewPanningState() {
 			// Wait for the view to pan to the player
-			if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center))
+			if (player.RoomControl.ViewControl.IsCenteredOnTarget())
 				subStateMachine.NextState();
 		}
 

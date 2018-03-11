@@ -168,9 +168,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			wordIndex		= 0;
 
 			if (readerPosition == TextReaderPosition.Unset) {
-
-				if (GameControl.Player.ViewPosition.Y <
-					((GameSettings.VIEW_HEIGHT) / 2 + 8))
+				if (GameControl.Player.DrawPosition.Y <
+					RoomControl.Camera.RoomBounds.Center.Y + 8)
 					readerPosition = TextReaderPosition.Bottom;
 				else
 					readerPosition = TextReaderPosition.Top;

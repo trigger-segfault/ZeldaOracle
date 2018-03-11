@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
-using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.GameStates.Transitions {
@@ -64,45 +57,39 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void Update() {
 			timer++;
 
-			// Wait for the view to pan to the player.
+			// Wait for the view to pan to the player
 			if (isWaitingForView) {
-				OldRoomControl.ViewControl.PanTo(
-					Player.DrawCenter + Player.ViewFocusOffset);
-
-				if (OldRoomControl.ViewControl.IsCenteredOnPosition(
-					Player.DrawCenter + Player.ViewFocusOffset))
-				{
+				if (OldRoomControl.ViewControl.IsCenteredOnTarget()) {
 					// Convert the player's position from the old room to the
-					// new room.
+					// new room
 					Vector2F playerPosInNewRoom = Player.Position -
 						(Directions.ToPoint(direction) *
 						NewRoomControl.RoomBounds.Size);
 
 					// Setup the new room while pretending the player is in his
-					// final position after transitioning.
+					// final position after transitioning
 					Vector2F totalMovement = Directions.ToVector(direction) *
-						(playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
+						(playerSpeed * ((float) maxDistance / TRANSITION_SPEED));
 					Player.Position = playerPosInNewRoom + totalMovement;
 					SetupNewRoom(false);
 
 					// Move the player back a bit so we can smoothly transition
-					// them between the room border.
+					// him between the room border
 					Player.Position -= totalMovement;
 					isWaitingForView = false;
 					return;
 				}
 			}
 
-			// Update HUD.
+			// Update HUD
 			GameControl.HUD.Update();
 
-			// Update screen panning.
+			// Update screen panning
 			if (timer > TRANSITION_DELAY) {
 				distance += TRANSITION_SPEED;
 				Player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
-
-
-				// Check if we are done panning.
+				
+				// Check if we are done panning
 				if (distance >= maxDistance) {
 					DestroyOldRoom();
 					EndTransition();
@@ -114,7 +101,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			// same for both horizontal and vertical transitions, even though the
 			// total number of frames for each transition are 40 and 32 respectively.
 			if (timer % 2 == 1) {
-				lerpRatio = GMath.Min(1f, (float) (timer - TRANSITION_DELAY) / TRANSITION_LERP_FRAMES);
+				lerpRatio = GMath.Min(1f, (float) (timer - TRANSITION_DELAY) /
+					TRANSITION_LERP_FRAMES);
 			}
 		}
 

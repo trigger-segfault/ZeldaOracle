@@ -1222,16 +1222,6 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return hasMoved; }
 		}
 
-		/// <summary>Gets the position of the tile relative to the view.</summary>
-		public Vector2F ViewPosition {
-			get { return Position - RoomControl.ViewControl.Position; }
-		}
-
-		/// <summary>Gets the center of the tile relative to the view.</summary>
-		public Vector2F ViewCenter {
-			get { return Center - RoomControl.ViewControl.Position; }
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Scripting API

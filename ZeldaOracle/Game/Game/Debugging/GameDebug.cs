@@ -470,7 +470,7 @@ namespace ZeldaOracle.Game.Debug {
 			mousePosition.Y /= (float) GameControl.GameManager.GameBase.Window.ClientBounds.Height;
 			mousePosition.Y *= GameSettings.SCREEN_HEIGHT;
 			mousePosition.Y -= 16.0f; // HUD
-			mousePosition += RoomControl.ViewControl.Position;
+			mousePosition += RoomControl.ViewControl.Camera.TopLeft;
 			Point2I mouseTileLocationPrev = mouseTileLocation;
 			mouseTileLocation = RoomControl.GetTileLocation(mousePosition);
 
