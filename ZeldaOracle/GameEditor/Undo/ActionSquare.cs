@@ -17,6 +17,7 @@ namespace ZeldaEditor.Undo {
 		private TileData placedTile;
 		private Dictionary<Point2I, TileDataInstance> overwrittenTiles; // Used on layers 2 and up
 		private TileDataInstance[,] overwrittenTileGrid; // Used on layer 1
+		private TileDataInstance[,] placedTiles;
 
 		public ActionSquare(Level level, int layer, Rectangle2I square, TileData placedTile) {
 			ActionName = (placedTile == null ? "Erase" : "Place") + " Tile Square";
@@ -29,6 +30,7 @@ namespace ZeldaEditor.Undo {
 				this.overwrittenTiles = new Dictionary<Point2I, TileDataInstance>();
 			else
 				this.overwrittenTileGrid = new TileDataInstance[square.Width, square.Height];
+			this.placedTiles = new TileDataInstance[square.Width, square.Height];
 		}
 
 		public void AddOverwrittenTile(Point2I point, TileDataInstance tile) {
@@ -39,6 +41,21 @@ namespace ZeldaEditor.Undo {
 			else {
 				overwrittenTileGrid[point.X - square.X, point.Y - square.Y] = tile;
 			}
+		}
+
+		public override void Execute(EditorControl editorControl) {
+			editorControl.OpenLevel(level);
+			for (int x = 0; x < square.Width; x++) {
+				for (int y = 0; y < square.Height; y++) {
+					Point2I point = square.Point + new Point2I(x, y);
+					Point2I roomLocation = point / level.RoomSize;
+					Point2I tileLocation = point % level.RoomSize;
+					Room room = level.GetRoomAt(roomLocation);
+					placedTiles[x, y] = new TileDataInstance(placedTile);
+					room.PlaceTile(placedTiles[x, y], tileLocation, layer);
+				}
+			}
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Undo(EditorControl editorControl) {
@@ -82,7 +99,7 @@ namespace ZeldaEditor.Undo {
 					Point2I roomLocation = point / level.RoomSize;
 					Point2I tileLocation = point % level.RoomSize;
 					Room room = level.GetRoomAt(roomLocation);
-					room.CreateTile(placedTile, tileLocation, layer);
+					room.PlaceTile(placedTiles[x, y], tileLocation, layer);
 				}
 			}
 			editorControl.NeedsNewEventCache = true;
