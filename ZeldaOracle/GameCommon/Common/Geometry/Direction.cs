@@ -5,11 +5,39 @@ namespace ZeldaOracle.Common.Geometry {
 
 	/// <summary>The direction of rotation, either Clockwise or Counter-Clockwise. Note
 	/// that angles in this game increase in the clockwise direction, where zero
-	/// represents right.
-	/// </summary>
+	/// represents right.</summary>
 	public enum WindingOrder {
 		CounterClockwise = 0,
 		Clockwise = 1,
+	}
+
+	public struct Distance {
+
+		private float pixels;
+
+		public Distance(float pixels) {
+			this.pixels = pixels;
+		}
+
+		public static Distance FromTiles(float tile) {
+			return new Distance(tile * 16);
+		}
+
+		public static Distance FromPixels(float pixels) {
+			return new Distance(pixels);
+		}
+
+		public static implicit operator Distance(float pixels) {
+			return new Distance(pixels);
+		}
+
+		public static implicit operator float(Distance distance) {
+			return distance.pixels;
+		}
+
+		public float Pixels {
+			get { return pixels; }
+		}
 	}
 
 

@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
-	public class Player : Unit {
+	public class Player : Unit, ZeldaAPI.Player {
 
 		/// <summary>The current direction that the player wants to face to use items.</summary>
 		private Direction useDirection;
@@ -279,6 +279,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		/// </summary>
 		public void BeginControlState(PlayerState state) {
 			controlStateMachine.BeginState(state);
+		}
+		public void EndControlState() {
+			if (controlStateMachine.IsActive)
+				controlStateMachine.CurrentState.End();
 		}
 		
 		

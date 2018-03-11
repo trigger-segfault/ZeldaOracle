@@ -227,6 +227,7 @@
     <Compile Include="Common\Util\BinaryExtensions.cs" />
     <Compile Include="Common\Util\EnumHelper.cs" />
     <Compile Include="Common\Util\GdiCasting.cs" />
+    <Compile Include="Common\Util\LogUtility.cs" />
     <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Common\Util\PathHelper.cs" />
     <Compile Include="Common\Util\ReflectionHelper.cs" />
@@ -258,7 +259,12 @@
     <Compile Include="Game\Control\RoomManagers\RoomGraphics.cs" />
     <Compile Include="Game\Control\RoomManagers\RoomPhysics.cs" />
     <Compile Include="Game\Control\RoomVisualEffect.cs" />
+    <Compile Include="Game\Control\Scripting\Actions\ScriptActionsSection.cs" />
+    <Compile Include="Game\Control\Scripting\Actions\ScriptActions.Unit.cs" />
     <Compile Include="Game\Control\Scripting\Script.cs" />
+    <Compile Include="Game\Control\Scripting\Actions\ScriptActions.cs" />
+    <Compile Include="Game\Control\Scripting\Actions\ScriptActions.Camera.cs" />
+    <Compile Include="Game\Control\Scripting\Actions\ScriptActions.General.cs" />
     <Compile Include="Game\Control\Scripting\ScriptInstance.cs" />
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
@@ -655,6 +661,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Collision\" />
+    <Folder Include="Game\Control\Scripting\Functions\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

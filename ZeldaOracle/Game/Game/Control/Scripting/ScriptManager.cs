@@ -70,7 +70,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			scripts.Remove(script.ID);
 		}
 
-		/// <summary>Removes the script with the specified id from the collection.</summary>
+		/// <summary>Removes the script with the specified id from the collection.
+		/// </summary>
 		public void RemoveScript(string scriptID) {
 			scripts.Remove(scriptID);
 		}

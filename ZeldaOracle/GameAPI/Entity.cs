@@ -9,4 +9,12 @@ namespace ZeldaAPI {
 	public interface Entity {
 		// Nothing yet...
 	}
+
+	public interface Unit : Entity {
+	}
+
+	/// <summary>The player entity.</summary>
+	public interface Player : Unit {
+	}
+
 }

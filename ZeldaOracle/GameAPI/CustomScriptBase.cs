@@ -14,6 +14,8 @@ namespace ZeldaAPI {
 		/// <summary>Access to the game.</summary>
 		public Game game;
 		/// <summary>Contains the possible script actions to perform.</summary>
-		public ScriptActions actions;
+		public ScriptActions Actions;
+
+		public Player player;
 	}
 }

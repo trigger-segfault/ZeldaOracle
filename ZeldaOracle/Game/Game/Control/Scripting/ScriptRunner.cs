@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Worlds;
 
 
@@ -34,8 +35,10 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		public void TerminateAllScripts() {
 			for (int i = 0; i < runningScripts.Count; i++) {
-				Console.WriteLine("Terminating script '{0}'",
+				Logs.Scripts.Log("Terminating script '{0}'",
 					runningScripts[i].Script.ID);
+				//Console.WriteLine("Terminating script '{0}'",
+					//runningScripts[i].Script.ID);
 				runningScripts[i].Terminate();
 			}
 			runningScripts.Clear();
@@ -46,7 +49,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			for (int i = 0; i < runningScripts.Count; i++) {
 				ScriptInstance script = runningScripts[i];
 				if (script.RoomControl == roomControl) {
-					Console.WriteLine("Terminating script '{0}'", script.Script.ID);
+					Logs.Scripts.Log("Terminating script '{0}'", script.Script.ID);
 					script.Terminate();
 					runningScripts.RemoveAt(i--);
 				}
@@ -104,6 +107,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			if (methodInfo != null) {
 				ScriptInstance instance = new ScriptInstance(
 					script, gameControl.RoomControl, methodInfo, parameters);
+				Logs.Scripts.Log("Running script '{0}'", script.ID);
 				instance.Start(scriptObject);
 				if (!instance.IsComplete)
 					runningScripts.Add(instance);

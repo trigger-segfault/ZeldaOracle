@@ -257,9 +257,7 @@ namespace ZeldaOracle.Game.Control {
 		// Execute a script.
 		public void ExecuteScript(Script script, params object[] parameters) {
 			if (script != null) {
-				Console.WriteLine("Executing script " + script.ID);
-				
-				// Only internal scripts take in parameters.
+				// Only internal scripts take in parameters
 				if (script.IsHidden)
 					scriptRunner.RunScript(script.ID, parameters);
 				else

@@ -126,14 +126,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 		
 		private void OnShieldHit(Entity sender, EventArgs args) {
-			Player player = (sender as Player);
+			Player player = (sender.RootEntity as Player);
 			FlipOver(player.Center);
 			player.Bump(Center);
 			AudioSystem.PlaySound(GameData.SOUND_BOMB_BOUNCE);
 		}
 		
 		private void OnShovelHit(Entity sender, EventArgs args) {
-			Player player = (sender as Player);
+			Player player = (sender.RootEntity as Player);
 			FlipOver(player.Center);
 		}
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading;
+using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game.Control.Scripting.Actions;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 
 	/// <summary>An instance of a running script.</summary>
-	public class ScriptInstance : ZeldaAPI.ScriptActions {
+	public class ScriptInstance {
 
 		private Script script;
 		private MethodInfo method;
@@ -46,20 +48,14 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		/// <summary>Start the script and wait for it to return.</summary>
 		public void Start(ZeldaAPI.CustomScriptBase scriptContext) {
-			context = scriptContext;
-
-			isComplete = false;
-			isTerminated = false;
-			allowAutoResume = true;
-			exception = null;
-
-			// Setup the script context
-			context.game = roomControl.GameControl;
-			context.room = roomControl;
-			context.area = roomControl.GameControl.AreaControl;
-			context.actions = this;
+			context			= scriptContext;
+			isComplete		= false;
+			isTerminated	= false;
+			allowAutoResume	= true;
+			exception		= null;
 
 			// Start the script thread and wait for it to return
+			SetupContext();
 			signalReturnToCaller.Reset();
 			signalResumeScript.Set();
 			thread.Start();
@@ -72,14 +68,9 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public void Resume() {
 			if (!isComplete) {
 				allowAutoResume = true;
-
-				// Setup the script context
-				context.game = roomControl.GameControl;
-				context.room = roomControl;
-				context.area = roomControl.GameControl.AreaControl;
-				context.actions = this;
-
+				
 				// Resume the script thread and wait for it to return
+				SetupContext();
 				signalReturnToCaller.Reset();
 				signalResumeScript.Set();
 				signalReturnToCaller.WaitOne();
@@ -99,27 +90,56 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			if (!isComplete) {
 				isTerminated = true;
 
-				// Setup the script context
-				context.game = roomControl.GameControl;
-				context.room = roomControl;
-				context.area = roomControl.GameControl.AreaControl;
-				context.actions = this;
-
 				// Resume the script thread and wait for it to complete
+				SetupContext();
 				signalReturnToCaller.Reset();
 				signalResumeScript.Set();
 				thread.Join();
 			}
 		}
+		
+		private void SetupContext() {
+			context.game = roomControl.GameControl;
+			context.room = roomControl;
+			context.area = roomControl.GameControl.AreaControl;
+			context.player = roomControl.Player;
+			context.Actions = new ScriptActions(this);
+		}
 
 
 		//-----------------------------------------------------------------------------
-		// Internal Methods
+		// Script Thread Methods
 		//-----------------------------------------------------------------------------
+
+		public void LogMessage(string format, params object[] args) {
+			string message = String.Format(format, args);
+			Logs.Scripts.Log("{0}: {1}", script.ID, message);
+		}
+
+		public void PerformUpdate(ZeldaAPI.WaitCondition update) {
+			ReturnToCaller();
+			while (!update.Invoke())
+				ReturnToCaller();
+		}
+
+		public void WaitForCondition(ZeldaAPI.WaitCondition condition) {
+			if (condition != null) {
+				while (!condition.Invoke())
+					ReturnToCaller();
+			}
+			else {
+				ReturnToCaller();
+			}
+		}
+
+		public void WaitForResume() {
+			allowAutoResume = false;
+			ReturnToCaller();
+		}
 
 		/// <summary>Interrupt the script, returning control to the main thread. The
 		/// script will continue once Resume is called by the main thread.</summary>
-		private void ReturnToCaller() {
+		public void ReturnToCaller() {
 			// Signal the calling thread that this script has returned
 			signalResumeScript.Reset();
 			signalReturnToCaller.Set();
@@ -131,7 +151,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			// terminate the thread function
 			if (isTerminated)
 				thread.Abort();
-				//throw new TargetInvocationException();
 		}
 
 		/// <summary>The function which is invoked by starting script thread.</summary>
@@ -158,28 +177,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			signalReturnToCaller.Set();
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// API Methods
-		//-----------------------------------------------------------------------------
-
-		public void WaitForCondition(ZeldaAPI.WaitCondition condition) {
-			while (!condition.Invoke())
-				ReturnToCaller();
-		}
-		
-		public void Wait(int ticks) {
-			int startWaitTime = roomControl.GameManager.ElapsedTicks;
-			while (roomControl.GameManager.ElapsedTicks - startWaitTime < ticks)
-				ReturnToCaller();
-		}
-
-		public void Message(string text) {
-			roomControl.GameControl.DisplayMessage(text, null, Resume);
-			allowAutoResume = false;
-			ReturnToCaller();
-		}
-		
 
 		//-----------------------------------------------------------------------------
 		// Properties

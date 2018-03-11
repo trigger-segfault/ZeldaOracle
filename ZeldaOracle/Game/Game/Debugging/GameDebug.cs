@@ -31,6 +31,7 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Monsters.JumpMonsters;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Control.RoomManagers;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
@@ -282,6 +283,12 @@ namespace ZeldaOracle.Game.Debug {
 					printDebugInfoFunctionIndex = (printDebugInfoFunctionIndex + 1) %
 						printDebugInfoFunctions.Length;
 					Console.Clear();
+					if (printDebugInfoFunctions[printDebugInfoFunctionIndex] == null) {
+						Console.ForegroundColor = ConsoleColor.Yellow;
+						Console.WriteLine("Log Messages:");
+						Console.ForegroundColor = ConsoleColor.Gray;
+						Logs.LoggingSystem.PrintAllLogMessages();
+					}
 				}
 			}
 			// F5: Pause gameplay.

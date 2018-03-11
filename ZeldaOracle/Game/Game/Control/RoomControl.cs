@@ -705,6 +705,9 @@ namespace ZeldaOracle.Game.Control {
 			GameControl.HUD.Update();
 			GameControl.UpdateRoomState();
 
+			// Update scripts
+			GameControl.UpdateScripts();
+
 			if (GameControl.UpdateRoom) {
 				// [Start] Open inventory
 				if (Controls.Start.IsPressed())

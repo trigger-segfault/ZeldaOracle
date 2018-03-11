@@ -23,7 +23,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 	}
 
 	
-	public class Unit : Entity {
+	public class Unit : Entity, ZeldaAPI.Unit {
 		
 		/// <summary>List of tools that the unit is carrying/holding.</summary>
 		private HashSet<UnitTool> tools;
