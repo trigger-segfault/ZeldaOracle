@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
@@ -8,15 +9,28 @@ namespace ZeldaOracle.Game.Entities {
 
 	[Flags]
 	public enum NPCFlags {
-		AlwaysFacePlayer	= 0x1,
-		FacePlayerWhenNear	= 0x2,		// Face player when he is nearby.
-		FacePlayerOnTalk	= 0x4,		// Face player when talked to.
-		AnimateOnTalk		= 0x8,		// Animate when a different room event is playing.
-		OnlyFaceHorizontal	= 0x10,		// Only face horizontally (left or right).
-		OnlyFaceVertical	= 0x20,		// Only face vertically (up or down).
+		/// <summary>Always face player no matter the distance.</summary>
+		AlwaysFacePlayer = (1 << 0),
 
+		/// <summary>Face player when he is nearby.</summary>
+		FacePlayerWhenNear = (1 << 1),
+
+		/// <summary>Face player when talked to.</summary>
+		FacePlayerOnTalk = (1 << 2),
+
+		/// <summary>Animate when a different room event is playing.</summary>
+		AnimateOnTalk = (1 << 3),
+
+		/// <summary>Only face horizontally (left or right).</summary>
+		OnlyFaceHorizontal = (1 << 4),
+
+		/// <summary>Only face vertically (up or down).</summary>
+		OnlyFaceVertical = (1 << 5),
+
+		/// <summary>The default flags for NPCs.</summary>
+		[Browsable(false)]
 		Default				= FacePlayerOnTalk | FacePlayerWhenNear,
-	};
+	}
 
 	public class NPC : Entity {
 

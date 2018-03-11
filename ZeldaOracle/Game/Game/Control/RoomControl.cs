@@ -33,6 +33,7 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>The above sprites for tiles will be drawn.</summary>
 		DrawAbove = (1 << 1),
 		/// <summary>Everything will be drawn.</summary>
+		DrawAll = DrawBelow | DrawAbove,
 	}
 
 	// Handles the main Zelda gameplay within a room.
