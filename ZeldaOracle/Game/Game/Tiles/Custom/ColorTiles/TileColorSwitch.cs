@@ -112,6 +112,21 @@ namespace ZeldaOracle.Game.Tiles {
 				args.Color);*/
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.AbsorbSeeds;
+
+			data.Properties.Set("switch_once", false)
+				.SetDocumentation("Switch Once", "Switch", "Can the color switch only be switched once?");
+			data.Properties.Set("switch_state", false)
+				.SetDocumentation("Switch State", "Switch", "The switch state of the color switch (false = blue, true = red).");
+			data.Properties.Set("sync_with_area", false)
+				.SetDocumentation("Sync With Area", "Switch", "Will the color switch's state be syncronized with other color switches in the area?");
+
+			data.Events.AddEvent("toggle", "Toggle", "Switch", "Occurs when the Color Switch changes color.",
+				new ScriptParameter(typeof(ZeldaAPI.ColorSwitch), "colorSwitch"));
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

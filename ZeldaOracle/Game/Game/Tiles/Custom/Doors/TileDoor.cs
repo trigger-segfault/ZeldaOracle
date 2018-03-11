@@ -185,6 +185,14 @@ namespace ZeldaOracle.Game.Tiles {
 			Tile.DrawTileDataIndex(g, args, substripIndex: direction);
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.Set("open", false)
+				.SetDocumentation("Open", "Door", "True if the door open.");
+			data.Properties.Set("direction", Direction.Right)
+				.SetDocumentation("Direction", "Door", "The direction the door is facing.").Hide();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

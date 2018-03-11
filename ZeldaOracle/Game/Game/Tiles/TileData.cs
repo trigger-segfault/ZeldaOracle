@@ -44,17 +44,17 @@ namespace ZeldaOracle.Game.Tiles {
 			// General
 			properties.Set("size", Point2I.One)
 				.SetDocumentation("Size", "General", "");
-			properties.Set("flags", (int) TileFlags.Default)
+			properties.SetEnumInt("flags", TileFlags.Default)
 				.SetDocumentation("Tile Flags", "enum_flags", typeof(TileFlags), "General", "");
-			properties.Set("solidity", (int) TileSolidType.NotSolid)
+			properties.SetEnumInt("solidity", TileSolidType.NotSolid)
 				.SetDocumentation("Solid Type", "enum", typeof(TileSolidType), "General", "");
 			properties.Set("ledge_direction", Direction.Down)
 				.SetDocumentation("Ledge Direction", "direction", "", "General", "");
 			//properties.Set("collision_model", "")
 			//	.SetDocumentation("Collision Model", "collision_model", "", "General", "");
-			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
+			properties.SetEnumInt("environment_type", TileEnvironmentType.Normal)
 				.SetDocumentation("Environment Type", "enum", typeof(TileEnvironmentType), "General", "");
-			properties.Set("polarity", (int) Polarity.None)
+			properties.SetEnumStr("polarity", Polarity.None)
 				.SetDocumentation("Polarity", "enum", typeof(Polarity), "General", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
 			properties.Set("disable_on_destroy", false)
 				.SetDocumentation("Disable on Destroy", "General", "");
@@ -114,6 +114,7 @@ namespace ZeldaOracle.Game.Tiles {
 			spriteAbove			= copy.spriteAbove;
 			spriteAsObject		= copy.spriteAsObject;
 			breakAnimation		= copy.breakAnimation;
+			breakSound			= copy.breakSound;
 			spriteList			= new ISprite[copy.spriteList.Length];
 			model				= copy.model;
 			tileBelow			= copy.tileBelow;
@@ -189,8 +190,8 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileFlags Flags {
-			get { return (TileFlags) properties.GetInteger("flags", 0); }
-			set { properties.Set("flags", (int) value); }
+			get { return properties.GetEnum("flags", TileFlags.Default); }
+			set { properties.SetEnum("flags", value); }
 		}
 
 		public ISprite SpriteAbove {
@@ -231,13 +232,13 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileEnvironmentType EnvironmentType {
-			get { return properties.GetEnum<TileEnvironmentType>("environment_type", TileEnvironmentType.Normal); }
-			set { properties.Set("environment_type", (int) value); }
+			get { return properties.GetEnum("environment_type", TileEnvironmentType.Normal); }
+			set { properties.SetEnum("environment_type", value); }
 		}
 
 		public TileSolidType SolidType {
-			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
-			set { properties.Set("solidity", (int) value); }
+			get { return properties.GetEnum("solidity", TileSolidType.NotSolid); }
+			set { properties.SetEnum("solidity", value); }
 		}
 
 		public int LedgeDirection {

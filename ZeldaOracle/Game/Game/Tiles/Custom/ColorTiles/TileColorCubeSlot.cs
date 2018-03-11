@@ -46,9 +46,11 @@ namespace ZeldaOracle.Game.Tiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Events.AddEvent("color_change", "Color Change", "Color", "Occurs when the slot's color changes.",
+				new ScriptParameter(typeof(ZeldaAPI.ColorCubeSlot), "tile"),
+				new ScriptParameter(typeof(PuzzleColor), "color"));
 		}
 
 

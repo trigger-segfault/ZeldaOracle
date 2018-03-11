@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("ID", "", "", "General", "The ID used for saves to identify the world.", true, true);
 
 			this.events.AddEvent("start_game", "Start Game", "Initialization",
-				"Called when the game first starts.", new ScriptParameter("Game", "game"));
+				"Called when the game first starts.", new ScriptParameter(typeof(ZeldaAPI.Game), "game"));
 
 			// This will be debug-assigned as "Link" in GameControl.StartGame until we
 			// have an enter name screen.

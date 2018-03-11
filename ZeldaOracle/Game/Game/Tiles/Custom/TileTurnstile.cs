@@ -207,7 +207,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 			g.DrawSprite(
 				arrowAnimation,//.GetSubstrip(clockwise ? 0 : 1),
-				args.SpriteDrawSettings,
+				args.SpriteSettings,
 				args.Position,
 				args.Color);
 			g.DrawSprite(
@@ -215,6 +215,15 @@ namespace ZeldaOracle.Game.Tiles {
 				new SpriteSettings(args.Zone.StyleDefinitions, 16f),
 				args.Position,
 				args.Color);
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Size = new Point2I(3, 3);
+			data.ResetCondition = TileResetCondition.LeaveArea;
+
+			data.Properties.Set("clockwise", false)
+				.SetDocumentation("Clockwise", "Turnstile", "True if the turnstile is in clockwise mode.");
 		}
 
 

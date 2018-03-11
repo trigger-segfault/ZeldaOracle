@@ -109,8 +109,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		}
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
-			ISprite sprite = args.ActionTile.Sprite;
+		public static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
+			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
@@ -124,14 +124,14 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public static void DrawTileDataColors(Graphics2D g, ActionTileDataDrawArgs args, ColorDefinitions colorDefinitions) {
-			ISprite sprite = args.ActionTile.Sprite;
+		public static void DrawTileDataColors(Graphics2D g, ActionDataDrawArgs args, ColorDefinitions colorDefinitions) {
+			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
@@ -146,14 +146,14 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public static void DrawTileDataWithOffset(Graphics2D g, ActionTileDataDrawArgs args, Point2I offset) {
-			ISprite sprite = args.ActionTile.Sprite;
+		public static void DrawTileDataWithOffset(Graphics2D g, ActionDataDrawArgs args, Point2I offset) {
+			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
@@ -166,14 +166,14 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
 
 		/// <summary>Draws the action tile data to display in the editor with the specified sprite index.</summary>
-		public static void DrawTileDataIndex(Graphics2D g, ActionTileDataDrawArgs args, int substripIndex = -1, ColorDefinitions colorDefinitions = null) {
-			ISprite sprite = args.ActionTile.Sprite;
+		public static void DrawTileDataIndex(Graphics2D g, ActionDataDrawArgs args, int substripIndex = -1, ColorDefinitions colorDefinitions = null) {
+			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
 				if (substripIndex == -1)
 					substripIndex = args.Properties.GetInteger("substrip_index", 0);
@@ -190,10 +190,11 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -243,6 +244,11 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		public EventCollection Events {
 			get { return actionData.Events; }
+		}
+
+		/// <summary>Gets the type of entity this action spawns.</summary>
+		public Type EntityType {
+			get { return actionData.EntityType; }
 		}
 	}
 }

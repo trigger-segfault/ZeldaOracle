@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Worlds {
 		{
 			this.defaultTileData    = copy.defaultTileData;
 			this.styles             = new StyleDefinitions(copy.styles);
-			this.properties.SetAll(copy.properties);
+			this.properties			= new Properties(copy.properties, this);
 		}
 
 		

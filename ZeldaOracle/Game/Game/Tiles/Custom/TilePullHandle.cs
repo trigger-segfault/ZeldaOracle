@@ -172,9 +172,27 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
 			g.DrawSprite(
 				sprite,
-				args.SpriteDrawSettings,
+				args.SpriteSettings,
 				args.Position,
 				args.Color);
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.NotSurface;
+
+			data.Properties.Set("direction", Direction.Down)
+				.SetDocumentation("Direction", "direction", "", "Pull Handle", "The direction the handle extends in.");
+
+			data.Events.AddEvent("retracting", "Retracting", "Pull Handle", "Occurs every step that the pull handle is retracting into the wall.",
+				new ScriptParameter(typeof(ZeldaAPI.PullHandle), "pullHandle"));
+			data.Events.AddEvent("extending", "Extending", "Pull Handle", "Occurs every step that the pull handle is extending from the wall.",
+				new ScriptParameter(typeof(ZeldaAPI.PullHandle), "pullHandle"));
+			data.Events.AddEvent("fully_retract", "Fully Retracted", "Pull Handle", "Occurs when the handle is fully retracted into the wall.",
+				new ScriptParameter(typeof(ZeldaAPI.PullHandle), "pullHandle"));
+			data.Events.AddEvent("fully_extend", "Fully Extended", "Pull Handle", "Occurs when the handle is fully extended from the wall.",
+				new ScriptParameter(typeof(ZeldaAPI.PullHandle), "pullHandle"));
+
 		}
 
 

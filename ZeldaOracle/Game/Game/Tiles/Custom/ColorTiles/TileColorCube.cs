@@ -93,6 +93,13 @@ namespace ZeldaOracle.Game.Tiles {
 			Tile.DrawTileDataIndex(g, args, orientationIndex);
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.Movable;
+			data.Properties.SetEnumInt("orientation", ColorCubeOrientation.BlueYellow)
+				.SetDocumentation("Orientation", "enum", typeof(ColorCubeOrientation), "Color Cube", "The orientation index of the color cube.");
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

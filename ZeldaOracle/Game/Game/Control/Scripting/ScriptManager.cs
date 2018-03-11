@@ -118,16 +118,16 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			string pathToAssembly = "";
 			bool hasErrors = false;
 			
-			// Setup the compile options.
+			// Setup the compile options
 			CompilerParameters options	= new CompilerParameters();
 			options.GenerateExecutable	= false;			 // We want a Dll (Class Library)
 			options.GenerateInMemory    = !generateAssembly; // Save the assembly to a file.
 			options.OutputAssembly		=
 				Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location) + "Scripts.dll";
 
-			// Add the assembly references.
-			options.ReferencedAssemblies.Add(GetZeldaCommonAssembly().Location);
-			options.ReferencedAssemblies.Add(GetZeldaAPIAssembly().Location);
+			// Add the assembly references
+			options.ReferencedAssemblies.Add(Assemblies.ZeldaCommon.Location);
+			options.ReferencedAssemblies.Add(Assemblies.ZeldaAPI.Location);
 
 			// Create a C# code provider and compile the code.
 			// The 'using' statement is necessary so the created DLL file isn't

@@ -171,9 +171,16 @@ namespace ZeldaOracle.Game.Tiles {
 
 			g.DrawSprite(
 				animation,
-				args.SpriteDrawSettings,
+				args.SpriteSettings,
 				args.Position,
 				args.Color);
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.SetEnum("polarity", Polarity.North);
+			data.Properties.SetEnumInt("rotation_direction", WindingOrder.Clockwise)
+				.SetDocumentation("Rotation Direction", "enum", typeof(WindingOrder), "Magnet Spinner", "The direction in which the spinner will rotate.");
 		}
 
 

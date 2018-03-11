@@ -57,22 +57,30 @@ namespace ZeldaOracle.Game.Tiles {
 				if (sprite != null) {
 					g.DrawSprite(
 						sprite,
-						args.SpriteDrawSettings,
+						args.SpriteSettings,
 						args.Position + Point2I.FromBoolean(!vertical, i * GameSettings.TILE_SIZE),
 						args.Color);
 				}
 			}
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public new static void InitializeTileData(TileData data) {
+			data.Properties.Set("ignore_monster", true);
+			data.Properties.Set("vertical", false)
+				.SetDocumentation("Vertical", "Roller", "The roller rolls vertically.").Hide();
+			data.Properties
+				.SetDocumentation("size", "Length", "single_axis", "!vertical:1", "Roller", "The length of the spike roller in tiles.");
+			data.Properties.Set("move_distance_1", 1)
+				.SetDocumentation("First Move Distance", "Roller", "The distance to move from the starting position.");
+			data.Properties.Set("move_distance_2", -1)
+				.SetDocumentation("Second Move Distance", "Roller", "The distance to move from the starting position after moving the first distance.");
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Override Properties
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Gets the type of monster to spawn.</summary>
-		public override Type MonsterType {
-			get { return typeof(MonsterSpikeRoller); }
-		}
 
 		/// <summary>Gets the spawn position for the monster.</summary>
 		public override Vector2F SpawnPosition {

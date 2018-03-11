@@ -139,9 +139,17 @@ namespace ZeldaOracle.Game.Tiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.Set("releasable", true)
+				.SetDocumentation("Releasable", "Button", "Can the button only be pressed, and not released?");
+			data.Properties.Set("pressed", false)
+				.SetDocumentation("Pressed", "Button", "Is the button pressed?");
+
+			data.Events.AddEvent("press", "Press", "Switch", "Occurs when the button is pressed.",
+				new ScriptParameter(typeof(ZeldaAPI.Button), "button"));
+			data.Events.AddEvent("release", "Release", "Switch", "Occurs when the button is released.",
+				new ScriptParameter(typeof(ZeldaAPI.Button), "button"));
 		}
 	}
 }

@@ -161,14 +161,7 @@ namespace ZeldaOracle.Common.Scripting {
 				editorSubType, category, description, isReadOnly, isBrowsable);
 			return this;
 		}
-
-		/// <summary>Adds property documentation solely to set IsBrowsable to false.</summary>
-		public Property SetHidden() {
-			documentation = new PropertyDocumentation(name, "", "", "Misc", "",
-				false, true);
-			return this;
-		}
-
+		
 		/// <summary>Create the documentation for this property.</summary>
 		public Property SetDocumentation(string readableName, string category,
 			string description)
@@ -176,6 +169,14 @@ namespace ZeldaOracle.Common.Scripting {
 			documentation = new PropertyDocumentation(readableName, "", "", category,
 				description, false, true);
 			return this;
+		}
+
+		/// <summary>Marks the property as unbrowsable and read only in the documentation.</summary>
+		public void Hide() {
+			if (documentation == null)
+				documentation = new PropertyDocumentation(name, "Misc", "");
+			documentation.IsReadOnly = true;
+			documentation.IsBrowsable = false;
 		}
 
 		/// <summary>Set the property action to occur when this property is modified.</summary>
@@ -302,6 +303,11 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property BaseProperty {
 			get { return baseProperty; }
 			set { baseProperty = value; }
+		}
+
+		/// <summary>Gets if the property has a base.</summary>
+		public bool HasBase {
+			get { return baseProperty != null; }
 		}
 
 		/* public PropertyAction Action {

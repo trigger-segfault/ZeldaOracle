@@ -223,35 +223,7 @@ namespace ZeldaOracle.Game {
 
 		private static void LoadTiles() {
 			Resources.LoadTiles("Tiles/tiles.conscript");
-
-			Resources.RemoveResource<BaseTileData>("monster");
-			Resources.RemoveResource<ActionTileData>("monster");
-			Resources.RemoveResource<BaseTileData>("tile_monster");
-			Resources.RemoveResource<TileData>("tile_monster");
 		}
-		/*
-		private static ActionTileData CreateMonsterAction(int sx, int sy, string id, string animation, Type monsterType, MonsterColor color) {
-			ActionTileData etd = new ActionTileData(typeof(MonsterAction));
-			etd.Sprite = Resources.GetAnimation(animation);
-
-			etd.Properties.Set("color", (int) color)
-				.SetDocumentation("Color", "enum", "MonsterColor", "", "The color of the monster.");
-			etd.Properties.Set("respawn_type", "Normal")
-				.SetDocumentation("Respawn Type", "enum", "MonsterRespawnType", "", "When a monster respawns.");
-			etd.Properties.Set("monster_type", monsterType.Name)
-				.SetDocumentation("Monster Type", "string", "", "", "When a monster respawns.");
-			etd.Properties.Set("dead", false);
-
-			etd.Events.AddEvent("event_die", "Die", "Occurs when the monster dies.", new ScriptParameter("Monster", "monster"));
-			etd.Properties.Set("event_die", "")
-				.SetDocumentation("Die", "script", "", "", "Occurs when the monster dies.");
-
-
-			etd.Properties.Set("substrip_index", Direction.Down);
-
-			Resources.AddResource(id, etd);
-			return etd;
-		}*/
 
 
 		//-----------------------------------------------------------------------------
