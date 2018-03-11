@@ -31,6 +31,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 			// Spawn NPC entity.
 			NPC npc = new NPC();
+			npc.Properties			= properties;
 			npc.Flags				= (NPCFlags) Properties.GetInteger("npc_flags");
 			npc.Direction			= Properties.GetInteger("direction");
 			npc.Message				= new Message(Properties.GetString("text"));

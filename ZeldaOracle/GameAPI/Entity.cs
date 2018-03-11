@@ -17,4 +17,9 @@ namespace ZeldaAPI {
 	public interface Player : Unit {
 	}
 
+	public interface Sound {
+	}
+
+	public interface Music {
+	}
 }

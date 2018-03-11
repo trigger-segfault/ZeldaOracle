@@ -105,6 +105,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			context.area = roomControl.GameControl.AreaControl;
 			context.player = roomControl.Player;
 			context.Actions = new ScriptActions(this);
+			context.Functions = new ScriptFunctions(this);
 		}
 
 

@@ -13,7 +13,7 @@ using Song = ZeldaOracle.Common.Audio.Song;
 
 namespace ZeldaOracle.Common.Audio {
 	/// <summary>A structure for storing a song.</summary>
-	public class Song {
+	public class Song : ZeldaAPI.Music {
 		// Containment
 		/// <summary>The base sound effect class contained by this song.</summary>
 		private SoundEffect soundEffect;

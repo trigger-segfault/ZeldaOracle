@@ -12,7 +12,7 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Audio {
 	
 	/// <summary>A structure for storing a sound effect.</summary>
-	public class Sound {
+	public class Sound : ZeldaAPI.Sound {
 		// Containment
 		/// <summary>The sound effect class contained by this sound.</summary>
 		private SoundEffect soundEffect;

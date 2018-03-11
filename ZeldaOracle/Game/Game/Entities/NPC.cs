@@ -3,6 +3,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Units;
 
 namespace ZeldaOracle.Game.Entities {
 
@@ -18,12 +19,10 @@ namespace ZeldaOracle.Game.Entities {
 		Default				= FacePlayerOnTalk | FacePlayerWhenNear,
 	};
 
-	public class NPC : Entity {
+	public class NPC : Unit {
 
 		/// <summary>The direction to face when not near the player.</summary>
-		private Direction direction;
-		/// <summary>The current direction the NPC is facing.</summary>
-		private Direction faceDirection;
+		private Direction defaultDirection;
 		/// <summary>The radius of the diamond shape of tiles where the NPC will face
 		/// the player (excluding the center tile).</summary>
 		private int sightDistance;
@@ -85,8 +84,8 @@ namespace ZeldaOracle.Game.Entities {
 				}
 				if (flags.HasFlag(NPCFlags.FacePlayerOnTalk)) {
 					if (actionEntity is Player)
-						faceDirection = ((Player) actionEntity).Direction.Reverse();
-					Graphics.SubStripIndex = faceDirection;
+						direction = ((Player) actionEntity).Direction.Reverse();
+					Graphics.SubStripIndex = direction;
 				}
 				GameControl.DisplayMessage(message, null, delegate() {
 					if (animationTalk != null)
@@ -103,14 +102,15 @@ namespace ZeldaOracle.Game.Entities {
 			Graphics.PlayAnimation(animationDefault);
 
 			sightDistance	= 2;
-			faceDirection	= direction;
+			direction	= defaultDirection;
 
 			Graphics.IsAnimatedWhenPaused	= flags.HasFlag(NPCFlags.AnimateOnTalk);
-			Graphics.SubStripIndex			= faceDirection;
+			Graphics.SubStripIndex			= direction;
 		}
 
 		public override void Update() {
-			faceDirection = direction;
+			/*
+			direction = defaultDirection;
 
 			bool facePlayer = flags.HasFlag(NPCFlags.AlwaysFacePlayer);
 
@@ -125,24 +125,25 @@ namespace ZeldaOracle.Game.Entities {
 			if (facePlayer) {
 				if (flags.HasFlag(NPCFlags.OnlyFaceHorizontal)) {
 					// Face the player horizontally
-					faceDirection = Direction.Right;
+					direction = Direction.Right;
 					if (RoomControl.Player.Center.X < Center.X)
-						faceDirection = Direction.Left;
+						direction = Direction.Left;
 				}
 				else if (flags.HasFlag(NPCFlags.OnlyFaceVertical)) {
 					// Face the player vertically
-					faceDirection = Direction.Down;
+					direction = Direction.Down;
 					if (RoomControl.Player.Center.Y < Center.Y)
-						faceDirection = Direction.Up;
+						direction = Direction.Up;
 				}
 				else {
 					// Face the player in all directions.
 					Vector2F lookVector = RoomControl.Player.Center - Center;
-					faceDirection = Direction.FromVector(lookVector);
+					direction = Direction.FromVector(lookVector);
 				}
 			}
+			*/
 			
-			Graphics.SubStripIndex = faceDirection;
+			Graphics.SubStripIndex = direction;
 
 			base.Update();
 		}
@@ -160,10 +161,10 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		/// <summary>The direction to face when not near the player.</summary>
-		public Direction Direction {
-			get { return direction; }
-			set { direction = value; }
-		}
+		//public Direction Direction {
+		//	get { return defaultDirection; }
+		//	set { defaultDirection = value; }
+		//}
 
 		/// <summary>The message to display when talking.</summary>
 		public Message Message {

@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Effects;
 namespace ZeldaOracle.Game.Entities {
 
 	// The main class for entity objects in the room.
-	public class Entity {
+	public class Entity : ZeldaAPI.Entity {
 
 		// Internal state
 
@@ -311,7 +311,10 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public override string ToString() {
-			return string.Format("'{0}'", GetType().Name);
+			if (ID != "")
+				return ID;
+			else
+				return string.Format("[{0}]'", GetType().Name);
 		}
 
 
@@ -560,6 +563,15 @@ namespace ZeldaOracle.Game.Entities {
 				return isPersistentBetweenRooms;
 			}
 			set { isPersistentBetweenRooms = value; }
+		}
+
+		public string ID {
+			get {
+				if (properties != null)
+					return properties.GetString("id", "");
+				else
+					return "";
+			}
 		}
 	}
 }

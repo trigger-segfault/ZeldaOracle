@@ -7,7 +7,7 @@ using ZeldaOracle.Game.Entities.Units;
 namespace ZeldaOracle.Game.Control.Scripting.Actions {
 
 	public class ScriptActionsGeneral :
-		ScriptActionsSection, ZeldaAPI.ScriptActionsGeneral
+		ScriptInterfaceSection, ZeldaAPI.ScriptActionsGeneral
 	{
 
 		public void WaitForCondition(ZeldaAPI.WaitCondition condition) {

@@ -1,20 +1,20 @@
 ﻿using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Main;
 
-namespace ZeldaOracle.Game.Control.Scripting.Actions {
+namespace ZeldaOracle.Game.Control.Scripting {
 
-	public partial class ScriptActionsSection {
+	public partial class ScriptInterfaceSection {
 
-		private ScriptActions actions;
+		private ScriptInterface scriptInterface;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public ScriptActionsSection() {
-		}
+		public ScriptInterfaceSection() {
 
+		}
 
 		public void LogMessage(string format, params object[] args) {
 			ScriptInstance.LogMessage(format, args);
@@ -25,29 +25,29 @@ namespace ZeldaOracle.Game.Control.Scripting.Actions {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public ScriptActions Actions {
-			get { return actions; }
-			set { actions = value; }
+		public ScriptInterface ScriptInterface {
+			get { return scriptInterface; }
+			set { scriptInterface = value; }
 		}
 
 		protected ScriptInstance ScriptInstance {
-			get { return actions.ScriptInstance; }
+			get { return scriptInterface.ScriptInstance; }
 		}
 
 		protected RoomControl RoomControl {
-			get { return actions.ScriptInstance.RoomControl; }
+			get { return scriptInterface.ScriptInstance.RoomControl; }
 		}
 
 		protected GameControl GameControl {
-			get { return actions.ScriptInstance.RoomControl.GameControl; }
+			get { return scriptInterface.ScriptInstance.RoomControl.GameControl; }
 		}
 
 		protected GameManager GameManager {
-			get { return actions.ScriptInstance.RoomControl.GameManager; }
+			get { return scriptInterface.ScriptInstance.RoomControl.GameManager; }
 		}
 
 		protected Player Player {
-			get { return actions.ScriptInstance.RoomControl.Player; }
+			get { return scriptInterface.ScriptInstance.RoomControl.Player; }
 		}
 	}
 

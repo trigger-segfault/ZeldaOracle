@@ -5,7 +5,7 @@ using ZeldaOracle.Game.Entities;
 namespace ZeldaOracle.Game.Control.Scripting.Actions {
 
 	public class ScriptActionsCamera :
-		ScriptActionsSection, ZeldaAPI.ScriptActionsCamera
+		ScriptInterfaceSection, ZeldaAPI.ScriptActionsCamera
 	{
 
 		public void SetCameraTargetToEntity(ZeldaAPI.Entity entity) {

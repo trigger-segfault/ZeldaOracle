@@ -15,6 +15,7 @@ namespace ZeldaAPI {
 		public Game game;
 		/// <summary>Contains the possible script actions to perform.</summary>
 		public ScriptActions Actions;
+		public ScriptFunctions Functions;
 
 		public Player player;
 	}

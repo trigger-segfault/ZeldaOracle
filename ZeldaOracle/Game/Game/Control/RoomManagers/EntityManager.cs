@@ -150,6 +150,16 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 		// Entity Queries
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>Find an entity by ID, returning the first entity with the given ID
+		/// or null if no entity was found.</summary>
+		public Entity FindEntityByID(string id) {
+			foreach (Entity entity in entities) {
+				if (entity.ID == id)
+					return entity;
+			}
+			return null;
+		}
+		
 		/// <summary>Iterate entities of the given type.</summary>
 		public IEnumerable<T> GetEntitiesOfType<T>() where T : Entity {
 			foreach (Entity entity in entities) {

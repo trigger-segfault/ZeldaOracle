@@ -259,7 +259,10 @@
     <Compile Include="Game\Control\RoomManagers\RoomGraphics.cs" />
     <Compile Include="Game\Control\RoomManagers\RoomPhysics.cs" />
     <Compile Include="Game\Control\RoomVisualEffect.cs" />
-    <Compile Include="Game\Control\Scripting\Actions\ScriptActionsSection.cs" />
+    <Compile Include="Game\Control\Scripting\Actions\ScriptActions.Sound.cs" />
+    <Compile Include="Game\Control\Scripting\Functions\ScriptFunctions.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptInterface.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptInterfaceSection.cs" />
     <Compile Include="Game\Control\Scripting\Actions\ScriptActions.Unit.cs" />
     <Compile Include="Game\Control\Scripting\Script.cs" />
     <Compile Include="Game\Control\Scripting\Actions\ScriptActions.cs" />
@@ -663,7 +666,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Collision\" />
-    <Folder Include="Game\Control\Scripting\Functions\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
