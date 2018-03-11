@@ -271,6 +271,7 @@
     <Compile Include="Game\Control\RoomManagers\TileManager.cs" />
     <Compile Include="Game\Control\RoomManagers\InteractionManager.cs" />
     <Compile Include="Game\Control\Camera.cs" />
+    <Compile Include="Game\Debugging\DebugScripts.cs" />
     <Compile Include="Game\Debugging\DevSettings.cs" />
     <Compile Include="Game\Debugging\GameDebug.cs" />
     <Compile Include="Game\Debugging\PlayerDebugNoClipState.cs" />

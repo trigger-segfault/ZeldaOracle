@@ -33,7 +33,7 @@ using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Control.RoomManagers;
 using ZeldaOracle.Common.Util;
 
-namespace ZeldaOracle.Game.Debug {
+namespace ZeldaOracle.Game.Debugging {
 	public class GameDebug {
 
 		public static GameControl GameControl {
@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Debug {
 			get { return gameControl.GameManager; }
 		}
 
-
+		private static DebugScripts debugScripts = new DebugScripts();
 		private static GameControl gameControl;
 		private static bool showTileCursor = false;
 		private static Vector2F mousePosition;
@@ -244,12 +244,8 @@ namespace ZeldaOracle.Game.Debug {
 				Keyboard.IsKeyDown(Keys.RShift));
 			
 			if (ctrl && Keyboard.IsKeyPressed(Keys.S)) {
-				GameControl.ScriptRunner.TerminateAllScripts();
-				// Test scripts
-				//Script script = new Script();
-				//script.ID = "test_script";
-				//script.Code = "int x = 0;";
-				//GameControl.ExecuteScript(script);
+				GameControl.ScriptRunner.RunScript(
+					debugScripts, debugScripts.DebugScript1);
 			}
 
 			// Print debug info to the console window

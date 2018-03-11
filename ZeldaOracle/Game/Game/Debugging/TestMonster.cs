@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 
-namespace ZeldaOracle.Game.Debug {
+namespace ZeldaOracle.Game.Debugging {
 
 	public class TestMonster : Monster {
 

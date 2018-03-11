@@ -9,7 +9,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 	/// <summary>An instance of a running script.</summary>
 	public class ScriptInstance {
 
-		private Script script;
+		//private Script script;
+		private string name;
 		private MethodInfo method;
 		private object[] parameters;
 		private Thread thread;
@@ -27,20 +28,20 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public ScriptInstance(Script script, RoomControl roomControl,
+		public ScriptInstance(RoomControl roomControl, string name,
 			MethodInfo method, object[] parameters)
 		{
-			this.script = script;
-			this.roomControl = roomControl;
-			this.method = method;
-			this.parameters = parameters;
-			thread = new Thread(ThreadFunction);
-			isComplete = false;
-			exception = null;
-
-			signalResumeScript = new ManualResetEvent(true);
-			signalReturnToCaller = new ManualResetEvent(false);
+			this.name				= name;
+			this.roomControl		= roomControl;
+			this.method				= method;
+			this.parameters			= parameters;
+			thread					= new Thread(ThreadFunction);
+			isComplete				= false;
+			exception				= null;
+			signalResumeScript		= new ManualResetEvent(true);
+			signalReturnToCaller	= new ManualResetEvent(false);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Thread Operations
@@ -113,7 +114,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		public void LogMessage(string format, params object[] args) {
 			string message = String.Format(format, args);
-			Logs.Scripts.Log("{0}: {1}", script.ID, message);
+			Logs.Scripts.Log("{0}: {1}", name, message);
 		}
 
 		public void PerformUpdate(ZeldaAPI.WaitCondition update) {
@@ -198,8 +199,12 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 
 		/// <summary>The script which is running.</summary>
-		public Script Script {
-			get { return script; }
+		//public Script Script {
+		//	get { return script; }
+		//}
+
+		public string Name {
+			get { return name; }
 		}
 
 		public Exception Exception {

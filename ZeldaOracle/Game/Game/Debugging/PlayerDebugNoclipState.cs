@@ -1,7 +1,7 @@
 ﻿
 using ZeldaOracle.Game.Entities.Players;
 
-namespace ZeldaOracle.Game.Debug {
+namespace ZeldaOracle.Game.Debugging {
 
 	public class PlayerDebugNoClipState : PlayerState {
 

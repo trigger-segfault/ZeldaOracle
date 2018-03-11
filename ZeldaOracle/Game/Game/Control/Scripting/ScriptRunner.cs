@@ -7,11 +7,27 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 
+	//public class ScriptRunInfo {
+	//	private string name;
+	//	private ZeldaAPI.CustomScriptBase context;
+	//	private MethodInfo method;
+	//	private Action execute;
+	//	private object[] parameters;
+
+	//	public ScriptRunInfo(string name, MethodInfo method, params object[] parameters) {
+	//		this.name = name;
+	//		this.parameters = parameters;
+	//		this.execute = new delegate() {
+	//			execute.GetMethodInfo
+	//		}
+	//	}
+	//}
+
 	public class ScriptRunner {
 
 		private GameControl gameControl;
-		private ZeldaAPI.CustomScriptBase scriptObject;
 		private Assembly compiledAssembly;
+		private ZeldaAPI.CustomScriptBase context;
 		private Dictionary<Script, MethodInfo> scriptMethods;
 		private List<ScriptInstance> runningScripts;
 
@@ -22,7 +38,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		public ScriptRunner(GameControl gameControl) {
 			this.gameControl	= gameControl;
-			scriptObject		= null;
+			context				= null;
 			compiledAssembly	= null;
 			scriptMethods		= new Dictionary<Script, MethodInfo>();
 			runningScripts		= new List<ScriptInstance>();
@@ -35,8 +51,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		public void TerminateAllScripts() {
 			for (int i = 0; i < runningScripts.Count; i++) {
-				Logs.Scripts.Log("Terminating script '{0}'",
-					runningScripts[i].Script.ID);
+				Logs.Scripts.Log("Terminating script '{0}'", runningScripts[i].Name);
 				//Console.WriteLine("Terminating script '{0}'",
 					//runningScripts[i].Script.ID);
 				runningScripts[i].Terminate();
@@ -49,7 +64,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			for (int i = 0; i < runningScripts.Count; i++) {
 				ScriptInstance script = runningScripts[i];
 				if (script.RoomControl == roomControl) {
-					Logs.Scripts.Log("Terminating script '{0}'", script.Script.ID);
+					Logs.Scripts.Log("Terminating script '{0}'", script.Name);
 					script.Terminate();
 					runningScripts.RemoveAt(i--);
 				}
@@ -78,8 +93,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				return false;
 
 			// Construct the script object
-			scriptObject = (ZeldaAPI.CustomScriptBase) constructor.Invoke(null);
-			if (scriptObject == null)
+			context = (ZeldaAPI.CustomScriptBase) constructor.Invoke(null);
+			if (context == null)
 				return false;
 
 			// Create a mapping of scripts to method infos
@@ -102,16 +117,35 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		/// <summary>Run a script with the given parameters.</summary>
 		public void RunScript(Script script, object[] parameters) {
-			MethodInfo methodInfo = scriptMethods[script];
+			MethodInfo method = scriptMethods[script];
+			RunScript(context, script.ID, method, parameters);
+		}
 
-			if (methodInfo != null) {
-				ScriptInstance instance = new ScriptInstance(
-					script, gameControl.RoomControl, methodInfo, parameters);
-				Logs.Scripts.Log("Running script '{0}'", script.ID);
-				instance.Start(scriptObject);
-				if (!instance.IsComplete)
-					runningScripts.Add(instance);
-			}
+		/// <summary>Run a method as a script with the given parameters.</summary>
+		public void RunScript(MethodInfo method, object[] parameters) {
+			RunScript(context, method.Name, method, parameters);
+		}
+
+		public void RunScript(ZeldaAPI.CustomScriptBase context, Action function) {
+			MethodInfo method = function.GetMethodInfo();
+			RunScript(context, method.Name, method, new object[] {});
+		}
+
+		public void RunScript(ZeldaAPI.CustomScriptBase context, string name, Action function) {
+			MethodInfo method = function.GetMethodInfo();
+			RunScript(context, name, method, new object[] {});
+		}
+
+		/// <summary>Run a method as a script with the given parameters.</summary>
+		public void RunScript(ZeldaAPI.CustomScriptBase context,
+			string name, MethodInfo method, object[] parameters)
+		{
+			Logs.Scripts.Log("Running script '{0}'", name);
+			ScriptInstance instance = new ScriptInstance(
+				gameControl.RoomControl, name, method, parameters);
+			instance.Start(context);
+			if (!instance.IsComplete)
+				runningScripts.Add(instance);
 		}
 
 		/// <summary>Update execution for any running scripts.</summary>

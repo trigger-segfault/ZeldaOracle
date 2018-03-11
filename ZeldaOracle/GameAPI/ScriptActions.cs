@@ -24,7 +24,9 @@ namespace ZeldaAPI {
 	}
 	
 	public interface ScriptActionsCamera {
-		void LockCameraTargetToEntity(Entity entity);
+		void SetCameraTargetToEntity(Entity entity);
+		void SetCameraTargetToPoint(Vector2F point);
+		void ResetCamera();
 	}
 	
 	public interface ScriptActionsUnit {
@@ -32,5 +34,6 @@ namespace ZeldaAPI {
 		void MakeUnitFaceDirection(Unit unit, Direction direction);
 		void Destroy(Unit unit);
 		void Kill(Unit unit);
+		void Jump(Unit unit, float jumpSpeed);
 	}
 }

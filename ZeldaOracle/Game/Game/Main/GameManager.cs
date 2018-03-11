@@ -34,7 +34,7 @@ using Song			= ZeldaOracle.Common.Audio.Song;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.GameStates;
-using ZeldaOracle.Game.Debug;
+using ZeldaOracle.Game.Debugging;
 
 
 namespace ZeldaOracle.Game.Main {

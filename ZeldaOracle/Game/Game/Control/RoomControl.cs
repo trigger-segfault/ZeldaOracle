@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.GameStates.Transitions;
-using ZeldaOracle.Game.Debug;
+using ZeldaOracle.Game.Debugging;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;

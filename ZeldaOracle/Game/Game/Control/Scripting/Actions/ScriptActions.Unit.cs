@@ -1,4 +1,5 @@
-﻿using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
@@ -35,6 +36,10 @@ namespace ZeldaOracle.Game.Control.Scripting.Actions {
 
 		public void Destroy(ZeldaAPI.Unit unit) {
 			((Unit) unit).Destroy();
+		}
+
+		public void Jump(ZeldaAPI.Unit unit, float jumpSpeed) {
+			((Unit) unit).Physics.ZVelocity = jumpSpeed;
 		}
 
 		public void Move(ZeldaAPI.Unit unit, Direction direction,

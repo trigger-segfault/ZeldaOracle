@@ -8,26 +8,16 @@ namespace ZeldaOracle.Game.Control.Scripting.Actions {
 		ScriptActionsSection, ZeldaAPI.ScriptActionsCamera
 	{
 
-		public void LockCameraTargetToEntity(ZeldaAPI.Entity entity) {
+		public void SetCameraTargetToEntity(ZeldaAPI.Entity entity) {
 			RoomControl.ViewControl.SetTarget((Entity) entity);
 		}
 
-		public void LockCameraTargetToPoint(Vector2F point) {
+		public void SetCameraTargetToPoint(Vector2F point) {
 			RoomControl.ViewControl.SetTarget(point);
 		}
 
 		public void ResetCamera() {
-			//RoomControl.ViewControl
-		}
-
-		public void PanCamera(Vector2F point) {
-
-			//ScriptInstance.PerformUpdate(delegate() {
-
-
-
-			//	return true;
-			//});
+			RoomControl.ViewControl.SetTarget(RoomControl.Player);
 		}
 	}
 }

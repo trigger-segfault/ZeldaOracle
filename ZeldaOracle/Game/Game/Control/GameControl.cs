@@ -10,7 +10,7 @@ using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Maps;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Control.Scripting;
-using ZeldaOracle.Game.Debug;
+using ZeldaOracle.Game.Debugging;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
