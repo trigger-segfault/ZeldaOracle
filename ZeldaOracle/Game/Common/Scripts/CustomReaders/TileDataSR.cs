@@ -27,7 +27,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			Root,
 			Tile,
 			ActionTile,
-			Model
+			Model,
 		}
 
 		private CollisionModel      model;

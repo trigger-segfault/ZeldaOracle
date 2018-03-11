@@ -14,7 +14,7 @@ namespace ZeldaOracle.Common.Ini {
 		/// <summary>Uses " = " for ini property assignment.</summary>
 		EqualsSpaced,
 		/// <summary>Uses " : " for ini property assignment.</summary>
-		ColonSpaced
+		ColonSpaced,
 	}
 
 	/// <summary>The available comment styles for ini documents.</summary>
@@ -30,7 +30,7 @@ namespace ZeldaOracle.Common.Ini {
 		/// <summary>Uses "# " as the ini comment indicator.</summary>
 		PoundSpaced,
 		/// <summary>Uses "! " as the ini comment indicator.</summary>
-		ExclamationSpaced
+		ExclamationSpaced,
 	}
 
 	/// <summary>The formats an enum can be stored in.</summary>

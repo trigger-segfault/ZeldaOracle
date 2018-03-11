@@ -14,7 +14,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private enum SubState {
 			NotBlocking,
 			Blocking,
-		};
+		}
 
 		private ItemShield weapon;
 		private GenericStateMachine<SubState> subStateMachine;

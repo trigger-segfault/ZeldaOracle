@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaAPI;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
-using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Game.Tiles {
 

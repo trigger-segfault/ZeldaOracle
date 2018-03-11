@@ -7,7 +7,7 @@ namespace ZeldaOracle.Common.Input {
 		Up						= 0,
 		Released				= 1,
 		Down					= 2,
-		Pressed					= 3
+		Pressed					= 3,
 
 	}
 }

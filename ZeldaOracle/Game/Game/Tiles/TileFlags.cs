@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace ZeldaOracle.Game.Tiles {
 
+	/// <summary>How the solidity of a tile is defined and handled.</summary>
 	public enum TileSolidType {
 		/// <summary>Never solid.</summary>
 		NotSolid = 0,
@@ -61,69 +62,69 @@ namespace ZeldaOracle.Game.Tiles {
 		public int SpawnDelayAfterPoof { get; set; }
 	}
 
+	/// <summary>All boolean settings for tiles.</summary>
 	[Flags]
 	public enum TileFlags {
 
+		/// <summary>No tile flags are set.</summary>
 		[Browsable(false)]
 		None = 0,
 
-		/// <summary>Default tile flags (Flags are designed so this value is zero).
-		/// </summary>
+		/// <summary>Default tile flags (Flags are designed so this value is zero).</summary>
 		[Browsable(false)]
 		Default = 0,
 				
 		/// <summary>Tile can be pushed and moved.</summary>
-		Movable = 0x1,
+		Movable = (1 << 0),
 		
 		/// <summary>Tile can be picked up and carried.</summary>
-		Pickupable = 0x2,
+		Pickupable = (1 << 1),
 		
 		/// <summary>Destroyed by fire.</summary>
-		Burnable = 0x4,
+		Burnable = (1 << 2),
 		
 		/// <summary>Destroyed by a sword.</summary>
-		Cuttable = 0x8,
+		Cuttable = (1 << 3),
 		
 		/// <summary>Destroyed by bomb explosions.</summary>
-		Bombable = 0x10,
+		Bombable = (1 << 4),
 		
 		/// <summary>Destroyed by boomerang.</summary>
-		Boomerangable = 0x20,
+		Boomerangable = (1 << 5),
 		
 		/// <summary>Can be switched with using the Switch Hook.</summary>
-		Switchable = 0x40,
+		Switchable = (1 << 6),
 		
 		/// <summary>Won't be destroyed when switched using the Switch Hook.</summary>
-		SwitchStays = 0x80,
+		SwitchStays = (1 << 7),
 		
 		/// <summary>Can be dug with a shovel.</summary>
-		Digable = 0x100,
+		Digable = (1 << 8),
 		
 		/// <summary>Cannot be covered by movable blocks.</summary>
-		NotCoverable = 0x200,
+		NotCoverable = (1 << 9),
 		
 		/// <summary>Player will not use the pushing animation when walking into the
 		/// tile.</summary>
-		NotPushable = 0x400,
+		NotPushable = (1 << 10),
 		
 		/// <summary>The player cannot grab the tile with the power bracelet.</summary>
-		NotGrabbable = 0x800,
+		NotGrabbable = (1 << 11),
 		
 		/// <summary>Seeds will be destroyed when hitting this tile instead of bouncing
 		/// off.</summary>
-		AbsorbSeeds = 0x1000,
+		AbsorbSeeds = (1 << 12),
 		
-		/// <summary>The tile is picked up instantly, without having to pull on it.
-		/// </summary>
-		InstantPickup = 0x2000,
+		/// <summary>The tile is picked up instantly, without having to pull on it.</summary>
+		InstantPickup = (1 << 13),
 		
 		/// <summary>Hurt the player when he touches the tile.</summary>
-		HurtPlayer = 0x4000,
+		HurtPlayer = (1 << 14),
 
 		/// <summary>The tile will be skipped when checking for surfaces.</summary>
-		NotSurface = 0x8000,
+		NotSurface = (1 << 15),
 
 		/// <summary>True if the carried tile bounces.</summary>
-		Bounces = 0x10000,
+		Bounces = (1 << 16),
 	}
 }

@@ -24,7 +24,7 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Used for tile and entities.</summary>
 		Black		= 3,
 		/// <summary>Used to assign all tile and entity colors in the group.</summary>
-		All
+		All,
 	}
 
 	/// <summary>A nullable palette color.</summary>

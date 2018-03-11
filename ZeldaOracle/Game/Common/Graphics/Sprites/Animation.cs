@@ -15,7 +15,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>Keep looping back and playing from the beginning endlessly. Same as Loop.</summary>
 		Repeat,
 		/// <summary>Keep looping back and playing from the beginning endlessly. Same as Repeat.</summary>
-		Loop
+		Loop,
 	}
 
 

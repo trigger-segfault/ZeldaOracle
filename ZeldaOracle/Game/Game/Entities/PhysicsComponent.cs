@@ -7,36 +7,78 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities {
-	
+	/// <summary>All flags used for physics-related settings.</summary>
 	[Flags]
 	public enum PhysicsFlags {
-		None					= 0,
-		Solid					= 0x1,		// The entity is solid (other entities can collide with this one).
-		HasGravity				= 0x2,		// The entity is affected by gravity.
-		CollideWorld			= 0x4,		// Collide with solid tiles.
-		CollideRoomEdge			= 0x10,		// Colide with the edges of the room.
-		ReboundSolid			= 0x20,		// Rebound off of solids.
-		ReboundRoomEdge			= 0x40,		// Rebound off of room edges.
-		Bounces					= 0x80,		// The entity bounces when it hits the ground.
-		DestroyedOutsideRoom	= 0x100,	// The entity is destroyed when it is outside of the room.
-		DestroyedInHoles		= 0x200,	// The entity gets destroyed in holes.
-		LedgePassable			= 0x400,	// The entity can pass over ledges.
-		HalfSolidPassable		= 0x800,	// The entity can pass over half-solids (railings).
-		AutoDodge				= 0x1000,	// Will move out of the way when colliding with the edges of objects.
-		PassableToOthers		= 0x2000,	// Other entities are unable to check collisions with the entity.
-		MoveWithConveyors		= 0x4000,	// Moves with conveyor tiles.
-		MoveWithPlatforms		= 0x8000,	// Moves with moving platform tiles.
-		Crushable				= 0x10000,
-		EdgeClipping			= 0x20000,	// Allow clipping into the edges of tiles.
-		DisableSurfaceContact	= 0x40000,	// Do not check for surface interactions such as water, holes, conveyors
+		/// <summary>No physics flags are enabled.</summary>
+		None = 0,
 
-		CheckRadialCollisions	= 0x80000,
-		ResolveClippingCollisions	= 0x200000,
+		/// <summary>The entity is solid (other entities can collide with this one).</summary>
+		Solid = (1 << 0),
 
-		// This was added for player ladder climbing in a side-scrolling room,
-		// because when climbing a ladder, it is like the player is on the ground
-		// even though he is not.
-		OnGroundOverride		= 0x100000,	// If this is set, IsOnGround will always be true.
+		/// <summary>The entity is affected by gravity.</summary>
+		HasGravity = (1 << 1),
+
+		/// <summary>Collide with solid tiles.</summary>
+		CollideWorld = (1 << 2),
+
+		// (1 << 3) is skipped
+
+		/// <summary>Colide with the edges of the room.</summary>
+		CollideRoomEdge = (1 << 4),
+
+		/// <summary>Rebound off of solids.</summary>
+		ReboundSolid = (1 << 5),
+
+		/// <summary>Rebound off of room edges.</summary>
+		ReboundRoomEdge = (1 << 6),
+
+		/// <summary>The entity bounces when it hits the ground.</summary>
+		Bounces = (1 << 7),
+
+		/// <summary>The entity is destroyed when it is outside of the room.</summary>
+		DestroyedOutsideRoom = (1 << 8),
+
+		/// <summary>The entity gets destroyed in holes.</summary>
+		DestroyedInHoles = (1 << 9),
+
+		/// <summary>The entity can pass over ledges.</summary>
+		LedgePassable = (1 << 10),
+
+		/// <summary>The entity can pass over half-solids (railings).</summary>
+		HalfSolidPassable = (1 << 11),
+
+		/// <summary>Will move out of the way when colliding with the edges of objects.</summary>
+		AutoDodge = (1 << 12),
+
+		/// <summary>Other entities are unable to check collisions with the entity.</summary>
+		PassableToOthers = (1 << 13),
+
+		/// <summary>Moves with conveyor tiles.</summary>
+		MoveWithConveyors = (1 << 14),
+
+		/// <summary>Moves with moving platform tiles.</summary>
+		MoveWithPlatforms = (1 << 15),
+
+		/// <summary>Allows the entities OnCrush to be triggered.</summary>
+		Crushable = (1 << 16),
+
+		/// <summary>Allow clipping into the edges of tiles.</summary>
+		EdgeClipping = (1 << 17),
+
+		/// <summary>Do not check for surface interactions such as
+		/// water, holes, conveyors.</summary>
+		DisableSurfaceContact = (1 << 18),
+
+		CheckRadialCollisions = (1 << 19),
+
+		ResolveClippingCollisions = (1 << 21),
+
+		/// <summary>This was added for player ladder climbing in a side-scrolling
+		/// room, because when climbing a ladder, it is like the player is on the
+		/// ground even though he is not.<para/>
+		/// If this is set, IsOnGround will always be true.</summary>
+		OnGroundOverride = (1 << 20),
 	}
 
 	public enum LedgePassState {

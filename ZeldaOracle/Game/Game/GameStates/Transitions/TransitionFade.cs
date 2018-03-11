@@ -9,7 +9,7 @@ namespace ZeldaOracle.Game.GameStates {
 	
 	public enum FadeType {
 		FadeOut,
-		FadeIn
+		FadeIn,
 	}
 
 	public class TransitionFade : GameState {

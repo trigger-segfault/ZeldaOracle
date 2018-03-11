@@ -23,12 +23,17 @@ using ZeldaOracle.Game.Control.RoomManagers;
 
 namespace ZeldaOracle.Game.Control {
 
+	/// <summary>The modes for drawing room layers.</summary>
 	[Flags]
 	public enum RoomDrawing {
+		/// <summary>No room layers will be drawn.</summary>
 		None = 0,
-		DrawBelow = 0x1,
-		DrawAbove = 0x2,
-		DrawAll = 0x3
+		/// <summary>The normal tiles and entities will be drawn.</summary>
+		DrawBelow = (1 << 0),
+		/// <summary>The above sprites for tiles will be drawn.</summary>
+		DrawAbove = (1 << 1),
+		/// <summary>Everything will be drawn.</summary>
+		DrawAll = DrawBelow | DrawAbove,
 	}
 
 	// Handles the main Zelda gameplay within a room.
