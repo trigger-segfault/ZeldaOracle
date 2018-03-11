@@ -14,14 +14,14 @@ namespace ZeldaEditor.Undo {
 		private Level level;
 		private int layer;
 		private TileData placedTile;
-		private HashSet<Point2I> placedTiles;
+		private Dictionary<Point2I, TileDataInstance> placedTiles;
 		private Dictionary<Point2I, TileDataInstance> overwrittenTiles;
 
 		private ActionPlace(Level level, int layer, TileData placedTile) {
 			this.level = level;
 			this.layer = layer;
 			this.placedTile = placedTile;
-			this.placedTiles = new HashSet<Point2I>();
+			this.placedTiles = new Dictionary<Point2I, TileDataInstance>();
 			this.overwrittenTiles = new Dictionary<Point2I, TileDataInstance>();
 		}
 
@@ -40,8 +40,8 @@ namespace ZeldaEditor.Undo {
 		}
 
 		public void AddPlacedTile(Point2I point) {
-			if (!placedTiles.Contains(point))
-				placedTiles.Add(point);
+			if (!placedTiles.ContainsKey(point))
+				placedTiles.Add(point, new TileDataInstance(placedTile));
 		}
 
 		public void AddOverwrittenTile(Point2I point, TileDataInstance tile) {
@@ -51,9 +51,9 @@ namespace ZeldaEditor.Undo {
 
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
-			foreach (var point in placedTiles) {
-				Point2I roomLocation = point / level.RoomSize;
-				Point2I tileLocation = point % level.RoomSize;
+			foreach (var pair in placedTiles) {
+				Point2I roomLocation = pair.Key / level.RoomSize;
+				Point2I tileLocation = pair.Key % level.RoomSize;
 				Room room = level.GetRoomAt(roomLocation);
 				room.RemoveTile(tileLocation, layer);
 			}
@@ -68,11 +68,11 @@ namespace ZeldaEditor.Undo {
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
-			foreach (var point in placedTiles) {
-				Point2I roomLocation = point / level.RoomSize;
-				Point2I tileLocation = point % level.RoomSize;
+			foreach (var pair in placedTiles) {
+				Point2I roomLocation = pair.Key / level.RoomSize;
+				Point2I tileLocation = pair.Key % level.RoomSize;
 				Room room = level.GetRoomAt(roomLocation);
-				room.CreateTile(placedTile, tileLocation, layer);
+				room.PlaceTile(pair.Value, tileLocation, layer);
 			}
 			editorControl.NeedsNewEventCache = true;
 		}

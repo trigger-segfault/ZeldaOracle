@@ -59,6 +59,8 @@ namespace ZeldaEditor.Tools {
 				action.AddOverwrittenActionTile(selectedActionTile);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
+			LevelDisplay.ClearSelectionBox();
+			EditorControl.EditingTileData = null;
 			selectedActionTile	= null;
 			selectedTile		= null;
 			selectedRoom		= null;
@@ -70,6 +72,8 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void Deselect() {
+			LevelDisplay.ClearSelectionBox();
+			EditorControl.EditingTileData = null;
 			selectedActionTile	= null;
 			selectedTile		= null;
 			selectedRoom        = null;
