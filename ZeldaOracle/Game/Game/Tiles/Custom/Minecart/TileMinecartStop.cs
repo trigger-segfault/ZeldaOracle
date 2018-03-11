@@ -26,10 +26,10 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Draws the tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+		
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.NotCoverable;
 		}
 	}
 }

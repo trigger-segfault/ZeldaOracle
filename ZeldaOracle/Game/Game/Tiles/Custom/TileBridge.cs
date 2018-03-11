@@ -237,9 +237,12 @@ namespace ZeldaOracle.Game.Tiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.Set("vertical", false)
+				.SetDocumentation("Vertical", "Bridge", "True if the bridge is vertical.").Hide();
+			data.Properties.Set("bridge_direction", Direction.Invalid)
+				.SetDocumentation("Bridge Direction", "Bridge", "Direction the bridge builds in.");
 		}
 
 

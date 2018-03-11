@@ -9,171 +9,419 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
-
+	/// <summary>Argumemts used to draw a tile data's in-game type.</summary>
 	public struct TileDataDrawArgs {
+		/// <summary>The base action data for this tile.</summary>
 		public TileData Tile { get; }
+		/// <summary>The properties for this tile.</summary>
 		public Properties Properties { get; }
+		/// <summary>The pixel position of this tile.</summary>
 		public Point2I Position { get; }
+		/// <summary>The zone this tile is in.</summary>
 		public Zone Zone { get; }
-		public Level Level { get; }
-		public Room Room { get; }
-		public float Time { get; }
+		/// <summary>The colorization of the tile.</summary>
 		public Color Color { get; }
+		/// <summary>The level containing the tile.</summary>
+		public Level Level { get; }
+		/// <summary>The room containing the tile.</summary>
+		public Room Room { get; }
+		/// <summary>The animation playback time.</summary>
+		public float Time { get; }
+		/// <summary>True if extra details in the tile are drawn.</summary>
 		public bool Extras { get; }
+		/// <summary>The reward database.</summary>
 		public RewardManager RewardManager { get; }
 
-		public SpriteSettings SpriteDrawSettings {
+		/// <summary>Gets sprite drawing settings based on the arguments.</summary>
+		public SpriteSettings SpriteSettings {
 			get { return new SpriteSettings(Zone.StyleDefinitions, Time); }
 		}
 
-		public TileDataDrawArgs(TileData tile, Properties properties, Point2I position, Zone zone, Level level, Room room, float time, Color color, bool extras, RewardManager rewardManager) {
+		/// <summary>Constructs the tile data drawing arguments.</summary>
+		public TileDataDrawArgs(TileData tile, Properties properties, Point2I position, Zone zone, Color color) {
 			this.Tile			= tile;
 			this.Properties		= properties;
 			this.Position		= position;
 			this.Zone			= zone;
-			this.Level			= level;
-			this.Room			= room;
-			this.Time			= time;
 			this.Color			= color;
-			this.Extras			= extras;
-			this.RewardManager	= rewardManager;
+			this.Level			= TileDataDrawing.Level;
+			this.Room			= TileDataDrawing.Room;
+			this.Time			= TileDataDrawing.PlaybackTime;
+			this.Extras			= TileDataDrawing.Extras;
+			this.RewardManager	= TileDataDrawing.RewardManager;
 		}
 	}
 
-	public struct ActionTileDataDrawArgs {
-		public ActionTileData ActionTile { get; }
+	/// <summary>Argumemts used to draw an action data's in-game type.</summary>
+	public struct ActionDataDrawArgs {
+		/// <summary>The base action data for this action.</summary>
+		public ActionTileData Action { get; }
+		/// <summary>The properties for this action.</summary>
 		public Properties Properties { get; }
+		/// <summary>The pixel position of this action.</summary>
 		public Point2I Position { get; }
+		/// <summary>The zone this action is in.</summary>
 		public Zone Zone { get; }
-		public Level Level { get; }
-		public Room Room { get; }
-		public float Time { get; }
+		/// <summary>The colorization of the action.</summary>
 		public Color Color { get; }
+		/// <summary>The level containing the action.</summary>
+		public Level Level { get; }
+		/// <summary>The room containing the action.</summary>
+		public Room Room { get; }
+		/// <summary>The animation playback time.</summary>
+		public float Time { get; }
+		/// <summary>True if extra details in the action are drawn.</summary>
 		public bool Extras { get; }
+		/// <summary>The reward database.</summary>
 		public RewardManager RewardManager { get; }
 
-		public SpriteSettings SpriteDrawSettings {
+		/// <summary>Gets sprite drawing settings based on the arguments.</summary>
+		public SpriteSettings SpriteSettings {
 			get { return new SpriteSettings(Zone.StyleDefinitions, Time); }
 		}
 
-		public ActionTileDataDrawArgs(ActionTileData actionTile, Properties properties, Point2I position, Zone zone, Level level, Room room, float time, Color color, bool extras, RewardManager rewardManager) {
-			this.ActionTile		= actionTile;
+		/// <summary>Constructs the action data drawing arguments.</summary>
+		public ActionDataDrawArgs(ActionTileData action, Properties properties, Point2I position, Zone zone, Color color) {
+			this.Action			= action;
 			this.Properties		= properties;
 			this.Position		= position;
 			this.Zone			= zone;
-			this.Level			= level;
-			this.Room			= room;
-			this.Time			= time;
 			this.Color			= color;
-			this.Extras			= extras;
-			this.RewardManager	= rewardManager;
+			this.Level			= TileDataDrawing.Level;
+			this.Room			= TileDataDrawing.Room;
+			this.Time			= TileDataDrawing.PlaybackTime;
+			this.Extras			= TileDataDrawing.Extras;
+			this.RewardManager	= TileDataDrawing.RewardManager;
 		}
 	}
 
-	public delegate void TileDrawFunction(Graphics2D g, TileDataDrawArgs args);
+	/// <summary>The function called to draw a tile's type.</summary>
+	public delegate void TileDataDrawer(Graphics2D g, TileDataDrawArgs args);
 
-	public delegate void ActionTileDrawFunction(Graphics2D g, ActionTileDataDrawArgs args);
+	/// <summary>The function called to draw an action's type.</summary>
+	public delegate void ActionDataDrawer(Graphics2D g, ActionDataDrawArgs args);
 
+	/// <summary>A static class used to draw a tile type in the editor
+	/// by using static reflection.</summary>
 	public static class TileDataDrawing {
-		private static Dictionary<Type, TileDrawFunction> tileDrawFunctions;
-		private static Dictionary<Type, ActionTileDrawFunction> actionTileDrawFunctions;
+		/// <summary>The collection of tile drawing functions.</summary>
+		private static Dictionary<Type, TileDataDrawer> tileDrawFunctions;
+		/// <summary>The collection of action drawing functions.</summary>
+		private static Dictionary<Type, ActionDataDrawer> actionDrawFunctions;
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The reward manager argument.</summary>
 		public static RewardManager RewardManager { get; set; }
+		/// <summary>The tile's level argument.</summary>
 		public static Level Level { get; set; }
-		public static float PlaybackTime { get; set; }
-		public static bool Extras { get; set; }
+		/// <summary>The tile's room argument.</summary>
 		public static Room Room { get; set; }
+		/// <summary>The animation playback time argument.</summary>
+		public static float PlaybackTime { get; set; }
+		/// <summary>The argument specifying if extra details are drawn.</summary>
+		public static bool Extras { get; set; }
 
 
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the type drawing function dictionaries.</summary>
 		static TileDataDrawing() {
-			tileDrawFunctions = new Dictionary<Type, TileDrawFunction>();
-			actionTileDrawFunctions = new Dictionary<Type, ActionTileDrawFunction>();
+			tileDrawFunctions = new Dictionary<Type, TileDataDrawer>();
+			actionDrawFunctions = new Dictionary<Type, ActionDataDrawer>();
 		}
 
-		public static void DrawTile(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone) {
-			DrawTile(g, baseTileData, baseTileData.Properties, position, zone, Color.White);
+
+		//-----------------------------------------------------------------------------
+		// Drawing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data.</summary>
+		public static void DrawTile(Graphics2D g, BaseTileData data, Point2I position,
+			Zone zone)
+		{
+			DrawTile(g, data, data.Properties, position, zone, Color.White);
 		}
 
-		public static void DrawTile(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
-			DrawTile(g, baseTileData, baseTileData.Properties, position, zone, color);
+		/// <summary>Draws the tile data.</summary>
+		public static void DrawTile(Graphics2D g, BaseTileData data, Point2I position,
+			Zone zone, Color color)
+		{
+			DrawTile(g, data, data.Properties, position, zone, color);
 		}
 
-		public static void DrawTile(Graphics2D g, BaseTileDataInstance baseTileData, Point2I position, Zone zone) {
-			DrawTile(g, baseTileData.BaseData, baseTileData.Properties, position, zone, Color.White);
+		/// <summary>Draws the tile data instance.</summary>
+		public static void DrawTile(Graphics2D g, BaseTileDataInstance data,
+			Point2I position, Zone zone)
+		{
+			DrawTile(g, data.BaseData, data.Properties, position, zone, Color.White);
 		}
 
-		public static void DrawTile(Graphics2D g, BaseTileDataInstance baseTileData, Point2I position, Zone zone, Color color) {
-			DrawTile(g, baseTileData.BaseData, baseTileData.Properties, position, zone, color);
+		/// <summary>Draws the tile data instance.</summary>
+		public static void DrawTile(Graphics2D g, BaseTileDataInstance data,
+			Point2I position, Zone zone, Color color)
+		{
+			DrawTile(g, data.BaseData, data.Properties, position, zone, color);
 		}
 
-		public static void DrawTilePreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone) {
-			DrawTilePreview(g, baseTileData, position, zone, Color.White);
+		/// <summary>Draws the tile data and uses its sprite object if one exists.</summary>
+		public static void DrawTileObject(Graphics2D g, TileData data,
+			Point2I position, Zone zone)
+		{
+			DrawTileObject(g, data, position, zone, Color.White);
 		}
 
-		public static void DrawTilePreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
-			if (baseTileData.HasPreviewSprite) {
-				DrawPreview(g, baseTileData, position, zone, color);
+		/// <summary>Draws the tile data and uses its sprite object if one exists.</summary>
+		public static void DrawTileObject(Graphics2D g, TileData data,
+			Point2I position, Zone zone, Color color)
+		{
+			if (data.SpriteAsObject != null) {
+				DrawSpriteObject(g, data, position, zone, color);
 			}
 			else {
-				DrawTile(g, baseTileData, baseTileData.Properties, position, zone, color);
+				DrawTile(g, data, data.Properties, position, zone, color);
 			}
 		}
 
-		public static void DrawTilePreview(Graphics2D g, BaseTileDataInstance baseTileData, Point2I position, Zone zone) {
-			DrawTilePreview(g, baseTileData, position, zone, Color.White);
+		/// <summary>Draws the tile data instance and uses its sprite object if
+		/// one exists.</summary>
+		public static void DrawTileObject(Graphics2D g, TileDataInstance data,
+			Point2I position, Zone zone)
+		{
+			DrawTileObject(g, data, position, zone, Color.White);
 		}
 
-		public static void DrawTilePreview(Graphics2D g, BaseTileDataInstance baseTileData, Point2I position, Zone zone, Color color) {
-			if (baseTileData.HasPreviewSprite) {
-				DrawPreview(g, baseTileData.BaseData, position, zone, color);
+		/// <summary>Draws the tile data instance and uses its sprite object if
+		/// one exists.</summary>
+		public static void DrawTileObject(Graphics2D g, TileDataInstance data,
+			Point2I position, Zone zone, Color color)
+		{
+			if (data.SpriteAsObject != null) {
+				DrawSpriteObject(g, data.TileData, position, zone, color);
 			}
 			else {
-				DrawTile(g, baseTileData.BaseData, baseTileData.Properties, position, zone, color);
+				DrawTile(g, data.BaseData, data.Properties, position, zone, color);
 			}
 		}
 
-		private static void DrawPreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
+		/// <summary>Draws the tile data and uses its preview sprite if one exists.</summary>
+		public static void DrawTilePreview(Graphics2D g, BaseTileData data,
+			Point2I position, Zone zone)
+		{
+			DrawTilePreview(g, data, position, zone, Color.White);
+		}
+
+		/// <summary>Draws the tile data and uses its preview sprite if one exists.</summary>
+		public static void DrawTilePreview(Graphics2D g, BaseTileData data,
+			Point2I position, Zone zone, Color color)
+		{
+			if (data.HasPreviewSprite) {
+				DrawPreview(g, data, position, zone, color);
+			}
+			else {
+				DrawTile(g, data, data.Properties, position, zone, color);
+			}
+		}
+
+		/// <summary>Draws the tile data instance and uses its preview sprite if
+		/// one exists.</summary>
+		public static void DrawTilePreview(Graphics2D g, BaseTileDataInstance data,
+			Point2I position, Zone zone)
+		{
+			DrawTilePreview(g, data, position, zone, Color.White);
+		}
+
+		/// <summary>Draws the tile data instance and uses its preview sprite if
+		/// one exists.</summary>
+		public static void DrawTilePreview(Graphics2D g, BaseTileDataInstance data,
+			Point2I position, Zone zone, Color color)
+		{
+			if (data.HasPreviewSprite) {
+				DrawPreview(g, data.BaseData, position, zone, color);
+			}
+			else {
+				DrawTile(g, data.BaseData, data.Properties, position, zone, color);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile's preview sprite.</summary>
+		private static void DrawPreview(Graphics2D g, BaseTileData data,
+			Point2I position, Zone zone, Color color)
+		{
 			g.DrawSprite(
-				baseTileData.PreviewSprite,
+				data.PreviewSprite,
 				new SpriteSettings(zone.StyleDefinitions, PlaybackTime),
 				position,
 				color);
 		}
 
+		/// <summary>Draws the tile's sprite object.</summary>
+		private static void DrawSpriteObject(Graphics2D g, TileData data,
+			Point2I position, Zone zone, Color color)
+		{
+			g.DrawSprite(
+				data.SpriteAsObject,
+				new SpriteSettings(zone.StyleDefinitions, PlaybackTime),
+				position,
+				color);
+		}
 
-		private static void DrawTile(Graphics2D g, BaseTileData baseTileData, Properties properties, Point2I position, Zone zone, Color color) {
+		/// <summary>Attempts to draw the tile based on its type or entity type.</summary>
+		private static void DrawTile(Graphics2D g, BaseTileData data,
+			Properties properties, Point2I position, Zone zone, Color color)
+		{
+			// Attempt to draw through the entity type first
+			if (DrawTileEntity(g, data, properties, position, zone, color))
+				return;
+
+			Type[] types;
+			if (data is TileData) {
+				if (data.Type == null)
+					types = new Type[] { typeof(Tile) };
+				else
+					types = TypeHelper.GetInheritance<Tile>(data.Type, false);
+			}
+			else if (data is ActionTileData) {
+				if (data.Type == null)
+					types = new Type[] { typeof(ActionTile) };
+				else
+					types = TypeHelper.GetInheritance<ActionTile>(data.Type, false);
+			}
+			else
+				throw new ArgumentException("Invalidate BaseTileData!");
 			
-			if (baseTileData is TileData) {
-				TileData tile = (TileData) baseTileData;
-				Type type = tile.Type ?? typeof(Tile);
-				TileDrawFunction drawFunc;
-				if (!tileDrawFunctions.TryGetValue(type, out drawFunc)) {
-					MethodInfo methodInfo = type.GetMethod("DrawTileData", BindingFlags.Static | BindingFlags.Public);
-					if (methodInfo != null)
-						drawFunc = ReflectionHelper.GetFunction<TileDrawFunction>(methodInfo);
-					tileDrawFunctions.Add(type, drawFunc);
+			foreach (Type type in types) {
+				if (DrawTileType(type, g, data, properties, position, zone, color))
+					return;
+			}
+		}
+
+		/// <summary>Attempts to draw the tile based on its spawned entity type.
+		/// Returns false if no function was found.</summary>
+		private static bool DrawTileEntity(Graphics2D g, BaseTileData data,
+			Properties properties, Point2I position, Zone zone, Color color)
+		{
+			if (data.EntityType == null)
+				return false;
+
+			Type[] types = TypeHelper.GetInheritance<Entity>(data.EntityType, false);
+
+			foreach (Type type in types) {
+				if (DrawTileEntityType(type, g, data, properties, position, zone, color))
+					return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>Attempts to draw the tile based on its spawned entity type.
+		/// Returns false if no function was found.</summary>
+		private static bool DrawTileEntityType(Type entityType, Graphics2D g,
+			BaseTileData data, Properties properties, Point2I position,
+			Zone zone, Color color)
+		{
+			if (data is TileData) {
+				TileData tile = (TileData) data;
+				TileDataDrawer drawFunc;
+				if (!tileDrawFunctions.TryGetValue(entityType, out drawFunc)) {
+					MethodInfo methodInfo = entityType.GetMethod("DrawTileData",
+						BindingFlags.Static | BindingFlags.Public,
+						typeof(Graphics2D), typeof(TileDataDrawArgs));
+					if (methodInfo != null) {
+						drawFunc = ReflectionHelper.GetFunction
+							<TileDataDrawer>(methodInfo);
+					}
+					tileDrawFunctions.Add(entityType, drawFunc);
 				}
-				var args = new TileDataDrawArgs(tile, properties, position, zone, Level, Room, PlaybackTime, color, Extras, RewardManager);
+				if (drawFunc == null)
+					return false;
+				var args = new TileDataDrawArgs(tile, properties, position, zone, color);
+				drawFunc(g, args);
+				return true;
+			}
+			else if (data is ActionTileData) {
+				ActionTileData actionTile = (ActionTileData) data;
+				ActionDataDrawer drawFunc;
+				if (!actionDrawFunctions.TryGetValue(entityType, out drawFunc)) {
+					MethodInfo methodInfo = entityType.GetMethod("DrawTileData",
+						BindingFlags.Static | BindingFlags.Public,
+						typeof(Graphics2D), typeof(ActionDataDrawArgs));
+					if (methodInfo != null) {
+						drawFunc = ReflectionHelper.GetFunction
+							<ActionDataDrawer>(methodInfo);
+					}
+					actionDrawFunctions.Add(entityType, drawFunc);
+				}
+				if (drawFunc == null)
+					return false;
+				var args = new ActionDataDrawArgs(actionTile, properties, position, zone, color);
+				drawFunc(g, args);
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Attempts to draw the tile based on its type.
+		/// Returns false if no function was found.</summary>
+		private static bool DrawTileType(Type tileType, Graphics2D g, BaseTileData data,
+			Properties properties, Point2I position, Zone zone, Color color)
+		{
+			if (data is TileData) {
+				TileData tile = (TileData) data;
+				TileDataDrawer drawFunc;
+				if (!tileDrawFunctions.TryGetValue(tileType, out drawFunc)) {
+					MethodInfo methodInfo = tileType.GetMethod("DrawTileData",
+						BindingFlags.Static | BindingFlags.Public,
+						typeof(Graphics2D), typeof(TileDataDrawArgs));
+					if (methodInfo != null) {
+						drawFunc = ReflectionHelper.GetFunction
+							<TileDataDrawer>(methodInfo);
+					}
+					tileDrawFunctions.Add(tileType, drawFunc);
+				}
+				if (drawFunc == null)
+					return false;
+				var args = new TileDataDrawArgs(tile, properties, position, zone, color);
 				drawFunc(g, args);
 				Tile.DrawTileDataAbove(g, args);
+				return true;
 			}
-			else if (baseTileData is ActionTileData) {
-				ActionTileData actionTile = (ActionTileData) baseTileData;
-				Type type = actionTile.Type ?? typeof(ActionTile);
-				ActionTileDrawFunction drawFunc;
-				if (!actionTileDrawFunctions.TryGetValue(type, out drawFunc)) {
-					MethodInfo methodInfo = type.GetMethod("DrawTileData", BindingFlags.Static | BindingFlags.Public);
-					if (methodInfo != null)
-						drawFunc = ReflectionHelper.GetFunction<ActionTileDrawFunction>(methodInfo);
-					actionTileDrawFunctions.Add(type, drawFunc);
+			else if (data is ActionTileData) {
+				ActionTileData actionTile = (ActionTileData) data;
+				ActionDataDrawer drawFunc;
+				if (!actionDrawFunctions.TryGetValue(tileType, out drawFunc)) {
+					MethodInfo methodInfo = tileType.GetMethod("DrawTileData",
+						BindingFlags.Static | BindingFlags.Public,
+						typeof(Graphics2D), typeof(ActionDataDrawArgs));
+					if (methodInfo != null) {
+						drawFunc = ReflectionHelper.GetFunction
+							<ActionDataDrawer>(methodInfo);
+					}
+					actionDrawFunctions.Add(tileType, drawFunc);
 				}
-				drawFunc(g, new ActionTileDataDrawArgs(actionTile, properties, position, zone, Level, Room, PlaybackTime, color, Extras, RewardManager));
+				if (drawFunc == null)
+					return false;
+				var args = new ActionDataDrawArgs(actionTile, properties, position, zone, color);
+				drawFunc(g, args);
+				return true;
 			}
+			return false;
 		}
 	}
 }

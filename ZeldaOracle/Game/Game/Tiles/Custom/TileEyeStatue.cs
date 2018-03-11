@@ -69,7 +69,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Tile.DrawTileData(g, args);
 			g.DrawSprite(
 					GameData.SPR_TILE_STATUE_EYE,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 		}

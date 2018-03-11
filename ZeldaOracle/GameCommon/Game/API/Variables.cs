@@ -37,6 +37,13 @@ namespace ZeldaOracle.Game.API {
 			Clone(copy);
 		}
 
+		/// <summary>Constructs a copy of the variables collection.</summary>
+		public Variables(Variables copy, IVariableObject variableObject) {
+			this.map = new Dictionary<string, Variable>();
+			Clone(copy);
+			this.variableObject = variableObject;
+		}
+
 		/// <summary>Clones the variables collection.</summary>
 		public void Clone(Variables copy) {
 			variableObject = copy.variableObject;
@@ -318,6 +325,24 @@ namespace ZeldaOracle.Game.API {
 				return SetVariable(name, value.ToString());
 			else
 				throw new InvalidOperationException("Variable type does not support enums.");
+		}
+		
+		/// <summary>Sets the variable's value as an integer enum.</summary>
+		public Variable SetEnumInt<E>(string name, E value) where E : struct {
+			Variable v = GetVariable(name);
+			if (v == null || v.Type == VariableType.Integer)
+				return SetVariable(name, (int) (object) value);
+			else
+				throw new InvalidOperationException("Variable type is not an integer.");
+		}
+		
+		/// <summary>Sets the variable's value as a string enum.</summary>
+		public Variable SetEnumStr<E>(string name, E value) where E : struct {
+			Variable v = GetVariable(name);
+			if (v == null || v.Type == VariableType.String)
+				return SetVariable(name, value.ToString());
+			else
+				throw new InvalidOperationException("Variable type is not a string.");
 		}
 
 		/// <summary>Sets the variable's string value.</summary>

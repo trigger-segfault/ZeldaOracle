@@ -45,9 +45,11 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public new static void InitializeTileData(TileData data) {
+			data.Properties.Set("order", 0)
+				.SetDocumentation("Launch Order", "Flying Tile", "The order in which to launch each flying tile in the room.");
+			data.EntityType = typeof(MonsterFlyingTile);
 		}
 
 
@@ -56,9 +58,9 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the type of monster to spawn.</summary>
-		public override Type MonsterType {
+		/*public override Type MonsterType {
 			get { return typeof(MonsterFlyingTile); }
-		}
+		}*/
 
 		public override bool IsStatic {
 			get { return false; }

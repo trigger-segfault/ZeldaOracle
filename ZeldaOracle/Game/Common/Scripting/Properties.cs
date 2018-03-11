@@ -45,6 +45,13 @@ namespace ZeldaOracle.Common.Scripting {
 			Clone(copy);
 		}
 
+		/// <summary>Constructs a copy of the properties collection.</summary>
+		public Properties(Properties copy, IPropertyObject propertyObject) {
+			this.map = new Dictionary<string, Property>();
+			Clone(copy);
+			this.propertyObject = propertyObject;
+		}
+
 		/// <summary>Clones the properties collection.</summary>
 		public void Clone(Properties copy) {
 			propertyObject = copy.propertyObject;
@@ -125,7 +132,7 @@ namespace ZeldaOracle.Common.Scripting {
 		/// but no base property.</summary>
 		public bool ContainsWithNoBase(string name) {
 			Property p = GetProperty(name, false);
-			return (p != null && p.BaseProperty == null);
+			return (p != null && !p.HasBase);
 		}
 
 
@@ -133,7 +140,8 @@ namespace ZeldaOracle.Common.Scripting {
 		// Matching
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Returns true if the two properties match. (Does not check base properties.)</summary>
+		/// <summary>Returns true if the two properties match.
+		/// (Does not check base properties.)</summary>
 		public bool Matches(Properties properties) {
 			Properties more = this;
 			Properties less = properties;
@@ -347,7 +355,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 		public bool RemoveProperty(string name, bool onlyIfNoBase) {
 			Property p = GetProperty(name, false);
-			if (p != null && (!onlyIfNoBase || p.BaseProperty == null)) {
+			if (p != null && (!onlyIfNoBase || !p.HasBase)) {
 				map.Remove(name);
 				return true;
 			}
@@ -356,7 +364,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 		public bool RenameProperty(string oldName, string newName, bool onlyIfNoBase) {
 			Property p = GetProperty(oldName, false);
-			if (p != null && (!onlyIfNoBase || p.BaseProperty == null)) {
+			if (p != null && (!onlyIfNoBase || !p.HasBase)) {
 				p.Name = newName;
 				map[newName] = p;
 				map.Remove(oldName);
@@ -371,8 +379,10 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Merge these properties with another.</summary>
 		public void SetAll(Properties other) {
-			foreach (Property otherProperty in other.map.Values)
-				SetProperty(otherProperty.Name, otherProperty.ObjectValue, false);
+			foreach (Property otherProperty in other.map.Values) {
+				Property p = SetProperty(otherProperty.Name,
+					otherProperty.ObjectValue, false);
+			}
 		}
 
 
@@ -401,6 +411,24 @@ namespace ZeldaOracle.Common.Scripting {
 				return SetProperty(name, value.ToString(), false);
 			else
 				throw new InvalidOperationException("Property type does not support enums.");
+		}
+
+		/// <summary>Sets the property's value as an integer enum.</summary>
+		public Property SetEnumInt<E>(string name, E value) where E : struct {
+			Property p = GetProperty(name, true);
+			if (p == null || p.Type == PropertyType.Integer)
+				return SetProperty(name, (int) (object) value, false);
+			else
+				throw new InvalidOperationException("Property type is not an integer.");
+		}
+
+		/// <summary>Sets the property's value as a string enum.</summary>
+		public Property SetEnumStr<E>(string name, E value) where E : struct {
+			Property p = GetProperty(name, true);
+			if (p == null || p.Type == PropertyType.String)
+				return SetProperty(name, value.ToString(), false);
+			else
+				throw new InvalidOperationException("Property type is not a string.");
 		}
 
 		public Property Set(string name, Property property) {
@@ -455,23 +483,39 @@ namespace ZeldaOracle.Common.Scripting {
 			return SetProperty(name, value, true);
 		}
 
-		public void SetDocumentation(string name, string readableName, string editorType,
-			string editorSubType, string category, string description, bool isEditable = true, bool isHidden = false)
+		/// <summary>Sets the documentation for an existing property.
+		/// Does not include base properties.</summary>
+		public void SetDocumentation(string name, string readableName,
+			string editorType, string editorSubType, string category,
+			string description, bool isReadOnly = false, bool isBrowsable = true)
 		{
 			SetDocumentation(name, new PropertyDocumentation(readableName,
-				editorType, editorSubType, category, description, isEditable, isHidden));
+				editorType, editorSubType, category, description, isReadOnly, isBrowsable));
 		}
 
-		public void SetDocumentation(string name, string readableName, string editorType,
-			Type editorSubType, string category, string description, bool isEditable = true, bool isHidden = false) {
+		/// <summary>Sets the documentation for an existing property.
+		/// Does not include base properties.</summary>
+		public void SetDocumentation(string name, string readableName,
+			string editorType, Type editorSubType, string category, string description,
+			bool isReadOnly = false, bool isBrowsable = true)
+		{
 			SetDocumentation(name, new PropertyDocumentation(readableName,
-				editorType, editorSubType, category, description, isEditable, isHidden));
+				editorType, editorSubType, category, description, isReadOnly, isBrowsable));
 		}
 
+		/// <summary>Sets the documentation for an existing property.
+		/// Does not include base properties.</summary>
 		public void SetDocumentation(string name, PropertyDocumentation documentation) {
 			Property p = GetProperty(name, false);
 			if (p != null)
 				p.Documentation = documentation;
+		}
+
+		/// <summary>Marks a property as unbrowsable and read only in the documentation.</summary>
+		public void Hide(string name) {
+			Property p = GetProperty(name, false);
+			if (p != null)
+				p.Hide();
 		}
 
 		/// <summary>Used to restore properties that were aquired from the clipboard.</summary>

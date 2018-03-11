@@ -113,8 +113,17 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles.Puzzles {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
+		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			ActionTile.DrawTileData(g, args);
+		}
+
+		/// <summary>Initializes the properties and events for the action type.</summary>
+		public static void InitializeTileData(ActionTileData data) {
+			data.Properties.Set("solve_once", false)
+				.SetDocumentation("Solve Once", "Puzzle", "Can the puzzle only be solved once and not unsolved?");
+
+			data.Events.AddEvent("solved", "Solved", "Puzzle", "Occurs when the puzzle is solved.");
+			data.Events.AddEvent("unsolve", "Unsolve", "Puzzle", "Occurs when the puzzle is solved.");
 		}
 	}
 }

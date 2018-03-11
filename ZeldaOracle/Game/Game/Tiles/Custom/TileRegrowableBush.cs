@@ -97,9 +97,13 @@ namespace ZeldaOracle.Game.Tiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.Cuttable | TileFlags.Bombable;
+
+			data.Properties.Set("cling_on_stab", false);
+			data.Properties.Set("angle", Angle.Right)
+				.SetDocumentation("Angle", "angle", "", "Seed Bouncer", "The angle the seed bouncer is facing.");
 		}
 	}
 }

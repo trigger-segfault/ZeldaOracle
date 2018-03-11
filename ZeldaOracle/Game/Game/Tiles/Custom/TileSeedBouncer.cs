@@ -63,9 +63,18 @@ namespace ZeldaOracle.Game.Tiles {
 			int angle = args.Properties.GetInteger("angle", 0);
 			g.DrawSprite(
 				GameData.ANIM_TILE_SEED_BOUNCER.GetSubstrip(angle),
-				args.SpriteDrawSettings,
+				args.SpriteSettings,
 				args.Position,
 				args.Color);
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.NotSurface;
+
+			data.Properties.Set("cling_on_stab", false);
+			data.Properties.Set("angle", Angle.Right)
+				.SetDocumentation("Angle", "angle", "", "Seed Bouncer", "The angle the seed bouncer is facing.");
 		}
 
 

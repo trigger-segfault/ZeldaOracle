@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaAPI;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -72,10 +71,20 @@ namespace ZeldaOracle.Game.Tiles {
 			if (flameAnimation != null) {
 				g.DrawSprite(
 					flameAnimation,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position + new Point2I(8, -1),
 					args.Color);
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.SetEnumInt("color", PuzzleColor.None)
+				.SetDocumentation("Color", "enum", typeof(PuzzleColor), "Color", "The color of the lantern flames.");
+
+			data.Events.AddEvent("color_change", "Color Change", "Color", "Occurs when the lantern's flame color changes.",
+				new ScriptParameter(typeof(ZeldaAPI.ColorLantern), "tile"),
+				new ScriptParameter(typeof(PuzzleColor), "color"));
 		}
 
 

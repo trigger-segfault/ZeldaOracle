@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	public class MonsterSpinyBeetle : Monster {
@@ -412,6 +415,27 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
+			MonsterAction.DrawTileData(g, args);
+			TileData cover = args.Properties.GetResource<TileData>("cover_tile");
+			if (cover != null) {
+				TileDataDrawing.DrawTileObject(g, cover,
+					args.Position - new Point2I(0, 4), args.Zone);
+			}
+		}
+
+		/// <summary>Initializes the properties and events for the action type.</summary>
+		public static void InitializeTileData(ActionTileData data) {
+			data.Properties.Set("cover_tile", "bush")
+				.SetDocumentation("Cover Tile", "tile_data", "", "Monster", "The tile that covers the spiny beetle.");
+		}
+
+		
 		//-------------------------------------------------------------------------
 		// Internal Properties
 		//-------------------------------------------------------------------------

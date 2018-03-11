@@ -107,8 +107,8 @@ namespace ZeldaOracle.Game.Worlds {
 		public Level(Level copy) :
 			this()
 		{
-			properties.SetAll(copy.properties);
-			events.SetAll(copy.events);
+			properties	= new Properties(copy.properties, this);
+			events		= new EventCollection(copy.events, this);
 
 			this.world          = copy.world;
 			this.roomSize       = copy.roomSize;

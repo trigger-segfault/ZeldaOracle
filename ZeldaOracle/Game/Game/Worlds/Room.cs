@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Tiles.Custom.Monsters;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Room : IEventObjectContainer, IEventObject, IVariableObject {
@@ -36,10 +37,10 @@ namespace ZeldaOracle.Game.Worlds {
 			this.tileData	= new TileDataInstance[0, 0, 0];
 			this.actionData	= new List<ActionTileDataInstance>();
 
-			this.events		= new EventCollection(this);
 			this.properties	= new Properties(this);
 			this.properties.BaseProperties = new Properties();
 			this.variables	= new Variables(this);
+			this.events		= new EventCollection(this);
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this room.");
@@ -47,7 +48,7 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Music", "song", "", "General", "The music to play in this room. Select none to choose the default music.", true, false);
 			properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "General", "The zone type for this room.");
-			properties.BaseProperties.SetEnum("spawn_mode", MonsterSpawnMode.Normal)
+			properties.BaseProperties.SetEnumStr("spawn_mode", MonsterSpawnMode.Normal)
 				.SetDocumentation("Monster Spawn Mode", "enum", typeof(MonsterSpawnMode), "General", "The method for spawning monsters in this room.");
 			//properties.BaseProperties.Set("area", "")
 			//	.SetDocumentation("Area", "area", "", "Area", "The area this room belongs to.");
@@ -104,8 +105,8 @@ namespace ZeldaOracle.Game.Worlds {
 		public Room(Room copy) :
 			this()
 		{
-			properties.SetAll(copy.properties);
-			events.SetAll(copy.events);
+			properties	= new Properties(copy.properties, this);
+			events		= new EventCollection(copy.events, this);
 
 			this.level		= copy.level;
 			this.location	= copy.location;
@@ -248,7 +249,7 @@ namespace ZeldaOracle.Game.Worlds {
 			bool includeParented = true)
 		{
 			foreach (TileDataInstance tile in GetTiles(includeParented)) {
-				if (tile.ID == tileID && GameUtil.TypeHasBase<TileType>(tile.Type))
+				if (tile.ID == tileID && TypeHelper.TypeHasBase<TileType>(tile.Type))
 					return tile;
 			}
 			return null;
@@ -318,7 +319,9 @@ namespace ZeldaOracle.Game.Worlds {
 			// Get the parent room's shared tiles
 			Room parentRoom = ParentRoom;
 			if (parentRoom != null) {
-				foreach (TileDataInstance tile in parentRoom.GetSharedTiles()) {
+				foreach (TileDataInstance tile in
+					parentRoom.GetSharedTileLayer(layer))
+				{
 					if (IsTileAreaClear(tile))
 						yield return tile;
 				}

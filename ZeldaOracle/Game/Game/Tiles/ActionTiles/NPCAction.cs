@@ -45,9 +45,23 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
+		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			int direction = args.Properties.GetInteger("direction", 0);
 			ActionTile.DrawTileDataIndex(g, args, substripIndex: direction);
+		}
+
+		/// <summary>Initializes the properties and events for the action type.</summary>
+		public static void InitializeTileData(ActionTileData data) {
+			data.Properties.SetEnumInt("npc_flags", NPCFlags.FacePlayerWhenNear | NPCFlags.FacePlayerOnTalk)
+				.SetDocumentation("NPC Options", "enum_flags", typeof(NPCFlags), "NPC", "The options for the NPC.");
+			data.Properties.Set("direction", Direction.Right)
+				.SetDocumentation("Direction", "direction", "", "NPC", "The default direction the NPC faces.");
+			data.Properties.Set("text", "<red>undefined<red>")
+				.SetDocumentation("Text", "text_message", "", "NPC", "The text to display when the NPC is talked to.");
+			data.Properties.Set("animation", "npc_shopkeeper")
+				.SetDocumentation("Animation", "animation", "", "NPC", "The animation of the NPC.");
+			data.Properties.Set("animation_talk", "")
+				.SetDocumentation("Talk Animation", "animation", "", "NPC", "The animation of the NPC when being talked to.");
 		}
 
 

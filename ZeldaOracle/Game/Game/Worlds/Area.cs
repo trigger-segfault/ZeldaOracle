@@ -26,10 +26,10 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public Area() {
-			this.events     = new EventCollection(this);
 			this.properties = new Properties(this);
-			this.properties.BaseProperties  = new Properties();
+			this.properties.BaseProperties = new Properties();
 			this.variables	= new Variables(this);
+			this.events		= new EventCollection(this);
 
 			// General
 			properties.BaseProperties.Set("id", "")
@@ -46,17 +46,17 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Map Type", "enum", "MapType", "Settings", "The type of map to display for this area.");
 			//properties.BaseProperties.Set("map_id",  "")
 			//	.SetDocumentation("Map ID", "", "", "Settings", "The type of map to display for this area.");
-			properties.BaseProperties.SetEnum("respawn_mode", RoomRespawnMode.Overworld)
+			properties.BaseProperties.SetEnumStr("respawn_mode", RoomRespawnMode.Overworld)
 				.SetDocumentation("Room Respawn Mode", "enum", typeof(RoomRespawnMode), "Settings", "The type of map to display for this area.");
 
 			// Yes, the enum type and editor enum type are supposed to be different.
-			properties.BaseProperties.SetEnum("spawn_mode", MonsterSpawnMode.Random)
+			properties.BaseProperties.SetEnumStr("spawn_mode", MonsterSpawnMode.Random)
 				.SetDocumentation("Monster Spawn Mode", "enum", typeof(AreaSpawnMode), "Settings", "The method for spawning monsters in a room.");
 			// Note area name message is only displayed on certain
 			// warp points so that setting goes in WarpAction.
 
 			// Puzzle
-			properties.BaseProperties.Set("color_switch_color", (int) PuzzleColor.Blue)
+			properties.BaseProperties.SetEnumInt("color_switch_color", PuzzleColor.Blue)
 				.SetDocumentation("Color Switch Color", "enum", typeof(PuzzleColor), "Puzzle", "");
 
 			// Dungeon
@@ -79,16 +79,16 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Area(string id, string name) :
-			this() {
+			this()
+		{
 			properties.Set("id", id);
 			properties.Set("name", name);
 		}
 
-		public Area(Area copy) :
-			this() {
-			properties.SetAll(copy.properties);
-			variables.SetAll(copy.variables);
-			events.SetAll(copy.events);
+		public Area(Area copy) {
+			properties	= new Properties(copy.properties, this);
+			variables	= new Variables(copy.variables, this);
+			events		= new EventCollection(copy.events, this);
 		}
 
 

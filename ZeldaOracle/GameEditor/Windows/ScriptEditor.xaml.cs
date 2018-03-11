@@ -20,6 +20,7 @@ using ICSharpCode.CodeCompletion;
 using ZeldaEditor.Control;
 using ZeldaEditor.Scripting;
 using ZeldaEditor.Util;
+using ZeldaOracle.Game;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaEditor.Windows {
@@ -39,23 +40,19 @@ namespace ZeldaEditor.Windows {
 		private string                      previousCode;       // The code of the script when the editor was opened.
 		//private bool                        autoCompile;
 		//private bool                        compileOnClose;
-		private StoppableTimer					timer;
+		private StoppableTimer				timer;
 		private bool                        loaded;
 
 		private static CSharpCompletion     completion;
 
 		public static void Initialize() {
-			Assembly[] assemblies = new Assembly[] {
-				typeof(ZeldaAPI.Tile).Assembly,
-				typeof(ZeldaOracle.Common.Geometry.Point2I).Assembly,
-				typeof(object).Assembly,
-				typeof(Uri).Assembly,
-				typeof(Enumerable).Assembly
-			};
-			completion = new CSharpCompletion(new ScriptProvider(), assemblies);
+			completion = new CSharpCompletion(new ScriptProvider(),
+				Assemblies.Scripting);
 		}
 
-		public ScriptEditor(Script script, EditorControl editorControl, bool newScript, bool internalScript) {
+		public ScriptEditor(Script script, EditorControl editorControl,
+			bool newScript, bool internalScript)
+		{
 			InitializeComponent();
 			this.loaded = false;
 			this.script = script;

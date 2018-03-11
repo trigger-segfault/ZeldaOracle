@@ -7,6 +7,8 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
@@ -48,10 +50,9 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			
 			// Construct the monster object
 			if (CanSpawn) {
-				string monsterTypeStr = Properties.GetString("monster_type", "");
-				monster = ConstructObject<Monster>(monsterTypeStr);
+				monster = ReflectionHelper.Construct<Monster>(EntityType);
 				if (monster == null)
-					Console.WriteLine("Error trying to spawn monster of type " + monsterTypeStr);
+					Console.WriteLine("Error trying to spawn monster of type '" + EntityType.Name + "'!");
 			}
 
 			// Spawn the monster entity
@@ -59,6 +60,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				Vector2F center = position + (size * GameSettings.TILE_SIZE / 2);
 				monster.SetPositionByCenter(center);
 				monster.Properties = properties;
+				monster.Events = Events;
 				RoomControl.SpawnEntity(monster);
 			}
 		}
@@ -69,7 +71,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
+		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			ColorDefinitions colorDefinitions = new ColorDefinitions();
 			MonsterColor color = (MonsterColor) args.Properties.GetInteger("color", 0);
 			switch (color) {
@@ -96,6 +98,30 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				break;
 			}
 			ActionTile.DrawTileDataColors(g, args, colorDefinitions);
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(ActionTileData data) {
+			data.ResetCondition = TileResetCondition.Never;
+			data.IsShared = true;
+
+			data.Properties.Hide("reset_condition");
+
+			data.Properties.SetEnumInt("color", MonsterColor.Red)
+				.SetDocumentation("Color", "enum", typeof(MonsterColor), "Monster", "The color of the monster.");
+			data.Properties.SetEnumInt("respawn_type", MonsterRespawnType.Normal)
+				.SetDocumentation("Respawn Type", "enum", typeof(MonsterRespawnType), "Monster", "How a monster respawns.");
+			data.Properties.Set("dead", false)
+				.SetDocumentation("Is Dead", "Monster", "True if the monster is permanently dead.");
+			data.Properties.Set("ignore_monster", false)
+				.SetDocumentation("Ignore Monster", "Monster", "True if the monster is not counted towards clearing the room.");
+			data.Properties.Set("monster_id", 0)
+				.SetDocumentation("Monster ID", "Monster", "An ID unique to each monster in a room used to manage which monsters are dead. An ID of 0 will use an ID unique to every other monster in the game.");
+
+			data.Events.AddEvent("die", "Die", "Monster", "Occurs when the monster dies.",
+				new ScriptParameter(typeof(ZeldaAPI.Monster), "monster"));
+
+			data.EntityType = typeof(Monster);
 		}
 
 

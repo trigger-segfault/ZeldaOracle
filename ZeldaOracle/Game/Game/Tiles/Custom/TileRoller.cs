@@ -157,10 +157,21 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				ISprite sprite = args.Tile.Sprite;
 				g.DrawSprite(
 					sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position + Point2I.FromBoolean(!vertical, i * GameSettings.TILE_SIZE),
 					args.Color);
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.Movable | TileFlags.NotGrabbable;
+
+			data.Properties.Set("cling_on_stab", false);
+			data.Properties.Set("vertical", false)
+				.SetDocumentation("Vertical", "Roller", "The roller rolls vertically.").Hide();
+			data.Properties
+				.SetDocumentation("size", "Length", "single_axis", "!vertical:1", "Roller", "The length of the roller in tiles.");
 		}
 
 

@@ -39,11 +39,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void Clone(BaseTileDataInstance copy) {
 			this.room		= copy.Room;
 			this.tileData	= copy.tileData;
-			this.properties							= new Properties(this);
+			this.properties							= new Properties(copy.properties, this);
 			this.properties.BaseProperties			= tileData.Properties;
 			this.modifiedProperties					= new Properties(this);
-			this.modifiedProperties.BaseProperties	= tileData.Properties;
-			this.properties.SetAll(copy.properties);
+			this.modifiedProperties.BaseProperties	= this.properties;
 			this.events								= new EventCollection(copy.Events, this);
 		}
 
@@ -60,7 +59,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public void OverrideDefaultState() {
 			// Copy the modified properties back into the default properties.
-			properties.Clone(modifiedProperties);
+			properties.SetAll(modifiedProperties);
 		}
 
 
@@ -123,9 +122,15 @@ namespace ZeldaOracle.Game.Tiles {
 		public Properties BaseProperties {
 			get { return tileData.Properties; }
 		}
-		
+
+		/// <summary>Gets the overridden type fof the tile.</summary>
 		public Type Type {
 			get { return tileData.Type; }
+		}
+
+		/// <summary>Gets the type of entity this tile spawns.</summary>
+		public Type EntityType {
+			get { return tileData.EntityType; }
 		}
 
 		public Point2I SheetLocation {

@@ -7,12 +7,16 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public abstract class BaseTileData : IPropertyObject {
-		
+
+		/// <summary>The overridden type fof the tile.</summary>
 		protected Type type;
+		/// <summary>The type of entity this tile spawns.</summary>
+		protected Type entityType;
 		protected Tileset tileset;
 		protected Point2I sheetLocation;	// TODO: remove this, maybe?
 		protected Properties properties;
@@ -28,6 +32,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public BaseTileData() {
 			name			= "";
 			type			= null;
+			entityType		= null;
 			tileset			= null;
 			sheetLocation	= Point2I.Zero;
 			properties		= new Properties(this);
@@ -50,7 +55,7 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Animation Substrip Index", "", "", "Internal",
 				"The index of the substrip for dynamic animations.", true, false);
 			
-			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
+			properties.SetEnumInt("reset_condition", TileResetCondition.LeaveRoom)
 				.SetDocumentation("Reset Condition", "enum", typeof(TileResetCondition), "General",
 				"The condition for when the tile resets its properties.");
 
@@ -59,21 +64,23 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public BaseTileData(BaseTileData copy) {
-			type				= copy.type;
-			tileset				= copy.tileset;
-			sheetLocation		= copy.sheetLocation;
-			properties			= new Properties(this);
-			properties.SetAll(copy.properties);
-			events              = new EventDocumentationCollection(copy.events);
-			previewSprite		= copy.previewSprite;
+			type			= copy.type;
+			entityType		= copy.EntityType;
+			tileset			= copy.tileset;
+			sheetLocation	= copy.sheetLocation;
+			previewSprite	= copy.previewSprite;
+			properties		= new Properties(copy.properties, this);
+			events			= new EventDocumentationCollection(copy.events);
 		}
 
 		public virtual void Clone(BaseTileData copy) {
-			type		= copy.type;
-			properties	= new Properties(copy.properties);
-			events		= new EventDocumentationCollection(copy.events);
-			//properties.SetAll(copy.properties);
-			previewSprite		= copy.previewSprite;
+			type			= copy.type;
+			entityType		= copy.entityType;
+			tileset			= copy.tileset;
+			sheetLocation	= copy.sheetLocation;
+			previewSprite	= copy.previewSprite;
+			properties		= new Properties(copy.properties, this);
+			events			= new EventDocumentationCollection(copy.events);
 		}
 		
 		
@@ -90,9 +97,45 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets or sets the overridden type fof the tile.</summary>
 		public Type Type {
 			get { return type; }
-			set { type = value; }
+			set {
+				if ((type == null && value != null) || !type.Equals(value)) {
+					// Make sure we extend the correct type and don't go backwards.
+					if (type != null) {
+						if (value == null || !type.IsAssignableFrom(value))
+							throw new ArgumentException("New type does not inherit from previous tile type!");
+					}
+					Type previousType = type;
+					type = value;
+					// Initialize the tile's new types.
+					TileDataInitializing.InitializeTile(this, previousType);
+				}
+			}
+		}
+
+		/// <summary>Gets or sets the type of entity this tile spawns.</summary>
+		public Type EntityType {
+			get { return entityType; }
+			set {
+				if ((entityType == null && value != null) ||
+					!entityType.Equals(value))
+				{
+					// Make sure we extend entity and don't go backwards.
+					if (entityType != null) {
+						if (value == null || !entityType.IsAssignableFrom(value))
+							throw new ArgumentException("New type does not inherit from previous entity type!");
+					}
+					else if (!typeof(Entity).IsAssignableFrom(value)) {
+						throw new ArgumentException("New type does not inherit from Entity!");
+					}
+					Type previousType = entityType;
+					entityType = value;
+					// Initialize the tile's new entity types.
+					TileDataInitializing.InitializeEntity(this, previousType);
+				}
+			}
 		}
 
 		/*

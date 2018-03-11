@@ -70,11 +70,23 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				if (reward != null) {
 					g.DrawSprite(
 						reward.Sprite,
-						args.SpriteDrawSettings,
+						args.SpriteSettings,
 						args.Position,
 						args.Color);
 				}
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.ResetCondition = TileResetCondition.Never;
+			data.IsShared = true;
+
+			data.Properties.Set("spawn_delay_after_poof", 16);
+			data.Properties.Set("reward", "rupees_1")
+				.SetDocumentation("Reward", "reward", "", "Chest", "The reward contained inside the chest.");
+			data.Properties.Set("looted", false)
+				.SetDocumentation("Looted", "Chest", "True if the item has been taken from the chest.");
 		}
 
 
