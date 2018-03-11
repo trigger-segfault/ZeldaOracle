@@ -19,7 +19,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			BeforeTurn,
 			Turning,
 			AfterTurn,
-			Walking
+			Walking,
 		}
 
 		private int timer;

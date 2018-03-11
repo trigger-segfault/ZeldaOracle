@@ -5,8 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
-using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Game.Tiles {
 

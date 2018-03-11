@@ -23,7 +23,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		private enum Modes {
 			Root,
-			Tileset
+			Tileset,
 		}
 		
 		private Tileset				tileset;

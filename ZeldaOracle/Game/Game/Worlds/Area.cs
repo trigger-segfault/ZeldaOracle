@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Worlds {
 	public enum MapType {
 		None,
 		Overworld,
-		Dungeon
+		Dungeon,
 	}
 
 	public class Area : IEventObject, IIDObject, IVariableObject {

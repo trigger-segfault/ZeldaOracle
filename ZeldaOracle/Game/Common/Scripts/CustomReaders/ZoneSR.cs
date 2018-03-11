@@ -24,7 +24,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		private enum Modes {
 			Root,
-			Zone
+			Zone,
 		}
 
 		private Zone zone;

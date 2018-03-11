@@ -64,11 +64,9 @@
     <Compile Include="Game\API\Variable.cs" />
     <Compile Include="Game\API\Variables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Game\API\TileEnums.cs" />
+    <Compile Include="Game\CommonTypes.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\Util\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

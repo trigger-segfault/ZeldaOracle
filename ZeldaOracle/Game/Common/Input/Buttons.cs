@@ -9,7 +9,7 @@ namespace ZeldaOracle.Common.Input {
 		// Analog Sticks
 		LeftStick = 1,
 		RightStick = 2,
-		DPad = 3
+		DPad = 3,
 	}
 
 	/// <summary>The control codes for each of the trigger on a gamepad.</summary>
@@ -19,7 +19,7 @@ namespace ZeldaOracle.Common.Input {
 
 		// Triggers
 		LeftTrigger = 1,
-		RightTrigger = 2
+		RightTrigger = 2,
 	}
 
 	/// <summary>The control codes for each of the buttons on a gamepad.</summary>
@@ -60,7 +60,7 @@ namespace ZeldaOracle.Common.Input {
 		RightStickUp		= 23,
 
 		LeftTriggerButton	= 24,
-		RightTriggerButton	= 25
+		RightTriggerButton	= 25,
 
 	}
 }

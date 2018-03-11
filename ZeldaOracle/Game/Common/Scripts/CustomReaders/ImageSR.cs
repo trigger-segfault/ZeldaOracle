@@ -15,7 +15,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		private enum Modes {
 			Root,
-			Image
+			Image,
 		}
 
 		//-----------------------------------------------------------------------------

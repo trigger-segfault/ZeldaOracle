@@ -18,7 +18,7 @@ namespace ZeldaOracle.Common.Translation {
 		/// <summary>The format code outputs to an uncolored character or string.</summary>
 		NoColorString,
 		/// <summary>The format code outputs to a string representation of a variable.</summary>
-		Variable
+		Variable,
 	}
 
 	/// <summary>A static class for managing string format codes.</summary>

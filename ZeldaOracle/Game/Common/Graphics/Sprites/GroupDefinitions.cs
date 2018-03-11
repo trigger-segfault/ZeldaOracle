@@ -56,8 +56,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			}
 		}
 
-		/// <summary>Gets the definition for the specified group.
-		/// <para>Returns null if that group is not defined.</para></summary>
+		/// <summary>Gets the definition for the specified group.<para/>
+		/// Returns null if that group is not defined.</summary>
 		public string Get(string group) {
 			if (group == null)
 				throw new ArgumentNullException("Group cannot be null!");

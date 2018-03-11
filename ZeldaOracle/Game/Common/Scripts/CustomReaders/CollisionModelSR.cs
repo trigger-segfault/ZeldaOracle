@@ -13,7 +13,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		private enum Modes {
 			Root,
-			Model
+			Model,
 		}
 
 		private CollisionModel model;

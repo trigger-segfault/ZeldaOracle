@@ -19,7 +19,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Destroying,
 			Created,
 			Destroyed,
-		};
+		}
 
 		private bool isVertical;
 		private int bridgeDirection;

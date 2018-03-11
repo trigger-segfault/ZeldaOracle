@@ -27,8 +27,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		private string group;
 		/// <summary>The collection of this sprite's definitions.</summary>
 		private Dictionary<string, ISprite> definitions;
-		/// <summary>The default sprite for this group.
-		/// <para>This must also be contained in definitions.</para></summary>
+		/// <summary>The default sprite for this group.<para/>
+		/// This must also be contained in definitions.</summary>
 		private ISprite defaultSprite;
 
 

@@ -11,8 +11,8 @@ namespace ZeldaOracle.Common.Graphics {
 	public enum PaletteTypes {
 		None,
 		Tile,
-		Entity
-	};
+		Entity,
+	}
 
 	/// <summary>A dictionary for assigning names to palette indecies. The purpose of
 	/// this dictionary is for palette setup at the beginning of the game.</summary>

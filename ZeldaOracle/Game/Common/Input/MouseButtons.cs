@@ -11,7 +11,7 @@ namespace ZeldaOracle.Common.Input {
 		Middle				= 2,
 		Right				= 3,
 		XButton1			= 4,
-		XButton2			= 5
+		XButton2			= 5,
 
 	}
 }

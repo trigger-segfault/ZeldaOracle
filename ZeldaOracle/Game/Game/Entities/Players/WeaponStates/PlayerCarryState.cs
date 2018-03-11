@@ -8,10 +8,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 	public class PlayerCarryState : PlayerState {
 
-		enum SubState {
+		private enum SubState {
 			Pickup,
 			Carry,
-		};
+		}
 		
 		private Entity carriedEntity;
 		private int pickupTimer;

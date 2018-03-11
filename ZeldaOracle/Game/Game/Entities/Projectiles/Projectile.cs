@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		Physical = 0,	// Can always be deflected
 		Magic,			// Can only be deflected by shields
 		Beam,			// Can only be deflected by the Mirror Shield
-		NotDeflectable	// Can NEVER be deflected.
+		NotDeflectable,	// Can NEVER be deflected.
 	}
 
 	public class Projectile : Entity, IInterceptable {
