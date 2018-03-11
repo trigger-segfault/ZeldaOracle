@@ -468,6 +468,7 @@ namespace ZeldaOracle.Game.Control {
 			foreach (ActionTile actionTile in actionTiles)
 				actionTile.OnRemoveFromRoom();
 			entityManager.LeaveRoom();
+			GameControl.OnLeaveRoom(this);
 		}
 		
 

@@ -55,10 +55,10 @@ namespace ZeldaOracle.Game.Debug {
 		private static Point2I mouseTileLocation;
 		private static string sampledTileName = "";
 		private static Action[] printDebugInfoFunctions = new Action[] {
+			null,
 			PrintDebugInfoEntities,
 			PrintDebugInfoInteractions,
-			PrintPlayerDebugInfo,
-			null,
+			PrintDebugInfoPlayer,
 		};
 		private static int printDebugInfoFunctionIndex = 0;
 		private static PlayerDebugNoClipState playerNoClipState = new PlayerDebugNoClipState();
@@ -180,7 +180,7 @@ namespace ZeldaOracle.Game.Debug {
 			}
 		}
 
-		public static void PrintPlayerDebugInfo() {
+		public static void PrintDebugInfoPlayer() {
 			Player player = RoomControl.Player;
 			
 			Console.ForegroundColor = ConsoleColor.Yellow;
@@ -242,6 +242,15 @@ namespace ZeldaOracle.Game.Debug {
 			bool shift = (Keyboard.IsKeyDown(Keys.LShift) ||
 				Keyboard.IsKeyDown(Keys.RShift));
 			
+			if (ctrl && Keyboard.IsKeyPressed(Keys.S)) {
+				GameControl.ScriptRunner.TerminateAllScripts();
+				// Test scripts
+				//Script script = new Script();
+				//script.ID = "test_script";
+				//script.Code = "int x = 0;";
+				//GameControl.ExecuteScript(script);
+			}
+
 			// Print debug info to the console window
 			if (GameManager.IsConsoleOpen &&
 				printDebugInfoFunctions[printDebugInfoFunctionIndex] != null)

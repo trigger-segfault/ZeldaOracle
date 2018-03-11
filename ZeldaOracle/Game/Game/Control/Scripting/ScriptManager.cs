@@ -13,8 +13,10 @@ using ZeldaOracle.Game.Worlds;
 using CSharpCodeProvider = Microsoft.CSharp.CSharpCodeProvider;
 
 namespace ZeldaOracle.Game.Control.Scripting {
+
 	/// <summary>The manager for storing and compiling scripts.</summary>
 	public class ScriptManager {
+
 		/// <summary>The collection of scripts.</summary>
 		private Dictionary<string, Script> scripts;
 		/// <summary>The raw data for the compiled script assembly.</summary>

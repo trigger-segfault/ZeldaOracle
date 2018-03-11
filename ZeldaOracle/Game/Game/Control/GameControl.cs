@@ -422,6 +422,14 @@ namespace ZeldaOracle.Game.Control {
 		public void UpdateRoomState() {
 			roomStateStack.Update();
 		}
+		
+		public void UpdateScripts() {
+			scriptRunner.UpdateScriptExecution();
+		}
+		
+		public void OnLeaveRoom(RoomControl roomControl) {
+			scriptRunner.TerminateRoomScripts(roomControl);
+		}
 
 		public void DrawRoomState(Graphics2D g) {
 			roomStateStack.Draw(g);
@@ -572,6 +580,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public Variables Vars {
 			get { return world.Vars; }
+		}
+
+		public ScriptRunner ScriptRunner {
+			get { return scriptRunner; }
 		}
 	}
 }

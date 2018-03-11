@@ -81,8 +81,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private List<ScriptCompileError> warnings;
 		private List<ScriptParameter> parameters; // Parameters that are passed into the script.
 
-		//private MethodInfo method;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -99,20 +97,23 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		// Copy constructor.
 		public Script(Script copy) {
-			id	    			= copy.id;
-			code				= copy.code;
-			isHidden			= copy.isHidden;
-			// Paremters are never modified so they can be referenced in multiple places
-			parameters          = copy.parameters;
-			errors				= new List<ScriptCompileError>();
-			warnings			= new List<ScriptCompileError>();
+			id	    	= copy.id;
+			code		= copy.code;
+			isHidden	= copy.isHidden;
 
-			// Copy errors and warnings.
+			// Parameters are never modified so they can be referenced in multiple
+			// places
+			parameters	= copy.parameters;
+
+			// Copy errors and warnings
+			errors = new List<ScriptCompileError>();
 			for (int i = 0; i < copy.errors.Count; i++)
 				errors.Add(new ScriptCompileError(copy.errors[i]));
+			warnings = new List<ScriptCompileError>();
 			for (int i = 0; i < copy.warnings.Count; i++)
 				warnings.Add(new ScriptCompileError(copy.warnings[i]));
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

@@ -167,6 +167,7 @@ namespace ZeldaOracle.Game.Main {
 
 		/// <summary>Exits the game.</summary>
 		public void Exit() {
+			gameControl.ScriptRunner.TerminateAllScripts();
 			gameBase.Exit();
 		}
 
@@ -251,6 +252,9 @@ namespace ZeldaOracle.Game.Main {
 			// Update the game-state stack.
 			if (!isGamePaused)
 				gameStateStack.Update();
+
+			// Update scripts
+			gameControl.UpdateScripts();
 			
 			elapsedTicks++;
 			
