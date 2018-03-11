@@ -538,6 +538,12 @@ namespace ZeldaOracle.Game.Control {
 				if (warpTile != null) {
 					WarpAction actionTile =
 						newControl.FindActionTile(warpTile) as WarpAction;
+					// Create a dummy warp tile for deactivated warps
+					if (actionTile == null) {
+						actionTile = ActionTile.CreateAction(warpTile) as WarpAction;
+						if (actionTile != null)
+							actionTile.Initialize(newControl);
+					}
 					if (actionTile != null)
 						enterState = actionTile.CreateEnterState();
 				}
@@ -577,7 +583,13 @@ namespace ZeldaOracle.Game.Control {
 				transition.NewRoomSetup += delegate(RoomControl roomControl) {
 					// Find the warp action were warping to
 					WarpAction actionTile =
-					newControl.FindActionTile(warpTile) as WarpAction;
+						newControl.FindActionTile(warpTile) as WarpAction;
+					// Create a dummy warp tile for deactivated warps
+					if (actionTile == null) {
+						actionTile = ActionTile.CreateAction(warpTile) as WarpAction;
+						if (actionTile != null)
+							actionTile.Initialize(newControl);
+					}
 					if (actionTile != null)
 						actionTile.SetupPlayerInRoom();
 				};
