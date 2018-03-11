@@ -38,7 +38,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public OffsetSprite(ISprite sprite, Rectangle2I? clipping = null, Flip flip = Flip.None,
 			Rotation rotation = Rotation.None)
 		{
-			this.sprite			= sprite;
+			// Call sprite property for containment checking
+			this.Sprite			= sprite;
 			this.drawOffset		= Point2I.Zero;
 			this.clipping		= clipping;
 			this.flipEffects	= flip;
@@ -49,7 +50,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public OffsetSprite(ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null,
 			Flip flip = Flip.None, Rotation rotation = Rotation.None)
 		{
-			this.sprite			= sprite;
+			// Call sprite property for containment checking
+			this.Sprite			= sprite;
 			this.drawOffset		= drawOffset;
 			this.clipping		= clipping;
 			this.flipEffects	= flip;
@@ -81,6 +83,21 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				parts = parts.NextPart;
 			}
 			return firstPart;
+		}
+
+		/// <summary>Gets all sprites contained by this sprite including this one.</summary>
+		public IEnumerable<ISprite> GetAllSprites() {
+			yield return this;
+			if (sprite != null) {
+				foreach (ISprite subsprite in sprite.GetAllSprites()) {
+					yield return subsprite;
+				}
+			}
+		}
+
+		/// <summary>Returns true if this sprite contains the specified sprite.</summary>
+		public bool ContainsSubSprite(ISprite sprite) {
+			return GetAllSprites().Contains(sprite);
 		}
 
 		/// <summary>Clones the sprite.</summary>
@@ -130,7 +147,11 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>Gets or sets the sprite of the offset sprite.</summary>
 		public ISprite Sprite {
 			get { return sprite; }
-			set { sprite = value; }
+			set {
+				if (value != null && value.ContainsSubSprite(this))
+					throw new SpriteContainmentException(this, value);
+				sprite = value;
+			}
 		}
 
 		/// <summary>Gets or sets the extra draw offset of the offset sprite.</summary>

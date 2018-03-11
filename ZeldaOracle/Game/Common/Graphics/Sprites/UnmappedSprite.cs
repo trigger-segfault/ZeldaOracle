@@ -42,6 +42,16 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			return new SpritePart(Image, Image.Bounds, DrawOffset/*, flipEffects, rotation*/);
 		}
 
+		/// <summary>Gets all sprites contained by this sprite including this one.</summary>
+		public IEnumerable<ISprite> GetAllSprites() {
+			yield return this;
+		}
+
+		/// <summary>Returns true if this sprite contains the specified sprite.</summary>
+		public bool ContainsSubSprite(ISprite sprite) {
+			return false;
+		}
+
 		/// <summary>Clones the sprite.</summary>
 		public ISprite Clone() {
 			return new UnmappedSprite(this);

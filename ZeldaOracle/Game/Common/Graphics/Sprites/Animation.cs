@@ -51,7 +51,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.nextStrip	= null;
 			this.loopMode	= LoopMode.Repeat;
 
-			this.frames.Add(new AnimationFrame(0, 1, sprite));
+			// Call AddFrame for containment checks
+			this.AddFrame(new AnimationFrame(0, 1, sprite));
 		}
 
 		/// <summary>Constructs an animation with the specified loop mode.</summary>
@@ -108,6 +109,23 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				}
 			}
 			return firstPart;
+		}
+
+		/// <summary>Gets all sprites contained by this sprite including this one.</summary>
+		public IEnumerable<ISprite> GetAllSprites() {
+			yield return this;
+			foreach (AnimationFrame frame in frames) {
+				if (frame.OffsetSprite == null)
+					continue;
+				foreach (ISprite subsprite in frame.OffsetSprite.GetAllSprites()) {
+					yield return subsprite;
+				}
+			}
+		}
+
+		/// <summary>Returns true if this sprite contains the specified sprite.</summary>
+		public bool ContainsSubSprite(ISprite sprite) {
+			return GetAllSprites().Contains(sprite);
 		}
 
 		/// <summary>Clones the sprite.</summary>
@@ -193,6 +211,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Adds a frame.</summary>
 		public void AddFrame(AnimationFrame frame) {
+			if (frame.OffsetSprite != null && frame.OffsetSprite.ContainsSubSprite(this))
+				throw new SpriteContainmentException(this, "AnimationFrame");
 			int index = 0;
 			while (index < frames.Count && frame.Depth >= frames[index].Depth) {
 				if (frame.StartTime < frames[index].StartTime && frame.Depth == frames[index].Depth)
