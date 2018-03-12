@@ -86,22 +86,32 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			get { return sprite; }
 			set { sprite = value; }
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
+		/// <summary>Gets or sets the ActionTileData this instance was constructed
+		/// from.</summary>
 		public ActionTileData ActionTileData {
 			get { return (ActionTileData) tileData; }
 			set { base.BaseData = value; }
 		}
 
+		/// <summary>Gets or sets the pixel position of the action in the room.</summary>
 		public Point2I Position {
 			get { return position; }
 			set { position = value; }
 		}
 
+		/// <summary>Gets the pixel position of the action from the start of the
+		/// level.</summary>
+		public Point2I LevelPosition {
+			get { return room.LevelPosition + Position; }
+		}
+
+		/// <summary>Gets the size of the action in tiles.</summary>
 		public Point2I Size {
 			get { return ActionTileData.Size; }
 		}

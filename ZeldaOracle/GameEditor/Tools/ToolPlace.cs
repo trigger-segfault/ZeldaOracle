@@ -24,6 +24,7 @@ namespace ZeldaEditor.Tools {
 
 		private TileData drawTileData;
 		private TileDataInstance drawTile;
+		private HashSet<Point2I> overwrittenTiles;
 		private Dictionary<Point2I, TileDataInstance> placedTiles;
 
 		//-----------------------------------------------------------------------------
@@ -31,6 +32,7 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public ToolPlace() : base("Place Tool", Key.P) {
+			overwrittenTiles = new HashSet<Point2I>();
 			placedTiles = new Dictionary<Point2I, TileDataInstance>();
 		}
 
@@ -48,6 +50,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		protected override void OnCancel() {
+			overwrittenTiles.Clear();
 			placedTiles.Clear();
 			tileAction = null;
 		}
@@ -108,7 +111,7 @@ namespace ZeldaEditor.Tools {
 							if (room == null) continue;
 							TileDataInstance tile = LevelDisplay.GetTile(point, EditorControl.CurrentLayer);
 							if (tile == null) continue;
-							tileAction.AddOverwrittenTile(roomLocation * Level.RoomSize + tile.Location, tile);
+							tileAction.AddOverwrittenTile(tile);
 						}
 					}
 
@@ -139,6 +142,7 @@ namespace ZeldaEditor.Tools {
 				IsDrawing = false;
 				EditorControl.PushAction(tileAction, ActionExecution.Execute);
 				tileAction = null;
+				overwrittenTiles.Clear();
 				placedTiles.Clear();
 			}
 		}
@@ -153,8 +157,11 @@ namespace ZeldaEditor.Tools {
 					tileAction.AddPlacedTile(levelTileCoord);
 					
 					TileDataInstance tile = LevelDisplay.GetTile(levelTileCoord, EditorControl.CurrentLayer);
-					if (tile != null)
-						tileAction.AddOverwrittenTile(room.Location * Level.RoomSize + tile.Location, tile);
+					if (tile != null) {
+						if (!overwrittenTiles.Contains(tile.LevelCoord))
+							overwrittenTiles.Add(tile.LevelCoord);
+						tileAction.AddOverwrittenTile(tile);
+					}
 				}
 			}
 		}
@@ -171,19 +178,31 @@ namespace ZeldaEditor.Tools {
 		// Overridden Drawing Methods
 		//-----------------------------------------------------------------------------
 
-		public override bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
-			return (IsDrawing && drawTile == null && placedTiles.ContainsKey(levelCoord) && layer == EditorControl.CurrentLayer);
+		public override bool DrawHideTile(TileDataInstance tile, Room room,
+			Point2I levelCoord, int layer)
+		{
+			if (IsDrawing && layer == EditorControl.CurrentLayer) {
+				return (placedTiles.ContainsKey(levelCoord) ||
+						overwrittenTiles.Contains(levelCoord));
+			}
+			return false;
 		}
 
-		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
+		public override void DrawTile(Graphics2D g, Room room, Point2I position,
+			Point2I levelCoord, int layer)
+		{
 			if (!EditorControl.ActionMode && layer == EditorControl.CurrentLayer) {
 				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null)
-						LevelDisplay.DrawTile(g, room, CreateDrawTile(), position, LevelDisplay.FadeAboveColor);
+						LevelDisplay.DrawTile(g, room, CreateDrawTile(), position,
+							LevelDisplay.FadeAboveColor);
 				}
-				else if (IsDrawing && placedTiles.ContainsKey(levelCoord) && drawTile != null) {
-					LevelDisplay.DrawTile(g, room, drawTile, position, LevelDisplay.NormalColor);
+				else if (IsDrawing && placedTiles.ContainsKey(levelCoord) &&
+					drawTile != null)
+				{
+					LevelDisplay.DrawTile(g, room, drawTile, position,
+						LevelDisplay.NormalColor);
 				}
 			}
 		}
@@ -192,10 +211,12 @@ namespace ZeldaEditor.Tools {
 			if (EditorControl.ActionMode) {
 				ActionTileDataInstance actionTile = CreateDrawActionTile();
 				if (actionTile != null) {
-					Point2I position = LevelDisplay.GetLevelPixelDrawPosition(actionTile.Position);
+					Point2I position = LevelDisplay
+						.GetLevelPixelDrawPosition(actionTile.Position);
 					Room room = LevelDisplay.SampleRoom(position);
 					if (room != null)
-						LevelDisplay.DrawActionTile(g, room, actionTile, position, LevelDisplay.FadeAboveColor);
+						LevelDisplay.DrawActionTile(g, room, actionTile, position,
+							LevelDisplay.FadeAboveColor);
 				}
 			}
 		}
@@ -215,7 +236,8 @@ namespace ZeldaEditor.Tools {
 		private ActionTileDataInstance CreateDrawActionTile() {
 			ActionTileData actionTileData = GetActionTileData();
 			if (actionTileData != null)
-				return new ActionTileDataInstance(actionTileData, LevelDisplay.CursorHalfTileLocation * (GameSettings.TILE_SIZE / 2));
+				return new ActionTileDataInstance(actionTileData,
+					LevelDisplay.CursorHalfTileLocation * (GameSettings.TILE_SIZE / 2));
 			return null;
 		}
 

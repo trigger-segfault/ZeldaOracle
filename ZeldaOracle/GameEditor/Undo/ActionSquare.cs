@@ -15,8 +15,8 @@ namespace ZeldaEditor.Undo {
 		private int layer;
 		private Rectangle2I square;
 		private TileData placedTile;
-		private Dictionary<Point2I, TileDataInstance> overwrittenTiles; // Used on layers 2 and up
-		private TileDataInstance[,] overwrittenTileGrid; // Used on layer 1
+		private Dictionary<Point2I, TileDataInstance> overwrittenTiles;
+		//private TileDataInstance[,] overwrittenTileGrid;
 		private TileDataInstance[,] placedTiles;
 
 		public ActionSquare(Level level, int layer, Rectangle2I square, TileData placedTile) {
@@ -26,24 +26,32 @@ namespace ZeldaEditor.Undo {
 			this.layer = layer;
 			this.square = square;
 			this.placedTile = placedTile;
-			if (layer >= 1)
+			//if (layer >= 1)
 				this.overwrittenTiles = new Dictionary<Point2I, TileDataInstance>();
-			else
-				this.overwrittenTileGrid = new TileDataInstance[square.Width, square.Height];
+			//else
+			//	this.overwrittenTileGrid = new TileDataInstance[square.Width, square.Height];
 			this.placedTiles = new TileDataInstance[square.Width, square.Height];
+
+			for (int x = 0; x < square.Width; x++) {
+				for (int y = 0; y < square.Height; y++) {
+					if (placedTile != null)
+						placedTiles[x, y] = new TileDataInstance(placedTile);
+				}
+			}
 		}
 
-		public void AddOverwrittenTile(Point2I point, TileDataInstance tile) {
-			if (layer >= 1) {
+		public void AddOverwrittenTile(TileDataInstance tile) {
+			//if (layer >= 1) {
+			Point2I point = tile.LevelCoord;
 				if (!overwrittenTiles.ContainsKey(point))
 					overwrittenTiles.Add(point, tile);
-			}
+			/*}
 			else {
 				overwrittenTileGrid[point.X - square.X, point.Y - square.Y] = tile;
-			}
+			}*/
 		}
 
-		public override void Execute(EditorControl editorControl) {
+		/*public override void Execute(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			for (int x = 0; x < square.Width; x++) {
 				for (int y = 0; y < square.Height; y++) {
@@ -51,23 +59,24 @@ namespace ZeldaEditor.Undo {
 					Point2I roomLocation = point / level.RoomSize;
 					Point2I tileLocation = point % level.RoomSize;
 					Room room = level.GetRoomAt(roomLocation);
-					placedTiles[x, y] = new TileDataInstance(placedTile);
+					if (placedTile != null)
+						placedTiles[x, y] = new TileDataInstance(placedTile);
 					room.PlaceTile(placedTiles[x, y], tileLocation, layer);
 				}
 			}
 			editorControl.NeedsNewEventCache = true;
-		}
+		}*/
 
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
-			if (layer >= 1) {
+			//if (layer >= 1) {
 				for (int x = 0; x < square.Width; x++) {
 					for (int y = 0; y < square.Height; y++) {
 						Point2I point = square.Point + new Point2I(x, y);
 						Point2I roomLocation = point / level.RoomSize;
 						Point2I tileLocation = point % level.RoomSize;
 						Room room = level.GetRoomAt(roomLocation);
-						room.RemoveTile(x, y, layer);
+						room.RemoveTile(tileLocation, layer);
 					}
 				}
 				foreach (var pair in overwrittenTiles) {
@@ -76,7 +85,7 @@ namespace ZeldaEditor.Undo {
 					Room room = level.GetRoomAt(roomLocation);
 					room.PlaceTile(pair.Value, tileLocation, layer);
 				}
-			}
+			/*}
 			else {
 				for (int x = 0; x < square.Width; x++) {
 					for (int y = 0; y < square.Height; y++) {
@@ -87,7 +96,7 @@ namespace ZeldaEditor.Undo {
 						room.PlaceTile(overwrittenTileGrid[x, y], tileLocation, layer);
 					}
 				}
-			}
+			}*/
 			editorControl.NeedsNewEventCache = true;
 		}
 

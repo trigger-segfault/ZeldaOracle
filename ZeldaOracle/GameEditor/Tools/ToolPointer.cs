@@ -50,7 +50,7 @@ namespace ZeldaEditor.Tools {
 			if (selectedTile != null && selectedTile.Room.ContainsTile(selectedTile)) {
 				ActionPlace action = ActionPlace.CreatePlaceAction(selectedTile.Room.Level, selectedTile.Layer, null);
 				Point2I location = selectedTile.Location + selectedTile.Room.Location * selectedTile.Room.Size;
-				action.AddOverwrittenTile(location, selectedTile);
+				action.AddOverwrittenTile(selectedTile);
 				action.AddPlacedTile(location);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}

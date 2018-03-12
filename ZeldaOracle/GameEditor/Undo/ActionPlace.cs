@@ -40,11 +40,16 @@ namespace ZeldaEditor.Undo {
 		}
 
 		public void AddPlacedTile(Point2I point) {
-			if (!placedTiles.ContainsKey(point))
-				placedTiles.Add(point, new TileDataInstance(placedTile));
+			if (!placedTiles.ContainsKey(point)) {
+				TileDataInstance tile = null;
+				if (placedTile != null)
+					tile = new TileDataInstance(placedTile);
+				placedTiles.Add(point, tile);
+			}
 		}
 
-		public void AddOverwrittenTile(Point2I point, TileDataInstance tile) {
+		public void AddOverwrittenTile(TileDataInstance tile) {
+			Point2I point = tile.LevelCoord;
 			if (tile != null && !overwrittenTiles.ContainsKey(point))
 				overwrittenTiles.Add(point, tile);
 		}
