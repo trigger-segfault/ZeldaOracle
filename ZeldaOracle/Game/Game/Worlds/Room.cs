@@ -732,6 +732,18 @@ namespace ZeldaOracle.Game.Worlds {
 			set { location = value; }
 		}
 
+		/// <summary>Gets the coordinates of the room in tiles from the start of the
+		/// level.</summary>
+		public Point2I LevelCoord {
+			get { return location * level.RoomSize; }
+		}
+
+		/// <summary>Gets the pixel position of the room from the start of the
+		/// level.</summary>
+		public Point2I LevelPosition {
+			get { return LevelCoord * GameSettings.TILE_SIZE; }
+		}
+
 		/// <summary>Gets or sets the zone assigned to this room.</summary>
 		public Zone Zone {
 			get {
