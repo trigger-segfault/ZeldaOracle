@@ -119,9 +119,9 @@ namespace ZeldaOracle.Game.Main {
 		protected override void Initialize() {
 			game = new GameManager(launchParameters, this);
 
-			Console.WriteLine("Begin Initialize");
+			Logs.Initialization.LogNotice("Begin Initialize");
 
-			Console.WriteLine("Initializing Input");
+			Logs.Initialization.LogNotice("Initializing Input");
 			EventInput.Initialize(Window);
 			Keyboard.Initialize();
 			Mouse.Initialize();
@@ -140,7 +140,7 @@ namespace ZeldaOracle.Game.Main {
 
 			Window.ClientSizeChanged += OnClientSizeChanged;
 
-			Console.WriteLine("End Initialize");
+			Logs.Initialization.LogNotice("End Initialize");
 		}
 
 
@@ -156,7 +156,7 @@ namespace ZeldaOracle.Game.Main {
 			isContentLoaded = false;
 
 			try {
-				Console.WriteLine("Begin Load Content");
+				Logs.Initialization.LogNotice("Begin Load Content");
 
 				// Create a new SpriteBatch, which can be used to draw textures.
 				spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -168,12 +168,11 @@ namespace ZeldaOracle.Game.Main {
 
 				base.LoadContent();
 
-				Console.WriteLine("End Load Content");
+				Logs.Initialization.LogNotice("End Load Content");
 				isContentLoaded = true;
 			}
 			catch (LoadContentException e) {
-				//Console.WriteLine("LOAD CONTENT EXCEPTION: " + e.Message);
-				e.PrintMessage();
+				Logs.Initialization.LogError(e.Message);
 			}
 		}
 
@@ -207,7 +206,7 @@ namespace ZeldaOracle.Game.Main {
 
 		/// <summary>Called when the window has been manually resized.</summary>
 		private void OnClientSizeChanged(object sender, EventArgs e) {
-			Console.WriteLine("OnClientSizeChanged");
+			Logs.Initialization.LogInfo("OnClientSizeChanged");
 			windowSizeChanged = true;
 		}
 
@@ -296,7 +295,7 @@ namespace ZeldaOracle.Game.Main {
 		protected void UpdateFullScreen() {
 			
 			if (fullScreen != graphics.IsFullScreen) {
-				Console.WriteLine("UpdateFullScreen");
+				Logs.Initialization.LogInfo("UpdateFullScreen");
 				if (graphics.IsFullScreen) {
 					Form.FormBorderStyle				= FormBorderStyle.None;
 
@@ -324,7 +323,7 @@ namespace ZeldaOracle.Game.Main {
 					Form.Icon							= new Icon("Game.ico");
 					Window.AllowUserResizing = true;
 				}
-				Console.WriteLine("End UpdateFullScreen");
+				Logs.Initialization.LogInfo("End UpdateFullScreen");
 			}
 		}
 

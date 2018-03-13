@@ -103,20 +103,36 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		/// <summary>Compile all the scripts and save the result to the raw
 		/// assembly data.</summary>
 		public void CompileAndWriteAssembly(World world) {
-			Logs.Scripts.Log("Compiling all scripts...");
+			// Compile the scripts and get the generated assembly
+			Logs.Scripts.LogNotice("Compiling all scripts...");
 			var result = Compile(CreateCode(world, false));
 			rawAssembly = result.RawAssembly;
-
-			// Log errors
-			if (result.Errors.Count == 0) {
-				Logs.Scripts.Log("Scripts compiled successfully!");
+			
+			// Log the compile result
+			if (result.Errors.Count > 0 && result.Warnings.Count > 0) {
+				Logs.Scripts.LogError(
+					"There where {0} errors and {1} warnings during compilation:",
+					result.Errors.Count, result.Warnings.Count);
+			}
+			else if (result.Errors.Count > 0) {
+				Logs.Scripts.LogError(
+					"There where {0} errors during compilation:",
+					result.Errors.Count);
+			}
+			else if (result.Warnings.Count > 0) {
+				Logs.Scripts.LogWarning(
+					"There where {0} warnings during compilation:",
+					result.Warnings.Count);
 			}
 			else {
-				Logs.Scripts.Log("There where errors compiling the scripts");
-				foreach (var error in result.Errors) {
-					Logs.Scripts.Log(error.ToString());
-				}
+				Logs.Scripts.LogNotice("Scripts compiled successfully!");
 			}
+
+			// Log individual errors and warnings
+			foreach (var error in result.Errors)
+				Logs.Scripts.LogError(error.ToString());
+			foreach (var warning in result.Warnings)
+				Logs.Scripts.LogWarning(warning.ToString());
 		}
 
 		/// <summary>Compile all the scripts into one assembly.</summary>

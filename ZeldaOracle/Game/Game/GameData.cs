@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using System.Diagnostics;
 using ZeldaOracle.Common.Scripts;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game {
 	
@@ -39,6 +40,8 @@ namespace ZeldaOracle.Game {
 			throw new LoadContentException("END");
 			*/
 
+			Logs.InitializeLogs();
+
 			Stopwatch watch = Stopwatch.StartNew();
 			Stopwatch audioWatch = new Stopwatch();
 			Stopwatch spriteWatch = new Stopwatch();
@@ -48,67 +51,69 @@ namespace ZeldaOracle.Game {
 				Resources.PalettedSpriteDatabase.DatabaseFileExists())
 				Resources.PalettedSpriteDatabase.Load();
 
-			Console.WriteLine("Loading Palette Dictionaries");
+			Logs.Initialization.LogNotice("Loading Palette Dictionaries");
 			LoadPaletteDictionaries();
 
-			Console.WriteLine("Loading Palettes");
+			Logs.Initialization.LogNotice("Loading Palettes");
 			LoadPalettes();
 
-			Console.WriteLine("Loading Shaders");
+			Logs.Initialization.LogNotice("Loading Shaders");
 			LoadShaders();
 
-			Console.WriteLine("Pre-Loading Zones");
+			Logs.Initialization.LogNotice("Pre-Loading Zones");
 			LoadZonesPreTileData();
 
-			Console.WriteLine("Loading Images");
+			Logs.Initialization.LogNotice("Loading Images");
 			LoadImages();
 
 			spriteWatch.Start();
 
-			Console.WriteLine("Loading Sprites");
+			Logs.Initialization.LogNotice("Loading Sprites");
 			LoadSprites();
 
 			spriteWatch.Stop();
 
-			Console.WriteLine("Loading Animations");
+			Logs.Initialization.LogNotice("Loading Animations");
 			LoadAnimations();
 
-			Console.WriteLine("Loading Collision Models");
+			Logs.Initialization.LogNotice("Loading Collision Models");
 			LoadCollisionModels();
 			
-			Console.WriteLine("Loading Fonts");
+			Logs.Initialization.LogNotice("Loading Fonts");
 			LoadFonts();
 
 			audioWatch.Start();
 
-			Console.WriteLine("Loading Sound Effects");
+			Logs.Initialization.LogNotice("Loading Sound Effects");
 			LoadSounds();
 
-			Console.WriteLine("Loading Music");
+			Logs.Initialization.LogNotice("Loading Music");
 			LoadMusic();
 
 			audioWatch.Stop();
 
 			// CONSCRIPT DESIGNER ONLY
 			if (rewardManager != null) {
-				Console.WriteLine("Loading Rewards");
+				Logs.Initialization.LogNotice("Loading Rewards");
 				LoadRewards(rewardManager);
 			}
 
-			Console.WriteLine("Loading Tiles");
+			Logs.Initialization.LogNotice("Loading Tiles");
 			LoadTiles();
 
-			Console.WriteLine("Loading Tilesets");
+			Logs.Initialization.LogNotice("Loading Tilesets");
 			LoadTilesets();
 
-			Console.WriteLine("Loading Zones");
+			Logs.Initialization.LogNotice("Loading Zones");
 			LoadZonesPostTileData();
 
-			//Console.WriteLine("Took " + spriteWatch.ElapsedMilliseconds + "ms to load sprites.");
-			//Console.WriteLine("Took " + audioWatch.ElapsedMilliseconds + "ms to load audio.");
+			//Logs.Initialization.LogNotice("Took " + spriteWatch.ElapsedMilliseconds + "ms to load sprites.");
+			//Logs.Initialization.LogNotice("Took " + audioWatch.ElapsedMilliseconds + "ms to load audio.");
 			if (rewardManager == null) {
-				Console.WriteLine("Took " + ScriptReader.Watch.ElapsedMilliseconds + "ms to parse conscripts.");
-				Console.WriteLine("Took " + watch.ElapsedMilliseconds + "ms to load game data.");
+				Logs.Initialization.LogInfo("Took {0} ms to parse conscripts.",
+					ScriptReader.Watch.ElapsedMilliseconds);
+				Logs.Initialization.LogInfo("Took {0} ms to load game data.",
+					watch.ElapsedMilliseconds);
 			}
 
 			if (!Resources.PalettedSpriteDatabase.IsPreloaded) {
@@ -116,7 +121,9 @@ namespace ZeldaOracle.Game {
 				Resources.PalettedSpriteDatabase.Save();
 
 				if (rewardManager == null)
-					Console.WriteLine("Took " + watch.ElapsedMilliseconds + "ms to save sprite database.");
+					Logs.Initialization.LogInfo(
+						"Took {0} ms to save sprite database.",
+						watch.ElapsedMilliseconds);
 			}
 		}
 

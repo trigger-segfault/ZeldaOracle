@@ -63,8 +63,6 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>The user settings for the game.</summary>
 		private UserSettings	userSettings;
 
-		private LoggingSystem	loggingSystem;
-
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -91,15 +89,11 @@ namespace ZeldaOracle.Game.Main {
 			this.defaultConsoleOut	= Console.Out;
 			this.userSettings       = null;
 
-			loggingSystem = new LoggingSystem();
-			Logs.LoggingSystem = loggingSystem;
-			Logs.Scripts = loggingSystem.CreateLog("Scripts");
-			foreach (PropertyInfo property in typeof(Logs).GetProperties()) {
-				if (property.PropertyType == typeof(Logger)) {
-					Console.WriteLine("Creating log " + property.Name);
-					property.SetValue(null, loggingSystem.CreateLog(property.Name));
-				}
-			}
+			// Initialize logging system
+			Logs.InitializeLogs();
+			Logs.LoggingSystem.GameTimeFunction = delegate() {
+				return ElapsedTicks;
+			};
 
 			this.gameBase.Window.Title = GameName;
 
@@ -111,8 +105,6 @@ namespace ZeldaOracle.Game.Main {
 			elapsedTicks = 0;
 			
 			ScreenResized();
-
-			loggingSystem = new LoggingSystem();
 
 			userSettings	= new UserSettings();
 			// Controls is initialized in here
@@ -383,10 +375,6 @@ namespace ZeldaOracle.Game.Main {
 		}
 
 		// Debug ----------------------------------------------------------------------
-
-		public LoggingSystem LoggingSystem {
-			get { return loggingSystem; }
-		}
 
 		/// <summary>Gets if the game is currently in debug mode.</summary>
 		public bool DebugMode {

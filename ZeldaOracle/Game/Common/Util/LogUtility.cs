@@ -1,9 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace ZeldaOracle.Common.Util {
+
+	public enum LogLevel {
+		All = 0,
+
+		Info = 0,
+		Notice = 1,
+		Warning = 2,
+		Error = 3,
+
+		Count = 4,
+		None = 4,
+	}
 
 	public class LogMessage {
 		public Logger Logger { get; set; }
@@ -11,6 +24,8 @@ namespace ZeldaOracle.Common.Util {
 		public string FileName { get; set; }
 		public string MethodName { get; set; }
 		public int FileLineNumber { get; set; }
+		public LogLevel LogLevel { get; set; }
+		public int GameTime { get; set; }
 	}
 
 	public class Logger {
@@ -33,18 +48,56 @@ namespace ZeldaOracle.Common.Util {
 		{
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Log Message
+		//-----------------------------------------------------------------------------
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void LogInfo(string format, params object[] args) {
+			LogMessage(LogLevel.Info, format, args);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void LogNotice(string format, params object[] args) {
+			LogMessage(LogLevel.Notice, format, args);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void LogWarning(string format, params object[] args) {
+			LogMessage(LogLevel.Error, format, args);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void LogError(string format, params object[] args) {
+			LogMessage(LogLevel.Error, format, args);
+		}
+
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public void Log(string format, params object[] args) {
-			StackTrace stackTrace = new StackTrace();
-			StackFrame stackFrame = stackTrace.GetFrame(1);
+			LogMessage(LogLevel.Info, format, args);
+		}
 
-			LogMessage message = new LogMessage();
-			message.Logger = this;
-			message.Text = string.Format(format, args);
-			message.FileName = stackFrame.GetFileName();
-			message.MethodName = stackFrame.GetMethod().Name;
-			message.FileLineNumber = stackFrame.GetFileLineNumber();
-			
+		
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void LogMessage(LogLevel level, string format, params object[] args) {
+			StackTrace stackTrace = new StackTrace();
+			StackFrame stackFrame = stackTrace.GetFrame(2);
+
+			LogMessage message = new LogMessage() {
+				Logger			= this,
+				LogLevel			= level,
+				Text			= string.Format(format, args),
+				FileName		= stackFrame.GetFileName(),
+				MethodName		= stackFrame.GetMethod().Name,
+				FileLineNumber	= stackFrame.GetFileLineNumber(),
+				GameTime		= loggingSystem.GameTimeFunction(),
+			};
+
 			if (loggingSystem != null)
 				loggingSystem.LogMessage(message);
 		}
@@ -65,8 +118,11 @@ namespace ZeldaOracle.Common.Util {
 		}
 	}
 
+
 	public static class Logs {
-		public static LoggingSystem LoggingSystem { get; set; } 
+		public static LoggingSystem LoggingSystem { get; set; }  = null;
+
+		public static Logger Initialization { get; set; }
 		public static Logger Scripts { get; set; }
 		public static Logger Entity { get; set; }
 		public static Logger Physics { get; set; }
@@ -74,12 +130,31 @@ namespace ZeldaOracle.Common.Util {
 		public static Logger Monsters { get; set; }
 		public static Logger Player { get; set; }
 		public static Logger Tile { get; set; }
+
+
+		public static void InitializeLogs() {
+			if (LoggingSystem == null) {
+				LoggingSystem = new LoggingSystem();
+				foreach (PropertyInfo property in typeof(Logs).GetProperties()) {
+					if (property.PropertyType == typeof(Logger))
+						property.SetValue(null, LoggingSystem.CreateLog(property.Name));
+				}
+			}
+		}
 	}
+
+
+	public delegate int GameTimeFunction();
+
 
 	public class LoggingSystem {
 
 		private List<Logger> loggers;
 		private List<LogMessage> messages;
+		private LogLevel logLevel;
+		private ConsoleColor[] logLevelColors;
+		private string[] logLevelNames;
+		private GameTimeFunction gameTimeFunction;
 
 		
 		//-----------------------------------------------------------------------------
@@ -87,8 +162,22 @@ namespace ZeldaOracle.Common.Util {
 		//-----------------------------------------------------------------------------
 
 		public LoggingSystem() {
-			loggers = new List<Logger>();
-			messages = new List<LogMessage>();
+			loggers				= new List<Logger>();
+			messages			= new List<LogMessage>();
+			logLevel			= LogLevel.All;
+			gameTimeFunction	= delegate() { return 0; };
+
+			logLevelColors = new ConsoleColor[(int) LogLevel.Count];
+			logLevelColors[(int) LogLevel.Info]		= ConsoleColor.Gray;
+			logLevelColors[(int) LogLevel.Notice]	= ConsoleColor.White;
+			logLevelColors[(int) LogLevel.Warning]	= ConsoleColor.Yellow;
+			logLevelColors[(int) LogLevel.Error]	= ConsoleColor.Red;
+
+			logLevelNames = new string[(int) LogLevel.Count];
+			logLevelNames[(int) LogLevel.Info]		= "INFO";
+			logLevelNames[(int) LogLevel.Notice]	= "NOTICE";
+			logLevelNames[(int) LogLevel.Warning]	= "WARNING";
+			logLevelNames[(int) LogLevel.Error]		= "ERROR";
 		}
 		
 
@@ -115,14 +204,36 @@ namespace ZeldaOracle.Common.Util {
 
 		/// <summary>Print a single log message to the console.</summary>
 		private void PrintLogMessage(LogMessage message) {
-			Console.WriteLine("{0}: {1}", message.Logger.Name, message.Text);
+			if (message.LogLevel >= logLevel) {
+
+				// 10023:INFO:Scripts : Running script 'event_enter'
+				//ConsoleColor placeholder = Console.ForegroundColor;
+				//Console.ForegroundColor = logLevelColors[(int) logLevel];
+				Console.WriteLine("{0} : {1}.{2} : {3}", message.GameTime,
+					 message.Logger.Name, logLevel.ToString(), message.Text);
+				//Console.ForegroundColor = placeholder;
+			}
 		}
 
 		/// <summary>Print all log messages to the console.</summary>
 		public void PrintAllLogMessages() {
-			for (int i = 0; i < messages.Count; i++) {
+			for (int i = 0; i < messages.Count; i++)
 				PrintLogMessage(messages[i]);
-			}
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public LogLevel LogLevel {
+			get { return LogLevel; }
+			set { logLevel = value; }
+		}
+
+		public GameTimeFunction GameTimeFunction {
+			get { return gameTimeFunction; }
+			set { gameTimeFunction = value; }
 		}
 	}
 }

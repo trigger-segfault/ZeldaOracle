@@ -117,7 +117,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 						}
 						
 						isPreloaded = true;
-						Console.WriteLine("Took " + watch.ElapsedMilliseconds + "ms to preload paletted sprite database.");
+						Logs.Initialization.LogInfo(
+							"Took {0} ms to preload paletted sprite database.",
+							watch.ElapsedMilliseconds);
 						return true;
 					}
 					else {
