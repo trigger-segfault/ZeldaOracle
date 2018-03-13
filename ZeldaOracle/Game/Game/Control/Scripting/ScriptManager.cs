@@ -102,10 +102,10 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		/// <summary>Compile all the scripts and save the result to the raw
 		/// assembly data.</summary>
-		public void CompileAndWriteAssembly(World world) {
+		public ScriptCompileResult CompileAndWriteAssembly(World world) {
 			// Compile the scripts and get the generated assembly
 			Logs.Scripts.LogNotice("Compiling all scripts...");
-			var result = Compile(CreateCode(world, false));
+			ScriptCompileResult result = Compile(CreateCode(world, false));
 			rawAssembly = result.RawAssembly;
 			
 			// Log the compile result
@@ -133,6 +133,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				Logs.Scripts.LogError(error.ToString());
 			foreach (var warning in result.Warnings)
 				Logs.Scripts.LogWarning(warning.ToString());
+
+			return result;
 		}
 
 		/// <summary>Compile all the scripts into one assembly.</summary>

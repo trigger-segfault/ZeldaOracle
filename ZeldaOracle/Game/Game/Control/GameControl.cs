@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Maps;
 using ZeldaOracle.Game.Control.Menus;
@@ -85,6 +86,7 @@ namespace ZeldaOracle.Game.Control {
 
 		public void LoadWorld(string fileName, bool recompile) {
 			WorldFile worldFile = new WorldFile();
+			Logs.Initialization.LogNotice("Loading world file");
 			World world = worldFile.Load(fileName, false);
 			LoadWorld(world, recompile);
 		}

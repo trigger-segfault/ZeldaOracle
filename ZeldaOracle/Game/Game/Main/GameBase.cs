@@ -118,7 +118,8 @@ namespace ZeldaOracle.Game.Main {
 		/// </summary>
 		protected override void Initialize() {
 			game = new GameManager(launchParameters, this);
-
+			
+			Stopwatch watch = Stopwatch.StartNew();
 			Logs.Initialization.LogNotice("Begin Initialize");
 
 			Logs.Initialization.LogNotice("Initializing Input");
@@ -140,7 +141,7 @@ namespace ZeldaOracle.Game.Main {
 
 			Window.ClientSizeChanged += OnClientSizeChanged;
 
-			Logs.Initialization.LogNotice("End Initialize");
+			Logs.Initialization.LogNotice("End Initialize ({0} ms)", watch.ElapsedMilliseconds);
 		}
 
 
@@ -181,7 +182,7 @@ namespace ZeldaOracle.Game.Main {
 		/// all content.
 		/// </summary>
 		protected override void UnloadContent() {
-			Console.WriteLine("Begin Unload Content");
+			Logs.Initialization.LogNotice("Begin Unload Content");
 
 			AudioSystem.Uninitialize();
 			//Resources.Uninitialize();
@@ -190,7 +191,7 @@ namespace ZeldaOracle.Game.Main {
 
 			base.UnloadContent();
 
-			Console.WriteLine("End Unload Content");
+			Logs.Initialization.LogNotice("End Unload Content");
 		}
 
 

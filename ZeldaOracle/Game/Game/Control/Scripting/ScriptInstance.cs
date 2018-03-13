@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private bool allowAutoResume;
 		private bool isTerminated;
 		private Exception exception;
+		private int startTime;
 
 
 		//-----------------------------------------------------------------------------
@@ -55,6 +56,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			isTerminated	= false;
 			allowAutoResume	= true;
 			exception		= null;
+			startTime		= RoomControl.GameControl.GameManager.ElapsedTicks;
 
 			// Start the script thread and wait for it to return
 			SetupContext();
@@ -116,7 +118,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		public void LogMessage(string format, params object[] args) {
 			string message = String.Format(format, args);
-			Logs.Scripts.Log("{0}: {1}", name, message);
+			Logs.Scripts.LogInfo("{0}: {1}", name, message);
 		}
 
 		public void PerformUpdate(ZeldaAPI.UpdateCondition update) {
@@ -223,6 +225,11 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		public RoomControl RoomControl {
 			get { return roomControl; }
+		}
+
+		public int StartTime {
+			get { return startTime; }
+			set { startTime = value; }
 		}
 	}
 }

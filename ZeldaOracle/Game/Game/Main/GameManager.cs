@@ -394,6 +394,8 @@ namespace ZeldaOracle.Game.Main {
 			set {
 				if (value != isConsoleOpen) {
 					isConsoleOpen = value;
+					Logs.LoggingSystem.ColorizeLogMessages = isConsoleOpen;
+
 					if (isConsoleOpen) {
 						// Allocate a new console window
 						NativeMethods.AllocConsole();

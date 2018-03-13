@@ -273,18 +273,20 @@ namespace ZeldaOracle.Game.Debugging {
 				GameManager.IsConsoleOpen = !GameManager.IsConsoleOpen;
 			// F1: Cycle debug console printouts
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.F1)) {
-				if (!GameManager.IsConsoleOpen)
+				if (!GameManager.IsConsoleOpen) {
 					GameManager.IsConsoleOpen = true;
+				}
 				else {
 					printDebugInfoFunctionIndex = (printDebugInfoFunctionIndex + 1) %
 						printDebugInfoFunctions.Length;
-					Console.Clear();
-					if (printDebugInfoFunctions[printDebugInfoFunctionIndex] == null) {
-						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.WriteLine("Log Messages:");
-						Console.ForegroundColor = ConsoleColor.Gray;
-						Logs.LoggingSystem.PrintAllLogMessages();
-					}
+				}
+
+				Console.Clear();
+				if (printDebugInfoFunctions[printDebugInfoFunctionIndex] == null) {
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.WriteLine("Log Messages:");
+					Console.ForegroundColor = ConsoleColor.Gray;
+					Logs.LoggingSystem.PrintAllLogMessages();
 				}
 			}
 			// F5: Pause gameplay.

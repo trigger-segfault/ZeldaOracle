@@ -90,7 +90,7 @@ namespace ZeldaOracle.Common.Util {
 
 			LogMessage message = new LogMessage() {
 				Logger			= this,
-				LogLevel			= level,
+				LogLevel		= level,
 				Text			= string.Format(format, args),
 				FileName		= stackFrame.GetFileName(),
 				MethodName		= stackFrame.GetMethod().Name,
@@ -155,6 +155,7 @@ namespace ZeldaOracle.Common.Util {
 		private ConsoleColor[] logLevelColors;
 		private string[] logLevelNames;
 		private GameTimeFunction gameTimeFunction;
+		private bool colorizeLogMessages;
 
 		
 		//-----------------------------------------------------------------------------
@@ -166,6 +167,7 @@ namespace ZeldaOracle.Common.Util {
 			messages			= new List<LogMessage>();
 			logLevel			= LogLevel.All;
 			gameTimeFunction	= delegate() { return 0; };
+			colorizeLogMessages	= false;
 
 			logLevelColors = new ConsoleColor[(int) LogLevel.Count];
 			logLevelColors[(int) LogLevel.Info]		= ConsoleColor.Gray;
@@ -205,13 +207,17 @@ namespace ZeldaOracle.Common.Util {
 		/// <summary>Print a single log message to the console.</summary>
 		private void PrintLogMessage(LogMessage message) {
 			if (message.LogLevel >= logLevel) {
+				ConsoleColor placeholder = ConsoleColor.Gray;
+				if (colorizeLogMessages) {
+					placeholder = Console.ForegroundColor;
+					Console.ForegroundColor = logLevelColors[(int) message.LogLevel];
+				}
 
-				// 10023:INFO:Scripts : Running script 'event_enter'
-				//ConsoleColor placeholder = Console.ForegroundColor;
-				//Console.ForegroundColor = logLevelColors[(int) logLevel];
 				Console.WriteLine("{0} : {1}.{2} : {3}", message.GameTime,
-					 message.Logger.Name, logLevel.ToString(), message.Text);
-				//Console.ForegroundColor = placeholder;
+					 message.Logger.Name, message.LogLevel.ToString(), message.Text);
+
+				if (colorizeLogMessages)
+					Console.ForegroundColor = placeholder;
 			}
 		}
 
@@ -234,6 +240,11 @@ namespace ZeldaOracle.Common.Util {
 		public GameTimeFunction GameTimeFunction {
 			get { return gameTimeFunction; }
 			set { gameTimeFunction = value; }
+		}
+
+		public bool ColorizeLogMessages {
+			get { return colorizeLogMessages ; }
+			set { colorizeLogMessages = value; }
 		}
 	}
 }

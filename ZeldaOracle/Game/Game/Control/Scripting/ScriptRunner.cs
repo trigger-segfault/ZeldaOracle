@@ -51,9 +51,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		public void TerminateAllScripts() {
 			for (int i = 0; i < runningScripts.Count; i++) {
-				Logs.Scripts.Log("Terminating script '{0}'", runningScripts[i].Name);
-				//Console.WriteLine("Terminating script '{0}'",
-					//runningScripts[i].Script.ID);
+				Logs.Scripts.LogNotice("Terminating script: {0}",
+					runningScripts[i].Name);
 				runningScripts[i].Terminate();
 			}
 			runningScripts.Clear();
@@ -64,7 +63,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			for (int i = 0; i < runningScripts.Count; i++) {
 				ScriptInstance script = runningScripts[i];
 				if (script.RoomControl == roomControl) {
-					Logs.Scripts.Log("Terminating script '{0}'", script.Name);
+					Logs.Scripts.LogNotice("Terminating script: {0}", script.Name);
 					script.Terminate();
 					runningScripts.RemoveAt(i--);
 				}
@@ -140,7 +139,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public void RunScript(ZeldaAPI.CustomScriptBase context,
 			string name, MethodInfo method, object[] parameters)
 		{
-			Logs.Scripts.Log("Running script '{0}'", name);
+			Logs.Scripts.LogNotice("Running script: {0}", name);
 			ScriptInstance instance = new ScriptInstance(
 				gameControl.RoomControl, name, method, parameters);
 			instance.Start(context);
@@ -152,13 +151,25 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public void UpdateScriptExecution() {
 			for (int i = 0; i < runningScripts.Count; i++) {
 				ScriptInstance script = runningScripts[i];
+
+				// Resume script execution
 				script.AutoResume();
+				
+				// Check if the script had an exception
 				if (script.Exception != null) {
-					Console.WriteLine("ERROR: script exited with exception");
+					Logs.Scripts.LogError(
+						"Script '{0}' terminated with exception: {1}",
+						script.Name, script.Exception.Message);
 					//throw script.Exception;
 				}
-				if (script.IsComplete)
+
+				// Check if the script completed
+				if (script.IsComplete) {
 					runningScripts.RemoveAt(i--);
+					Logs.Scripts.LogNotice("Script completed after {0} ticks: {1}",
+						gameControl.GameManager.ElapsedTicks - script.StartTime,
+						script.Name);
+				}
 			}
 		}
 	}
