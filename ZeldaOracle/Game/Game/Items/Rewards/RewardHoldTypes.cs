@@ -8,6 +8,6 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		Raise,
 		OneHand,
-		TwoHands
+		TwoHands,
 	}
 }

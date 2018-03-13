@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Game.API;
+using ZeldaOracle.Game;
 
 namespace ZeldaAPI {
 

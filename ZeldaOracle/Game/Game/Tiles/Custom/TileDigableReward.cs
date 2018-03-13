@@ -81,15 +81,29 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			if (reward != null) {
 				g.DrawSprite(
 					reward.Sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 				g.DrawSprite(
 					GameData.SPR_TILE_DIGABLE_REWARD_DIRT,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.Digable;
+			data.ResetCondition = TileResetCondition.Never;
+			data.IsShared = true;
+
+			data.Properties.Set("reward", "heart_piece")
+				.SetDocumentation("Reward", "reward", "", "Reward", "The reward to spawn.");
+			data.Properties.Set("looted", false)
+				.SetDocumentation("Looted", "Reward", "True if the item has been taken.");
+
+			data.EntityType = typeof(CollectibleReward);
 		}
 
 

@@ -50,7 +50,7 @@ namespace ZeldaEditor.Tools {
 			if (selectedTile != null && selectedTile.Room.ContainsTile(selectedTile)) {
 				ActionPlace action = ActionPlace.CreatePlaceAction(selectedTile.Room.Level, selectedTile.Layer, null);
 				Point2I location = selectedTile.Location + selectedTile.Room.Location * selectedTile.Room.Size;
-				action.AddOverwrittenTile(location, selectedTile);
+				action.AddOverwrittenTile(selectedTile);
 				action.AddPlacedTile(location);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
@@ -59,6 +59,8 @@ namespace ZeldaEditor.Tools {
 				action.AddOverwrittenActionTile(selectedActionTile);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
+			LevelDisplay.ClearSelectionBox();
+			EditorControl.EditingTileData = null;
 			selectedActionTile	= null;
 			selectedTile		= null;
 			selectedRoom		= null;
@@ -70,6 +72,8 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void Deselect() {
+			LevelDisplay.ClearSelectionBox();
+			EditorControl.EditingTileData = null;
 			selectedActionTile	= null;
 			selectedTile		= null;
 			selectedRoom        = null;

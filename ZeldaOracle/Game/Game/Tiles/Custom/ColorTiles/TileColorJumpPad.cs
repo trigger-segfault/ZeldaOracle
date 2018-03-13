@@ -124,10 +124,20 @@ namespace ZeldaOracle.Game.Tiles {
 			if (sprite != null) {
 				g.DrawSprite(
 					sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.SetEnumInt("color", PuzzleColor.Red)
+				.SetDocumentation("Color", "enum", typeof(PuzzleColor), "Color", "The color of the jump pad.");
+
+			data.Events.AddEvent("color_change", "Color Change", "Color", "Occurs when the pad's color changes.",
+				new ScriptParameter(typeof(ZeldaAPI.ColorJumpPad), "tile"),
+				new ScriptParameter(typeof(PuzzleColor), "color"));
 		}
 
 

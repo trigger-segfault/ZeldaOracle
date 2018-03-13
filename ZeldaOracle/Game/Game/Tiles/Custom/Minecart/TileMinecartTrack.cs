@@ -143,10 +143,23 @@ namespace ZeldaOracle.Game.Tiles {
 			DrawTileDataIndex(g, args, (int) orientation);
 			if (args.Properties.GetBoolean("minecart", false)) {
 				if (orientation.HasDirection(Direction.Left) || orientation.HasDirection(Direction.Right))
-					g.DrawSprite(GameData.SPR_MINECART_HORIZONTAL, args.SpriteDrawSettings, args.Position, args.Color);
+					g.DrawSprite(GameData.SPR_MINECART_HORIZONTAL, args.SpriteSettings, args.Position, args.Color);
 				else
-					g.DrawSprite(GameData.SPR_MINECART_VERTICAL, args.SpriteDrawSettings, args.Position, args.Color);
+					g.DrawSprite(GameData.SPR_MINECART_VERTICAL, args.SpriteSettings, args.Position, args.Color);
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.NotCoverable;
+			data.ResetCondition = TileResetCondition.LeaveArea;
+
+			data.Properties.SetEnumInt("track_orientation", MinecartTrackOrientation.Horizontal)
+				.SetDocumentation("Track Orientation", "enum", typeof(MinecartTrackOrientation), "Minecart", "The initial orientation of the track.").Hide();
+			data.Properties.SetEnumInt("switched_track_orientation", MinecartTrackOrientation.Horizontal)
+				.SetDocumentation("Switched Track Orientation", "enum", typeof(MinecartTrackOrientation), "Minecart", "The switched orientation of the track.");
+			data.Properties.Set("minecart", false)
+				.SetDocumentation("Has Minecart", "Minecart", "Does this track currently have a minecart on it?");
 		}
 
 

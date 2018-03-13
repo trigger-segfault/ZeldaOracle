@@ -12,7 +12,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		private enum Modes {
 			Root,
-			Palette
+			Palette,
 		}
 
 		private Palette palette;

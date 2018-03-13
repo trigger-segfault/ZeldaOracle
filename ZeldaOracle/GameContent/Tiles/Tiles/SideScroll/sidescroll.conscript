@@ -221,26 +221,26 @@ TILE "ss_disappearing_platform";
 	SOLID		block;
 	SAMESPRITE;
 	PREVIEW		"tile_ss_disappearing_platform";
-	PROPERTIES
-		(integer, appear_time, 0,
-			"Appear Time", "", "Disappearing",
-			"The time in frames when the block starts appearing."),
-		(integer, disappear_time, 90,
-			"Disappear Time", "", "Disappearing",
-			"The time in frames when the block starts disappearing."),
-		(integer, duration, 180,
-			"Total Duration", "", "Disappearing",
-			"The total duration of the time loop."),
-		(string, sync_with, "",
-			"Sync With", ("type", "TileDisappearingPlatform"), "Disappearing",
-			"Substitute the time properties with the specified platform.");
+	#PROPERTIES
+	#	(integer, appear_time, 0,
+	#		"Appear Time", "", "Disappearing",
+	#		"The time in frames when the block starts appearing."),
+	#	(integer, disappear_time, 90,
+	#		"Disappear Time", "", "Disappearing",
+	#		"The time in frames when the block starts disappearing."),
+	#	(integer, duration, 180,
+	#		"Total Duration", "", "Disappearing",
+	#		"The total duration of the time loop."),
+	#	(string, sync_with, "",
+	#		"Sync With", ("tile_type", "TileDisappearingPlatform"), "Disappearing",
+	#		"Substitute the time properties with the specified platform.");
 	END;
 TILE "ss_rotating_platform"; SAMESPRITE; SOLID block; END;
 
 TILE "temp_ss_conveyor_belt";
 	TYPE		TileConveyorBelt;
 	SOLID		block;
-	DOCUMENT	(size, "Length", ("single_axis", "horizontal:1"), "Conveyor Belt", "The length of the conveyor belt in tiles.");
+	#DOCUMENT	(size, "Length", ("single_axis", "horizontal:1"), "Conveyor Belt", "The length of the conveyor belt in tiles.");
 END;
 
 TILE "ss_conveyor_belt_right";

@@ -14,7 +14,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		private enum Modes {
 			Root,
-			Font
+			Font,
 		}
 
 		// The current font being created.

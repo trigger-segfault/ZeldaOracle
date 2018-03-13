@@ -27,8 +27,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		private string group;
 		/// <summary>The collection of this sprite's definitions.</summary>
 		private Dictionary<string, ISprite> definitions;
-		/// <summary>The default sprite for this group.
-		/// <para>This must also be contained in definitions.</para></summary>
+		/// <summary>The default sprite for this group.<para/>
+		/// This must also be contained in definitions.</summary>
 		private ISprite defaultSprite;
 
 
@@ -49,7 +49,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.group          = group;
 			this.definitions    = new Dictionary<string, ISprite>();
 			this.defaultSprite  = firstSprite;
-			this.definitions.Add(firstDefinition, firstSprite);
+
+			// Call Add for containment checks
+			this.Add(firstDefinition, firstSprite);
 		}
 
 		/// <summary>Constructs a copy of the definition sprite.</summary>
@@ -84,6 +86,21 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			if (defaultSprite != null)
 				return defaultSprite.GetParts(settings);
 			return null;
+		}
+
+		/// <summary>Gets all sprites contained by this sprite including this one.</summary>
+		public IEnumerable<ISprite> GetAllSprites() {
+			yield return this;
+			foreach (var pair in definitions) {
+				foreach (ISprite subsprite in pair.Value.GetAllSprites()) {
+					yield return subsprite;
+				}
+			}
+		}
+
+		/// <summary>Returns true if this sprite contains the specified sprite.</summary>
+		public bool ContainsSubSprite(ISprite sprite) {
+			return GetAllSprites().Contains(sprite);
 		}
 
 		/// <summary>Clones the sprite.</summary>
@@ -147,6 +164,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Adds the sprite definition to the sprite.</summary>
 		public void Add(string definintion, ISprite sprite) {
+			if (sprite != null && sprite.ContainsSubSprite(this))
+				throw new SpriteContainmentException(this, sprite);
 			if (definintion == null)
 				throw new ArgumentNullException("Definition cannot be null!");
 			if (sprite == null)
@@ -158,6 +177,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Sets the sprite definition for the sprite.</summary>
 		public void Set(string definintion, ISprite sprite) {
+			if (sprite != null && sprite.ContainsSubSprite(this))
+				throw new SpriteContainmentException(this, sprite);
 			if (definintion == null)
 				throw new ArgumentNullException("Definition cannot be null!");
 			if (sprite == null)

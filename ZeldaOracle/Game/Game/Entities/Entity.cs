@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Game.Entities {
 
@@ -22,6 +25,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
 		private Properties			properties;
+		private EventCollection		events;
 
 		// Settings
 
@@ -66,6 +70,7 @@ namespace ZeldaOracle.Game.Entities {
 			centerOffset				= Point2I.Zero;
 			actionAlignDistance			= 5;
 			properties					= null;
+			events                      = null;
 			isPersistentBetweenRooms	= false;
 
 			parent				= null;
@@ -525,9 +530,16 @@ namespace ZeldaOracle.Game.Entities {
 			set { soundBounce = value; }
 		}
 
+		/// <summary>Gets or sets the properties for the entity.</summary>
 		public Properties Properties {
 			get { return properties; }
 			set { properties = value; }
+		}
+
+		/// <summary>Gets or sets the events for the entity.</summary>
+		public EventCollection Events {
+			get { return events; }
+			set { events = value; }
 		}
 
 		public Entity Parent {

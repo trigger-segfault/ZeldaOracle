@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 
@@ -33,15 +35,39 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 				return;
 			RoomControl.RemoveTile(this);
 			Monster monster = ConstructMonster();
-			//monster.IgnoreMonster = IgnoreMonster;
 			monster.Position = SpawnPosition;
 			monster.Properties = Properties;
+			monster.Events = Events;
 			RoomControl.SpawnEntity(monster);
 		}
 
 		/// <summary>Constructs the monster associated with the tile.</summary>
 		public virtual Monster ConstructMonster() {
-			return MonsterAction.ConstructObject<Monster>(MonsterType);
+			return ReflectionHelper.Construct<Monster>(EntityType);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.SetEnumInt("respawn_type", MonsterRespawnType.Normal)
+				.SetDocumentation("Respawn Type", "enum", typeof(MonsterRespawnType), "Monster", "How a monster respawns.");
+			data.Properties.Set("dead", false)
+				.SetDocumentation("Is Dead", "Monster", "True if the monster is permanently dead.");
+			data.Properties.Set("ignore_monster", false)
+				.SetDocumentation("Ignore Monster", "Monster", "True if the monster is not counted towards clearing the room.");
+			data.Properties.Set("monster_id", 0)
+				.SetDocumentation("Monster ID", "Monster", "An ID unique to each monster in a room used to manage which monsters are dead. An ID of 0 will use an ID unique to every other monster in the game.");
+
+			data.Events.AddEvent("die", "Die", "Monster", "Occurs when the monster dies.",
+				new ScriptParameter(typeof(ZeldaAPI.Monster), "monster"));
+
+			data.EntityType = typeof(Monster);
+			data.ResetCondition = TileResetCondition.Never;
+			data.Properties.Hide("reset_condition");
 		}
 
 
@@ -50,7 +76,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the type of monster to spawn.</summary>
-		public abstract Type MonsterType { get; }
+		//public abstract Type MonsterType { get; }
 
 		/// <summary>Gets the spawn position for the monster.</summary>
 		public virtual Vector2F SpawnPosition {

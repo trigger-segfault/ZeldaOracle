@@ -57,14 +57,22 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
+		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			Polarity polarity = args.Properties.GetEnum("polarity", Polarity.North);
 			ISprite sprite = null;
 			if (polarity == Polarity.North)
 				sprite = GameData.SPR_MAGNET_BALL_NORTH;
 			else
 				sprite = GameData.SPR_MAGNET_BALL_SOUTH;
-			g.DrawSprite(sprite, args.SpriteDrawSettings, args.Position, args.Color);
+			g.DrawSprite(sprite, args.SpriteSettings, args.Position, args.Color);
+		}
+		
+		/// <summary>Initializes the properties and events for the action type.</summary>
+		public static void InitializeTileData(ActionTileData data) {
+			data.Properties.SetEnumStr("polarity", Polarity.North)
+				.SetDocumentation("Polarity", "enum", typeof(Polarity), "Magnet Ball", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
+			data.EntityType = typeof(MagnetBall);
+			data.ResetCondition = TileResetCondition.LeaveArea;
 		}
 
 

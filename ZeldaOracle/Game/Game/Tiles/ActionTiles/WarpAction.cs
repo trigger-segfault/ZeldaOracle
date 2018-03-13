@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public ActionTileDataInstance FindDestinationPoint() {
 			string warpID = properties.GetString("destination_warp_point", "?");
 			string warpLevelID = Properties.GetString("destination_level",
-				RoomControl.Level.Properties.GetString("id"));
+				RoomControl.Level.ID);
 			if (warpID.Length == 0 || warpLevelID.Length == 0)
 				return null;
 			Level warpLevel = RoomControl.GameControl.World.GetLevel(warpLevelID);
@@ -199,7 +199,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
+		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			WarpType warpType = args.Properties.GetEnum<WarpType>("warp_type", WarpType.Tunnel);
 			ISprite sprite = null;
 			if (warpType == WarpType.Entrance)
@@ -211,10 +211,24 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			if (sprite != null) {
 				g.DrawSprite(
 					sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the action type.</summary>
+		public static void InitializeTileData(ActionTileData data) {
+			data.Properties.SetEnumStr("warp_type", WarpType.Tunnel)
+				.SetDocumentation("Warp Type", "enum", typeof(WarpType), "Warp", "The type of warp point.");
+			data.Properties.Set("destination_level", "")
+				.SetDocumentation("Destination Level", "level", "", "Warp", "The level where the destination point is in.");
+			data.Properties.Set("destination_warp_point", "")
+				.SetDocumentation("Destination Warp Point", "warp", "destination_level", "Warp", "The id of the warp point destination.");
+			data.Properties.Set("face_direction", Direction.Down)
+				.SetDocumentation("Face Direction", "direction", "", "Warp", "The direction the player should face when entering a room through this Warp Point.");
+			data.Properties.Set("show_area_name", false)
+				.SetDocumentation("Show Area Name", "Warp", "True if a message displaying the area name is shown upon entering.");
 		}
 
 

@@ -249,8 +249,8 @@ namespace ZeldaOracle.Common.Scripts {
 		// Resources
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the resource with the specified name.
-		/// <para>Does error handling and temporary resources with "temp_" prefix.</para></summary>
+		/// <summary>Gets the resource with the specified name.<para/>
+		/// Does error handling and temporary resources with "temp_" prefix.</summary>
 		protected T GetResource<T>(string name, bool allowEmptyNames = false) {
 			if (name.StartsWith("temp_")) {
 				if (!tempResources.ContainsResource<T>(name))
@@ -264,8 +264,8 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 		}
 
-		/// <summary>Returns true if a resource with the specified name exists.
-		/// <para>Does temporary resources with "temp_" prefix.</para></summary>
+		/// <summary>Returns true if a resource with the specified name exists.<para/>
+		/// Does temporary resources with "temp_" prefix.</summary>
 		protected bool ContainsResource<T>(string name) {
 			if (name.StartsWith("temp_")) {
 				return tempResources.ContainsResource<T>(name);
@@ -275,8 +275,8 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 		}
 
-		/// <summary>Sets the resource with the specified name.
-		/// <para>Does error handling and temporary resources with "temp_" prefix.</para></summary>
+		/// <summary>Sets the resource with the specified name.<para/>
+		/// Does error handling and temporary resources with "temp_" prefix.</summary>
 		protected T SetResource<T>(string name, T resource) {
 			if (name.StartsWith("temp_")) {
 				tempResources.SetResource<T>(name, resource);
@@ -287,8 +287,8 @@ namespace ZeldaOracle.Common.Scripts {
 			return resource;
 		}
 
-		/// <summary>Adds the resource with the specified name.
-		/// <para>Does error handling and temporary resources with "temp_" prefix.</para></summary>
+		/// <summary>Adds the resource with the specified name.<para/>
+		/// Does error handling and temporary resources with "temp_" prefix.</summary>
 		protected T AddResource<T>(string name, T resource) {
 			if (name.StartsWith("temp_")) {
 				if (tempResources.ContainsResource<T>(name))

@@ -23,6 +23,7 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -674,12 +675,12 @@ namespace ZeldaOracle.Game.Tiles {
 		// Construct a tile from the given tile-data.
 		public static Tile CreateTile(TileDataInstance data) {
 			Tile tile;
-			
+
 			// Construct the tile.
 			if (data.Type == null)
 				tile = new Tile();
 			else
-				tile = (Tile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
+				tile = ReflectionHelper.Construct<Tile>(data.Type);
 			
 			tile.location			= data.Location;
 			tile.layer				= data.Layer;
@@ -737,7 +738,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (sprite != null) {
 				g.DrawSprite(
 					sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 			}
@@ -753,7 +754,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (sprite != null) {
 				g.DrawSprite(
 					sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position + offset,
 					args.Color);
 			}
@@ -772,7 +773,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (sprite != null) {
 				g.DrawSprite(
 					sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 			}
@@ -783,7 +784,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (args.Tile.SpriteAbove != null) {
 				g.DrawSprite(
 					args.Tile.SpriteAbove,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 			}
@@ -1222,7 +1223,12 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return hasMoved; }
 		}
 
+		/// <summary>Gets the type of entity this tile spawns.</summary>
+		public Type EntityType {
+			get { return tileData.EntityType; }
+		}
 
+		
 		//-----------------------------------------------------------------------------
 		// Scripting API
 		//-----------------------------------------------------------------------------

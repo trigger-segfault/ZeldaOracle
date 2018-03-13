@@ -135,8 +135,8 @@ TILE "pot";
 	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
-	PROPERTIES	(integer, cuttable_sword_level, 1),
-				(boolean, raised_on_buttons, true);
+	PROPERTY	(cuttable_sword_level, 1);
+	PROPERTY	(raised_on_buttons, true);
 END;
 
 TILE "dirt_pile";

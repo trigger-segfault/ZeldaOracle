@@ -23,6 +23,7 @@ namespace ZeldaEditor.Tools {
 
 		private Rectangle2I square;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -101,7 +102,7 @@ namespace ZeldaEditor.Tools {
 						Point2I roomCoord = levelTileCoord % Level.RoomSize;
 						TileDataInstance tile = room.GetTile(roomCoord, EditorControl.CurrentLayer);
 						if (tile != null) {
-							action.AddOverwrittenTile(levelTileCoord, tile);
+							action.AddOverwrittenTile(tile);
 						}
 					}
 				}
@@ -134,23 +135,31 @@ namespace ZeldaEditor.Tools {
 		// Overridden Drawing Methods
 		//-----------------------------------------------------------------------------
 
-		public override bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
-			return (IsDrawing && drawTile == null && square.Contains(levelCoord) && layer == EditorControl.CurrentLayer);
+		public override bool DrawHideTile(TileDataInstance tile, Room room,
+			Point2I levelCoord, int layer)
+		{
+			return (IsDrawing && square.Intersects(tile.LevelBounds) &&
+					layer == EditorControl.CurrentLayer);
 		}
 
-		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
+		public override void DrawTile(Graphics2D g, Room room, Point2I position,
+			Point2I levelCoord, int layer)
+		{
 			if (!EditorControl.ActionMode && layer == EditorControl.CurrentLayer) {
 				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null) {
-						LevelDisplay.DrawTile(g, room, tile, position, LevelDisplay.FadeAboveColor);
+						LevelDisplay.DrawTile(g, room, tile, position,
+							LevelDisplay.FadeAboveColor);
 					}
 				}
 				else if (IsDrawing && square.Contains(levelCoord) && drawTile != null) {
-					LevelDisplay.DrawTile(g, room, drawTile, position, LevelDisplay.NormalColor);
+					LevelDisplay.DrawTile(g, room, drawTile, position,
+						LevelDisplay.NormalColor);
 				}
 			}
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods

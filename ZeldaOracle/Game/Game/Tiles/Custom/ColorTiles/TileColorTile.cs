@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaAPI;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
@@ -45,7 +44,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			PuzzleColor tileColor = args.Properties.GetEnum<PuzzleColor>("color", PuzzleColor.Red);
+			PuzzleColor tileColor = args.Properties.GetEnum("color", PuzzleColor.Red);
 			ISprite sprite = null;
 			if (tileColor == PuzzleColor.Red)
 				sprite = GameData.SPR_TILE_COLOR_TILE_RED;
@@ -56,10 +55,16 @@ namespace ZeldaOracle.Game.Tiles {
 			if (sprite != null) {
 				g.DrawSprite(
 					sprite,
-					args.SpriteDrawSettings,
+					args.SpriteSettings,
 					args.Position,
 					args.Color);
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.SetEnumInt("color", PuzzleColor.Red)
+				.SetDocumentation("Color", "enum", typeof(PuzzleColor), "Color", "The color of the tile.");
 		}
 
 

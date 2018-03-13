@@ -53,6 +53,19 @@ namespace ZeldaOracle.Game.Tiles {
 			Tile.DrawTileDataIndex(g, args, switchState ? 1 : 0);
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.AbsorbSeeds;
+
+			data.Properties.Set("switch_once", false)
+				.SetDocumentation("Switch Once", "Lever", "Can the lever only be switched once?");
+			data.Properties.Set("switch_state", false)
+				.SetDocumentation("Switch State", "Lever", "True if the lever is facing left.");
+
+			data.Events.AddEvent("toggle", "Toggle", "Switch", "Occurs when the lever is toggled.",
+				new ScriptParameter(typeof(ZeldaAPI.Lever), "lever"));
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Scripting API

@@ -107,6 +107,18 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.NotSurface;
+			data.DrawAsEntity = true;
+
+			data.Properties.Set("cling_on_stab", false);
+			data.Properties.Set("raised", false)
+				.SetDocumentation("Raised", "Crossing Gate", "True if the gate is raised.");
+			data.Properties.Set("face_left", false)
+				.SetDocumentation("Switch State", "Crossing Gate", "True if the crossing gate is facing left.").Hide();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

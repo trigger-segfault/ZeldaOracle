@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
+using ZeldaOracle.Game.Tiles.Custom.Monsters;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
@@ -26,7 +27,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			Root,
 			Tile,
 			ActionTile,
-			Model
+			Model,
 		}
 
 		private CollisionModel      model;
@@ -115,22 +116,36 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name, string sprite, string monsterType, string monsterColor, bool ignoreMonster = false",
 			delegate (CommandParam parameters) {
 				actionTileData = new ActionTileData();
-				actionTileData.Clone(GetResource<ActionTileData>("monster"));
 				actionTileData.Name = parameters.GetString(0);
 				baseTileData = actionTileData;
-				
-				actionTileData.Sprite = GetResource<ISprite>(parameters.GetString(1));
-				actionTileData.Properties.Set("monster_type", parameters.GetString(2));
-				actionTileData.Properties.Set("ignore_monster", parameters.GetBool(4));
 
-				// Make sure the monster type exists.
-				GameUtil.FindTypeWithBase<Monster>(parameters.GetString(2), true);
+				actionTileData.Type = typeof(MonsterAction);
+				actionTileData.Sprite = GetResource<ISprite>(parameters.GetString(1));
+				actionTileData.EntityType = GameUtil.FindTypeWithBase
+					<Monster>(parameters.GetString(2), false);
+				actionTileData.Properties.Set("ignore_monster", parameters.GetBool(4));
 
 				MonsterColor color;
 				if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
-					ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
-				actionTileData.Properties.Set("color", (int) color);
+					ThrowParseError("Invalid monster color: '" + parameters.GetString(3) + "'!");
+				actionTileData.Properties.SetEnum("color", color);
 				Mode = Modes.ActionTile;
+			});
+			//=====================================================================================
+			AddCommand("TILEMONSTER", (int) Modes.Root,
+				"string name, string tileType, string monsterType, bool ignoreMonster = false",
+			delegate (CommandParam parameters) {
+				tileData = new TileData();
+				tileData.Name = parameters.GetString(0);
+				baseTileData = tileData;
+				
+				tileData.Type = GameUtil.FindTypeWithBase
+					<TileMonster>(parameters.GetString(1), false);
+				tileData.EntityType = GameUtil.FindTypeWithBase
+					<Monster>(parameters.GetString(2), false);
+				tileData.Properties.Set("ignore_monster", parameters.GetBool(3));
+				
+				Mode = Modes.Tile;
 			});
 			//=====================================================================================
 			AddCommand("END", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
@@ -165,6 +180,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					baseTileData.Type = GameUtil.FindTypeWithBase<Tile>(typeName, true);
 				else
 					baseTileData.Type = GameUtil.FindTypeWithBase<ActionTile>(typeName, true);
+			});
+			//=====================================================================================
+			AddCommand("ENTITYTYPE", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+				"string type",
+			delegate (CommandParam parameters) {
+				string typeName = parameters.GetString(0);
+				baseTileData.EntityType = GameUtil.FindTypeWithBase<Entity>(typeName, true);
 			});
 			//=====================================================================================
 			AddCommand("FLAGS", (int) Modes.Tile,
@@ -217,27 +239,27 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// (string type, string name, var value)...
 			// (string type, string name, var value, string readableName, string editorType, string category, string description)...
 			// (string type, string name, var value, string readableName, (string editorType, string editorSubType), string category, string description, bool isHidden = false)...
-			AddCommand("PROPERTIES", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+			/*AddCommand("PROPERTIES", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"Property properties...",
 				//"(string type, string name, var otherData...)...",
-				CommandProperties);
+				CommandProperties);*/
 			//=====================================================================================
 			AddCommand("PROPERTY", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"(string name, string value)",
 				CommandProperty);
 			//=====================================================================================
-			AddCommand("LOCKPROP", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+			/*AddCommand("LOCKPROP", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"string name",
-				CommandLockProperty);
+				CommandLockProperty);*/
 			//=====================================================================================
-			AddCommand("DOCUMENT", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+			/*AddCommand("DOCUMENT", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"(string name, string readableName, string editorType, string category, " +
 					"string description, bool browsable = true)",
 				"(string name, string readableName, (string editorType, string editorSubtype), " +
 					"string category, string description, bool browsable = true)",
-				CommandDocumentation);
+				CommandDocumentation);*/
 			//=====================================================================================
-			AddCommand("EVENT", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
+			/*AddCommand("EVENT", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"string name, string readableName, string category, string description",
 				"string name, string readableName, string category, string description, (string params...)", // Params = (type1, name1, type2, name2...)
 			delegate (CommandParam parameters) {
@@ -268,7 +290,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						parameters.GetString(2), // Category
 						parameters.GetString(3), // Description
 						scriptParams);
-			});
+			});*/
 			//=====================================================================================
 			AddCommand("SPRITE", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"Sprite sprite, Point drawOffset = (0, 0)",

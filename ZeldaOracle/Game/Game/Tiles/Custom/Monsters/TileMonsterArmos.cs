@@ -95,7 +95,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			Tile.DrawTileData(g, args);
 			if (args.Extras) {
-				bool blue = args.Properties.GetBoolean("blue", false);
+				bool blue = args.Tile.EntityType.Equals(typeof(MonsterArmosBlue));
 				var color = ColorDefinitions.All(blue ? "shaded_blue" : "shaded_red");
 				g.DrawSprite(
 					GameData.ANIM_MONSTER_ARMOS,
@@ -105,15 +105,22 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			}
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public new static void InitializeTileData(TileData data) {
+			//data.Properties.Set("blue", false)
+			//	.SetDocumentation("Is Blue", "", "", "Armos", "The color of the Armos monster.", true, false);
+			data.EntityType = typeof(MonsterArmosRed);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Override Properties
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the type of monster to spawn.</summary>
-		public override Type MonsterType {
+		/*public override Type MonsterType {
 			get { return (IsBlue ? typeof(MonsterArmosBlue) : typeof(MonsterArmosRed)); }
-		}
+		}*/
 		
 		public override bool IsStatic {
 			get { return false; }

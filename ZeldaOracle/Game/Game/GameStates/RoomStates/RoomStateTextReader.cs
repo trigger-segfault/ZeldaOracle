@@ -19,7 +19,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		Top,
 		TopMiddle,
 		BottomMiddle,
-		Bottom
+		Bottom,
 	}
 
 	/// <summary>Arguments for the room state text reader.</summary>
@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			PressToContinue,
 			PressToEndParagraph,
 			HeartPieceDelay,
-			Finished
+			Finished,
 		}
 
 

@@ -73,7 +73,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Masked,
 			Unmasking,
 			Unmasked,
-		};
+		}
 
 		private MonsterToolShield mask;
 		private GenericStateMachine<IronMaskState> stateMachine;

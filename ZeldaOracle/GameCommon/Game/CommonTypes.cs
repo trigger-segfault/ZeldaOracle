@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZeldaOracle.Game.API {
+namespace ZeldaOracle.Game {
 	/// <summary>The colors types for use with puzzles.</summary>
 	public enum PuzzleColor {
 		/// <summary>No puzzle color.</summary>
@@ -14,7 +14,7 @@ namespace ZeldaOracle.Game.API {
 		/// <summary>Yellow puzzle color.</summary>
 		Yellow,
 		/// <summary>Blue puzzle color.</summary>
-		Blue
+		Blue,
 	}
 
 	/// <summary>The states of a dungeon door.</summary>
@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.API {
 		/// <summary>Track goes from bottom to left.</summary>
 		DownLeft,
 		/// <summary>Track goes from bottom to right.</summary>
-		DownRight
+		DownRight,
 	}
 
 	/// <summary>The color cube's sprite index has the value of one of these orientations.</summary>
@@ -54,6 +54,6 @@ namespace ZeldaOracle.Game.API {
 		/// <summary>Red on top with blue on the side.</summary>
 		RedBlue,
 		/// <summary>Red on top with yellow on the side.</summary>
-		RedYellow
+		RedYellow,
 	}
 }

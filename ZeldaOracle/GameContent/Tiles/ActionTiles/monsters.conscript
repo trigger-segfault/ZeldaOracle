@@ -57,10 +57,12 @@ MONSTER "monster_bari",					"monster_bari",					MonsterBari,			blue;	END;
 MONSTER "monster_biri",					"monster_biri",					MonsterBiri,			blue;	END;
 MONSTER "monster_iron_mask",			"monster_iron_mask",			MonsterIronMask,		red;	END;
 MONSTER "monster_spiny_beetle_bush",	"monster_spiny_beetle",			MonsterSpinyBeetle,		red;
-	PROPERTIES	(string, cover_tile, "bush");
+	#PROPERTIES	(string, cover_tile, "bush");
+	PROPERTY	(cover_tile, "bush");
 END;
 MONSTER "monster_spiny_beetle_rock",	"monster_spiny_beetle",			MonsterSpinyBeetle,		red;
-	PROPERTIES	(string, cover_tile, "bracelet_rock");
+	#PROPERTIES	(string, cover_tile, "bracelet_rock");
+	PROPERTY	(cover_tile, "bracelet_rock");
 END;
 
 
@@ -69,23 +71,23 @@ END;
 #==============================================================================		
 
 TILE "monster_beamos";
-	CLONE		"tile_monster";
+	#CLONE		"tile_monster";
 	TYPE		TileMonsterBeamos;
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
 	SPRITE		"monster_beamos";
 	SHARED		true;
 	ENTITYDRAW	true;
-	PROPERTIES	(boolean, ignore_monster, true);
+	#PROPERTY	(ignore_monster, true);
 END;
 
-TILE "monster_armos_red";
-	CLONE		"tile_monster";
-	TYPE		TileMonsterArmos;
-	SOLID		block;
+TILEMONSTER "monster_armos_red", TileMonsterArmos, MonsterArmosRed;
+	#CLONE		"tile_monster";
+	#TYPE		TileMonsterArmos;
+	#SOLID		block;
 	PREVIEW		"preview_monster_armos_red";
 	SPRITE		"tile_armos_stationary";
-	PROPERTIES	(boolean, blue, false, "Is Blue", "", "Monster", "The color of the Armos monster.", false);
+	#PROPERTIES	(boolean, blue, false, "Is Blue", "", "Monster", "The color of the Armos monster.", false);
 END;
 
 TILE "monster_armos_red_alt";
@@ -93,10 +95,12 @@ TILE "monster_armos_red_alt";
 	SPRITE		"tile_armos_alt_stationary";
 END;
 
-TILE "monster_armos_blue";
-	CLONE		"monster_armos_red";
+TILEMONSTER "monster_armos_blue", TileMonsterArmos, MonsterArmosBlue;
+#TILE "monster_armos_blue";
+	#CLONE		"monster_armos_red";
 	PREVIEW		"preview_monster_armos_blue";
-	PROPERTIES	(boolean, blue, true);
+	SPRITE		"tile_armos_stationary";
+	#PROPERTIES	(boolean, blue, true);
 END;
 
 TILE "monster_armos_blue_alt";
@@ -104,11 +108,11 @@ TILE "monster_armos_blue_alt";
 	SPRITE		"tile_armos_alt_stationary";
 END;
 
-TILE "monster_flying_tile";
-	CLONE		"tile_monster";
-	TYPE		TileMonsterFlyingTile;
+TILEMONSTER "monster_flying_tile", TileMonsterFlyingTile, MonsterFlyingTile;
+	#CLONE		"tile_monster";
+	#TYPE		TileMonsterFlyingTile;
 	SAMESPRITE;
-	PROPERTIES
-		(integer, order, 0, "Launch Order", "",
-			"Flying Tile", "The order in which to launch each flying tile in the room.");
+	#PROPERTIES
+	#	(integer, order, 0, "Launch Order", "",
+	#		"Flying Tile", "The order in which to launch each flying tile in the room.");
 END;

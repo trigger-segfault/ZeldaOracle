@@ -380,8 +380,8 @@ namespace ZeldaOracle.Common.Geometry {
 		// Static methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Returns the intersection between two rectangles.
-		/// <para>Returns the Empty rect if there is no intersection.</para><summary>
+		/// <summary>Returns the intersection between two rectangles.<para/>
+		/// Returns the Empty rect if there is no intersection.<summary>
 		public static Rectangle2F Intersect(Rectangle2F r1, Rectangle2F r2) {
 			float x1 = Math.Max(r1.Left,   r2.Left);
 			float y1 = Math.Max(r1.Top,    r2.Top);

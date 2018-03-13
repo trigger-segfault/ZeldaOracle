@@ -13,12 +13,15 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 namespace ZeldaOracle.Game.Worlds {
 
 	public enum CreateTileGridMode {
-		/// <summary>The tile grid will contain the actual tile instances and remove them from the level.</summary>
+		/// <summary>The tile grid will contain the actual tile instances and remove
+		/// them from the level.</summary>
 		Remove,
-		/// <summary>The tile grid will contain copies of the tile instances without removing them from the level.</summary>
+		/// <summary>The tile grid will contain copies of the tile instances without
+		/// removing them from the level.</summary>
 		Duplicate,
-		/// <summary>The tile grid will contain the actual tile instances without removing them from the level.</summary>
-		Twin
+		/// <summary>The tile grid will contain the actual tile instances without
+		/// removing them from the level.</summary>
+		Twin,
 	}
 
 	public class Level : IEventObjectContainer, IEventObject, IIDObject,
@@ -107,8 +110,8 @@ namespace ZeldaOracle.Game.Worlds {
 		public Level(Level copy) :
 			this()
 		{
-			properties.SetAll(copy.properties);
-			events.SetAll(copy.events);
+			properties	= new Properties(copy.properties, this);
+			events		= new EventCollection(copy.events, this);
 
 			this.world          = copy.world;
 			this.roomSize       = copy.roomSize;

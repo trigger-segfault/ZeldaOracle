@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Scripting {
 	/// <summary>A single parameter in a script event.</summary>
@@ -27,6 +28,9 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Constructs a script parameter with the specified type and name.</summary>
 		public ScriptParameter(Type type, string name) {
+			if (!Assemblies.Scripting.Contains(type.Assembly))
+				throw new ArgumentException("Script parameter type '" + type.Name +
+					"' does not come from an assembly referenced by scripts!");
 			this.Type = type.Name;
 			this.Name = name;
 		}

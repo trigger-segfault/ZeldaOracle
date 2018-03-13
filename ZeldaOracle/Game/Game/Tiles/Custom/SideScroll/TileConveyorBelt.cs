@@ -75,11 +75,20 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 				if (sprite != null) {
 					g.DrawSprite(
 						sprite,
-						args.SpriteDrawSettings,
+						args.SpriteSettings,
 						args.Position + new Point2I(x * GameSettings.TILE_SIZE, 0),
 						args.Color);
 				}
 			}
+		}
+
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.Set("cling_on_stab", false);
+			data.Properties.Set("vertical", false)
+				.SetDocumentation("Vertical", "Roller", "The roller rolls vertically.").Hide();
+			data.Properties
+				.SetDocumentation("size", "Length", "single_axis", "false:1", "Conveyor Belt", "The length of the conveyor belt in tiles.");
 		}
 	}
 }

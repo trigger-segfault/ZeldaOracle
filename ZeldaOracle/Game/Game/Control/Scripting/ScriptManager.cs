@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Worlds;
 using CSharpCodeProvider = Microsoft.CSharp.CSharpCodeProvider;
 
@@ -102,8 +103,20 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		/// <summary>Compile all the scripts and save the result to the raw
 		/// assembly data.</summary>
 		public void CompileAndWriteAssembly(World world) {
+			Logs.Scripts.Log("Compiling all scripts...");
 			var result = Compile(CreateCode(world, false));
 			rawAssembly = result.RawAssembly;
+
+			// Log errors
+			if (result.Errors.Count == 0) {
+				Logs.Scripts.Log("Scripts compiled successfully!");
+			}
+			else {
+				Logs.Scripts.Log("There where errors compiling the scripts");
+				foreach (var error in result.Errors) {
+					Logs.Scripts.Log(error.ToString());
+				}
+			}
 		}
 
 		/// <summary>Compile all the scripts into one assembly.</summary>
@@ -121,16 +134,16 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			string pathToAssembly = "";
 			bool hasErrors = false;
 			
-			// Setup the compile options.
+			// Setup the compile options
 			CompilerParameters options	= new CompilerParameters();
-			options.GenerateExecutable	= false;			 // We want a Dll (Class Library)
-			options.GenerateInMemory    = !generateAssembly; // Save the assembly to a file.
+			options.GenerateExecutable	= false;			 // We want a DLL (Class Library)
+			options.GenerateInMemory    = !generateAssembly; // Save the assembly to a file
 			options.OutputAssembly		=
 				Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location) + "Scripts.dll";
 
-			// Add the assembly references.
-			options.ReferencedAssemblies.Add(GetZeldaCommonAssembly().Location);
-			options.ReferencedAssemblies.Add(GetZeldaAPIAssembly().Location);
+			// Add the assembly references
+			options.ReferencedAssemblies.Add(Assemblies.ZeldaCommon.Location);
+			options.ReferencedAssemblies.Add(Assemblies.ZeldaAPI.Location);
 
 			// Create a C# code provider and compile the code.
 			// The 'using' statement is necessary so the created DLL file isn't
@@ -284,6 +297,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			return	"using System.Collections.Generic; " +
 					"using Console = System.Console; " +
 					"using ZeldaAPI; " +
+					"using ZeldaOracle.Game; " +
 					"using ZeldaOracle.Game.API; " +
 					"using ZeldaOracle.Common.Geometry; ";
 		}

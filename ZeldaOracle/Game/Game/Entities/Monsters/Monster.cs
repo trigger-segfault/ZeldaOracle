@@ -13,13 +13,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
-
-	public enum MonsterRespawnType {
-		Never	= 0,
-		Always	= 1,
-		Normal	= 2,
-	}
-
+	
 	public enum MonsterColor {
 		Red			= 0,
 		Blue		= 1,
@@ -30,7 +24,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		DarkBlue	= 6,
 		InverseBlue	= 7,
 
-		Count
+		Count,
 	}
 
 	public partial class Monster : Unit, ZeldaAPI.Monster {

@@ -18,8 +18,20 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		protected override IValueConverter CreateValueConverter() {
 			string subtype = PropertyDescriptor.Documentation.EditorSubType;
 			string[] parts = subtype.Split(new char[] { ':' }, 2);
+			bool not = false;
+			if (parts[0].StartsWith("!")) {
+				parts[0] = parts[0].Substring(1);
+				not = true;
+			}
+			bool vertical;
+			if (!bool.TryParse(parts[0], out vertical)) {
+				// We should check for an associated property
+				vertical = PropertyDescriptor.PropertyObject.Properties.GetBoolean(parts[0], false);
+			}
+			if (not)
+				vertical = !vertical;
 
-			bool vertical = string.Compare(parts[0], "vertical", true) == 0;
+			//bool vertical = string.Compare(parts[0], "vertical", true) == 0;
 			int otherValue = 0;
 			if (parts.Length == 2)
 				int.TryParse(parts[1], out otherValue);

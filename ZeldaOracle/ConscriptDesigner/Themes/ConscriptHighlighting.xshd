@@ -201,8 +201,6 @@
 
     <!--MusicSR-->
     <Keywords color="Commands">
-      <Word>MUSIC</Word>
-      <Word>END</Word>
       <Word>SONG</Word>
     </Keywords>
 
@@ -237,6 +235,7 @@
       <Word>ACTIONTILESET</Word>
       <Word>TILE</Word>
       <Word>ACTIONTILE</Word>
+      <Word>TILEMONSTER</Word>
       <Word>MONSTER</Word>
       <Word>END</Word>
       <Word>DEFAULT</Word>
@@ -245,6 +244,7 @@
       <Word>SETTILE</Word>
       <Word>REMOVETILE</Word>
       <Word>TYPE</Word>
+      <Word>ENTITYTYPE</Word>
       <Word>FLAGS</Word>
       <Word>ENVTYPE</Word>
       <Word>RESETWHEN</Word>

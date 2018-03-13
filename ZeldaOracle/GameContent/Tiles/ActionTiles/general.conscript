@@ -2,47 +2,49 @@
 ACTIONTILE warp;
 	TYPE		WarpAction;
 	SPRITE		action_tile_warp_tunnel;
-	PROPERTIES	(string,  warp_type,				"tunnel",	"Warp Type", ("enum", "WarpType"), "Warp", "The type of warp point."),
-				(string,  destination_level,		"",			"Destination Level", "level", "Warp", "The level where the destination point is in."),
-				(string,  destination_warp_point,	"",			"Destination Warp Point", ("warp", "destination_level"), "Warp", "The id of the warp point destination."),
-				(integer, face_direction,			3,			"Face Direction", "direction", "Warp", "The direction the player should face when entering a room through this Warp Point."),
-				(boolean, show_area_name,			false,		"Show Area Name", "", "Warp", "True if a message displaying the area name is shown upon entering.");
+	#PROPERTIES	(string,  warp_type,				"tunnel",	"Warp Type", ("enum", "WarpType"), "Warp", "The type of warp point."),
+	#			(string,  destination_level,		"",			"Destination Level", "level", "Warp", "The level where the destination point is in."),
+	#			(string,  destination_warp_point,	"",			"Destination Warp Point", ("warp", "destination_level"), "Warp", "The id of the warp point destination."),
+	#			(integer, face_direction,			3,			"Face Direction", "direction", "Warp", "The direction the player should face when entering a room through this Warp Point."),
+	#			(boolean, show_area_name,			false,		"Show Area Name", "", "Warp", "True if a message displaying the area name is shown upon entering.");
 END;
 
 ACTIONTILE color_tile_puzzle;
 	TYPE		ActionColorTilePuzzle;
 	SPRITE		action_tile_color_tile_puzzle;
-	PROPERTIES	(boolean, solve_once, false, "Solve Once", "", "Puzzle", "Can the puzzle only be solved once and not unsolved?");
-	EVENT		solved, "Solved", "Puzzle", "Occurs when the puzzle is solved.";
-	EVENT		unsolve, "Unsolve", "Puzzle", "Occurs when the puzzle is unsolved (is no longer considered solved).";
+	#PROPERTIES	(boolean, solve_once, false, "Solve Once", "", "Puzzle", "Can the puzzle only be solved once and not unsolved?");
+	#EVENT		solved, "Solved", "Puzzle", "Occurs when the puzzle is solved.";
+	#EVENT		unsolve, "Unsolve", "Puzzle", "Occurs when the puzzle is unsolved (is no longer considered solved).";
 END;
 
 ACTIONTILE npc;
 	TYPE		NPCAction;
 	SPRITE		npc_shopkeeper;
-	PROPERTIES	(integer, npc_flags,		6, "NPC Options", ("enum_flags", "NPCFlags"), "NPC", "The options for the NPC."),
-				(integer, direction,		0, "Direction", "direction", "NPC", "The default direction the NPC faces."),
-				(string,  text,				"<red>undefined<red>", "Text", "text_message", "NPC", "The text to display when the NPC is talked to."),
-				(string,  animation,		"npc_shopkeeper", "Animation", "animation", "NPC", "The animation of the NPC."),
-				(string,  animation_talk,	"", "Talk Animation", "animation", "NPC", "The animation of the NPC when being talked to."),
-				(integer, physics_flags,	1, "Physics Flags", ("enum_flags", "PhysicsFlags"), "Physics", "TODO");
+	#PROPERTIES	(integer, npc_flags,		6, "NPC Options", ("enum_flags", "NPCFlags"), "NPC", "The options for the NPC."),
+	#			(integer, direction,		0, "Direction", "direction", "NPC", "The default direction the NPC faces."),
+	#			(string,  text,				"<red>undefined<red>", "Text", "text_message", "NPC", "The text to display when the NPC is talked to."),
+	#			(string,  animation,		"npc_shopkeeper", "Animation", "animation", "NPC", "The animation of the NPC."),
+	#			(string,  animation_talk,	"", "Talk Animation", "animation", "NPC", "The animation of the NPC when being talked to."),
+	#			(integer, physics_flags,	1, "Physics Flags", ("enum_flags", "PhysicsFlags"), "Physics", "TODO");
 END;
 
-ACTIONTILE temp_magnet_ball;
-	TYPE		MagnetBallActionTile;
-	SPRITE		magnet_ball_north;
-	RESETWHEN	LeaveArea;
-	PROPERTIES	(string, polarity, "north", "Polarity", ("enum", "Polarity"), "Magnet Ball", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
-END;
+#ACTIONTILE temp_magnet_ball;
+#	TYPE		MagnetBallActionTile;
+#	SPRITE		magnet_ball_north;
+#	RESETWHEN	LeaveArea;
+#	PROPERTIES	(string, polarity, "north", "Polarity", ("enum", "Polarity"), "Magnet Ball", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
+#END;
 
 ACTIONTILE magnet_ball_north;
-	CLONE		temp_magnet_ball;
+	TYPE		MagnetBallActionTile;
+	#CLONE		temp_magnet_ball;
 	SPRITE		magnet_ball_north;
 	PROPERTY	(polarity, North);
 END;
 
 ACTIONTILE magnet_ball_south;
-	CLONE		temp_magnet_ball;
+	TYPE		MagnetBallActionTile;
+	#CLONE		temp_magnet_ball;
 	SPRITE		magnet_ball_south;
 	PROPERTY	(polarity, South);
 END;

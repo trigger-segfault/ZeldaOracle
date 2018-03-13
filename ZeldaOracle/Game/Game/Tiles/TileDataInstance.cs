@@ -68,6 +68,26 @@ namespace ZeldaOracle.Game.Tiles {
 			return (x == location.X && y == location.Y);
 		}
 
+		/// <summary>Returns true if this tile contains the tile location in the room.</summary>
+		public bool ContainsLocation(Point2I location) {
+			return new Rectangle2I(Location, Size).Contains(location);
+		}
+
+		/// <summary>Returns true if this tile contains the tile location in the room.</summary>
+		public bool ContainsLocation(int x, int y) {
+			return ContainsLocation(new Point2I(x, y));
+		}
+
+		/// <summary>Returns true if this tile contains the tile location in the level.</summary>
+		public bool ContainsLevelCoord(Point2I location) {
+			return new Rectangle2I(LevelCoord, Size).Contains(location);
+		}
+
+		/// <summary>Returns true if this tile contains the tile location in the level.</summary>
+		public bool ContainsLevelCoord(int x, int y) {
+			return ContainsLevelCoord(new Point2I(x, y));
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Flags
@@ -115,21 +135,54 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets or sets the TileData this instance was constructed from.</summary>
 		public TileData TileData {
 			get { return (tileData as TileData); }
 			set { base.BaseData = value; }
 		}
-		
+
+		/// <summary>Gets or sets the location of the tile in the room.</summary>
 		public Point2I Location {
 			get { return location; }
 			set { location = value; }
 		}
 
+		/// <summary>Gets the pixel position of the tile in the room.</summary>
+		public Point2I Position {
+			get { return location * GameSettings.TILE_SIZE; }
+		}
+
+		/// <summary>Gets the coordinates of the tile in tiles from the start of the
+		/// level.</summary>
+		public Point2I LevelCoord {
+			get { return room.LevelCoord + location; }
+		}
+
+		/// <summary>Gets the pixel position of the tile from the start of the
+		/// level.</summary>
+		public Point2I LevelPosition {
+			get { return room.LevelPosition + Position; }
+		}
+
+		public Rectangle2I Bounds {
+			get { return new Rectangle2I(location, Size); }
+		}
+
+		public Rectangle2I LevelBounds {
+			get { return new Rectangle2I(LevelCoord, Size); }
+		}
+
+		public Rectangle2I PixelBounds {
+			get { return Bounds * GameSettings.TILE_SIZE; }
+		}
+
+		/// <summary>Gets or sets the layer this tile is located on.</summary>
 		public int Layer {
 			get { return layer; }
 			set { layer = value; }
 		}
-		
+
+		/// <summary>Gets or sets the size of the tiles in tiles.</summary>
 		public Point2I Size {
 			get { return GMath.Max(Point2I.One, properties.GetPoint("size", Point2I.One)); }
 			set { properties.Set("size", value); }
@@ -156,8 +209,8 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileFlags Flags {
-			get { return (TileFlags) properties.GetInteger("flags", 0); }
-			set { properties.Set("flags", (int) value); }
+			get { return properties.GetEnum("flags", TileFlags.Default); }
+			set { properties.SetEnum("flags", value); }
 		}
 
 		public CollisionModel CollisionModel {
@@ -175,8 +228,8 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileSolidType SolidType {
-			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
-			set { properties.Set("solidity", (int) value); }
+			get { return properties.GetEnum("solidity", TileSolidType.NotSolid); }
+			set { properties.SetEnum("solidity", value); }
 		}
 
 		public bool IsSolid {

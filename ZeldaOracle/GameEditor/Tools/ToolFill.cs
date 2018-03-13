@@ -178,7 +178,7 @@ namespace ZeldaEditor.Tools {
 			Point2I tileCoord = levelTileCoord % Level.RoomSize;
 
 			TileDataInstance oldTile = room.GetTile(tileCoord, EditorControl.CurrentLayer);
-			action.AddOverwrittenTile(levelTileCoord, oldTile);
+			action.AddOverwrittenTile(oldTile);
 			action.AddPlacedTile(levelTileCoord);
 
 			room.CreateTile(tileData, tileCoord, EditorControl.CurrentLayer);

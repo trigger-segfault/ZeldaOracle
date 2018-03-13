@@ -74,6 +74,19 @@ namespace ZeldaOracle.Game.Tiles {
 			Tile.DrawTileDataIndex(g, args, lit ? 0 : 1);
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Flags |= TileFlags.AbsorbSeeds;
+
+			data.Properties.Set("lit", true)
+				.SetDocumentation("Lit", "Lanturn", "Whether the lantern starts lit or not.");
+
+			data.Events.AddEvent("light", "Light", "Lanturn", "Occurs when the lantern is lighted.",
+				new ScriptParameter(typeof(ZeldaAPI.Lantern), "lanturn"));
+			data.Events.AddEvent("put_out", "Put Out", "Lanturn", "Occurs when the lantern is put out.",
+				new ScriptParameter(typeof(ZeldaAPI.Lantern), "lanturn"));
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

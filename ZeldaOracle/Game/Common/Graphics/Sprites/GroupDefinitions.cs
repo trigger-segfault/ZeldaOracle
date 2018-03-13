@@ -56,8 +56,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			}
 		}
 
-		/// <summary>Gets the definition for the specified group.
-		/// <para>Returns null if that group is not defined.</para></summary>
+		/// <summary>Gets the definition for the specified group.<para/>
+		/// Returns null if that group is not defined.</summary>
 		public string Get(string group) {
 			if (group == null)
 				throw new ArgumentNullException("Group cannot be null!");
@@ -106,7 +106,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 	public class ColorDefinitions : GroupDefinitions {
 		
 		/// <summary>An empty collection of group definitions.</summary>
-		public static readonly ColorDefinitions Empty = new ColorDefinitions();
+		public static ColorDefinitions Empty {
+			get { return new ColorDefinitions(); }
+		}
+
 
 		/// <summary>Constructs a new collection of color definitions.</summary>
 		public ColorDefinitions() { }
@@ -120,6 +123,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			definitions.Set("all", definition);
 			return definitions;
 		}
+
 
 		/// <summary>Sets all groups to the same definition.</summary>
 		public void SetAll(string definition) {
@@ -135,14 +139,16 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 	/// <summary>A collection of style definitions for what styles to use.</summary>
 	public class StyleDefinitions : GroupDefinitions {
 
+		/// <summary>An empty collection of group definitions.</summary>
+		public static StyleDefinitions Empty {
+			get { return new StyleDefinitions(); }
+		}
+
+
 		/// <summary>Constructs a new collection of style definitions.</summary>
 		public StyleDefinitions() { }
 
 		/// <summary>Constructs a copy of the collection of style definitions.</summary>
 		public StyleDefinitions(StyleDefinitions copy) : base(copy) { }
-
-		/// <summary>An empty collection of group definitions.</summary>
-		public static readonly StyleDefinitions Empty = new StyleDefinitions();
-
 	}
 }

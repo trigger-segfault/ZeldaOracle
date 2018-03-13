@@ -87,6 +87,18 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 			}
 		}
 
+		/// <summary>Initializes the properties and events for the tile type.</summary>
+		public static void InitializeTileData(TileData data) {
+			data.Properties.Set("appear_time", 0)
+				.SetDocumentation("Appear Time", "Disappearing", "The time in frames when the block starts appearing.");
+			data.Properties.Set("disappear_time", 90)
+				.SetDocumentation("Disappear Time", "Disappearing", "The time in frames when the block starts disappearing.");
+			data.Properties.Set("duration", 180)
+				.SetDocumentation("Total Duration", "Disappearing", "The total duration of the time loop.");
+			data.Properties.Set("sync_with", "")
+				.SetDocumentation("Sync With", "tile_type", "TileDisappearingPlatform", "Disappearing", "Substitute the time properties with the specified disappearing platform.");
+		}
+
 		private static Properties GetSyncedProperties(Properties properties, Room room) {
 			string syncName = properties.GetString("sync_with", "");
 			if (!string.IsNullOrWhiteSpace(syncName)) {

@@ -7,7 +7,7 @@
 TILE "temp_movable_block";
 	FLAGS		Movable;
 	SOLID		block;
-	PROPERTIES	(boolean, move_once, true);
+	PROPERTY	(move_once, true);
 END;
 
 #==============================================================
@@ -43,7 +43,7 @@ END;
 TILE "regrowable_bush";
 	TYPE		TileRegrowableBush;
 	MODEL		block;
-	FLAGS		Cuttable, Bombable;
+	#FLAGS		Cuttable, Bombable;
 	SAMESPRITE;
 	BREAKANIM	"effect_leaves";
 	BREAKSOUND	"leaves";
@@ -172,10 +172,10 @@ TILE "sign";
 	BREAKANIM	"effect_red_brick_break";
 	BREAKSOUND	"rock_shatter";
 	PROPERTY	(cuttable_sword_level, 1);
-	PROPERTIES
-		(string, text, "Hello World!",
-			"Text", "text_message", "Sign",
-			"The text to display when the sign is read from the front.");
+	#PROPERTIES
+	#	(string, text, "Hello World!",
+	#		"Text", "text_message", "Sign",
+	#		"The text to display when the sign is read from the front.");
 END;
 
 # Grave -------------------------------------------------------
@@ -201,19 +201,13 @@ END;
 
 # Magnet Stones -----------------------------------------------
 
-TILE "temp_magnet_stone";
-	#TYPE		TileMagnetStone
-	SOLID block;
-END;
 TILE "magnet_stone_north";
-	CLONE "temp_magnet_stone";
 	SAMESPRITE;
-	PROPERTY (polarity, 0); # North
+	PROPERTY (polarity, North); # North
 END;
 TILE "magnet_stone_south";
-	CLONE "temp_magnet_stone";
 	SAMESPRITE;
-	PROPERTY (polarity, 1); # South
+	PROPERTY (polarity, South); # South
 END;
 
 # Soft Soil ---------------------------------------------------
@@ -269,7 +263,7 @@ END;
 
 TILE "ice_block";
 	TYPE		TileIceBlock;
-	FLAGS		Movable;
+	#FLAGS		Movable;
 	SOLID		block;
 	SAMESPRITE; SAMESPRITEOBJ;
 END;

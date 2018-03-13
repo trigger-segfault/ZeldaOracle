@@ -168,8 +168,8 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the type of monster to spawn.</summary>
-		public override Type MonsterType {
+		/*public override Type MonsterType {
 			get { return null; }
-		}
+		}*/
 	}
 }
