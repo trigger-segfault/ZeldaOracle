@@ -1,9 +1,12 @@
 ﻿
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaAPI {
 	/// <summary>Returns true if a condition is met.</summary>
 	public delegate bool WaitCondition();
+	public delegate bool UpdateCondition();
+	public delegate bool TimedUpdateCondition(int elapsedTime);
 
 	/// <summary>Provides the actions to perform from within a script.</summary>
 	public interface ScriptActions {
@@ -11,6 +14,7 @@ namespace ZeldaAPI {
 		ScriptActionsCamera Camera { get; }
 		ScriptActionsUnit Unit { get; }
 		ScriptActionsSound Sound { get; }
+		ScriptActionsItem Item { get; }
 	}
 
 	public interface ScriptFunctions {
@@ -19,6 +23,8 @@ namespace ZeldaAPI {
 		ScriptFunctionsTile Tile { get; }
 		ScriptFunctionsSound Sound { get; }
 		ScriptFunctionsMusic Music { get; }
+		//ScriptFunctionsItem Item { get; }
+		ScriptFunctionsReward Reward { get; }
 	}
 	
 	public interface ScriptActionsGeneral {
@@ -30,6 +36,9 @@ namespace ZeldaAPI {
 		void Message(string text);
 		void BeginCutscene();
 		void EndCutscene();
+		
+		void FadeScreenOut(Color color, int duration);
+		void FadeScreenIn(Color color, int duration);
 	}
 	
 	public interface ScriptActionsSound {
@@ -53,6 +62,10 @@ namespace ZeldaAPI {
 		void Kill(Unit unit);
 		void Jump(Unit unit, float jumpSpeed);
 	}
+	
+	public interface ScriptActionsItem {
+		void GiveReward(Reward reward);
+	}
 
 
 
@@ -73,6 +86,10 @@ namespace ZeldaAPI {
 
 	public interface ScriptFunctionsMusic {
 		Music MusicByID(string id);
+	}
+
+	public interface ScriptFunctionsReward {
+		Reward RewardByID(string id);
 	}
 
 }

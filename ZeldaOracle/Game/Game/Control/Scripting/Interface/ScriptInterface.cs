@@ -2,7 +2,7 @@
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Main;
 
-namespace ZeldaOracle.Game.Control.Scripting {
+namespace ZeldaOracle.Game.Control.Scripting.Interface {
 
 	public partial class ScriptInterface {
 

@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items.Rewards {
-	public class Reward {
+	public class Reward : ZeldaAPI.Reward {
 
 		protected string id;
 		protected ISprite sprite;
@@ -62,6 +62,15 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			else {
 				this.sprite = sprite;
 			}
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
+		public override string ToString() {
+			return id;
 		}
 
 

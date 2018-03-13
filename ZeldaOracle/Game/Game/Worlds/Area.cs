@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities;
@@ -208,6 +209,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public MonsterSpawnMode SpawnMode {
 			get { return properties.GetEnum("spawn_mode", MonsterSpawnMode.Random); }
 			set { properties.SetEnum("spawn_mode", value); }
+		}
+		
+		/// <summary>Gets or sets the music for this area.</summary>
+		public Song Music {
+			get { return properties.GetResource<Song>("music", null); }
 		}
 
 		// Puzzle ---------------------------------------------------------------------

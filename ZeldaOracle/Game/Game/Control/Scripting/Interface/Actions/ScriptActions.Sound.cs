@@ -1,6 +1,6 @@
 ﻿using ZeldaOracle.Common.Audio;
 
-namespace ZeldaOracle.Game.Control.Scripting.Actions {
+namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 
 	public class ScriptActionsSound :
 		ScriptInterfaceSection, ZeldaAPI.ScriptActionsSound

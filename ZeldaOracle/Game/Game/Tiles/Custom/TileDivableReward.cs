@@ -10,7 +10,7 @@ using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
-	public class TileDivableReward : TileEntitySpawnOnce, ZeldaAPI.Reward {
+	public class TileDivableReward : TileEntitySpawnOnce, ZeldaAPI.RewardTile {
 		
 		//-----------------------------------------------------------------------------
 		// Constructor

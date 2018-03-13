@@ -66,6 +66,7 @@ namespace ZeldaOracle.Game.Control {
 		private RoomVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
 		private int					currentRoomTicks;
+		private Color				colorOverlay;
 		/// <summary>Useful for keeping track of the current room through properties.
 		/// </summary>
 		private int					roomNumber;
@@ -88,6 +89,7 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public RoomControl() {
+			colorOverlay			= Color.Transparent;
 			room					= null;
 			roomLocation			= Point2I.Zero;
 			actionTiles				= new List<ActionTile>();
@@ -374,6 +376,13 @@ namespace ZeldaOracle.Game.Control {
 			if (this.areaControl == null)
 				areaControl = GameControl.GetAreaControl(Area);
 			
+			if (room.Area != null) {
+				if (room.Area.Music != null)
+					AudioSystem.PlaySong(room.Area.Music);
+				else
+					AudioSystem.StopMusic();
+			}
+
 			viewControl.RoomBounds = RoomBounds;
 			viewControl.SetTarget(Player);
 
@@ -406,28 +415,6 @@ namespace ZeldaOracle.Game.Control {
 				if (tile != null)
 					PlaceTile(tile, data.Location, data.Layer, false);
 			}
-			/*for (int x = 0; x < room.Width; x++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
-						TileDataInstance data = room.TileData[x, y, i];
-
-						if (data != null && data.IsAtLocation(x, y)) {
-							Tile tile = null;
-							if (data.ModifiedProperties.GetBoolean("enabled", true)) {
-								tile = Tile.CreateTile(data);
-							}
-							else if (i == 0 && data.TileBelow != null) {
-								tile = Tile.CreateTile(data.TileBelow);
-							}
-							else if (i == 0 && Zone.DefaultTileData != null) {
-								tile = Tile.CreateTile(Zone.DefaultTileData);
-							}
-							if (tile != null)
-								PlaceTile(tile, x, y, i, false);
-						}
-					}
-				}
-			}*/
 
 			// Create the action tiles
 			actionTiles.Capacity = room.ActionCount;
@@ -771,6 +758,9 @@ namespace ZeldaOracle.Game.Control {
 				roomGraphics.DrawAll(g);
 
 				EndVisualEffect(g, position);
+
+				if (!colorOverlay.IsTransparent)
+					g.FillRectangle(GameSettings.SCREEN_BOUNDS, colorOverlay);
 			}
 
 			// DEBUG: Draw debug information.
@@ -1090,6 +1080,11 @@ namespace ZeldaOracle.Game.Control {
 		/// <summary>Gets if the room is cleared in the respawn manager.</summary>
 		public bool IsCleared {
 			get { return RespawnManager.IsRoomCleared(room); }
+		}
+
+		public Color OverlayColor {
+			get { return colorOverlay; }
+			set { colorOverlay = value; }
 		}
 	}
 }

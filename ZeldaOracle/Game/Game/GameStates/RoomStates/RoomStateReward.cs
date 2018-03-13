@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private Point2I chestPosition;
 		private int timer;
 		private bool useChest;
-
+		private Action completeAction;
 		private AnimationPlayer animationPlayer;
 
 
@@ -33,11 +33,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public RoomStateReward(Reward reward)
-		{
+		public RoomStateReward(Reward reward, Action completeAction = null) {
+			this.reward				= reward;
+			this.completeAction		= completeAction;
 			this.updateRoom			= false;
 			this.animateRoom		= true;
-			this.reward				= reward;
 			this.chestPosition		= Point2I.Zero;
 			this.useChest			= false;
 			this.timer				= 0;
@@ -45,7 +45,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		}
 
 		public RoomStateReward(Reward reward, Point2I chestPosition) :
-			this(reward)
+			this(reward, null)
 		{
 			this.chestPosition		= chestPosition;
 			this.useChest			= true;
@@ -82,6 +82,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				// Pop before incase the OnCollect pushes a new game state
 				gameControl.PopRoomState();
 				reward.OnCollect(GameControl);
+				completeAction?.Invoke();
 				return;
 			}
 		}
@@ -103,6 +104,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			}
 
 			g.PopTranslation(2);
+		}
+
+		public Action CompleteAction {
+			get { return completeAction; }
+			set { completeAction = value; }
 		}
 	}
 }

@@ -153,7 +153,7 @@ namespace ZeldaAPI {
 	}
 
 	/// <summary>Access to a standalone reward tile.</summary>
-	public interface Reward : Tile {
+	public interface RewardTile : Tile {
 		/// <summary>Spawns the reward.</summary>
 		void SpawnReward();
 		/// <summary>Returns true if the reward has already been taken.</summary>

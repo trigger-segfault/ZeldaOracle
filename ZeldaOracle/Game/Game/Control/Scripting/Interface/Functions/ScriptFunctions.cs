@@ -1,7 +1,7 @@
 ﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 
-namespace ZeldaOracle.Game.Control.Scripting.Actions {
+namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 
 	public class ScriptFunctions : ScriptInterface, ZeldaAPI.ScriptFunctions {
 
@@ -10,6 +10,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Actions {
 		public ZeldaAPI.ScriptFunctionsTile		Tile { get; set; }
 		public ZeldaAPI.ScriptFunctionsSound	Sound { get; set; }
 		public ZeldaAPI.ScriptFunctionsMusic	Music { get; set; }
+		public ZeldaAPI.ScriptFunctionsReward	Reward { get; set; }
 
 		public ScriptFunctions(ScriptInstance script) : base(script) {
 			Unit	= CreateSection(new ScriptFunctionsUnit());
@@ -17,6 +18,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Actions {
 			Tile	= CreateSection(new ScriptFunctionsTile());
 			Sound	= CreateSection(new ScriptFunctionsSound());
 			Music	= CreateSection(new ScriptFunctionsMusic());
+			Reward	= CreateSection(new ScriptFunctionsReward());
 		}
 	}
 
@@ -54,6 +56,14 @@ namespace ZeldaOracle.Game.Control.Scripting.Actions {
 	{
 		public ZeldaAPI.Music MusicByID(string id) {
 			return Resources.GetSong(id);
+		}
+	}
+
+	public class ScriptFunctionsReward :
+		ScriptInterfaceSection, ZeldaAPI.ScriptFunctionsReward
+	{
+		public ZeldaAPI.Reward RewardByID(string id) {
+			return GameControl.RewardManager.GetReward(id);
 		}
 	}
 }

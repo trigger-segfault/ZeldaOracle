@@ -5,18 +5,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Units;
 
-namespace ZeldaOracle.Game.Control.Scripting.Actions {
-
-	public class PlayerCutsceneState : PlayerState {
-		public PlayerCutsceneState() {
-			StateParameters.DisablePlayerControl = true;
-		}
-
-		public override void OnBegin(PlayerState previousState) {
-			player.StopPushing();
-			player.Movement.StopMotion();
-		}
-	}
+namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 
 	public class ScriptActionsUnit :
 		ScriptInterfaceSection, ZeldaAPI.ScriptActionsUnit
@@ -58,7 +47,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Actions {
 				Vector2F vectorToPoint = point - actualUnit.Position;
 
 				if (vectorToPoint.Length <= speed) {
-					actualUnit.Position = vectorToPoint;
+					actualUnit.Position = point;
 					return true;
 				}
 				else {

@@ -2,7 +2,7 @@
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 
-namespace ZeldaOracle.Game.Control.Scripting.Actions {
+namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 
 	public class ScriptActionsCamera :
 		ScriptInterfaceSection, ZeldaAPI.ScriptActionsCamera

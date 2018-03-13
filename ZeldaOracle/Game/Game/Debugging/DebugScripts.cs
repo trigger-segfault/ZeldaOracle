@@ -1,5 +1,6 @@
 ﻿using ZeldaAPI;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Debugging {
 
@@ -13,6 +14,8 @@ namespace ZeldaOracle.Game.Debugging {
 
 			Actions.General.BeginCutscene();
 			Actions.General.Wait(6);
+			Actions.General.FadeScreenOut(Color.White, 8);
+			Actions.General.FadeScreenIn(Color.White, 8);
 			Actions.Sound.PlaySound(Functions.Sound.SoundByID("effect_cling"));
 			Actions.Unit.MakeUnitFaceDirection(actor, Direction.Down);
 			Actions.Unit.Jump(actor, 1.5f);
@@ -25,6 +28,17 @@ namespace ZeldaOracle.Game.Debugging {
 			Actions.Unit.Move(actor, Direction.Up, 32, 2.0f);
 			Actions.Unit.MakeUnitFaceDirection(actor, Direction.Right);
 			Actions.General.EndCutscene();
+
+			//Actions.General.BeginCutscene();
+			//Actions.General.Wait(30);
+			//Actions.Unit.MakeUnitFaceDirection(player, Direction.Down);
+			//Actions.Item.GiveReward(Functions.Reward.RewardByID("item_flippers_2"));
+			//Actions.General.Wait(30);
+			//Actions.Unit.MakeUnitFaceDirection(player, Direction.Right);
+			//Actions.General.Wait(30);
+			//Actions.Unit.Move(player, Direction.Right, 32, 1.0f);
+			//Actions.General.Wait(30);
+			//Actions.General.EndCutscene();
 		}
 
 

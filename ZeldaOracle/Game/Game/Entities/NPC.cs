@@ -50,9 +50,10 @@ namespace ZeldaOracle.Game.Entities {
 			centerOffset					= Graphics.DrawOffset + new Point2I(8, 8);
 
 			// Physics
-			Physics.Enable(
-				PhysicsFlags.Solid |
-				PhysicsFlags.HasGravity);
+			Physics.Enable(PhysicsFlags.HasGravity);
+			//Physics.Enable(
+			//	PhysicsFlags.Solid |
+			//	PhysicsFlags.HasGravity);
 			Physics.CollisionBox = new Rectangle2F(-8, -11, 16, 13);
 
 			// Interactions
@@ -102,7 +103,7 @@ namespace ZeldaOracle.Game.Entities {
 			Graphics.PlayAnimation(animationDefault);
 
 			sightDistance	= 2;
-			direction	= defaultDirection;
+			direction = Properties.Get<int>("direction", defaultDirection);
 
 			Graphics.IsAnimatedWhenPaused	= flags.HasFlag(NPCFlags.AnimateOnTalk);
 			Graphics.SubStripIndex			= direction;

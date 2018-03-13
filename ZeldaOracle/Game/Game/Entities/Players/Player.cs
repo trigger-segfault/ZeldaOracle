@@ -269,6 +269,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			return false;
 		}
 
+		public bool EndCondition<T>() where T : PlayerState {
+			foreach (PlayerState state in ConditionStates) {
+				if (state is T)
+					state.End();
+			}
+			return false;
+		}
+
 		/// <summary>Begin a new weapon state, replacing the previous weapon state.
 		/// </summary>
 		public void BeginWeaponState(PlayerState weaponState) {

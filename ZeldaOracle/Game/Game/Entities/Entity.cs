@@ -286,6 +286,8 @@ namespace ZeldaOracle.Game.Entities {
 				isInRoom = false;
 				OnDestroy();
 			}
+			if (properties != null)
+				properties.Set("enabled", false);
 		}
 
 		/// <summary>Mark the entity as having been removed from the current room.
@@ -314,7 +316,7 @@ namespace ZeldaOracle.Game.Entities {
 			if (ID != "")
 				return ID;
 			else
-				return string.Format("[{0}]'", GetType().Name);
+				return string.Format("[{0}]", GetType().Name);
 		}
 
 

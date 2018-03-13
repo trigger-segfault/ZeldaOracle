@@ -2,7 +2,8 @@
 using System.Reflection;
 using System.Threading;
 using ZeldaOracle.Common.Util;
-using ZeldaOracle.Game.Control.Scripting.Actions;
+using ZeldaOracle.Game.Control.Scripting.Interface.Actions;
+using ZeldaOracle.Game.Control.Scripting.Interface.Functions;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 
@@ -118,9 +119,17 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			Logs.Scripts.Log("{0}: {1}", name, message);
 		}
 
-		public void PerformUpdate(ZeldaAPI.WaitCondition update) {
+		public void PerformUpdate(ZeldaAPI.UpdateCondition update) {
 			ReturnToCaller();
 			while (!update.Invoke())
+				ReturnToCaller();
+		}
+
+		public void PerformUpdate(ZeldaAPI.TimedUpdateCondition update) {
+			ReturnToCaller();
+			int startTime = RoomControl.GameControl.GameManager.ElapsedTicks;
+			while (!update.Invoke(
+				RoomControl.GameControl.GameManager.ElapsedTicks - startTime))
 				ReturnToCaller();
 		}
 

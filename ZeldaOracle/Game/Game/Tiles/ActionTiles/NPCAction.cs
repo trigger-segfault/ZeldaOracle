@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			npc.Message				= new Message(Properties.GetString("text"));
 			npc.DefaultAnimation	= Properties.GetResource<Animation>("animation");
 			npc.TalkAnimation		= Properties.GetResource<Animation>("animation_talk");
+			npc.Physics.Flags		= properties.GetEnum("physics_flags", npc.Physics.Flags);
 			RoomControl.SpawnEntity(npc, position - npc.Graphics.DrawOffset);
 		}
 
