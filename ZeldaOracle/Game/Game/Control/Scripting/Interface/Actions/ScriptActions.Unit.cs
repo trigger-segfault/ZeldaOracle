@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 			((Unit) unit).Physics.ZVelocity = jumpSpeed;
 		}
 
-		public void MoveToPoint(ZeldaAPI.Unit unit, Vector2F point, float speed) {
+		public ZeldaAPI.ScriptAction MoveToPoint(ZeldaAPI.Unit unit, Vector2F point, float speed) {
 			LogMessage(
 				"Moving unit {0} to point {1} with a speed of {2} pixels/tick",
 				unit, point, speed);
@@ -42,8 +42,8 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 				Player player = (Player) unit;
 				player.Graphics.PlayAnimation(player.Animations.Default);
 			}
-
-			ScriptInstance.PerformUpdate(delegate() {
+			
+			ScriptAction action = ScriptInstance.BeginAction(delegate() {
 				Vector2F vectorToPoint = point - actualUnit.Position;
 
 				if (vectorToPoint.Length <= speed) {
@@ -55,14 +55,16 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 					return false;
 				}
 			});
+			
+			//if (unit is Player) {
+			//	Player player = (Player) unit;
+			//	player.Graphics.StopAnimation();
+			//}
 
-			if (unit is Player) {
-				Player player = (Player) unit;
-				player.Graphics.StopAnimation();
-			}
+			return action;
 		}
 
-		public void Move(ZeldaAPI.Unit unit, Direction direction,
+		public ZeldaAPI.ScriptAction MoveInDirection(ZeldaAPI.Unit unit, Direction direction,
 			Distance distance, float speed)
 		{
 			LogMessage(
@@ -80,17 +82,19 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 				player.Graphics.PlayAnimation(player.Animations.Default);
 			}
 
-			ScriptInstance.PerformUpdate(delegate() {
+			ScriptAction action = ScriptInstance.BeginAction(delegate() {
 				float amount = GMath.Min(speed, distance.Pixels - currentDistance);
 				currentDistance += amount;
 				actualUnit.Position += direction.ToVector(amount);
 				return (currentDistance >= distance);
 			});
 
-			if (unit is Player) {
-				Player player = (Player) unit;
-				player.Graphics.StopAnimation();
-			}
+			//if (unit is Player) {
+			//	Player player = (Player) unit;
+			//	player.Graphics.StopAnimation();
+			//}
+
+			return action;
 		}
 
 		public void BeginMovingInDirection(ZeldaAPI.Entity entity, Direction direction, float speed) {

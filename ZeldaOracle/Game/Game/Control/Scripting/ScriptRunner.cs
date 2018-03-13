@@ -152,8 +152,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			for (int i = 0; i < runningScripts.Count; i++) {
 				ScriptInstance script = runningScripts[i];
 
-				// Resume script execution
-				script.AutoResume();
+				// Update script actions and attempt to resume execution
+				script.Update();
 				
 				// Check if the script had an exception
 				if (script.Exception != null) {

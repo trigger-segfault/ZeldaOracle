@@ -29,12 +29,15 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		protected override void Initialize() {
 			base.Initialize();
 
+			string text = Properties.GetString("text");
+
 			// Spawn NPC entity.
 			NPC npc = new NPC();
 			npc.Properties			= properties;
+			npc.Events				= Events;
 			npc.Flags				= (NPCFlags) Properties.GetInteger("npc_flags");
 			npc.Direction			= Properties.GetInteger("direction");
-			npc.Message				= new Message(Properties.GetString("text"));
+			npc.Message				= (text.Length > 0 ? new Message(text) : null);
 			npc.DefaultAnimation	= Properties.GetResource<Animation>("animation");
 			npc.TalkAnimation		= Properties.GetResource<Animation>("animation_talk");
 			npc.Physics.Flags		= properties.GetEnumFlags("physics_flags", npc.Physics.Flags);
@@ -58,14 +61,16 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				.SetDocumentation("NPC Options", "enum_flags", typeof(NPCFlags), "NPC", "The options for the NPC.");
 			data.Properties.Set("direction", Direction.Right)
 				.SetDocumentation("Direction", "direction", "", "NPC", "The default direction the NPC faces.");
-			data.Properties.Set("text", "<red>undefined<red>")
+			data.Properties.Set("text", "")
 				.SetDocumentation("Text", "text_message", "", "NPC", "The text to display when the NPC is talked to.");
 			data.Properties.Set("animation", "npc_shopkeeper")
 				.SetDocumentation("Animation", "animation", "", "NPC", "The animation of the NPC.");
 			data.Properties.Set("animation_talk", "")
 				.SetDocumentation("Talk Animation", "animation", "", "NPC", "The animation of the NPC when being talked to.");
-			data.Properties.Set("physics_flags", (int) PhysicsFlags.Solid)
+			data.Properties.Set("physics_flags", (int) (PhysicsFlags.Solid | PhysicsFlags.HasGravity))
 				.SetDocumentation("Physics Flags", "enum_flags", typeof(PhysicsFlags), "Physics", "Physics properties of the entity.");
+			
+			data.Events.AddEvent("talk", "Talk", "NPC", "Triggered upon talking to the NPC.");
 		}
 
 

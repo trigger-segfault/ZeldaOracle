@@ -94,6 +94,8 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public void Talk(Entity actionEntity, EventArgs args) {
+			GameControl.FireEvent(this, "talk");
+			
 			if (message != null) {
 				if (animationTalk != null) {
 					Graphics.PlayAnimation(animationTalk);

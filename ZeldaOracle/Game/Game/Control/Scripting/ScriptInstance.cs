@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using ZeldaOracle.Common.Util;
@@ -6,6 +7,27 @@ using ZeldaOracle.Game.Control.Scripting.Interface.Actions;
 using ZeldaOracle.Game.Control.Scripting.Interface.Functions;
 
 namespace ZeldaOracle.Game.Control.Scripting {
+
+	public class ScriptAction : ZeldaAPI.ScriptAction {
+		public ScriptInstance ScriptInstance { get; set; }
+		public ZeldaAPI.UpdateCondition UpdateFunction { get; set; }
+		public bool IsComplete { get; set; }
+		public bool WaitForCompletion { get; set; }
+
+		public void Update() {
+			if (!IsComplete && UpdateFunction != null) {
+				if (UpdateFunction.Invoke())
+					IsComplete = true;
+			}
+		}
+
+		public void Wait(bool wait = true) {
+			Logs.Scripts.LogInfo("Waiting for action to complete");
+			ScriptInstance.WaitForCondition(delegate() {
+				return IsComplete;
+			});
+		}
+	}
 
 	/// <summary>An instance of a running script.</summary>
 	public class ScriptInstance {
@@ -24,6 +46,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private bool isTerminated;
 		private Exception exception;
 		private int startTime;
+		private List<ScriptAction> actions;
 
 
 		//-----------------------------------------------------------------------------
@@ -37,6 +60,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			this.roomControl		= roomControl;
 			this.method				= method;
 			this.parameters			= parameters;
+			this.actions			= new List<ScriptAction>();
 			thread					= new Thread(ThreadFunction);
 			isComplete				= false;
 			exception				= null;
@@ -57,6 +81,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			allowAutoResume	= true;
 			exception		= null;
 			startTime		= RoomControl.GameControl.GameManager.ElapsedTicks;
+			actions.Clear();
 
 			// Start the script thread and wait for it to return
 			SetupContext();
@@ -90,6 +115,20 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				Resume();
 		}
 
+		public void Update() {
+			if (!isComplete) {
+				// Update active actions
+				for (int i = 0; i < actions.Count; i++) {
+					actions[i].Update();
+					if (actions[i].IsComplete)
+						actions.RemoveAt(i--);
+				}
+			}
+			
+			if (allowAutoResume && !isComplete)
+				Resume();
+		}
+
 		public void Terminate() {
 			if (!isComplete) {
 				isTerminated = true;
@@ -119,6 +158,16 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public void LogMessage(string format, params object[] args) {
 			string message = String.Format(format, args);
 			Logs.Scripts.LogInfo("{0}: {1}", name, message);
+		}
+
+		public ScriptAction BeginAction(ZeldaAPI.UpdateCondition update) {
+			ScriptAction action = new ScriptAction() {
+				ScriptInstance = this,
+				IsComplete = false,
+				UpdateFunction = update,
+			};
+			actions.Add(action);
+			return action;
 		}
 
 		public void PerformUpdate(ZeldaAPI.UpdateCondition update) {

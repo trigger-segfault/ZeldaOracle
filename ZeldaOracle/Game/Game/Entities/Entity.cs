@@ -12,7 +12,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 namespace ZeldaOracle.Game.Entities {
 
 	// The main class for entity objects in the room.
-	public class Entity : ZeldaAPI.Entity {
+	public class Entity : ZeldaAPI.Entity, IPropertyObject, IEventObject {
 
 		// Internal state
 

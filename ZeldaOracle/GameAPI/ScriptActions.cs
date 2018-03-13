@@ -8,6 +8,10 @@ namespace ZeldaAPI {
 	public delegate bool UpdateCondition();
 	public delegate bool TimedUpdateCondition(int elapsedTime);
 
+	public interface ScriptAction {
+		void Wait(bool wait = true);
+	}
+
 	/// <summary>Provides the actions to perform from within a script.</summary>
 	public interface ScriptActions {
 		ScriptActionsGeneral General { get; }
@@ -54,8 +58,8 @@ namespace ZeldaAPI {
 	}
 	
 	public interface ScriptActionsUnit {
-		void Move(Unit unit, Direction direction, Distance distance, float speed);
-		void MoveToPoint(Unit unit, Vector2F point, float speed);
+		ScriptAction MoveInDirection(Unit unit, Direction direction, Distance distance, float speed);
+		ScriptAction MoveToPoint(Unit unit, Vector2F point, float speed);
 		void MakeUnitFaceDirection(Unit unit, Direction direction);
 		//void MakeUnitFacePoint(Unit unit, Vector2F point);
 		void Destroy(Unit unit);
