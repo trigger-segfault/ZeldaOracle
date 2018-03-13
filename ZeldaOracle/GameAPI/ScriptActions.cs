@@ -1,6 +1,7 @@
 ﻿
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game;
 
 namespace ZeldaAPI {
 	/// <summary>Returns true if a condition is met.</summary>
@@ -19,6 +20,7 @@ namespace ZeldaAPI {
 		ScriptActionsUnit Unit { get; }
 		ScriptActionsSound Sound { get; }
 		ScriptActionsItem Item { get; }
+		ScriptActionsTiles Tile { get; }
 	}
 
 	public interface ScriptFunctions {
@@ -70,6 +72,16 @@ namespace ZeldaAPI {
 	public interface ScriptActionsItem {
 		void GiveReward(Reward reward);
 	}
+	
+	public interface ScriptActionsTiles {
+		void LightLantern(Lantern lantern);
+		void PutOutLantern(Lantern lantern);
+		void FlipSwitch(Lever lever);
+		void SetColor(ColorTile tile, PuzzleColor color);
+		//void Rotate(ColorTile tile, PuzzleColor color);
+		void BuildBridge(Bridge bridge);
+		void DestroyBridge(Bridge bridge);
+	}
 
 
 
@@ -94,6 +106,25 @@ namespace ZeldaAPI {
 
 	public interface ScriptFunctionsReward {
 		Reward RewardByID(string id);
+	}
+
+	public enum UnitEvent {
+		Dies,
+		Spawns,
+		IsDestroyed,
+		IsDamaged,
+		IsKnockedBack,
+	}
+
+	public enum EntityEvent {
+		IsSpawned,
+		IsDestroyed,
+	}
+	
+	public interface ScriptEvents {
+		//void RoomTransition(Room room, Direction direction);
+		//void UnitEvent(Unit unit, UnitEvent unitEvent);
+		//void EntityEvent(Entity entity, EntityEvent entityEvent)
 	}
 
 }

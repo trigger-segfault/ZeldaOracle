@@ -7,6 +7,16 @@ namespace ZeldaOracle.Game.Debugging {
 	public class DebugScripts : ZeldaAPI.CustomScriptBase {
 
 		public void DebugScript1() {
+
+			foreach (var lever in room.GetTilesOfType<Lever>()) {
+				Actions.Tile.FlipSwitch(lever);
+			}
+			foreach (ColorTile tile in room.GetTilesOfType<ColorTile>()) {
+				Actions.Tile.SetColor(tile, PuzzleColor.Blue);
+			}
+			return;
+
+
 			// Get the shopkeeper
 			Unit actor = Functions.Unit.UnitByID("shopkeeper");
 			if (actor == null)

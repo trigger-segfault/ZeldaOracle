@@ -5,25 +5,29 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
-	public abstract class BaseTileDataInstance : IEventObject, IIDObject {
+	public abstract class BaseTileDataInstance :
+		IEventObject, ITriggerObject, IIDObject
+	{
 
 		protected Room				room;
 		protected BaseTileData		tileData;
 		protected Properties		properties;			// The default properties for the tile.
 		protected Properties		modifiedProperties; // The properties that tiles are spawned with.
 		protected EventCollection   events;
-		
+		protected TriggerCollection	triggers;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
 		public BaseTileDataInstance() {
-			this.room				= null;
-			this.tileData			= null;
-			this.properties			= new Properties(this);
-			this.modifiedProperties	= new Properties(this);
-			this.events				= new EventCollection(this);
+			room				= null;
+			tileData			= null;
+			properties			= new Properties(this);
+			modifiedProperties	= new Properties(this);
+			events				= new EventCollection(this);
+			triggers			= new TriggerCollection(this);
 		}
 
 		public BaseTileDataInstance(BaseTileData tileData) {
@@ -34,6 +38,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.modifiedProperties					= new Properties(this);
 			this.modifiedProperties.BaseProperties	= this.properties;
 			this.events								= new EventCollection(tileData.Events, this);
+			this.triggers							= new TriggerCollection(this);
 		}
 
 		public virtual void Clone(BaseTileDataInstance copy) {
@@ -43,7 +48,8 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties.BaseProperties			= tileData.Properties;
 			this.modifiedProperties					= new Properties(this);
 			this.modifiedProperties.BaseProperties	= this.properties;
-			this.events								= new EventCollection(copy.Events, this);
+			this.events								= new EventCollection(copy.events, this);
+			this.triggers							= new TriggerCollection(copy.triggers, this);
 		}
 
 
@@ -119,11 +125,16 @@ namespace ZeldaOracle.Game.Tiles {
 			set { events = value; }
 		}
 
+		public TriggerCollection Triggers {
+			get { return triggers; }
+			set { triggers = value; }
+		}
+
 		public Properties BaseProperties {
 			get { return tileData.Properties; }
 		}
 
-		/// <summary>Gets the overridden type fof the tile.</summary>
+		/// <summary>Gets the overridden type of the tile.</summary>
 		public Type Type {
 			get { return tileData.Type; }
 		}

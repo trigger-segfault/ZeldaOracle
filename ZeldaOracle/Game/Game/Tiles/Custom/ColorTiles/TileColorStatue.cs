@@ -39,6 +39,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public PuzzleColor Color {
 			get { return Properties.GetEnum<PuzzleColor>("color", PuzzleColor.Red); }
+			set { }
 		}
 
 

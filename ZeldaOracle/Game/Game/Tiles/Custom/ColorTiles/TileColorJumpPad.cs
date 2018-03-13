@@ -146,8 +146,16 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public PuzzleColor Color {
-			get { return Properties.GetEnum<PuzzleColor>("color", PuzzleColor.Red); }
-			set { Properties.Set("color", (int) value); }
+			get { return Properties.GetEnum("color", PuzzleColor.Red); }
+			set {
+				Properties.Set("color", (int) value);
+				if (value == PuzzleColor.Red)
+					Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
+				else if (value == PuzzleColor.Yellow)
+					Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
+				else if (value == PuzzleColor.Blue)
+					Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
+			}
 		}
 		
 

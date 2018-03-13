@@ -31,6 +31,10 @@ namespace ZeldaOracle.Game.Tiles {
 			this.switchState = switchState;
 		}
 
+		public void Flip() {
+			Toggle();
+		}
+
 		public bool Toggle() {
 			if (toggleDelayTimer > 0)
 				return false;

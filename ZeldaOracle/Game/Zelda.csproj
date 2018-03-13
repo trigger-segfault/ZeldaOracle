@@ -162,6 +162,9 @@
     <Compile Include="Common\Ini\IniReflectionSettings.cs" />
     <Compile Include="Common\Scripting\EventDocumentation.cs" />
     <Compile Include="Common\Scripting\EventDocumentationCollection.cs" />
+    <Compile Include="Common\Scripting\Trigger.cs" />
+    <Compile Include="Common\Scripting\TriggerCollection.cs" />
+    <Compile Include="Common\Scripting\ITriggerObject.cs" />
     <Compile Include="Common\Scripting\IEventObject.cs" />
     <Compile Include="Common\Scripting\IEventObjectContainer.cs" />
     <Compile Include="Common\Scripting\IIDObject.cs" />
@@ -263,6 +266,8 @@
     <Compile Include="Game\Control\RoomVisualEffect.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Sound.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Item.cs" />
+    <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Tiles.cs" />
+    <Compile Include="Game\Control\Scripting\Interface\Events\ScriptEvents.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Functions\ScriptFunctions.cs" />
     <Compile Include="Game\Control\Scripting\Interface\ScriptInterface.cs" />
     <Compile Include="Game\Control\Scripting\Interface\ScriptInterfaceSection.cs" />

@@ -31,21 +31,15 @@ namespace ZeldaAPI {
 	}
 	
 	/// <summary>Access to a color cube slot tile.</summary>
-	public interface ColorCubeSlot : Tile {
-		/// <summary>The color of the tile based on the color cube on top of it.</summary>
-		PuzzleColor Color { get; set; }
+	public interface ColorCubeSlot : ColorTile {
 	}
 
 	/// <summary>Access to a lanturn tile with a colored flame.</summary>
-	public interface ColorLantern : Tile {
-		/// <summary>The color of the lanturn's flame.</summary>
-		PuzzleColor Color { get; set; }
+	public interface ColorLantern : ColorTile {
 	}
 
 	/// <summary>Access to a tile that can change colors by jumping on it.</summary>
-	public interface ColorJumpPad : Tile {
-		/// <summary>The color of the jump pad.</summary>
-		PuzzleColor Color { get; set; }
+	public interface ColorJumpPad : ColorTile {
 	}
 
 	/// <summary>Access to a color tile.</summary>
@@ -55,15 +49,11 @@ namespace ZeldaAPI {
 	}
 
 	/// <summary>Access to a puzzle-colored statue tile.</summary>
-	public interface ColorStatue : Tile {
-		/// <summary>The color of the statue.</summary>
-		PuzzleColor Color { get; }
+	public interface ColorStatue : ColorTile {
 	}
 
 	/// <summary>Access to a color block tile.</summary>
-	public interface ColorBlock : Tile {
-		/// <summary>Gets the color of the color block.</summary>
-		PuzzleColor Color { get; }
+	public interface ColorBlock : ColorTile {
 	}
 
 	/// <summary>Access to a door tile.</summary>
@@ -87,17 +77,15 @@ namespace ZeldaAPI {
 
 	/// <summary>Access to a level switch tile.</summary>
 	public interface Lever : Tile {
+		void Flip();
 		/// <summary>Returns true if the lever is facing left.</summary>
 		bool IsFacingLeft { get; }
 		/// <summary>Returns true if the lever is facing right.</summary>
 		bool IsFacingRight { get; }
 	}
-
+	
 	/// <summary>Access to a red/blue color switch tile.</summary>
-	public interface ColorSwitch : Tile {
-		/// <summary>Gets the color of the color switch tile. This can only be
-		/// red or blue.</summary>
-		PuzzleColor Color { get; }
+	public interface ColorSwitch : ColorTile {
 	}
 
 	/// <summary>Access to a rotatable plate for bouncing seeds off of.</summary>
