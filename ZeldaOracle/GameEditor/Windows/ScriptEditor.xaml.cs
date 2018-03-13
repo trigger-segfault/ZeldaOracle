@@ -29,27 +29,32 @@ namespace ZeldaEditor.Windows {
 	/// </summary>
 	public partial class ScriptEditor : Window {
 
-		private EditorControl               editorControl;
-		private Script                      script;
-		private bool                        newScript;
-		private bool                        internalScript;
-		private Task<ScriptCompileResult>   compileTask;        // The async task that compiles the code as it changes.
-		private bool                        needsRecompiling;   // Has the code changed and needs to be recompiled?
-		private ScriptCompileError          displayedError;
-		private string                      previousName;       // The name of the script when the editor was opened.
-		private string                      previousCode;       // The code of the script when the editor was opened.
-		//private bool                        autoCompile;
-		//private bool                        compileOnClose;
+		private EditorControl				editorControl;
+		private Script						script;
+		private bool						newScript;
+		private bool						internalScript;
+		private Task<ScriptCompileResult>	compileTask;		// The async task that compiles the code as it changes.
+		private bool						needsRecompiling;   // Has the code changed and needs to be recompiled?
+		private ScriptCompileError			displayedError;
+		private string						previousName;	   // The name of the script when the editor was opened.
+		private string						previousCode;	   // The code of the script when the editor was opened.
+		//private bool						autoCompile;
+		//private bool						compileOnClose;
 		private StoppableTimer				timer;
-		private bool                        loaded;
+		private bool						loaded;
 
-		private static CSharpCompletion     completion;
+		private static CSharpCompletion		 completion;
 
 		public static void Initialize() {
 			completion = new CSharpCompletion(new ScriptProvider(),
 				Assemblies.Scripting);
 		}
+		
 
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+		
 		public ScriptEditor(Script script, EditorControl editorControl,
 			bool newScript, bool internalScript)
 		{
@@ -103,11 +108,12 @@ namespace ZeldaEditor.Windows {
 			editor.FontSize = 12.667;
 			editor.TextChanged += OnTextChanged;
 			editor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
+
 			timer = StoppableTimer.StartNew(
 				TimeSpan.FromMilliseconds(500),
 				DispatcherPriority.ApplicationIdle,
 				RecompileUpdate);
-			//timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.ApplicationIdle, delegate { RecompileUpdate(); }, Dispatcher);
+
 			TextOptions.SetTextFormattingMode(editor, TextFormattingMode.Display);
 			editor.IsModified = false;
 			editor.Focus();
@@ -115,8 +121,12 @@ namespace ZeldaEditor.Windows {
 			UpdateStatusBar();
 			loaded = true;
 		}
+		
 
-
+		//-----------------------------------------------------------------------------
+		// UI Callbacks
+		//-----------------------------------------------------------------------------
+		
 		private void OnCaretPositionChanged(object sender, EventArgs e) {
 			if (!loaded) return;
 			UpdateStatusBar();
@@ -128,6 +138,14 @@ namespace ZeldaEditor.Windows {
 			CommandManager.InvalidateRequerySuggested();
 		}
 
+		private void OnRedoCommand(object sender, ExecutedRoutedEventArgs e) {
+			editor.Redo();
+		}
+
+		private void CanExecuteRedo(object sender, CanExecuteRoutedEventArgs e) {
+			e.CanExecute = editor.CanRedo;
+		}
+
 		private void OnRecompileCheck(object sender, ElapsedEventArgs e) {
 			RecompileUpdate();
 		}
@@ -135,6 +153,35 @@ namespace ZeldaEditor.Windows {
 		private void OnFinished(object sender, RoutedEventArgs e) {
 			if (UpdateScript()) {
 				DialogResult = true;
+				Close();
+			}
+		}
+
+		private void CanSaveScript(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = (editor.IsModified || script.ID != textBoxName.Text);
+		}
+
+		private void SaveScript(object sender, ExecutedRoutedEventArgs e) {
+			UpdateScript();
+		}
+
+		private void OnDeleteScript(object sender, RoutedEventArgs e) {
+			var result = MessageBoxResult.Yes;
+			if (string.IsNullOrWhiteSpace(previousCode) &&
+				string.IsNullOrWhiteSpace(editor.Text))
+				result = TriggerMessageBox.Show(this, MessageIcon.Warning,
+					"Are you sure you want to delete this script?", "Delete Script",
+					MessageBoxButton.YesNo);
+
+			if (result == MessageBoxResult.Yes) {
+				if (!newScript && !internalScript) {
+					editorControl.World.ScriptManager.RemoveScript(script);
+					script.ID = "";
+				}
+				script.Code = "";
+				if (!newScript)
+					DialogResult = true;
 				Close();
 			}
 		}
@@ -155,7 +202,9 @@ namespace ZeldaEditor.Windows {
 
 		private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if ((!DialogResult.HasValue || !DialogResult.Value) && editor.IsModified) {
-				var result = TriggerMessageBox.Show(this, MessageIcon.Warning, "Save changes to the code?", "Warning", MessageBoxButton.YesNoCancel);
+				var result = TriggerMessageBox.Show(this, MessageIcon.Warning,
+					"Save changes to the code?", "Warning",
+					MessageBoxButton.YesNoCancel);
 
 				if (result == MessageBoxResult.Yes) {
 					if (!UpdateScript())
@@ -219,19 +268,22 @@ namespace ZeldaEditor.Windows {
 			statusChar.Content = "Char " + editor.CaretOffset;
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Returns true if the compile task is running.</summary>
 		public bool IsCompiling {
 			get { return (compileTask != null); }
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		// Begin compiling the script asyncronously.
+		/// <summary>Begin compiling the script asyncronously.</summary>
 		private void BeginCompilingScript() {
 			script.Code = editor.Text;
 
@@ -241,9 +293,9 @@ namespace ZeldaEditor.Windows {
 			needsRecompiling = false;
 		}
 
-		// Check when the compiling has finished.
+		/// <summary>Check when the compiling has finished.</summary>
 		private void RecompileUpdate() {
-			// Check if we have finished compiling.
+			// Check if we have finished compiling
 			if (IsCompiling) {
 				if (compileTask.IsCompleted) {
 					ScriptCompileResult results = compileTask.Result;
@@ -251,13 +303,14 @@ namespace ZeldaEditor.Windows {
 					OnCompileComplete(results);
 				}
 			}
-			// Begin recompiling.
+			// Begin recompiling
 			else if (needsRecompiling && !editorControl.IsBusyCompiling) {
 				BeginCompilingScript();
 			}
 		}
 
-		// Called once an asyncronous compiling task has completed.
+		/// <summary>Called once an asyncronous compiling task has completed.
+		/// </summary>
 		private void OnCompileComplete(ScriptCompileResult results) {
 			Dispatcher.Invoke(() => {
 				// Update the script object.
@@ -279,40 +332,6 @@ namespace ZeldaEditor.Windows {
 
 				//if (!script.IsHidden)
 			});
-		}
-
-		private void CanSaveScript(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
-			e.CanExecute = (editor.IsModified || script.ID != textBoxName.Text);
-		}
-
-		private void SaveScript(object sender, ExecutedRoutedEventArgs e) {
-			UpdateScript();
-		}
-
-		private void OnDeleteScript(object sender, RoutedEventArgs e) {
-			var result = MessageBoxResult.Yes;
-			if (string.IsNullOrWhiteSpace(previousCode) && string.IsNullOrWhiteSpace(editor.Text))
-				result = TriggerMessageBox.Show(this, MessageIcon.Warning, "Are you sure you want to delete this script?", "Delete Script", MessageBoxButton.YesNo);
-
-			if (result == MessageBoxResult.Yes) {
-				if (!newScript && !internalScript) {
-					editorControl.World.ScriptManager.RemoveScript(script);
-					script.ID = "";
-				}
-				script.Code = "";
-				if (!newScript)
-					DialogResult = true;
-				Close();
-			}
-		}
-
-		private void OnRedoCommand(object sender, ExecutedRoutedEventArgs e) {
-			editor.Redo();
-		}
-
-		private void CanExecuteRedo(object sender, CanExecuteRoutedEventArgs e) {
-			e.CanExecute = editor.CanRedo;
 		}
 	}
 }

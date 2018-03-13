@@ -93,9 +93,9 @@ namespace ZeldaEditor {
 
 		/// <summary>The command to show the tile properties.</summary>
 		public static readonly RoutedUICommand TileProperties = new RoutedUICommand(
-			"TileProperties", "Tile Properties", typeof(EditorCommands),
-			new InputGestureCollection() {
-				new KeyGesture(Key.F4) });
+			"TileProperties", "Tile Properties", typeof(EditorCommands));
+			//new InputGestureCollection() {
+				//new KeyGesture(Key.F4) });
 
 		/// <summary>The command to show the room properties.</summary>
 		public static readonly RoutedUICommand RoomProperties = new RoutedUICommand(
@@ -116,6 +116,11 @@ namespace ZeldaEditor {
 			"ViewEditPaths", "View/Edit Paths", typeof(EditorCommands),
 			new InputGestureCollection() {
 				new KeyGesture(Key.P, ModifierKeys.Control | ModifierKeys.Shift) });
+
+		/// <summary>The command to open the object editor.</summary>
+		public static readonly RoutedUICommand ObjectEditor = new RoutedUICommand(
+			"ObjectEditor", "Object Editor", typeof(EditorCommands),
+			new InputGestureCollection() { new KeyGesture(Key.F4) });
 
 
 		//-----------------------------------------------------------------------------

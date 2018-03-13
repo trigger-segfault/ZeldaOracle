@@ -183,6 +183,9 @@
     <Compile Include="Windows\ResizeLevelWindow.xaml.cs">
       <DependentUpon>ResizeLevelWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ObjectEditor.xaml.cs">
+      <DependentUpon>ObjectEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ScriptEditor.xaml.cs">
       <DependentUpon>ScriptEditor.xaml</DependentUpon>
     </Compile>
@@ -291,6 +294,10 @@
     <Page Include="Windows\ResizeLevelWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ObjectEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ScriptEditor.xaml">
       <SubType>Designer</SubType>

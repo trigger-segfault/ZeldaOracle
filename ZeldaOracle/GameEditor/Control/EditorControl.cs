@@ -789,16 +789,20 @@ namespace ZeldaEditor.Control {
 		// Scripts
 		//-----------------------------------------------------------------------------
 
-		public void CompileScriptAsync(Script script, ScriptCompileCallback callback, bool scriptEditor) {
+		/// <summary>Compile a script in a background task.</summary>
+		public void CompileScriptAsync(Script script,
+			ScriptCompileCallback callback, bool scriptEditor)
+		{
 			if (!CancelCompilation(scriptEditor))
 				return;
 
 			compileCallback = callback;
-			compileTask = Task.Run(() => {
+			compileTask = Task.Run(delegate() {
 				compileThread = Thread.CurrentThread;
 				try {
 					int scriptStart;
-					string code = world.ScriptManager.CreateTestScriptCode(script, script.Code, out scriptStart);
+					string code = world.ScriptManager.CreateTestScriptCode(
+						script, script.Code, out scriptStart);
 					return world.ScriptManager.Compile(code, false, scriptStart);
 				}
 				catch (ThreadAbortException) {

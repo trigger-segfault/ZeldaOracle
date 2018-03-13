@@ -52,6 +52,7 @@
         <CommandBinding Command="cmd:EditorCommands.Deselect" CanExecute="CanExecuteDeleteDeselect" Executed="OnDeselectCommand"/>
 
         <CommandBinding Command="cmd:EditorCommands.ViewEditPaths" CanExecute="CanExecuteViewPaths" Executed="OnViewPathsCommands"/>
+        <CommandBinding Command="cmd:EditorCommands.ObjectEditor" Executed="OnObjectEditorCommand"/>
 
         <CommandBinding Command="cmd:EditorCommands.AddNewLevel" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewLevelCommand"/>
         <CommandBinding Command="cmd:EditorCommands.AddNewArea" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewAreaCommand"/>

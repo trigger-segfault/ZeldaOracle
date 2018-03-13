@@ -51,6 +51,7 @@ namespace ZeldaEditor {
 
 		private HistoryWindow		historyWindow;
 		private RefactorWindow      refactorWindow;
+		private ObjectEditor		objectWindow;
 
 		private bool suppressEvents = false;
 
@@ -97,8 +98,7 @@ namespace ZeldaEditor {
 			tilePreview.Name				= "tilePreview";
 			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
 			hostTilePreview.Child			= tilePreview;
-
-
+			
 			statusTask.Content = "";
 
 			// Setup layer combo-box.
@@ -341,6 +341,9 @@ namespace ZeldaEditor {
 		}
 
 		public void UpdatePropertyPreview(IPropertyObject obj) {
+			if (objectWindow != null)
+				objectWindow.SetObject(obj as BaseTileDataInstance);
+
 			System.Windows.Controls.Image image = new System.Windows.Controls.Image();
 			image.Stretch = Stretch.None;
 			image.HorizontalAlignment = HorizontalAlignment.Left;
@@ -397,6 +400,21 @@ namespace ZeldaEditor {
 			else if (editorControl.EditingRoom != null) {
 				TilePathEditor.ShowViewer(this, editorControl,
 					editorControl.EditingRoom);
+			}
+		}
+
+		private void OnObjectEditorCommand(object sender, ExecutedRoutedEventArgs e) {
+			if (objectWindow == null) {
+				objectWindow = new ObjectEditor(editorControl,
+					editorControl.EditingTileData);
+				objectWindow.Owner = this;
+				objectWindow.Closed += delegate(object unused1, EventArgs unused2) {
+					objectWindow = null;
+				};
+				objectWindow.Show();
+			}
+			else {
+				objectWindow.Focus();
 			}
 		}
 
