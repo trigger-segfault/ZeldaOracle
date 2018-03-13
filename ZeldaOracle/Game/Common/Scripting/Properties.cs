@@ -271,7 +271,8 @@ namespace ZeldaOracle.Common.Scripting {
 			return defaultValue;
 		}
 
-		/// <summary>Tries to get an enum property value with a default value fallback.</summary>
+		/// <summary>Tries to get an enum property value with a default value fallback.
+		/// </summary>
 		public E TryGetEnum<E>(string name, E defaultValue) where E : struct {
 			Property p = GetProperty(name, true);
 			if (p != null) {
@@ -281,9 +282,24 @@ namespace ZeldaOracle.Common.Scripting {
 					else if (p.Type == PropertyType.String)
 						return (E) Enum.Parse(typeof(E), p.StringValue, true);
 					else
-						throw new InvalidOperationException("Property type does not support enums.");
+						throw new InvalidOperationException(
+							"Property type does not support enums.");
 				}
 				catch { }
+			}
+			return defaultValue;
+		}
+
+		/// <summary>Get an enum flags property value with a default value fallback.
+		/// </summary>
+		public E GetEnumFlags<E>(string name, E defaultValue) where E : struct {
+			Property p = GetProperty(name, true);
+			if (p != null) {
+				if (p.Type == PropertyType.Integer)
+					return (E) Enum.ToObject(typeof(E), p.IntValue);
+				else
+					throw new InvalidOperationException(
+						"Property type does not support enum flags.");
 			}
 			return defaultValue;
 		}

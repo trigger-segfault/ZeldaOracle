@@ -64,7 +64,8 @@ namespace ZeldaOracle.Game.Entities {
 			centerOffset					= Graphics.DrawOffset + new Point2I(8, 8);
 
 			// Physics
-			Physics.Enable(PhysicsFlags.HasGravity);
+			Physics.Enable();
+			//Physics.Enable(PhysicsFlags.HasGravity);
 			//Physics.Enable(
 			//	PhysicsFlags.Solid |
 			//	PhysicsFlags.HasGravity);

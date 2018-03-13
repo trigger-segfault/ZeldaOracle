@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			npc.Message				= new Message(Properties.GetString("text"));
 			npc.DefaultAnimation	= Properties.GetResource<Animation>("animation");
 			npc.TalkAnimation		= Properties.GetResource<Animation>("animation_talk");
-			npc.Physics.Flags		= properties.GetEnum("physics_flags", npc.Physics.Flags);
+			npc.Physics.Flags		= properties.GetEnumFlags("physics_flags", npc.Physics.Flags);
 			RoomControl.SpawnEntity(npc, position - npc.Graphics.DrawOffset);
 		}
 
@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				.SetDocumentation("Animation", "animation", "", "NPC", "The animation of the NPC.");
 			data.Properties.Set("animation_talk", "")
 				.SetDocumentation("Talk Animation", "animation", "", "NPC", "The animation of the NPC when being talked to.");
-			data.Properties.Set("physics_flags", "")
+			data.Properties.Set("physics_flags", (int) PhysicsFlags.Solid)
 				.SetDocumentation("Physics Flags", "enum_flags", typeof(PhysicsFlags), "Physics", "Physics properties of the entity.");
 		}
 
