@@ -21,13 +21,13 @@ namespace ZeldaOracle.Common.Scripting {
 		Point,
 	}
 
+	
 	public class PropertyValue {
 		/// <summary>The data type of the property.</summary>
 		public PropertyType Type { get; set; }
 		/// <summary>The object value for the property. For lists, this is used to store the child count as an integer.</summary>
 		public object ObjectValue { get; set; }
 	}
-
 
 	/// <summary>A proprety represents a piece of data that can be represented
 	/// multiple types including lists of other properties.</summary>
@@ -47,9 +47,6 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>The documentation for this property, if it is a base-property.</summary>
 		[NonSerialized]
 		private PropertyDocumentation documentation;
-		/// <summary>The action that occurs when the property is changed. NOTE: this is currently unused.</summary>
-		[NonSerialized]
-		private PropertyAction action;
 		/// <summary>The properties containing this property.</summary>
 		[NonSerialized]
 		private Properties properties;
@@ -70,13 +67,8 @@ namespace ZeldaOracle.Common.Scripting {
 			this.nextSibling	= null;
 			this.firstChild		= null;
 			this.documentation	= null;
-			this.action			= null;
 			this.properties		= null;
 			this.baseProperty	= null;
-
-			// Add the property action.
-			//if (Resources.ContainsResource<PropertyAction>(name))
-			//	this.action = Resources.GetResource<PropertyAction>(name);
 		}
 
 		/// <summary>Construct a property as a copy of another.</summary>
@@ -87,7 +79,6 @@ namespace ZeldaOracle.Common.Scripting {
 			nextSibling		= null;
 			firstChild		= null;
 			documentation	= copy.documentation;
-			action			= copy.action;
 			properties		= null;
 			baseProperty	= null;
 
@@ -177,23 +168,6 @@ namespace ZeldaOracle.Common.Scripting {
 				documentation = new PropertyDocumentation(name, "Misc", "");
 			documentation.IsReadOnly = true;
 			documentation.IsBrowsable = false;
-		}
-
-		/// <summary>Set the property action to occur when this property is modified.</summary>
-		public Property SetAction(PropertyAction action) {
-			this.action = action;
-			return this;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Actions
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Runs the property action.</summary>
-		public void RunAction(IPropertyObject sender, object value) {
-			if (action != null)
-				action(sender, value);
 		}
 
 
@@ -325,61 +299,37 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>The property's raw object value.</summary>
 		public object ObjectValue {
 			get { return objectValue; }
-			set {
-				objectValue = value;
-				if (properties != null)
-					RunAction(properties.PropertyObject, value);
-			}
+			set { objectValue = value; }
 		}
 
 		/// <summary>The property value as a string.</summary>
 		public string StringValue {
 			get { return (string) objectValue; }
-			set {
-				objectValue = value;
-				if (properties != null)
-					RunAction(properties.PropertyObject, value);
-			}
+			set { objectValue = value; }
 		}
 
 		/// <summary>The property value as an integer.</summary>
 		public int IntValue {
 			get { return (int) objectValue; }
-			set {
-				objectValue = value;
-				if (properties != null)
-					RunAction(properties.PropertyObject, value);
-			}
+			set { objectValue = value; }
 		}
 
 		/// <summary>The property value as a float.</summary>
 		public float FloatValue {
 			get { return (float) objectValue; }
-			set {
-				objectValue = value;
-				if (properties != null)
-					RunAction(properties.PropertyObject, value);
-			}
+			set { objectValue = value; }
 		}
 
 		/// <summary>The property value as a boolean.</summary>
 		public bool BoolValue {
 			get { return (bool) objectValue; }
-			set {
-				objectValue = value;
-				if (properties != null)
-					RunAction(properties.PropertyObject, value);
-			}
+			set { objectValue = value; }
 		}
 
 		/// <summary>The property value as a point.</summary>
 		public Point2I PointValue {
 			get { return (Point2I) objectValue; }
-			set {
-				objectValue = value;
-				if (properties != null)
-					RunAction(properties.PropertyObject, value);
-			}
+			set { objectValue = value; }
 		}
 
 		// Lists ---------------------------------------------------------------------
