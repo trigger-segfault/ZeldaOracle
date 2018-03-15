@@ -19,7 +19,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemFeather() : base("item_feather") {
+		//public ItemFeather() : base("feather") {
+		public ItemFeather(string id) : base(id) {
 			SetName("Roc's Feather", "Roc's Cape");
 			SetDescription("A nice lift.", "A wing-riding cape.");
 			SetMessage(

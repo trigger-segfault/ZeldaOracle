@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			g.PushTranslation(0, GameSettings.HUD_HEIGHT);
 			g.PushTranslation(-RoomControl.ViewControl.Camera.TopLeft);
 
-			if (reward.HoldType == RewardHoldTypes.Raise && useChest) {
+			if (!reward.HoldInChest && useChest) {
 				g.DrawAnimation(animationPlayer, chestPosition + new Point2I(0, -8 - (timer + 2) / 4));
 			}
 			else if (timer >= (useChest ? RaiseDuration : NonChestDuration)) {

@@ -1,0 +1,60 @@
+﻿#==============================================================
+# Key Items
+#==============================================================
+
+ITEM "wallet", ItemEquipment;
+	NAME		"Child's Wallet", "Adult's Wallet", "Giant's Wallet";
+	DESCRIPTION	"Allows you to carry a measly 99 rupees.",
+				"Allows you to carry 300 rupees!",
+				"Allows you to carry a whopping 999 rupees!";
+	#TODO: Wallet Reward Message
+	SPRITE		"item_icon_wallet_1", "item_icon_wallet_2", "item_icon_wallet_3";
+	AMMO		"rupees", "ore_chunks";
+	MAXAMMO		99, 300, 999;
+	MAXLEVEL	3;
+	HOLDTYPE	TwoHands;
+	LEVELUPAMMO	false;
+END;
+
+ITEM "flippers", ItemFlippers;
+	NAME		"Zora's Flippers", "Mermaid Suit";
+	DESCRIPTION	"Hit the beach.", "The skin of the mythical beast.";
+	MESSAGE		"You got <red>Zora's Flippers<red>! You can now go for a swim! Press <a> to swim, <b> to dive!"
+				"You got a <red>Mermaid Suit<red>! Now you can swim in deep waters. Press <dpad> to swim, <b> to dive and <a> to use items.";
+	SPRITE		"item_icon_flippers_1", "item_icon_flippers_2";
+	MAXLEVEL	2;
+	HOLDTYPE	TwoHands;
+	SECONDSLOT	(0, 0);
+END;
+
+ITEM "magic_potion", ItemMagicPotion;
+	NAME		"Magic Potion";
+	DESCRIPTION	"Fill your hearts!";
+	#TODO: Magic Potion Reward Message
+	#MESSAGE		"You got <red>Zora's Flippers<red>! You can now go for a swim! Press <a> to swim, <b> to dive!";
+	SPRITE		"item_icon_magic_potion";
+	HOLDTYPE	TwoHands;
+	SECONDSLOT	(1, 0);
+END;
+
+ITEM "members_card", ItemSecondary;
+	NAME		"Member's Card";
+	DESCRIPTION	"Opens the door!";
+	#TODO: Member's Card Reward Message
+	#MESSAGE		"You got <red>Zora's Flippers<red>! You can now go for a swim! Press <a> to swim, <b> to dive!";
+	SPRITE		"item_icon_members_card";
+	HOLDTYPE	TwoHands;
+	SECONDSLOT	(1, 1);
+END;
+
+ITEM "maku_seed", ItemSecondary;
+	NAME		"Maku Seed";
+	DESCRIPTION	"Evil-cleansing sacred seed.";
+	#TODO: Maku Seed Reward Message
+	#MESSAGE		"You got <red>Zora's Flippers<red>! You can now go for a swim! Press <a> to swim, <b> to dive!";
+	SPRITE		"item_icon_maku_seed";
+	HOLDTYPE	TwoHands;
+	SECONDSLOT	(3, 0);
+END;
+
+#==============================================================

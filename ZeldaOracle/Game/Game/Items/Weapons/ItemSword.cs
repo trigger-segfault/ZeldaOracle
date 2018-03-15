@@ -21,7 +21,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSword() : base("item_sword") {
+		public ItemSword(string id) : base(id) {
 			SetName("Wooden Sword", "Noble Sword", "Master Sword");
 			SetDescription("A hero's blade.", "A sacred blade.", "The blade of legends.");
 			SetMessage(

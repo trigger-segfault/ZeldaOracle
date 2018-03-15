@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemMembersCard() : base("item_members_card") {
+		public ItemMembersCard() : base("members_card") {
 			SetName("Member's Card");
 			SetDescription("Opens the door!");
 			SetSprite(GameData.SPR_ITEM_ICON_MEMBERS_CARD);

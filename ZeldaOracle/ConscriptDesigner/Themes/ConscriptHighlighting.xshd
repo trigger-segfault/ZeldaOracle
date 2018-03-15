@@ -292,6 +292,53 @@
       <Word>PALETTE</Word>
       <Word>SETSTYLE</Word>
     </Keywords>
+
+    <!--ItemSR-->
+    <Keywords color="Commands">
+      <Word>ITEM</Word>
+      <Word>AMMO</Word>
+      <Word>END</Word>
+      <Word>MAXLEVEL</Word>
+      <Word>NAME</Word>
+      <Word>DESCRIPTION</Word>
+      <Word>MESSAGE</Word>
+      <Word>SPRITE</Word>
+      <Word>PRICE</Word>
+      <Word>AMMO</Word>
+      <Word>MAXAMMO</Word>
+      <Word>HOLDTYPE</Word>
+      <Word>EQUIPSPRITE</Word>
+      <Word>SECONDSLOT</Word>
+      <Word>ESSENCESLOT</Word>
+      <Word>LEVELUPAMMO</Word>
+
+      <Word>NAME</Word>
+      <Word>DESCRIPTION</Word>
+      <Word>OBTAIN</Word>
+      <Word>CANTCOLLECT</Word>
+      <Word>SPRITE</Word>
+      <Word>AMOUNTBASED</Word>
+      <Word>MAXAMOUNT</Word>
+    </Keywords>
+    
+    <!--RewardSR-->
+    <Keywords color="Commands">
+      <Word>REWARD</Word>
+      <Word>CLONE</Word>
+      <Word>END</Word>
+      <Word>MESSAGE</Word>
+      <Word>OBTAIN</Word>
+      <Word>CANTCOLLECT</Word>
+      <Word>HOLDINCHEST</Word>
+      <Word>HOLDTYPE</Word>
+      <Word>PICKUPMESSAGE</Word>
+      <Word>WEAPONINTERACT</Word>
+      <Word>BOUNCESOUND</Word>
+
+      <Word>AMOUNT</Word>
+      <Word>FULL</Word>
+      <Word>AMMO</Word>
+    </Keywords>
   </RuleSet>
   
   

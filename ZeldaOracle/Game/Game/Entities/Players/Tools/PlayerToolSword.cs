@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		public override void Initialize() {
 			base.Initialize();
 
-			itemSword = (ItemSword) unit.GameControl.Inventory.GetItem("item_sword");
+			itemSword = (ItemSword) unit.GameControl.Inventory.GetItem("sword");
 
 			Interactions.InteractionEventArgs = new WeaponInteractionEventArgs() {
 				Weapon = itemSword,

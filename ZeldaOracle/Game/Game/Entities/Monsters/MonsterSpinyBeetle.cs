@@ -88,8 +88,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Weapon interations
 
 			int swordLevel = -1;
-			if (GameControl.Inventory.ContainsItem("item_sword"))
-				swordLevel = GameControl.Inventory.GetItem("item_sword").Level;
+			if (GameControl.Inventory.ContainsItem("sword"))
+				swordLevel = GameControl.Inventory.GetItem("sword").Level;
 			int cuttableLevel = CoverProperties.GetInteger("cuttable_sword_level");
 			if (CoverFlags.HasFlag(TileFlags.Cuttable) && swordLevel >= cuttableLevel) {
 				Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept,	MonsterReactions.DamageByLevel(1, 2, 3), BreakCover);
@@ -110,8 +110,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 
 			int boomerangLevel = -1;
-			if (GameControl.Inventory.ContainsItem("item_boomerang"))
-				boomerangLevel = GameControl.Inventory.GetItem("item_boomerang").Level;
+			if (GameControl.Inventory.ContainsItem("boomerang"))
+				boomerangLevel = GameControl.Inventory.GetItem("boomerang").Level;
 			if (CoverFlags.HasFlag(TileFlags.Boomerangable) && boomerangLevel >= Items.Item.Level2) {
 				Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	MonsterReactions.Stun, BreakCover);
 			}

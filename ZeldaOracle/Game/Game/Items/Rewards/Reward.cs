@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players;
 
@@ -16,14 +17,17 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		private RewardManager	rewardManager;
 		private string			id;
 
+		private Properties		properties;
+
 		private ISprite			sprite;
 		private string			message;
 		private string			obtainMessage;
 		private string			cantCollectMessage;
+		private bool			holdInChest;
 		private RewardHoldTypes	holdType;
 		private bool			hasDuration;
 		private bool			showMessageOnPickup;
-		private bool			isCollectibleWithWeapons;
+		private bool			interactWithWeapons;
 		private Sound			bounceSound;
 
 
@@ -40,11 +44,26 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			message				= "";
 			obtainMessage		= "";
 			cantCollectMessage	= "";
-			holdType			= RewardHoldTypes.Raise;
+			holdInChest			= true;
+			holdType			= RewardHoldTypes.TwoHands;
 			hasDuration			= false;
-			showMessageOnPickup			= false;
-			isCollectibleWithWeapons	= false;
+			showMessageOnPickup	= false;
+			interactWithWeapons	= false;
 			bounceSound			= null;
+		}
+
+		/// <summary>Clones the data for the specified reward.</summary>
+		public virtual void Clone(Reward reward) {
+			sprite				= reward.sprite;
+			message				= reward.message;
+			obtainMessage		= reward.obtainMessage;
+			cantCollectMessage	= reward.cantCollectMessage;
+			holdInChest			= reward.holdInChest;
+			holdType			= reward.holdType;
+			hasDuration			= reward.hasDuration;
+			showMessageOnPickup	= reward.showMessageOnPickup;
+			interactWithWeapons	= reward.interactWithWeapons;
+			bounceSound			= reward.bounceSound;
 		}
 
 
@@ -183,6 +202,13 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			set { cantCollectMessage = value; }
 		}
 
+		/// <summary>Gets if the reward does not rise out of chests and instead, is
+		/// picked up by the player.</summary>
+		public bool HoldInChest {
+			get { return holdInChest; }
+			set { holdInChest = value; }
+		}
+
 		/// <summary>Gets the method for holding this reward when in the reward state.</summary>
 		public RewardHoldTypes HoldType {
 			get { return holdType; }
@@ -204,9 +230,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		/// <summary>Gets if this reward can be collected with weapons like the
 		/// sword, boomerange, and switch hook.</summary>
-		public bool IsCollectibleWithWeapons {
-			get { return isCollectibleWithWeapons; }
-			set { isCollectibleWithWeapons = value; }
+		public bool InteractWithWeapons {
+			get { return interactWithWeapons; }
+			set { interactWithWeapons = value; }
 		}
 
 		/// <summary>Gets the bounce sound for the reward's entity.</summary>

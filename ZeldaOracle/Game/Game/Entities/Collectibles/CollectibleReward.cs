@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.isSubmergable		= isSubmergable;
 			showMessage				= reward.ShowMessageOnPickup;
 			hasDuration				= reward.HasDuration;
-			isCollectibleWithWeapons	= reward.IsCollectibleWithWeapons;
+			isCollectibleWithWeapons	= reward.InteractWithWeapons;
 			submerged				= false;
 		}
 

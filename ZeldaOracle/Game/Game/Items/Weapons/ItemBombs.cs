@@ -15,7 +15,8 @@ namespace ZeldaOracle.Game.Items {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public ItemBombs() : base("item_bombs") {
+		//public ItemBombs() : base("bombs") {
+		public ItemBombs(string id) : base(id) {
 			SetName("Bombs");
 			SetDescription("Very explosive.");
 			SetMessage(
@@ -25,7 +26,7 @@ namespace ZeldaOracle.Game.Items {
 				"You can now hold more <red>Bombs<red> than before!",
 				"You can now hold even more <red>Bombs<red> than before!");
 			SetSprite(GameData.SPR_ITEM_ICON_BOMB);
-			SetAmmo("ammo_bombs");
+			SetAmmo("bombs");
 			SetMaxAmmo(10, 20, 30);
 			MaxLevel	= Item.Level3;
 			HoldType    = RewardHoldTypes.TwoHands;

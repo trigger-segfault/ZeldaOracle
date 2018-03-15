@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence4() : base("item_essence_4") {
+		public ItemEssence4() : base("essence_4") {
 			SetName("Burning Flame");
 			SetDescription("It reignights a hero's passion deep in wavering hearts.");
 			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_4);

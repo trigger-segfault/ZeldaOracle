@@ -14,7 +14,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBigSword() : base("item_biggoron_sword") {
+		//public ItemBigSword() : base("biggoron_sword") {
+		public ItemBigSword(string id) : base(id) {
 			SetName("Biggoron's Sword");
 			SetDescription("A powerful, two-handed sword.");
 			SetMessage("You got <red>Biggoron's Sword<red>! " +

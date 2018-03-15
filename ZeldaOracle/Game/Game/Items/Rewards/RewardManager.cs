@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
@@ -36,6 +37,27 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			this.rewards		= new Dictionary<string, Reward>();
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Resources
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the item rewards by loading them from resources.</summary>
+		public void LoadItems() {
+			// Create RewardItems from Item resources
+			foreach (var pair in Resources.GetResourceDictionary<Item>()) {
+				AddRewardItem(pair.Value);
+			}
+		}
+
+		/// <summary>Initializes all rewards by loading them from resources.</summary>
+		public void LoadResources() {
+			// Load rest of rewards
+			foreach (var pair in Resources.GetResourceDictionary<Reward>()) {
+				AddReward(pair.Value);
+			}
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Rewards

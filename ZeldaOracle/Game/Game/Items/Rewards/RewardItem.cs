@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			HoldType		= item.HoldType;
 			HasDuration		= false;
 			ShowMessageOnPickup			= true;
-			IsCollectibleWithWeapons	= false;
+			InteractWithWeapons	= false;
 		}
 
 
@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		/// <summary>Constructs an the reward name for an item at the specified level.</summary>
 		public static string ItemName(Item item, int level) {
-			string name = item.ID;
+			string name = "item_" + item.ID;
 			if (item.IsLeveled)
 				name += "_" + (level + 1);
 			return name;

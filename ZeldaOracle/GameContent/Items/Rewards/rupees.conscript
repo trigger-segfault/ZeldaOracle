@@ -1,0 +1,52 @@
+﻿#==============================================================
+# Rupees
+#==============================================================
+
+REWARD "rupees_1", RewardRupee;
+	SPRITE		"reward_rupee_small_green";
+	MESSAGE		"You got <red>1 Rupee<red>!<n>...";
+	CANTCOLLECT	"There's no wallet to put this in.";
+	FULL		"Your wallet is already full.";
+	AMOUNT		1;
+END;
+
+CLONE REWARD "rupees_1", "rupees_5";
+	SPRITE		"reward_rupee_red";
+	MESSAGE		"You got <red>5 Rupees<red>!";
+	AMOUNT		5;
+END;
+
+CLONE REWARD "rupees_5", "rupees_10";
+	MESSAGE		"You got <red>10 Rupees<red>!";
+	AMOUNT		10;
+END;
+
+CLONE REWARD "rupees_1", "rupees_20";
+	SPRITE		"reward_rupee_blue";
+	MESSAGE		"You got <red>20 Rupees<red>!";
+	AMOUNT		20;
+END;
+
+CLONE REWARD "rupees_20", "rupees_30";
+	MESSAGE		"You got <red>30 Rupees<red>!";
+	AMOUNT		30;
+END;
+
+CLONE REWARD "rupees_1", "rupees_100";
+	SPRITE		"reward_rupee_big_blue";
+	MESSAGE		"You got <red>100<n>Rupees<red>! I bet<n>you're thrilled!";
+	AMOUNT		100;
+END;
+
+CLONE REWARD "rupees_1", "rupees_150";
+	SPRITE		"reward_rupee_big_red";
+	MESSAGE		"You got <red>150<n>Rupees<red>!<n>Way to go!!!";
+	AMOUNT		150;
+END;
+
+CLONE REWARD "rupees_150", "rupees_200";
+	MESSAGE		"You got <red>200<n>Rupees<red>! That's<n>pure bliss!";
+	AMOUNT		200;
+END;
+
+#==============================================================

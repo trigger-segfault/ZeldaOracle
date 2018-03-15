@@ -24,6 +24,7 @@ namespace ZeldaOracle.Game.Items {
 
 		public Point2I SecondarySlot {
 			get { return slot; }
+			set { slot = value; }
 		}
 	}
 }

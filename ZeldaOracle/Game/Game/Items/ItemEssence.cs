@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Items {
 
 		public int EssenceSlot {
 			get { return slot; }
+			set { slot = value; }
 		}
 	}
 }

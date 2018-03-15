@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence2() : base("item_essence_2") {
+		public ItemEssence2() : base("essence_2") {
 			SetName("Ancient Wood");
 			SetDescription("It speaks only truth to closed ears.");
 			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_2);

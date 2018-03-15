@@ -26,7 +26,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBow() : base("item_bow") {
+		//public ItemBow() : base("bow") {
+		public ItemBow(string id) : base(id) {
 			SetName("Wooden Bow");
 			SetDescription("Weapon of a marksman.");
 			SetMessage(
@@ -34,7 +35,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				"Your <red>Bow<red> has been upgraded! You can now hold more arrows.",
 				"Your <red>Bow<red> has been upgraded! You can now hold even more arrows.");
 			SetSprite(GameData.SPR_ITEM_ICON_BOW);
-			SetAmmo("ammo_arrows");
+			SetAmmo("arrows");
 			SetMaxAmmo(30, 40, 50);
 			MaxLevel	= Item.Level3;
 			HoldType = RewardHoldTypes.TwoHands;

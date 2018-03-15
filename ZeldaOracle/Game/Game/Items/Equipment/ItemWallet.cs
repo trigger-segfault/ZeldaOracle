@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Items.Equipment {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemWallet() : base("item_wallet") {
+		public ItemWallet() : base("wallet") {
 			SetName("Child's Wallet", "Adult's Wallet", "Giant's Wallet");
 			SetDescription(
 				"Allows you to carry a measly 99 rupees.",

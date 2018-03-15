@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence8() : base("item_essence_8") {
+		public ItemEssence8() : base("essence_8") {
 			SetName("Falling Star");
 			SetDescription("Its eternal light acts as guide to the other essences.");
 			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_8);

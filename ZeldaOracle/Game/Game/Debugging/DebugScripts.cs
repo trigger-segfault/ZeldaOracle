@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Debugging {
 			//Actions.General.BeginCutscene();
 			//Actions.General.Wait(30);
 			//Actions.Unit.MakeUnitFaceDirection(player, Direction.Down);
-			//Actions.Item.GiveReward(Functions.Reward.RewardByID("item_flippers_2"));
+			//Actions.Item.GiveReward(Functions.Reward.RewardByID("flippers_2"));
 			//Actions.General.Wait(30);
 			//Actions.Unit.MakeUnitFaceDirection(player, Direction.Right);
 			//Actions.General.Wait(30);

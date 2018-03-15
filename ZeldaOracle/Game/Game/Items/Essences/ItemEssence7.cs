@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence7() : base("item_essence_7") {
+		public ItemEssence7() : base("essence_7") {
 			SetName("Rolling Sea");
 			SetDescription("The song of the sea forms a wave that carries heros into adventure.");
 			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_7);

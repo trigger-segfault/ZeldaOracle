@@ -16,7 +16,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBoomerang() : base("item_boomerang") {
+		//public ItemBoomerang() : base("boomerang") {
+		public ItemBoomerang(string id) : base(id) {
 			SetName("Boomerang", "Magic Boomerang");
 			SetDescription("Always comes back to you.", "A remote-control weapon.");
 			SetMessage(

@@ -15,7 +15,8 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemMagicPotion() : base("item_magic_potion") {
+		//public ItemMagicPotion() : base("magic_potion") {
+		public ItemMagicPotion(string id) : base(id) {
 			SetName("Magic Potion");
 			SetDescription("Fill your hearts!");
 			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_POTION);

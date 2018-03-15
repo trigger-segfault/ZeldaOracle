@@ -9,7 +9,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemShield() : base("item_shield") {
+		//public ItemShield() : base("shield") {
+		public ItemShield(string id) : base(id) {
 			SetName("Wooden Shield", "Iron Shield", "Mirror Shield");
 			SetDescription("A small shield.", "A large shield.", "A reflective shield.");
 			SetMessage(

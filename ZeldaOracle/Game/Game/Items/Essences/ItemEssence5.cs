@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence5() : base("item_essence_5") {
+		public ItemEssence5() : base("essence_5") {
 			SetName("Sacred Soil");
 			SetDescription("Its warmth is known by all that rests in the earth.");
 			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_5);

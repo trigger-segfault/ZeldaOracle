@@ -11,28 +11,37 @@ using ZeldaOracle.Game.Control;
 namespace ZeldaOracle.Game.Items.Rewards {
 	/// <summary>A reward that gives a player a specified amount of rupees.</summary>
 	public class RewardRupee : RewardAmmo {
-
-		/// <summary>The amount of rupees to give.</summary>
-		private int amount;
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		public RewardRupee(string id)
+			: base(id, false) {
+			
+			FullMessage			= "But the wallet is full.";
+			CantCollectMessage  = "But there's no wallet to put it in.";
+			HoldInChest		= false;
+			HoldType		= RewardHoldTypes.TwoHands;
+			HasDuration		= true;
+			ShowMessageOnPickup			= false;
+			InteractWithWeapons	= true;
+		}
+
 		public RewardRupee(string id, int amount, string message, ISprite sprite)
 			: base(id, "rupees", amount, message, sprite)
 		{
-			this.amount			= amount;
-
 			Sprite			= sprite;
 			Message			= message;
-			FullMessage			= message + "<p>But the wallet is full.";
-			CantCollectMessage  = message + "<p>But there's no wallet to put it in.";
-			HoldType		= RewardHoldTypes.Raise;
+			FullMessage			= "But the wallet is full.";
+			CantCollectMessage  = "But there's no wallet to put it in.";
+			HoldInChest		= false;
+			HoldType		= RewardHoldTypes.TwoHands;
 			HasDuration		= true;
 			ShowMessageOnPickup			= false;
-			IsCollectibleWithWeapons	= true;
+			InteractWithWeapons	= true;
+			
+			Amount			= amount;
 		}
 
 
@@ -45,7 +54,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			if (GameControl.HUD.DynamicRupees >= Ammo.MaxAmount)
 				AudioSystem.PlaySound(GameData.SOUND_GET_RUPEE);
 
-			Ammo.Amount += amount;
+			Ammo.Amount += Amount;
 		}
 	}
 }

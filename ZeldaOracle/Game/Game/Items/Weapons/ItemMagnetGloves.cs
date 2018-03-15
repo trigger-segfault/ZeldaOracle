@@ -17,7 +17,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemMagnetGloves() : base("item_magnet_gloves") {
+		//public ItemMagnetGloves() : base("magnet_gloves") {
+		public ItemMagnetGloves(string id) : base(id) {
 			SetName("Magnetic Gloves");
 			SetDescription("Magnetically attractive!");
 			SetMessage("You got the Magnetic Gloves! " +

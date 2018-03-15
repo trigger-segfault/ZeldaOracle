@@ -25,7 +25,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSeedShooter() : base("item_seed_shooter") {
+		//public ItemSeedShooter() : base("seed_shooter") {
+		public ItemSeedShooter(string id) : base(id) {
 			SetName("Seed Shooter");
 			SetDescription("Used to bounce seeds around.");
 			SetSprite(GameData.SPR_ITEM_ICON_SEED_SHOOTER);

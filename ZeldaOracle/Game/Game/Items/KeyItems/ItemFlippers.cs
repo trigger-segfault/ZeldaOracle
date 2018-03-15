@@ -16,7 +16,8 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemFlippers() : base("item_flippers") {
+		//public ItemFlippers() : base("flippers") {
+		public ItemFlippers(string id) : base(id) {
 			SetName("Zora's Flippers", "Mermaid Suit");
 			SetDescription("Hit the beach.", "The skin of the mythical beast.");
 			SetMessage(

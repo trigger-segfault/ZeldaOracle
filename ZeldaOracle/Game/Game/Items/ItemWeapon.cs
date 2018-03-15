@@ -38,7 +38,13 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Sets the ammo types used by this weapon.</summary>
-		protected override void SetAmmo(params string[] ammos) {
+		public override void SetAmmo(params string[] ammos) {
+			base.SetAmmo(ammos);
+			ammoIndex = 0;
+		}
+
+		/// <summary>Sets the ammo types used by this weapon.</summary>
+		public override void SetAmmo(params Ammo[] ammos) {
 			base.SetAmmo(ammos);
 			ammoIndex = 0;
 		}

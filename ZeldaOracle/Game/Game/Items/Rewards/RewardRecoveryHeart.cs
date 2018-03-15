@@ -9,27 +9,31 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardRecoveryHeart : Reward {
-
-		/// <summary>The amount of full hearts to restore.</summary>
-		private int amount;
-
-
+	public class RewardRecoveryHeart : RewardAmount {
+		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
-		public RewardRecoveryHeart(string id, int amount, string message, ISprite sprite)
+		
+		/// <summary>Constructs the recovery heart reward</summary>
+		public RewardRecoveryHeart(string id)
 			: base(id)
 		{
-			this.amount		= amount;
+			HoldInChest		= false;
+			HoldType		= RewardHoldTypes.TwoHands;
+			HasDuration		= true;
+			ShowMessageOnPickup			= false;
+			InteractWithWeapons	= true;
+		}
+
+		/// <summary>Constructs the recovery heart reward</summary>
+		public RewardRecoveryHeart(string id, int amount, string message, ISprite sprite)
+			: this(id)
+		{
 
 			Sprite			= sprite;
 			Message			= message;
-			HoldType		= RewardHoldTypes.Raise;
-			HasDuration		= true;
-			ShowMessageOnPickup			= false;
-			IsCollectibleWithWeapons	= true;
+			Amount			= amount;
 		}
 
 
@@ -42,7 +46,17 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			if (GameControl.HUD.DynamicHealth >= Player.MaxHealth)
 				AudioSystem.PlaySound(GameData.SOUND_GET_HEART);
 
-			Player.Health += amount * 4;
+			Player.Health += Amount * 4;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets if the reward is already at capacity.</summary>
+		public override bool IsFull {
+			get { return Player.Health >= Player.MaxHealth; }
 		}
 	}
 }

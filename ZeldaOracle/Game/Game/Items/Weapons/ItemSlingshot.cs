@@ -24,7 +24,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSlingshot() : base("item_slingshot") {
+		//public ItemSlingshot() : base("slingshot") {
+		public ItemSlingshot(string id) : base(id) {
 			SetName("Slingshot", "Hyper Slingshot");
 			SetDescription("Used to shoot seeds.", "Shoots in 3 directions.");
 			SetSprite(

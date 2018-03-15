@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
-	public class SeedBasedItem : ItemWeapon {
+	public abstract class SeedBasedItem : ItemWeapon {
 
 
 		//-----------------------------------------------------------------------------
@@ -24,11 +24,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		public SeedBasedItem(string id) : base(id) {
 			SetAmmo(
-				"ammo_ember_seeds",
-				"ammo_scent_seeds",
-				"ammo_pegasus_seeds",
-				"ammo_gale_seeds",
-				"ammo_mystery_seeds");
+				"ember_seeds",
+				"scent_seeds",
+				"pegasus_seeds",
+				"gale_seeds",
+				"mystery_seeds");
 		}
 
 
@@ -50,11 +50,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public SeedType CurrentSeedType {
 			get {
 				switch (CurrentAmmo.ID) {
-				case "ammo_ember_seeds":	return SeedType.Ember;
-				case "ammo_scent_seeds":	return SeedType.Scent;
-				case "ammo_pegasus_seeds":	return SeedType.Pegasus;
-				case "ammo_gale_seeds":		return SeedType.Gale;
-				case "ammo_mystery_seeds":	return SeedType.Mystery;
+				case "ember_seeds":	return SeedType.Ember;
+				case "scent_seeds":	return SeedType.Scent;
+				case "pegasus_seeds":	return SeedType.Pegasus;
+				case "gale_seeds":		return SeedType.Gale;
+				case "mystery_seeds":	return SeedType.Mystery;
 				default: return SeedType.Ember;
 				}
 			}

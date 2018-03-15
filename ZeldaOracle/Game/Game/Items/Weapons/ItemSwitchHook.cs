@@ -21,7 +21,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSwitchHook() : base("item_switch_hook") {
+		//public ItemSwitchHook() : base("switch_hook") {
+		public ItemSwitchHook(string id) : base(id) {
 			SetName("Switch Hook", "Long Hook");
 			SetDescription("User and target trade places.", "Switches places from a distance.");
 			SetSprite(GameData.SPR_ITEM_ICON_SWITCH_HOOK);

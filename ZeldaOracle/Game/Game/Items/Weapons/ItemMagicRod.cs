@@ -20,7 +20,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemMagicRod() : base("item_magic_rod") {
+		//public ItemMagicRod() : base("magic_rod") {
+		public ItemMagicRod(string id) : base(id) {
 			SetName("Magic Rod");
 			SetDescription("Burn, baby burn!");
 			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_ROD);

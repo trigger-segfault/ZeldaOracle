@@ -236,6 +236,16 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			return null;
 		}
 
+		// Get an indexed child's value as an enum.
+		public E GetEnum<E>(int index, bool ignoreCase) where E : struct {
+			CommandParam parameter = GetParam(index);
+			if (parameter.IsValidType(CommandParamType.Integer))
+				return (E) Enum.ToObject(typeof(E), parameter.IntValue);
+			else if (parameter.IsValidType(CommandParamType.String))
+				return (E) Enum.Parse(typeof(E), parameter.StringValue, ignoreCase);
+			throw new Exception("Parameter type does not support enums!");
+		}
+
 		// Get an indexed child's string value.
 		public string GetString(int index) {
 			return GetParam(index).StringValue;

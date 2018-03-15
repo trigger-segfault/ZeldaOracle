@@ -20,7 +20,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemCane() : base("item_cane") {
+		//public ItemCane() : base("cane") {
+		public ItemCane(string id) : base(id) {
 			SetName("Cane of Somaria");
 			SetDescription("Used to create blocks.");
 			SetSprite(GameData.SPR_ITEM_ICON_CANE);

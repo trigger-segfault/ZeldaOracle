@@ -22,7 +22,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemShovel() : base("item_shovel") {
+		//public ItemShovel() : base("shovel") {
+		public ItemShovel(string id) : base(id) {
 			SetName("Shovel");
 			SetDescription("A handy tool.");
 			SetMessage("You got the <red>Shovel<red>! Now start digging!");

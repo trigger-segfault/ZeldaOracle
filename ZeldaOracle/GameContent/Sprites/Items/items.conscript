@@ -117,7 +117,7 @@ NAME "item_icon_flippers_1",				(6, 1);
 NAME "item_icon_flippers_2",				(7, 1);
 NAME "item_icon_magic_potion",				(6, 3);
 NAME "item_icon_members_card",				(7, 7);
-COMPOSITE "item_icon_essence_seed";
+COMPOSITE "item_icon_maku_seed";
 	ADD (0, 9); ADD (1, 9); END;
 NAME "item_icon_essence_1",					(8, 7);
 NAME "item_icon_essence_2",					(9, 7);

@@ -14,7 +14,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBracelet() : base("item_bracelet") {
+		//public ItemBracelet() : base("bracelet") {
+		public ItemBracelet(string id) : base(id) {
 			SetName("Power Bracelet", "Power Gloves");
 			SetDescription("A strength booster.", "Used to lift large objects.");
 			SetMessage(

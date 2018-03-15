@@ -20,7 +20,16 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			HoldType		= RewardHoldTypes.TwoHands;
 			HasDuration		= false;
 			ShowMessageOnPickup			= true;
-			IsCollectibleWithWeapons	= false;
+			InteractWithWeapons	= false;
+		}
+		
+		public RewardHeartContainer(string id) : base(id) {
+			Sprite			= GameData.SPR_REWARD_HEART_CONTAINER;
+			Message			= "You got a <red>Heart Container<red>!";
+			HoldType		= RewardHoldTypes.TwoHands;
+			HasDuration		= false;
+			ShowMessageOnPickup			= true;
+			InteractWithWeapons	= false;
 		}
 		
 

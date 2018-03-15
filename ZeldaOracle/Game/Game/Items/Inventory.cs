@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Main;
@@ -46,6 +47,20 @@ namespace ZeldaOracle.Game.Items {
 		/// <summary>Constructs the in-game inventory manager.</summary>
 		public Inventory(GameControl gameControl) : this() {
 			this.gameControl = gameControl;
+		}
+
+		//-----------------------------------------------------------------------------
+		// Resources
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes all items and ammo by loading them from resources.</summary>
+		public void LoadResources() {
+			foreach (var pair in Resources.GetResourceDictionary<Ammo>()) {
+				AddAmmo(pair.Value, false);
+			}
+			foreach (var pair in Resources.GetResourceDictionary<Item>()) {
+				AddItem(pair.Value, false);
+			}
 		}
 
 
@@ -176,7 +191,7 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Gets the weapon with the specified ID.</summary>
 		public ItemWeapon GetWeapon(string id) {
-			return items[id] as ItemWeapon;
+			return GetItem(id) as ItemWeapon;
 		}
 
 
@@ -193,7 +208,9 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Gets the item with the specified ID.</summary>
 		public Item GetItem(string id) {
-			return items[id];
+			Item item;
+			items.TryGetValue(id, out item);
+			return item;
 		}
 
 		/// <summary>Checks if the item exists.</summary>
@@ -276,7 +293,16 @@ namespace ZeldaOracle.Game.Items {
 		
 		/// <summary>Gets the ammo class with the specified ID.</summary>
 		public Ammo GetAmmo(string id) {
-			return ammos[id];
+			Ammo ammo;
+			ammos.TryGetValue(id, out ammo);
+			return ammo;
+		}
+
+		/// <summary>Gets the collection of ammos in the game.</summary>
+		public IEnumerable<Ammo> GetAmmos() {
+			foreach (var pair in ammos) {
+				yield return pair.Value;
+			}
 		}
 
 		/// <summary>Checks if the ammo exists.</summary>

@@ -29,7 +29,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSeedSatchel() : base("item_seed_satchel") {
+		//public ItemSeedSatchel() : base("seed_satchel") {
+		public ItemSeedSatchel(string id) : base(id) {
 			SetName("Seed Satchel");
 			SetDescription("A bag for carrying seeds.");
 			SetMessage(

@@ -127,35 +127,48 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Sets the leveled names of the item.</summary>
-		protected void SetName(params string[] names) {
+		public void SetName(params string[] names) {
 			name = names;
 		}
 
 		/// <summary>Sets the leveled descriptions of the item.</summary>
-		protected void SetDescription(params string[] descriptions) {
+		public void SetDescription(params string[] descriptions) {
 			description = descriptions;
 		}
 
 		/// <summary>Sets the leveled reward messages of the item.</summary>
-		protected void SetMessage(params string[] messages) {
+		public void SetMessage(params string[] messages) {
 			message = messages;
 		}
 
 		/// <summary>Sets the leveled sprites of the item.</summary>
-		protected void SetSprite(params ISprite[] sprites) {
+		public void SetSprite(params ISprite[] sprites) {
 			sprite = sprites;
 		}
 
+		/// <summary>Sets the default leveled prices of the item.</summary>
+		public void SetDefaultPrice(params int[] prices) {
+			price = prices;
+		}
+
 		/// <summary>Sets the ammo types used by this weapon.</summary>
-		protected virtual void SetAmmo(params string[] ammoIDs) {
+		public virtual void SetAmmo(params string[] ammoIDs) {
 			ammoID = new string[ammoIDs.Length];
 			for (int i = 0; i < ammoID.Length; i++) {
 				ammoID[i] = ammoIDs[i];
 			}
 		}
 
+		/// <summary>Sets the ammo types used by this weapon.</summary>
+		public virtual void SetAmmo(params Ammo[] ammos) {
+			ammo = new Ammo[ammos.Length];
+			for (int i = 0; i < ammo.Length; i++) {
+				ammo[i] = ammos[i];
+			}
+		}
+
 		/// <summary>Sets the max ammo allowed at each level.</summary>
-		protected void SetMaxAmmo(params int[] maxAmmos) {
+		public void SetMaxAmmo(params int[] maxAmmos) {
 			maxAmmo = maxAmmos;
 		}
 
@@ -181,10 +194,14 @@ namespace ZeldaOracle.Game.Items {
 				ammo = new Ammo[ammoID.Length];
 				for (int i = 0; i < ammo.Length; i++) {
 					ammo[i] = inventory.GetAmmo(ammoID[i]);
-					if (IsAmmoContainer)
-						ammo[i].Container = this;
 				}
 				ammoID = null;
+			}
+			if (ammo != null) {
+				foreach (Ammo ammo in this.ammo) {
+					if (IsAmmoContainer)
+						ammo.Container = this;
+				}
 			}
 			OnInitialize();
 		}

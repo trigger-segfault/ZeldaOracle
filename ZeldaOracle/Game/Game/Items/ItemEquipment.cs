@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Sets the leveled equipped sprites of the item.</summary>
-		protected void SetSpriteEquipped(params ISprite[] sprites) {
+		public void SetSpriteEquipped(params ISprite[] sprites) {
 			spriteEquipped = sprites;
 		}
 

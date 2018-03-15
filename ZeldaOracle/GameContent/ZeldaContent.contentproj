@@ -90,7 +90,6 @@
   <ItemGroup>
     <Folder Include="Images\Editor\" />
     <Folder Include="Languages\" />
-    <Folder Include="Particles\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\collision_models.conscript">
@@ -104,6 +103,46 @@
     <None Include="Images\images.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>images</Name>
+    </None>
+    <None Include="Items\items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>items</Name>
+    </None>
+    <None Include="Items\Items\ammo.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ammo</Name>
+    </None>
+    <None Include="Items\Items\essences.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>essences</Name>
+    </None>
+    <None Include="Items\Items\key_items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>key_items</Name>
+    </None>
+    <None Include="Items\Items\weapons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>weapons</Name>
+    </None>
+    <None Include="Items\rewards.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>rewards</Name>
+    </None>
+    <None Include="Items\Rewards\ammo.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ammo</Name>
+    </None>
+    <None Include="Items\Rewards\dungeon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon</Name>
+    </None>
+    <None Include="Items\Rewards\health.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>health</Name>
+    </None>
+    <None Include="Items\Rewards\rupees.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>rupees</Name>
     </None>
     <None Include="Music\music.conscript">
       <Name>music</Name>

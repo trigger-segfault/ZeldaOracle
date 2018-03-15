@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			HoldType		= holdType;
 			HasDuration		= false;
 			ShowMessageOnPickup			= (id != "small_key");
-			IsCollectibleWithWeapons	= (id != "small_key");
+			InteractWithWeapons	= (id != "small_key");
 
 			if (id == "small_key" || id == "boss_key")
 				BounceSound = GameData.SOUND_KEY_BOUNCE;

@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssenceSeed() : base("item_essence_seed") {
+		public ItemEssenceSeed() : base("essence_seed") {
 			SetName("Maku Seed");
 			SetDescription("Evil-cleansing sacred seed.");
 			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_SEED);

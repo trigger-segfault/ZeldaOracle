@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private bool AttemptPickup(Tile tile) {
 			int minLevel = tile.Properties.GetInteger(
 				"pickupable_bracelet_level", Item.Level1);
-			Item item = player.Inventory.GetItem("item_bracelet");
+			Item item = player.Inventory.GetItem("bracelet");
 
 			if (tile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
 				player.PickupTile(tile);
