@@ -230,16 +230,27 @@ namespace ZeldaOracle.Game.Control {
 
 			FireEvent(world, "start_game", this);
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Scripts
 		//-----------------------------------------------------------------------------
-		
+
 		public void FireEvent(IEventObject caller, string eventName, params object[] parameters) {
+			Logs.Scripts.LogError("Outdated FireEvent on " + caller.GetType().Name);
+		}
+
+		public void FireEvent(ITriggerObject caller, string eventName) {
 			Event evnt = caller.Events.GetEvent(eventName);
-			if (evnt != null)
-				ExecuteScript(evnt.InternalScriptID, parameters);
+			List<Trigger> triggers = caller.Triggers.GetTriggersByEvent(evnt).ToList();
+			foreach (Trigger trigger in triggers) {
+				Logs.Scripts.LogNotice("Running trigger {0}", trigger.Name);
+				if (trigger.FireOnce)
+					trigger.IsEnabled = false;
+				if (trigger.Script != null) {
+					ScriptRunner.RunScript(trigger.Script, new object[] {});
+				}
+			}
 		}
 
 		// Execute a script with the given name.

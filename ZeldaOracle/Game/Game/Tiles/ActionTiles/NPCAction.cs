@@ -35,6 +35,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			NPC npc = new NPC();
 			npc.Properties			= properties;
 			npc.Events				= Events;
+			npc.Triggers			= Triggers;
 			npc.Flags				= (NPCFlags) Properties.GetInteger("npc_flags");
 			npc.Direction			= Properties.GetInteger("direction");
 			npc.Message				= (text.Length > 0 ? new Message(text) : null);
@@ -69,10 +70,13 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				.SetDocumentation("Talk Animation", "animation", "", "NPC", "The animation of the NPC when being talked to.");
 			data.Properties.Set("physics_flags", (int) (PhysicsFlags.Solid | PhysicsFlags.HasGravity))
 				.SetDocumentation("Physics Flags", "enum_flags", typeof(PhysicsFlags), "Physics", "Physics properties of the entity.");
-			
+
 			data.Events.AddEvent("talk", "Talk", "NPC", "Triggered upon talking to the NPC.");
 		}
 
+		public enum EventTypes {
+			Talk
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties

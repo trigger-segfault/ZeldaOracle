@@ -9,6 +9,11 @@ namespace ZeldaAPI {
 	public delegate bool UpdateCondition();
 	public delegate bool TimedUpdateCondition(int elapsedTime);
 
+	public interface Trigger {
+		void TurnOn();
+		void TurnOff();
+	}
+
 	public interface ScriptAction {
 		void Wait(bool wait = true);
 	}
@@ -20,7 +25,8 @@ namespace ZeldaAPI {
 		ScriptActionsUnit Unit { get; }
 		ScriptActionsSound Sound { get; }
 		ScriptActionsItem Item { get; }
-		ScriptActionsTiles Tile { get; }
+		ScriptActionsTile Tile { get; }
+		ScriptActionsTrigger Trigger { get; }
 	}
 
 	public interface ScriptFunctions {
@@ -73,7 +79,7 @@ namespace ZeldaAPI {
 		void GiveReward(Reward reward);
 	}
 	
-	public interface ScriptActionsTiles {
+	public interface ScriptActionsTile {
 		void LightLantern(Lantern lantern);
 		void PutOutLantern(Lantern lantern);
 		void FlipSwitch(Lever lever);
@@ -81,6 +87,12 @@ namespace ZeldaAPI {
 		//void Rotate(ColorTile tile, PuzzleColor color);
 		void BuildBridge(Bridge bridge);
 		void DestroyBridge(Bridge bridge);
+	}
+
+	public interface ScriptActionsTrigger {
+		void Run(Trigger trigger);
+		void TurnOn(Trigger trigger);
+		void TurnOff(Trigger trigger);
 	}
 
 

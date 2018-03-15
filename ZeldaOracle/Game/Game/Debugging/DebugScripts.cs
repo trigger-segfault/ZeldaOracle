@@ -54,5 +54,11 @@ namespace ZeldaOracle.Game.Debugging {
 		}
 
 
+		public void DebugScript2() {
+
+
+			//Actions.Trigger.Run();
+		}
+
 	}
 }

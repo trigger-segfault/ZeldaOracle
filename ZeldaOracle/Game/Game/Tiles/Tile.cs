@@ -27,7 +27,7 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class Tile : IEventObject, ZeldaAPI.Tile {
+	public class Tile : ITriggerObject, ZeldaAPI.Tile {
 		
 		//-----------------------------------------------------------------------------
 		// Members
@@ -953,6 +953,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public EventCollection Events {
 			get { return tileData.Events; }
+		}
+
+		public TriggerCollection Triggers {
+			get { return tileData.Triggers; }
 		}
 
 		// Get the original tile data from which this was created.

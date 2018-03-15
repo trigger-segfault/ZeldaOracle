@@ -5,9 +5,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Worlds;
@@ -271,18 +268,19 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			return code;
 		}
 
-		/// <summary>Creates code for testing a single script.</summary>
+		/// <summary>Generates the code used for test-compiling a single script.
+		/// Other scripts are included as method stubs.</summary>
 		public string CreateTestScriptCode(Script newScript, string newCode,
 			out int scriptStart)
 		{
-			// Begin class and namespace.
+			// Begin class and namespace
 			string code = CreateUsingsString() + CreateClassString();
 			
 			code += CreateTestMethodHeadString(newScript);
 			scriptStart = code.Length;
-			code += newCode + "}";
+			code += newCode + "\n}";
 
-			// Script methods.
+			// Script methods
 			foreach (KeyValuePair<string, Script> entry in scripts) {
 				Script script = entry.Value;
 				if (script == newScript)
@@ -292,7 +290,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				}
 			}
 
-			// Close class and namespace.
+			// Close class and namespace
 			code += CreateClosingClassString();
 
 			return code;
@@ -335,7 +333,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		/// <summary>Creates a method head used for testing a script.</summary>
 		public static string CreateTestMethodHeadString(Script script) {
 			string name = (script.IsHidden ? "__internal_script__" : script.ID);
-			return	"public void " + name + "(" + CreateParametersString(script.Parameters) + ") { ";
+			return	"public void " + name + "(" + CreateParametersString(script.Parameters) + ") {\n";
 		}
 
 		/// <summary>Creates a method from the script.</summary>

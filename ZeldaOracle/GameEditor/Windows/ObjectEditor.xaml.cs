@@ -7,6 +7,10 @@ using ZeldaOracle.Common.Scripting;
 using Trigger = ZeldaOracle.Common.Scripting.Trigger;
 using TriggerCollection = ZeldaOracle.Common.Scripting.TriggerCollection;
 using ZeldaEditor.WinForms;
+using ZeldaOracle.Game.Control.Scripting;
+using ICSharpCode.CodeCompletion;
+using ZeldaOracle.Game;
+using ZeldaEditor.Scripting;
 
 namespace ZeldaEditor.Windows {
 	
@@ -61,7 +65,7 @@ namespace ZeldaEditor.Windows {
 			// Find an unused untitled trigger name
 			bool nameIsTaken = true;
 			for (int index = 1; nameIsTaken; index++) {
-				trigger.Name = string.Format("Untitled Trigger {0}", index);
+				trigger.Name = string.Format("trigger_{0}", index);
 				nameIsTaken = false;
 				foreach (Trigger other in triggers) {
 					if (trigger.Name == other.Name) {
@@ -141,6 +145,9 @@ namespace ZeldaEditor.Windows {
 		private ObjectEditorModel model;
 		private TilePreview tilePreview;
 		
+		private static CSharpCompletion completion = new CSharpCompletion(
+			new ScriptProvider(), Assemblies.Scripting);
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -168,6 +175,15 @@ namespace ZeldaEditor.Windows {
 			tilePreview.Name				= "tilePreview";
 			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
 			hostTilePreview.Child			= tilePreview;
+			
+			// Setup the script text editor
+			scriptEditor.TextChanged += OnScriptTextChanged;
+			//scriptEditor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
+			
+			scriptEditor.Completion = completion;
+			scriptEditor.Document.FileName = "dummyFileName.cs";
+			scriptEditor.Script = null;
+			scriptEditor.EditorControl = editorControl;
 
 			SetObject(tileData);
 		}
@@ -211,6 +227,8 @@ namespace ZeldaEditor.Windows {
 					comboBoxEventType.SelectedIndex = 0;
 					checkBoxInitiallyOn.IsChecked = false;
 					checkBoxFireOnce.IsChecked = false;
+					scriptEditor.Text = "";
+					scriptEditor.Script = null;
 				}
 			}
 			else {
@@ -222,6 +240,11 @@ namespace ZeldaEditor.Windows {
 						model.EventTypes.IndexOf(model.SelectedTrigger.EventType);
 					checkBoxInitiallyOn.IsChecked = model.SelectedTrigger.InitiallyOn;
 					checkBoxFireOnce.IsChecked = model.SelectedTrigger.FireOnce;
+					if (model.SelectedTrigger.Script != null)
+						scriptEditor.Text = model.SelectedTrigger.Script.Code;
+					else
+						scriptEditor.Text = "";
+					scriptEditor.Script = model.SelectedTrigger.Script;
 				}
 			}
 		}
@@ -283,6 +306,18 @@ namespace ZeldaEditor.Windows {
 		private void OnClickFireOnce(object sender, RoutedEventArgs e) {
 			if (model.SelectedTrigger != null)
 				model.SelectedTrigger.FireOnce = checkBoxFireOnce.IsChecked.Value;
+		}
+
+		private void OnScriptTextChanged(object sender, EventArgs e) {
+			if (model.SelectedTrigger != null) {
+				if (model.SelectedTrigger.Script == null)
+					model.SelectedTrigger.CreateScript();
+				model.SelectedTrigger.Script.Code = scriptEditor.Text;
+				scriptEditor.Script = model.SelectedTrigger.Script;
+				//needsRecompiling = true;
+				//UpdateStatusBar();
+				//CommandManager.InvalidateRequerySuggested();
+			}
 		}
 	}
 }

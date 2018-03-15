@@ -15,7 +15,6 @@ namespace ZeldaOracle.Game.Worlds {
 	public class World : IEventObjectContainer, IEventObject, IIDObject,
 		IVariableObjectContainer, IVariableObject
 	{
-
 		private Properties properties;
 		private EventCollection events;
 		private Variables variables;
@@ -40,29 +39,31 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Constructs an empty world.</summary>
 		public World() {
-			this.areas		= new List<Area>();
-			this.levels			= new List<Level>();
-			this.scriptManager	= new ScriptManager();
+			areas			= new List<Area>();
+			levels			= new List<Level>();
+			scriptManager	= new ScriptManager();
 
-			this.events			= new EventCollection(this);
-			this.properties		= new Properties(this);
-			this.properties.BaseProperties = new Properties();
-			this.variables		= new Variables(this);
+			events			= new EventCollection(this);
+			properties		= new Properties(this);
+			properties.BaseProperties = new Properties();
+			variables		= new Variables(this);
 
-			this.defaultArea	= new Area();
-			this.defaultArea.World = this;
+			defaultArea	= new Area();
+			defaultArea.World = this;
 
-			this.nextMonsterID  = int.MaxValue;
+			nextMonsterID  = int.MaxValue;
 
-			this.properties.BaseProperties.Set("id", "world_name")
-				.SetDocumentation("ID", "", "", "General", "The ID used for saves to identify the world.", true, true);
+			properties.BaseProperties.Set("id", "world_name")
+				.SetDocumentation("ID", "", "", "General",
+				"The ID used for saves to identify the world.", true, true);
 
-			this.events.AddEvent("start_game", "Start Game", "Initialization",
-				"Called when the game first starts.", new ScriptParameter(typeof(ZeldaAPI.Game), "game"));
+			events.AddEvent("start_game", "Start Game", "Initialization",
+				"Called when the game first starts.",
+				new ScriptParameter(typeof(ZeldaAPI.Game), "game"));
 
 			// This will be debug-assigned as "Link" in GameControl.StartGame until we
 			// have an enter name screen.
-			this.variables.AddBuiltIn("player", "");
+			variables.AddBuiltIn("player", "");
 		}
 
 
@@ -317,9 +318,11 @@ namespace ZeldaOracle.Game.Worlds {
 
 			if (startLevelIndex == oldIndex)
 				startLevelIndex = newIndex;
-			else if (startLevelIndex > oldIndex && startLevelIndex <= newIndex && oldIndex < newIndex)
+			else if (startLevelIndex > oldIndex &&
+				startLevelIndex <= newIndex && oldIndex < newIndex)
 				startLevelIndex--;
-			else if (startLevelIndex >= newIndex && startLevelIndex < oldIndex && oldIndex > newIndex)
+			else if (startLevelIndex >= newIndex &&
+				startLevelIndex < oldIndex && oldIndex > newIndex)
 				startLevelIndex++;
 
 			Level level = levels[oldIndex];
@@ -401,7 +404,8 @@ namespace ZeldaOracle.Game.Worlds {
 			scriptManager.RemoveScript(script);
 		}
 
-		/// <summary>Removes the script with the specified id from the collection.</summary>
+		/// <summary>Removes the script with the specified id from the collection.
+		/// </summary>
 		public void RemoveScript(string scriptID) {
 			scriptManager.RemoveScript(scriptID);
 		}

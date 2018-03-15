@@ -9,6 +9,8 @@ using System.Collections;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 	
+	/// <summary>Result information from compiling a script, including the 
+	/// encountered errors/warnings and also the raw assembly data.</summary>
 	public class ScriptCompileResult {
 
 		public ScriptCompileResult() {
@@ -16,13 +18,19 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			Warnings	= new List<ScriptCompileError>();
 			RawAssembly	= null;
 		}
-
+		
+		/// <summary>Errors encountered during compilation.</summary>
 		public List<ScriptCompileError> Errors { get; set; }
-		public List<ScriptCompileError> Warnings { get; set; }
-		public byte[] RawAssembly { get; set; }
 
+		/// <summary>Warnings encountered during compilation.</summary>
+		public List<ScriptCompileError> Warnings { get; set; }
+
+		/// <summary>Raw assembly output from the compiler. If there where compiler
+		/// errors, then this will be null.</summary>
+		public byte[] RawAssembly { get; set; }
 	}
 
+	/// <summary>Represents a compiler error or warning.</summary>
 	[Serializable]
 	public class ScriptCompileError {
 		
@@ -74,12 +82,19 @@ namespace ZeldaOracle.Game.Control.Scripting {
 	[Serializable]
 	public class Script : IIDObject {
 
-		private string id; // The script's identifier and name
-		private string code; // User-entered code for the script.
-		private bool isHidden; // Is this script visible in the editor? Hidden scripts are used in object events.
+		/// <summary>The script's identifier and name.</summary>
+		private string id;
+		/// <summary>User-entered code for the script.</summary>
+		private string code;
+		/// <summary>Is this script visible in the editor? Hidden scripts are used in
+		/// object events.</summary>
+		private bool isHidden;
+		/// <summary>Errors encountered when compiling this script.</summary>
 		private List<ScriptCompileError> errors;
+		/// <summary>Warnings encountered when compiling this script.</summary>
 		private List<ScriptCompileError> warnings;
-		private List<ScriptParameter> parameters; // Parameters that are passed into the script.
+		/// <summary>Parameters that are passed into the script.</summary>
+		private List<ScriptParameter> parameters;
 
 
 		//-----------------------------------------------------------------------------
@@ -87,15 +102,15 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		//-----------------------------------------------------------------------------
 
 		public Script() {
-			id   				= "";
-			code				= "";
-			isHidden			= false;
-			errors				= new List<ScriptCompileError>();
-			warnings			= new List<ScriptCompileError>();
-			parameters			= new List<ScriptParameter>();
+			id   		= "";
+			code		= "";
+			isHidden	= false;
+			errors		= new List<ScriptCompileError>();
+			warnings	= new List<ScriptCompileError>();
+			parameters	= new List<ScriptParameter>();
 		}
 		
-		// Copy constructor.
+		/// <summary>Copy constructor.</summary>
 		public Script(Script copy) {
 			id	    	= copy.id;
 			code		= copy.code;
@@ -119,31 +134,37 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>The script's identifier and name.</summary>
 		public string ID {
 			get { return id; }
 			set { id = value; }
 		}
 
+		/// <summary>User-entered code for the script.</summary>
 		public string Code {
 			get { return code; }
 			set { code = value; }
 		}
-
+		
+		/// <summary>Is this script visible in the editor? Hidden scripts are used in
+		/// object events.</summary>
 		public bool IsHidden {
 			get { return isHidden; }
 			set { isHidden = value; }
 		}
-
+		/// <summary>Errors encountered when compiling this script.</summary>
 		public List<ScriptCompileError> Errors {
 			get { return errors; }
 			set { errors = value; }
 		}
 
+		/// <summary>Warnings encountered when compiling this script.</summary>
 		public List<ScriptCompileError> Warnings {
 			get { return warnings; }
 			set { warnings = value; }
 		}
 
+		/// <summary>Parameters that are passed into the script.</summary>
 		public List<ScriptParameter> Parameters {
 			get { return parameters; }
 			set { parameters = value; }
@@ -153,10 +174,12 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			get { return parameters.Count; }
 		}
 
+		/// <summary>True if the script has compiler errors.</summary>
 		public bool HasErrors {
 			get { return (errors.Count > 0); }
 		}
 
+		/// <summary>True if the script has compiler warnings.</summary>
 		public bool HasWarnings {
 			get { return (warnings.Count > 0); }
 		}

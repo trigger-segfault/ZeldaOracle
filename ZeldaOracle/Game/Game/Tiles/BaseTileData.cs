@@ -11,9 +11,9 @@ using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public abstract class BaseTileData : IPropertyObject {
+	public abstract class BaseTileData : IPropertyObject, IIDObject {
 
-		/// <summary>The overridden type fof the tile.</summary>
+		/// <summary>The type of the tile.</summary>
 		protected Type type;
 		/// <summary>The type of entity this tile spawns.</summary>
 		protected Type entityType;
@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets or sets the overridden type fof the tile.</summary>
+		/// <summary>Gets or sets the type of the tile.</summary>
 		public Type Type {
 			get { return type; }
 			set {
@@ -176,6 +176,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public string Name {
 			get { return name; }
 			set { name = value; }
+		}
+
+		string IIDObject.ID {
+			get { return name; }
 		}
 
 		public bool HasPreviewSprite {

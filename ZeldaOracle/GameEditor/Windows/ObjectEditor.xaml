@@ -68,6 +68,12 @@
             <TabItem Header="Variables">
                 <Label Content="Content goes here..." />
             </TabItem>
+            <TabItem Header="Paths">
+                <Label Content="Content goes here..." />
+            </TabItem>
+            <TabItem Header="Drops">
+                <Label Content="Content goes here..." />
+            </TabItem>
         </TabControl>
     </DockPanel>
 

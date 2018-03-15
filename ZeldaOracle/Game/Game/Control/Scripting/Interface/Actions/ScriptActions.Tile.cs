@@ -7,8 +7,8 @@ using ZeldaOracle.Game.Entities.Units;
 
 namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 
-	public class ScriptActionsTiles :
-		ScriptInterfaceSection, ZeldaAPI.ScriptActionsTiles
+	public class ScriptActionsTile :
+		ScriptInterfaceSection, ZeldaAPI.ScriptActionsTile
 	{
 
 		public void LightLantern(ZeldaAPI.Lantern lantern) {

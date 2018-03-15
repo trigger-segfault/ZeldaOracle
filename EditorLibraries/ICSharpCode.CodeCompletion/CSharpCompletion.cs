@@ -181,7 +181,7 @@ namespace ICSharpCode.CodeCompletion {
 
 			result.TriggerWordLength = triggerWordLength;
 			result.TriggerWord = completionContext.Document.GetText(completionContext.Offset - triggerWordLength, triggerWordLength);
-			Debug.Print("Trigger word: '{0}'", result.TriggerWord);
+			//Debug.Print("Trigger word: '{0}'", result.TriggerWord);
 
 			//cast to AvalonEdit completion data and add to results
 			foreach (var completion in completionData) {

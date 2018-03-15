@@ -12,7 +12,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 namespace ZeldaOracle.Game.Entities {
 
 	// The main class for entity objects in the room.
-	public class Entity : ZeldaAPI.Entity, IPropertyObject, IEventObject {
+	public class Entity : ZeldaAPI.Entity, ITriggerObject {
 
 		// Internal state
 
@@ -26,6 +26,7 @@ namespace ZeldaOracle.Game.Entities {
 		private float				previousZPosition;
 		private Properties			properties;
 		private EventCollection		events;
+		private TriggerCollection	triggers;
 
 		// Settings
 
@@ -540,6 +541,12 @@ namespace ZeldaOracle.Game.Entities {
 		public EventCollection Events {
 			get { return events; }
 			set { events = value; }
+		}
+
+		/// <summary>Gets or sets the triggers for the entity.</summary>
+		public TriggerCollection Triggers {
+			get { return triggers; }
+			set { triggers = value; }
 		}
 
 		public Entity Parent {

@@ -1,15 +1,9 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
@@ -167,11 +161,11 @@ namespace ZeldaOracle.Game.Worlds {
 			try {
 				world = new World();
 
-				// Read the header.
+				// Read the header
 				ReadHeader(reader, world);
-				// Read the string list.
+				// Read the string list
 				ReadStrings(reader);
-				// Read resource lists.
+				// Read resource lists
 				ReadTileTypes(reader);
 				ReadResourceList(reader, zones);
 				ReadResourceList(reader, tilesets);
@@ -230,8 +224,8 @@ namespace ZeldaOracle.Game.Worlds {
 			ReadEvents(reader, world.Events, world);
 
 			// Read the areas.
-			int dungoenCount = reader.ReadInt32();
-			for (int i = 0; i < dungoenCount; i++) {
+			int areaCount = reader.ReadInt32();
+			for (int i = 0; i < areaCount; i++) {
 				Area area = ReadArea(reader, world);
 				world.AddArea(area);
 			}
@@ -661,21 +655,19 @@ namespace ZeldaOracle.Game.Worlds {
 			if (editorMode) {
 				int internalID = 0;
 				foreach (IEventObject eventObject in world.GetEventObjects()) {
-					foreach (Event evnt in eventObject.Events.GetEvents()) {
-						if (evnt.IsDefined) {
-							string existingScript =
-								evnt.GetExistingScript(world.ScriptManager.Scripts);
-							if (existingScript == null) {
-								evnt.Script.ID = ScriptManager.
-									CreateInternalScriptName(internalID);
-								evnt.InternalScriptID = evnt.Script.ID;
-								internalScripts.Add(
-									new KeyValuePair<Script, Event>(evnt.Script, evnt));
-								internalID++;
-							}
-							else {
-								evnt.InternalScriptID = existingScript;
-							}
+					foreach (Event evnt in eventObject.Events.GetDefinedEvents()) {
+						string existingScript =
+							evnt.GetExistingScript(world.ScriptManager.Scripts);
+						if (existingScript == null) {
+							evnt.Script.ID = ScriptManager.
+								CreateInternalScriptName(internalID);
+							evnt.InternalScriptID = evnt.Script.ID;
+							internalScripts.Add(
+								new KeyValuePair<Script, Event>(evnt.Script, evnt));
+							internalID++;
+						}
+						else {
+							evnt.InternalScriptID = existingScript;
 						}
 					}
 				}
@@ -917,13 +909,11 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void WriteEvents(BinaryWriter writer, EventCollection events) {
-			int count = events.GetEvents().Where(e => e.IsDefined).Count();
+			int count = events.GetDefinedEvents().Count();
 			writer.Write(count);
-			foreach (Event evnt in events.GetEvents()) {
-				if (evnt.IsDefined) {
-					WriteString(writer, evnt.Name);
-					WriteString(writer, evnt.InternalScriptID);
-				}
+			foreach (Event evnt in events.GetDefinedEvents()) {
+				WriteString(writer, evnt.Name);
+				WriteString(writer, evnt.InternalScriptID);
 			}
 		}
 
@@ -1037,14 +1027,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private int WriteObject<T>(BinaryWriter writer, T obj, List<T> objList) where T : class {
-			int index = 0;
-			for (int i = 0; i < objList.Count; i++) {
-				if (objList[i] == obj) {
-					index = i;
-					break;
-				}
-			}
-			index = objList.Count;
+			int index = objList.Count;
 			objList.Add(obj);
 			writer.Write(index);
 			return index;

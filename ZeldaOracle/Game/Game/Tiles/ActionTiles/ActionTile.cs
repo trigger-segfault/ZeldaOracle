@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
-	public class ActionTile : IEventObject {
+	public class ActionTile : ITriggerObject {
 		
 		private RoomControl				roomControl;
 		private	ActionTileDataInstance	actionData;
@@ -244,6 +244,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		public EventCollection Events {
 			get { return actionData.Events; }
+		}
+
+		public TriggerCollection Triggers {
+			get { return actionData.Triggers; }
 		}
 
 		/// <summary>Gets the type of entity this action spawns.</summary>

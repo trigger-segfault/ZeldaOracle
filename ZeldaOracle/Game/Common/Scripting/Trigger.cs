@@ -1,4 +1,6 @@
 ﻿
+using ZeldaOracle.Game.Control.Scripting;
+
 namespace ZeldaOracle.Common.Scripting {
 
 	public struct TriggerEvent {
@@ -27,8 +29,10 @@ namespace ZeldaOracle.Common.Scripting {
 		private string name;
 		private string description;
 		private bool initiallyOn;
+		private bool enabled;
 		private bool fireOnce;
-		private TriggerEvent eventType;
+		private TriggerEvent eventType; // TODO: multiple events
+		private Script script;
 
 		
 		//-----------------------------------------------------------------------------
@@ -45,6 +49,8 @@ namespace ZeldaOracle.Common.Scripting {
 			name		= "";
 			description	= "";
 			eventType	= new TriggerEvent(null);
+			script		= null;
+			enabled		= true;
 		}
 
 		public Trigger(Trigger copy, TriggerCollection collection) {
@@ -54,6 +60,25 @@ namespace ZeldaOracle.Common.Scripting {
 			name		= copy.name;
 			description	= copy.description;
 			eventType	= copy.eventType;
+			script		= new Script(copy.script);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Trigger Action Management
+		//-----------------------------------------------------------------------------
+
+		public bool IsTriggeredByEvent(Event e) {
+			return (eventType.Event == e);
+		}
+
+		public Script CreateScript() {
+			script = new Script() {
+				ID = name,
+				IsHidden = true,
+			};
+			
+			return script;
 		}
 
 
@@ -85,6 +110,11 @@ namespace ZeldaOracle.Common.Scripting {
 			set { fireOnce = value; }
 		}
 
+		public bool IsEnabled {
+			get { return enabled; }
+			set { enabled = value; }
+		}
+
 		public string Name {
 			get { return name; }
 			set { name = value; }
@@ -93,6 +123,11 @@ namespace ZeldaOracle.Common.Scripting {
 		public TriggerEvent EventType {
 			get { return eventType; }
 			set { eventType = value; }
+		}
+
+		public Script Script {
+			get { return script; }
+			set { script = value; }
 		}
 	}
 }

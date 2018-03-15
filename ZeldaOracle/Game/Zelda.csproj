@@ -266,7 +266,8 @@
     <Compile Include="Game\Control\RoomVisualEffect.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Sound.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Item.cs" />
-    <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Tiles.cs" />
+    <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Trigger.cs" />
+    <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Tile.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Events\ScriptEvents.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Functions\ScriptFunctions.cs" />
     <Compile Include="Game\Control\Scripting\Interface\ScriptInterface.cs" />

@@ -8,11 +8,6 @@ TILE "temp_roller";
 	TYPE		TileRoller;
 	#FLAGS		Movable, NotGrabbable;
 	SOLID		block;
-	#PROPERTY	(cling_on_stab, false);
-	#PROPERTIES
-	#	(boolean, vertical, false,
-	#		"Vertical", "", "Roller",
-	#		"The roller rolls vertically", false);
 END;
 
 # Spike Roller ------------------------------------------------
@@ -21,16 +16,6 @@ TILE "temp_spike_roller";
 	#CLONE		"tile_monster";
 	TYPE		TileSpikeRoller;
 	#PROPERTY	(ignore_monster, true);
-	#PROPERTIES
-	#	(boolean, vertical, false,
-	#		"Vertical", "", "Roller",
-	#		"True if the spike roller rolls, vertically.", false),
-	#	(integer, move_distance_1, 1,
-	#		"First Move Distance", "", "Roller",
-	#		"The distance to move from the starting position."),
-	#	(integer, move_distance_2, -1,
-	#		"Second Move Distance", "", "Roller",
-	#		"The distance to move from the starting position after moving the first distance.");
 END;
 
 # Arrow Cannon ------------------------------------------------
@@ -38,9 +23,6 @@ END;
 TILE "temp_arrow_cannon";
 	TYPE		TileArrowCannon;
 	SOLID		block;
-	#PROPERTIES
-	#	(integer, direction, 0, "Direction", "direction",
-	#		"Arrow Cannon", "The direction arrows are shot in.", false);
 END;
 
 # Color Switch ------------------------------------------------
@@ -51,10 +33,6 @@ TILE "temp_color_switch";
 	#FLAGS		AbsorbSeeds;
 	SPRITEINDEX	0, "tile_color_switch_blue";
 	SPRITEINDEX	1, "tile_color_switch_red";
-	#PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
-	#			(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
-	#			(boolean, sync_with_area,	false,	"Sync With Area",	"", "", "Will the color switch's state be syncronized with other color switches in the area?");
-	#EVENT		toggle, "Toggle", "Switch", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
 END;
 
 # Crossing Gate -----------------------------------------------
@@ -62,11 +40,6 @@ END;
 TILE "temp_crossing_grate";
 	TYPE		TileCrossingGate;
 	SOLID		edge_w;
-	#FLAGS		NotSurface;
-	#ENTITYDRAW	true;
-	#PROPERTY	(cling_on_stab, false);
-	#PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
-	#			(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
 END;
 
 # Trampoline --------------------------------------------------
@@ -79,22 +52,16 @@ END;
 
 # Magnet Spinner ----------------------------------------------
 
-TILE "temp_magnet_spinner";
+TILE "magnet_spinner_north";
 	TYPE		TileMagnetSpinner;
 	SOLID		block;
-	#PROPERTY	(polarity, 0); # North
-	#PROPERTIES	(integer, rotation_direction, 1, "Rotation Direction", ("enum", "WindingOrder"),
-	#             "Magnet Spinner", "The direction in which the spinner will rotate.");
-END;
-
-TILE "magnet_spinner_north";
-	CLONE		"temp_magnet_spinner";
-	PROPERTY	(polarity, North); # North
+	PROPERTY	(polarity, North);
 END;
 
 TILE "magnet_spinner_south";
-	CLONE		"temp_magnet_spinner";
-	PROPERTY	(polarity, South); # South
+	TYPE		TileMagnetSpinner;
+	SOLID		block;
+	PROPERTY	(polarity, South);
 END;
 
 
@@ -114,7 +81,6 @@ TILE "color_cube";
 	SPRITEINDEX		3, "color_cube_yellow_blue";
 	SPRITEINDEX		4, "color_cube_red_blue";
 	SPRITEINDEX		5, "color_cube_yellow_red";
-	#PROPERTIES		(integer, orientation, 0, "Orientation", ("enum", "ColorCubeOrientation"), "Color Cube", "The orientation index of the color cube.");
 END;
 
 # Roller ------------------------------------------------------
@@ -124,14 +90,12 @@ TILE "roller_horizontal";
 	SPRITEINDEX	0, "tile_roller_horizontal";
 	SPRITEINDEX	1, "tile_roller_horizontal_roll";
 	PROPERTY	(vertical, false);
-	#DOCUMENT	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the roller in tiles.");
 END;
 TILE "roller_vertical";
 	CLONE		"temp_roller";
 	SPRITEINDEX	0, "tile_roller_vertical";
 	SPRITEINDEX	1, "tile_roller_vertical_roll";
 	PROPERTY	(vertical, true);
-	#DOCUMENT	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the roller in tiles.");
 END;
 
 # Spike Roller ------------------------------------------------
@@ -143,7 +107,6 @@ TILE "spike_roller_horizontal";
 	SPRITEINDEX 2, "tile_spike_roller_horizontal_mid";
 	SPRITEINDEX 3, "tile_spike_roller_horizontal_bottom";
 	PROPERTY	(vertical, false);
-	#DOCUMENT	(size, "Length", ("single_axis", "vertical:1"), "Roller", "The length of the spike roller in tiles.");
 END;
 TILE "spike_roller_vertical";
 	CLONE		"temp_spike_roller";
@@ -152,7 +115,6 @@ TILE "spike_roller_vertical";
 	SPRITEINDEX 2, "tile_spike_roller_vertical_mid";
 	SPRITEINDEX 3, "tile_spike_roller_vertical_right";
 	PROPERTY	(vertical, true);
-	#DOCUMENT	(size, "Length", ("single_axis", "horizontal:1"), "Roller", "The length of the spike roller in tiles.");
 END;
 
 # Arrow Cannon ------------------------------------------------
@@ -176,10 +138,6 @@ TILE "owl";
 	SOLID		block;
 	SPRITEINDEX	0, "tile_owl";
 	SPRITEINDEX	1, "tile_owl_activated";
-	#PROPERTIES
-	#	(string, text, "<red>undefined<red>",
-	#		"Text", "text_message", "Owl",
-	#		"The text to display when the owl is activated.");
 END;
 
 # Color Switch ------------------------------------------------
@@ -230,13 +188,7 @@ END;
 
 TILE "pull_handle";
 	TYPE		TilePullHandle;
-	#FLAGS		NotSurface;
 	SPRITE		"tile_pull_handle_down";
-	#PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
-	#EVENT		retracting, "Retracting", "Pull Handle", "Occurs every step that the pull handle is retracting into the wall.", (PullHandle, pullHandle);
-	#EVENT		extending, "Extending", "Pull Handle", "Occurs every step that the pull handle is extending from the wall.", (PullHandle, pullHandle);
-	#EVENT		fully_retract, "Fully Retracted", "Pull Handle", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
-	#EVENT		fully_extend, "Fully Extended", "Pull Handle", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
 END;
 
 # Seed Bouncer ------------------------------------------------
@@ -245,8 +197,6 @@ TILE "seed_bouncer";
 	TYPE		TileSeedBouncer;
 	SPRITE		"tile_seed_bouncer";
 	HALFSOLID	block;
-	#PROPERTIES	(integer, angle, 0, "Angle", "angle", "Seed Bouncer", "The angle the seed bouncer is facing."),
-	#			(boolean, cling_on_stab, false);
 END;
 
 # Trampolines -------------------------------------------------
