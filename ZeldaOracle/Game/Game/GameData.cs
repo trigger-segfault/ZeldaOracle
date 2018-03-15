@@ -94,6 +94,9 @@ namespace ZeldaOracle.Game {
 
 			// CONSCRIPT DESIGNER ONLY
 			if (rewardManager != null) {
+				Logs.Initialization.LogNotice("Loading Inventory");
+				LoadInventory(rewardManager.Inventory, false);
+
 				Logs.Initialization.LogNotice("Loading Rewards");
 				LoadRewards(rewardManager);
 			}

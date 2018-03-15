@@ -48,6 +48,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the hash code for the unmapped sprite lookup.</summary>
 		public override int GetHashCode() {
+			if (SpriteParts == null)
+				return 0;
 			return SpriteParts.GetHashCode();
 		}
 
@@ -137,6 +139,7 @@ namespace ZeldaOracle.Common.Graphics {
 				return unmappedSprite;
 
 			Rectangle2I bounds = sprite.GetBounds(settings);
+			bounds.Size = GMath.Max(Point2I.One, bounds.Size);
 			RenderTarget2D renderTarget = new RenderTarget2D(Resources.GraphicsDevice, bounds.Width, bounds.Height, false, SurfaceFormat.Color, DepthFormat.None);
 			GameData.PaletteShader.TilePalette = tilePalette;
 			GameData.PaletteShader.EntityPalette = entityPalette;

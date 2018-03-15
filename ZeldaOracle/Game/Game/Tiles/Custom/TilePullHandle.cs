@@ -99,7 +99,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 			CollisionStyle		= CollisionStyle.Circular;
 			IsSolid				= true;
-			ClingWhenStabbed	= false;
 			SolidType			= TileSolidType.HalfSolid;
 			Rectangle2I collisionBox = new Rectangle2I(4, 4, 8, 8);
 			collisionBox.ExtendEdge(direction, 5);
@@ -179,7 +178,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Initializes the properties and events for the tile type.</summary>
 		public static void InitializeTileData(TileData data) {
-			data.Flags |= TileFlags.NotSurface;
+			data.Flags |= TileFlags.NotSurface | TileFlags.NoClingOnStab;
 
 			data.Properties.Set("direction", Direction.Down)
 				.SetDocumentation("Direction", "direction", "", "Pull Handle", "The direction the handle extends in.");

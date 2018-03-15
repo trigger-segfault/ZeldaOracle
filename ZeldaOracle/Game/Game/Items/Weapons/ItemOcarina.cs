@@ -14,12 +14,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemOcarina() {
-			this.id				= "item_ocarina";
-			this.name			= new string[] { "Ocarina" };
-			this.description	= new string[] { "Plays a beautiful sound." };
-			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_OCARINA };
-			this.flags			= ItemFlags.None;
+		public ItemOcarina() : base("item_ocarina") {
+			SetName("Ocarina");
+			SetDescription("Plays a beautiful sound.");
+			SetSprite(GameData.SPR_ITEM_ICON_OCARINA);
+			Flags = WeaponFlags.None;
 		}
 
 	}

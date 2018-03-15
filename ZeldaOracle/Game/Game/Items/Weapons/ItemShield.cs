@@ -1,4 +1,5 @@
 ﻿using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -8,22 +9,25 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemShield() {
-			id			= "item_shield";
-			name		= new string[] { "Wooden Shield", "Iron Shield", "Mirror Shield" };
-			description	= new string[] { "A small shield.", "A large shield.", "A reflective shield." };
-			maxLevel	= Item.Level3;
-
-			flags =
-				ItemFlags.UsableWhileJumping |
-				ItemFlags.UsableWithSword |
-				ItemFlags.UsableWhileInHole;
-
-			sprite = new ISprite[] {
+		public ItemShield() : base("item_shield") {
+			SetName("Wooden Shield", "Iron Shield", "Mirror Shield");
+			SetDescription("A small shield.", "A large shield.", "A reflective shield.");
+			SetMessage(
+				"You got a <red>Wooden Shield<red>!",
+				"You got an <red>Iron Shield<red>!",
+				"You got the <red>Mirror Shield<red>!");
+			SetSprite(
 				GameData.SPR_ITEM_ICON_SHIELD_1,
 				GameData.SPR_ITEM_ICON_SHIELD_2,
-				GameData.SPR_ITEM_ICON_SHIELD_3
-			};
+				GameData.SPR_ITEM_ICON_SHIELD_3);
+			MaxLevel = Item.Level3;
+			HoldType = RewardHoldTypes.TwoHands;
+
+			Flags =
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWithSword |
+				WeaponFlags.UsableWhileInHole;
+
 		}
 
 

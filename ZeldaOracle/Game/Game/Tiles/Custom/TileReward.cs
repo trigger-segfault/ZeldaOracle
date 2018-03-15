@@ -29,6 +29,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 				
 				CollectibleReward collectible = new CollectibleReward(reward);
+				collectible.HasDuration = false;
 				collectible.Collected += delegate() {
 					Properties.Set("looted", true);
 					RoomControl.RemoveTile(this);

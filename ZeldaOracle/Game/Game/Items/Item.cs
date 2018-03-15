@@ -9,22 +9,33 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items {
 	public abstract class Item : ISlotItem {
 
-		protected Inventory		inventory;
+		private Inventory	inventory;
+		private string		id;
 
-		protected string		id;
-		protected string[]		name;
-		protected string[]		description;
-		protected int			level;
-		protected int			maxLevel;
+		private string[]	name;
+		private string[]	description;
+		private string[]	message;
+		private ISprite[]	sprite;
+		private int			level;
+		private int			maxLevel;
+		private RewardHoldTypes	holdType;
 
-		protected bool			isObtained;
-		protected bool			isStolen;
+		private int[]		price;
 
-		protected ISprite[]		sprite;
+		private string[]	ammoID;
+		private Ammo[]		ammo;
+		private int[]		maxAmmo;
+		private bool		ammoOnLevelUp;
+
+		private bool		isObtained;
+		private bool		isLost;
+
+
 
 
 		//-----------------------------------------------------------------------------
@@ -40,16 +51,142 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		protected Item() {
-			this.inventory		= null;
-			this.id				= "";
-			this.name			= new string[] { "" };
-			this.description	= new string[] { "" };
-			this.level			= Item.Level1;
-			this.maxLevel		= Item.Level1;
-			this.isObtained		= false;
-			this.isStolen		= false;
-			this.sprite			= null;
+		protected Item(string id) {
+			this.id			= id;
+			inventory		= null;
+
+			name			= new string[] { "" };
+			description		= new string[] { "" };
+			message			= new string[] { "" };
+			sprite			= new ISprite[] { new EmptySprite() };
+			level			= Item.Level1;
+			maxLevel		= Item.Level1;
+			holdType		= RewardHoldTypes.TwoHands;
+
+			price          = new int[] { 0 };
+
+			ammoID			= null;
+			ammo			= null;
+			maxAmmo			= null;
+			ammoOnLevelUp	= false;
+
+			isObtained		= false;
+			isLost			= false;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the name of the item at the specified level.</summary>
+		public string GetName(int level) {
+			if (level < name.Length)
+				return name[level];
+			return name.LastOrDefault() ?? "";
+		}
+
+		/// <summary>Gets the description of the item at the specified level.</summary>
+		public string GetDescription(int level) {
+			if (level < description.Length)
+				return description[level];
+			return description.LastOrDefault() ?? "";
+		}
+
+		/// <summary>Gets the reward message of the item at the specified level.</summary>
+		public string GetMessage(int level) {
+			if (level < message.Length)
+				return message[level];
+			return message.LastOrDefault() ?? "";
+		}
+
+		/// <summary>Gets the sprite of the item at the specified level.</summary>
+		public ISprite GetSprite(int level) {
+			if (level < sprite.Length)
+				return sprite[level];
+			return sprite.LastOrDefault();
+		}
+
+		/// <summary>Gets the price of the item at the specified level.</summary>
+		public int GetDefaultPrice(int level) {
+			if (level < price.Length)
+				return price[level];
+			return price.LastOrDefault();
+		}
+
+		/// <summary>Gets the collection of this item's levels.</summary>
+		public IEnumerable<int> GetLevels() {
+			for (int i = 0; i <= maxLevel; i++) {
+				yield return i;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Protected Mutators
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Sets the leveled names of the item.</summary>
+		protected void SetName(params string[] names) {
+			name = names;
+		}
+
+		/// <summary>Sets the leveled descriptions of the item.</summary>
+		protected void SetDescription(params string[] descriptions) {
+			description = descriptions;
+		}
+
+		/// <summary>Sets the leveled reward messages of the item.</summary>
+		protected void SetMessage(params string[] messages) {
+			message = messages;
+		}
+
+		/// <summary>Sets the leveled sprites of the item.</summary>
+		protected void SetSprite(params ISprite[] sprites) {
+			sprite = sprites;
+		}
+
+		/// <summary>Sets the ammo types used by this weapon.</summary>
+		protected virtual void SetAmmo(params string[] ammoIDs) {
+			ammoID = new string[ammoIDs.Length];
+			for (int i = 0; i < ammoID.Length; i++) {
+				ammoID[i] = ammoIDs[i];
+			}
+		}
+
+		/// <summary>Sets the max ammo allowed at each level.</summary>
+		protected void SetMaxAmmo(params int[] maxAmmos) {
+			maxAmmo = maxAmmos;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Ammo
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the ammo at the specified index in the list.</summary>
+		public Ammo GetAmmoAt(int index) {
+			return ammo[index];
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Initialization
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		public void Initialize(Inventory inventory) {
+			this.inventory = inventory;
+			if (ammoID != null) {
+				ammo = new Ammo[ammoID.Length];
+				for (int i = 0; i < ammo.Length; i++) {
+					ammo[i] = inventory.GetAmmo(ammoID[i]);
+					if (IsAmmoContainer)
+						ammo[i].Container = this;
+				}
+				ammoID = null;
+			}
+			OnInitialize();
 		}
 
 
@@ -57,27 +194,25 @@ namespace ZeldaOracle.Game.Items {
 		// Virtual
 		//-----------------------------------------------------------------------------
 
-		// Called when the item is added to the inventory list.
-		public virtual void OnAdded(Inventory inventory) {
-			this.inventory = inventory;
-		}
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		protected virtual void OnInitialize() { }
 
-		// Called when the item's level is changed.
-		public virtual void OnLevelUp() { }
+		/// <summary>Called when the item's level is changed.</summary>
+		protected virtual void OnLevelUp() { }
 
-		// Called when the item has been obtained.
-		public virtual void OnObtained() { }
+		/// <summary>Called when the item has been obtained.</summary>
+		protected virtual void OnObtained() { }
 
-		// Called when the item has been unobtained.
-		public virtual void OnUnobtained() { }
+		/// <summary>Called when the item has been unobtained.</summary>
+		protected virtual void OnUnobtained() { }
 
-		// Called when the item has been stolen.
-		public virtual void OnStolen() { }
+		/// <summary>Called when the item has been lost.</summary>
+		protected virtual void OnLost() { }
 
-		// Called when the stolen item has been returned.
-		public virtual void OnReturned() { }
+		/// <summary>Called when the lost item has been reobtained.</summary>
+		protected virtual void OnReobtained() { }
 
-		// Draws the item inside the inventory.
+		/// <summary>Draws the item inside the inventory.</summary>
 		public virtual void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
 		}
@@ -88,65 +223,151 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		protected virtual void DrawSprite(Graphics2D g, Point2I position) {
-			g.DrawSprite(sprite[level], position);
+			g.DrawSprite(Sprite, position);
 		}
 
 		protected virtual void DrawLevel(Graphics2D g, Point2I position) {
 			g.DrawSprite(GameData.SPR_HUD_LEVEL, position + new Point2I(8, 8));
-			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), EntityColors.Black);
+			g.DrawString(GameData.FONT_SMALL, DisplayLevel.ToString(), position + new Point2I(16, 8), EntityColors.Black);
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		private void AmmoLevelUp() {
+			if (IsAmmoContainer) {
+				foreach (Ammo ammo in this.ammo) {
+					ammo.MaxAmount = maxAmmo[Level];
+					if (ammo.IsObtained && IncreaseAmmoOnLevelUp)
+						ammo.Amount = ammo.MaxAmount;
+				}
+			}
+		}
+
+		private void AmmoObtained() {
+			if (IsAmmoContainer) {
+				if (isObtained) {
+					inventory.ObtainAmmo(ammo[0]);
+					ammo[0].MaxAmount = maxAmmo[0];
+					if (IncreaseAmmoOnLevelUp)
+						ammo[0].Amount = ammo[0].MaxAmount;
+				}
+				else {
+					foreach (Ammo ammo in this.ammo) {
+						ammo.IsObtained = false;
+					}
+				}
+			}
+		}
+
+		private void AmmoLost() {
+			if (IsAmmoContainer) {
+				foreach (Ammo ammo in this.ammo) {
+					if (ammo.IsObtained)
+						ammo.IsObtained = isLost;
+				}
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		// Gets the player.
-		public Player Player {
-			get { return inventory.GameControl.Player; }
+
+		/// <summary>Get or sets the inventory containing this item.</summary>
+		public Inventory Inventory {
+			get { return inventory; }
+			set { inventory = value; }
 		}
 
-		// Gets the current room control.
+		/// <summary>Gets the current game control.</summary>
+		public GameControl GameControl {
+			get { return inventory.GameControl; }
+		}
+
+		/// <summary>Gets the current room control.</summary>
 		public RoomControl RoomControl {
 			get { return inventory.GameControl.RoomControl; }
 		}
 
-		// Gets the id of the item.
+		/// <summary>Gets the player.</summary>
+		public Player Player {
+			get { return inventory.GameControl.Player; }
+		}
+
+		/// <summary>Gets the id of the item.</summary>
 		public string ID {
 			get { return id; }
 		}
 
-		// Gets the name of the item.
-		public virtual string Name {
-			get { return name[level]; }
+		/// <summary>Gets the name of the item.</summary>
+		public string Name {
+			get { return GetName(level); }
+			//set { SetName(value); }
 		}
 
-		// Gets the description of the item.
-		public virtual string Description {
-			get { return description[level]; }
+		/// <summary>Gets the description of the item.</summary>
+		public string Description {
+			get { return GetDescription(level); }
+			//set { SetDescription(value); }
 		}
 
-		// Gets the level of the item.
+		/// <summary>Gets the reward message of the item.</summary>
+		public string Message {
+			get { return GetMessage(level); }
+			//set { SetMessage(value); }
+		}
+
+		/// <summary>Gets the sprite of the item.</summary>
+		public ISprite Sprite {
+			get { return GetSprite(level); }
+			//set { SetSprite(value); }
+		}
+
+		/// <summary>Gets the hold type for the item during the reward state.</summary>
+		public RewardHoldTypes HoldType {
+			get { return holdType; }
+			set { holdType = value; }
+		}
+
+		/// <summary>Gets the level of the item.</summary>
 		public int Level {
 			get { return level; }
 			set {
+				value = GMath.Clamp(value, 0, maxLevel);
 				if (level != value) {
-					level = GMath.Clamp(value, 0, maxLevel);
+					level = value;
+					AmmoLevelUp();
 					OnLevelUp();
 				}
 			}
 		}
 
-		// Gets the highest item level.
-		public int MaxLevel {
-			get { return maxLevel; }
+		/// <summary>Gets the dispaly level for the item and not the level index.</summary>
+		public int DisplayLevel {
+			get { return level + 1; }
 		}
 
-		// Gets if the item has been obtained.
+		/// <summary>Gets the highest item level.</summary>
+		public int MaxLevel {
+			get { return maxLevel; }
+			set { maxLevel = GMath.Max(Item.Level1, value); }
+		}
+
+		/// <summary>Gets if the item has multiple levels.</summary>
+		public bool IsLeveled {
+			get { return MaxLevel > Item.Level1; }
+		}
+
+		/// <summary>Gets if the item has been obtained.</summary>
 		public bool IsObtained {
 			get { return isObtained; }
 			set {
 				if (isObtained != value) {
 					isObtained = value;
+					AmmoObtained();
 					if (isObtained)
 						OnObtained();
 					else
@@ -155,18 +376,49 @@ namespace ZeldaOracle.Game.Items {
 			}
 		}
 
-		// Gets if the item has been stolen.
-		public bool IsStolen {
-			get { return isStolen; }
+		/// <summary>Gets if the item has been lost.</summary>
+		public bool IsLost {
+			get { return isLost; }
 			set {
-				if (isStolen != value) {
-					isStolen = value;
-					if (isStolen)
-						OnStolen();
+				if (isLost != value) {
+					isLost = value;
+					AmmoLost();
+					if (isLost)
+						OnLost();
 					else
-						OnReturned();
+						OnReobtained();
 				}
 			}
+		}
+
+		/// <summary>Gets if the item has been obtained and is not lost.</summary>
+		public bool IsAvailable {
+			get { return isObtained && !isLost; }
+		}
+
+		/// <summary>Returns the number of ammo types this item uses.</summary>
+		public int AmmoCount {
+			get {
+				if (ammo != null)
+					return ammo.Length;
+				return 0;
+			}
+		}
+
+		/// <summary>Gets if the item uses ammo to function.</summary>
+		public bool UsesAmmo {
+			get { return ammo != null; }
+		}
+
+		/// <summary>Gets if this item is the one containing the ammo it uses.</summary>
+		public bool IsAmmoContainer {
+			get { return ammo != null && maxAmmo != null; }
+		}
+
+		/// <summary>Gets if ammo should be increased to the new capacity on level up.</summary>
+		public bool IncreaseAmmoOnLevelUp {
+			get { return ammoOnLevelUp; }
+			set { ammoOnLevelUp = value; }
 		}
 	}
 }

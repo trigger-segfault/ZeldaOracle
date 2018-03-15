@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSecondary() {
+		public ItemSecondary(string id) : base(id) {
 			this.slot = Point2I.Zero;
 		}
 

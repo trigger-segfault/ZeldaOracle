@@ -11,39 +11,38 @@ using ZeldaOracle.Game.Control;
 namespace ZeldaOracle.Game.Items.Rewards {
 	public class RewardRecoveryHeart : Reward {
 
-		protected int amount;
+		/// <summary>The amount of full hearts to restore.</summary>
+		private int amount;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardRecoveryHeart(string id, int amount, string message, ISprite sprite) {
-			InitSprite(sprite);
+		public RewardRecoveryHeart(string id, int amount, string message, ISprite sprite)
+			: base(id)
+		{
+			this.amount		= amount;
 
-			this.id				= id;
-			this.message		= message;
-			this.hasDuration	= true;
-			this.holdType		= RewardHoldTypes.Raise;
-			this.isCollectibleWithItems	= true;
-			this.onlyShowMessageInChest = true;
-
-			this.amount			= amount;
+			Sprite			= sprite;
+			Message			= message;
+			HoldType		= RewardHoldTypes.Raise;
+			HasDuration		= true;
+			ShowMessageOnPickup			= false;
+			IsCollectibleWithWeapons	= true;
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnCollect(GameControl gameControl) {
-			if (gameControl.HUD.DynamicHealth >= gameControl.Player.MaxHealth)
+		/// <summary>Called when the player collects the reward.</summary>
+		public override void OnCollect() {
+			if (GameControl.HUD.DynamicHealth >= Player.MaxHealth)
 				AudioSystem.PlaySound(GameData.SOUND_GET_HEART);
 
-			gameControl.Player.Health += amount * 4;
+			Player.Health += amount * 4;
 		}
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
 	}
 }

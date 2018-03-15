@@ -19,18 +19,19 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemFeather(int level = 0) {
-			this.id				= "item_feather";
-			this.name			= new string[] { "Roc's Feather", "Roc's Cape" };
-			this.description	= new string[] { "A nice lift.", "A wing-riding cape." };
-			this.level			= level;
-			this.maxLevel		= Item.Level2;
-			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
-
-			sprite = new ISprite[] {
+		public ItemFeather() : base("item_feather") {
+			SetName("Roc's Feather", "Roc's Cape");
+			SetDescription("A nice lift.", "A wing-riding cape.");
+			SetMessage(
+				"You got <red>Roc's Feather<red>! You feel as light as a feather!",
+				"You got <red>Roc's Cape<red>! " +
+					"Press and hold the button to do a double jump!");
+			SetSprite(
 				GameData.SPR_ITEM_ICON_FEATHER,
-				GameData.SPR_ITEM_ICON_CAPE
-			};
+				GameData.SPR_ITEM_ICON_CAPE);
+			MaxLevel = Item.Level2;
+
+			Flags = WeaponFlags.UsableWhileJumping | WeaponFlags.UsableWithSword;
 		}
 
 
@@ -56,7 +57,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Deplay cape when in air.
 		public override void OnButtonDown() {
-			if (Player.IsInAir && level == ItemWeapon.Level2) {
+			if (Player.IsInAir && Level == ItemWeapon.Level2) {
 				Player.Movement.DeployCape();
 			}
 		}

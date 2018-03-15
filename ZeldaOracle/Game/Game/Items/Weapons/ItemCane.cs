@@ -20,16 +20,17 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemCane() {
-			this.id				= "item_cane";
-			this.name			= new string[] { "Cane of Somaria" };
-			this.description	= new string[] { "Used to create blocks." };
-			this.maxLevel		= Item.Level1;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
-			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_CANE };
+		public ItemCane() : base("item_cane") {
+			SetName("Cane of Somaria");
+			SetDescription("Used to create blocks.");
+			SetSprite(GameData.SPR_ITEM_ICON_CANE);
+			Flags =
+				WeaponFlags.UsableInMinecart |
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWhileInHole;
 
-			this.somariaBlockTile		= null;
-			this.somariaBlockTileData	= null;
+			somariaBlockTile		= null;
+			somariaBlockTileData	= null;
 		}
 
 
@@ -44,9 +45,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			return true;
 		}
 
-		public override void OnAdded(Inventory inventory) {
-			base.OnAdded(inventory);
-
+		protected override void OnInitialize() {
 			somariaBlockTile = null;
 
 			// Create the somaria block tile data.

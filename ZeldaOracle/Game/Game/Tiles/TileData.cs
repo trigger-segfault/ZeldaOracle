@@ -76,8 +76,6 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Cuttable Sword Level", "Interactions", "");
 			properties.Set("pickupable_bracelet_level", 0)
 				.SetDocumentation("Pickupable Bracelet Level", "Interactions", "");
-			properties.Set("cling_on_stab", true)
-				.SetDocumentation("Cling on Stab", "Interactions", "True if a cling effect should be spawned when the tile is stabbed with the sword.");
 			properties.Set("raised_on_buttons", false)
 				.SetDocumentation("Raised on Buttons", "Interactions", "True if a the tile appears raised when pushed onto a button.");
 

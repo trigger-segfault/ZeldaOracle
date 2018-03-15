@@ -58,6 +58,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			if (dropEntity != null) {
 				if (dropEntity is CollectibleReward) {
 					var collectibleReward = dropEntity as CollectibleReward;
+					collectibleReward.HasDuration = false;
 					collectibleReward.Collected += delegate () {
 						Properties.Set("looted", true);
 						IsEnabled = false;

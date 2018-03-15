@@ -13,12 +13,12 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence7() : base() {
-			this.id = "item_essence_7";
-			this.name = new string[] { "Rolling Sea" };
-			this.description = new string[] { "The song of the sea forms a wave that carries heros into adventure." };
-			this.slot = 6;
-			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_ESSENCE_7 };
+		public ItemEssence7() : base("item_essence_7") {
+			SetName("Rolling Sea");
+			SetDescription("The song of the sea forms a wave that carries heros into adventure.");
+			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_7);
+
+			slot = 6;
 		}
 
 	}

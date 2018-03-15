@@ -3,6 +3,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	
@@ -16,18 +17,18 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemMagnetGloves() {
-			this.id				= "item_magnet_gloves";
-			this.name			= new string[] { "Magnetic Glovess" };
-			this.description	= new string[] { "Magnetically attractive!" };
-			this.maxLevel		= Item.Level1;
-			this.flags = 
-				ItemFlags.UsableWhileJumping | 
-				ItemFlags.UsableWhileInHole;
+		public ItemMagnetGloves() : base("item_magnet_gloves") {
+			SetName("Magnetic Gloves");
+			SetDescription("Magnetically attractive!");
+			SetMessage("You got the Magnetic Gloves! " +
+						"Their magnetic might attracts and repels.");
+			SetSprite(GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH);
+			MaxLevel		= Item.Level1;
+			HoldType = RewardHoldTypes.TwoHands;
+			Flags = 
+				WeaponFlags.UsableWhileJumping | 
+				WeaponFlags.UsableWhileInHole;
 
-			this.sprite = new ISprite[] {
-				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH
-			};
 
 			polarity = Polarity.South;
 			polaritySprites = new ISprite[2];
@@ -63,7 +64,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			get { return polarity; }
 			set {
 				polarity = value;
-				sprite[0] = polaritySprites[(int) polarity];
+				SetSprite(polaritySprites[(int) polarity]);
 			}
 		}
 	}

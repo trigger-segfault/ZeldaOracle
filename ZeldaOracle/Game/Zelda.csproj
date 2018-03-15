@@ -136,6 +136,8 @@
     <None Include="Common\Debugging\ToggleMenuItem.cs" />
     <Compile Include="Common\Graphics\MappedColors.cs" />
     <Compile Include="Common\Graphics\PaletteColors.cs" />
+    <Compile Include="Common\Graphics\RenderTarget.cs" />
+    <Compile Include="Common\Graphics\Sprites\CanvasSprite.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Misc.cs" />
     <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Size.cs" />
@@ -304,6 +306,9 @@
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\Minecart.cs" />
+    <Compile Include="Game\Items\Rewards\LinkedReward.cs" />
+    <Compile Include="Game\Items\Rewards\LinkedRewardItemCurrent.cs" />
+    <Compile Include="Game\Items\Rewards\LinkedRewardItemLevelUp.cs" />
     <Compile Include="Game\Tiles\TileDataInitializing.cs" />
     <Compile Include="Game\Worlds\MonsterSpawnMode.cs" />
     <Compile Include="Game\Worlds\RoomRespawnMode.cs" />
@@ -491,7 +496,7 @@
     <Compile Include="Game\Items\Inventory.cs" />
     <Compile Include="Game\Items\Item.cs" />
     <Compile Include="Game\Items\ItemEssence.cs" />
-    <Compile Include="Game\Items\ItemFlags.cs" />
+    <Compile Include="Game\Items\WeaponFlags.cs" />
     <Compile Include="Game\Items\ItemWeapon.cs" />
     <Compile Include="Game\Items\Rewards\RewardHeartContainer.cs" />
     <Compile Include="Game\Items\Rewards\RewardHeartPiece.cs" />
@@ -500,7 +505,7 @@
     <Compile Include="Game\Items\Rewards\RewardAmmo.cs" />
     <Compile Include="Game\Items\Rewards\RewardRecoveryHeart.cs" />
     <Compile Include="Game\Items\Rewards\Reward.cs" />
-    <Compile Include="Game\Items\Rewards\RewardHoldTypes.cs" />
+    <Compile Include="Game\Items\RewardHoldTypes.cs" />
     <Compile Include="Game\Items\Rewards\RewardManager.cs" />
     <Compile Include="Game\Items\Rewards\RewardRupee.cs" />
     <Compile Include="Game\Items\KeyItems\ItemMembersCard.cs" />

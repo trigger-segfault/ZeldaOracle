@@ -22,7 +22,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public SeedBasedItem() {
+		public SeedBasedItem(string id) : base(id) {
+			SetAmmo(
+				"ammo_ember_seeds",
+				"ammo_scent_seeds",
+				"ammo_pegasus_seeds",
+				"ammo_gale_seeds",
+				"ammo_mystery_seeds");
 		}
 
 
@@ -30,40 +36,27 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		// Called when the item is added to the inventory list.
-		public override void OnAdded(Inventory inventory) {
-			base.OnAdded(inventory);
-			
-			currentAmmo = 0;
-
-			ammo = new Ammo[] {
-				inventory.GetAmmo("ammo_ember_seeds"),
-				inventory.GetAmmo("ammo_scent_seeds"),
-				inventory.GetAmmo("ammo_pegasus_seeds"),
-				inventory.GetAmmo("ammo_gale_seeds"),
-				inventory.GetAmmo("ammo_mystery_seeds"),
-			};
+		// Draws the item inside the inventory.
+		public override void DrawSlot(Graphics2D g, Point2I position) {
+			DrawSprite(g, position);
+			DrawAmmo(g, position);
+			g.DrawSprite(CurrentAmmo.Sprite, position + new Point2I(8, 0));
 		}
 
-		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
 		public SeedType CurrentSeedType {
 			get {
-				string ammoID = ammo[currentAmmo].ID;
-				if (ammoID == "ammo_ember_seeds")
-					return SeedType.Ember;
-				else if (ammoID == "ammo_scent_seeds")
-					return SeedType.Scent;
-				else if (ammoID == "ammo_gale_seeds")
-					return SeedType.Gale;
-				else if (ammoID == "ammo_mystery_seeds")
-					return SeedType.Mystery;
-				else if (ammoID == "ammo_pegasus_seeds")
-					return SeedType.Pegasus;
-				return SeedType.Ember;
+				switch (CurrentAmmo.ID) {
+				case "ammo_ember_seeds":	return SeedType.Ember;
+				case "ammo_scent_seeds":	return SeedType.Scent;
+				case "ammo_pegasus_seeds":	return SeedType.Pegasus;
+				case "ammo_gale_seeds":		return SeedType.Gale;
+				case "ammo_mystery_seeds":	return SeedType.Mystery;
+				default: return SeedType.Ember;
+				}
 			}
 		}
 	}

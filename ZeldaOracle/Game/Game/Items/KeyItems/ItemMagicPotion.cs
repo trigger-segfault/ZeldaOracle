@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.KeyItems {
 	public class ItemMagicPotion : ItemSecondary {
@@ -14,12 +15,13 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemMagicPotion() {
-			this.id = "item_magic_potion";
-			this.name = new string[] { "Magic Potion" };
-			this.description = new string[] { "Fill your hearts!" };
-			this.slot = new Point2I(1, 0);
-			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_MAGIC_POTION };
+		public ItemMagicPotion() : base("item_magic_potion") {
+			SetName("Magic Potion");
+			SetDescription("Fill your hearts!");
+			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_POTION);
+			HoldType = RewardHoldTypes.TwoHands;
+
+			slot = new Point2I(1, 0);
 		}
 
 	}

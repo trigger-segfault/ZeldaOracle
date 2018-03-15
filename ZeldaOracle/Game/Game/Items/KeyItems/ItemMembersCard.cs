@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.KeyItems {
 	public class ItemMembersCard : ItemSecondary {
@@ -14,12 +15,13 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemMembersCard() {
-			this.id = "item_members_card";
-			this.name = new string[] { "Member's Card" };
-			this.description = new string[] { "Opens the door!" };
-			this.slot = new Point2I(1, 1);
-			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_MEMBERS_CARD };
+		public ItemMembersCard() : base("item_members_card") {
+			SetName("Member's Card");
+			SetDescription("Opens the door!");
+			SetSprite(GameData.SPR_ITEM_ICON_MEMBERS_CARD);
+			HoldType = RewardHoldTypes.TwoHands;
+
+			slot = new Point2I(1, 1);
 		}
 
 	}

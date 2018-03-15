@@ -126,5 +126,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>True if the carried tile bounces.</summary>
 		Bounces = (1 << 16),
+
+		/// <summary>The sword will not create a sling effect when stabbing the tile.</summary>
+		NoClingOnStab = (1 << 17),
 	}
 }

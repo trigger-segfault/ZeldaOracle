@@ -14,28 +14,27 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardHeartContainer() {
-			InitSprite(GameData.SPR_REWARD_HEART_CONTAINER);
-
-			this.id				= "heart_container";
-			this.message		= "You got a <red>Heart Container<red>!";
-			this.hasDuration	= false;
-			this.holdType		= RewardHoldTypes.TwoHands;
-			this.isCollectibleWithItems	= false;
+		public RewardHeartContainer() : base("heart_container") {
+			Sprite			= GameData.SPR_REWARD_HEART_CONTAINER;
+			Message			= "You got a <red>Heart Container<red>!";
+			HoldType		= RewardHoldTypes.TwoHands;
+			HasDuration		= false;
+			ShowMessageOnPickup			= true;
+			IsCollectibleWithWeapons	= false;
 		}
 		
 
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnDisplayMessage(GameControl gameControl) {
-			IncrementHeartContainers(gameControl);
-			gameControl.DisplayMessage(message);
+		public override void OnDisplayMessage() {
+			IncrementHeartContainers();
+			GameControl.DisplayMessage(Message);
 		}
 
-		public override void OnCollectNoMessage(GameControl gameControl) {
-			IncrementHeartContainers(gameControl);
+		public override void OnCollectNoMessage() {
+			IncrementHeartContainers();
 		}
 
 
@@ -43,9 +42,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		private void IncrementHeartContainers(GameControl gameControl) {
-			gameControl.Player.MaxHealth += 4;
-			gameControl.Player.Health = gameControl.Player.MaxHealth;
+		private void IncrementHeartContainers() {
+			Player.MaxHealth += 4;
+			Player.Health = Player.MaxHealth;
 		}
 	}
 }

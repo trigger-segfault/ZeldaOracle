@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 
 		/// <summary>Initializes the properties and events for the tile type.</summary>
 		public static void InitializeTileData(TileData data) {
-			data.Properties.Set("cling_on_stab", false);
+			data.Flags |= TileFlags.NoClingOnStab;
 			data.Properties.Set("vertical", false)
 				.SetDocumentation("Vertical", "Roller", "The roller rolls vertically.").Hide();
 			data.Properties

@@ -227,8 +227,8 @@ namespace ZeldaEditor.Control {
 			try {
 				GameData.Initialize();
 
-				this.inventory      = new Inventory(null);
-				this.rewardManager  = new RewardManager(null);
+				this.inventory      = new Inventory();
+				this.rewardManager  = new RewardManager(inventory);
 				this.timer          = Stopwatch.StartNew();
 				this.ticks          = 0;
 				this.roomSpacing    = 1;

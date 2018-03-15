@@ -28,6 +28,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 
 			CollectibleReward collectible = new CollectibleReward(reward, isSubmergable: true);
+			collectible.HasDuration = false;
 			collectible.Collected += delegate () {
 				Properties.Set("looted", true);
 				IsEnabled = false;

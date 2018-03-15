@@ -13,12 +13,12 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence8() : base() {
-			this.id = "item_essence_8";
-			this.name = new string[] { "Falling Star" };
-			this.description = new string[] { "Its eternal light acts as guide to the other essences." };
-			this.slot = 7;
-			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_ESSENCE_8 };
+		public ItemEssence8() : base("item_essence_8") {
+			SetName("Falling Star");
+			SetDescription("Its eternal light acts as guide to the other essences.");
+			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_8);
+
+			slot = 7;
 		}
 
 	}

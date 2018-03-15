@@ -56,8 +56,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public override void OnPushing(Direction direction) {
 			if (!IsMoving && IsPushableDirection(direction) &&
-				GameControl.Inventory.IsWeaponButtonDown(
-					GameControl.Inventory.GetWeapon("item_bracelet")))
+				GameControl.Inventory.IsWeaponButtonDown("item_bracelet"))
 			{
 				ResetReturnTimer();
 				// Let the update method know that we're still pushing the tile
@@ -165,9 +164,9 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		/// <summary>Initializes the properties and events for the tile type.</summary>
 		public static void InitializeTileData(TileData data) {
-			data.Flags |= TileFlags.Movable | TileFlags.NotGrabbable;
-
-			data.Properties.Set("cling_on_stab", false);
+			data.Flags |= TileFlags.Movable | TileFlags.NotGrabbable |
+				TileFlags.NoClingOnStab;
+			
 			data.Properties.Set("vertical", false)
 				.SetDocumentation("Vertical", "Roller", "The roller rolls vertically.").Hide();
 			data.Properties

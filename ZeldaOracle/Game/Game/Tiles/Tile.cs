@@ -1170,8 +1170,13 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool ClingWhenStabbed {
-			get { return properties.GetBoolean("cling_on_stab", true); }
-			set { properties.Set("cling_on_stab", value); }
+			get { return !flags.HasFlag(TileFlags.NoClingOnStab); }
+			set {
+				if (value)
+					flags &= ~TileFlags.NoClingOnStab;
+				else
+					flags |= TileFlags.NoClingOnStab;
+			}
 		}
 
 		public Vector2F Velocity {

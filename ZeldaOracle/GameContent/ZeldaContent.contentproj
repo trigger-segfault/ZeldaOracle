@@ -585,17 +585,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>general_objects</Name>
     </None>
-    <None Include="Tiles\Tiles\Objects\natural_objects_old.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>natural_objects_old</Name>
-    </None>
     <None Include="Tiles\Tiles\Objects\puzzle_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>puzzle_objects</Name>
-    </None>
-    <None Include="Tiles\Tiles\Objects\puzzle_objects_old.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>puzzle_objects_old</Name>
     </None>
     <None Include="Tiles\Tiles\overworld.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1282,6 +1274,16 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
+    <Compile Include="Sounds\Items\magnet_gloves_loop.wav">
+      <Name>magnet_gloves_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\magnet_gloves_stop.wav">
+      <Name>magnet_gloves_stop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="Sounds\Items\seed_shooter.wav">
       <Name>seed_shooter</Name>
       <Importer>WavImporter</Importer>
@@ -1565,18 +1567,7 @@
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\magnet_gloves_loop.wav">
-      <Name>magnet_gloves_loop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\Items\magnet_gloves_stop.wav">
-      <Name>magnet_gloves_stop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>

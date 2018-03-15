@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game {
 
@@ -27,6 +28,10 @@ namespace ZeldaOracle.Game {
 
 			// Add ammos.
 			inventory.AddAmmos(false,
+				new Ammo("rupees", "Rupees", "A currency.",
+					GameData.SPR_REWARD_RUPEE_SMALL_GREEN, 0, 99),
+				new Ammo("ore_chunks", "Ore Chunks", "Subrosian currency.",
+					GameData.SPR_REWARD_ORE_CHUNK_BLUE, 0, 99),
 				new AmmoSatchelSeeds("ammo_ember_seeds", "Ember Seeds", "A burst of fire!",
 					GameData.SPR_ITEM_SEED_EMBER, 0, 20),
 				new AmmoSatchelSeeds("ammo_scent_seeds", "Scent Seeds", "An aromatic blast!",
@@ -67,8 +72,7 @@ namespace ZeldaOracle.Game {
 				new ItemMagnetGloves(),
 				
 				// Key items:
-				// Keep this as level 3 unless the game has wallet limitations
-				new ItemWallet(Item.Level3),
+				new ItemWallet(),
 				new ItemMembersCard(),
 				new ItemMagicPotion(),
 				new ItemEssenceSeed(),
@@ -87,6 +91,9 @@ namespace ZeldaOracle.Game {
 			// Add key items.
 			inventory.AddItems(false,
 				new ItemFlippers());
+
+			// Keep wallet as max level unless the game has wallet limitations
+			inventory.SetMaxLevel("item_wallet");
 		}
 
 
@@ -98,18 +105,22 @@ namespace ZeldaOracle.Game {
 
 			// Key Items
 
-			rewardManager.AddReward(new RewardItem("item_flippers_1", "item_flippers", Item.Level1, RewardHoldTypes.TwoHands,
-				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press A to swim, B to dive!",
+			foreach (Item item in rewardManager.Inventory.GetItems()) {
+				rewardManager.AddRewardItem(item);
+			}
+
+			/*rewardManager.AddReward(new RewardItem("item_flippers_1", "item_flippers", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press <a> to swim, <b> to dive!",
 				GameData.SPR_ITEM_ICON_FLIPPERS_1));
 
 			rewardManager.AddReward(new RewardItem("item_flippers_2", "item_flippers", Item.Level2, RewardHoldTypes.TwoHands,
-				"You got a <red>Mermaid Suit<red>! Now you can swim in deep waters. Press DPAD to swim, B to dive and A to use items.",
+				"You got a <red>Mermaid Suit<red>! Now you can swim in deep waters. Press <dpad> to swim, <b> to dive and <a> to use items.",
 				GameData.SPR_ITEM_ICON_FLIPPERS_2));
 			
 			// Weapons
 
 			rewardManager.AddReward(new RewardItem("item_sword_1", "item_sword", Item.Level1, RewardHoldTypes.OneHand,
-				"You got a Hero's <red>Wooden Sword<red>! Hold A or B to charge it up, then release it for a spin attack!",
+				"You got a Hero's <red>Wooden Sword<red>! Hold <a> or <b> to charge it up, then release it for a spin attack!",
 				GameData.SPR_ITEM_ICON_SWORD_1));
 
 			rewardManager.AddReward(new RewardItem("item_sword_2", "item_sword", Item.Level2, RewardHoldTypes.OneHand,
@@ -149,7 +160,7 @@ namespace ZeldaOracle.Game {
 				GameData.SPR_ITEM_ICON_SATCHEL));
 
 			rewardManager.AddReward(new RewardItem("item_bombs_1", "item_bombs", Item.Level1, RewardHoldTypes.TwoHands,
-				"You got <red>Bombs<red>! Use them to blow open false walls. Press A or B to set a Bomb. If you also press DPAD, you can throw the Bomb.",
+				"You got <red>Bombs<red>! Use them to blow open false walls. Press <a> or <b> to set a Bomb. If you also press <dpad>, you can throw the Bomb.",
 				GameData.SPR_ITEM_ICON_BOMB));
 
 			rewardManager.AddReward(new RewardItem("item_bombs_2", "item_bombs", Item.Level2, RewardHoldTypes.TwoHands,
@@ -161,7 +172,7 @@ namespace ZeldaOracle.Game {
 				GameData.SPR_ITEM_ICON_BOMB));
 
 			rewardManager.AddReward(new RewardItem("item_bracelet_1", "item_bracelet", Item.Level1, RewardHoldTypes.TwoHands,
-				"You got the <red>Power Bracelet<red>! Hold the button and press DPAD to lift heavy objects!",
+				"You got the <red>Power Bracelet<red>! Hold the button and press <dpad> to lift heavy objects!",
 				GameData.SPR_ITEM_ICON_BRACELET));
 
 			rewardManager.AddReward(new RewardItem("item_bracelet_2", "item_bracelet", Item.Level2, RewardHoldTypes.TwoHands,
@@ -173,7 +184,7 @@ namespace ZeldaOracle.Game {
 				GameData.SPR_ITEM_ICON_BOOMERANG_1));
 
 			rewardManager.AddReward(new RewardItem("item_boomerang_2", "item_boomerang", Item.Level2, RewardHoldTypes.TwoHands,
-				"It's the <red>Magical Boomerang<red>! Press DPAD while holding the button to control its flight path!",
+				"It's the <red>Magical Boomerang<red>! Press <dpad> while holding the button to control its flight path!",
 				GameData.SPR_ITEM_ICON_BOOMERANG_2));
 
 			rewardManager.AddReward(new RewardItem("item_feather_1", "item_feather", Item.Level1, RewardHoldTypes.TwoHands,
@@ -214,7 +225,7 @@ namespace ZeldaOracle.Game {
 
 			rewardManager.AddReward(new RewardItem("item_magnet_gloves", "item_magnet_gloves", Item.Level1, RewardHoldTypes.OneHand,
 				"You got the Magnetic Gloves! Their magnetic might attracts and repels.",
-				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH));
+				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH));*/
 
 			// Rupees
 

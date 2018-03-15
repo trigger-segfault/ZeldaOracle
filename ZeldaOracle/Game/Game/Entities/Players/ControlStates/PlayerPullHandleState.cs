@@ -57,13 +57,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 			base.Update();
-
-			InputControl grabButton = player.Inventory.GetSlotButton(bracelet.CurrentEquipSlot);
+			
 			InputControl pullButton = Controls.GetArrowControl(player.Direction.Reverse());
 			
 			timer--;
 
-			if (!grabButton.IsDown()) {
+			if (!bracelet.IsButtonDown()) {
 				End();
 			}
 			else if (isPulling) {

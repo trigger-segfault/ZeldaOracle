@@ -2,45 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Audio;
+using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items.Rewards {
+	/// <summary>A reward that gives a player an item at a specified level.</summary>
 	public class RewardItem : Reward {
 
-		protected string itemID;
-		protected int level;
+		/// <summary>The item to reward.</summary>
+		private Item item;
+		/// <summary>The level of the item to reward.</summary>
+		private int level;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardItem(string id, string itemID, int level, RewardHoldTypes holdType, string message, ISprite sprite) {
-			InitSprite(sprite);
+		/// <summary>Constructs a reward item based on the item and level.</summary>
+		public RewardItem(Item item, int level) : base(ItemName(item, level)) {
+			this.item = item;
+			this.level = level;
 
-			this.id				= id;
-			this.message		= message;
-			this.hasDuration	= false;
-			this.holdType		= holdType;
-			this.isCollectibleWithItems	= false;
-
-			this.itemID			= itemID;
-			this.level			= level;
+			Sprite			= item.GetSprite(level);
+			Message			= item.GetMessage(level);
+			HoldType		= item.HoldType;
+			HasDuration		= false;
+			ShowMessageOnPickup			= true;
+			IsCollectibleWithWeapons	= false;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnCollect(GameControl gameControl) {
-			//AudioSystem.PlaySound("Pickups/get_ammo");
+		/// <summary>Called when the player collects the reward.</summary>
+		public override void OnCollect() {
+			Inventory.ObtainItem(item);
+			// Don't level-down the item
+			item.Level = GMath.Max(item.Level, level);
+		}
 
-			gameControl.Inventory.ObtainItem(gameControl.Inventory.GetItem(itemID));
-			gameControl.Inventory.GetItem(itemID).Level = level;
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs an the reward name for an item at the specified level.</summary>
+		public static string ItemName(Item item, int level) {
+			string name = item.ID;
+			if (item.IsLeveled)
+				name += "_" + (level + 1);
+			return name;
 		}
 
 
@@ -48,5 +63,14 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the item this reward represents.</summary>
+		public Item Item {
+			get { return item; }
+		}
+
+		/// <summary>Gets the item level this reward represents.</summary>
+		public int Level {
+			get { return level; }
+		}
 	}
 }
