@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Items.Ammos;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -28,28 +29,32 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSeedSatchel() {
-			this.id				= "item_seed_satchel";
-			this.name			= new string[] { "Seed Satchel", "Seed Satchel", "Seed Satchel" };
-			this.description	= new string[] { "A bag for carrying seeds.", "A bag for carrying seeds.", "A bag for carrying seeds." };
-			this.maxLevel		= Item.Level3;
-			this.currentAmmo	= 0;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
-			this.emberSeedTracker	= new EntityTracker<DroppedSeed>(1);
-			this.scentSeedTracker	= new EntityTracker<DroppedSeed>(1);
-			this.galeSeedTracker	= new EntityTracker<DroppedSeed>(1);
-			this.mysterySeedTracker	= new EntityTracker<DroppedSeed>(1);
+		//public ItemSeedSatchel() : base("seed_satchel") {
+		public ItemSeedSatchel(string id) : base(id) {
+			SetName("Seed Satchel");
+			SetDescription("A bag for carrying seeds.");
+			SetMessage(
+				"You got a <red>Seed Satchel<red>! " +
+					"And it has <red>20 Ember Seeds<red>!",
+				"You can now hold more <red>Mystical Seeds<red> than before!",
+				"You can now hold even more <red>Mystical Seeds<red> than before!");
+			SetSprite(GameData.SPR_ITEM_ICON_SATCHEL);
+			SetSpriteEquipped(GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED);
+			SetMaxAmmo(20, 30, 50);
+			MaxLevel = Item.Level3;
+			HoldType = RewardHoldTypes.TwoHands;
 
-			sprite = new ISprite[] {
-				GameData.SPR_ITEM_ICON_SATCHEL,
-				GameData.SPR_ITEM_ICON_SATCHEL,
-				GameData.SPR_ITEM_ICON_SATCHEL,
-			};
-			spriteEquipped = new ISprite[] {
-				GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED,
-				GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED,
-				GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED,
-			};
+			IncreaseAmmoOnLevelUp = true;
+			Flags =
+				WeaponFlags.UsableInMinecart |
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWithSword |
+				WeaponFlags.UsableWhileInHole;
+
+			emberSeedTracker	= new EntityTracker<DroppedSeed>(1);
+			scentSeedTracker	= new EntityTracker<DroppedSeed>(1);
+			galeSeedTracker		= new EntityTracker<DroppedSeed>(1);
+			mysterySeedTracker	= new EntityTracker<DroppedSeed>(1);
 		}
 
 
@@ -131,25 +136,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
 			DrawAmmo(g, position);
-			g.DrawSprite(ammo[currentAmmo].Sprite, position + new Point2I(8, 0));
-		}
-
-		// Called when the item's level is changed.
-		public override void OnLevelUp() {
-			// Increase the max amount of seeds you can carry.
-			int[] maxAmounts = { 20, 30, 50 };
-			for (int i = 0; i < ammo.Length; i++) {
-				ammo[i].MaxAmount = maxAmounts[level];
-				if (ammo[i].IsObtained)
-					ammo[i].Amount = maxAmounts[level];
-			}
-		}
-
-		// Called when the item has been obtained.
-		public override void OnObtained() {
-			// Obtain the first seed type (Ember seeds).
-			inventory.ObtainAmmo(this.ammo[0]);
-			this.ammo[0].Amount = 20;
+			g.DrawSprite(CurrentAmmo.Sprite, position + new Point2I(8, 0));
 		}
 	}
 }

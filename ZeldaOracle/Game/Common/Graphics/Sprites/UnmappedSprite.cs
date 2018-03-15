@@ -16,6 +16,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>The draw offset for the texture.</summary>
 		public Point2I DrawOffset { get; }
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -39,7 +40,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public SpritePart GetParts(SpriteSettings settings) {
-			return new SpritePart(Image, Image.Bounds, DrawOffset/*, flipEffects, rotation*/);
+			return new SpritePart(Image, Image.Bounds, DrawOffset/*,
+				flipEffects, rotation*/);
 		}
 
 		/// <summary>Gets all sprites contained by this sprite including this one.</summary>

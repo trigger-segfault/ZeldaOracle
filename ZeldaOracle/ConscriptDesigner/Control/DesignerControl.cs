@@ -27,6 +27,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -424,7 +425,8 @@ namespace ConscriptDesigner.Control {
 				UpdateContentFolder(project);
 
 				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
-				rewardManager = new RewardManager(null);
+				Inventory inventory = new Inventory();
+				rewardManager = new RewardManager(inventory);
 				GameData.Initialize(false, rewardManager);
 
 				//Console.WriteLine("Loading Rewards");

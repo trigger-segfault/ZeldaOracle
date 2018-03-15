@@ -53,9 +53,9 @@ namespace ZeldaOracle.Game.Entities {
 			this.reward				= reward;
 			this.isDrop				= isDrop;
 			this.isSubmergable		= isSubmergable;
-			showMessage				= !reward.OnlyShowMessageInChest;
+			showMessage				= reward.ShowMessageOnPickup;
 			hasDuration				= reward.HasDuration;
-			isCollectibleWithItems	= reward.IsCollectibleWithItems;
+			isCollectibleWithWeapons	= reward.InteractWithWeapons;
 			submerged				= false;
 		}
 
@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Entities {
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
 				}
 				else {
-					reward.OnCollectNoMessage(GameControl);
+					reward.OnCollectNoMessage();
 				}
 				base.Collect();
 			}

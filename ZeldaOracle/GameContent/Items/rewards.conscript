@@ -1,0 +1,11 @@
+﻿#==============================================================
+# Loading
+#==============================================================
+
+# RewardItems are automatically loaded and setup
+LOAD "Rewards/rupees.conscript", true;
+LOAD "Rewards/health.conscript", true;
+LOAD "Rewards/ammo.conscript", true;
+LOAD "Rewards/dungeon.conscript", true;
+
+#==============================================================

@@ -1,0 +1,26 @@
+﻿#==============================================================
+# Health
+#==============================================================
+
+REWARD "heart_piece", RewardHeartPiece;
+	SPRITE		"reward_heart_piece";
+	MESSAGE		"You got a <n> <red>Piece of <n>Heart<red>!<heart-piece>Collect four in all to get an extra <red>Heart Container<red>! Check them on the Item Screen.";
+END;
+
+REWARD "heart_container", RewardHeartContainer;
+	SPRITE		"reward_heart_container";
+	MESSAGE		"You got a <red>Heart Container<red>!";
+END;
+
+REWARD "hearts_1", RewardRecoveryHeart;
+	SPRITE		"reward_heart";
+	MESSAGE		"You recovered<n>only one <red>heart<red>!";
+	FULL		"Your health is already full.";
+END;
+
+CLONE REWARD "hearts_1", "hearts_3";
+	SPRITE		"reward_hearts_3";
+	MESSAGE		"You got three<n><red>hearts<red>!";
+END;
+
+#==============================================================

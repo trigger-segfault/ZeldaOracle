@@ -11,56 +11,49 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Items.Rewards {
 	public class RewardDungeonItem : Reward {
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardDungeonItem(string id, ISprite sprite, RewardHoldTypes holdType, string message) {
-			InitSprite(sprite);
-
-			this.id				= id;
-			this.message		= message;
-			this.holdType		= holdType;
-
-			this.hasDuration	= false;
-			this.isCollectibleWithItems	= (id != "small_key");
-			this.onlyShowMessageInChest = (id == "small_key");
+		public RewardDungeonItem(string id, ISprite sprite, RewardHoldTypes holdType,
+			string message) : base(id)
+		{
+			Sprite			= sprite;
+			Message			= message;
+			HoldType		= holdType;
+			HasDuration		= false;
+			ShowMessageOnPickup			= (id != "small_key");
+			InteractWithWeapons	= (id != "small_key");
 
 			if (id == "small_key" || id == "boss_key")
-				this.soundBounce = GameData.SOUND_KEY_BOUNCE;
+				BounceSound = GameData.SOUND_KEY_BOUNCE;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnCollect(GameControl gameControl) {
+		/// <summary>Called when the player collects the reward.</summary>
+		public override void OnCollect() {
 			// TEMP: hard coded dungeon reward possibilities.
-			Area area = gameControl.RoomControl.Area;
+			Area area = RoomControl.Area;
 			
-			if (id == "small_key") {
+			if (ID == "small_key") {
 				area.SmallKeyCount++;
 				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 			}
-			else if (id == "boss_key") {
+			else if (ID == "boss_key") {
 				area.HasBossKey = true;
 				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 			}
-			else if (id == "map") {
+			else if (ID == "map") {
 				area.HasMap = true;
 			}
-			else if (id == "compass") {
+			else if (ID == "compass") {
 				area.HasCompass = true;
 			}
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
 	}
 }

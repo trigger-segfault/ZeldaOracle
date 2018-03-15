@@ -13,12 +13,12 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence6() : base() {
-			this.id = "item_essence_6";
-			this.name = new string[] { "Lonely Peak" };
-			this.description = new string[] { "A proud spirit that remains stalwart in trying times." };
-			this.slot = 5;
-			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_ESSENCE_6 };
+		public ItemEssence6() : base("essence_6") {
+			SetName("Lonely Peak");
+			SetDescription("A proud spirit that remains stalwart in trying times.");
+			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_6);
+
+			slot = 5;
 		}
 
 	}

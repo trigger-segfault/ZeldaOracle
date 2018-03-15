@@ -299,8 +299,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				int imageCount = reader.ReadInt32();
 				for (int i = 0; i < imageCount; i++) {
 					int pngSize = reader.ReadInt32();
-					Texture2D texture = Texture2DLoader.FromStream(reader.BaseStream, pngSize);
-					images.Add(new Image(texture));
+					Image image = ImageLoader.FromStream(reader.BaseStream, pngSize);
+					images.Add(image);
 				}
 			}
 

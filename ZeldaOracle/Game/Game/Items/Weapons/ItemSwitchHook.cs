@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemSwitchHook : ItemWeapon {
@@ -20,19 +21,16 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSwitchHook() {
-			this.id				= "item_switch_hook";
-			this.name			= new string[] { "Switch Hook", "Long Hook" };
-			this.description	= new string[] { "User and target trade places.", "Switches places from a distance." };
-			this.level			= 0;
-			this.maxLevel		= Item.Level2;
-			this.flags			=
-				ItemFlags.UsableWithSword |
-				ItemFlags.UsableUnderwater;
-			this.sprite = new ISprite[] {
-				GameData.SPR_ITEM_ICON_SWITCH_HOOK,
-				GameData.SPR_ITEM_ICON_SWITCH_HOOK
-			};
+		//public ItemSwitchHook() : base("switch_hook") {
+		public ItemSwitchHook(string id) : base(id) {
+			SetName("Switch Hook", "Long Hook");
+			SetDescription("User and target trade places.", "Switches places from a distance.");
+			SetSprite(GameData.SPR_ITEM_ICON_SWITCH_HOOK);
+			MaxLevel = Item.Level2;
+			HoldType = RewardHoldTypes.TwoHands;
+			Flags =
+				WeaponFlags.UsableWithSword |
+				WeaponFlags.UsableUnderwater;
 		}
 
 

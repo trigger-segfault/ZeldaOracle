@@ -3,6 +3,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -15,24 +16,28 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBoomerang() {
-			id			= "item_boomerang";
-			name		= new string[] { "Boomerang", "Magic Boomerang" };
-			description	= new string[] { "Always comes back to you.", "A remote-control weapon." };
-			level		= 0;
-			maxLevel	= Item.Level2;
-			flags		=
-				ItemFlags.UsableInMinecart |
-				ItemFlags.UsableWhileJumping |
-				ItemFlags.UsableWithSword |
-				ItemFlags.UsableWhileInHole;
+		//public ItemBoomerang() : base("boomerang") {
+		public ItemBoomerang(string id) : base(id) {
+			SetName("Boomerang", "Magic Boomerang");
+			SetDescription("Always comes back to you.", "A remote-control weapon.");
+			SetMessage(
+				"You got the <red>Boomerang<red>! " +
+					"Use it to stop enemies in their tracks!",
+				"It's the <red>Magical Boomerang<red>! " +
+					"Press <dpad> while holding the button to control its flight path!");
+			SetSprite(
+				GameData.SPR_ITEM_ICON_BOOMERANG_1,
+				GameData.SPR_ITEM_ICON_BOOMERANG_2);
+			MaxLevel	= Item.Level2;
+
+			HoldType = RewardHoldTypes.TwoHands;
+			Flags		=
+				WeaponFlags.UsableInMinecart |
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWithSword |
+				WeaponFlags.UsableWhileInHole;
 
 			boomerangTracker = new EntityTracker<Boomerang>(1);
-
-			sprite = new ISprite[] {
-				GameData.SPR_ITEM_ICON_BOOMERANG_1,
-				GameData.SPR_ITEM_ICON_BOOMERANG_2
-			};
 		}
 
 
@@ -49,7 +54,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Player.ShootFromAngle(boomerang, Player.UseAngle, boomerang.Speed);
 			boomerangTracker.TrackEntity(boomerang);
 			
-			if (level == Item.Level1) {
+			if (Level == Item.Level1) {
 				// Begin the standard busy state for the regular boomerang
 				Player.BeginBusyState(10, Player.Animations.Throw);
 			}

@@ -1,0 +1,56 @@
+﻿#==============================================================
+# Ammo
+#==============================================================
+
+REWARD "ember_seeds_5", RewardAmmo;
+	SPRITE		"reward_seed_ember";
+	MESSAGE		"You got<n><red>5 Ember Seeds<red>!";
+	CANTCOLLECT	"No Seed Satchel to put these in.";
+	FULL		"Your Seed Satchel is full.";
+	AMMO		"ember_seeds";
+	AMOUNT		5;
+END;
+
+CLONE REWARD "ember_seeds_5", "scent_seeds_5";
+	SPRITE		"reward_seed_scent";
+	MESSAGE		"You got<n><red>5 Scent Seeds<red>!";
+	AMMO		"scent_seeds";
+END;
+
+CLONE REWARD "ember_seeds_5", "pegasus_seeds_5";
+	SPRITE		"reward_seed_pegasus";
+	MESSAGE		"You got<n><red>5 Pegasus Seeds<red>!";
+	AMMO		"pegasus_seeds";
+END;
+
+CLONE REWARD "ember_seeds_5", "gale_seeds_5";
+	SPRITE		"reward_seed_gale";
+	MESSAGE		"You got<n><red>5 Gale Seeds<red>!";
+	AMMO		"gale_seeds";
+END;
+
+CLONE REWARD "ember_seeds_5", "mystery_seeds_5";
+	SPRITE		"reward_seed_mystery";
+	MESSAGE		"You got<n><red>5 Mystery Seeds<red>!";
+	AMMO		"mystery_seeds";
+END;
+
+REWARD "bombs_5", RewardAmmo;
+	SPRITE		"item_ammo_bomb";
+	MESSAGE		"You got<n><red>5 Bombs<red>!";
+	CANTCOLLECT	"No Bomb Bag to put these in.";
+	FULL		"Your Bomb Bag is full.";
+	AMMO		"bombs";
+	AMOUNT		5;
+END;
+
+REWARD "arrows_5", RewardAmmo;
+	SPRITE		"item_ammo_arrow";
+	MESSAGE		"You got<n><red>5 Arrows<red>!";
+	CANTCOLLECT	"No Quiver to put these in.";
+	FULL		"Your Quiver is full.";
+	AMMO		"arrows";
+	AMOUNT		5;
+END;
+
+#==============================================================

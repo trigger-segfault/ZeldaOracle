@@ -13,13 +13,13 @@ SPRITESHEET "temp_sheet_items_large", "Items/items_large",		(16, 16), (1, 1), (1
 PALETTEDICTIONARY "entity_dictionary";
 
 MAPPEDCOLORS	"entities_default",
-	("green", "blue", "red", "orange", "shaded_red", "shaded_blue",
+	("green", "blue", "red", "orange", "brown", "shaded_red", "shaded_blue",
 	"maku_seed_ages", "maku_seed_seasons");
 
 SOURCE "temp_sheet_items_small";
 SPRITESET "items_small", (16, 6);
 	MULTIPLE BASIC (0, 0), (0, 0), (16, 2); END;
-	SINGLE BASIC (0, 2); END;
+	MULTIPLE BASIC (0, 2), (0, 2), (5, 1); END;
 	MULTIPLE BASIC (0, 3), (0, 3), (8, 1); END;
 	MULTIPLE BASIC (9, 3), (9, 3), (7, 1); END;
 	MULTIPLE BASIC (0, 4), (0, 4), (16, 1); END;
@@ -75,6 +75,9 @@ NAME "item_icon_rod_of_essences",			(11, 1);
 NAME "item_icon_ocarina",					(12, 1);
 NAME "item_icon_bow",						(13, 1);
 NAME "item_icon_magic_rod",					( 0, 2);
+COMPOSITE "item_icon_wallet_1";				ADD (1, 2); ADD (2, 2); END;
+COMPOSITE "item_icon_wallet_2";				ADD (1, 2); ADD (3, 2); END;
+COMPOSITE "item_icon_wallet_3";				ADD (1, 2); ADD (4, 2); END;
 OFFSET "item_seed_ember",					( 0, 3), clipping: (0, 0, 8, 8); END;
 OFFSET "item_seed_scent",					( 1, 3), clipping: (0, 0, 8, 8); END;
 OFFSET "item_seed_pegasus",					( 2, 3), clipping: (0, 0, 8, 8); END;
@@ -90,6 +93,10 @@ OFFSET "reward_seed_mystery",				( 4, 3), (4, 7); END;
 OFFSET "reward_rupee_small_green",			( 5, 3), (4, 0); END;
 OFFSET "reward_rupee_red",					( 6, 3), (4, 0); END;
 OFFSET "reward_rupee_blue",					( 7, 3), (4, 0); END;
+OFFSET "reward_ore_chunk_blue",				( 9, 3), (4, 0); END;
+OFFSET "reward_ore_chunk_red",				(10, 3), (4, 0); END;
+OFFSET "reward_ore_chunk_orange",			(11, 3), (4, 0); END;
+OFFSET "item_icon_fools_ore",				(12, 3), (4, 0); END;
 OFFSET "reward_heart",						(13, 3), (4, 1); END;
 COMPOSITE "reward_hearts_3";				ADD (13, 3), (4, 0); ADD (13, 3), (0, 4); ADD (13, 3), (8, 4); END;
 NAME "reward_small_key",					( 0, 4);
@@ -110,7 +117,7 @@ NAME "item_icon_flippers_1",				(6, 1);
 NAME "item_icon_flippers_2",				(7, 1);
 NAME "item_icon_magic_potion",				(6, 3);
 NAME "item_icon_members_card",				(7, 7);
-COMPOSITE "item_icon_essence_seed";
+COMPOSITE "item_icon_maku_seed";
 	ADD (0, 9); ADD (1, 9); END;
 NAME "item_icon_essence_1",					(8, 7);
 NAME "item_icon_essence_2",					(9, 7);

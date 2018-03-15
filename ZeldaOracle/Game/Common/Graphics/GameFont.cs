@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game;
 using ZeldaOracle.Game.API;
 
 namespace ZeldaOracle.Common.Graphics {
-
 	/// <summary>A monospaced sprite font.</summary>
 	public class GameFont {
 
@@ -45,7 +46,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 
 		//-----------------------------------------------------------------------------
-		// Character Cell
+		// Characters
 		//-----------------------------------------------------------------------------
 
 		/// <summary>A helper method to get the source rect for the specified character.</summary>
@@ -54,6 +55,39 @@ namespace ZeldaOracle.Common.Graphics {
 			if (index < charactersPerRow * spriteSheet.Height)
 				return spriteSheet.GetSourceRect(index % charactersPerRow, index / charactersPerRow);
 			return spriteSheet.GetSourceRect(Point2I.Zero);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Sprites
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the sprite for the specified character.</summary>
+		public BasicSprite GetSprite(char character) {
+			int index = (int) character;
+			if (index < charactersPerRow * spriteSheet.Height)
+				return spriteSheet.GetSprite(index % charactersPerRow, index / charactersPerRow);
+			return spriteSheet.GetSprite(Point2I.Zero);
+		}
+
+		/// <summary>Gets the colored sprite for the specified character.</summary>
+		public CanvasSprite GetSprite(char character, ColorOrPalette color) {
+			return GetSprite("" + character, color);
+		}
+
+		/// <summary>Gets the colored sprite for the specified string.</summary>
+		public CanvasSprite GetSprite(DrawableString text, ColorOrPalette color) {
+			CanvasSprite canvas = new CanvasSprite(MeasureString(text));
+			Graphics2D g = canvas.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.DrawString(this, text, Vector2F.Zero, color);
+			canvas.End(g);
+			return canvas;
+		}
+
+		/// <summary>Gets the colored sprite for the specified formatted string.</summary>
+		public CanvasSprite GetFormattedSprite(string text, ColorOrPalette color) {
+			LetterString letterStr = FormatCodes.FormatString(text, null);
+			return GetSprite(letterStr, color);
 		}
 
 
@@ -237,6 +271,10 @@ namespace ZeldaOracle.Common.Graphics {
 				if (caretLine == -1 || caretLine >= lines.Count) {
 					caretLine = lines.Count - 1;
 				}
+
+				// Make a dummy line to prevent issues with the text reader.
+				//if (lines.Count == 0)
+				//	lines.Add(new LetterString());
 
 				WrappedLetterString wrappedString = new WrappedLetterString();
 				wrappedString.Lines = lines.ToArray();

@@ -1,0 +1,65 @@
+﻿#==============================================================
+# Ammos
+#==============================================================
+
+# Currencies ==================================================
+
+AMMO "rupees", Ammo;
+	NAME		"Rupees";
+	DESCRIPTION	"A currency.";
+	SPRITE		"reward_rupee_small_green";
+END;
+
+AMMO "ore_chunks", Ammo;
+	NAME		"Ore Chunks";
+	DESCRIPTION	"Subrosian currency.";
+	SPRITE		"reward_ore_chunk_blue";
+END;
+
+# Seeds =======================================================
+
+AMMO "ember_seeds", AmmoSatchelSeeds;
+	NAME		"Ember Seeds";
+	DESCRIPTION "A burst of fire!";
+	SPRITE		"item_seed_ember";
+END;
+
+AMMO "scent_seeds", AmmoSatchelSeeds;
+	NAME		"Scent Seeds";
+	DESCRIPTION	"An aromatic blast!";
+	SPRITE		"item_seed_scent";
+END;
+
+AMMO "pegasus_seeds", AmmoSatchelSeeds;
+	NAME		"Pegasus Seeds";
+	DESCRIPTION	"Steals speed?";
+	SPRITE		"item_seed_pegasus";
+END;
+
+AMMO "gale_seeds", AmmoSatchelSeeds;
+	NAME		"Gale Seeds";
+	DESCRIPTION	"A mighty blow!";
+	SPRITE		"item_seed_gale";
+END;
+
+AMMO "mystery_seeds", AmmoSatchelSeeds;
+	NAME		"Mystery Seeds";
+	DESCRIPTION	"A producer of unknown effects.";
+	SPRITE		"item_seed_mystery";
+END;
+
+# Standard Ammo ===============================================
+
+AMMO "bombs", Ammo;
+	NAME		"Bombs";
+	DESCRIPTION	"Very explosive.";
+	SPRITE		"item_ammo_bomb";
+END;
+
+AMMO "arrows", Ammo;
+	NAME		"Arrows";
+	DESCRIPTION	"A standard arrow.";
+	SPRITE		"item_ammo_arrow";
+END;
+
+#==============================================================

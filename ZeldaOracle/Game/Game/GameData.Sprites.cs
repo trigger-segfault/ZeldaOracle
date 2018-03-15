@@ -170,6 +170,10 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_ITEM_ICON_ESSENCE_6;
 		public static ISprite SPR_ITEM_ICON_ESSENCE_7;
 		public static ISprite SPR_ITEM_ICON_ESSENCE_8;
+		public static ISprite SPR_ITEM_ICON_WALLET_1;
+		public static ISprite SPR_ITEM_ICON_WALLET_2;
+		public static ISprite SPR_ITEM_ICON_WALLET_3;
+		public static ISprite SPR_ITEM_FOOLS_ORE;
 
 		// Reward Icons
 		public static ISprite SPR_REWARD_RUPEE_SMALL_GREEN;
@@ -179,6 +183,9 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_REWARD_RUPEE_BLUE;
 		public static ISprite SPR_REWARD_RUPEE_BIG_BLUE;
 		public static ISprite SPR_REWARD_RUPEE_BIG_RED;
+		public static ISprite SPR_REWARD_ORE_CHUNK_BLUE;
+		public static ISprite SPR_REWARD_ORE_CHUNK_RED;
+		public static ISprite SPR_REWARD_ORE_CHUNK_ORANGE;
 		public static ISprite SPR_REWARD_HEART;
 		public static ISprite SPR_REWARD_HEARTS_3;
 		public static ISprite SPR_REWARD_SEED_EMBER;

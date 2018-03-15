@@ -3,6 +3,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items {
 	public class ItemBombs : ItemWeapon {
@@ -14,21 +15,26 @@ namespace ZeldaOracle.Game.Items {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public ItemBombs() {
-			id			= "item_bombs";
-			name		= new string[] { "Bombs", "Bombs", "Bombs" };
-			description	= new string[]
-				{ "Very explosive.", "Very explosive.", "Very explosive." };
-			maxLevel	= Item.Level3;
-			currentAmmo	= 0;
-			bombTracker	= new EntityTracker<Bomb>(1);
-			flags		= ItemFlags.UsableWhileInHole;
+		//public ItemBombs() : base("bombs") {
+		public ItemBombs(string id) : base(id) {
+			SetName("Bombs");
+			SetDescription("Very explosive.");
+			SetMessage(
+				"You got <red>Bombs<red>! Use them to blow open false walls. " +
+					"Press <a> or <b> to set a Bomb. " +
+					"If you also press <dpad>, you can throw the Bomb.",
+				"You can now hold more <red>Bombs<red> than before!",
+				"You can now hold even more <red>Bombs<red> than before!");
+			SetSprite(GameData.SPR_ITEM_ICON_BOMB);
+			SetAmmo("bombs");
+			SetMaxAmmo(10, 20, 30);
+			MaxLevel	= Item.Level3;
+			HoldType    = RewardHoldTypes.TwoHands;
 
-			sprite = new ISprite[] {
-				GameData.SPR_ITEM_ICON_BOMB,
-				GameData.SPR_ITEM_ICON_BOMB,
-				GameData.SPR_ITEM_ICON_BOMB,
-			};
+			Flags       = WeaponFlags.UsableWhileInHole;
+			IncreaseAmmoOnLevelUp = true;
+
+			bombTracker	= new EntityTracker<Bomb>(1);
 		}
 
 
@@ -61,29 +67,6 @@ namespace ZeldaOracle.Game.Items {
 				}
 			}
 			return false;
-		}
-
-		// Called when the item is added to the inventory list
-		public override void OnAdded(Inventory inventory) {
-			base.OnAdded(inventory);
-
-			this.currentAmmo = 0;
-			this.ammo = new Ammo[] {
-				inventory.GetAmmo("ammo_bombs")
-			};
-		}
-
-		// Called when the item's level is changed.
-		public override void OnLevelUp() {
-			int[] maxAmounts	= { 10, 20, 30 };
-			ammo[0].MaxAmount	= maxAmounts[level];
-			ammo[0].Amount		= maxAmounts[level];
-		}
-
-		// Called when the item has been obtained.
-		public override void OnObtained() {
-			inventory.ObtainAmmo(ammo[0]);
-			ammo[0].Amount = ammo[0].MaxAmount;
 		}
 
 

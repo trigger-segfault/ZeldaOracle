@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Items.Ammos;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -24,19 +25,20 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSeedShooter() {
-			this.id				= "item_seed_shooter";
-			this.name			= new string[] { "Seed Shooter" };
-			this.description	= new string[] { "Used to bounce seeds around." };
-			this.currentAmmo	= 0;
-			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER };
-			this.spriteEquipped	= new ISprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED };
-			this.flags			=
-				ItemFlags.UsableInMinecart |
-				ItemFlags.UsableUnderwater |
-				ItemFlags.UsableWhileJumping |
-				ItemFlags.UsableWhileInHole;
-			this.seedTracker	= new EntityTracker<SeedProjectile>(1);
+		//public ItemSeedShooter() : base("seed_shooter") {
+		public ItemSeedShooter(string id) : base(id) {
+			SetName("Seed Shooter");
+			SetDescription("Used to bounce seeds around.");
+			SetSprite(GameData.SPR_ITEM_ICON_SEED_SHOOTER);
+			SetSpriteEquipped(GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED);
+			HoldType = RewardHoldTypes.TwoHands;
+			Flags =
+				WeaponFlags.UsableInMinecart |
+				WeaponFlags.UsableUnderwater |
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWhileInHole;
+
+			seedTracker	= new EntityTracker<SeedProjectile>(1);
 		}
 
 
@@ -58,7 +60,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
 			DrawAmmo(g, position);
-			g.DrawSprite(ammo[currentAmmo].Sprite, position + new Point2I(8, 0));
+			g.DrawSprite(CurrentAmmo.Sprite, position + new Point2I(8, 0));
 		}
 
 

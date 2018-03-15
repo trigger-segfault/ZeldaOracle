@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -25,29 +26,32 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBow() {
-			id			= "item_bow";
-			name		= new string[] { "Wooden Bow", "Wooden Bow", "Wooden Bow" };
-			description	= new string[] { "Weapon of a marksman.", "Weapon of a marksman.", "Weapon of a marksman." };
-			maxLevel	= Item.Level3;
-			currentAmmo	= 0;
-			flags		=
-				ItemFlags.UsableInMinecart |
-				ItemFlags.UsableWhileJumping |
-				ItemFlags.UsableWhileInHole;
+		//public ItemBow() : base("bow") {
+		public ItemBow(string id) : base(id) {
+			SetName("Wooden Bow");
+			SetDescription("Weapon of a marksman.");
+			SetMessage(
+				"You got <red>Bow<red>! Shoot arrows at your enemies!",
+				"Your <red>Bow<red> has been upgraded! You can now hold more arrows.",
+				"Your <red>Bow<red> has been upgraded! You can now hold even more arrows.");
+			SetSprite(GameData.SPR_ITEM_ICON_BOW);
+			SetAmmo("arrows");
+			SetMaxAmmo(30, 40, 50);
+			MaxLevel	= Item.Level3;
+			HoldType = RewardHoldTypes.TwoHands;
+			Flags		=
+				WeaponFlags.UsableInMinecart |
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWhileInHole;
+
+			IncreaseAmmoOnLevelUp = true;
 
 			arrowTracker = new EntityTracker<Arrow>(2);
-
-			sprite = new ISprite[] {
-				GameData.SPR_ITEM_ICON_BOW,
-				GameData.SPR_ITEM_ICON_BOW,
-				GameData.SPR_ITEM_ICON_BOW
-			};
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B).
@@ -74,49 +78,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			return true;
 		}
 
-		// Called when the item is added to the inventory list.
-		public override void OnAdded(Inventory inventory) {
-			base.OnAdded(inventory);
-
-			this.currentAmmo = 0;
-			this.ammo = new Ammo[] {
-				inventory.GetAmmo("ammo_arrows")
-			};
-		}
-
 		// Draws the item inside the inventory.
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
 			DrawAmmo(g, position);
-		}
-
-		// Called when the item's level is changed.
-		public override void OnLevelUp() {
-			int[] maxAmounts	= { 30, 40, 50 };
-			ammo[0].MaxAmount	= maxAmounts[level];
-			ammo[0].Amount		= maxAmounts[level];
-		}
-
-
-		// Called when the item has been obtained.
-		public override void OnObtained() {
-			inventory.ObtainAmmo(ammo[0]);
-			ammo[0].Amount = ammo[0].MaxAmount;
-		}
-
-		// Called when the item has been unobtained.
-		public override void OnUnobtained() {
-
-		}
-
-		// Called when the item has been stolen.
-		public override void OnStolen() {
-
-		}
-
-		// Called when the stolen item has been returned.
-		public override void OnReturned() {
-
 		}
 	}
 }

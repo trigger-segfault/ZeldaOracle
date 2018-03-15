@@ -5,6 +5,7 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBracelet : ItemWeapon {
@@ -13,18 +14,21 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBracelet(int level = 0) {
-			this.id				= "item_bracelet";
-			this.name			= new string[] { "Power Bracelet", "Power Gloves" };
-			this.description	= new string[] { "A strength booster.", "Used to lift large objects." };
-			this.level			= level;
-			this.maxLevel		= 1;
-			this.flags			= ItemFlags.None;
+		//public ItemBracelet() : base("bracelet") {
+		public ItemBracelet(string id) : base(id) {
+			SetName("Power Bracelet", "Power Gloves");
+			SetDescription("A strength booster.", "Used to lift large objects.");
+			SetMessage(
+				"You got the <red>Power Bracelet<red>! " +
+					"Hold the button and press <dpad> to lift heavy objects!",
+				"You got the <red>Power Glove<red>! You can now lift heavy objects.");
+			MaxLevel = Item.Level2;
+			Flags = WeaponFlags.None;
+			HoldType = RewardHoldTypes.TwoHands;
 
-			sprite = new ISprite[] {
+			SetSprite(
 				GameData.SPR_ITEM_ICON_BRACELET,
-				GameData.SPR_ITEM_ICON_POWER_GLOVES
-			};
+				GameData.SPR_ITEM_ICON_POWER_GLOVES);
 		}
 
 

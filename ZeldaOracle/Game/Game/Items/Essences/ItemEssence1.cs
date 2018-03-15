@@ -13,12 +13,12 @@ namespace ZeldaOracle.Game.Items.Essences {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence1() : base() {
-			this.id = "item_essence_1";
-			this.name = new string[] { "Eternal Spirit" };
-			this.description = new string[] { "It speaks across time to the heart!" };
-			this.slot = 0;
-			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_ESSENCE_1 };
+		public ItemEssence1() : base("essence_1") {
+			SetName("Eternal Spirit");
+			SetDescription("It speaks across time to the heart!");
+			SetSprite(GameData.SPR_ITEM_ICON_ESSENCE_1);
+
+			slot = 0;
 		}
 
 	}

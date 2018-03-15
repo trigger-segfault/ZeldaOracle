@@ -9,41 +9,54 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardRecoveryHeart : Reward {
-
-		protected int amount;
-
+	public class RewardRecoveryHeart : RewardAmount {
+		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
-		public RewardRecoveryHeart(string id, int amount, string message, ISprite sprite) {
-			InitSprite(sprite);
-
-			this.id				= id;
-			this.message		= message;
-			this.hasDuration	= true;
-			this.holdType		= RewardHoldTypes.Raise;
-			this.isCollectibleWithItems	= true;
-			this.onlyShowMessageInChest = true;
-
-			this.amount			= amount;
+		
+		/// <summary>Constructs the recovery heart reward</summary>
+		public RewardRecoveryHeart(string id)
+			: base(id)
+		{
+			HoldInChest		= false;
+			HoldType		= RewardHoldTypes.TwoHands;
+			HasDuration		= true;
+			ShowMessageOnPickup			= false;
+			InteractWithWeapons	= true;
 		}
 
+		/// <summary>Constructs the recovery heart reward</summary>
+		public RewardRecoveryHeart(string id, int amount, string message, ISprite sprite)
+			: this(id)
+		{
+
+			Sprite			= sprite;
+			Message			= message;
+			Amount			= amount;
+		}
+
+
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnCollect(GameControl gameControl) {
-			if (gameControl.HUD.DynamicHealth >= gameControl.Player.MaxHealth)
+		/// <summary>Called when the player collects the reward.</summary>
+		public override void OnCollect() {
+			if (GameControl.HUD.DynamicHealth >= Player.MaxHealth)
 				AudioSystem.PlaySound(GameData.SOUND_GET_HEART);
 
-			gameControl.Player.Health += amount * 4;
+			Player.Health += Amount * 4;
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Properties
+		// Overridden Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets if the reward is already at capacity.</summary>
+		public override bool IsFull {
+			get { return Player.Health >= Player.MaxHealth; }
+		}
 	}
 }

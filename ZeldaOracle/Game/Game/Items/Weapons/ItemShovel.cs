@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemShovel : ItemWeapon {
@@ -21,13 +22,15 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemShovel() {
-			this.id				= "item_shovel";
-			this.name			= new string[] { "Shovel" };
-			this.description	= new string[] { "A handy tool." };
-			this.maxLevel		= Item.Level1;
-			this.flags			= ItemFlags.UsableWhileInHole;
-			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_SHOVEL };
+		//public ItemShovel() : base("shovel") {
+		public ItemShovel(string id) : base(id) {
+			SetName("Shovel");
+			SetDescription("A handy tool.");
+			SetMessage("You got the <red>Shovel<red>! Now start digging!");
+			SetSprite(GameData.SPR_ITEM_ICON_SHOVEL);
+			MaxLevel = Item.Level1;
+			HoldType = RewardHoldTypes.TwoHands;
+			Flags = WeaponFlags.UsableWhileInHole;
 		}
 
 

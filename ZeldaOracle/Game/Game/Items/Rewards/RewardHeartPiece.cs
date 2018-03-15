@@ -16,45 +16,53 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardHeartPiece() {
-			InitSprite(GameData.SPR_REWARD_HEART_PIECE);
+		public RewardHeartPiece() : base("heart_piece") {
+			Sprite			= GameData.SPR_REWARD_HEART_PIECE;
+			Message			= GameSettings.HEART_PIECE_TEXT;
+			HoldType		= RewardHoldTypes.TwoHands;
+			HasDuration		= false;
+			ShowMessageOnPickup	= true;
+			InteractWithWeapons	= false;
+		}
 
-			this.id				= "heart_piece";
-			this.message        = GameSettings.HEART_PIECE_TEXT;
-			this.hasDuration	= false;
-			this.holdType		= RewardHoldTypes.TwoHands;
-			this.isCollectibleWithItems	= false;
+		public RewardHeartPiece(string id) : base(id) {
+			Sprite			= GameData.SPR_REWARD_HEART_PIECE;
+			Message			= GameSettings.HEART_PIECE_TEXT;
+			HoldType		= RewardHoldTypes.TwoHands;
+			HasDuration		 = false;
+			ShowMessageOnPickup	= true;
+			InteractWithWeapons	= false;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnDisplayMessage(GameControl gameControl) {
-			if (gameControl.Inventory.PiecesOfHeart == 3) {
-				gameControl.DisplayMessage(
-					message,
+		public override void OnDisplayMessage() {
+			if (GameControl.Inventory.PiecesOfHeart == 3) {
+				GameControl.DisplayMessage(
+					Message,
 					null,
 					new RoomStateAction(() => {
-						IncrementPiecesOfHeart(gameControl);
+						IncrementPiecesOfHeart();
 					}),
 					new RoomStateTextReader(GameSettings.HEART_CONTAINER_TEXT, null)
 				);
 			}
 			else {
-				gameControl.DisplayMessage(
-					message,
+				GameControl.DisplayMessage(
+					Message,
 					null,
 					new RoomStateAction(() => {
-						IncrementPiecesOfHeart(gameControl);
+						IncrementPiecesOfHeart();
 					})
 				);
 			}
 		}
 
-		public override void OnCollectNoMessage(GameControl gameControl) {
-			IncrementPiecesOfHeart(gameControl);
+		public override void OnCollectNoMessage() {
+			IncrementPiecesOfHeart();
 		}
 
 
@@ -62,13 +70,13 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		private void IncrementPiecesOfHeart(GameControl gameControl) {
-			gameControl.Inventory.PiecesOfHeart++;
-			if (gameControl.Inventory.PiecesOfHeart == 4) {
+		private void IncrementPiecesOfHeart() {
+			Inventory.PiecesOfHeart++;
+			if (Inventory.PiecesOfHeart == 4) {
 				AudioSystem.PlaySound(GameData.SOUND_HEART_CONTAINER);
-				gameControl.Inventory.PiecesOfHeart = 0;
-				gameControl.Player.MaxHealth += 4;
-				gameControl.Player.Health = gameControl.Player.MaxHealth;
+				Inventory.PiecesOfHeart = 0;
+				Player.MaxHealth += 4;
+				Player.Health = Player.MaxHealth;
 			}
 		}
 	}

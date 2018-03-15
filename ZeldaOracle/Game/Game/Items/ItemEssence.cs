@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence() {
+		public ItemEssence(string id) : base(id) {
 			this.slot = 0;
 		}
 
@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Items {
 
 		public int EssenceSlot {
 			get { return slot; }
+			set { slot = value; }
 		}
 	}
 }

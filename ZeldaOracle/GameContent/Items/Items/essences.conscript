@@ -1,0 +1,61 @@
+﻿#==============================================================
+# Essences
+#==============================================================
+
+ITEM "essence_1", ItemEssence;
+	NAME		"Eternal Spirit";
+	DESCRIPTION	"It speaks across time to the heart!";
+	SPRITE		"item_icon_essence_1";
+	ESSENCESLOT	0;
+END;
+
+ITEM "essence_2", ItemEssence;
+	NAME		"Ancient Wood";
+	DESCRIPTION	"It speaks only truth to closed ears.";
+	SPRITE		"item_icon_essence_2";
+	ESSENCESLOT	1;
+END;
+
+ITEM "essence_3", ItemEssence;
+	NAME		"Echoing Howl";
+	DESCRIPTION	"It echoes far across plains to speak to insolent hearts.";
+	SPRITE		"item_icon_essence_3";
+	ESSENCESLOT	2;
+END;
+
+ITEM "essence_4", ItemEssence;
+	NAME		"Burning Flame";
+	DESCRIPTION	"It reignights a hero's passion deep in wavering hearts.";
+	SPRITE		"item_icon_essence_4";
+	ESSENCESLOT	3;
+END;
+
+ITEM "essence_5", ItemEssence;
+	NAME		"Sacred Soil";
+	DESCRIPTION	"Its warmth is known by all that rests in the earth.";
+	SPRITE		"item_icon_essence_5";
+	ESSENCESLOT	4;
+END;
+
+ITEM "essence_6", ItemEssence;
+	NAME		"Lonely Peak";
+	DESCRIPTION	"A proud spirit that remains stalwart in trying times.";
+	SPRITE		"item_icon_essence_6";
+	ESSENCESLOT	5;
+END;
+
+ITEM "essence_7", ItemEssence;
+	NAME		"Rolling Sea";
+	DESCRIPTION	"The song of the sea forms a wave that carries heros into adventure.";
+	SPRITE		"item_icon_essence_7";
+	ESSENCESLOT	6;
+END;
+
+ITEM "essence_8", ItemEssence;
+	NAME		"Falling Star";
+	DESCRIPTION	"Its eternal light acts as guide to the other essences.";
+	SPRITE		"item_icon_essence_8";
+	ESSENCESLOT	7;
+END;
+
+#==============================================================

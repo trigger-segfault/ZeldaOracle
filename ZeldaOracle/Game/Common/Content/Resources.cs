@@ -14,12 +14,14 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using XnaSong = Microsoft.Xna.Framework.Media.Song;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Common.Content {
 
@@ -117,6 +119,9 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, Zone> zones;
 		private static Dictionary<string, PropertyAction> propertyActions;
+		private static Dictionary<string, Item> items;
+		private static Dictionary<string, Ammo> ammos;
+		private static Dictionary<string, Reward> rewards;
 
 		// SOUNDS:
 		/// <summary>The collection of loaded sound effects.</summary>
@@ -165,6 +170,10 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>The directory for storing languages.</summary>
 		public const string LanguageDirectory = "Languages/";
 
+		// Items
+		/// <summary>The directory for storing items, ammos, and rewards.</summary>
+		public const string ItemDirectory = "Items/";
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization
@@ -204,6 +213,10 @@ namespace ZeldaOracle.Common.Content {
 			tilesets			= new Dictionary<string, Tileset>();
 			zones				= new Dictionary<string, Zone>();
 
+			items				= new Dictionary<string, Item>();
+			ammos				= new Dictionary<string, Ammo>();
+			rewards				= new Dictionary<string, Reward>();
+
 			propertyActions		= new Dictionary<string, PropertyAction>();
 
 			// Settings
@@ -226,12 +239,15 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			resourceDictionaries[typeof(TileData)]			= tileData;
-			resourceDictionaries[typeof(ActionTileData)]		= actionTileData;
+			resourceDictionaries[typeof(ActionTileData)]	= actionTileData;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(Zone)]				= zones;
 			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
-			resourceDictionaries[typeof(PaletteDictionary)] = paletteDictionaries;
-			resourceDictionaries[typeof(Palette)]           = palettes;
+			resourceDictionaries[typeof(PaletteDictionary)]	= paletteDictionaries;
+			resourceDictionaries[typeof(Palette)]			= palettes;
+			resourceDictionaries[typeof(Item)]				= items;
+			resourceDictionaries[typeof(Ammo)]				= ammos;
+			resourceDictionaries[typeof(Reward)]			= rewards;
 		}
 
 		public static void Uninitialize() {
@@ -255,6 +271,9 @@ namespace ZeldaOracle.Common.Content {
 			actionTileData = null;
 			tilesets = null;
 			zones = null;
+			items = null;
+			ammos = null;
+			rewards = null;
 			propertyActions = null;
 			paletteDictionaries = null;
 			foreach (var pair in palettes) {
@@ -607,6 +626,16 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Loads/compiles tile data from a script file.</summary>
 		public static void LoadTiles(string assetName) {
 			LoadScript(assetName, new TileDataSR());
+		}
+
+		/// <summary>Loads/compiles items and ammos from a script file.</summary>
+		public static void LoadItems(string assetName) {
+			LoadScript(assetName, new ItemSR());
+		}
+
+		/// <summary>Loads/compiles items and rewards from a script file.</summary>
+		public static void LoadRewards(string assetName) {
+			LoadScript(assetName, new RewardSR());
 		}
 
 		/// <summary>Loads/compiles zones from a script file.</summary>

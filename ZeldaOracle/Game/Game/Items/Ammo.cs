@@ -10,72 +10,151 @@ using ZeldaOracle.Game.Control.Menus;
 namespace ZeldaOracle.Game.Items {
 	public class Ammo : ISlotItem {
 
-		protected string id;
-		protected string name;
-		protected string description;
+		private string		id;
+		private Item		container;
 
-		protected bool isAmountBased;
-		private int amount;
-		private int maxAmount;
+		private string		name;
+		private string		description;
+		private string		obtainMessage;
+		private string		cantCollectMessage;
+		private ISprite		sprite;
 
-		private bool isObtained;
-		protected bool isStolen;
-		protected ISprite sprite;
+		private bool		isAmountBased;
+		private int			amount;
+		private int			maxAmount;
+
+		private bool		isObtained;
+		private bool		isLost;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Ammo(string id, string name, string description, ISprite sprite, int amount, int maxAmount) {
+		public Ammo(string id) {
+			this.id         = id;
+			container		= null;
+			
+			name			= "";
+			description		= "";
+			obtainMessage		= "";
+			cantCollectMessage	= "";
+			sprite			= new EmptySprite();
+
+			isAmountBased	= true;
+			amount			= 0;
+			maxAmount		= 0;
+
+			isObtained		= false;
+			isLost			= false;
+		}
+
+		public Ammo(string id, string name, string description, ISprite sprite,
+			int amount, int maxAmount)
+		{
 			this.id				= id;
+			container			= null;
+
 			this.name			= name;
 			this.description	= description;
+			obtainMessage		= "";
+			cantCollectMessage	= "";
+			this.sprite			= sprite;
+
+			isAmountBased		= true;
 			this.amount			= amount;
 			this.maxAmount		= maxAmount;
-			this.sprite			= sprite;
-			this.isObtained		= false;
-			this.isStolen		= false;
+
+			isObtained		= false;
+			isLost		= false;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Virtual
 		//-----------------------------------------------------------------------------
 
-		// Draws the item inside the inventory.
+		/// <summary>Draws the item inside the inventory.</summary>
 		public virtual void DrawSlot(Graphics2D g, Point2I position) {
 			g.DrawSprite(sprite, position);
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		// Gets the id of the ammo.
+
+		/// <summary>Gets the id of the ammo.</summary>
 		public string ID {
 			get { return id; }
 		}
 
-		// Gets the name of the ammo.
+		/// <summary>Gets the item containing this ammo.</summary>
+		public Item Container {
+			get { return container; }
+			set { container = value; }
+		}
+
+		/// <summary>Gets if the item needs a container in order to be collected.</summary>
+		public bool NeedsContainer {
+			get { return container != null; }
+		}
+
+		/// <summary>Gets if the ammos container is available and thus it can be
+		/// picked up. Also returns true if the ammo does not need a container.</summary>
+		public bool IsContainerAvailable {
+			get { return (container == null || container.IsAvailable); }
+		}
+
+		/// <summary>Gets the name of the ammo.</summary>
 		public string Name {
 			get { return name; }
+			set { name = value; }
 		}
 
-		// Gets the description of the ammo.
+		/// <summary>Gets the description of the ammo.</summary>
 		public string Description {
 			get { return description; }
+			set { description = value; }
 		}
 
-		// Gets or sets the current amount of the ammo.
+		/// <summary>Gets the message when the player picks up this ammo type
+		/// for the first time.</summary>
+		public string ObtainMessage {
+			get { return obtainMessage; }
+			set { obtainMessage = value; }
+		}
+
+		/// <summary>Gets the message when the player tries to pick up the ammo but
+		/// has no container for it.</summary>
+		public string CantCollectMessage {
+			get { return cantCollectMessage; }
+			set { cantCollectMessage = value; }
+		}
+
+		/// <summary>Gets the sprite of the ammo.</summary>
+		public ISprite Sprite {
+			get { return sprite; }
+			set { sprite = value; }
+		}
+
+		/// <summary>Gets or sets if the ammo uses an amount and is not
+		/// instead, all or nothing.</summary>
+		public bool IsAmountBased {
+			get { return isAmountBased; }
+			set { isAmountBased = value; }
+		}
+
+		/// <summary>Gets or sets the current amount of the ammo.</summary>
 		public int Amount {
 			get { return amount; }
 			set {
-				if (isObtained && !isStolen)
+				if (isObtained && !isLost)
 					amount = GMath.Clamp(value, 0, maxAmount);
 			}
 		}
 
-		// Gets or sets the max amount of the ammo.
+		/// <summary>Gets or sets the max amount of the ammo.</summary>
 		public int MaxAmount {
 			get { return maxAmount; }
 			set {
@@ -85,25 +164,26 @@ namespace ZeldaOracle.Game.Items {
 			}
 		}
 
-		// Gets or sets if the ammo has been obtained.
+		/// <summary>Gets or sets if the ammo has been obtained.</summary>
 		public bool IsObtained {
 			get { return isObtained; }
 			set { isObtained = value; }
 		}
 
-		// Gets or sets if the ammo has been stolen.
-		public bool IsStolen {
-			get { return isStolen; }
-			set { isStolen = value; }
+		/// <summary>Gets or sets if the ammo has been lost.</summary>
+		public bool IsLost {
+			get { return isLost; }
+			set { isLost = value; }
 		}
 
-		// Gets if the ammo is out.
+		/// <summary>Gets if the ammo is out.</summary>
 		public bool IsEmpty {
-			get { return amount == 0; }
+			get { return !isAmountBased || amount == 0; }
 		}
 
-		public ISprite Sprite {
-			get { return sprite; }
+		/// <summary>Gets if the ammo is at capacity.</summary>
+		public bool IsFull {
+			get { return !isAmountBased || amount == maxAmount; }
 		}
 	}
 }

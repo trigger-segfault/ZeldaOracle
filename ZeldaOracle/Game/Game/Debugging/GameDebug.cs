@@ -87,11 +87,8 @@ namespace ZeldaOracle.Game.Debugging {
 		}
 
 		private static void EquipStartWeapon(string id, int slot) {
-			string weaponId = id;
-			if (!weaponId.StartsWith("item_"))
-				weaponId = "item_" + weaponId;
 			Inventory inventory = GameControl.RoomControl.Player.Inventory;
-			ItemWeapon weapon = inventory.GetItem(weaponId) as ItemWeapon;
+			ItemWeapon weapon = inventory.GetItem(id) as ItemWeapon;
 			if (weapon != null)
 				gameControl.MenuWeapons.EquipWeapon(weapon, slot);
 		}
@@ -104,6 +101,15 @@ namespace ZeldaOracle.Game.Debugging {
 				PlayerSwimmingSkills.CanSwimInWater;
 				//PlayerSwimmingSkills.CanSwimInWater |
 				//PlayerSwimmingSkills.CanSwimInOcean;
+
+			// Obtain all items and ammo
+			foreach (Item item in GameControl.Inventory.GetItems()) {
+				GameControl.Inventory.ObtainItem(item);
+			}
+
+			foreach (Ammo ammo in GameControl.Inventory.GetAmmos()) {
+				GameControl.Inventory.ObtainAmmo(ammo);
+			}
 
 			// Equip starting weapons
 			EquipStartWeapon(DevSettings.Inventory.A, Inventory.SLOT_A);
@@ -443,13 +449,13 @@ namespace ZeldaOracle.Game.Debugging {
 			}
 			// B: Spawn bomb collectibles.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.B)) {
-				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
+				Collectible collectible = gameControl.RewardManager.SpawnCollectible("bombs_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
 			// J: Spawn arrow collectibles.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.J)) {
-				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
+				Collectible collectible = gameControl.RewardManager.SpawnCollectible("arrows_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
