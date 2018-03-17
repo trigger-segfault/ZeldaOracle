@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game {
 	
@@ -110,4 +111,5 @@ namespace ZeldaOracle.Game {
 		/// intercpted.</summary>
 		bool Intercept();
 	}
+
 }

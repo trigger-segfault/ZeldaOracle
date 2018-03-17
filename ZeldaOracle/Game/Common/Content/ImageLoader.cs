@@ -33,10 +33,8 @@ namespace ZeldaOracle.Common.Content {
 			// Load through GDI Bitmap because it doesn't cause issues with alpha
 			using (Bitmap bitmap = (Bitmap) Bitmap.FromStream(stream)) {
 				// Create a texture and array to output the bitmap to
-				Image image = new Image(Resources.GraphicsDevice,
+				Image image = new Image(
 					bitmap.Width, bitmap.Height, SurfaceFormat.Color);
-				//Texture2D texture = new Texture2D(Resources.GraphicsDevice,
-				//	bitmap.Width, bitmap.Height, false, SurfaceFormat.Color);
 				XnaColor[] data = new XnaColor[bitmap.Width * bitmap.Height];
 
 				// Get the pixels from the bitmap
@@ -55,7 +53,7 @@ namespace ZeldaOracle.Common.Content {
 				bitmap.UnlockBits(bmpData);
 
 				// Assign the data to the texture
-				image.Texture.SetData<XnaColor>(data);
+				image.Texture2D.SetData<XnaColor>(data);
 
 				// Fun fact: All this extra work is actually 50% faster than
 				// Texture2D.FromStream! It's not only broken, but slow as well.

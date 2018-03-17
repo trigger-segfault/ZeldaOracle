@@ -27,11 +27,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemSeedShooter() : base("seed_shooter") {
 		public ItemSeedShooter(string id) : base(id) {
-			SetName("Seed Shooter");
+			/*SetName("Seed Shooter");
 			SetDescription("Used to bounce seeds around.");
 			SetSprite(GameData.SPR_ITEM_ICON_SEED_SHOOTER);
 			SetSpriteEquipped(GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED);
-			HoldType = RewardHoldTypes.TwoHands;
+			HoldType = RewardHoldTypes.TwoHands;*/
 			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableUnderwater |

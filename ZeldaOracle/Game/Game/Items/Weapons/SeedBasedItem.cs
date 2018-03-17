@@ -43,6 +43,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			g.DrawSprite(CurrentAmmo.Sprite, position + new Point2I(8, 0));
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

@@ -59,8 +59,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Type type = GameUtil.FindTypeWithBase<Reward>(typeName, false);
 
 				reward = ReflectionHelper.Construct<Reward, string>(type, rewardID);
-				if (reward == null)
-					ThrowCommandParseError(type.Name + " does not have a valid constructor!");
 
 				if (TypeHelper.TypeHasBase<RewardAmount>(type))
 					amount = (RewardAmount) reward;
@@ -81,8 +79,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Type type = oldReward.GetType();
 
 				reward = ReflectionHelper.Construct<Reward, string>(type, rewardID);
-				if (reward == null)
-					ThrowCommandParseError(type.Name + " does not have a valid constructor!");
 				reward.Clone(oldReward);
 
 				if (TypeHelper.TypeHasBase<RewardAmount>(type))

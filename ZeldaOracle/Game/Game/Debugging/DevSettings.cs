@@ -56,9 +56,9 @@ namespace ZeldaOracle.Game {
 			public string WorldFile { get; set; }
 			[DefaultValue("default")]
 			public string Level { get; set; }
-			//[DefaultPoint2IValue(0, 0)]
+			[DefaultValue(typeof(Point2I), "0,0")]
 			public Point2I Room { get; set; }
-			//[DefaultPoint2IValue(0, 0)]
+			[DefaultValue(typeof(Point2I), "0,0")]
 			public Point2I Location { get; set; }
 		}
 		

@@ -94,7 +94,7 @@ namespace ZeldaOracle.Game.Entities
 				finalColorDefinitions = ColorDefinitions.All("hurt");
 			}
 
-			Graphics2D g2d = new Graphics2D(Resources.SpriteBatch);
+			Graphics2D g2d = new Graphics2D();
 			unmappedSprite = Unmapping.UnmapSprite(g2d, animationPlayer.SpriteOrSubStrip,
 				new SpriteSettings(Entity.RoomControl.Zone.StyleDefinitions,
 					colorDefinitions, animationPlayer.PlaybackTime),

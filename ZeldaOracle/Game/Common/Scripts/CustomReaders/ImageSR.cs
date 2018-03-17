@@ -34,7 +34,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (parameters.ChildCount == 2)
 					imagePath = parameters.GetString(1);
 
-				Image image = Resources.LoadImage(Resources.ImageDirectory + imagePath, false);
+				Image image = Image.FromContent(Resources.ImageDirectory + imagePath);
 				AddResource<Image>(imageName, image);
 			});
 			//=====================================================================================

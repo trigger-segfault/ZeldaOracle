@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+using System.ComponentModel;
+using ZeldaOracle.Common.Converters;
 
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>The 2D floating precision vector with numerous operations and functions.</summary>
 	[Serializable]
+	[TypeConverter(typeof(Vector2FConverter))]
 	public struct Vector2F {
 
 		//-----------------------------------------------------------------------------

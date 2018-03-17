@@ -65,8 +65,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Type type = GameUtil.FindTypeWithBase<Item>(typeName, false);
 
 				item = ReflectionHelper.Construct<Item, string>(type, itemID);
-				if (item == null)
-					ThrowCommandParseError(type.Name + " does not have a valid constructor!");
 
 				if (TypeHelper.TypeHasBase<ItemEquipment>(type))
 					equipment = (ItemEquipment) item;
@@ -91,9 +89,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Type type = GameUtil.FindTypeWithBase<Ammo>(typeName, false);
 
 				ammo = ReflectionHelper.Construct<Ammo, string>(type, ammoID);
-
-				if (ammo == null)
-					ThrowCommandParseError(type.Name + " does not have a valid constructor!");
 
 				AddResource<Ammo>(ammoID, ammo);
 				Mode = Modes.Ammo;

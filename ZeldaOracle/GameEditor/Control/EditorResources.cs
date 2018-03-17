@@ -66,11 +66,11 @@ namespace ZeldaEditor.Control {
 			UnmappedSpriteLookup lookup = new UnmappedSpriteLookup(sprite, settings, tilePalette, entityPalette);
 			UnmappedWpfSprite unmappedSprite = null;
 			if (!unmappedSprites.TryGetValue(lookup, out unmappedSprite)) {
-				Graphics2D g = new Graphics2D(ZeldaResources.SpriteBatch);
+				Graphics2D g = new Graphics2D();
 				UnmappedSprite zeldaUnmappedSprite = Unmapping.UnmapSprite(g, sprite, settings, tilePalette, entityPalette);
 				MemoryStream memoryStream = new MemoryStream();
 				ZeldaImage image = zeldaUnmappedSprite.Image;
-				image.Texture.SaveAsPng(memoryStream, image.Texture.Width, image.Texture.Height);
+				image.Texture2D.SaveAsPng(memoryStream, image.Texture2D.Width, image.Texture2D.Height);
 				BitmapSource bitmap = BitmapFactory.LoadSourceFromStream(memoryStream);
 				bitmap.Freeze();
 				unmappedSprite = new UnmappedWpfSprite(bitmap, zeldaUnmappedSprite.DrawOffset);

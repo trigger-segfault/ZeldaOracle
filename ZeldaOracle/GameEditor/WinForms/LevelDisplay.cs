@@ -22,7 +22,6 @@ using System.Threading;
 using System.Windows.Threading;
 using ZeldaEditor.Tools;
 using DrawMode = ZeldaOracle.Common.Graphics.DrawMode;
-using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 using Effect = Microsoft.Xna.Framework.Graphics.Effect;
 using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
@@ -41,9 +40,6 @@ namespace ZeldaEditor.WinForms {
 		public readonly Color FadeAboveColor = new Color(200, 200, 200, 100);
 		public readonly Color FadeBelowColor = new Color(200, 200, 200, 150);
 		public readonly Color HideColor = Color.Transparent;
-
-		private static ContentManager content;
-		private static SpriteBatch spriteBatch;
 
 		private EditorWindow	editorWindow;
 		private EditorControl	editorControl;
@@ -78,10 +74,6 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Initialize() {
-			content     = new ContentManager(Services, "Content");
-			spriteBatch = new SpriteBatch(GraphicsDevice);
-			
-			editorControl.SetGraphics(spriteBatch, GraphicsDevice, content);
 				
 			// Wire the events.
 			MouseEnter          += OnMouseEnter;
@@ -122,14 +114,6 @@ namespace ZeldaEditor.WinForms {
 					}
 				},
 				System.Windows.Application.Current.Dispatcher);*/
-		}
-
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				content.Unload();
-			}
-
-			base.Dispose(disposing);
 		}
 		
 
@@ -709,7 +693,8 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
-			if (!editorControl.IsResourcesLoaded)
+			if (!Resources.IsInitialized) return;
+			if (!editorControl.IsInitialized)
 				return;
 			Stopwatch watch = new Stopwatch();
 			watch.Start();
@@ -720,7 +705,7 @@ namespace ZeldaEditor.WinForms {
 			TileDataDrawing.Extras = editorControl.ShowRewards;
 			TileDataDrawing.Level = Level;
 			//GraphicsDevice.Textures[1] = Resources.GetPalette("dungeon_ages_1").PaletteTexture;
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			//g.Begin(paletteDrawMode);
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			//GameSettings.DRAW_MODE_DEFAULT.Effect.CurrentTechnique.Passes[0].Apply();

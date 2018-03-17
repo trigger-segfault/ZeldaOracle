@@ -55,10 +55,10 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Initializes all items and ammo by loading them from resources.</summary>
 		public void LoadResources() {
-			foreach (var pair in Resources.GetResourceDictionary<Ammo>()) {
+			foreach (var pair in Resources.GetDictionary<Ammo>()) {
 				AddAmmo(pair.Value, false);
 			}
-			foreach (var pair in Resources.GetResourceDictionary<Item>()) {
+			foreach (var pair in Resources.GetDictionary<Item>()) {
 				AddItem(pair.Value, false);
 			}
 		}

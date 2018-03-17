@@ -75,7 +75,7 @@ namespace ConscriptDesigner.Anchorables {
 
 			tileData.Clear();
 			filteredTileData.Clear();
-			foreach (var pair in ZeldaResources.GetResourceDictionary<BaseTileData>()) {
+			foreach (var pair in ZeldaResources.GetDictionary<BaseTileData>()) {
 				tileData.Add(pair.Value);
 			}
 

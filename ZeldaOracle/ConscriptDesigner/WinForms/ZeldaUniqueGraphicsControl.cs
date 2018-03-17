@@ -4,7 +4,6 @@ using Size = System.Drawing.Size;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -27,7 +26,6 @@ namespace ConscriptDesigner.WinForms {
 		private static Zone defaultZone;
 
 		private StoppableTimer dispatcherTimer;
-		private SpriteBatch spriteBatch;
 
 		protected int columns;
 
@@ -51,7 +49,6 @@ namespace ConscriptDesigner.WinForms {
 
 		public ZeldaUniqueGraphicsDeviceControl() {
 			this.isInitialized = false;
-			this.spriteBatch = null;
 			this.columns = 1;
 			this.mouse = -Point2I.One;
 			this.hoverPoint = -Point2I.One;
@@ -70,7 +67,6 @@ namespace ConscriptDesigner.WinForms {
 		}
 
 		protected override void Initialize() {
-			this.spriteBatch = new SpriteBatch(GraphicsDevice);
 			if (renderTarget == null)
 				renderTarget = new RenderTarget2D(GraphicsDevice, 1, 1);
 			if (defaultZone == null)
@@ -227,9 +223,10 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected sealed override void Draw() {
+			if (!Resources.IsInitialized) return;
 			SpriteSettings settings = new SpriteSettings(DesignerControl.PlaybackTime);
 			Zone zone = DesignerControl.PreviewZone ?? defaultZone;
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 
 			if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
 				//GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;

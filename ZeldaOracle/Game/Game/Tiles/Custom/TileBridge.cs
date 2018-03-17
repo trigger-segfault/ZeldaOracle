@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (instantaneous) {
 				while (state == TileBridgeState.Creating) {
 					if (RoomControl.IsTileInBounds(pieceLocation) && GetConnectedTile(pieceLocation) == null) {
-						TileData pieceTileData = Resources.GetResource<TileData>(
+						TileData pieceTileData = Resources.Get<TileData>(
 							isVertical ? "bridge_vertical" : "bridge_horizontal");
 						Tile pieceTile = Tile.CreateTile(pieceTileData);
 						RoomControl.PlaceTileOnHighestLayer(pieceTile, pieceLocation);
@@ -201,7 +201,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 					if (RoomControl.IsTileInBounds(pieceLocation) && GetConnectedTile(pieceLocation) == null) {
 						AudioSystem.PlaySound(GameData.SOUND_BARRIER);
-						TileData pieceTileData = Resources.GetResource<TileData>(
+						TileData pieceTileData = Resources.Get<TileData>(
 							isVertical ? "bridge_vertical" : "bridge_horizontal");
 						Tile pieceTile = Tile.CreateTile(pieceTileData);
 						RoomControl.PlaceTileOnHighestLayer(pieceTile, pieceLocation);

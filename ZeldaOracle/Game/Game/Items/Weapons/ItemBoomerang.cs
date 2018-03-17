@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemBoomerang() : base("boomerang") {
 		public ItemBoomerang(string id) : base(id) {
-			SetName("Boomerang", "Magic Boomerang");
+			/*SetName("Boomerang", "Magic Boomerang");
 			SetDescription("Always comes back to you.", "A remote-control weapon.");
 			SetMessage(
 				"You got the <red>Boomerang<red>! " +
@@ -30,8 +30,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				GameData.SPR_ITEM_ICON_BOOMERANG_2);
 			MaxLevel	= Item.Level2;
 
-			HoldType = RewardHoldTypes.TwoHands;
-			Flags		=
+			HoldType = RewardHoldTypes.TwoHands;*/
+			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWithSword |

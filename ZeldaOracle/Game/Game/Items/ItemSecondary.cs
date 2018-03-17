@@ -7,14 +7,25 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Game.Items {
 	public class ItemSecondary : Item {
 
-		protected Point2I slot;
+		private Point2I slot;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public ItemSecondary(string id) : base(id) {
-			this.slot = Point2I.Zero;
+			slot = Point2I.Zero;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		protected override void OnInitialize() {
+			//slot = ItemData.Properties.Get("slot", Point2I.Zero);
 		}
 
 

@@ -131,7 +131,7 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			//g.SetRenderTarget(GameData.RenderTargetGame);
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 

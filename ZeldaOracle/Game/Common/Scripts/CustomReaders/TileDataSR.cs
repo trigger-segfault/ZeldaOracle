@@ -89,7 +89,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (!ContainsResource<ISpriteSource>(name)) {
 					ThrowCommandParseError("No sprite source with the name '" + name + "' exists in resources!");
 				}
-				source = Resources.GetResource<ISpriteSource>(name);
+				source = Resources.Get<ISpriteSource>(name);
 			});
 			//=====================================================================================
 			// TILE/TILESET BEGIN/END

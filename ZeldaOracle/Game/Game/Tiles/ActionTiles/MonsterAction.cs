@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			
 			// Construct the monster object
 			if (CanSpawn) {
-				monster = ReflectionHelper.Construct<Monster>(EntityType);
+				monster = ReflectionHelper.ConstructSafe<Monster>(EntityType);
 				if (monster == null)
 					Console.WriteLine("Error trying to spawn monster of type '" + EntityType.Name + "'!");
 			}

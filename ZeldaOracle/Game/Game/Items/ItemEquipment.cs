@@ -17,6 +17,10 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
+		public ItemEquipment() {
+			isEquipped = false;
+			spriteEquipped = null;
+		}
 		public ItemEquipment(string id) : base(id) {
 			isEquipped = false;
 			spriteEquipped = null;
@@ -69,8 +73,13 @@ namespace ZeldaOracle.Game.Items {
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		protected override void OnInitialize() {
+			//spriteEquipped = ItemData.EquipSprites;
+		}
 
 		/// <summary>Called when the item is equipped.</summary>
 		public virtual void OnEquip() { }

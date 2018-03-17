@@ -22,9 +22,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemMagicRod() : base("magic_rod") {
 		public ItemMagicRod(string id) : base(id) {
-			SetName("Magic Rod");
+			/*SetName("Magic Rod");
 			SetDescription("Burn, baby burn!");
-			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_ROD);
+			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_ROD);*/
 
 			Flags =
 				WeaponFlags.UsableInMinecart |

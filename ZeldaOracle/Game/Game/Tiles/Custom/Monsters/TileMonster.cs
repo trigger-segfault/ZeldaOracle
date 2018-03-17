@@ -43,7 +43,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 		/// <summary>Constructs the monster associated with the tile.</summary>
 		public virtual Monster ConstructMonster() {
-			return ReflectionHelper.Construct<Monster>(EntityType);
+			return ReflectionHelper.ConstructSafe<Monster>(EntityType);
 		}
 
 

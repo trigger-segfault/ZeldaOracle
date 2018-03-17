@@ -130,6 +130,16 @@ namespace ZeldaOracle.Game {
 			}
 		}
 
+		/// <summary>Unloads everything from GameData.</summary>
+		public static void Uninitialize() {
+			// Unset all game data
+			IEnumerable<FieldInfo> fields = typeof(GameData).GetFields()
+				.Where(field => field.IsStatic);
+			foreach (FieldInfo field in fields) {
+				field.SetValue(null, null);
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal
@@ -147,8 +157,8 @@ namespace ZeldaOracle.Game {
 			foreach (FieldInfo field in fields) {
 				string name = field.Name.ToLower().Remove(0, prefix.Length);
 				
-				if (Resources.ContainsResource<T>(name)) {
-					field.SetValue(null, Resources.GetResource<T>(name));
+				if (Resources.Contains<T>(name)) {
+					field.SetValue(null, Resources.Get<T>(name));
 				}
 				else if (field.GetValue(null) != null) {
 					//Console.WriteLine("** WARNING: " + name + " is built programatically.");
@@ -160,7 +170,7 @@ namespace ZeldaOracle.Game {
 			
 			// Loop through resource dictionary.
 			// Find any resources that don't have corresponding fields in GameData.
-			Dictionary<string, T> dictionary = Resources.GetResourceDictionary<T>();
+			Dictionary<string, T> dictionary = Resources.GetDictionary<T>();
 			foreach (KeyValuePair<string, T> entry in dictionary) {
 				string name = prefix.ToLower() + entry.Key;
 				FieldInfo matchingField = fields.FirstOrDefault(
@@ -263,7 +273,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadPalettes("Palettes/palettes.conscript");
 
 			// Menu palette is made programatically as it's just a 16 unit offset (Maxes at 248)
-			Palette entitiesMenu = new Palette(Resources.GetResource<Palette>("entities_default"));
+			Palette entitiesMenu = new Palette(Resources.Get<Palette>("entities_default"));
 			foreach (var pair in entitiesMenu.GetDefinedConsts()) {
 				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
 					if (pair.Value[i].IsUndefined)
@@ -287,7 +297,7 @@ namespace ZeldaOracle.Game {
 				}
 			}
 			entitiesMenu.UpdatePalette();
-			Resources.AddResource<Palette>("entities_menu", entitiesMenu);
+			Resources.Add<Palette>("entities_menu", entitiesMenu);
 
 			IntegrateResources<Palette>("PAL_");
 			

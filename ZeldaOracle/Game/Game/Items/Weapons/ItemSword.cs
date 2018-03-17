@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		public ItemSword(string id) : base(id) {
-			SetName("Wooden Sword", "Noble Sword", "Master Sword");
+			/*SetName("Wooden Sword", "Noble Sword", "Master Sword");
 			SetDescription("A hero's blade.", "A sacred blade.", "The blade of legends.");
 			SetMessage(
 				"You got a Hero's <red>Wooden Sword<red>! " +
@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				GameData.SPR_ITEM_ICON_SWORD_2,
 				GameData.SPR_ITEM_ICON_SWORD_3);
 			MaxLevel = Item.Level3;
-			HoldType = RewardHoldTypes.OneHand;
+			HoldType = RewardHoldTypes.OneHand;*/
 
 			Flags =
 				WeaponFlags.UsableInMinecart |

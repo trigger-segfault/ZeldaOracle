@@ -31,7 +31,8 @@ namespace ZeldaOracle.Common.Ini {
 		//private bool allowDuplicates;
 
 		// Load and Save Settings
-		/// <summary>Requires that all formatted lines use escape characters even when unnecessary.</summary>
+		/// <summary>Requires that all formatted lines use escape characters even when
+		/// unnecessary.</summary>
 		private bool strictFormatting;
 		/// <summary>True if characters are escaped.</summary>
 		private bool escapeEnabled;
@@ -97,7 +98,8 @@ namespace ZeldaOracle.Common.Ini {
 			return sections.ContainsKey(section.Name);
 		}
 
-		/// <summary>Returns true if this document contains a section with the specified name.</summary>
+		/// <summary>Returns true if this document contains a section with the
+		/// specified name.</summary>
 		public bool Contains(string sectionName) {
 			return sections.ContainsKey(sectionName);
 		}
@@ -126,14 +128,16 @@ namespace ZeldaOracle.Common.Ini {
 		/// <summary>Removes the section from the document.</summary>
 		public void Remove(IniSection section) {
 			if (section.Name == "")
-				throw new ArgumentException("Cannot remove the global section from an ini document!");
+				throw new ArgumentException("Cannot remove the global section from " +
+					"an ini document!");
 			sections.Remove(section.Name);
 		}
 
 		/// <summary>Removes the section with the specified name from the document.</summary>
 		public void Remove(string sectionName) {
 			if (sectionName == "")
-				throw new ArgumentException("Cannot remove the global section from an ini document!");
+				throw new ArgumentException("Cannot remove the global section from " +
+					"an ini document!");
 			sections.Remove(sectionName);
 		}
 
@@ -191,7 +195,8 @@ namespace ZeldaOracle.Common.Ini {
 			// Split lines at "=", " = ", ":", or " : " and not "\\=" or "\\:"
 			// Remove quotes around values
 			// Implement all escape characters:
-			// '\\', '\0', '\a', '\b', '\t', '\r', '\n', '\;', '\#', '\!', '\=', '\:', '\"', '\ ', '\x####'
+			// '\\', '\0', '\a', '\b', '\t', '\r', '\n', '\;',
+			// '\#', '\!', '\=', '\:', '\"', '\ ', '\x####'
 
 			// Replace all carriage returns with new lines
 			text = text.Replace("\r\n", "\n");
@@ -305,9 +310,11 @@ namespace ZeldaOracle.Common.Ini {
 			int assignIndex = -1;
 			int equalsIndex = property.IndexOf("=");
 			int colonIndex = property.IndexOf(":");
-			if (equalsIndex != -1 && (equalsIndex < colonIndex || colonIndex == -1))
+			if (equalsIndex != -1 &&
+				(equalsIndex < colonIndex || colonIndex == -1))
 				assignIndex = equalsIndex;
-			else if (colonIndex != -1 && (colonIndex < equalsIndex || equalsIndex == -1))
+			else if (colonIndex != -1 &&
+				(colonIndex < equalsIndex || equalsIndex == -1))
 				assignIndex = colonIndex;
 			if (assignIndex != -1)
 				property = property.Remove(assignIndex, 1).Insert(assignIndex, "\n");
@@ -381,7 +388,9 @@ namespace ZeldaOracle.Common.Ini {
 		}
 
 		/// <summary>Format and returns the text with escape characters.</summary>
-		private string FormatEscape(string text, bool escape, bool special, bool quotes, bool spaces) {
+		private string FormatEscape(string text, bool escape, bool special,
+			bool quotes, bool spaces)
+		{
 			text = text.Replace("\\", "\\\\");
 			if (escape) {
 				text = text.Replace("\0", "\\0");
@@ -415,7 +424,8 @@ namespace ZeldaOracle.Common.Ini {
 				return "";
 			string text = name;
 			if (escapeEnabled)
-				text = FormatEscape(text, true, strictFormatting, strictFormatting, strictFormatting);
+				text = FormatEscape(text, true, strictFormatting, strictFormatting,
+					strictFormatting);
 			text = "[" + text + "]";
 			return ContinueLine(text);
 		}
@@ -439,7 +449,8 @@ namespace ZeldaOracle.Common.Ini {
 		/// <summary>Formats and returns the property value.</summary>
 		private string FormatPropertyValue(string value, bool useQuotes) {
 			if (escapeEnabled)
-				value = FormatEscape(value, true, strictFormatting, true, strictFormatting);
+				value = FormatEscape(value, true, strictFormatting, true,
+					strictFormatting);
 			if (useQuotes)
 				value = "\"" + value + "\"";
 			return value;

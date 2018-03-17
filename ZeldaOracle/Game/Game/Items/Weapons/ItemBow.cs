@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemBow() : base("bow") {
 		public ItemBow(string id) : base(id) {
-			SetName("Wooden Bow");
+			/*SetName("Wooden Bow");
 			SetDescription("Weapon of a marksman.");
 			SetMessage(
 				"You got <red>Bow<red>! Shoot arrows at your enemies!",
@@ -39,12 +39,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			SetMaxAmmo(30, 40, 50);
 			MaxLevel	= Item.Level3;
 			HoldType = RewardHoldTypes.TwoHands;
-			Flags		=
+
+			IncreaseAmmoOnLevelUp = true;*/
+			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWhileInHole;
-
-			IncreaseAmmoOnLevelUp = true;
 
 			arrowTracker = new EntityTracker<Arrow>(2);
 		}

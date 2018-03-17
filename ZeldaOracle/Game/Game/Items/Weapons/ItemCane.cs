@@ -22,9 +22,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemCane() : base("cane") {
 		public ItemCane(string id) : base(id) {
-			SetName("Cane of Somaria");
+			/*SetName("Cane of Somaria");
 			SetDescription("Used to create blocks.");
-			SetSprite(GameData.SPR_ITEM_ICON_CANE);
+			SetSprite(GameData.SPR_ITEM_ICON_CANE);*/
 			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |
@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B).
@@ -47,6 +47,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 
 		protected override void OnInitialize() {
+			base.OnInitialize();
+
 			somariaBlockTile = null;
 
 			// Create the somaria block tile data.

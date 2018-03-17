@@ -5,9 +5,6 @@ using System.Text;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Items.Ammos;
 using ZeldaOracle.Game.Items.Drops;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Items.KeyItems;
-using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Entities;
@@ -48,11 +45,14 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public static void LoadInventory(Inventory inventory, bool obtain = false) {
+			// Clear the resources if they're being reloaded
+			Resources.ClearDictionary<Item>();
+			Resources.ClearDictionary<Ammo>();
 
 			Resources.LoadItems(Resources.ItemDirectory + "items.conscript");
-			inventory.LoadResources();
 			IntegrateResources<Item>("ITEM_");
 			IntegrateResources<Ammo>("AMMO_");
+			inventory.LoadResources();
 			inventory.SetMaxLevel("wallet");
 
 			// Add ammos.
@@ -131,6 +131,8 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public static void LoadRewards(RewardManager rewardManager) {
+			// Clear the resources if they're being reloaded
+			Resources.ClearDictionary<Reward>();
 
 			rewardManager.LoadItems();
 			Resources.LoadRewards(Resources.ItemDirectory + "rewards.conscript");

@@ -60,7 +60,7 @@ namespace ZeldaEditor.Windows {
 		}
 
 		private void InitZones() {
-			foreach (var pair in ZeldaOracle.Common.Content.Resources.GetResourceDictionary<Zone>()) {
+			foreach (var pair in ZeldaOracle.Common.Content.Resources.GetDictionary<Zone>()) {
 				comboBoxZones.Items.Add(pair.Key);
 			}
 			comboBoxZones.SelectedIndex = 0;
@@ -83,7 +83,7 @@ namespace ZeldaEditor.Windows {
 				dimensions = new Point2I(spinnerWidth.Value.Value, spinnerHeight.Value.Value);
 				layerCount = 3;
 				roomSize = (Point2I)(comboBoxRoomSizes.SelectedItem as ComboBoxItem).Tag;
-				zone = ZeldaOracle.Common.Content.Resources.GetResource<Zone>((string)comboBoxZones.SelectedItem);
+				zone = ZeldaOracle.Common.Content.Resources.Get<Zone>((string)comboBoxZones.SelectedItem);
 				Level level = new Level(id, dimensions, layerCount, roomSize, zone);
 				action = new ActionCreateLevel(level);
 				DialogResult = true;

@@ -16,17 +16,20 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemBigSword() : base("biggoron_sword") {
 		public ItemBigSword(string id) : base(id) {
-			SetName("Biggoron's Sword");
+			/*SetName("Biggoron's Sword");
 			SetDescription("A powerful, two-handed sword.");
 			SetMessage("You got <red>Biggoron's Sword<red>! " +
 							"This two-handed sword is huge!");
 			SetSprite(GameData.SPR_ITEM_ICON_BIGGORON_SWORD);
 			SetSpriteEquipped(GameData.SPR_ITEM_ICON_BIGGORON_SWORD_EQUIPPED);
 
-			HoldType    = RewardHoldTypes.TwoHands;
+			HoldType    = RewardHoldTypes.TwoHands;*/
 
-			Flags = WeaponFlags.TwoHanded | WeaponFlags.UsableInMinecart |
-				WeaponFlags.UsableWhileJumping | WeaponFlags.UsableWhileInHole;
+			Flags =
+				WeaponFlags.TwoHanded |
+				WeaponFlags.UsableInMinecart |
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWhileInHole;
 		}
 		
 

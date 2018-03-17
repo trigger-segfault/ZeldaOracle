@@ -82,7 +82,7 @@ namespace ConscriptDesigner.Anchorables {
 			sources.Clear();
 			spriteGrid = new SpriteInfo[0, 0];
 
-			foreach (var pair in ZeldaResources.GetResourceDictionary<ISpriteSource>()) {
+			foreach (var pair in ZeldaResources.GetDictionary<ISpriteSource>()) {
 				sources.Add(pair);
 			}
 			sources.Sort((a, b) => AlphanumComparator.Compare(a.Key, b.Key, true));
@@ -94,7 +94,7 @@ namespace ConscriptDesigner.Anchorables {
 				item.Tag = pair.Key;
 				comboBoxSpriteSources.Items.Add(item);
 			}
-			source = ZeldaResources.GetResource<ISpriteSource>(sourceName);
+			source = ZeldaResources.Get<ISpriteSource>(sourceName);
 			if (sources.Any() && source == null) {
 				sourceName = sources[0].Key;
 				source = sources[0].Value;
@@ -183,7 +183,7 @@ namespace ConscriptDesigner.Anchorables {
 			if (suppressEvents) return;
 			if (comboBoxSpriteSources.SelectedIndex != -1) {
 				sourceName = (string) ((ComboBoxItem) comboBoxSpriteSources.SelectedItem).Tag;
-				source = ZeldaResources.GetResource<ISpriteSource>(sourceName);
+				source = ZeldaResources.Get<ISpriteSource>(sourceName);
 				UpdateSource();
 			}
 		}
