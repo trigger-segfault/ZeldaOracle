@@ -139,17 +139,17 @@ namespace ZeldaEditor.Control {
 
 				// Create tileset combo box.
 				editorForm.ComboBoxTilesets.Items.Clear();
-				foreach (KeyValuePair<string, TilesetOld> entry in Resources.GetResourceDictionary<TilesetOld>()) {
+				foreach (KeyValuePair<string, TilesetOld> entry in Resources.GetDictionary<TilesetOld>()) {
 					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
 				}
-				foreach (KeyValuePair<string, EventTileset> entry in Resources.GetResourceDictionary<EventTileset>()) {
+				foreach (KeyValuePair<string, EventTileset> entry in Resources.GetDictionary<EventTileset>()) {
 					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxTilesets.SelectedIndex = 0;
 				
 				// Create zone combo box.
 				editorForm.ComboBoxZones.Items.Clear();
-				foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
+				foreach (KeyValuePair<string, Zone> entry in Resources.GetDictionary<Zone>()) {
 					if (tileset.SpriteSheet.Image.HasVariant(entry.Key))
 						editorForm.ComboBoxZones.Items.Add(entry.Key);
 				}
@@ -321,10 +321,10 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void ChangeTileset(string name) {
-			if (Resources.ContainsResource<TilesetOld>(name))
-				tileset = Resources.GetResource<TilesetOld>(name);
-			else if (Resources.ContainsResource<EventTileset>(name))
-				tileset = Resources.GetResource<EventTileset>(name);
+			if (Resources.Contains<TilesetOld>(name))
+				tileset = Resources.Get<TilesetOld>(name);
+			else if (Resources.Contains<EventTileset>(name))
+				tileset = Resources.Get<EventTileset>(name);
 			
 			if (tileset.SpriteSheet != null) {
 				// Determine which zone to begin using for this tileset.
@@ -337,7 +337,7 @@ namespace ZeldaEditor.Control {
 
 				// Setup zone combo box for the new tileset.
 				editorForm.ComboBoxZones.Items.Clear();
-				foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
+				foreach (KeyValuePair<string, Zone> entry in Resources.GetDictionary<Zone>()) {
 					if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {
 						editorForm.ComboBoxZones.Items.Add(entry.Key);
 						if (entry.Key == zone.ID)
@@ -353,7 +353,7 @@ namespace ZeldaEditor.Control {
 
 		public void ChangeZone(string name) {
 			if (name != "(none)") {
-				zone = Resources.GetResource<Zone>(name);
+				zone = Resources.Get<Zone>(name);
 				editorForm.TileDisplay.UpdateZone();
 			}
 		}

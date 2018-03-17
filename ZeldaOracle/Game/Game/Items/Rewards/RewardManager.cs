@@ -45,7 +45,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		/// <summary>Initializes the item rewards by loading them from resources.</summary>
 		public void LoadItems() {
 			// Create RewardItems from Item resources
-			foreach (var pair in Resources.GetResourceDictionary<Item>()) {
+			foreach (var pair in Resources.GetDictionary<Item>()) {
 				AddRewardItem(pair.Value);
 			}
 		}
@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		/// <summary>Initializes all rewards by loading them from resources.</summary>
 		public void LoadResources() {
 			// Load rest of rewards
-			foreach (var pair in Resources.GetResourceDictionary<Reward>()) {
+			foreach (var pair in Resources.GetDictionary<Reward>()) {
 				AddReward(pair.Value);
 			}
 		}

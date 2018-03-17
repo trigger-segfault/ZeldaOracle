@@ -17,7 +17,6 @@ using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Drops;
-using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items.KeyItems;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Items.Weapons;

@@ -349,7 +349,7 @@ namespace ZeldaOracle.Game {
 			string[] orientations = { "blue_yellow", "blue_red", "yellow_red", "yellow_blue", "red_blue", "red_yellow" };
 
 			for (int i = 0; i < 6; i++) {
-				SPR_COLOR_CUBE_ORIENTATIONS[i] = Resources.GetResource<ISprite>("color_cube_" + orientations[i]);
+				SPR_COLOR_CUBE_ORIENTATIONS[i] = Resources.Get<ISprite>("color_cube_" + orientations[i]);
 			}
 		}
 	}

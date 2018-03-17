@@ -335,7 +335,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Spawn the a "dug" tile or TileBelow in this tile's place.
 				TileData data = TileBelow ??
-					Resources.GetResource<TileData>("dug");
+					Resources.Get<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
 			}
@@ -680,7 +680,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (data.Type == null)
 				tile = new Tile();
 			else
-				tile = ReflectionHelper.Construct<Tile>(data.Type);
+				tile = ReflectionHelper.ConstructSafe<Tile>(data.Type);
 			
 			tile.location			= data.Location;
 			tile.layer				= data.Layer;

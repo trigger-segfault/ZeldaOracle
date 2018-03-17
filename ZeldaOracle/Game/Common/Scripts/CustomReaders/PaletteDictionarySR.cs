@@ -40,7 +40,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowCommandParseError("Invalid Palette Type");
 				assetName = parameters.GetString(1);
 				dictionary = new PaletteDictionary(type);
-				Resources.AddPaletteDictionary(assetName, dictionary);
+				AddResource<PaletteDictionary>(assetName, dictionary);
 				Mode = Modes.Dictionary;
 			});
 			//=====================================================================================

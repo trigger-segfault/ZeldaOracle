@@ -14,7 +14,6 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
-using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using ZeldaOracle.Common.Graphics.Sprites;
 using System.Windows.Threading;
 using Size = System.Drawing.Size;
@@ -22,8 +21,6 @@ using Size = System.Drawing.Size;
 namespace ZeldaEditor.WinForms {
 
 	public class TilePreview : GraphicsDeviceControl {
-		
-		private static SpriteBatch spriteBatch;
 		
 		private EditorControl editorControl;
 
@@ -34,8 +31,6 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Initialize() {
-			spriteBatch = new SpriteBatch(GraphicsDevice);
-			
 			this.ResizeRedraw = true;
 			tile = null;
 
@@ -60,9 +55,10 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
-			if (!editorControl.IsResourcesLoaded)
+			if (!Resources.IsInitialized) return;
+			if (!editorControl.IsInitialized)
 				return;
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			g.Clear(Color.White);
 			if (tile == null)
 				return;

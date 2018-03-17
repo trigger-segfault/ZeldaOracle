@@ -10,15 +10,13 @@ using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.KeyItems {
 	public class ItemFlippers : ItemSecondary {
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
-
-		//public ItemFlippers() : base("flippers") {
+		
 		public ItemFlippers(string id) : base(id) {
-			SetName("Zora's Flippers", "Mermaid Suit");
+			/*SetName("Zora's Flippers", "Mermaid Suit");
 			SetDescription("Hit the beach.", "The skin of the mythical beast.");
 			SetMessage(
 				"You got <red>Zora's Flippers<red>! You can now go for a swim! " +
@@ -31,12 +29,12 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			MaxLevel = Item.Level2;
 			HoldType = RewardHoldTypes.TwoHands;
 
-			slot = new Point2I(0, 0);
+			slot = new Point2I(0, 0);*/
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		// Called when the item's level is changed.

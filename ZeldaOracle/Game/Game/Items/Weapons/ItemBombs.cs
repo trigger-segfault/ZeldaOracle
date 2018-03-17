@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Items {
 
 		//public ItemBombs() : base("bombs") {
 		public ItemBombs(string id) : base(id) {
-			SetName("Bombs");
+			/*SetName("Bombs");
 			SetDescription("Very explosive.");
 			SetMessage(
 				"You got <red>Bombs<red>! Use them to blow open false walls. " +
@@ -30,9 +30,9 @@ namespace ZeldaOracle.Game.Items {
 			SetMaxAmmo(10, 20, 30);
 			MaxLevel	= Item.Level3;
 			HoldType    = RewardHoldTypes.TwoHands;
+			IncreaseAmmoOnLevelUp = true;*/
 
-			Flags       = WeaponFlags.UsableWhileInHole;
-			IncreaseAmmoOnLevelUp = true;
+			Flags = WeaponFlags.UsableWhileInHole;
 
 			bombTracker	= new EntityTracker<Bomb>(1);
 		}

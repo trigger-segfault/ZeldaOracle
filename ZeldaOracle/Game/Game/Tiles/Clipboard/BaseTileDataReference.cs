@@ -39,12 +39,12 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 
 		/// <summary>Confirms that the resource exists in the database.</summary>
 		public bool ConfirmResourceExists() {
-			return Resources.ContainsResource<TData>(name);
+			return Resources.Contains<TData>(name);
 		}
 
 		/// <summary>Creates and returns the dereferenced tile data.</summary>
 		public TInstance Dereference() {
-			TInstance baseTileData = SetupInstance(Resources.GetResource<TData>(name));
+			TInstance baseTileData = SetupInstance(Resources.Get<TData>(name));
 			baseTileData.Properties	= properties;
 			baseTileData.Events		= events;
 			properties.RestoreFromClipboard(baseTileData.BaseData.Properties, baseTileData);

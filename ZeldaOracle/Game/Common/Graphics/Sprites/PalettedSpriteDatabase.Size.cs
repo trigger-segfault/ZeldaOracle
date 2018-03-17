@@ -83,7 +83,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 				// Do we need to create a new image
 				if (ImageIndex == 0) {
-					currentImage = new Image(Resources.GraphicsDevice, dimensions * size);
+					currentImage = new Image(dimensions * size);
 					images.Add(currentImage);
 				}
 				else {
@@ -95,7 +95,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				Point2I rectSize = originalSprite.SourceRect.Size;
 				//XnaColor[] colorData = new XnaColor[currentImage.Width * currentImage.Height];
 				XnaRectangle rect = originalSprite.SourceRect.ToXnaRectangle();
-				originalSprite.Image.Texture.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
+				originalSprite.Image.Texture2D.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				for (int x = 0; x < rectSize.X; x++) {
 					for (int y = 0; y < rectSize.Y; y++) {
@@ -112,7 +112,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 				// Save the mapping to the database image
 				rect = CurrentSourceRect.ToXnaRectangle();
-				currentImage.Texture.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
+				currentImage.Texture2D.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				// Skip all the busywork
 				FinishSprite:
@@ -139,7 +139,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 				// Do we need to create a new image
 				if (ImageIndex == 0) {
-					currentImage = new Image(Resources.GraphicsDevice, dimensions * size);
+					currentImage = new Image(dimensions * size);
 					images.Add(currentImage);
 				}
 				else {
@@ -165,7 +165,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				Point2I rectSize = args.SourceRect.Size;
 				//XnaColor[] colorData = new XnaColor[currentImage.Width * currentImage.Height];
 				XnaRectangle rect = args.SourceRect.ToXnaRectangle();
-				args.Image.Texture.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
+				args.Image.Texture2D.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 				Point2I chunkSize = args.ChunkSize;
 				if (chunkSize.IsZero)
 					chunkSize = rectSize;
@@ -276,7 +276,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 				// Save the mapping to the database image
 				rect = CurrentSourceRect.ToXnaRectangle();
-				currentImage.Texture.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
+				currentImage.Texture2D.SetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 
 				// Skip all the busywork
 				FinishSprite:
@@ -298,26 +298,27 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				preloadCount = reader.ReadInt32();
 				int imageCount = reader.ReadInt32();
 				for (int i = 0; i < imageCount; i++) {
-					int pngSize = reader.ReadInt32();
+					images.Add(Image.FromStreamAndSize(reader.BaseStream));
+					/*int pngSize = reader.ReadInt32();
 					Image image = ImageLoader.FromStream(reader.BaseStream, pngSize);
-					images.Add(image);
+					images.Add(image);*/
 				}
 			}
 
 			/// <summary>Writes the paletted sprite database size and all of its images.</summary>
 			public void Write(BinaryWriter writer) {
-				TextureLoader loader = new TextureLoader(Resources.GraphicsDevice);
 				writer.Write(spriteIndex);
 				writer.Write(images.Count);
 				foreach (Image image in images) {
+					image.SaveAsPngAndSize(writer.BaseStream);
 					// Write the png size later
-					writer.Write((int) 0);
+					/*writer.Write((int) 0);
 					int pngStart = (int) writer.BaseStream.Position;
-					image.Texture.SaveAsPng(writer.BaseStream, image.Width, image.Height);
+					image.Texture2D.SaveAsPng(writer.BaseStream, image.Width, image.Height);
 					int pngSize = (int) writer.BaseStream.Position - pngStart;
 					writer.BaseStream.Position = pngStart - 4;
 					writer.Write(pngSize);
-					writer.BaseStream.Position += pngSize;
+					writer.BaseStream.Position += pngSize;*/
 				}
 			}
 

@@ -89,12 +89,12 @@ namespace ConscriptDesigner.Anchorables {
 
 			tileData.Clear();
 			filteredTileData.Clear();
-			foreach (var pair in ZeldaResources.GetResourceDictionary<BaseTileData>()) {
+			foreach (var pair in ZeldaResources.GetDictionary<BaseTileData>()) {
 				tileData.Add(pair.Value);
 			}
 
 			tilesets.Clear();
-			foreach (var pair in ZeldaResources.GetResourceDictionary<Tileset>()) {
+			foreach (var pair in ZeldaResources.GetDictionary<Tileset>()) {
 				tilesets.Add(new KeyValuePair<string, Tileset>(pair.Key, pair.Value));
 			}
 			tilesets.Sort((a, b) => AlphanumComparator.Compare(a.Key, b.Key, true));
@@ -108,7 +108,7 @@ namespace ConscriptDesigner.Anchorables {
 				item.Tag = pair.Key;
 				comboBoxTilesets.Items.Add(item);
 			}
-			tileset = ZeldaResources.GetResource<Tileset>(tilesetName);
+			tileset = ZeldaResources.Get<Tileset>(tilesetName);
 			if (tilesets.Any() && tileset == null) {
 				tilesetName = tilesets[0].Key;
 				tileset = null;
@@ -222,7 +222,7 @@ namespace ConscriptDesigner.Anchorables {
 				else {
 					toolbarSearch.Visibility = Visibility.Collapsed;
 					statusBarHoverIndex.Visibility = Visibility.Visible;
-					tileset = ZeldaResources.GetResource<Tileset>(tilesetName);
+					tileset = ZeldaResources.Get<Tileset>(tilesetName);
 				}
 				UpdateTiles();
 			}

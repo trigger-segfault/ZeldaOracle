@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>The graphics manager.</summary>
 		private GraphicsDeviceManager graphics;
 		/// <summary>The sprite batch to draw to.</summary>
-		private SpriteBatch spriteBatch;
+		//private SpriteBatch spriteBatch;
 		/// <summary>True if the game is in fullscreen mode.</summary>
 		private bool fullScreen;
 		/// <summary>The current size of the non-fullscreen window.</summary>
@@ -80,7 +80,7 @@ namespace ZeldaOracle.Game.Main {
 		public GameBase(string[] launchParameters) {
 			// Graphics
 			this.graphics				= new GraphicsDeviceManager(this);
-			this.spriteBatch			= null;
+			//this.spriteBatch			= null;
 			this.Content.RootDirectory	= "Content";
 			this.fullScreen				= false;
 			this.windowSize             = GameSettings.SCREEN_SIZE * 4;
@@ -160,10 +160,11 @@ namespace ZeldaOracle.Game.Main {
 				Logs.Initialization.LogNotice("Begin Load Content");
 
 				// Create a new SpriteBatch, which can be used to draw textures.
-				spriteBatch = new SpriteBatch(GraphicsDevice);
+				//spriteBatch = new SpriteBatch(GraphicsDevice);
 
 				AudioSystem.Initialize();
-				Resources.Initialize(spriteBatch, GraphicsDevice, Content);
+
+				Resources.Initialize(GraphicsDevice, Content);
 				
 				game.LoadContent(Content);
 
@@ -352,7 +353,7 @@ namespace ZeldaOracle.Game.Main {
 			UpdateFrameRate(gameTime);
 
 			// Render the game
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			game.Draw(g);
 			base.Draw(gameTime);
 		}
@@ -427,7 +428,7 @@ namespace ZeldaOracle.Game.Main {
 		
 		/// <summary>Returns the stored sprite batch class.</summary>
 		public SpriteBatch SpriteBatch {
-			get { return spriteBatch; }
+			get { return Resources.SpriteBatch; }
 		}
 
 		/// <summary>The current frame rate of the game.</summary>

@@ -21,7 +21,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemFeather() : base("feather") {
 		public ItemFeather(string id) : base(id) {
-			SetName("Roc's Feather", "Roc's Cape");
+			/*SetName("Roc's Feather", "Roc's Cape");
 			SetDescription("A nice lift.", "A wing-riding cape.");
 			SetMessage(
 				"You got <red>Roc's Feather<red>! You feel as light as a feather!",
@@ -30,9 +30,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			SetSprite(
 				GameData.SPR_ITEM_ICON_FEATHER,
 				GameData.SPR_ITEM_ICON_CAPE);
-			MaxLevel = Item.Level2;
+			MaxLevel = Item.Level2;*/
 
-			Flags = WeaponFlags.UsableWhileJumping | WeaponFlags.UsableWithSword;
+			Flags =
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWithSword;
 		}
 
 

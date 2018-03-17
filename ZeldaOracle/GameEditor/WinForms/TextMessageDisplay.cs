@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using Microsoft.Xna.Framework.Content;
 using ZeldaEditor.Control;
 using ZeldaEditor.Util;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Translation;
@@ -28,9 +29,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		private const int MaxWidth = 144;
-
-		private static ContentManager content;
-		private static Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
+		
 		private StoppableTimer dispatcherTimer;
 		
 		// The wrapped and formatted lines.
@@ -139,8 +138,6 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		protected override void Initialize() {
-			content     = new ContentManager(Services, "Content");
-			spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(GraphicsDevice);
 
 			//KeyDown += OnKeyDown;
 
@@ -174,14 +171,6 @@ namespace ZeldaEditor.WinForms {
 				enterPressed = true;
 			}
 		}*/
-
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				content.Unload();
-			}
-
-			base.Dispose(disposing);
-		}
 
 
 		//-----------------------------------------------------------------------------
@@ -294,9 +283,10 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		protected override void Draw() {
-			if (!editorControl.IsResourcesLoaded)
+			if (!Resources.IsInitialized) return;
+			if (!editorControl.IsInitialized)
 				return;
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.Clear(Color.White);
 

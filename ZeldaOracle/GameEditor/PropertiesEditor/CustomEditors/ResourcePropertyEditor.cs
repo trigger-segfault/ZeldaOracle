@@ -31,7 +31,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			return new NoneStringConverter();
 		}
 		protected override IEnumerable CreateItemsSource(PropertyItem item) {
-			Dictionary<string, T> resourceMap = Resources.GetResourceDictionary<T>();
+			Dictionary<string, T> resourceMap = Resources.GetDictionary<T>();
 			string[] resourceIds = new string[resourceMap.Count + 1];
 			int index = 0;
 			resourceIds[index] = "(none)";

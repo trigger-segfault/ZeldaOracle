@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public abstract class BaseTileData : IPropertyObject {
 
-		/// <summary>The overridden type fof the tile.</summary>
+		/// <summary>The overridden type for the tile.</summary>
 		protected Type type;
 		/// <summary>The type of entity this tile spawns.</summary>
 		protected Type entityType;
@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets or sets the overridden type fof the tile.</summary>
+		/// <summary>Gets or sets the overridden type for the tile.</summary>
 		public Type Type {
 			get { return type; }
 			set {

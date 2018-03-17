@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			RoomControl.RemoveTile(this);
 
 			// Spawn the a "dug" tile in this tile's place.
-			TileData data = Resources.GetResource<TileData>("dug");
+			TileData data = Resources.Get<TileData>("dug");
 			Tile dugTile = Tile.CreateTile(data);
 			RoomControl.PlaceTile(dugTile, Location, Layer);
 

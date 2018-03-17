@@ -9,20 +9,18 @@ using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.KeyItems {
 	public class ItemMagicPotion : ItemSecondary {
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
-
-		//public ItemMagicPotion() : base("magic_potion") {
+		
 		public ItemMagicPotion(string id) : base(id) {
-			SetName("Magic Potion");
+			/*SetName("Magic Potion");
 			SetDescription("Fill your hearts!");
 			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_POTION);
 			HoldType = RewardHoldTypes.TwoHands;
 
-			slot = new Point2I(1, 0);
+			slot = new Point2I(1, 0);*/
 		}
 
 	}

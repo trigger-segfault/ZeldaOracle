@@ -841,7 +841,7 @@ namespace ZeldaEditor {
 		protected override void Draw() {
 			editorControl.UpdateTicks();
 			
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			DrawLevel(g);
 			g.End();

@@ -23,15 +23,15 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Constructs a canvas sprite and render target.</summary>
 		public CanvasSprite(Point2I size) {
-			RenderTarget	= new RenderTarget(Resources.GraphicsDevice, size,
-				SurfaceFormat.Color, RenderTargetUsage.PreserveContents);
+			RenderTarget	= new RenderTarget(size, SurfaceFormat.Color,
+				RenderTargetUsage.PreserveContents);
 			DrawOffset		= Point2I.Zero;
 		}
 
 		/// <summary>Constructs a canvas sprite and render target with a draw offset.</summary>
 		public CanvasSprite(Point2I size, Point2I drawOffset) {
-			RenderTarget	= new RenderTarget(Resources.GraphicsDevice, size,
-				SurfaceFormat.Color, RenderTargetUsage.PreserveContents);
+			RenderTarget	= new RenderTarget(size, SurfaceFormat.Color,
+				RenderTargetUsage.PreserveContents);
 			DrawOffset		= drawOffset;
 		}
 
@@ -97,7 +97,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>Begins drawing to the canvas sprite. CanvasSprite.End() must be
 		/// called instead of Graphics2D.End().</summary>
 		public Graphics2D Begin(DrawMode drawMode) {
-			Graphics2D g = new Graphics2D(Resources.SpriteBatch);
+			Graphics2D g = new Graphics2D();
 			g.SetRenderTarget(RenderTarget);
 			g.Begin(drawMode);
 			return g;

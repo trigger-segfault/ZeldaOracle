@@ -258,9 +258,9 @@ namespace ZeldaOracle.Common.Scripts {
 				return tempResources.GetResource<T>(name);
 			}
 			else {
-				if (!Resources.ContainsResource<T>(name))
+				if (!Resources.Contains<T>(name))
 					ThrowCommandParseError("Resource with name '" + name + "' does not exist!");
-				return Resources.GetResource<T>(name, allowEmptyNames);
+				return Resources.Get<T>(name, allowEmptyNames);
 			}
 		}
 
@@ -271,7 +271,7 @@ namespace ZeldaOracle.Common.Scripts {
 				return tempResources.ContainsResource<T>(name);
 			}
 			else {
-				return Resources.ContainsResource<T>(name);
+				return Resources.Contains<T>(name);
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace ZeldaOracle.Common.Scripts {
 				tempResources.SetResource<T>(name, resource);
 			}
 			else {
-				Resources.SetResource<T>(name, resource);
+				Resources.Set<T>(name, resource);
 			}
 			return resource;
 		}
@@ -296,9 +296,9 @@ namespace ZeldaOracle.Common.Scripts {
 				tempResources.AddResource<T>(name, resource);
 			}
 			else {
-				if (Resources.ContainsResource<T>(name))
+				if (Resources.Contains<T>(name))
 					ThrowCommandParseError("Resource with name '" + name + "' already exists!");
-				Resources.AddResource<T>(name, resource);
+				Resources.Add<T>(name, resource);
 			}
 			return resource;
 		}

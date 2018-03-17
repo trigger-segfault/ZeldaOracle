@@ -10,34 +10,34 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Items {
 	public abstract class Item : ISlotItem {
 
-		private Inventory	inventory;
-		private string		id;
+		private Inventory   inventory;
+		//private ItemData    itemData;
+		private string      id;
 
-		private string[]	name;
-		private string[]	description;
-		private string[]	message;
-		private ISprite[]	sprite;
-		private int			level;
-		private int			maxLevel;
-		private RewardHoldTypes	holdType;
+		private string[]    name;
+		private string[]    description;
+		private string[]    message;
+		private ISprite[]   sprite;
+		private int         level;
+		private int         maxLevel;
+		private RewardHoldTypes holdType;
 
-		private int[]		price;
+		private int[]       price;
 
-		private string[]	ammoID;
-		private Ammo[]		ammo;
-		private int[]		maxAmmo;
-		private bool		ammoOnLevelUp;
+		private Ammo[]      ammo;
+		private int[]       maxAmmo;
+		private bool        levelUpAmmo;
 
-		private bool		isObtained;
-		private bool		isLost;
+		private bool        isObtained;
+		private bool        isLost;
 
-
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
@@ -51,27 +51,30 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		protected Item(string id) {
-			this.id			= id;
+		protected Item() {
 			inventory		= null;
+			id				= "";
 
-			name			= new string[] { "" };
-			description		= new string[] { "" };
-			message			= new string[] { "" };
-			sprite			= new ISprite[] { new EmptySprite() };
+			name			= new string[0];
+			description		= new string[0];
+			message			= new string[0];
+			sprite			= new ISprite[0];
 			level			= Item.Level1;
 			maxLevel		= Item.Level1;
 			holdType		= RewardHoldTypes.TwoHands;
 
-			price          = new int[] { 0 };
+			price			= new int[0];
 
-			ammoID			= null;
 			ammo			= null;
 			maxAmmo			= null;
-			ammoOnLevelUp	= false;
+			levelUpAmmo		= false;
 
 			isObtained		= false;
 			isLost			= false;
+		}
+
+		protected Item(string id) : this() {
+			this.id			= id;
 		}
 
 
@@ -104,7 +107,7 @@ namespace ZeldaOracle.Game.Items {
 		public ISprite GetSprite(int level) {
 			if (level < sprite.Length)
 				return sprite[level];
-			return sprite.LastOrDefault();
+			return sprite.LastOrDefault() ?? new EmptySprite();
 		}
 
 		/// <summary>Gets the price of the item at the specified level.</summary>
@@ -153,9 +156,13 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Sets the ammo types used by this weapon.</summary>
 		public virtual void SetAmmo(params string[] ammoIDs) {
-			ammoID = new string[ammoIDs.Length];
-			for (int i = 0; i < ammoID.Length; i++) {
-				ammoID[i] = ammoIDs[i];
+			ammo = new Ammo[ammoIDs.Length];
+			for (int i = 0; i < ammo.Length; i++) {
+				Ammo ammoRes = Resources.Get<Ammo>(ammoIDs[i]);
+				if (ammoRes == null)
+					throw new ArgumentException("Ammo with name '" + ammoIDs[i] +
+						"' does not exist!");
+				ammo[i] = ammoRes;
 			}
 		}
 
@@ -187,22 +194,47 @@ namespace ZeldaOracle.Game.Items {
 		// Initialization
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs the item from the item data.</summary>
+		/*public static Item CreateItem(ItemData itemData) {
+			Item item = ReflectionHelper.Construct<Item>(itemData.Type);
+			item.itemData = itemData;
+			return item;
+		}*/
+
 		/// <summary>Initializes the item after it's added to the inventory list.</summary>
 		public void Initialize(Inventory inventory) {
 			this.inventory = inventory;
-			if (ammoID != null) {
+
+			// Load item data
+			/*id          = itemData.ID;
+			sprite		= itemData.Sprites;
+			name		= itemData.Names;
+			description	= itemData.Descriptions;
+			message		= itemData.Messages;
+			price		= itemData.Prices;
+			maxAmmo		= itemData.MaxAmmos;
+			maxLevel	= itemData.MaxLevel;
+			holdType	= itemData.HoldType;
+			levelUpAmmo	= itemData.LevelUpAmmo;
+
+			// Load and setup ammo
+			string[] ammoID = itemData.Ammos;
+			if (ammoID.Any()) {
 				ammo = new Ammo[ammoID.Length];
 				for (int i = 0; i < ammo.Length; i++) {
 					ammo[i] = inventory.GetAmmo(ammoID[i]);
+					if (IsAmmoContainer)
+						ammo[i].Container = this;
 				}
-				ammoID = null;
-			}
+			}*/
 			if (ammo != null) {
 				foreach (Ammo ammo in this.ammo) {
 					if (IsAmmoContainer)
 						ammo.Container = this;
 				}
 			}
+
+			// Initialize child classes
 			OnInitialize();
 		}
 
@@ -293,6 +325,11 @@ namespace ZeldaOracle.Game.Items {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the item data used to construct this item.</summary>
+		/*public ItemData ItemData {
+			get { return itemData; }
+		}*/
+		
 		/// <summary>Get or sets the inventory containing this item.</summary>
 		public Inventory Inventory {
 			get { return inventory; }
@@ -434,8 +471,8 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Gets if ammo should be increased to the new capacity on level up.</summary>
 		public bool IncreaseAmmoOnLevelUp {
-			get { return ammoOnLevelUp; }
-			set { ammoOnLevelUp = value; }
+			get { return levelUpAmmo; }
+			set { levelUpAmmo = value; }
 		}
 	}
 }

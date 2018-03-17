@@ -16,19 +16,19 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemBracelet() : base("bracelet") {
 		public ItemBracelet(string id) : base(id) {
-			SetName("Power Bracelet", "Power Gloves");
+			/*SetName("Power Bracelet", "Power Gloves");
 			SetDescription("A strength booster.", "Used to lift large objects.");
 			SetMessage(
 				"You got the <red>Power Bracelet<red>! " +
 					"Hold the button and press <dpad> to lift heavy objects!",
 				"You got the <red>Power Glove<red>! You can now lift heavy objects.");
-			MaxLevel = Item.Level2;
-			Flags = WeaponFlags.None;
-			HoldType = RewardHoldTypes.TwoHands;
-
 			SetSprite(
 				GameData.SPR_ITEM_ICON_BRACELET,
 				GameData.SPR_ITEM_ICON_POWER_GLOVES);
+			MaxLevel = Item.Level2;
+			HoldType = RewardHoldTypes.TwoHands;*/
+
+			Flags = WeaponFlags.None;
 		}
 
 

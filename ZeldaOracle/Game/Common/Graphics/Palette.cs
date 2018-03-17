@@ -9,6 +9,7 @@ using XnaColor = Microsoft.Xna.Framework.Color;
 
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>The subtypes to use for looking up colors in color groups.</summary>
@@ -151,13 +152,15 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Creates a new palette.</summary>
-		public Palette(GraphicsDevice graphicsDevice, PaletteDictionary dictionary) {
+		public Palette(PaletteDictionary dictionary) {
 			this.dictionary			= dictionary;
 
-			this.paletteTexture		= new Texture2D(graphicsDevice, Dimensions.X, Dimensions.Y);
-			this.colorGroups		= new Dictionary<string, PaletteColor[]>();
-			this.constColorGroups	= new Dictionary<string, PaletteColor[]>();
-			this.lookupGroups		= new Dictionary<string, LookupPair[]>();
+			paletteTexture		= new Texture2D(Resources.GraphicsDevice,
+				Dimensions.X, Dimensions.Y);
+			colorGroups			= new Dictionary<string, PaletteColor[]>();
+			constColorGroups	= new Dictionary<string, PaletteColor[]>();
+			lookupGroups		= new Dictionary<string, LookupPair[]>();
+			Resources.AddDisposable(paletteTexture);
 			
 			if (dictionary.PaletteType == PaletteTypes.Tile)
 				colorGroups.Add("default", ColorGroupToPaletteGroup(DefaultTile));
@@ -167,18 +170,20 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Constructs a copy of the palette.</summary>
 		public Palette(Palette copy) {
-			this.dictionary     = new PaletteDictionary(copy.dictionary);
+			dictionary			= new PaletteDictionary(copy.dictionary);
 
-			this.paletteTexture		= new Texture2D(copy.paletteTexture.GraphicsDevice, Dimensions.X, Dimensions.Y);
-			this.colorGroups		= new Dictionary<string, PaletteColor[]>();
-			this.constColorGroups	= new Dictionary<string, PaletteColor[]>();
-			this.lookupGroups       = new Dictionary<string, LookupPair[]>();
+			paletteTexture		= new Texture2D(copy.paletteTexture.GraphicsDevice, Dimensions.X, Dimensions.Y);
+			colorGroups			= new Dictionary<string, PaletteColor[]>();
+			constColorGroups	= new Dictionary<string, PaletteColor[]>();
+			lookupGroups		= new Dictionary<string, LookupPair[]>();
+			Resources.AddDisposable(paletteTexture);
+
 			foreach (var pair in copy.colorGroups)
-				this.colorGroups.Add(pair.Key, (PaletteColor[]) pair.Value.Clone());
+				colorGroups.Add(pair.Key, (PaletteColor[]) pair.Value.Clone());
 			foreach (var pair in copy.constColorGroups)
-				this.constColorGroups.Add(pair.Key, (PaletteColor[]) pair.Value.Clone());
+				constColorGroups.Add(pair.Key, (PaletteColor[]) pair.Value.Clone());
 			foreach (var pair in copy.lookupGroups)
-				this.lookupGroups.Add(pair.Key, (LookupPair[]) pair.Value.Clone());
+				lookupGroups.Add(pair.Key, (LookupPair[]) pair.Value.Clone());
 		}
 
 

@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemSeedSatchel() : base("seed_satchel") {
 		public ItemSeedSatchel(string id) : base(id) {
-			SetName("Seed Satchel");
+			/*SetName("Seed Satchel");
 			SetDescription("A bag for carrying seeds.");
 			SetMessage(
 				"You got a <red>Seed Satchel<red>! " +
@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			MaxLevel = Item.Level3;
 			HoldType = RewardHoldTypes.TwoHands;
 
-			IncreaseAmmoOnLevelUp = true;
+			IncreaseAmmoOnLevelUp = true;*/
 			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |

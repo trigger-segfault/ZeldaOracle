@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Ini {
 	public abstract class IniReflectionSettings {
@@ -149,30 +150,37 @@ namespace ZeldaOracle.Common.Ini {
 			foreach (PropertyInfo propertyInfo in properties) {
 				var isSection = propertyInfo.GetCustomAttribute<SectionAttribute>();
 				if (isSection != null) {
-					LoadSection(document.Get(propertyInfo.Name), propertyInfo.PropertyType,
+					LoadSection(document.Get(propertyInfo.Name),
+						propertyInfo.PropertyType,
 						propertyInfo.GetValue(this));
 				}
-				else {
-					if (!LoadProperty(globalSection.Get(propertyInfo.Name), propertyInfo, this))
+				else if (propertyInfo.IsBrowsable()) {
+					if (!LoadProperty(globalSection.Get(propertyInfo.Name),
+						propertyInfo, this))
 						ResetProperty(propertyInfo, this);
 				}
 			}
 		}
 
 		/// <summary>Loads the values from the ini section using reflection.</summary>
-		private static void LoadSection(IniSection section, Type type, object instance) {
+		private static void LoadSection(IniSection section, Type type,
+			object instance)
+		{
 			var properties = type.GetProperties(
 				BindingFlags.Public | BindingFlags.Instance);
 			foreach (PropertyInfo propertyInfo in properties) {
 				if (section.Contains(propertyInfo.Name))
-					LoadProperty(section.Get(propertyInfo.Name), propertyInfo, instance);
-				else
+					LoadProperty(section.Get(propertyInfo.Name), propertyInfo,
+						instance);
+				else if (propertyInfo.IsBrowsable())
 					ResetProperty(propertyInfo, instance);
 			}
 		}
 
 		/// <summary>Loads the value from the ini property using reflection.</summary>
-		private static bool LoadProperty(IniProperty property, PropertyInfo propertyInfo, object instance) {
+		private static bool LoadProperty(IniProperty property,
+			PropertyInfo propertyInfo, object instance)
+		{
 			object value = null;
 			if (propertyInfo.PropertyType.IsEnum) {
 				string text = property.GetString();
@@ -232,11 +240,12 @@ namespace ZeldaOracle.Common.Ini {
 			foreach (PropertyInfo propertyInfo in properties) {
 				var isSection = propertyInfo.GetCustomAttribute<SectionAttribute>();
 				if (isSection != null) {
-					IniSection section = SaveSection(propertyInfo, propertyInfo.GetValue(this));
+					IniSection section = SaveSection(propertyInfo,
+						propertyInfo.GetValue(this));
 					if (section.Any())
 						document.Add(section);
 				}
-				else {
+				else if (propertyInfo.IsBrowsable()) {
 					IniProperty property = SaveProperty(propertyInfo, this);
 					globalSection.Add(property);
 				}
@@ -253,7 +262,8 @@ namespace ZeldaOracle.Common.Ini {
 			var properties = type.GetProperties(
 				BindingFlags.Public | BindingFlags.Instance);
 			foreach (PropertyInfo subPropertyInfo in properties) {
-				section.Add(SaveProperty(subPropertyInfo, instance));
+				if (subPropertyInfo.IsBrowsable())
+					section.Add(SaveProperty(subPropertyInfo, instance));
 			}
 			return section;
 		}
@@ -262,13 +272,15 @@ namespace ZeldaOracle.Common.Ini {
 		private IniProperty SaveProperty(PropertyInfo propertyInfo, object instance) {
 			string value = propertyInfo.GetValue(instance).ToString();
 			string comments = GetComments(propertyInfo);
-			bool useQuotes = propertyInfo.GetCustomAttribute<UseQuotesAttribute>() != null;
+			bool useQuotes =
+				propertyInfo.GetCustomAttribute<UseQuotesAttribute>() != null;
 			return new IniProperty(propertyInfo.Name, value, comments, useQuotes);
 		}
 
 		/// <summary>Gets the ini comments for the property using reflection.</summary>
 		private string GetComments(PropertyInfo propertyInfo) {
-			var commentsAttribute = propertyInfo.GetCustomAttribute<CommentsAttribute>();
+			var commentsAttribute =
+				propertyInfo.GetCustomAttribute<CommentsAttribute>();
 			if (commentsAttribute != null)
 				return commentsAttribute.Comments;
 			return "";
@@ -293,9 +305,8 @@ namespace ZeldaOracle.Common.Ini {
 
 		/// <summary>Resets the property to its default value.</summary>
 		private static void ResetProperty(PropertyInfo propertyInfo, object instance) {
-			var attribute = propertyInfo.GetCustomAttribute<DefaultValueAttribute>();
-			if (attribute != null)
-				propertyInfo.SetValue(instance, attribute.Value);
+			propertyInfo.SetValue(instance,
+				ReflectionHelper.GetDefaultValue(propertyInfo));
 		}
 		
 

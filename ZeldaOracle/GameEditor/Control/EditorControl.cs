@@ -119,8 +119,7 @@ namespace ZeldaEditor.Control {
 		private Room editingRoom;
 		private BaseTileDataInstance editingTileData;
 
-		private StoppableTimer                  updateTimer;
-		private bool            resourcesLoaded;
+		private StoppableTimer				updateTimer;
 
 		private bool                        needsRecompiling;
 		private Task<ScriptCompileResult>   compileTask;
@@ -196,19 +195,9 @@ namespace ZeldaEditor.Control {
 			this.singleLayer				= false;
 			this.roomOnly					= false;
 			this.merge						= false;
-
-			this.resourcesLoaded			= false;
-		}
-
-		public void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
-			if (!isInitialized) {
-				isInitialized = true;
-				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
-			}
 		}
 
 		public void Initialize() {
-
 			// Create tools.
 			tools = new List<EditorTool>();
 			AddTool(toolPointer     = new ToolPointer());
@@ -240,7 +229,6 @@ namespace ZeldaEditor.Control {
 
 				GameData.LoadInventory(inventory);
 				GameData.LoadRewards(rewardManager);
-				resourcesLoaded = true;
 			}
 			catch (Exception ex) {
 				StoppableTimer.StopAll();
@@ -265,7 +253,8 @@ namespace ZeldaEditor.Control {
 				delegate { Update(); },
 				Application.Current.Dispatcher);*/
 
-			this.isInitialized = true;
+			isInitialized = true;
+
 
 			needsNewEventCache = true;
 			needsRecompiling = true;
@@ -331,7 +320,7 @@ namespace ZeldaEditor.Control {
 		private void UpdateTilesets() {
 			int index = 0;
 			List<string> tilesets = new List<string>();
-			foreach (var pair in Resources.GetResourceDictionary<Tileset>()) {
+			foreach (var pair in Resources.GetDictionary<Tileset>()) {
 				tilesets.Add(pair.Key);
 				if (tileset != null && pair.Key == tileset.ID)
 					index = tilesets.Count; // No -1 because "<Tiel List>" is added after sorting to the front
@@ -347,7 +336,7 @@ namespace ZeldaEditor.Control {
 		private void UpdateZones() {
 			int index = -1;
 			List<string> zones = new List<string>();
-			foreach (var pair in Resources.GetResourceDictionary<Zone>()) {
+			foreach (var pair in Resources.GetDictionary<Zone>()) {
 				zones.Add(pair.Key);
 				if (pair.Key == zone.ID)
 					index = zones.Count - 1;
@@ -513,8 +502,8 @@ namespace ZeldaEditor.Control {
 				UpdateTileSearch(tileSearchFilter);
 			}
 			else {
-				if (Resources.ContainsResource<Tileset>(name))
-					tileset = Resources.GetResource<Tileset>(name);
+				if (Resources.Contains<Tileset>(name))
+					tileset = Resources.Get<Tileset>(name);
 
 				editorWindow.TilesetDisplay.UpdateTileset();
 				//editorWindow.TilesetDisplay.UpdateZone();
@@ -528,7 +517,7 @@ namespace ZeldaEditor.Control {
 
 		public void ChangeZone(string name) {
 			if (name != "(none)") {
-				zone = Resources.GetResource<Zone>(name);
+				zone = Resources.Get<Zone>(name);
 				editorWindow.TilesetDisplay.UpdateZone();
 			}
 		}
@@ -537,7 +526,7 @@ namespace ZeldaEditor.Control {
 			tileset = null;
 			tileSearchFilter = filter;
 			List<BaseTileData> filteredTileData = new List<BaseTileData>();
-			foreach (var pair in Resources.GetResourceDictionary<BaseTileData>()) {
+			foreach (var pair in Resources.GetDictionary<BaseTileData>()) {
 				if (pair.Key.Contains(filter)) {
 					filteredTileData.Add(pair.Value);
 				}
@@ -1433,8 +1422,8 @@ namespace ZeldaEditor.Control {
 			set { isActive = value; }
 		}
 
-		public bool IsResourcesLoaded {
-			get { return resourcesLoaded; }
+		public bool IsInitialized {
+			get { return isInitialized; }
 		}
 	}
 }

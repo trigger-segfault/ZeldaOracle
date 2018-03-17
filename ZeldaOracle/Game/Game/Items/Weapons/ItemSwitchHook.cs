@@ -23,11 +23,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemSwitchHook() : base("switch_hook") {
 		public ItemSwitchHook(string id) : base(id) {
-			SetName("Switch Hook", "Long Hook");
+			/*SetName("Switch Hook", "Long Hook");
 			SetDescription("User and target trade places.", "Switches places from a distance.");
 			SetSprite(GameData.SPR_ITEM_ICON_SWITCH_HOOK);
 			MaxLevel = Item.Level2;
-			HoldType = RewardHoldTypes.TwoHands;
+			HoldType = RewardHoldTypes.TwoHands;*/
 			Flags =
 				WeaponFlags.UsableWithSword |
 				WeaponFlags.UsableUnderwater;

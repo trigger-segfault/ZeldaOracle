@@ -24,12 +24,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		//public ItemShovel() : base("shovel") {
 		public ItemShovel(string id) : base(id) {
-			SetName("Shovel");
+			/*SetName("Shovel");
 			SetDescription("A handy tool.");
 			SetMessage("You got the <red>Shovel<red>! Now start digging!");
 			SetSprite(GameData.SPR_ITEM_ICON_SHOVEL);
 			MaxLevel = Item.Level1;
-			HoldType = RewardHoldTypes.TwoHands;
+			HoldType = RewardHoldTypes.TwoHands;*/
 			Flags = WeaponFlags.UsableWhileInHole;
 		}
 

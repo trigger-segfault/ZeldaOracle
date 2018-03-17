@@ -322,13 +322,14 @@ namespace ZeldaOracle.Game.Debugging {
 				ChangeRooms(Direction.Left);
 			// Ctrl+Y: Cycle current room's zone
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Y)) {
-				List<string> zoneNames = Resources.GetResourceKeyList<Zone>();
+				List<string> zoneNames = new List<string>();
+				zoneNames.AddRange(Resources.GetDictionaryKeys<Zone>());
 				int index = zoneNames.IndexOf(RoomControl.Room.Zone.ID);
 				if (shift)
 					index = (index + zoneNames.Count - 1) % zoneNames.Count;
 				else
 					index = (index + 1) % zoneNames.Count;
-				RoomControl.Room.Zone = Resources.GetResource<Zone>(zoneNames[index]);
+				RoomControl.Room.Zone = Resources.Get<Zone>(zoneNames[index]);
 				//GameData.PaletteShader.TilePalette = RoomControl.Zone.Palette;
 				Console.WriteLine("Changed to zone '" + RoomControl.Zone.ID + "'");
 			}
@@ -505,7 +506,7 @@ namespace ZeldaOracle.Game.Debugging {
 				Tile topTile = RoomControl.GetTopTile(mouseTileLocation);
 				if (topTile != null)
 					layer = topTile.Layer;
-				TileData tileData = Resources.GetResource<TileData>(sampledTileName);
+				TileData tileData = Resources.Get<TileData>(sampledTileName);
 				if (tileData != null) {
 					Tile tile = Tile.CreateTile(tileData);
 					if (tile != null)

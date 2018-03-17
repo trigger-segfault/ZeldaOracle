@@ -140,7 +140,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 			Rectangle2I bounds = sprite.GetBounds(settings);
 			bounds.Size = GMath.Max(Point2I.One, bounds.Size);
-			RenderTarget2D renderTarget = new RenderTarget2D(Resources.GraphicsDevice, bounds.Width, bounds.Height, false, SurfaceFormat.Color, DepthFormat.None);
+			RenderTarget renderTarget = new RenderTarget(bounds.Size, SurfaceFormat.Color);
 			GameData.PaletteShader.TilePalette = tilePalette;
 			GameData.PaletteShader.EntityPalette = entityPalette;
 			GameData.PaletteShader.ApplyPalettes();
@@ -150,7 +150,7 @@ namespace ZeldaOracle.Common.Graphics {
 			g.DrawSprite(sprite, settings, -bounds.Point);
 			g.End();
 			g.SetRenderTarget(null);
-			unmappedSprite = new UnmappedSprite(new Image(renderTarget), bounds.Point);
+			unmappedSprite = new UnmappedSprite(renderTarget, bounds.Point);
 			unmappedSprites.Add(lookup, unmappedSprite);
 			return unmappedSprite;
 		}

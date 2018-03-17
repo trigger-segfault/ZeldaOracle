@@ -30,7 +30,7 @@ namespace ZeldaEditor {
 
 			comboBoxZone.Items.Clear();
 
-			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
+			foreach (KeyValuePair<string, Zone> entry in Resources.GetDictionary<Zone>()) {
 				comboBoxZone.Items.Add(entry.Key);
 			}
 			comboBoxZone.SelectedIndex = 0;
@@ -93,7 +93,7 @@ namespace ZeldaEditor {
 		}
 		
 		public Zone LevelZone {
-			get { return Resources.GetResource<Zone>(comboBoxZone.Text); }
+			get { return Resources.Get<Zone>(comboBoxZone.Text); }
 		}
 	}
 }

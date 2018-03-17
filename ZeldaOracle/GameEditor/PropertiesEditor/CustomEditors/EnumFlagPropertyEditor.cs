@@ -19,6 +19,7 @@ using System.Windows.Data;
 using System.Globalization;
 using Xceed.Wpf.Toolkit;
 using ZeldaEditor.Controls;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class EnumFlagPropertyEditor : TypeEditor<CheckComboBox>, ITypeEditor {
@@ -64,19 +65,10 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			return GetValues(enumType);
 		}
 
-		private static string[] GetValues(Type enumType) {
-			List<string> list = new List<string>();
-			if (enumType != null) {
-				foreach (FieldInfo fieldInfo in from x in enumType.GetFields()
-												where x.IsLiteral
-												select x) {
-					object[] customAttributes = fieldInfo.GetCustomAttributes(typeof(BrowsableAttribute), false);
-					if (customAttributes.Length != 1 || ((BrowsableAttribute)customAttributes[0]).Browsable) {
-						list.Add(fieldInfo.Name);
-					}
-				}
-			}
-			return list.ToArray();
+		private static IEnumerable<String> GetValues(Type enumType) {
+			if (enumType != null)
+				return EnumHelper.GetBrowsableNames(enumType);
+			return Enumerable.Empty<string>();
 		}
 
 		protected override IValueConverter CreateValueConverter() {

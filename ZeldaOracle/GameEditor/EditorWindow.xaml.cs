@@ -98,6 +98,7 @@ namespace ZeldaEditor {
 			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
 			hostTilePreview.Child			= tilePreview;
 
+			dummyHost.Child = new DummyGraphicsDeviceControl();
 
 			statusTask.Content = "";
 

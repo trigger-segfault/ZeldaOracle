@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// Create a pit tile if this tile is on the bottom layer.
 			if (Layer == 0 && TileBelow == null) {
-				TileData holeTileData = Resources.GetResource<TileData>("hole");
+				TileData holeTileData = Resources.Get<TileData>("hole");
 				Tile holeTile = Tile.CreateTile(holeTileData);
 				RoomControl.PlaceTile(holeTile, Location, Layer);
 			}
