@@ -169,11 +169,11 @@ namespace ZeldaOracle.Common.Util {
 			using (Bitmap bitmap = (Bitmap) Bitmap.FromStream(stream)) {
 				// Create a texture to output the bitmap to
 				Texture2D texture;
-				if (typeof(Texture).Equals(typeof(Texture2D))) {
+				if (typeof(TextureType) == typeof(Texture2D)) {
 					texture = new Texture2D(Resources.GraphicsDevice,
 						bitmap.Width, bitmap.Height, false, SurfaceFormat.Color);
 				}
-				else if (typeof(Texture).Equals(typeof(RenderTarget2D))) {
+				else if (typeof(TextureType) == typeof(RenderTarget2D)) {
 					texture = new RenderTarget2D(Resources.GraphicsDevice,
 						bitmap.Width, bitmap.Height, false, SurfaceFormat.Color,
 						DepthFormat.None, 0, usage);

@@ -7,12 +7,13 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Items {
 	/// <summary>A data structure for creating items in-game.</summary>
-	public class ItemData : BaseItemData {
+	public class ItemData : BaseResourceData {
 
-		private ISprite[]   sprites;
+		private ISprite[]	sprites;
 
 
 		//-----------------------------------------------------------------------------
@@ -21,13 +22,22 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Constructs the item data.</summary>
 		public ItemData() {
-			type        = typeof(Item);
-			sprites     = new ISprite[] { new EmptySprite() };
+			sprites		= new ISprite[] { new EmptySprite() };
 		}
 
 		/// <summary>Constructs a copy of the item data.</summary>
 		public ItemData(ItemData copy) : base(copy) {
-			sprites     = new ISprite[copy.sprites.Length];
+			sprites		= new ISprite[copy.sprites.Length];
+			for (int i = 0; i < sprites.Length; i++)
+				sprites[i] = copy.sprites[i];
+		}
+
+		/// <summary>Clones the specified item data.</summary>
+		public override void Clone(BaseResourceData baseCopy) {
+			base.Clone(baseCopy);
+
+			ItemData copy = (ItemData) baseCopy;
+			sprites		= new ISprite[copy.sprites.Length];
 			for (int i = 0; i < sprites.Length; i++)
 				sprites[i] = copy.sprites[i];
 		}
@@ -108,7 +118,31 @@ namespace ZeldaOracle.Game.Items {
 		private string ListName(string propertyName, int index) {
 			return propertyName + "_" + (index + 1);
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Override Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes data after a change in the final type.<para/>
+		/// This needs to be extended for each non-abstract class in order
+		/// to make use of compile-time generic arguments within
+		/// ResourceDataInitializing.InitializeData.</summary>
+		public override void InitializeData(Type previousType) {
+			ResourceDataInitializing.InitializeData(
+				this, OutputType, Type, previousType);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the base output type for this resource data.</summary>
+		public override Type OutputType {
+			get { return typeof(Item); }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -125,6 +159,9 @@ namespace ZeldaOracle.Game.Items {
 		public ISprite[] EquipSprites {
 			get {
 				string[] spriteNames = GetPropertyList<string>("equip_sprite");
+				// null lists to signal no equip sprites are used
+				if (spriteNames.Length == 0)
+					return null;
 				ISprite[] sprites = new ISprite[spriteNames.Length];
 				for (int i = 0; i < sprites.Length; i++) {
 					sprites[i] = Resources.Get<ISprite>(spriteNames[i]);
@@ -160,7 +197,11 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Gets the leveled max ammos for the item data.</summary>
 		public int[] MaxAmmos {
-			get { return GetPropertyList<int>("max_ammo"); }
+			get {
+				int[] maxAmmos = GetPropertyList<int>("max_ammo");
+				// null lists to signal this item is not an ammo container
+				return (maxAmmos.Length > 0 ? maxAmmos : null);
+			}
 		}
 		
 		// General --------------------------------------------------------------------

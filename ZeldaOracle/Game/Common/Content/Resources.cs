@@ -114,9 +114,9 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, Zone> zones;
 		private static Dictionary<string, PropertyAction> propertyActions;
-		private static Dictionary<string, Item> items;
-		private static Dictionary<string, Ammo> ammos;
-		private static Dictionary<string, Reward> rewards;
+		private static Dictionary<string, ItemData> items;
+		private static Dictionary<string, AmmoData> ammos;
+		private static Dictionary<string, RewardData> rewards;
 
 		// SOUNDS:
 		/// <summary>The collection of loaded sound effects.</summary>
@@ -244,9 +244,9 @@ namespace ZeldaOracle.Common.Content {
 			tilesets			= new Dictionary<string, Tileset>();
 			zones				= new Dictionary<string, Zone>();
 
-			items				= new Dictionary<string, Item>();
-			ammos				= new Dictionary<string, Ammo>();
-			rewards				= new Dictionary<string, Reward>();
+			items				= new Dictionary<string, ItemData>();
+			ammos				= new Dictionary<string, AmmoData>();
+			rewards				= new Dictionary<string, RewardData>();
 
 			propertyActions		= new Dictionary<string, PropertyAction>();
 
@@ -276,9 +276,9 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
 			resourceDictionaries[typeof(PaletteDictionary)]	= paletteDictionaries;
 			resourceDictionaries[typeof(Palette)]			= palettes;
-			resourceDictionaries[typeof(Item)]				= items;
-			resourceDictionaries[typeof(Ammo)]				= ammos;
-			resourceDictionaries[typeof(Reward)]			= rewards;
+			resourceDictionaries[typeof(ItemData)]			= items;
+			resourceDictionaries[typeof(AmmoData)]			= ammos;
+			resourceDictionaries[typeof(RewardData)]		= rewards;
 
 			isInitialized = true;
 		}

@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		// Use Tile.CreateTile() instead of this constructor.
-		protected Tile() {
+		public Tile() {
 			tileGridArea	= Rectangle2I.Zero;
 			isAlive				= false;
 			isInitialized		= false;
@@ -338,6 +338,16 @@ namespace ZeldaOracle.Game.Tiles {
 					Resources.Get<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
+
+
+				// Spawn drops.
+				Entity dropEntity = SpawnDrop();
+				if (dropEntity != null) {
+					if (dropEntity is Collectible)
+						(dropEntity as Collectible).CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+
+					dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
+				}
 			}
 			else {
 				roomControl.RemoveTile(this);
@@ -345,15 +355,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (properties.GetBoolean("disable_on_destroy", false))
 				IsEnabled = false; // TODO: this won't exactly work anymore.
-
-			// Spawn drops.
-			Entity dropEntity = SpawnDrop();
-			if (dropEntity != null) {
-				if (dropEntity is Collectible)
-					(dropEntity as Collectible).CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-
-				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
-			}
 
 			return true;
 		}

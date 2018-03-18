@@ -81,15 +81,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("SOURCE",
 				"string name",
 			delegate (CommandParam parameters) {
-				string name = parameters.GetString(0);
-				if (name.ToLower() == "none") {
-					source = null;
-					return;
-				}
-				if (!ContainsResource<ISpriteSource>(name)) {
-					ThrowCommandParseError("No sprite source with the name '" + name + "' exists in resources!");
-				}
-				source = Resources.Get<ISpriteSource>(name);
+				source = GetResource<ISpriteSource>(parameters.GetString(0));
 			});
 			//=====================================================================================
 			// TILE/TILESET BEGIN/END
@@ -98,7 +90,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name",
 			delegate (CommandParam parameters) {
 				tileData = new TileData();
-				tileData.Name = parameters.GetString(0);
+				tileData.ResourceName = parameters.GetString(0);
 				baseTileData = tileData;
 				Mode = Modes.Tile;
 			});
@@ -107,7 +99,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name",
 			delegate (CommandParam parameters) {
 				actionTileData = new ActionTileData();
-				actionTileData.Name = parameters.GetString(0);
+				actionTileData.ResourceName = parameters.GetString(0);
 				baseTileData = actionTileData;
 				Mode = Modes.ActionTile;
 			});
@@ -116,7 +108,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name, string sprite, string monsterType, string monsterColor, bool ignoreMonster = false",
 			delegate (CommandParam parameters) {
 				actionTileData = new ActionTileData();
-				actionTileData.Name = parameters.GetString(0);
+				actionTileData.ResourceName = parameters.GetString(0);
 				baseTileData = actionTileData;
 
 				actionTileData.Type = typeof(MonsterAction);
@@ -136,7 +128,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name, string tileType, string monsterType, bool ignoreMonster = false",
 			delegate (CommandParam parameters) {
 				tileData = new TileData();
-				tileData.Name = parameters.GetString(0);
+				tileData.ResourceName = parameters.GetString(0);
 				baseTileData = tileData;
 				
 				tileData.Type = GameUtil.FindTypeWithBase
@@ -153,16 +145,16 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				if (tileData != null) {
 					if (tileData.Tileset == null) {
-						AddResource<BaseTileData>(tileData.Name, tileData);
-						AddResource<TileData>(tileData.Name, tileData);
+						AddResource<BaseTileData>(tileData.ResourceName, tileData);
+						AddResource<TileData>(tileData.ResourceName, tileData);
 					}
 					tileData = null;
 					baseTileData = null;
 				}
 				else if (actionTileData != null) {
 					if (actionTileData.Tileset == null) {
-						AddResource<BaseTileData>(actionTileData.Name, actionTileData);
-						AddResource<ActionTileData>(actionTileData.Name, actionTileData);
+						AddResource<BaseTileData>(actionTileData.ResourceName, actionTileData);
+						AddResource<ActionTileData>(actionTileData.ResourceName, actionTileData);
 					}
 					actionTileData = null;
 					baseTileData = null;
@@ -245,7 +237,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				CommandProperties);*/
 			//=====================================================================================
 			AddCommand("PROPERTY", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
-				"(string name, string value)",
+				"(string name, var value)",
 				CommandProperty);
 			//=====================================================================================
 			/*AddCommand("LOCKPROP", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
@@ -307,7 +299,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				if (baseTileData == null)
 					ThrowCommandParseError("Cannot call SAMESPRITE without editing tile data");
-				baseTileData.Sprite = GetResource<ISprite>("tile_" + baseTileData.Name);
+				baseTileData.Sprite = GetResource<ISprite>("tile_" + baseTileData.ResourceName);
 			});
 			//=====================================================================================
 			AddCommand("SAMESPRITEABOVE", (int) Modes.Tile,
@@ -315,7 +307,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				if (tileData == null)
 					ThrowCommandParseError("Cannot call SAMESPRITEABOVE without editing tile data");
-				tileData.SpriteAbove = GetResource<ISprite>("tile_" + baseTileData.Name + "_above");
+				tileData.SpriteAbove = GetResource<ISprite>("tile_" + baseTileData.ResourceName + "_above");
 			});
 			//=====================================================================================
 			AddCommand("SAMESPRITEOBJ", (int) Modes.Tile,
@@ -323,7 +315,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				if (tileData == null)
 					ThrowCommandParseError("Cannot call SAMESPRITEOBJ without editing tile data");
-				tileData.SpriteAsObject = GetResource<ISprite>("tile_" + baseTileData.Name + "_asobject");
+				tileData.SpriteAsObject = GetResource<ISprite>("tile_" + baseTileData.ResourceName + "_asobject");
 			});
 			//=====================================================================================
 			AddCommand("SIZE", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },

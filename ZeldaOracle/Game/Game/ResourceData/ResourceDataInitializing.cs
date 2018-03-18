@@ -12,34 +12,17 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
-using DataOutType =
-	System.Collections.Generic.KeyValuePair<System.Type, System.Type>;
-using InitializerDictionary =
-	System.Collections.Generic.Dictionary<System.Type, System.Reflection.MethodInfo>;
-using DataOutDictionary =
-	System.Collections.Generic.Dictionary<
-	System.Collections.Generic.KeyValuePair<System.Type, System.Type>,
-	System.Collections.Generic.Dictionary<System.Type, System.Reflection.MethodInfo>>;
+using OutDictionary =
+	System.Collections.Generic.Dictionary<System.Type,
+		ZeldaOracle.Game.ResourceData.DelegateLookupInfo>;
 
 namespace ZeldaOracle.Game.ResourceData {
-	/// <summary>The function called to initialize an item type's properties.</summary>
-	public delegate void ItemDataInitializer(ItemData data);
-
-	/// <summary>The function called to initialize an reward type's properties.</summary>
-	public delegate void RewardDataInitializer(ItemData data);
-
-	/// <summary>The function called to initialize a tile type's properties.</summary>
-	public delegate void TileDataInitializer(TileData data);
-
-	/// <summary>The function called to initialize a action type's properties.</summary>
-	public delegate void ActionDataInitializer(ActionTileData data);
-
 	/// <summary>A static class used to initialize a resource data type's properties,
 	/// events, and other settings using static reflection.</summary>
 	public static class ResourceDataInitializing {
-
+		
 		/// <summary>The collection of data types and their collection of initializers.</summary>
-		private static Dictionary<DataOutType, InitializerDictionary> dataTypes;
+		private static Dictionary<Type, OutDictionary> dataTypes;
 
 
 		//-----------------------------------------------------------------------------
@@ -48,24 +31,34 @@ namespace ZeldaOracle.Game.ResourceData {
 
 		/// <summary>Initializes the type initializer dictionaries.</summary>
 		static ResourceDataInitializing() {
-			dataTypes = new Dictionary<KeyValuePair<Type, Type>, Dictionary<Type, MethodInfo>>();
-			RegisterDataType<TileData, Tile>();
-			RegisterDataType<TileData, Entity>();
-			RegisterDataType<ActionTileData, ActionTile>();
-			RegisterDataType<ActionTileData, Entity>();
-			RegisterDataType<ItemData, Item>();
-			RegisterDataType<AmmoData, Ammo>();
-			RegisterDataType<RewardData, Reward>();
+			dataTypes = new Dictionary<Type, OutDictionary>();
+			RegisterDataType<TileData, Tile>("TileData");
+			RegisterDataType<TileData, Entity>("TileData");
+			RegisterDataType<ActionTileData, ActionTile>("TileData");
+			RegisterDataType<ActionTileData, Entity>("TileData");
+
+			RegisterDataType<ItemData, Item>("ItemData");
+			RegisterDataType<AmmoData, Ammo>("AmmoData");
+			RegisterDataType<RewardData, Reward>("RewardData");
 		}
 
 		/// <summary>Registers a resource data type that can be used for
 		/// initialization.</summary>
-		public static void RegisterDataType<DataType, OutType>()
-			where DataType : BaseResourceData where OutType : class
+		public static void RegisterDataType<TData, TOut>(string functionPostfix)
+			where TData : BaseResourceData where TOut : class
 		{
-			dataTypes.Add(
-				new DataOutType(typeof(DataType), typeof(OutType)),
-				new InitializerDictionary());
+			/*dataTypes.Add(
+				new DataOutType(typeof(TData), typeof(TOut)),
+				new DelegateLookupInfo("Initialize" + functionPostfix,
+					typeof(Action<TData>)));*/
+			OutDictionary dictionary;
+			if (!dataTypes.TryGetValue(typeof(TData), out dictionary)) {
+				dictionary = new OutDictionary();
+				dataTypes.Add(typeof(TData), dictionary);
+			}
+			dictionary.Add(typeof(TOut),
+				new DelegateLookupInfo("Initialize" + functionPostfix,
+				typeof(Action<TData>)));
 		}
 
 
@@ -74,15 +67,13 @@ namespace ZeldaOracle.Game.ResourceData {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the data for a resource's types.</summary>
-		public static void InitializeData(
-			BaseResourceData data, Type newType, Type previousType, Type baseType)
+		public static void InitializeData<TData>(TData data, Type baseType,
+			Type newType, Type previousType) where TData : BaseResourceData
 		{
 			// No subtype to initialize
 			if (newType == null)
 				return;
-
-			DataOutType key = new DataOutType(data.GetType(), baseType);
-
+			
 			// Get the correct inheritance types
 			Type[] types = null;
 			if (previousType != null)
@@ -92,44 +83,26 @@ namespace ZeldaOracle.Game.ResourceData {
 
 			// Initialize each base type's settings
 			// up to and including the new type.
+			OutDictionary dictionary = dataTypes[typeof(TData)];
+			DelegateLookupInfo info = dictionary[baseType];
+			Delegate func;
 			foreach (Type type in types) {
 				if (type == baseType || type == previousType)
 					continue;
-				InitializeType(key, type, data);
+				if (!info.Delegates.TryGetValue(type, out func)) {
+					MethodInfo methodInfo = type.GetMethod(info.FunctionName,
+							BindingFlags.Static | BindingFlags.Public,
+							info.Parameters);
+					if (methodInfo != null) {
+						func = ReflectionHelper.GetFunction(info.DelegateType,
+							methodInfo);
+					}
+					info.Delegates.Add(type, func);
+				}
+				// It's important to call the function as a delegate known at
+				// compile time, otherwise the function call will be extremely slow.
+				((Action<TData>) func)?.Invoke(data);
 			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Internal Methods
-		//-----------------------------------------------------------------------------
-
-		/*private static InitializerDictionary GetInitializers(DataOutType key) {
-			InitializerDictionary initializers;
-			if (!dataTypes.TryGetValue(key, out initializers)) {
-				initializers = new InitializerDictionary();
-				dataTypes.Add(key, initializers);
-			}
-			return initializers;
-		}*/
-
-		/// <summary>Initializes the data for a resource's single type.</summary>
-		private static void InitializeType(DataOutType key, Type finalType,
-			BaseResourceData data)
-		{
-			InitializerDictionary initializers;
-			if (!dataTypes.TryGetValue(key, out initializers)) {
-				initializers = new InitializerDictionary();
-				dataTypes.Add(key, initializers);
-			}
-			MethodInfo methodInfo;
-			if (!initializers.TryGetValue(key.Key, out methodInfo)) {
-				methodInfo = finalType.GetMethod("InitializeData",
-						BindingFlags.Static | BindingFlags.Public,
-						key.Key);
-				initializers.Add(key.Key, methodInfo);
-			}
-			methodInfo?.Invoke(null, new object[] { data });
 		}
 	}
 }

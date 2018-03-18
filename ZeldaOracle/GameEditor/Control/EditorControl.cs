@@ -227,8 +227,8 @@ namespace ZeldaEditor.Control {
 				this.selectedTileData = null;
 				this.actionMode      = false;
 
-				GameData.LoadInventory(inventory);
-				GameData.LoadRewards(rewardManager);
+				inventory.Initialize();
+				rewardManager.Initialize();
 			}
 			catch (Exception ex) {
 				StoppableTimer.StopAll();

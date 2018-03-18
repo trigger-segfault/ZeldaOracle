@@ -8,21 +8,18 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public abstract class BaseTileData : IPropertyObject {
-
-		/// <summary>The overridden type for the tile.</summary>
-		protected Type type;
+	public abstract class BaseTileData : BaseResourceData {
+		
 		/// <summary>The type of entity this tile spawns.</summary>
 		protected Type entityType;
 		protected Tileset tileset;
 		protected Point2I sheetLocation;	// TODO: remove this, maybe?
-		protected Properties properties;
 		protected EventDocumentationCollection events;
 		private ISprite previewSprite;
-		private string name;
 
 		
 		//-----------------------------------------------------------------------------
@@ -30,8 +27,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public BaseTileData() {
-			name			= "";
-			type			= null;
 			entityType		= null;
 			tileset			= null;
 			sheetLocation	= Point2I.Zero;
@@ -63,27 +58,38 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Is Shared", "Parenting", "This tile will appear in all child rooms if its area is unoccupied.");
 		}
 
-		public BaseTileData(BaseTileData copy) {
-			type			= copy.type;
+		public BaseTileData(BaseTileData copy) : base(copy) {
 			entityType		= copy.EntityType;
 			tileset			= copy.tileset;
 			sheetLocation	= copy.sheetLocation;
 			previewSprite	= copy.previewSprite;
-			properties		= new Properties(copy.properties, this);
 			events			= new EventDocumentationCollection(copy.events);
 		}
 
-		public virtual void Clone(BaseTileData copy) {
-			type			= copy.type;
-			entityType		= copy.entityType;
+		/// <summary>Clones the specified base tile data.</summary>
+		public override void Clone(BaseResourceData baseCopy) {
+			base.Clone(baseCopy);
+
+			BaseTileData copy = (BaseTileData) baseCopy;
+			entityType		= copy.EntityType;
 			tileset			= copy.tileset;
 			sheetLocation	= copy.sheetLocation;
 			previewSprite	= copy.previewSprite;
-			properties		= new Properties(copy.properties, this);
 			events			= new EventDocumentationCollection(copy.events);
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Abstract Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes data after a change in the final entity type.<para/>
+		/// This needs to be extended for each non-abstract class in order
+		/// to make use of compile-time generic arguments within
+		/// ResourceDataInitializing.InitializeData.</summary>
+		public abstract void InitializeEntityData(Type previousType);
 		
-		
+
 		//-----------------------------------------------------------------------------
 		// Abstract Properties
 		//-----------------------------------------------------------------------------
@@ -97,62 +103,28 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets or sets the overridden type for the tile.</summary>
-		public Type Type {
-			get { return type; }
-			set {
-				if ((type == null && value != null) || !type.Equals(value)) {
-					// Make sure we extend the correct type and don't go backwards.
-					if (type != null) {
-						if (value == null || !type.IsAssignableFrom(value))
-							throw new ArgumentException("New type does not inherit from previous tile type!");
-					}
-					Type previousType = type;
-					type = value;
-					// Initialize the tile's new types.
-					TileDataInitializing.InitializeTile(this, previousType);
-				}
-			}
-		}
-
 		/// <summary>Gets or sets the type of entity this tile spawns.</summary>
 		public Type EntityType {
 			get { return entityType; }
 			set {
-				if ((entityType == null && value != null) ||
-					!entityType.Equals(value))
-				{
-					// Make sure we extend entity and don't go backwards.
+				if (entityType != value) {
+					// Make sure we extend the correct type and don't go backwards.
 					if (entityType != null) {
 						if (value == null || !entityType.IsAssignableFrom(value))
-							throw new ArgumentException("New type does not inherit from previous entity type!");
+							throw new ArgumentException("New entity type does not " +
+								"inherit from previous entity type!");
 					}
 					else if (!typeof(Entity).IsAssignableFrom(value)) {
-						throw new ArgumentException("New type does not inherit from Entity!");
+						throw new ArgumentException("New entity type does not " +
+							"inherit from Entity!");
 					}
 					Type previousType = entityType;
 					entityType = value;
-					// Initialize the tile's new entity types.
-					TileDataInitializing.InitializeEntity(this, previousType);
+					// Initialize the resource's new types
+					InitializeEntityData(previousType);
 				}
 			}
 		}
-
-		/*
-		public SpriteAnimation Sprite {
-			get {
-				if (spriteList.Length > 0)
-					return spriteList[0];
-				return new SpriteAnimation();
-			}
-			set {
-				if (value == null)
-					spriteList = new SpriteAnimation[0];
-				else
-					spriteAsObject.Set(value);
-				spriteList = new SpriteAnimation[] { value };
-			}
-		}*/
 
 		public Tileset Tileset {
 			get { return tileset; }
@@ -164,18 +136,8 @@ namespace ZeldaOracle.Game.Tiles {
 			set { sheetLocation = value; }
 		}
 
-		public Properties Properties {
-			get { return properties; }
-			set { properties = value; }
-		}
-
 		public EventDocumentationCollection Events {
 			get { return events; }
-		}
-
-		public string Name {
-			get { return name; }
-			set { name = value; }
 		}
 
 		public bool HasPreviewSprite {

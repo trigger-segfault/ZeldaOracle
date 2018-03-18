@@ -20,18 +20,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemMagicRod() : base("magic_rod") {
-		public ItemMagicRod(string id) : base(id) {
-			/*SetName("Magic Rod");
-			SetDescription("Burn, baby burn!");
-			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_ROD);*/
-
+		public ItemMagicRod() {
 			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWhileInHole;
 
-			fireTracker	= new EntityTracker<MagicRodFire>(2);
+			fireTracker = new EntityTracker<MagicRodFire>(2);
 		}
 
 

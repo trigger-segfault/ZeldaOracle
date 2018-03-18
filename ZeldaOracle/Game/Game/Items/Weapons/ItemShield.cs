@@ -9,26 +9,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemShield() : base("shield") {
-		public ItemShield(string id) : base(id) {
-			/*SetName("Wooden Shield", "Iron Shield", "Mirror Shield");
-			SetDescription("A small shield.", "A large shield.", "A reflective shield.");
-			SetMessage(
-				"You got a <red>Wooden Shield<red>!",
-				"You got an <red>Iron Shield<red>!",
-				"You got the <red>Mirror Shield<red>!");
-			SetSprite(
-				GameData.SPR_ITEM_ICON_SHIELD_1,
-				GameData.SPR_ITEM_ICON_SHIELD_2,
-				GameData.SPR_ITEM_ICON_SHIELD_3);
-			MaxLevel = Item.Level3;
-			HoldType = RewardHoldTypes.TwoHands;*/
-
+		public ItemShield() {
 			Flags =
 				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWithSword |
 				WeaponFlags.UsableWhileInHole;
-
 		}
 
 

@@ -16,26 +16,27 @@ using ZeldaOracle.Common.Util;
 namespace ZeldaOracle.Game.Items {
 	public abstract class Item : ISlotItem {
 
-		private Inventory   inventory;
-		//private ItemData    itemData;
-		private string      id;
+		private Inventory	inventory;
+		private ItemData	itemData;
+		private string		id;
 
-		private string[]    name;
-		private string[]    description;
-		private string[]    message;
-		private ISprite[]   sprite;
-		private int         level;
-		private int         maxLevel;
+		private string[]	name;
+		private string[]	description;
+		private string[]	message;
+		private ISprite[]	sprite;
+		private int			maxLevel;
 		private RewardHoldTypes holdType;
 
-		private int[]       price;
+		private int[]		price;
 
-		private Ammo[]      ammo;
-		private int[]       maxAmmo;
-		private bool        levelUpAmmo;
-
-		private bool        isObtained;
-		private bool        isLost;
+		private Ammo[]		ammo;
+		private int[]		maxAmmo;
+		private bool		levelUpAmmo;
+		
+		// TODO: Store these as properties for save format
+		private int			level;
+		private bool		isObtained;
+		private bool		isLost;
 
 		
 		//-----------------------------------------------------------------------------
@@ -51,8 +52,10 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs the base item.</summary>
 		protected Item() {
 			inventory		= null;
+			itemData		= null;
 			id				= "";
 
 			name			= new string[0];
@@ -73,6 +76,7 @@ namespace ZeldaOracle.Game.Items {
 			isLost			= false;
 		}
 
+		/// <summary>Constructs the base item with the specified ID.</summary>
 		protected Item(string id) : this() {
 			this.id			= id;
 		}
@@ -122,6 +126,15 @@ namespace ZeldaOracle.Game.Items {
 			for (int i = 0; i <= maxLevel; i++) {
 				yield return i;
 			}
+		}
+
+		/// <summary>Gets the max ammo of the item at the specified level.</summary>
+		public int GetMaxAmmo(int level) {
+			if (maxAmmo == null)
+				return 0;
+			if (level < maxAmmo.Length)
+				return maxAmmo[level];
+			return maxAmmo.LastOrDefault();
 		}
 
 
@@ -195,27 +208,29 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs the item from the item data.</summary>
-		/*public static Item CreateItem(ItemData itemData) {
-			Item item = ReflectionHelper.Construct<Item>(itemData.Type);
-			item.itemData = itemData;
+		public static Item CreateItem(ItemData data) {
+			Item item = ReflectionHelper.Construct<Item>(data.Type);
+			
+			// Load item data
+			item.itemData		= data;
+			item.id				= data.ResourceName;
+			item.sprite			= data.Sprites;
+			item.name			= data.Names;
+			item.description	= data.Descriptions;
+			item.message		= data.Messages;
+			item.price			= data.Prices;
+			item.maxAmmo		= data.MaxAmmos;
+			item.maxLevel		= data.MaxLevel;
+			item.holdType		= data.HoldType;
+			item.levelUpAmmo	= data.LevelUpAmmo;
+
 			return item;
-		}*/
+		}
 
 		/// <summary>Initializes the item after it's added to the inventory list.</summary>
 		public void Initialize(Inventory inventory) {
 			this.inventory = inventory;
 
-			// Load item data
-			/*id          = itemData.ID;
-			sprite		= itemData.Sprites;
-			name		= itemData.Names;
-			description	= itemData.Descriptions;
-			message		= itemData.Messages;
-			price		= itemData.Prices;
-			maxAmmo		= itemData.MaxAmmos;
-			maxLevel	= itemData.MaxLevel;
-			holdType	= itemData.HoldType;
-			levelUpAmmo	= itemData.LevelUpAmmo;
 
 			// Load and setup ammo
 			string[] ammoID = itemData.Ammos;
@@ -223,16 +238,18 @@ namespace ZeldaOracle.Game.Items {
 				ammo = new Ammo[ammoID.Length];
 				for (int i = 0; i < ammo.Length; i++) {
 					ammo[i] = inventory.GetAmmo(ammoID[i]);
-					if (IsAmmoContainer)
+					if (IsAmmoContainer) {
+						ammo[i].MaxAmount = GetMaxAmmo(level);
 						ammo[i].Container = this;
+					}
 				}
-			}*/
-			if (ammo != null) {
+			}
+			/*if (ammo != null) {
 				foreach (Ammo ammo in this.ammo) {
 					if (IsAmmoContainer)
 						ammo.Container = this;
 				}
-			}
+			}*/
 
 			// Initialize child classes
 			OnInitialize();
@@ -288,7 +305,7 @@ namespace ZeldaOracle.Game.Items {
 		private void AmmoLevelUp() {
 			if (IsAmmoContainer) {
 				foreach (Ammo ammo in this.ammo) {
-					ammo.MaxAmount = maxAmmo[Level];
+					ammo.MaxAmount = GetMaxAmmo(Level);
 					if (ammo.IsObtained && IncreaseAmmoOnLevelUp)
 						ammo.Amount = ammo.MaxAmount;
 				}
@@ -299,7 +316,7 @@ namespace ZeldaOracle.Game.Items {
 			if (IsAmmoContainer) {
 				if (isObtained) {
 					inventory.ObtainAmmo(ammo[0]);
-					ammo[0].MaxAmount = maxAmmo[0];
+					ammo[0].MaxAmount = GetMaxAmmo(level);
 					if (IncreaseAmmoOnLevelUp)
 						ammo[0].Amount = ammo[0].MaxAmount;
 				}
@@ -326,9 +343,9 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the item data used to construct this item.</summary>
-		/*public ItemData ItemData {
+		public ItemData ItemData {
 			get { return itemData; }
-		}*/
+		}
 		
 		/// <summary>Get or sets the inventory containing this item.</summary>
 		public Inventory Inventory {

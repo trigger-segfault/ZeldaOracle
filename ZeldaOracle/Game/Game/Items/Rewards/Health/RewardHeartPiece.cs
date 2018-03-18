@@ -9,29 +9,14 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 
-namespace ZeldaOracle.Game.Items.Rewards {
+namespace ZeldaOracle.Game.Items.Rewards.Health {
 	public class RewardHeartPiece : Reward {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardHeartPiece() : base("heart_piece") {
-			Sprite			= GameData.SPR_REWARD_HEART_PIECE;
-			Message			= GameSettings.HEART_PIECE_TEXT;
-			HoldType		= RewardHoldTypes.TwoHands;
-			HasDuration		= false;
-			ShowMessageOnPickup	= true;
-			InteractWithWeapons	= false;
-		}
-
-		public RewardHeartPiece(string id) : base(id) {
-			Sprite			= GameData.SPR_REWARD_HEART_PIECE;
-			Message			= GameSettings.HEART_PIECE_TEXT;
-			HoldType		= RewardHoldTypes.TwoHands;
-			HasDuration		 = false;
-			ShowMessageOnPickup	= true;
-			InteractWithWeapons	= false;
+		public RewardHeartPiece() {
 		}
 
 
@@ -63,6 +48,20 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public override void OnCollectNoMessage() {
 			IncrementPiecesOfHeart();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the reward type.</summary>
+		public static void InitializeRewardData(RewardData data) {
+			data.HoldInChest		= true;
+			data.HoldType			= RewardHoldTypes.TwoHands;
+			data.HasDuration		= false;
+			data.ShowPickupMessage	= true;
+			data.WeaponInteract		= false;
 		}
 
 

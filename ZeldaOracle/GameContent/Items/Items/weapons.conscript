@@ -66,7 +66,8 @@ ITEM "seed_satchel", ItemSeedSatchel;
 				"You can now hold even more <red>Mystical Seeds<red> than before!";
 	SPRITE		"item_icon_satchel";
 	EQUIPSPRITE	"item_icon_satchel_equipped";
-	AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
+	# Ammo is automatically set for seed weapons
+	#AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
 	MAXAMMO		20, 30, 50;
 	MAXLEVEL	3;
 	HOLDTYPE	TwoHands;
@@ -81,7 +82,8 @@ ITEM "seed_shooter", ItemSeedShooter;
 				"You can now hold even more <red>Mystical Seeds<red> than before!";
 	SPRITE		"item_icon_seed_shooter";
 	EQUIPSPRITE	"item_icon_seed_shooter_equipped";
-	AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
+	# Ammo is automatically set for seed weapons
+	#AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
 	HOLDTYPE	TwoHands;
 END;
 
@@ -92,7 +94,8 @@ ITEM "slingshot", ItemSlingshot;
 				"You got the <red>Hyper Slingshot<red>! It shoots three seeds at a time!";
 	SPRITE		"item_icon_slingshot_1", "item_icon_slingshot_2";
 	EQUIPSPRITE	"item_icon_slingshot_1", "item_icon_slingshot_2_equipped";
-	AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
+	# Ammo is automatically set for seed weapons
+	#AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
 	MAXLEVEL	2;
 	# TODO: Should this be OneHand?
 	HOLDTYPE	TwoHands;

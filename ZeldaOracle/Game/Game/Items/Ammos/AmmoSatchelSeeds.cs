@@ -12,17 +12,9 @@ namespace ZeldaOracle.Game.Items.Ammos {
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>Construct a seed satchel ammo.</summary>
-		public AmmoSatchelSeeds(string id) : base(id) {
-			IsAmountBased = true;
-		}
-
-		/// <summary>Construct a seed satchel ammo.</summary>
-		public AmmoSatchelSeeds(string id, string name, string description,
-			ISprite sprite, int amount, int maxAmount)
-			: base(id, name, description, sprite, amount, maxAmount)
-		{
+		public AmmoSatchelSeeds() {
 		}
 
 

@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Items.Rewards {
-	/// <summary>A reward that gives a player a specified amount of rupees.</summary>
-	public class RewardRupee : RewardAmmo {
-		
+namespace ZeldaOracle.Game.Items.Rewards.Dungeon {
+	public class RewardDungeonSmallKey : Reward {
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
-		public RewardRupee() {
+		public RewardDungeonSmallKey() {
 		}
 
 
@@ -26,8 +23,13 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the properties for the reward type.</summary>
-		public new static void InitializeRewardData(RewardData data) {
-			data.AmmoData = Resources.Get<AmmoData>("rupees");
+		public static void InitializeRewardData(RewardData data) {
+			data.HoldInChest		= false;
+			data.HoldType			= RewardHoldTypes.OneHand;
+			data.HasDuration		= false;
+			data.ShowPickupMessage	= false;
+			data.WeaponInteract		= true;
+			data.BounceSound		= GameData.SOUND_KEY_BOUNCE;
 		}
 
 
@@ -37,10 +39,10 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		/// <summary>Called when the player collects the reward.</summary>
 		public override void OnCollect() {
-			if (GameControl.HUD.DynamicRupees >= Ammo.MaxAmount)
-				AudioSystem.PlaySound(GameData.SOUND_GET_RUPEE);
-
-			Ammo.Amount += Amount;
+			Area area = RoomControl.Area;
+			
+			area.SmallKeyCount++;
+			AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 		}
 	}
 }

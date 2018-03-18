@@ -7,29 +7,14 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 
-namespace ZeldaOracle.Game.Items.Rewards {
+namespace ZeldaOracle.Game.Items.Rewards.Health {
 	public class RewardHeartContainer : Reward {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardHeartContainer() : base("heart_container") {
-			Sprite			= GameData.SPR_REWARD_HEART_CONTAINER;
-			Message			= "You got a <red>Heart Container<red>!";
-			HoldType		= RewardHoldTypes.TwoHands;
-			HasDuration		= false;
-			ShowMessageOnPickup			= true;
-			InteractWithWeapons	= false;
-		}
-		
-		public RewardHeartContainer(string id) : base(id) {
-			Sprite			= GameData.SPR_REWARD_HEART_CONTAINER;
-			Message			= "You got a <red>Heart Container<red>!";
-			HoldType		= RewardHoldTypes.TwoHands;
-			HasDuration		= false;
-			ShowMessageOnPickup			= true;
-			InteractWithWeapons	= false;
+		public RewardHeartContainer() {
 		}
 		
 
@@ -44,6 +29,20 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public override void OnCollectNoMessage() {
 			IncrementHeartContainers();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the reward type.</summary>
+		public static void InitializeRewardData(RewardData data) {
+			data.HoldInChest		= true;
+			data.HoldType			= RewardHoldTypes.TwoHands;
+			data.HasDuration		= false;
+			data.ShowPickupMessage	= true;
+			data.WeaponInteract		= false;
 		}
 
 

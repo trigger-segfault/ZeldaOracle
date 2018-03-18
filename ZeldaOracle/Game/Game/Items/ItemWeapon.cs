@@ -18,6 +18,8 @@ namespace ZeldaOracle.Game.Items {
 		/// <summary>The flags describing how the weapon can be used.</summary>
 		private WeaponFlags	flags;
 		private int			equipSlot;
+
+		// TODO: Store these as properties for save format
 		private int			ammoIndex;
 
 
@@ -25,7 +27,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemWeapon(string id) : base(id) {
+		public ItemWeapon() {
 			flags			= WeaponFlags.None;
 			equipSlot		= 0;
 			ammoIndex		= -1;
@@ -153,11 +155,18 @@ namespace ZeldaOracle.Game.Items {
 		public bool HasFlag(WeaponFlags flags) {
 			return this.flags.HasFlag(flags);
 		}
-		
 
+		
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		protected override void OnInitialize() {
+			base.OnInitialize();
+			if (UsesAmmo && ammoIndex == -1)
+				ammoIndex = 0;
+		}
 
 		protected virtual void DrawAmmo(Graphics2D g, Point2I position) {
 			g.DrawString(GameData.FONT_SMALL,

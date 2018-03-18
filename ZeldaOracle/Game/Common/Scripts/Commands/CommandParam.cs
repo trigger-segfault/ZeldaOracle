@@ -481,7 +481,23 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				return stringValue;
 			}
 		}
-			
+
+		public Point2I PointValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new Point2I(GetInt(0), GetInt(1));
+				return Point2I.Zero;
+			}
+		}
+
+		public Vector2F VectorValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new Vector2F(GetFloat(0), GetFloat(1));
+				return Vector2F.Zero;
+			}
+		}
+
 		// Script Reader Info ----------------------------------------------------------------
 
 		public int CharIndex {

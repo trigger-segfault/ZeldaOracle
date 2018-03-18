@@ -13,14 +13,8 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
-		
-		public ItemMagicPotion(string id) : base(id) {
-			/*SetName("Magic Potion");
-			SetDescription("Fill your hearts!");
-			SetSprite(GameData.SPR_ITEM_ICON_MAGIC_POTION);
-			HoldType = RewardHoldTypes.TwoHands;
 
-			slot = new Point2I(1, 0);*/
+		public ItemMagicPotion() {
 		}
 
 	}

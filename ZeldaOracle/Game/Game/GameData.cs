@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Initializes and loads the game content. NOTE: The order here is important.
-		public static void Initialize(bool preloadSprites = true, RewardManager rewardManager = null) {
+		public static void Initialize(bool preloadSprites = true) {
 			/*
 			CommandReferenceParam param = CommandParamParser.ParseReferenceParams(
 				"(any objs...)...");
@@ -91,15 +91,12 @@ namespace ZeldaOracle.Game {
 			LoadMusic();
 
 			audioWatch.Stop();
+			
+			Logs.Initialization.LogNotice("Loading Inventory");
+			LoadInventory();
 
-			// CONSCRIPT DESIGNER ONLY
-			if (rewardManager != null) {
-				Logs.Initialization.LogNotice("Loading Inventory");
-				LoadInventory(rewardManager.Inventory, false);
-
-				Logs.Initialization.LogNotice("Loading Rewards");
-				LoadRewards(rewardManager);
-			}
+			Logs.Initialization.LogNotice("Loading Rewards");
+			LoadRewards();
 
 			Logs.Initialization.LogNotice("Loading Tiles");
 			LoadTiles();
@@ -110,23 +107,22 @@ namespace ZeldaOracle.Game {
 			Logs.Initialization.LogNotice("Loading Zones");
 			LoadZonesPostTileData();
 
-			//Logs.Initialization.LogNotice("Took " + spriteWatch.ElapsedMilliseconds + "ms to load sprites.");
-			//Logs.Initialization.LogNotice("Took " + audioWatch.ElapsedMilliseconds + "ms to load audio.");
-			if (rewardManager == null) {
-				Logs.Initialization.LogInfo("Took {0} ms to parse conscripts.",
-					ScriptReader.Watch.ElapsedMilliseconds);
-				Logs.Initialization.LogInfo("Took {0} ms to load game data.",
-					watch.ElapsedMilliseconds);
-			}
+			//Logs.Initialization.LogNotice("Took {0} ms to load sprites.",
+			//	spriteWatch.ElapsedMilliseconds);
+			//Logs.Initialization.LogNotice("Took {0} ms to load audio.",
+			//	audioWatch.ElapsedMilliseconds);
+			Logs.Initialization.LogInfo("Took {0} ms to parse conscripts.",
+				ScriptReader.Watch.ElapsedMilliseconds);
+			Logs.Initialization.LogInfo("Took {0} ms to load game data.",
+				watch.ElapsedMilliseconds);
 
 			if (!Resources.PalettedSpriteDatabase.IsPreloaded) {
 				watch.Restart();
 				Resources.PalettedSpriteDatabase.Save();
-
-				if (rewardManager == null)
-					Logs.Initialization.LogInfo(
-						"Took {0} ms to save sprite database.",
-						watch.ElapsedMilliseconds);
+				
+				Logs.Initialization.LogInfo(
+					"Took {0} ms to save sprite database.",
+					watch.ElapsedMilliseconds);
 			}
 		}
 

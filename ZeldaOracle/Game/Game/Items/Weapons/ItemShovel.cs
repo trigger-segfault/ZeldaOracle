@@ -17,19 +17,11 @@ using ZeldaOracle.Game.Items.Rewards;
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemShovel : ItemWeapon {
 		
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemShovel() : base("shovel") {
-		public ItemShovel(string id) : base(id) {
-			/*SetName("Shovel");
-			SetDescription("A handy tool.");
-			SetMessage("You got the <red>Shovel<red>! Now start digging!");
-			SetSprite(GameData.SPR_ITEM_ICON_SHOVEL);
-			MaxLevel = Item.Level1;
-			HoldType = RewardHoldTypes.TwoHands;*/
+		public ItemShovel() {
 			Flags = WeaponFlags.UsableWhileInHole;
 		}
 

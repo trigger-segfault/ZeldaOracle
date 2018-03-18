@@ -152,7 +152,7 @@ namespace ConscriptDesigner.Anchorables {
 				statusTileInfo.Content = "";
 			}
 			else {
-				textBlockTileName.Text = hoverTileData.Name;
+				textBlockTileName.Text = hoverTileData.ResourceName;
 				if (hoverTileData.Type == null) {
 					if (hoverTileData is TileData)
 						statusTileInfo.Content = "Type: Tile";

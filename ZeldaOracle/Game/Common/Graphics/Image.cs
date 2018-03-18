@@ -117,8 +117,8 @@ namespace ZeldaOracle.Common.Graphics {
 			stream.Position += 4;
 			long streamStart = stream.Position;
 			SaveAsPng(stream);
-			int fileSize = (int) (streamStart - stream.Position);
-			stream.Position = streamStart;
+			int fileSize = (int) (stream.Position - streamStart);
+			stream.Position = streamStart - 4;
 			writer.Write(fileSize);
 			stream.Position = streamStart + fileSize;
 		}

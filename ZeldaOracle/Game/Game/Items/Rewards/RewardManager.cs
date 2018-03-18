@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Items.Rewards.Linked;
 
 namespace ZeldaOracle.Game.Items.Rewards {
 	/// <summary>The manager and container for all available rewards in the game.</summary>
@@ -44,17 +45,21 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		/// <summary>Initializes the item rewards by loading them from resources.</summary>
 		public void LoadItems() {
-			// Create RewardItems from Item resources
-			foreach (var pair in Resources.GetDictionary<Item>()) {
+			/*foreach (var pair in Resources.GetDictionary<Item>()) {
 				AddRewardItem(pair.Value);
-			}
+			}*/
 		}
 
 		/// <summary>Initializes all rewards by loading them from resources.</summary>
-		public void LoadResources() {
+		public void Initialize() {
+			// Create RewardItems from Item resources
+			foreach (Item item in inventory.GetItems()) {
+				AddRewardItem(item);
+			}
 			// Load rest of rewards
-			foreach (var pair in Resources.GetDictionary<Reward>()) {
-				AddReward(pair.Value);
+			foreach (var pair in Resources.GetDictionary<RewardData>()) {
+				Reward reward = Reward.CreateReward(pair.Value);
+				AddReward(reward);
 			}
 		}
 		
@@ -87,7 +92,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		public Reward AddReward(Reward reward) {
 			if (!rewards.ContainsKey(reward.ID)) {
 				rewards.Add(reward.ID, reward);
-				reward.RewardManager = this;
+				reward.Initialize(this);
 			}
 			return rewards[reward.ID];
 		}

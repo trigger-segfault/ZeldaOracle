@@ -9,16 +9,11 @@ using ZeldaOracle.Common.Graphics.Sprites;
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemOcarina : ItemWeapon {
 		
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemOcarina() : base("ocarina") {
-		public ItemOcarina(string id) : base(id) {
-			/*SetName("Ocarina");
-			SetDescription("Plays a beautiful sound.");
-			SetSprite(GameData.SPR_ITEM_ICON_OCARINA);*/
+		public ItemOcarina() {
 			Flags = WeaponFlags.None;
 		}
 

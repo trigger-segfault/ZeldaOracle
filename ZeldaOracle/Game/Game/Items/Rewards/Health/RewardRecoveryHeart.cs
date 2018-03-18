@@ -8,7 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 
-namespace ZeldaOracle.Game.Items.Rewards {
+namespace ZeldaOracle.Game.Items.Rewards.Health {
 	public class RewardRecoveryHeart : RewardAmount {
 		
 		//-----------------------------------------------------------------------------
@@ -16,24 +16,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>Constructs the recovery heart reward</summary>
-		public RewardRecoveryHeart(string id)
-			: base(id)
-		{
-			HoldInChest		= false;
-			HoldType		= RewardHoldTypes.TwoHands;
-			HasDuration		= true;
-			ShowMessageOnPickup			= false;
-			InteractWithWeapons	= true;
-		}
-
-		/// <summary>Constructs the recovery heart reward</summary>
-		public RewardRecoveryHeart(string id, int amount, string message, ISprite sprite)
-			: this(id)
-		{
-
-			Sprite			= sprite;
-			Message			= message;
-			Amount			= amount;
+		public RewardRecoveryHeart() {
 		}
 
 

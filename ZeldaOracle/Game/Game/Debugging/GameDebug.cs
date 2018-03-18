@@ -491,7 +491,7 @@ namespace ZeldaOracle.Game.Debugging {
 			{
 				Tile newSampledTile = RoomControl.GetTopTile(mouseTileLocation);
 				if (newSampledTile != null && newSampledTile.TileData.BaseData != null) {
-					sampledTileName = newSampledTile.TileData.BaseData.Name;
+					sampledTileName = newSampledTile.TileData.BaseData.ResourceName;
 				}
 			}
 

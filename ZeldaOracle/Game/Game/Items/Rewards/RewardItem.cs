@@ -24,19 +24,22 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		public RewardItem(Item item, int level) : base(ItemName(item, level)) {
 			this.item = item;
 			this.level = level;
-
-			Sprite			= item.GetSprite(level);
-			Message			= item.GetMessage(level);
-			HoldType		= item.HoldType;
-			HasDuration		= false;
-			ShowMessageOnPickup			= true;
-			InteractWithWeapons	= false;
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Called when the reward is being initialized.</summary>
+		protected override void OnInitialize() {
+			Sprite				= item.GetSprite(level);
+			Message				= item.GetMessage(level);
+			HoldType			= item.HoldType;
+			HasDuration			= false;
+			ShowPickupMessage	= true;
+			InteractWithWeapons	= false;
+		}
 
 		/// <summary>Called when the player collects the reward.</summary>
 		public override void OnCollect() {
