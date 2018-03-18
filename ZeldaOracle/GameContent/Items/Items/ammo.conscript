@@ -22,27 +22,33 @@ AMMO "ember_seeds", AmmoSatchelSeeds;
 	NAME		"Ember Seeds";
 	DESCRIPTION "A burst of fire!";
 	SPRITE		"item_seed_ember";
+	CANTCOLLECT	"No Seed Satchel to put these in.";
+	FULL		"Your Seed Satchel is full.";
 END;
 
 AMMO "scent_seeds", AmmoSatchelSeeds;
+	CLONE		"ember_seeds";
 	NAME		"Scent Seeds";
 	DESCRIPTION	"An aromatic blast!";
 	SPRITE		"item_seed_scent";
 END;
 
 AMMO "pegasus_seeds", AmmoSatchelSeeds;
+	CLONE		"ember_seeds";
 	NAME		"Pegasus Seeds";
 	DESCRIPTION	"Steals speed?";
 	SPRITE		"item_seed_pegasus";
 END;
 
 AMMO "gale_seeds", AmmoSatchelSeeds;
+	CLONE		"ember_seeds";
 	NAME		"Gale Seeds";
 	DESCRIPTION	"A mighty blow!";
 	SPRITE		"item_seed_gale";
 END;
 
 AMMO "mystery_seeds", AmmoSatchelSeeds;
+	CLONE		"ember_seeds";
 	NAME		"Mystery Seeds";
 	DESCRIPTION	"A producer of unknown effects.";
 	SPRITE		"item_seed_mystery";
@@ -54,12 +60,16 @@ AMMO "bombs", Ammo;
 	NAME		"Bombs";
 	DESCRIPTION	"Very explosive.";
 	SPRITE		"item_ammo_bomb";
+	CANTCOLLECT	"No Bomb Bag to put these in.";
+	FULL		"Your Bomb Bag is full.";
 END;
 
 AMMO "arrows", Ammo;
 	NAME		"Arrows";
 	DESCRIPTION	"A standard arrow.";
 	SPRITE		"item_ammo_arrow";
+	CANTCOLLECT	"No Quiver to put these in.";
+	FULL		"Your Quiver is full.";
 END;
 
 #==============================================================

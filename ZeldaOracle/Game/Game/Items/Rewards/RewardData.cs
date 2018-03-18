@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardData : BaseItemData {
+	public class RewardData : BaseResourceData {
 
 		private ISprite		sprite;
 
@@ -17,7 +19,6 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		/// <summary>Constructs the reward data.</summary>
 		public RewardData() {
-			type		= typeof(Reward);
 			sprite		= new EmptySprite();
 		}
 
@@ -26,158 +27,131 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			sprite		= copy.sprite;
 		}
 
+		/// <summary>Clones the specified reward data.</summary>
+		public override void Clone(BaseResourceData baseCopy) {
+			base.Clone(baseCopy);
 
-		//-----------------------------------------------------------------------------
-		// Mutators
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Sets a property list from the base name and values.</summary>
-		public void SetPropertyList<T>(string name, T[] values) {
-			for (int i = 0; i < values.Length; i++) {
-				properties.SetGeneric(ListName(name, i), values[i]);
-			}
-			// Remove lingering list properties
-			for (int i = values.Length; properties.Contains(ListName(name, i)); i++) {
-				properties.RemoveProperty(ListName(name, i), false);
-			}
-		}
-
-		/// <summary>Gets a property list from the base name.</summary>
-		public T[] GetPropertyList<T>(string name) {
-			int length = 0;
-			for (; properties.Contains(ListName(name, length)); length++) ;
-			T[] values = new T[length];
-			for (int i = 0; i < length; i++) {
-				values[i] = properties.Get<T>(ListName(name, i));
-			}
-			return values;
-		}
-
-		/// <summary>Sets the leveled names of the item.</summary>
-		public void SetName(params string[] names) {
-			SetPropertyList("name", names);
-		}
-
-		/// <summary>Sets the leveled descriptions of the item.</summary>
-		public void SetDescription(params string[] descriptions) {
-			SetPropertyList("description", descriptions);
-		}
-
-		/// <summary>Sets the leveled reward messages of the item.</summary>
-		public void SetMessage(params string[] messages) {
-			SetPropertyList("message", messages);
-		}
-
-		/// <summary>Sets the leveled sprites of the item.</summary>
-		public void SetSprite(params ISprite[] sprites) {
-			this.sprites = sprites;
-		}
-
-		/// <summary>Sets the leveled equipped sprites of the item.</summary>
-		public void SetEquipSprite(params string[] sprites) {
-			SetPropertyList("equip_sprite", sprites);
-		}
-
-		/// <summary>Sets the default leveled prices of the item.</summary>
-		public void SetDefaultPrice(params int[] prices) {
-			SetPropertyList("price", prices);
-		}
-
-		/// <summary>Sets the ammo types used by this weapon.</summary>
-		public virtual void SetAmmo(params string[] ammoIDs) {
-			SetPropertyList("ammo", ammoIDs);
-		}
-
-		/// <summary>Sets the max ammo allowed at each level.</summary>
-		public void SetMaxAmmo(params int[] maxAmmos) {
-			SetPropertyList("max_ammo", maxAmmos);
+			RewardData copy = (RewardData) baseCopy;
+			sprite = copy.sprite;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Internal Methods
+		// Override Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the name for a list property at the specified index.</summary>
-		private string ListName(string propertyName, int index) {
-			return propertyName + "_" + (index + 1);
+		/// <summary>Initializes data after a change in the final type.<para/>
+		/// This needs to be extended for each non-abstract class in order
+		/// to make use of compile-time generic arguments within
+		/// ResourceDataInitializing.InitializeData.</summary>
+		public override void InitializeData(Type previousType) {
+			ResourceDataInitializing.InitializeData(
+				this, OutputType, Type, previousType);
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the base output type for this resource data.</summary>
+		public override Type OutputType {
+			get { return typeof(Reward); }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Arrays ---------------------------------------------------------------------
-
-		/// <summary>Gets the leveled sprites for the item data.</summary>
-		public ISprite[] Sprites {
-			get { return sprites; }
+		/// <summary>Gets or sets the sprite for the reward data.</summary>
+		public ISprite Sprite {
+			get { return sprite; }
+			set { sprite = value; }
 		}
 
-		/// <summary>Gets the leveled sprites for the item data.</summary>
-		public ISprite[] EquipSprites {
-			get {
-				string[] spriteNames = GetPropertyList<string>("equip_sprite");
-				ISprite[] sprites = new ISprite[spriteNames.Length];
-				for (int i = 0; i < sprites.Length; i++) {
-					sprites[i] = Resources.Get<ISprite>(spriteNames[i]);
-				}
-				return sprites;
-			}
+		/// <summary>Gets or sets the normal message when the player picks up this
+		/// reward type.</summary>
+		public string Message {
+			get { return Properties.Get("message", ""); }
+			set { Properties.Set("message", value); }
 		}
 
-		/// <summary>Gets the leveled names for the item data.</summary>
-		public string[] Names {
-			get { return GetPropertyList<string>("name"); }
+		/// <summary>Gets or sets the message when the player picks up this reward type
+		/// for the first time.</summary>
+		public string ObtainMessage {
+			get { return Properties.Get("obtain_message", ""); }
+			set { Properties.Set("obtain_message", value); }
 		}
 
-		/// <summary>Gets the leveled descriptions for the item data.</summary>
-		public string[] Descriptions {
-			get { return GetPropertyList<string>("description"); }
+		/// <summary>Gets or sets the message when the player tries to pick up the
+		/// reward but has no container for it.</summary>
+		public string CantCollectMessage {
+			get { return Properties.Get("cant_collect_message", ""); }
+			set { Properties.Set("cant_collect_message", value); }
 		}
 
-		/// <summary>Gets the leveled messages for the item data.</summary>
-		public string[] Messages {
-			get { return GetPropertyList<string>("message"); }
+		/// <summary>Gets the message when the player tries to pick up the reward but
+		/// the container is full.</summary>
+		public string FullMessage {
+			get { return Properties.Get("full_message", ""); }
+			set { Properties.Set("full_message", value); }
 		}
 
-		/// <summary>Gets the leveled prices for the item data.</summary>
-		public int[] Prices {
-			get { return GetPropertyList<int>("price"); }
+		/// <summary>Gets or sets if the reward does not rise out of chests and
+		/// instead, is picked up by the player.</summary>
+		public bool HoldInChest {
+			get { return Properties.Get("hold_in_chest", true); }
+			set { Properties.Set("hold_in_chest", value); }
 		}
 
-		/// <summary>Gets the ammos for the item data.</summary>
-		public string[] Ammos {
-			get { return GetPropertyList<string>("ammo"); }
-		}
-
-		/// <summary>Gets the leveled max ammos for the item data.</summary>
-		public int[] MaxAmmos {
-			get { return GetPropertyList<int>("max_ammo"); }
-		}
-		
-		// General --------------------------------------------------------------------
-
-		/// <summary>Gets or sets the max level for the item data.</summary>
-		public int MaxLevel {
-			get { return properties.Get("max_level", Item.Level1); }
-			set {
-				value = GMath.Max(Item.Level1, value);
-				properties.Set("max_level", value);
-			}
-		}
-
-		/// <summary>Gets or sets the reward hold type for the item data.</summary>
+		/// <summary>Gets or sets the reward hold type for the reward data.</summary>
 		public RewardHoldTypes HoldType {
 			get { return properties.GetEnum("hold_type", RewardHoldTypes.TwoHands); }
 			set { properties.SetEnumStr("hold_type", value); }
 		}
 
-		/// <summary>Gets or sets if ammo is increased on level-up for the item data.</summary>
-		public bool LevelUpAmmo {
-			get { return properties.Get("levelup_ammo", false); }
-			set { properties.Set("levelup_ammo", value); }
+		/// <summary>Gets or sets if the reward entity has a duration.</summary>
+		public bool HasDuration {
+			get { return Properties.Get("has_duration", false); }
+			set { Properties.Set("has_duration", value); }
+		}
+
+		/// <summary>Gets or sets if the reward message is shown when the item is
+		/// picked up from the ground.</summary>
+		public bool ShowPickupMessage {
+			get { return Properties.Get("show_pickup_message", false); }
+			set { Properties.Set("show_pickup_message", value); }
+		}
+
+		/// <summary>Gets or sets if this reward can be collected with weapons like the
+		/// sword, boomerange, and switch hook.</summary>
+		public bool WeaponInteract {
+			get { return Properties.Get("weapon_interact", false); }
+			set { Properties.Set("weapon_interact", value); }
+		}
+		
+		/// <summary>Gets or sets the amount of the reward given with this reward.</summary>
+		public int Amount {
+			get { return Properties.Get("amount", 0); }
+			set { Properties.Set("amount", value); }
+		}
+
+		/// <summary>Gets or sets the ammo data tied to the reward.</summary>
+		public AmmoData AmmoData {
+			get { return Properties.GetResource<AmmoData>("ammo", null); }
+			set {
+				Properties.Set("ammo", value.ResourceName);
+				ObtainMessage = value.ObtainMessage;
+				CantCollectMessage = value.CantCollectMessage;
+				FullMessage = value.FullMessage;
+			}
+		}
+
+		/// <summary>Gets or sets the bounce sound tied to the reward.</summary>
+		public Sound BounceSound {
+			get { return Properties.GetResource<Sound>("bounce_sound", null); }
+			set { Properties.Set("bounce_sound", value.Name); }
 		}
 	}
 }

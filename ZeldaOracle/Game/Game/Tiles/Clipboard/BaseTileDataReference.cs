@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 
 		/// <summary>Consctructs an instance of </summary>
 		public BaseTileDataReference(BaseTileDataInstance baseTileData) {
-			this.name		= baseTileData.BaseData.Name;
+			this.name		= baseTileData.BaseData.ResourceName;
 			this.properties	= new Properties(baseTileData);
 			this.events		= new EventCollection(baseTileData.Events, baseTileData);
 			this.properties.Clone(baseTileData.Properties);

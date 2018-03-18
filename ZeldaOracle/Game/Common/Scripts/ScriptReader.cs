@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 using System.Threading;
 using ZeldaOracle.Common.Util;
 using System.Diagnostics;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Common.Scripts {
 	/// <summary>
@@ -303,6 +304,53 @@ namespace ZeldaOracle.Common.Scripts {
 			return resource;
 		}
 
+		/// <summary>Sets the object's properties from a set property command param.</summary>
+		protected void SetProperty(IPropertyObject propertyObject,
+			CommandParam parameters)
+		{
+			SetProperty(propertyObject.Properties, parameters);
+		}
+
+		/// <summary>Sets the properties from a set property command param.</summary>
+		protected void SetProperty(Properties properties, CommandParam parameters) {
+			parameters = parameters.GetParam(0);
+			string name = parameters.GetString(0);
+			Property property = properties.GetProperty(name, false);
+			if (!properties.Contains(name))
+				ThrowCommandParseError("Property with the name '" + name +
+					"' does not exist!");
+
+			object value = ParsePropertyValue(parameters.GetParam(1), property.Type);
+			properties.SetGeneric(name, value);
+		}
+
+		/// <summary>Parses the value of the property from the command param.</summary>
+		private object ParsePropertyValue(CommandParam param, PropertyType type) {
+			if (type == PropertyType.String) {
+				if (param.IsValidType(CommandParamType.String))
+					return param.StringValue;
+			}
+			else if (type == PropertyType.Integer) {
+				if (param.IsValidType(CommandParamType.Integer))
+					return param.IntValue;
+			}
+			else if (type == PropertyType.Float) {
+				if (param.IsValidType(CommandParamType.Float))
+					return param.FloatValue;
+			}
+			else if (type == PropertyType.Boolean) {
+				if (param.IsValidType(CommandParamType.Boolean))
+					return param.BoolValue;
+			}
+			else if (type == PropertyType.Point) {
+				if (param.IsValidType(CommandParamType.Array))
+					return param.PointValue;
+			}
+			else if (type == PropertyType.List)
+				ThrowParseError("Lists are unsupported as a property type");
+			ThrowParseError("The property value '" + param.StringValue + "' is not of type " + type.ToString());
+			return null;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Virtual methods

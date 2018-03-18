@@ -6,19 +6,29 @@ using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Items.Rewards {
+namespace ZeldaOracle.Game.Items.Rewards.Dungeon {
 	public class RewardDungeonBossKey : Reward {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardDungeonBossKey(string id) : base(id) {
-			HoldType        = RewardHoldTypes.OneHand;
-			HasDuration     = false;
-			ShowMessageOnPickup = true;
-			InteractWithWeapons = false;
-			BounceSound     = GameData.SOUND_KEY_BOUNCE;
+		public RewardDungeonBossKey() {
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the reward type.</summary>
+		public static void InitializeRewardData(RewardData data) {
+			data.HoldInChest		= true;
+			data.HoldType			= RewardHoldTypes.OneHand;
+			data.HasDuration		= false;
+			data.ShowPickupMessage	= true;
+			data.WeaponInteract		= false;
+			data.BounceSound		= GameData.SOUND_KEY_BOUNCE;
 		}
 
 

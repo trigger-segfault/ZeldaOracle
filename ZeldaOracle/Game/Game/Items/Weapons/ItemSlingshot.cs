@@ -24,22 +24,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemSlingshot() : base("slingshot") {
-		public ItemSlingshot(string id) : base(id) {
-			/*SetName("Slingshot", "Hyper Slingshot");
-			SetDescription("Used to shoot seeds.", "Shoots in 3 directions.");
-			SetSprite(
-				GameData.SPR_ITEM_ICON_SLINGSHOT_1,
-				GameData.SPR_ITEM_ICON_SLINGSHOT_2);
-			SetSpriteEquipped(
-				GameData.SPR_ITEM_ICON_SLINGSHOT_1,
-				GameData.SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED);
-			MaxLevel		= Item.Level2;*/
+		public ItemSlingshot() {
 			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWhileInHole;
-			seedTracker	= new EntityTracker<SeedProjectile>(3);
+
+			seedTracker = new EntityTracker<SeedProjectile>(3);
 		}
 
 

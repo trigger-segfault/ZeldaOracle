@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players;
 
@@ -15,6 +16,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 	public abstract class Reward : ZeldaAPI.Reward {
 
 		private RewardManager	rewardManager;
+		private RewardData		rewardData;
 		private string			id;
 
 		private Properties		properties;
@@ -26,7 +28,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		private bool			holdInChest;
 		private RewardHoldTypes	holdType;
 		private bool			hasDuration;
-		private bool			showMessageOnPickup;
+		private bool			showPickupMessag;
 		private bool			interactWithWeapons;
 		private Sound			bounceSound;
 
@@ -34,11 +36,12 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>Constructs the base reward.</summary>
-		public Reward(string id) {
-			this.id				= id;
+		protected Reward() {
 			rewardManager		= null;
+			rewardData          = null;
+			id					= "";
 
 			sprite				= null;
 			message				= "";
@@ -47,29 +50,42 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			holdInChest			= true;
 			holdType			= RewardHoldTypes.TwoHands;
 			hasDuration			= false;
-			showMessageOnPickup	= false;
+			showPickupMessag	= true;
 			interactWithWeapons	= false;
 			bounceSound			= null;
 		}
 
-		/// <summary>Clones the data for the specified reward.</summary>
-		public virtual void Clone(Reward reward) {
-			sprite				= reward.sprite;
-			message				= reward.message;
-			obtainMessage		= reward.obtainMessage;
-			cantCollectMessage	= reward.cantCollectMessage;
-			holdInChest			= reward.holdInChest;
-			holdType			= reward.holdType;
-			hasDuration			= reward.hasDuration;
-			showMessageOnPickup	= reward.showMessageOnPickup;
-			interactWithWeapons	= reward.interactWithWeapons;
-			bounceSound			= reward.bounceSound;
+		/// <summary>Constructs the base reward with the specified ID.</summary>
+		protected Reward(string id) : this() {
+			this.id				= id;
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Constructs the reward from the reward data.</summary>
+		public static Reward CreateReward(RewardData data) {
+			Reward reward = ReflectionHelper.Construct<Reward>(data.Type);
+			
+			// Load item data
+			reward.rewardData			= data;
+			reward.id					= data.ResourceName;
+			// Call the property and not the member to perform centering magic
+			reward.Sprite				= data.Sprite;
+			reward.message				= data.Message;
+			reward.obtainMessage		= data.ObtainMessage;
+			reward.cantCollectMessage	= data.CantCollectMessage;
+			reward.holdInChest			= data.HoldInChest;
+			reward.holdType				= data.HoldType;
+			reward.hasDuration			= data.HasDuration;
+			reward.showPickupMessag		= data.ShowPickupMessage;
+			reward.interactWithWeapons	= data.WeaponInteract;
+			reward.bounceSound			= data.BounceSound;
+
+			return reward;
+		}
 
 		/// <summary>Initializes the reward.</summary>
 		public void Initialize(RewardManager rewardManager) {
@@ -139,10 +155,11 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets or sets the reward manager for the reward.</summary>
+		// References -----------------------------------------------------------------
+
+		/// <summary>Gets the reward manager for the reward.</summary>
 		public RewardManager RewardManager {
 			get { return rewardManager; }
-			set { rewardManager = value; }
 		}
 
 		/// <summary>Get the inventory for the game.</summary>
@@ -163,6 +180,14 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		/// <summary>Gets the current player.</summary>
 		public Player Player {
 			get { return rewardManager.GameControl.Player; }
+		}
+
+		// Settings -------------------------------------------------------------------
+
+
+		/// <summary>Gets the reward data used to construct this reward.</summary>
+		public RewardData RewardData {
+			get { return rewardData; }
 		}
 
 		/// <summary>Gets the ID for the reward.</summary>
@@ -223,9 +248,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		/// <summary>Gets if the reward message is shown when the item is picked up
 		/// from the ground.</summary>
-		public bool ShowMessageOnPickup {
-			get { return showMessageOnPickup; }
-			set { showMessageOnPickup = value; }
+		public bool ShowPickupMessage {
+			get { return showPickupMessag; }
+			set { showPickupMessag = value; }
 		}
 
 		/// <summary>Gets if this reward can be collected with weapons like the

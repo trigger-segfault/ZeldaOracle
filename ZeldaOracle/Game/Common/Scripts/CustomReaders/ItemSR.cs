@@ -17,10 +17,9 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-
-
 	public class ItemSR : ScriptReader {
 
 		private enum Modes {
@@ -29,13 +28,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			Ammo,
 		}
 
-		private Item item;
-		private ItemEquipment equipment;
-		private ItemWeapon weapon;
-		private ItemSecondary secondary;
-		private ItemEssence essence;
-
-		private Ammo ammo;
+		private BaseResourceData baseData;
+		private ItemData itemData;
+		private AmmoData ammoData;
 
 
 		//-----------------------------------------------------------------------------
@@ -43,62 +38,78 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		//-----------------------------------------------------------------------------
 
 		public ItemSR() {
-
-			//=====================================================================================
-			// Type Definitions
-			//=====================================================================================
-			AddType("Sprite",
-				"string spriteName",
-				"(string animationName, int substrip)",
-				"(string spriteName, string definition)"
-			);
+			
 			//=====================================================================================
 			// ITEM BEGIN/END 
 			//=====================================================================================
 			AddCommand("ITEM", (int) Modes.Root,
-				"string id, string type = \"\"",
+				"string id, string type = \"Item\"",
 			delegate (CommandParam parameters) {
 				string itemID = parameters.GetString(0);
 				string typeName = parameters.GetString(1);
-				if (string.IsNullOrWhiteSpace(typeName))
-					typeName = typeof(Item).Name;
 				Type type = GameUtil.FindTypeWithBase<Item>(typeName, false);
+				
+				itemData = new ItemData();
+				itemData.ResourceName = itemID;
+				itemData.Type = type;
 
-				item = ReflectionHelper.Construct<Item, string>(type, itemID);
-
-				if (TypeHelper.TypeHasBase<ItemEquipment>(type))
-					equipment = (ItemEquipment) item;
-				if (TypeHelper.TypeHasBase<ItemWeapon>(type))
-					weapon = (ItemWeapon) item;
-				if (TypeHelper.TypeHasBase<ItemSecondary>(type))
-					secondary = (ItemSecondary) item;
-				if (TypeHelper.TypeHasBase<ItemEssence>(type))
-					essence = (ItemEssence) item;
-
-				AddResource<Item>(itemID, item);
+				baseData = itemData;
+				
+				AddResource<ItemData>(itemID, itemData);
 				Mode = Modes.Item;
 			});
 			//=====================================================================================
 			AddCommand("AMMO", (int) Modes.Root,
-				"string id, string type = \"\"",
+				"string id, string type = \"Ammo\"",
 			delegate (CommandParam parameters) {
 				string ammoID = parameters.GetString(0);
 				string typeName = parameters.GetString(1);
-				if (string.IsNullOrWhiteSpace(typeName))
-					typeName = typeof(Ammo).Name;
 				Type type = GameUtil.FindTypeWithBase<Ammo>(typeName, false);
+				
+				ammoData = new AmmoData();
+				ammoData.ResourceName = ammoID;
+				ammoData.Type = type;
 
-				ammo = ReflectionHelper.Construct<Ammo, string>(type, ammoID);
-
-				AddResource<Ammo>(ammoID, ammo);
+				baseData = ammoData;
+				
+				AddResource<AmmoData>(ammoID, ammoData);
 				Mode = Modes.Ammo;
+			});
+			//=====================================================================================
+			AddCommand("CLONE", new int[] { (int) Modes.Item, (int) Modes.Ammo },
+				"string id",
+			delegate (CommandParam parameters) {
+				string id = parameters.GetString(0);
+
+				BaseResourceData cloneData = null;
+				if (baseData is ItemData) {
+					cloneData = GetResource<ItemData>(id);
+					if (cloneData.Type != baseData.Type)
+						ThrowCommandParseError("Cannot clone items with different types!");
+				}
+				else if (baseData is AmmoData) {
+					cloneData = GetResource<AmmoData>(id);
+					if (cloneData.Type != baseData.Type)
+						ThrowCommandParseError("Cannot clone ammos with different types!");
+				}
+				baseData.Clone(cloneData);
 			});
 			//=====================================================================================
 			AddCommand("END", new int[] { (int) Modes.Item, (int) Modes.Ammo },
 				"",
 			delegate (CommandParam parameters) {
-				item = null;
+				itemData = null;
+				ammoData = null;
+				baseData = null;
 				Mode = Modes.Root;
+			});
+			//=====================================================================================
+			// GENERAL BUILDING
+			//=====================================================================================
+			AddCommand("PROPERTY", new int[] { (int) Modes.Item, (int) Modes.Ammo },
+				"(string name, var value)",
+			delegate (CommandParam parameters) {
+				SetProperty(baseData, parameters);
 			});
 			//=====================================================================================
 			// ITEM BUILDING
@@ -106,13 +117,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("MAXLEVEL", (int) Modes.Item,
 				"int maxLevel",
 			delegate (CommandParam parameters) {
-				item.MaxLevel = parameters.GetInt(0) - 1;
+				itemData.MaxLevel = parameters.GetInt(0) - 1;
 			});
 			//=====================================================================================
 			AddCommand("LEVELUPAMMO", (int) Modes.Item,
 				"bool ammoOnLevelUp",
 			delegate (CommandParam parameters) {
-				item.IncreaseAmmoOnLevelUp = parameters.GetBool(0);
+				itemData.LevelUpAmmo = parameters.GetBool(0);
 			});
 			//=====================================================================================
 			AddCommand("NAME", (int) Modes.Item,
@@ -121,7 +132,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				string[] names = new string[parameters.ChildCount];
 				for (int i = 0; i < names.Length; i++)
 					names[i] = parameters.GetString(i);
-				item.SetName(names);
+				itemData.SetName(names);
 			});
 			//=====================================================================================
 			AddCommand("DESCRIPTION", (int) Modes.Item,
@@ -130,7 +141,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				string[] descriptions = new string[parameters.ChildCount];
 				for (int i = 0; i < descriptions.Length; i++)
 					descriptions[i] = parameters.GetString(i);
-				item.SetDescription(descriptions);
+				itemData.SetDescription(descriptions);
 			});
 			//=====================================================================================
 			AddCommand("MESSAGE", (int) Modes.Item,
@@ -139,16 +150,16 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				string[] messages = new string[parameters.ChildCount];
 				for (int i = 0; i < messages.Length; i++)
 					messages[i] = parameters.GetString(i);
-				item.SetMessage(messages);
+				itemData.SetMessage(messages);
 			});
 			//=====================================================================================
 			AddCommand("SPRITE", (int) Modes.Item,
-				"Sprite sprites...",
+				"string sprites...",
 			delegate (CommandParam parameters) {
 				ISprite[] sprites = new ISprite[parameters.ChildCount];
 				for (int i = 0; i < sprites.Length; i++)
-					sprites[i] = GetSpriteFromParams(parameters, i);
-				item.SetSprite(sprites);
+					sprites[i] = GetResource<ISprite>(parameters.GetString(i));
+				itemData.SetSprite(sprites);
 			});
 			//=====================================================================================
 			AddCommand("PRICE", (int) Modes.Item,
@@ -157,16 +168,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				int[] prices = new int[parameters.ChildCount];
 				for (int i = 0; i < prices.Length; i++)
 					prices[i] = parameters.GetInt(i);
-				item.SetDefaultPrice(prices);
+				itemData.SetDefaultPrice(prices);
 			});
 			//=====================================================================================
 			AddCommand("AMMO", (int) Modes.Item,
 				"string ammos...",
 			delegate (CommandParam parameters) {
-				Ammo[] ammos = new Ammo[parameters.ChildCount];
-				for (int i = 0; i < ammos.Length; i++)
-					ammos[i] = GetResource<Ammo>(parameters.GetString(i));
-				item.SetAmmo(ammos);
+				string[] ammoNames = new string[parameters.ChildCount];
+				for (int i = 0; i < ammoNames.Length; i++) {
+					// Make sure the resource exists
+					GetResource<AmmoData>(parameters.GetString(i));
+					ammoNames[i] = parameters.GetString(i);
+				}
+				itemData.SetAmmo(ammoNames);
 			});
 			//=====================================================================================
 			AddCommand("MAXAMMO", (int) Modes.Item,
@@ -175,27 +189,30 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				int[] maxAmmos = new int[parameters.ChildCount];
 				for (int i = 0; i < maxAmmos.Length; i++)
 					maxAmmos[i] = parameters.GetInt(i);
-				item.SetMaxAmmo(maxAmmos);
+				itemData.SetMaxAmmo(maxAmmos);
 			});
 			//=====================================================================================
 			AddCommand("HOLDTYPE", (int) Modes.Item,
 				"string rewardHoldType",
 			delegate (CommandParam parameters) {
-				item.HoldType = parameters.GetEnum<RewardHoldTypes>(0, false);
+				itemData.HoldType = parameters.GetEnum<RewardHoldTypes>(0, false);
 			});
 			//=====================================================================================
 			// EQUIPMENT BUILDING
 			//=====================================================================================
 			AddCommand("EQUIPSPRITE", (int) Modes.Item,
-				"Sprite sprites...",
+				"string sprites...",
 			delegate (CommandParam parameters) {
-				if (equipment == null)
+				if (!TypeHelper.TypeHasBase<ItemEquipment>(itemData.Type))
 					ThrowCommandParseError("Can only call EQUIPSPRITE when constructing an " +
 						"ItemEquipment!");
-				ISprite[] sprites = new ISprite[parameters.ChildCount];
-				for (int i = 0; i < sprites.Length; i++)
-					sprites[i] = GetSpriteFromParams(parameters, i);
-				equipment.SetSpriteEquipped(sprites);
+				string[] spriteNames = new string[parameters.ChildCount];
+				for (int i = 0; i < spriteNames.Length; i++) {
+					// Make sure the resource exists
+					GetResource<ISprite>(parameters.GetString(i));
+					spriteNames[i] = parameters.GetString(i);
+				}
+				itemData.SetEquipSprite(spriteNames);
 			});
 			//=====================================================================================
 			// SECONDARY BUILDING
@@ -203,10 +220,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("SECONDSLOT", (int) Modes.Item,
 				"Point slot",
 			delegate (CommandParam parameters) {
-				if (secondary == null)
+				if (!TypeHelper.TypeHasBase<ItemSecondary>(itemData.Type))
 					ThrowCommandParseError("Can only call SECONDSLOT when constructing an " +
 						"ItemSecondary!");
-				secondary.SecondarySlot = parameters.GetPoint(0);
+				itemData.Properties.Set("slot", parameters.GetPoint(0));
 			});
 			//=====================================================================================
 			// ESSENCE BUILDING
@@ -214,10 +231,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("ESSENCESLOT", (int) Modes.Item,
 				"int slot",
 			delegate (CommandParam parameters) {
-				if (essence == null)
+				if (!TypeHelper.TypeHasBase<ItemEssence>(itemData.Type))
 					ThrowCommandParseError("Can only call ESSENCESLOT when constructing an " +
 						"ItemEssence!");
-				essence.EssenceSlot = parameters.GetInt(0);
+				itemData.Properties.Set("slot", parameters.GetInt(0));
 			});
 			//=====================================================================================
 			// AMMO BUILDING
@@ -225,143 +242,58 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("NAME", (int) Modes.Ammo,
 				"string name",
 			delegate (CommandParam parameters) {
-				ammo.Name = parameters.GetString(0);
+				ammoData.Name = parameters.GetString(0);
 			});
 			//=====================================================================================
 			AddCommand("DESCRIPTION", (int) Modes.Ammo,
 				"string description",
 			delegate (CommandParam parameters) {
-				ammo.Description = parameters.GetString(0);
+				ammoData.Description = parameters.GetString(0);
 			});
 			//=====================================================================================
 			AddCommand("OBTAIN", (int) Modes.Ammo,
 				"string obtainMessage",
 			delegate (CommandParam parameters) {
-				ammo.ObtainMessage = parameters.GetString(0);
+				ammoData.ObtainMessage = parameters.GetString(0);
 			});
 			//=====================================================================================
 			AddCommand("CANTCOLLECT", (int) Modes.Ammo,
 				"string cantCollectMessage",
 			delegate (CommandParam parameters) {
-				ammo.CantCollectMessage = parameters.GetString(0);
+				ammoData.CantCollectMessage = parameters.GetString(0);
+			});
+			//=====================================================================================
+			AddCommand("FULL", (int) Modes.Ammo,
+				"string fullMessage",
+			delegate (CommandParam parameters) {
+				ammoData.FullMessage = parameters.GetString(0);
 			});
 			//=====================================================================================
 			AddCommand("SPRITE", (int) Modes.Ammo,
-				"Sprite sprite",
+				"string sprite",
 			delegate (CommandParam parameters) {
-				ammo.Sprite = GetSpriteFromParams(parameters, 0);
+				ammoData.Sprite = GetResource<ISprite>(parameters.GetString(0));
 			});
 			//=====================================================================================
 			AddCommand("AMOUNTBASED", (int) Modes.Ammo,
 				"bool isAmountBased",
 			delegate (CommandParam parameters) {
-				ammo.IsAmountBased = parameters.GetBool(0);
+				ammoData.IsAmountBased = parameters.GetBool(0);
+			});
+			//=====================================================================================
+			AddCommand("AMOUNT", (int) Modes.Ammo,
+				"int amount",
+			delegate (CommandParam parameters) {
+				ammoData.Amount = parameters.GetInt(0);
 			});
 			//=====================================================================================
 			AddCommand("MAXAMOUNT", (int) Modes.Ammo,
 				"int maxAmount",
 			delegate (CommandParam parameters) {
-				ammo.MaxAmount = parameters.GetInt(0);
+				ammoData.MaxAmount = parameters.GetInt(0);
 			});
 			//=====================================================================================
 
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Script Commands
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Gets a sprite.</summary>
-		private ISprite GetSprite(string name) {
-			ISprite sprite = GetResource<ISprite>(name);
-			if (sprite == null) {
-				ThrowCommandParseError("Sprite with name '" + name + "' does not exist in resources!");
-			}
-			return sprite;
-		}
-
-		/// <summary>Gets a sprite.</summary>
-		private ISprite GetSprite(ISpriteSource source, Point2I index) {
-			if (source == null)
-				ThrowCommandParseError("Cannot get sprite from source with no sprite source!");
-			ISprite sprite = source.GetSprite(index);
-			if (sprite == null) {
-				ThrowCommandParseError("Sprite at source index '" + index + "' does not exist!");
-			}
-			return sprite;
-		}
-
-		/// <summary>Gets a sprite and confirms its type.</summary>
-		private T GetSprite<T>(string name) where T : class, ISprite {
-			T sprite = GetResource<ISprite>(name) as T;
-			if (sprite == null) {
-				ThrowCommandParseError(typeof(T).Name + " with name '" + name + "' does not exist in resources!");
-			}
-			return sprite;
-		}
-
-		/// <summary>Gets a sprite and confirms its type.</summary>
-		private T GetSprite<T>(ISpriteSource source, Point2I index) where T : class, ISprite {
-			if (source == null)
-				ThrowCommandParseError("Cannot get sprite from source with no sprite source!");
-			T sprite = source.GetSprite(index) as T;
-			if (sprite == null) {
-				ThrowCommandParseError(typeof(T).Name + " at source index '" + index + "' does not exist!");
-			}
-			return sprite;
-		}
-
-		/// <summary>Gets the sprite of a definition sprite.</summary>
-		private ISprite GetDefinedSprite(string name, string definition) {
-			return GetDefinedSprite(GetSprite<DefinitionSprite>(name), definition);
-		}
-
-		/// <summary>Gets the sprite of a definition sprite.</summary>
-		private ISprite GetDefinedSprite(ISpriteSource source, Point2I index, string definition) {
-			return GetDefinedSprite(GetSprite<DefinitionSprite>(source, index), definition);
-		}
-
-		/// <summary>Gets the sprite of a definition sprite.</summary>
-		private ISprite GetDefinedSprite(DefinitionSprite sprite, string definition) {
-			ISprite defSprite = sprite.Get(definition);
-			if (defSprite == null)
-				ThrowCommandParseError("Defined sprite with definition '" + definition + "' does not exist!");
-			return defSprite;
-		}
-
-		/// <summary>Gets the sprite from one of the many parameter overloads.</summary>
-		private ISprite GetSpriteFromParams(CommandParam param, int startIndex = 0) {
-			ISpriteSource source;
-			Point2I index;
-			string definition;
-			return GetSpriteFromParams(param, startIndex, out source, out index, out definition);
-		}
-
-		/// <summary>Gets the sprite from one of the many parameter overloads and returns the source.</summary>
-		private ISprite GetSpriteFromParams(CommandParam param, int startIndex, out ISpriteSource source, out Point2I index, out string definition) {
-			// 1: string spriteName
-			// 3: (string animationName, int substrip)
-			// 4: (string spriteName, string definition)
-			source = null;
-			index = Point2I.Zero;
-			definition = null;
-
-			var param0 = param.GetParam(startIndex);
-			if (param0.Type == CommandParamType.String) {
-				// Overload 1:
-				return GetResource<ISprite>(param.GetString(startIndex));
-			}
-			else {
-				if (param0.GetParam(1).IsValidType(CommandParamType.Integer)) {
-					// Overload 3:
-					return GetSprite<Animation>(param0.GetString(0)).GetSubstrip(param0.GetInt(1));
-				}
-				else {
-					// Overload 4:
-					return GetDefinedSprite(param0.GetString(0), param0.GetString(1));
-				}
-			}
 		}
 
 
@@ -371,7 +303,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
-			item     = null;
+			itemData = null;
+			ammoData = null;
+			baseData = null;
 		}
 
 		/// <summary>Ends reading the script.</summary>
@@ -388,17 +322,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Gets the source as a sprite sheet.</summary>
-		/*private SpriteSheet SpriteSheet {
-			get { return source as SpriteSheet; }
-		}*/
-
-		/// <summary>Gets the source as a sprite set.</summary>
-		/*private SpriteSet SpriteSet {
-			get { return source as SpriteSet; }
-		}*/
-
+		
 		/// <summary>The mode of the Tileset script reader.</summary>
 		private new Modes Mode {
 			get { return (Modes) base.Mode; }

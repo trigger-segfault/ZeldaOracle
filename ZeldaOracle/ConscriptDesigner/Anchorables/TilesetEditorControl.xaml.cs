@@ -214,7 +214,7 @@ namespace ConscriptDesigner.Anchorables {
 						Point2I point = new Point2I(x, y);
 						BaseTileData tileData = tileset.GetTileDataAtOrigin(point);
 						if (tileData != null) {
-							text.AppendLine("SETTILE " + point + ", \"" + tileData.Name + "\";");
+							text.AppendLine("SETTILE " + point + ", \"" + tileData.ResourceName + "\";");
 							lastRowEmpty = false;
 						}
 					}
@@ -297,7 +297,7 @@ namespace ConscriptDesigner.Anchorables {
 				statusTileInfo.Content = "";
 			}
 			else {
-				textBlockTileName.Text = hoverTileData.Name;
+				textBlockTileName.Text = hoverTileData.ResourceName;
 				if (hoverTileData.Type == null) {
 					if (hoverTileData is TileData)
 						statusTileInfo.Content = "Type: Tile";

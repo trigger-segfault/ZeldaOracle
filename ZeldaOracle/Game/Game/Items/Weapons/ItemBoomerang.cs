@@ -16,21 +16,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemBoomerang() : base("boomerang") {
-		public ItemBoomerang(string id) : base(id) {
-			/*SetName("Boomerang", "Magic Boomerang");
-			SetDescription("Always comes back to you.", "A remote-control weapon.");
-			SetMessage(
-				"You got the <red>Boomerang<red>! " +
-					"Use it to stop enemies in their tracks!",
-				"It's the <red>Magical Boomerang<red>! " +
-					"Press <dpad> while holding the button to control its flight path!");
-			SetSprite(
-				GameData.SPR_ITEM_ICON_BOOMERANG_1,
-				GameData.SPR_ITEM_ICON_BOOMERANG_2);
-			MaxLevel	= Item.Level2;
-
-			HoldType = RewardHoldTypes.TwoHands;*/
+		public ItemBoomerang() {
 			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |

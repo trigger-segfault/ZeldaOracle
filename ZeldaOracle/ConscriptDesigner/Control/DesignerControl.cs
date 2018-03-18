@@ -52,6 +52,7 @@ namespace ConscriptDesigner.Control {
 		private static List<IRequestCloseAnchorable> openAnchorables;
 		private static List<IRequestCloseAnchorable> closingAnchorables;
 
+		private static Inventory inventory;
 		private static RewardManager rewardManager;
 
 		private static Zone previewZone;
@@ -409,15 +410,19 @@ namespace ConscriptDesigner.Control {
 			Clear();
 			GameData.Uninitialize();
 			Resources.Unload();
+			inventory = null;
 			rewardManager = null;
 
 			try {
 				Stopwatch watch = Stopwatch.StartNew();
 				UpdateContentFolder(project);
 
-				Inventory inventory = new Inventory();
+				GameSettings.DesignerMode = true;
+				GameData.Initialize(false);
+				inventory = new Inventory();
+				inventory.Initialize();
 				rewardManager = new RewardManager(inventory);
-				GameData.Initialize(false, rewardManager);
+				rewardManager.Initialize();
 
 				//Console.WriteLine("Loading Rewards");
 				//rewardManager = new RewardManager(null);
@@ -939,6 +944,10 @@ namespace ConscriptDesigner.Control {
 
 		public static string ProjectSettingsFile {
 			get { return project.ProjectFile + ".designer.user"; }
+		}
+
+		public static Inventory Inventory {
+			get { return inventory; }
 		}
 
 		public static RewardManager RewardManager {

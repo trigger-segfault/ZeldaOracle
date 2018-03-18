@@ -29,32 +29,17 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemSeedSatchel() : base("seed_satchel") {
-		public ItemSeedSatchel(string id) : base(id) {
-			/*SetName("Seed Satchel");
-			SetDescription("A bag for carrying seeds.");
-			SetMessage(
-				"You got a <red>Seed Satchel<red>! " +
-					"And it has <red>20 Ember Seeds<red>!",
-				"You can now hold more <red>Mystical Seeds<red> than before!",
-				"You can now hold even more <red>Mystical Seeds<red> than before!");
-			SetSprite(GameData.SPR_ITEM_ICON_SATCHEL);
-			SetSpriteEquipped(GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED);
-			SetMaxAmmo(20, 30, 50);
-			MaxLevel = Item.Level3;
-			HoldType = RewardHoldTypes.TwoHands;
-
-			IncreaseAmmoOnLevelUp = true;*/
+		public ItemSeedSatchel() {
 			Flags =
 				WeaponFlags.UsableInMinecart |
 				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWithSword |
 				WeaponFlags.UsableWhileInHole;
 
-			emberSeedTracker	= new EntityTracker<DroppedSeed>(1);
-			scentSeedTracker	= new EntityTracker<DroppedSeed>(1);
-			galeSeedTracker		= new EntityTracker<DroppedSeed>(1);
-			mysterySeedTracker	= new EntityTracker<DroppedSeed>(1);
+			emberSeedTracker    = new EntityTracker<DroppedSeed>(1);
+			scentSeedTracker    = new EntityTracker<DroppedSeed>(1);
+			galeSeedTracker     = new EntityTracker<DroppedSeed>(1);
+			mysterySeedTracker  = new EntityTracker<DroppedSeed>(1);
 		}
 
 

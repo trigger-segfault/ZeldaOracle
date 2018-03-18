@@ -14,7 +14,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSecondary(string id) : base(id) {
+		public ItemSecondary() {
 			slot = Point2I.Zero;
 		}
 
@@ -25,7 +25,17 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Initializes the item after it's added to the inventory list.</summary>
 		protected override void OnInitialize() {
-			//slot = ItemData.Properties.Get("slot", Point2I.Zero);
+			slot = ItemData.Properties.Get("slot", Point2I.Zero);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the item type.</summary>
+		public static void InitializeItemData(ItemData data) {
+			data.Properties.Set("slot", Point2I.Zero);
 		}
 
 

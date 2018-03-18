@@ -10,6 +10,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -121,22 +122,22 @@ namespace ZeldaOracle.Game.Tiles {
 				spriteList[i] = copy.spriteList[i];
 		}
 
-		public override void Clone(BaseTileData copy) {
-			base.Clone(copy);
-			if (copy is TileData) {
-				TileData copyTileData = (TileData) copy;
-				spriteAbove			= copyTileData.spriteAbove;
-				spriteAsObject		= copyTileData.spriteAsObject;
-				breakAnimation		= copyTileData.breakAnimation;
-				breakSound			= copyTileData.breakSound;
-				model				= copyTileData.model;
-				tileBelow			= copyTileData.tileBelow;
+		/// <summary>Clones the specified tile data.</summary>
+		public override void Clone(BaseResourceData baseCopy) {
+			base.Clone(baseCopy);
 
-				if (copyTileData.spriteList.Length > 0) {
-					spriteList = new ISprite[copyTileData.spriteList.Length];
-					for (int i = 0; i < spriteList.Length; i++) {
-						spriteList[i] = copyTileData.spriteList[i];
-					}
+			TileData copy = (TileData) baseCopy;
+			spriteAbove			= copy.spriteAbove;
+			spriteAsObject		= copy.spriteAsObject;
+			breakAnimation		= copy.breakAnimation;
+			breakSound			= copy.breakSound;
+			model				= copy.model;
+			tileBelow			= copy.tileBelow;
+
+			if (copy.spriteList.Length > 0) {
+				spriteList = new ISprite[copy.spriteList.Length];
+				for (int i = 0; i < spriteList.Length; i++) {
+					spriteList[i] = copy.spriteList[i];
 				}
 			}
 		}
@@ -154,8 +155,36 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Override Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes data after a change in the final type.<para/>
+		/// This needs to be extended for each non-abstract class in order
+		/// to make use of compile-time generic arguments within
+		/// ResourceDataInitializing.InitializeData.</summary>
+		public override void InitializeData(Type previousType) {
+			ResourceDataInitializing.InitializeData(
+				this, OutputType, Type, previousType);
+		}
+
+		/// <summary>Initializes data after a change in the final entity type.<para/>
+		/// This needs to be extended for each non-abstract class in order
+		/// to make use of compile-time generic arguments within
+		/// ResourceDataInitializing.InitializeData.</summary>
+		public override void InitializeEntityData(Type previousType) {
+			ResourceDataInitializing.InitializeData(
+				this, typeof(Entity), EntityType, previousType);
+		}
+		
+
+		//-----------------------------------------------------------------------------
 		// Overridden Properties
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the base output type for this resource data.</summary>
+		public override Type OutputType {
+			get { return typeof(Tile); }
+		}
 
 		public override ISprite Sprite {
 			get {
@@ -225,8 +254,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public CollisionModel CollisionModel {
 			get { return model; }
 			set { model = value; }
-			//get { return properties.GetResource<CollisionModel>("collision_model", null); }
-			//set { properties.SetAsResource<CollisionModel>("collision_model", value); }
 		}
 
 		public TileEnvironmentType EnvironmentType {

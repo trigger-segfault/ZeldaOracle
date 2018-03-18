@@ -18,7 +18,8 @@ REWARD "hearts_1", RewardRecoveryHeart;
 	FULL		"Your health is already full.";
 END;
 
-CLONE REWARD "hearts_1", "hearts_3";
+REWARD "hearts_3", RewardRecoveryHeart;
+	CLONE		"hearts_1";
 	SPRITE		"reward_hearts_3";
 	MESSAGE		"You got three<n><red>hearts<red>!";
 END;

@@ -13,25 +13,12 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemFeather : ItemWeapon {
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemFeather() : base("feather") {
-		public ItemFeather(string id) : base(id) {
-			/*SetName("Roc's Feather", "Roc's Cape");
-			SetDescription("A nice lift.", "A wing-riding cape.");
-			SetMessage(
-				"You got <red>Roc's Feather<red>! You feel as light as a feather!",
-				"You got <red>Roc's Cape<red>! " +
-					"Press and hold the button to do a double jump!");
-			SetSprite(
-				GameData.SPR_ITEM_ICON_FEATHER,
-				GameData.SPR_ITEM_ICON_CAPE);
-			MaxLevel = Item.Level2;*/
-
+		public ItemFeather() {
 			Flags =
 				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWithSword;

@@ -121,13 +121,15 @@ namespace ZeldaOracle.Game.Control {
 
 			mapDungeon = new ScreenDungeonMap(gameManager);
 
-			GameData.LoadInventory(inventory, true);
+			inventory.Initialize();
+			inventory.SetMaxLevel("wallet");
 
 			hud = new HUD(this);
 			hud.DynamicHealth = player.Health;
 
 			rewardManager = new RewardManager(this);
-			GameData.LoadRewards(rewardManager);
+			rewardManager.Initialize();
+
 			dropManager = new DropManager(this);
 			GameData.LoadDrops(dropManager, rewardManager);
 

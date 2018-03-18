@@ -7,18 +7,28 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardDungeonMap : Reward {
+namespace ZeldaOracle.Game.Items.Rewards.Dungeon {
+	public class RewardDungeonCompass : Reward {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardDungeonMap(string id) : base(id) {
-			HoldType		= RewardHoldTypes.TwoHands;
-			HasDuration		= false;
-			ShowMessageOnPickup	= true;
-			InteractWithWeapons = false;
+		public RewardDungeonCompass() {
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the reward type.</summary>
+		public static void InitializeRewardData(RewardData data) {
+			data.HoldInChest		= true;
+			data.HoldType			= RewardHoldTypes.TwoHands;
+			data.HasDuration		= false;
+			data.ShowPickupMessage	= true;
+			data.WeaponInteract		= false;
 		}
 
 
@@ -30,7 +40,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		public override void OnCollect() {
 			Area area = RoomControl.Area;
 
-			area.HasMap = true;
+			area.HasCompass = true;
 		}
 	}
 }

@@ -67,7 +67,7 @@ namespace ZeldaEditor.DevTools {
 				IPropertyObject propertyObject = property.Properties.PropertyObject;
 
 				if (propertyObject is BaseTileData) {
-					Console.WriteLine(" - {0}", ((BaseTileData) propertyObject).Name);
+					Console.WriteLine(" - {0}", ((BaseTileData) propertyObject).ResourceName);
 				}
 				else if (propertyObject is BaseTileDataInstance) {
 					Type type = ((BaseTileDataInstance) propertyObject).Type;

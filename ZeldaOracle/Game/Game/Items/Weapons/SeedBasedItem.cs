@@ -16,26 +16,19 @@ using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 namespace ZeldaOracle.Game.Items.Weapons {
 
 	public abstract class SeedBasedItem : ItemWeapon {
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public SeedBasedItem(string id) : base(id) {
-			SetAmmo(
-				"ember_seeds",
-				"scent_seeds",
-				"pegasus_seeds",
-				"gale_seeds",
-				"mystery_seeds");
+		public SeedBasedItem() {
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
-		
+
 		// Draws the item inside the inventory.
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
@@ -44,6 +37,21 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 
 
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the item type.</summary>
+		public static void InitializeItemData(ItemData data) {
+			data.SetAmmo(
+				"ember_seeds",
+				"scent_seeds",
+				"pegasus_seeds",
+				"gale_seeds",
+				"mystery_seeds");
+		}
+
+		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

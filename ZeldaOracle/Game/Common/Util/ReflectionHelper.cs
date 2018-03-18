@@ -31,9 +31,36 @@ namespace ZeldaOracle.Common.Util {
 	/// <summary>A static helper class for functions involving reflection.</summary>
 	public static class ReflectionHelper {
 
+		/// <summary>Creates a callable delegate object from a MethodInfo.</summary>
+		public static Delegate GetFunction(Type delegateType, MethodInfo methodInfo) {
+			/*ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+			ParameterExpression[] parameters = new ParameterExpression[parameterInfos.Length];
+			for (int i = 0; i < parameterInfos.Length; i++)
+				parameters[i] = Expression.Parameter(parameterInfos[i].ParameterType, "param" + i);*/
+			return Delegate.CreateDelegate(delegateType, methodInfo);
+			/*if (methodInfo.IsStatic) {
+				return Delegate.CreateDelegate(delegateType, methodInfo);
+				return Expression.Lambda(
+					Expression.Call(methodInfo, parameters), parameters).Compile();
+			}
+			else {
+				return Delegate.CreateDelegate(delegateType,
+				ParameterExpression[] parametersFull = new ParameterExpression[parameterInfos.Length + 1];
+				ParameterExpression instance = Expression.Parameter(methodInfo.ReflectedType, "instance");
+				parametersFull[0] = instance;
+				for (int i = 0; i < parameterInfos.Length; i++)
+					parametersFull[i + 1] = parameters[i];
+				return Expression.Lambda(
+					Expression.Call(instance, methodInfo, parameters), parametersFull).Compile();
+			}*/
+		}
+
 		/// <summary>Creates a callable Func/Action object from a MethodInfo.</summary>
 		public static TDelegate GetFunction<TDelegate>(MethodInfo methodInfo) {
-			ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+			return (TDelegate) (object) Delegate.CreateDelegate(typeof(TDelegate), methodInfo);
+			// Although this looks more complicated than above,
+			// we get a slight performance boost.
+			/*ParameterInfo[] parameterInfos = methodInfo.GetParameters();
 			ParameterExpression[] parameters = new ParameterExpression[parameterInfos.Length];
 			for (int i = 0; i < parameterInfos.Length; i++)
 				parameters[i] = Expression.Parameter(parameterInfos[i].ParameterType, "param" + i);
@@ -49,7 +76,7 @@ namespace ZeldaOracle.Common.Util {
 					parametersFull[i + 1] = parameters[i];
 				return Expression.Lambda<TDelegate>(
 					Expression.Call(instance, methodInfo, parameters), parametersFull).Compile();
-			}
+			}*/
 		}
 
 

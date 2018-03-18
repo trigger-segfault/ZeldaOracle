@@ -7,19 +7,28 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardDungeonSmallKey : Reward {
+namespace ZeldaOracle.Game.Items.Rewards.Dungeon {
+	public class RewardDungeonMap : Reward {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardDungeonSmallKey(string id) : base(id) {
-			HoldType		= RewardHoldTypes.OneHand;
-			HasDuration		= false;
-			ShowMessageOnPickup	= false;
-			InteractWithWeapons = true;
-			BounceSound		= GameData.SOUND_KEY_BOUNCE;
+		public RewardDungeonMap() {
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the reward type.</summary>
+		public static void InitializeRewardData(RewardData data) {
+			data.HoldInChest		= true;
+			data.HoldType			= RewardHoldTypes.TwoHands;
+			data.HasDuration		= false;
+			data.ShowPickupMessage	= true;
+			data.WeaponInteract		= false;
 		}
 
 
@@ -30,9 +39,8 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		/// <summary>Called when the player collects the reward.</summary>
 		public override void OnCollect() {
 			Area area = RoomControl.Area;
-			
-			area.SmallKeyCount++;
-			AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
+
+			area.HasMap = true;
 		}
 	}
 }

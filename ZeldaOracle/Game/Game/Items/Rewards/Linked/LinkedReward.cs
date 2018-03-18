@@ -5,32 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardDungeonCompass : Reward {
+namespace ZeldaOracle.Game.Items.Rewards.Linked {
+	/// <summary>A reward class used for calculating the reward at runtime.</summary>
+	public abstract class LinkedReward : Reward {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardDungeonCompass(string id) : base(id) {
-			HoldType        = RewardHoldTypes.TwoHands;
-			HasDuration     = false;
-			ShowMessageOnPickup = true;
-			InteractWithWeapons = false;
+		/// <summary>Constructs the base linked reward.</summary>
+		public LinkedReward() {
+		}
+
+		/// <summary>Constructs the linked reward from the unique ID.</summary>
+		public LinkedReward(string id) : base(id) {
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden Methods
+		// Abstract Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Called when the player collects the reward.</summary>
-		public override void OnCollect() {
-			Area area = RoomControl.Area;
-
-			area.HasCompass = true;
-		}
+		/// <summary>Gets the reward being linked to.</summary>
+		public abstract Reward Reward { get; }
 	}
 }

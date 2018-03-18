@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEssence(string id) : base(id) {
+		public ItemEssence() {
 			slot = 0;
 		}
 
@@ -24,7 +24,17 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Initializes the item after it's added to the inventory list.</summary>
 		protected override void OnInitialize() {
-			//slot = ItemData.Properties.Get("slot", 0);
+			slot = ItemData.Properties.Get("slot", 0);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the item type.</summary>
+		public static void InitializeItemData(ItemData data) {
+			data.Properties.Set("slot", 0);
 		}
 
 

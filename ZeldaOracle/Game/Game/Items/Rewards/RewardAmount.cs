@@ -21,21 +21,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs an amount reward.</summary>
-		public RewardAmount(string id) : base(id) {
+		public RewardAmount() {
 			amount			= 0;
 			fullMessage		= "";
-		}
-		
-		/// <summary>Clones the data for the specified reward.</summary>
-		public override void Clone(Reward reward) {
-			base.Clone(reward);
-
-			if (reward is RewardAmount) {
-				var rewardAmount = (RewardAmount) reward;
-
-				amount		= rewardAmount.amount;
-				fullMessage	= rewardAmount.fullMessage;
-			}
 		}
 
 
@@ -61,6 +49,31 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			}
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Override Methods
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Called when the reward is being initialized.</summary>
+		protected override void OnInitialize() {
+			FullMessage			= RewardData.FullMessage;
+			Amount				= RewardData.Amount;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the reward type.</summary>
+		public static void InitializeRewardData(RewardData data) {
+			data.HoldInChest        = false;
+			data.HoldType           = RewardHoldTypes.TwoHands;
+			data.HasDuration        = true;
+			data.ShowPickupMessage  = false;
+			data.WeaponInteract     = true;
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Properties

@@ -11,6 +11,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.ResourceData;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
@@ -286,6 +287,41 @@ namespace ZeldaOracle.Game.Tiles {
 		private static void DrawTile(Graphics2D g, BaseTileData data,
 			Properties properties, Point2I position, Zone zone, Color color)
 		{
+			// Create the arguments to call
+			if (data is TileData) {
+				TileDataDrawArgs args = new TileDataDrawArgs((TileData) data,
+					properties, position, zone, color);
+
+				TileDataDrawer func = ResourceDataDrawing.GetDrawer<TileDataDrawer>(
+					data, typeof(Entity), data.EntityType);
+				if (func == null)
+					func = ResourceDataDrawing.GetDrawer<TileDataDrawer>(data);
+				func?.Invoke(g, args);
+			}
+			else if (data is ActionTileData) {
+				ActionDataDrawArgs args = new ActionDataDrawArgs((ActionTileData) data,
+					properties, position, zone, color);
+
+				ActionDataDrawer func =  ResourceDataDrawing.GetDrawer<ActionDataDrawer>(
+					data, typeof(Entity), data.EntityType);
+				if (func == null)
+					func = ResourceDataDrawing.GetDrawer<ActionDataDrawer>(data);
+				func?.Invoke(g, args);
+			}
+
+			// Attempt to draw through the entity type first
+			/*if (ResourceDataDrawing.DrawData(data.GetType(), data.EntityType,
+				typeof(Entity), g, args))
+				return;
+
+			ResourceDataDrawing.DrawData(data.GetType(), data.Type, data.OutputType,
+				g, args);*/
+		}
+
+		/// <summary>Attempts to draw the tile based on its type or entity type.</summary>
+		/*private static void DrawTile(Graphics2D g, BaseTileData data,
+			Properties properties, Point2I position, Zone zone, Color color)
+		{
 			// Attempt to draw through the entity type first
 			if (DrawTileEntity(g, data, properties, position, zone, color))
 				return;
@@ -310,7 +346,7 @@ namespace ZeldaOracle.Game.Tiles {
 				if (DrawTileType(type, g, data, properties, position, zone, color))
 					return;
 			}
-		}
+		}*/
 
 		/// <summary>Attempts to draw the tile based on its spawned entity type.
 		/// Returns false if no function was found.</summary>
@@ -389,6 +425,7 @@ namespace ZeldaOracle.Game.Tiles {
 					MethodInfo methodInfo = tileType.GetMethod("DrawTileData",
 						BindingFlags.Static | BindingFlags.Public,
 						typeof(Graphics2D), typeof(TileDataDrawArgs));
+					//MethodInfo methodInfo = ResourceDataDrawing.GetDrawer(data.GetType(), data.Type ?? typeof(Tile), data.OutputType);
 					if (methodInfo != null) {
 						drawFunc = ReflectionHelper.GetFunction
 							<TileDataDrawer>(methodInfo);
@@ -409,6 +446,7 @@ namespace ZeldaOracle.Game.Tiles {
 					MethodInfo methodInfo = tileType.GetMethod("DrawTileData",
 						BindingFlags.Static | BindingFlags.Public,
 						typeof(Graphics2D), typeof(ActionDataDrawArgs));
+					//MethodInfo methodInfo = ResourceDataDrawing.GetDrawer(data.GetType(), data.Type ?? typeof(ActionTile), data.OutputType);
 					if (methodInfo != null) {
 						drawFunc = ReflectionHelper.GetFunction
 							<ActionDataDrawer>(methodInfo);

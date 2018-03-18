@@ -9,32 +9,27 @@ namespace ZeldaOracle.Game.Items.Weapons {
 	
 	public class ItemMagnetGloves : ItemWeapon {
 
-		private Polarity polarity;
 		private ISprite[] polaritySprites;
+
+		// TODO: Store these as properties for save format
+		private Polarity polarity;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		//public ItemMagnetGloves() : base("magnet_gloves") {
-		public ItemMagnetGloves(string id) : base(id) {
-			/*SetName("Magnetic Gloves");
-			SetDescription("Magnetically attractive!");
-			SetMessage("You got the Magnetic Gloves! " +
-						"Their magnetic might attracts and repels.");
-			SetSprite(GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH);
-			MaxLevel		= Item.Level1;
-			HoldType = RewardHoldTypes.TwoHands;*/
-
-			Flags = 
-				WeaponFlags.UsableWhileJumping | 
+		public ItemMagnetGloves() {
+			Flags =
+				WeaponFlags.UsableWhileJumping |
 				WeaponFlags.UsableWhileInHole;
-			
+
 			polarity = Polarity.South;
 			polaritySprites = new ISprite[2];
-			polaritySprites[(int) Polarity.North] = GameData.SPR_ITEM_ICON_MAGNET_GLOVES_NORTH;
-			polaritySprites[(int) Polarity.South] = GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH;
+			polaritySprites[(int) Polarity.North] =
+				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_NORTH;
+			polaritySprites[(int) Polarity.South] =
+				GameData.SPR_ITEM_ICON_MAGNET_GLOVES_SOUTH;
 		}
 
 

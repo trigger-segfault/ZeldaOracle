@@ -12,9 +12,9 @@ namespace ZeldaOracle.Game.ResourceData {
 		/// <summary>The name of the resource data.</summary>
 		private string name;
 		/// <summary>The type of the resource data.</summary>
-		private Type type;
+		protected Type type;
 		/// <summary>The properties of the resource data.</summary>
-		private Properties properties;
+		protected Properties properties;
 		
 
 		//-----------------------------------------------------------------------------
@@ -24,6 +24,7 @@ namespace ZeldaOracle.Game.ResourceData {
 		/// <summary>Constructs the base resource data.</summary>
 		public BaseResourceData() {
 			name		= "";
+			type		= OutputType;
 			properties	= new Properties(this);
 		}
 
@@ -42,6 +43,17 @@ namespace ZeldaOracle.Game.ResourceData {
 
 
 		//-----------------------------------------------------------------------------
+		// Abstract Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes data after a change in the final type.<para/>
+		/// This needs to be extended for each non-abstract class in order
+		/// to make use of compile-time generic arguments within
+		/// ResourceDataInitializing.InitializeData.</summary>
+		public abstract void InitializeData(Type previousType);
+
+
+		//-----------------------------------------------------------------------------
 		// Abstract Properties
 		//-----------------------------------------------------------------------------
 
@@ -53,8 +65,8 @@ namespace ZeldaOracle.Game.ResourceData {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets or sets the name of the base resource data.</summary>
-		public string Name {
+		/// <summary>Gets or sets the resource name of the base resource data.</summary>
+		public string ResourceName {
 			get { return name; }
 			set { name = value; }
 		}
@@ -63,7 +75,7 @@ namespace ZeldaOracle.Game.ResourceData {
 		public Type Type {
 			get { return type; }
 			set {
-				if ((type == null && value != null) || !type.Equals(value)) {
+				if (type != value) {
 					// Make sure we extend the correct type and don't go backwards.
 					if (type != null) {
 						if (value == null || !type.IsAssignableFrom(value))
@@ -72,10 +84,8 @@ namespace ZeldaOracle.Game.ResourceData {
 					}
 					Type previousType = type;
 					type = value;
-					// Initialize the item's new types.
-					ResourceDataInitializing.InitializeData(
-						OutputType, this, type, previousType);
-					//ItemDataInitializing.InitializeItem(this, previousType);
+					// Initialize the resource's new types
+					InitializeData(previousType);
 				}
 			}
 		}

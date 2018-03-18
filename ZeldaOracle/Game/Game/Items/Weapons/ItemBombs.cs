@@ -15,26 +15,10 @@ namespace ZeldaOracle.Game.Items {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		//public ItemBombs() : base("bombs") {
-		public ItemBombs(string id) : base(id) {
-			/*SetName("Bombs");
-			SetDescription("Very explosive.");
-			SetMessage(
-				"You got <red>Bombs<red>! Use them to blow open false walls. " +
-					"Press <a> or <b> to set a Bomb. " +
-					"If you also press <dpad>, you can throw the Bomb.",
-				"You can now hold more <red>Bombs<red> than before!",
-				"You can now hold even more <red>Bombs<red> than before!");
-			SetSprite(GameData.SPR_ITEM_ICON_BOMB);
-			SetAmmo("bombs");
-			SetMaxAmmo(10, 20, 30);
-			MaxLevel	= Item.Level3;
-			HoldType    = RewardHoldTypes.TwoHands;
-			IncreaseAmmoOnLevelUp = true;*/
-
+		public ItemBombs() {
 			Flags = WeaponFlags.UsableWhileInHole;
 
-			bombTracker	= new EntityTracker<Bomb>(1);
+			bombTracker = new EntityTracker<Bomb>(1);
 		}
 
 
