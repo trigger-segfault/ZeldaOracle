@@ -883,6 +883,7 @@ namespace ZeldaOracle.Game.Worlds {
 				writer.Write((int) tile.SheetLocation.Y);
 				WriteProperties(writer, tile.Properties);
 				WriteEvents(writer, tile.Events);
+				//WriteTriggers(writer, tile.Triggers);
 			}
 			else {
 				writer.Write((int) -1);
@@ -914,6 +915,18 @@ namespace ZeldaOracle.Game.Worlds {
 			foreach (Event evnt in events.GetDefinedEvents()) {
 				WriteString(writer, evnt.Name);
 				WriteString(writer, evnt.InternalScriptID);
+			}
+		}
+
+		private void WriteTriggers(BinaryWriter writer, TriggerCollection triggers) {
+			writer.Write(triggers.Count);
+			foreach (Trigger trigger in triggers) {
+				WriteString(writer, trigger.Name);
+				WriteString(writer, trigger.Description);
+				WriteString(writer, trigger.EventType.Name);
+				writer.Write(trigger.InitiallyOn);
+				writer.Write(trigger.FireOnce);
+				WriteScript(writer, trigger.Script);
 			}
 		}
 

@@ -8,8 +8,6 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripting {
 	
-	public delegate void PropertyAction(IPropertyObject sender, object value);
-
 	/// <summary>The possible raw data types for a property.</summary>
 	[Serializable]
 	public enum PropertyType {
@@ -22,11 +20,20 @@ namespace ZeldaOracle.Common.Scripting {
 	}
 
 	
+	//public class PropertyValue {
+	//	/// <summary>The data type of the property.</summary>
+	//	public PropertyType Type { get; set; }
+	//	/// <summary>The object value for the property. For lists, this is used to store the child count as an integer.</summary>
+	//	public object ObjectValue { get; set; }
+	//}
+	
 	public class PropertyValue {
-		/// <summary>The data type of the property.</summary>
-		public PropertyType Type { get; set; }
 		/// <summary>The object value for the property. For lists, this is used to store the child count as an integer.</summary>
-		public object ObjectValue { get; set; }
+		private object objectValue;
+
+		public PropertyValue(PropertyValue copy) {
+			this.objectValue = copy.objectValue;
+		}
 	}
 
 	/// <summary>A proprety represents a piece of data that can be represented

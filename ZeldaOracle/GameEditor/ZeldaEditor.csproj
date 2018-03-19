@@ -113,6 +113,7 @@
     <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
+    <Compile Include="Control\ScriptCompileService.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
     <Compile Include="EditorCommands.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\AnglePropertyEditor.cs" />

@@ -116,7 +116,6 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, ActionTileData> actionTileData;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, Zone> zones;
-		private static Dictionary<string, PropertyAction> propertyActions;
 
 		// SOUNDS:
 		/// <summary>The collection of loaded sound effects.</summary>
@@ -204,8 +203,6 @@ namespace ZeldaOracle.Common.Content {
 			tilesets			= new Dictionary<string, Tileset>();
 			zones				= new Dictionary<string, Zone>();
 
-			propertyActions		= new Dictionary<string, PropertyAction>();
-
 			// Settings
 			verboseOutput		= false;
 
@@ -226,10 +223,9 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			resourceDictionaries[typeof(TileData)]			= tileData;
-			resourceDictionaries[typeof(ActionTileData)]		= actionTileData;
+			resourceDictionaries[typeof(ActionTileData)]	= actionTileData;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(Zone)]				= zones;
-			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
 			resourceDictionaries[typeof(PaletteDictionary)] = paletteDictionaries;
 			resourceDictionaries[typeof(Palette)]           = palettes;
 		}
@@ -255,7 +251,6 @@ namespace ZeldaOracle.Common.Content {
 			actionTileData = null;
 			tilesets = null;
 			zones = null;
-			propertyActions = null;
 			paletteDictionaries = null;
 			foreach (var pair in palettes) {
 				pair.Value.Dispose();

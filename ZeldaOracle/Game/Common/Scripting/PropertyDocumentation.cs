@@ -7,9 +7,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripting {
 	
-	/// <summary>
-	/// PropertyDocumentation
-	/// </summary>
+	/// <summary>Information about a property.</summary>
 	public class PropertyDocumentation {
 		private string	readableName; // A name that's more human-readable
 		private string	editorType;

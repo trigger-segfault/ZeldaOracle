@@ -35,6 +35,7 @@ using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Graphics;
 using ZeldaEditor.Util;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.Control {
 
@@ -139,6 +140,8 @@ namespace ZeldaEditor.Control {
 		private bool                        noScriptErrors;
 		private bool                        noScriptWarnings;
 
+		private ScriptCompileService		scriptCompileService;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -198,6 +201,8 @@ namespace ZeldaEditor.Control {
 			this.merge						= false;
 
 			this.resourcesLoaded			= false;
+
+			scriptCompileService = new ScriptCompileService();
 		}
 
 		public void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
@@ -428,7 +433,7 @@ namespace ZeldaEditor.Control {
 				PushAction(new ActionOpenWorld(), ActionExecution.None);
 				IsModified          = worldFileLocatedResource;
 
-				CheckAllScriptsIndividually();
+				//CheckAllScriptsIndividually();
 			}
 			else {
 				// Display the error.
@@ -789,202 +794,174 @@ namespace ZeldaEditor.Control {
 		// Scripts
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Compile a script in a background task.</summary>
-		public void CompileScriptAsync(Script script,
-			ScriptCompileCallback callback, bool scriptEditor)
-		{
-			if (!CancelCompilation(scriptEditor))
-				return;
+		public void OnScriptRenamed(string oldName, string newName) {
+			scriptCompileService.CancelAllTasks();
+			needsRecompiling = true;
 
-			compileCallback = callback;
-			compileTask = Task.Run(delegate() {
-				compileThread = Thread.CurrentThread;
-				try {
-					int scriptStart;
-					string code = world.ScriptManager.CreateTestScriptCode(
-						script, script.Code, out scriptStart);
-					return world.ScriptManager.Compile(code, false, scriptStart);
-				}
-				catch (ThreadAbortException) {
-					return null;
-				}
-			});
-			if (!scriptEditor)
-				editorWindow.SetStatusBarTask("Compiling scripts...");
-		}
-
-		public void ScriptRenamed(string oldName, string newName) {
-			CancelCompilation();
-
-			if (scriptsToRecompile != null && oldName != null && newName != null && scriptsToRecompile.Contains(oldName)) {
-				scriptsToRecompile.Remove(oldName);
-				scriptsToRecompile.Add(newName);
-			}
-			foreach (Script script in world.ScriptManager.Scripts.Values) {
-				if (!scriptsToRecompile.Contains(script.ID)) {
-					if (ScriptCallsScript(script, oldName) || ScriptCallsScript(script, newName)) {
-						scriptsToRecompile.Add(script.ID);
-					}
-				}
-			}
-			foreach (Event evnt in world.GetDefinedEvents()) {
-				if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
-					Script script = evnt.Script;
-					if (!eventsToRecompile.Contains(evnt)) {
-						if (ScriptCallsScript(script, oldName) || ScriptCallsScript(script, newName)) {
-							eventsToRecompile.Add(evnt);
-						}
-					}
-				}
-			}
-			if (HasScriptsToCheck)
-				needsRecompiling = true;
+			//CancelCompilation();
+			//
+			//if (scriptsToRecompile != null && oldName != null && newName != null && scriptsToRecompile.Contains(oldName)) {
+			//	scriptsToRecompile.Remove(oldName);
+			//	scriptsToRecompile.Add(newName);
+			//}
+			//foreach (Script script in world.ScriptManager.Scripts.Values) {
+			//	if (!scriptsToRecompile.Contains(script.ID)) {
+			//		if (ScriptCallsScript(script, oldName) || ScriptCallsScript(script, newName)) {
+			//			scriptsToRecompile.Add(script.ID);
+			//		}
+			//	}
+			//}
+			//foreach (Event evnt in world.GetDefinedEvents()) {
+			//	if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
+			//		Script script = evnt.Script;
+			//		if (!eventsToRecompile.Contains(evnt)) {
+			//			if (ScriptCallsScript(script, oldName) || ScriptCallsScript(script, newName)) {
+			//				eventsToRecompile.Add(evnt);
+			//			}
+			//		}
+			//	}
+			//}
+			//if (HasScriptsToCheck)
+			//	needsRecompiling = true;
 		}
 
 		// Internal -------------------------------------------------------------------
 
-		private void CheckAllScriptsIndividually() {
-			foreach (Script script in world.ScriptManager.Scripts.Values) {
-				if (!scriptsToRecompile.Contains(script.ID)) {
-					scriptsToRecompile.Add(script.ID);
-				}
-			}
-			foreach (Event evnt in world.GetDefinedEvents()) {
-				if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
-					Script script = evnt.Script;
-					if (!eventsToRecompile.Contains(evnt)) {
-						eventsToRecompile.Add(evnt);
-					}
-				}
-			}
-		}
-
 		private void UpdateScriptCompiling() {
-			if (compileTask != null) {
-				if (compileTask.IsCompleted) {
-					compileCallback(compileTask.Result);
-					scriptStarts.Clear();
-					compileThread = null;
-					compileTask = null;
-				}
+			if (scriptCompileService.IsCompiling) {
+				scriptCompileService.UpdateScriptCompiling();
 			}
-			else if (IsWorldOpen) {
-				if (needsRecompiling) {
-					CompileAllScriptsAsync(OnCompileCompleted);
-				}
-				else if (HasScriptsToCheck) {
-					CompileNextScript();
-				}
-			}
-			else {
-				needsRecompiling = false;
+			else if (IsWorldOpen && needsRecompiling) {
+				CompileTask task = scriptCompileService.CompileAllScripts(world);
+				task.Completed += OnCompleteCompiling;
 			}
 		}
 
-		private void CompileAllScriptsAsync(ScriptCompileCallback callback) {
-			compileCallback = callback;
-			compileTask = Task.Run(() => {
-				compileThread = Thread.CurrentThread;
-				try {
-					return world.ScriptManager.CompileScripts(world, true, scriptStarts);
-				}
-				catch (ThreadAbortException) {
-					return null;
-				}
-			});
-			editorWindow.SetStatusBarTask("Compiling scripts...");
-			currentCompilingScript = null;
-		}
-
-		private void OnCompileCompleted(ScriptCompileResult result) {
+		private void OnCompleteCompiling(ScriptCompileResult result) {
 			needsRecompiling = false;
-			compileTask = null;
-			compileThread = null;
-
 			world.ScriptManager.RawAssembly = result.RawAssembly;
-
-			Console.WriteLine("Compiled scripts with " + result.Errors.Count + " errors and " + result.Warnings.Count + " warnings.");
-
-			noScriptErrors = !result.Errors.Any();
-			noScriptWarnings = !result.Warnings.Any();
-
-			if (!HasScriptsToCheck || (noScriptErrors && noScriptWarnings)) {
-				editorWindow.ClearStatusBarTask();
-				editorWindow.WorldTreeView.RefreshScripts(true, true);
-				scriptsToRecompile.Clear();
-				eventsToRecompile.Clear();
-			}
+			
+			LogLevel level = LogLevel.Notice;
+			if (result.Errors.Count > 0)
+				level = LogLevel.Error;
+			else if (result.Warnings.Count > 0)
+				level = LogLevel.Warning;
+			Logs.Scripts.LogMessage(level,
+				"Compiled scripts with {0} errors and {0} warnings",
+				result.Errors.Count, result.Warnings.Count);
 		}
 
-		private void OnCompileScriptCompleted(ScriptCompileResult result) {
-			compileTask = null;
-			compileThread = null;
+		//private void CompileAllScriptsAsync(ScriptCompileCallback callback) {
+		//	Logs.Scripts.LogNotice("Compiling scripts...");
+		//	compileCallback = callback;
+		//	compileTask = Task.Run(() => {
+		//		compileThread = Thread.CurrentThread;
+		//		try {
+		//			return world.ScriptManager.CompileScripts(world, true, scriptStarts);
+		//		}
+		//		catch (ThreadAbortException) {
+		//			return null;
+		//		}
+		//	});
+		//	editorWindow.SetStatusBarTask("Compiling scripts...");
+		//	currentCompilingScript = null;
+		//}
 
-			currentCompilingScript.Errors   = result.Errors;
-			currentCompilingScript.Warnings = result.Warnings;
-			currentCompilingScript = null;
+		//private void OnCompileCompleted(ScriptCompileResult result) {
+		//	needsRecompiling = false;
+		//	compileTask = null;
+		//	compileThread = null;
 
-			if (!HasScriptsToCheck) {
-				editorWindow.ClearStatusBarTask();
-				editorWindow.WorldTreeView.RefreshScripts(true, true);
-			}
-		}
+		//	world.ScriptManager.RawAssembly = result.RawAssembly;
 
-		private void CompileNextScript() {
-			Script script = null;
-			if (scriptsToRecompile.Any()) {
-				string first = scriptsToRecompile.First();
-				script = world.GetScript(first);
-				scriptsToRecompile.Remove(first);
-			}
-			else if (eventsToRecompile.Any()) {
-				Event first = eventsToRecompile.First();
-				script = eventsToRecompile.First().Script;
-				eventsToRecompile.Remove(first);
-			}
-			if (script != null) {
-				CompileScriptAsync(script, OnCompileScriptCompleted, false);
-				currentCompilingScript = script;
-			}
-		}
+		//	LogLevel level = LogLevel.Notice;
+		//	if (result.Errors.Count > 0)
+		//		level = LogLevel.Error;
+		//	else if (result.Warnings.Count > 0)
+		//		level = LogLevel.Warning;
+		//	Logs.Scripts.LogMessage(level,
+		//		"Compiled scripts with {0} errors and {0} warnings",
+		//		result.Errors.Count, result.Warnings.Count);
 
+		//	noScriptErrors = !result.Errors.Any();
+		//	noScriptWarnings = !result.Warnings.Any();
 
-		private bool CancelCompilation(bool scriptEditor = false) {
-			if (compileTask != null && !compileTask.IsCompleted && compileThread != null) {
-				if (scriptEditor || !isCompilingForScriptEditor) {
-					compileThread.Abort();
-					compileThread = null;
-					compileTask = null;
-					currentCompilingScript = null;
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
-			return true;
-		}
+		//	if (!HasScriptsToCheck || (noScriptErrors && noScriptWarnings)) {
+		//		editorWindow.ClearStatusBarTask();
+		//		editorWindow.WorldTreeView.RefreshScripts(true, true);
+		//		scriptsToRecompile.Clear();
+		//		eventsToRecompile.Clear();
+		//	}
+		//}
 
-		private bool ScriptCallsScript(Script script, string scriptName) {
-			if (scriptName == null)
-				return false;
-			int index = script.Code.IndexOf(scriptName + "(");
-			if (index != -1) {
-				if (index != 0) {
-					char c = script.Code[index - 1];
-					if (!char.IsLetterOrDigit(c) && c != '_')
-						return true;
-				}
-				else {
-					return true;
-				}
-			}
-			return false;
-		}
+		//private void OnCompileScriptCompleted(ScriptCompileResult result) {
+		//	compileTask = null;
+		//	compileThread = null;
 
-		private bool HasScriptsToCheck {
-			get { return scriptsToRecompile.Any() || eventsToRecompile.Any(); }
-		}
+		//	currentCompilingScript.Errors   = result.Errors;
+		//	currentCompilingScript.Warnings = result.Warnings;
+		//	currentCompilingScript = null;
+
+		//	if (!HasScriptsToCheck) {
+		//		editorWindow.ClearStatusBarTask();
+		//		editorWindow.WorldTreeView.RefreshScripts(true, true);
+		//	}
+		//}
+
+		//private void CompileNextScript() {
+		//	Script script = null;
+		//	if (scriptsToRecompile.Any()) {
+		//		string first = scriptsToRecompile.First();
+		//		script = world.GetScript(first);
+		//		scriptsToRecompile.Remove(first);
+		//	}
+		//	else if (eventsToRecompile.Any()) {
+		//		Event first = eventsToRecompile.First();
+		//		script = eventsToRecompile.First().Script;
+		//		eventsToRecompile.Remove(first);
+		//	}
+		//	if (script != null) {
+		//		CompileScriptAsync(script, OnCompileScriptCompleted, false);
+		//		currentCompilingScript = script;
+		//	}
+		//}
+
+		//private bool CancelCompilation(bool scriptEditor = false) {
+		//	if (compileTask != null && !compileTask.IsCompleted && compileThread != null) {
+		//		if (scriptEditor || !isCompilingForScriptEditor) {
+		//			compileThread.Abort();
+		//			compileThread = null;
+		//			compileTask = null;
+		//			currentCompilingScript = null;
+		//			return true;
+		//		}
+		//		else {
+		//			return false;
+		//		}
+		//	}
+		//	return true;
+		//}
+
+		//private bool ScriptCallsScript(Script script, string scriptName) {
+		//	if (scriptName == null)
+		//		return false;
+		//	int index = script.Code.IndexOf(scriptName + "(");
+		//	if (index != -1) {
+		//		if (index != 0) {
+		//			char c = script.Code[index - 1];
+		//			if (!char.IsLetterOrDigit(c) && c != '_')
+		//				return true;
+		//		}
+		//		else {
+		//			return true;
+		//		}
+		//	}
+		//	return false;
+		//}
+
+		//private bool HasScriptsToCheck {
+		//	get { return scriptsToRecompile.Any() || eventsToRecompile.Any(); }
+		//}
 
 		//-----------------------------------------------------------------------------
 		// Events
@@ -1439,6 +1416,11 @@ namespace ZeldaEditor.Control {
 
 		public bool IsResourcesLoaded {
 			get { return resourcesLoaded; }
+		}
+
+		public ScriptCompileService ScriptCompileService {
+			get { return scriptCompileService; }
+			set { scriptCompileService = value; }
 		}
 	}
 }

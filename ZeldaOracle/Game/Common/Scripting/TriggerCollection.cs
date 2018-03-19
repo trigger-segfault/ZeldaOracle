@@ -66,5 +66,9 @@ namespace ZeldaOracle.Common.Scripting {
 			for (int i = 0; i < triggers.Count; i++)
 				yield return triggers[i];
 		}
+
+		public int Count {
+			get { return triggers.Count; }
+		}
 	}
 }

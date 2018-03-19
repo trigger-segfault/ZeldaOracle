@@ -44,7 +44,8 @@ namespace ZeldaOracle.Game.Tiles {
 			// No subtype to initialize
 			if (data.Type == null)
 				return;
-			
+
+			//Delegate.CreateDelegate(
 			// Get the correct inheritance types
 			Type[] types = null;
 			if (previousType != null)

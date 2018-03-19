@@ -21,6 +21,14 @@ namespace ZeldaOracle.Common.Scripting {
 				return Event.ReadableName;
 			return "(None)";
 		}
+
+		public string Name {
+			get {
+				if (Event != null)
+					return Event.Name;
+				return "";
+			}
+		}
 	}
 
 	public class Trigger {
@@ -118,6 +126,11 @@ namespace ZeldaOracle.Common.Scripting {
 		public string Name {
 			get { return name; }
 			set { name = value; }
+		}
+
+		public string Description {
+			get { return description; }
+			set { description = value; }
 		}
 
 		public TriggerEvent EventType {

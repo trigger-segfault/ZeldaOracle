@@ -278,7 +278,11 @@ namespace ZeldaEditor.Windows {
 		private void BeginCompilingScript() {
 			script.Code = editor.Text;
 
-			editorControl.CompileScriptAsync(script, OnCompileComplete, true);
+			CompileTask task = editorControl.ScriptCompileService.CompileSingleScript(
+				script, editorControl.World);
+			task.Completed += OnCompileComplete;
+
+			//editorControl.CompileScriptAsync(script, OnCompileComplete, true);
 
 			//compileTask = ScriptEditorCompiler.CompileScriptAsync(script);
 			needsRecompiling = false;

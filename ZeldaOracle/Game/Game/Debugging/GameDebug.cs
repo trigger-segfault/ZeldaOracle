@@ -101,9 +101,9 @@ namespace ZeldaOracle.Game.Debugging {
 
 			// Allow the player to swim in water and ocean
 			player.SwimmingSkills =
-				PlayerSwimmingSkills.CanSwimInWater;
-				//PlayerSwimmingSkills.CanSwimInWater |
-				//PlayerSwimmingSkills.CanSwimInOcean;
+				//PlayerSwimmingSkills.CanSwimInWater;
+				PlayerSwimmingSkills.CanSwimInWater |
+				PlayerSwimmingSkills.CanSwimInOcean;
 
 			// Equip starting weapons
 			EquipStartWeapon(DevSettings.Inventory.A, Inventory.SLOT_A);

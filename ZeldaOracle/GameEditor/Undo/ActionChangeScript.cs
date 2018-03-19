@@ -70,10 +70,10 @@ namespace ZeldaEditor.Undo {
 			switch (mode) {
 			case ChangeScriptModes.DefineScript:
 			case ChangeScriptModes.DuplicateScript:
-				editorControl.ScriptRenamed(null, scriptName);
+				editorControl.OnScriptRenamed(null, scriptName);
 				break;
 			case ChangeScriptModes.UndefineScript:
-				editorControl.ScriptRenamed(scriptName, null);
+				editorControl.OnScriptRenamed(scriptName, null);
 				break;
 			}
 			if (mode != ChangeScriptModes.ChangeScript) {
@@ -89,14 +89,14 @@ namespace ZeldaEditor.Undo {
 			case ChangeScriptModes.DefineScript:
 			case ChangeScriptModes.DuplicateScript:
 				editorControl.World.RemoveScript(scriptName);
-				editorControl.ScriptRenamed(scriptName, null);
+				editorControl.OnScriptRenamed(scriptName, null);
 				break;
 			case ChangeScriptModes.UndefineScript:
 				Script script = new Script();
 				script.ID = scriptName;
 				script.Code = oldCode;
 				editorControl.World.AddScript(script);
-				editorControl.ScriptRenamed(null, scriptName);
+				editorControl.OnScriptRenamed(null, scriptName);
 				break;
 			}
 			if (mode != ChangeScriptModes.ChangeScript) {
@@ -115,11 +115,11 @@ namespace ZeldaEditor.Undo {
 				script.ID = scriptName;
 				script.Code = newCode;
 				editorControl.World.AddScript(script);
-				editorControl.ScriptRenamed(null, scriptName);
+				editorControl.OnScriptRenamed(null, scriptName);
 				break;
 			case ChangeScriptModes.UndefineScript:
 				editorControl.World.RemoveScript(scriptName);
-				editorControl.ScriptRenamed(scriptName, null);
+				editorControl.OnScriptRenamed(scriptName, null);
 				break;
 			}
 			if (mode != ChangeScriptModes.ChangeScript) {

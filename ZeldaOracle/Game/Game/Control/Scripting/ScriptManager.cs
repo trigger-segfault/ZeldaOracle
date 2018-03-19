@@ -209,7 +209,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 
 		//-----------------------------------------------------------------------------
-		// Code
+		// Code Generation
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Creates code used in compiling all scripts.</summary>
@@ -266,6 +266,13 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			code += CreateClosingClassString();
 
 			return code;
+		}
+
+		/// <summary>Generates the code used for test-compiling a single script.
+		/// Other scripts are included as method stubs.</summary>
+		public string CreateTestScriptCode(Script script) {
+			int scriptStart;
+			return CreateTestScriptCode(script, script.Code, out scriptStart);
 		}
 
 		/// <summary>Generates the code used for test-compiling a single script.
