@@ -13,6 +13,7 @@ using ZeldaEditor.Scripting;
 using ZeldaEditor.Util;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Control.Scripting;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>
@@ -299,34 +300,39 @@ namespace ZeldaEditor.Windows {
 				}
 			}
 			// Begin recompiling
-			else if (needsRecompiling && !editorControl.IsBusyCompiling) {
+			else if (needsRecompiling) {
 				BeginCompilingScript();
 			}
 		}
 
 		/// <summary>Called once an asyncronous compiling task has completed.
 		/// </summary>
-		private void OnCompileComplete(ScriptCompileResult results) {
-			Dispatcher.Invoke(() => {
-				// Update the script object.
-				script.Code             = editor.Text;
-				script.Errors           = results.Errors;
-				script.Warnings         = results.Warnings;
+		private void OnCompileComplete(ScriptCompileResult result) {
+			// Update the script object
+			script.Code      = editor.Text;
+			script.Errors    = result.Errors;
+			script.Warnings  = result.Warnings;
 
-				// Update the error message status-strip.
-				if (script.HasErrors) {
-					displayedError = script.Errors[0];
-					statusErrorMessage.Text  = displayedError.ToString();
-					statusError.Visibility = Visibility.Visible;
-				}
-				else {
-					displayedError = null;
-					statusErrorMessage.Text  = "";
-					statusError.Visibility = Visibility.Hidden;
-				}
+			// Update the error message status-strip
+			if (script.HasErrors) {
+				displayedError = script.Errors[0];
+				statusErrorMessage.Text  = displayedError.ToString();
+				statusError.Visibility = Visibility.Visible;
+			}
+			else {
+				displayedError = null;
+				statusErrorMessage.Text  = "";
+				statusError.Visibility = Visibility.Hidden;
+			}
 
-				//if (!script.IsHidden)
-			});
+			LogLevel level = LogLevel.Notice;
+			if (result.Errors.Count > 0)
+				level = LogLevel.Error;
+			else if (result.Warnings.Count > 0)
+				level = LogLevel.Warning;
+			Logs.Scripts.LogMessage(level,
+				"Compiled script with {0} errors and {0} warnings",
+				result.Errors.Count, result.Warnings.Count);
 		}
 	}
 }

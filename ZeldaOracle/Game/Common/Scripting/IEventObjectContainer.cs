@@ -9,6 +9,6 @@ namespace ZeldaOracle.Common.Scripting {
 	public interface IEventObjectContainer : IPropertyObjectContainer {
 
 		/// <summary>Gets the collection of objects containing Zelda properties and events including this one.</summary>
-		IEnumerable<IEventObject> GetEventObjects();
+		IEnumerable<ITriggerObject> GetEventObjects();
 	}
 }

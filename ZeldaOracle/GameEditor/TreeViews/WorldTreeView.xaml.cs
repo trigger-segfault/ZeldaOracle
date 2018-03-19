@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Control;
-//using ZeldaEditor.PropertiesEditor.CustomEditors;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ZeldaEditor.Util;
@@ -20,20 +17,54 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaEditor.WinForms;
 
 namespace ZeldaEditor.TreeViews {
+	
+	/// <summary>Commands used by the WorldTreeView.</summary>
+	public static class WorldTreeViewCommands {
+		public static readonly RoutedUICommand Rename = new RoutedUICommand(
+			"RenameLevel", "Rename Level", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand Delete = new RoutedUICommand(
+			"DeleteLevel", "Delete Level", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand Duplicate = new RoutedUICommand(
+			"DuplicateLevel", "Duplicate Level", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand EditProperties = new RoutedUICommand(
+			"EditProperties", "Properties", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand CreateLevel = new RoutedUICommand(
+			"CreateLevel", "Create Level", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand ResizeLevel = new RoutedUICommand(
+			"ResizeLevel", "Resize Level", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand ShiftLevel = new RoutedUICommand(
+			"ShiftLevel", "Shift Rooms", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand Edit = new RoutedUICommand(
+			"Edit", "Edit", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand MoveDown = new RoutedUICommand(
+			"MoveDown", "Move Down", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand MoveUp = new RoutedUICommand(
+			"MoveUp", "Move Up", typeof(EditorCommands));
+
+		public static readonly RoutedUICommand GoToOwner = new RoutedUICommand(
+			"GoToOwner", "Go to Owner", typeof(EditorCommands));
+	}
+
 	/// <summary>
 	/// Interaction logic for WorldTreeView.xaml
 	/// </summary>
-	public partial class WorldTreeView : UserControl {
-
+	public partial class WorldTreeView : UserControl {		
 
 		private EditorControl editorControl;
 		private ImageTreeViewItem worldNode;
 		private ImageTreeViewItem levelsNode;
 		private ImageTreeViewItem areasNode;
 		private ImageTreeViewItem scriptsNode;
-
 		private TreeViewItem internalScriptsNode;
-
 		private TreeViewItem customScriptWorldNode;
 		private TreeViewItem customScriptAreaNode;
 		private Dictionary<string, TreeViewItem> customScriptLevelNodes;
@@ -46,6 +77,7 @@ namespace ZeldaEditor.TreeViews {
 
 		private WpfFocusMessageFilter messageFilter;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -55,6 +87,7 @@ namespace ZeldaEditor.TreeViews {
 			editorControl = null;
 			worldNode = null;
 
+			// Initialize context menus
 			InitWorldContextMenu();
 			InitLevelContextMenu();
 			InitAreaContextMenu();
@@ -62,11 +95,6 @@ namespace ZeldaEditor.TreeViews {
 			InitEventContextMenu();
 
 			customScriptLevelNodes = new Dictionary<string, TreeViewItem>();
-			// Open nodes on double click.
-			// TODO: Reimplement
-			/*NodeMouseDoubleClick += delegate(object sender, TreeNodeMouseClickEventArgs e) {
-				OpenNode(e.Node);
-			};*/
 
 			/*LabelEdit = true; // Allows the editing of labels.
 
@@ -98,8 +126,8 @@ namespace ZeldaEditor.TreeViews {
 
 			treeView.Items.Clear();
 
-			this.messageFilter = new WpfFocusMessageFilter(treeView);
-			this.messageFilter.AddFilter();
+			messageFilter = new WpfFocusMessageFilter(treeView);
+			messageFilter.AddFilter();
 		}
 
 		private void InitWorldContextMenu() {
@@ -108,47 +136,51 @@ namespace ZeldaEditor.TreeViews {
 			menuItem = new ImageMenuItem(EditorImages.Rename, "Rename");
 			menuItem.Click += OnRename;
 			contextMenuWorld.Items.Add(menuItem);
-			menuItem = new ImageMenuItem(EditorImages.Edit, "Edit");
-			menuItem.Click += OnEdit;
+			menuItem = new ImageMenuItem(EditorImages.Edit, "Properties...");
+			menuItem.Click += OnEditProperties;
 			contextMenuWorld.Items.Add(menuItem);
 		}
 
 		private void InitLevelContextMenu() {
 			ImageMenuItem menuItem;
+
 			contextMenuLevel = new ContextMenu();
+
 			menuItem = new ImageMenuItem(EditorImages.LevelAdd, "Create Level");
-			menuItem.Click += OnAdd;
+			menuItem.Command = WorldTreeViewCommands.CreateLevel;
 			contextMenuLevel.Items.Add(menuItem);
 			menuItem = new ImageMenuItem(EditorImages.LevelDuplicate, "Duplicate");
-			menuItem.Click += OnDuplicate;
+			menuItem.Command = WorldTreeViewCommands.Duplicate;
 			contextMenuLevel.Items.Add(menuItem);
 
 			contextMenuLevel.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.LevelDelete, "Delete");
-			menuItem.Click += OnDelete;
+			menuItem.Command = WorldTreeViewCommands.Delete;
 			contextMenuLevel.Items.Add(menuItem);
 
 			contextMenuLevel.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.Rename, "Rename");
-			menuItem.Click += OnRename;
+			menuItem.Command = WorldTreeViewCommands.Rename;
 			contextMenuLevel.Items.Add(menuItem);
 
 			contextMenuLevel.Items.Add(new Separator());
 			
 			menuItem = new ImageMenuItem(EditorImages.LevelResize, "Resize");
-			menuItem.Click += OnResizeLevel;
+			menuItem.Command = WorldTreeViewCommands.ResizeLevel;
 			contextMenuLevel.Items.Add(menuItem);
-
 			menuItem = new ImageMenuItem(EditorImages.LevelShift, "Shift");
-			menuItem.Click += OnShiftLevel;
+			menuItem.Command = WorldTreeViewCommands.ShiftLevel;
 			contextMenuLevel.Items.Add(menuItem);
 
 			contextMenuLevel.Items.Add(new Separator());
 
+			menuItem = new ImageMenuItem(EditorImages.Property, "Properties");
+			menuItem.Command = WorldTreeViewCommands.EditProperties;
+			contextMenuLevel.Items.Add(menuItem);
 			menuItem = new ImageMenuItem(EditorImages.Edit, "Edit");
-			menuItem.Click += OnEdit;
+			menuItem.Command = WorldTreeViewCommands.EditProperties;
 			contextMenuLevel.Items.Add(menuItem);
 		}
 
@@ -164,76 +196,82 @@ namespace ZeldaEditor.TreeViews {
 
 		private void InitAreaContextMenu() {
 			ImageMenuItem menuItem;
+			
 			contextMenuArea = new ContextMenu();
+
 			menuItem = new ImageMenuItem(EditorImages.AreaAdd, "Create Area");
-			menuItem.Click += OnAdd;
+			menuItem.Click += OnCreateArea;
 			contextMenuArea.Items.Add(menuItem);
 			menuItem = new ImageMenuItem(EditorImages.AreaDuplicate, "Duplicate");
-			menuItem.Click += OnDuplicate;
+			menuItem.Command = WorldTreeViewCommands.Duplicate;
 			contextMenuArea.Items.Add(menuItem);
 
 			contextMenuArea.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.AreaDelete, "Delete");
-			menuItem.Click += OnDelete;
+			menuItem.Command = WorldTreeViewCommands.Delete;
 			contextMenuArea.Items.Add(menuItem);
 
 			contextMenuArea.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.Rename, "Rename");
-			menuItem.Click += OnRename;
+			menuItem.Command = WorldTreeViewCommands.Rename;
 			contextMenuArea.Items.Add(menuItem);
 
 			contextMenuArea.Items.Add(new Separator());
 
-			menuItem = new ImageMenuItem(EditorImages.Edit, "Edit");
-			menuItem.Click += OnEdit;
+			menuItem = new ImageMenuItem(EditorImages.Property, "Properties");
+			menuItem.Command = WorldTreeViewCommands.EditProperties;
 			contextMenuArea.Items.Add(menuItem);
 		}
 
 
 		private void InitScriptContextMenu() {
 			ImageMenuItem menuItem;
+			
 			contextMenuScript = new ContextMenu();
+
 			menuItem = new ImageMenuItem(EditorImages.ScriptAdd, "Create Script");
-			menuItem.Click += OnAdd;
+			menuItem.Click += OnCreateScript;
 			contextMenuScript.Items.Add(menuItem);
+
 			menuItem = new ImageMenuItem(EditorImages.ScriptDuplicate, "Duplicate");
-			menuItem.Click += OnDuplicate;
+			menuItem.Command = WorldTreeViewCommands.Duplicate;
 			contextMenuScript.Items.Add(menuItem);
 
 			contextMenuScript.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.ScriptDelete, "Delete");
-			menuItem.Click += OnDelete;
+			menuItem.Command = WorldTreeViewCommands.Delete;
 			contextMenuScript.Items.Add(menuItem);
 
 			contextMenuScript.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.Rename, "Rename");
-			menuItem.Click += OnRename;
+			menuItem.Command = WorldTreeViewCommands.Rename;
 			contextMenuScript.Items.Add(menuItem);
 
 			contextMenuScript.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.Edit, "Edit");
-			menuItem.Click += OnEdit;
+			menuItem.Command = WorldTreeViewCommands.Edit;
 			contextMenuScript.Items.Add(menuItem);
 		}
 
 		private void InitEventContextMenu() {
 			ImageMenuItem menuItem;
 			contextMenuEvent = new ContextMenu();
-			menuItem = new ImageMenuItem(EditorImages.GotoOwner, "Goto Owner");
-			menuItem.Click += OnGotoOwner;
+			menuItem = new ImageMenuItem(EditorImages.GotoOwner, "Go to Owner");
+			menuItem.Command = WorldTreeViewCommands.GoToOwner;
 			contextMenuEvent.Items.Add(menuItem);
 
 			contextMenuEvent.Items.Add(new Separator());
 
 			menuItem = new ImageMenuItem(EditorImages.Edit, "Edit");
-			menuItem.Click += OnEdit;
+			menuItem.Command = WorldTreeViewCommands.Edit;
 			contextMenuEvent.Items.Add(menuItem);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Tree Node Mutators
@@ -250,6 +288,7 @@ namespace ZeldaEditor.TreeViews {
 			}
 			return -1;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Tree Refresh Methods
@@ -387,7 +426,6 @@ namespace ZeldaEditor.TreeViews {
 				RefreshAreas();
 				RefreshScripts(true, true);
 			}
-			UpdateButtons();
 		}
 
 
@@ -395,7 +433,7 @@ namespace ZeldaEditor.TreeViews {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		// Create the base node folders.
+		/// <summary>Create the base node folders.</summary>
 		private void CreateTreeSkeleton() {
 			World world = editorControl.World;
 
@@ -403,141 +441,47 @@ namespace ZeldaEditor.TreeViews {
 				worldNode.Items.Clear();
 			}
 			else {
-				worldNode           = new WorldTreeViewItem(world);
-				worldNode.Header    = editorControl.World.ID;
+				worldNode = new WorldTreeViewItem(world);
+				worldNode.Header = editorControl.World.ID;
+				worldNode.ContextMenu = contextMenuWorld;
 			}
 
 			if (levelsNode != null) {
 				levelsNode.Items.Clear();
 			}
 			else {
-				levelsNode          = new ImageTreeViewItem(EditorImages.LevelGroup, "Levels", true);
-				levelsNode.Tag      = "levels";
+				levelsNode = new ImageTreeViewItem(EditorImages.LevelGroup, "Levels", true);
+				levelsNode.Tag = "levels";
+				levelsNode.ContextMenu = contextMenuLevel;
 			}
 			if (areasNode != null) {
 				areasNode.Items.Clear();
 			}
 			else {
-				areasNode        = new ImageTreeViewItem(EditorImages.AreaGroup, "Areas", true);
-				areasNode.Tag    = "areas";
+				areasNode = new ImageTreeViewItem(EditorImages.AreaGroup, "Areas", true);
+				areasNode.Tag = "areas";
+				areasNode.ContextMenu = contextMenuArea;
 			}
 			if (scriptsNode != null) {
 				scriptsNode.Items.Clear();
 			}
 			else {
-				scriptsNode         = new ImageTreeViewItem(EditorImages.ScriptGroup, "Scripts", true);
-				scriptsNode.Tag     = "scripts";
+				scriptsNode = new ImageTreeViewItem(EditorImages.ScriptGroup, "Scripts", true);
+				scriptsNode.Tag = "scripts";
+				scriptsNode.ContextMenu = contextMenuScript;
 			}
-
 
 			treeView.Items.Clear();
 			treeView.Items.Add(worldNode);
 			worldNode.Items.Add(levelsNode);
 			worldNode.Items.Add(areasNode);
 			worldNode.Items.Add(scriptsNode);
-
-			worldNode.ContextMenu = contextMenuWorld;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public EditorControl EditorControl {
-			get { return editorControl; }
-			set { editorControl = value; }
-		}
-
-		public bool IsMouseOverTreeView {
-			get { return treeView.IsMouseOver; }
-		}
-
-		private void OnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
-			UpdateButtons();
-		}
-		
-		private void OnTreeViewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
-			TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
-			if (treeViewItem is IWorldTreeViewItem)
-				((IWorldTreeViewItem)treeViewItem).Open(editorControl);
-		}
-		private void OnTreeViewMouseRightButtonDown(object sender, MouseEventArgs e) {
-			TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
-
-			if (treeViewItem != null) {
-				treeViewItem.Focus();
-				e.Handled = true;
-			}
 		}
 
 		private static TreeViewItem VisualUpwardSearch(DependencyObject source) {
 			while (source != null && !(source is TreeViewItem))
 				source = VisualTreeHelper.GetParent(source);
-
 			return source as TreeViewItem;
-		}
-		private void OnTreeViewMouseDown(object sender, MouseButtonEventArgs e) {
-			TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
-
-			//treeViewItem.IsSelected = true;
-		}
-		private void OnGotoOwner(object sender, RoutedEventArgs e) {
-			IEventObject eventObject = (treeView.SelectedItem as EventTreeViewItem).Event.Events.EventObject;
-			if (eventObject is BaseTileDataInstance)
-				editorControl.GotoTile(eventObject as BaseTileDataInstance);
-			else if (eventObject is Room)
-				editorControl.GotoRoom(eventObject as Room);
-			else if (eventObject is Level)
-				editorControl.OpenLevel(eventObject as Level);
-			else
-				editorControl.OpenProperties(eventObject);
-		}
-
-		private void OnEdit(object sender, RoutedEventArgs e) {
-			(treeView.SelectedItem as IWorldTreeViewItem).Open(editorControl);
-		}
-
-		private void OnRename(object sender, RoutedEventArgs e) {
-			IWorldTreeViewItem node = treeView.SelectedItem as IWorldTreeViewItem;
-			string newID = RenameWindow.Show(Window.GetWindow(this),
-				editorControl.World, node.IDObject);
-
-			if (newID != null) {
-				ActionRenameID action = new ActionRenameID(node.IDObject, newID);
-				editorControl.PushAction(action, ActionExecution.Execute);
-				/*node.Rename(editorControl, newID);
-				editorControl.EditorWindow.UpdatePropertyPreview(editorControl.PropertyGrid.PropertyObject);
-				editorControl.IsModified = true;*/
-			}
-		}
-
-		private void OnAdd(object sender, RoutedEventArgs e) {
-			if (treeView.SelectedItem is LevelTreeViewItem) {
-				EditorCommands.AddNewLevel.Execute(null, null);
-			}
-			else if (treeView.SelectedItem is AreaTreeViewItem) {
-				EditorCommands.AddNewArea.Execute(null, null);
-			}
-			else if (treeView.SelectedItem is ScriptTreeViewItem) {
-				EditorCommands.AddNewScript.Execute(null, null);
-			}
-		}
-
-		private void OnDuplicate(object sender, RoutedEventArgs e) {
-			(treeView.SelectedItem as IWorldTreeViewItem).Duplicate(editorControl);
-		}
-
-		private void OnDelete(object sender, RoutedEventArgs e) {
-			(treeView.SelectedItem as IWorldTreeViewItem).Delete(editorControl);
-		}
-
-		private void OnMoveUp(object sender, RoutedEventArgs e) {
-			MoveSelected(-1);
-		}
-
-		private void OnMoveDown(object sender, RoutedEventArgs e) {
-			MoveSelected(+1);
 		}
 
 		private void MoveSelected(int direction) {
@@ -560,48 +504,128 @@ namespace ZeldaEditor.TreeViews {
 		private TreeViewItem GetParentNode(object node) {
 			return (node as TreeViewItem).Parent as TreeViewItem;
 		}
+		
 
-		private void UpdateButtons() {
-			buttonEdit.IsEnabled = false;
-			buttonRename.IsEnabled = false;
-			buttonDuplicate.IsEnabled = false;
-			buttonDelete.IsEnabled = false;
-			buttonMoveUp.IsEnabled = false;
-			buttonMoveDown.IsEnabled = false;
-			
-			if (treeView.SelectedItem is WorldTreeViewItem) {
-				buttonEdit.IsEnabled = true;
-				buttonRename.IsEnabled = true;
+		//-----------------------------------------------------------------------------
+		// Command Can Execute
+		//-----------------------------------------------------------------------------
+
+		private void IsItemSelected(object sender, CanExecuteRoutedEventArgs e) {
+			e.CanExecute = (treeView != null &&
+				(treeView.SelectedItem is LevelTreeViewItem ||
+				treeView.SelectedItem is AreaTreeViewItem ||
+				treeView.SelectedItem is ScriptTreeViewItem ||
+				treeView.SelectedItem is WorldTreeViewItem));
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Command Execute
+		//-----------------------------------------------------------------------------
+
+		private void OnEditProperties(object sender, RoutedEventArgs e) {
+			(treeView.SelectedItem as IWorldTreeViewItem).Open(editorControl);
+		}
+
+		private void OnEdit(object sender, RoutedEventArgs e) {
+			(treeView.SelectedItem as IWorldTreeViewItem).Open(editorControl);
+		}
+
+		private void OnRename(object sender, RoutedEventArgs e) {
+			IWorldTreeViewItem node = treeView.SelectedItem as IWorldTreeViewItem;
+			string newID = RenameWindow.Show(Window.GetWindow(this),
+				editorControl.World, node.IDObject);
+
+			if (newID != null) {
+				ActionRenameID action = new ActionRenameID(node.IDObject, newID);
+				editorControl.PushAction(action, ActionExecution.Execute);
 			}
-			else if (treeView.SelectedItem is IWorldTreeViewItem)
-			{
-				buttonEdit.IsEnabled = true;
-				buttonDuplicate.IsEnabled = true;
-				buttonDelete.IsEnabled = true;
+		}
 
-				if (!(treeView.SelectedItem is EventTreeViewItem))
-					buttonRename.IsEnabled = true;
+		private void OnCreateLevel(object sender, RoutedEventArgs e) {
+			EditorCommands.AddNewLevel.Execute(null, null);
+		}
 
-				if (!(treeView.SelectedItem is ScriptTreeViewItem)) {
-					TreeViewItem parent = GetParentNode(treeView.SelectedItem);
-					int selectedIndex = GetItemIndex(parent, treeView.SelectedItem);
-					if (selectedIndex > 0)
-						buttonMoveUp.IsEnabled = true;
-					if (selectedIndex + 1 < parent.Items.Count)
-						buttonMoveDown.IsEnabled = true;
-				}
-			}
+		private void OnCreateArea(object sender, RoutedEventArgs e) {
+			EditorCommands.AddNewArea.Execute(null, null);
+		}
+
+		private void OnCreateScript(object sender, RoutedEventArgs e) {
+			EditorCommands.AddNewScript.Execute(null, null);
+		}
+
+		private void OnDuplicate(object sender, RoutedEventArgs e) {
+			(treeView.SelectedItem as IWorldTreeViewItem).Duplicate(editorControl);
+		}
+
+		private void OnDelete(object sender, RoutedEventArgs e) {
+			(treeView.SelectedItem as IWorldTreeViewItem).Delete(editorControl);
+		}
+
+		private void OnMoveUp(object sender, RoutedEventArgs e) {
+			MoveSelected(-1);
+		}
+
+		private void OnMoveDown(object sender, RoutedEventArgs e) {
+			MoveSelected(+1);
+		}
+		
+		/// <summary>Select the object which is the owner of an event.</summary>
+		private void OnGoToOwner(object sender, RoutedEventArgs e) {
+			IEventObject eventObject =
+				(treeView.SelectedItem as EventTreeViewItem).Event.Events.EventObject;
+			if (eventObject is BaseTileDataInstance)
+				editorControl.GotoTile(eventObject as BaseTileDataInstance);
+			else if (eventObject is Room)
+				editorControl.GotoRoom(eventObject as Room);
+			else if (eventObject is Level)
+				editorControl.OpenLevel(eventObject as Level);
+			else
+				editorControl.OpenProperties(eventObject);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// UI Event Callbacks
+		//-----------------------------------------------------------------------------
+
+		private void OnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
 		}
 
 		private void OnTreeViewMouseEnter(object sender, MouseEventArgs e) {
 			treeView.Focus();
 		}
+
 		private void OnTreeViewRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
 			e.Handled = true;
 		}
+		
+		private void OnTreeViewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
+			TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+			if (treeViewItem is IWorldTreeViewItem)
+				((IWorldTreeViewItem)treeViewItem).Open(editorControl);
+		}
 
-		public void FocusOnTreeView() {
-			treeView.Focus();
+		private void OnTreeViewMouseDown(object sender, MouseButtonEventArgs e) {
+		}
+
+		private void OnTreeViewMouseRightButtonDown(object sender, MouseEventArgs e) {
+			TreeViewItem treeViewItem = VisualUpwardSearch(
+				e.OriginalSource as DependencyObject);
+			if (treeViewItem != null) {
+				treeViewItem.Focus();
+				e.Handled = true;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public EditorControl EditorControl {
+			get { return editorControl; }
+			set { editorControl = value; }
 		}
 	}
 }

@@ -75,7 +75,7 @@ namespace ZeldaEditor {
 
 			ScriptEditor.Initialize();
 
-			// Create the level display.
+			// Create the level display
 			levelDisplay					= new LevelDisplay();
 			levelDisplay.EditorControl		= editorControl;
 			levelDisplay.Name				= "levelDisplay";
@@ -83,7 +83,7 @@ namespace ZeldaEditor {
 			levelDisplay.EditorWindow		= this;
 			hostLevelDisplay.Child			= levelDisplay;
 
-			// Create the tileset display.
+			// Create the tileset display
 			tilesetDisplay					= new TilesetDisplay();
 			tilesetDisplay.EditorControl	= editorControl;
 			tilesetDisplay.Name				= "tilesetDisplay";
@@ -178,7 +178,6 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
-		
 
 		// Attempt to save the world automatically first, or open a dialogue
 		// if the world isn't from a file.
@@ -186,7 +185,7 @@ namespace ZeldaEditor {
 			if (editorControl.IsUntitled)
 				ShowSaveWorldDialog(); // Open Save as dialogue
 			else
-				editorControl.SaveWorld(); // Save to file.
+				editorControl.SaveWorld(); // Save to file
 		}
 
 		// Open a save file dialogue to save the world.
@@ -216,6 +215,7 @@ namespace ZeldaEditor {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
@@ -232,6 +232,7 @@ namespace ZeldaEditor {
 		private void OnApplicationDeactivated(object sender, EventArgs e) {
 			editorControl.IsActive = false;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Window Event Handlers

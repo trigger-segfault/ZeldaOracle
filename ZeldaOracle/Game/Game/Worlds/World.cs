@@ -13,10 +13,11 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 namespace ZeldaOracle.Game.Worlds {
 	/// <summary>The world class containing everything about the game.</summary>
 	public class World : IEventObjectContainer, IEventObject, IIDObject,
-		IVariableObjectContainer, IVariableObject
+		IVariableObjectContainer, IVariableObject, ITriggerObject
 	{
 		private Properties properties;
 		private EventCollection events;
+		private TriggerCollection triggers;
 		private Variables variables;
 		private List<Level> levels;
 		private List<Area> areas;
@@ -44,6 +45,7 @@ namespace ZeldaOracle.Game.Worlds {
 			scriptManager	= new ScriptManager();
 
 			events			= new EventCollection(this);
+			triggers		= new TriggerCollection(this);
 			properties		= new Properties(this);
 			properties.BaseProperties = new Properties();
 			variables		= new Variables(this);
@@ -211,10 +213,10 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		/// <summary>Gets the collection of event objects in the world.</summary>
-		public IEnumerable<IEventObject> GetEventObjects() {
+		public IEnumerable<ITriggerObject> GetEventObjects() {
 			yield return this;
 			foreach (Level level in levels) {
-				foreach (IEventObject eventObject in level.GetEventObjects()) {
+				foreach (ITriggerObject eventObject in level.GetEventObjects()) {
 					yield return eventObject;
 				}
 			}
@@ -240,6 +242,14 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 		}
+
+		public IEnumerable<Trigger> GetAllTriggers() {
+			foreach (ITriggerObject triggerObject in GetEventObjects()) {
+				foreach (Trigger trigger in triggerObject.Triggers)
+					yield return trigger;
+			}
+		}
+
 
 		/// <summary>Gets the collection of variables objects in the world.</summary>
 		public IEnumerable<IVariableObject> GetVariableObjects() {
@@ -472,6 +482,10 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Gets the events for the world.</summary>
 		public EventCollection Events {
 			get { return events; }
+		}
+		
+		public TriggerCollection Triggers {
+			get { return triggers; }
 		}
 
 		/// <summary>Gets the variables for the world.</summary>

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Trigger = ZeldaOracle.Common.Scripting.Trigger;
+using TriggerCollection = ZeldaOracle.Common.Scripting.TriggerCollection;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -123,7 +125,6 @@ namespace ZeldaEditor.Control {
 		private StoppableTimer				updateTimer;
 
 		private bool                        needsRecompiling;
-		private Task<ScriptCompileResult>   compileTask;
 		private List<ScriptStart>			scriptStarts;
 		private Thread						compileThread;
 		private ScriptCompileCallback       compileCallback;
@@ -164,7 +165,6 @@ namespace ZeldaEditor.Control {
 			this.isInitialized  = false;
 			this.isModified = false;
 			this.needsRecompiling   = false;
-			this.compileTask        = null;
 			this.compileCallback    = null;
 			this.scriptsToRecompile = new HashSet<string>();
 			this.eventsToRecompile = new HashSet<Event>();
@@ -838,7 +838,26 @@ namespace ZeldaEditor.Control {
 			Logs.Scripts.LogMessage(level,
 				"Compiled scripts with {0} errors and {0} warnings",
 				result.Errors.Count, result.Warnings.Count);
+
+			//if (!scriptCompileService.IsCompiling) {
+			//	editorWindow.ClearStatusBarTask();
+			//	editorWindow.WorldTreeView.RefreshScripts(true, true);
+			//}
 		}
+
+		//private void OnCompileScriptCompleted(ScriptCompileResult result) {
+		//	compileTask = null;
+		//	compileThread = null;
+
+		//	currentCompilingScript.Errors   = result.Errors;
+		//	currentCompilingScript.Warnings = result.Warnings;
+		//	currentCompilingScript = null;
+
+		//	if (!HasScriptsToCheck) {
+		//		editorWindow.ClearStatusBarTask();
+		//		editorWindow.WorldTreeView.RefreshScripts(true, true);
+		//	}
+		//}
 
 		//private void CompileAllScriptsAsync(ScriptCompileCallback callback) {
 		//	Logs.Scripts.LogNotice("Compiling scripts...");
@@ -971,6 +990,10 @@ namespace ZeldaEditor.Control {
 			List<Event> cache = new List<Event>();
 			int internalID = 0;
 			if (IsWorldOpen) {
+				foreach (Trigger trigger in world.GetAllTriggers()) {
+
+				}
+
 				foreach (Event evnt in world.GetDefinedEvents()) {
 					if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
 						evnt.InternalScriptID = ScriptManager.CreateInternalScriptName(internalID);
@@ -1366,10 +1389,6 @@ namespace ZeldaEditor.Control {
 		}
 
 		// Scripting ------------------------------------------------------------------
-
-		public bool IsBusyCompiling {
-			get { return (compileTask != null); }
-		}
 
 		public bool NeedsRecompiling {
 			get { return needsRecompiling; }

@@ -13,7 +13,6 @@ using ZeldaEditor.Util;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.TreeViews {
-	
 	public class WorldTreeViewItem : IWorldTreeViewItem {
 		private World world;
 		

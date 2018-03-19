@@ -16,7 +16,9 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Room : IEventObjectContainer, IEventObject, IVariableObject {
+	public class Room : IEventObjectContainer, IEventObject, IVariableObject,
+		ITriggerObject
+	{
 
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
@@ -25,6 +27,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Properties						properties;
 		private Variables						variables;
 		private EventCollection					events;
+		private TriggerCollection				triggers;
 
 
 		//-----------------------------------------------------------------------------
@@ -32,15 +35,16 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public Room() {
-			this.level		= null;
-			this.location	= Point2I.Zero;
-			this.tileData	= new TileDataInstance[0, 0, 0];
-			this.actionData	= new List<ActionTileDataInstance>();
+			level		= null;
+			location	= Point2I.Zero;
+			tileData	= new TileDataInstance[0, 0, 0];
+			actionData	= new List<ActionTileDataInstance>();
 
-			this.properties	= new Properties(this);
-			this.properties.BaseProperties = new Properties();
-			this.variables	= new Variables(this);
-			this.events		= new EventCollection(this);
+			properties	= new Properties(this);
+			properties.BaseProperties = new Properties();
+			variables	= new Variables(this);
+			events		= new EventCollection(this);
+			triggers	= new TriggerCollection(this);
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this room.");
@@ -146,7 +150,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public IEnumerable<IEventObject> GetEventObjects() {
+		public IEnumerable<ITriggerObject> GetEventObjects() {
 			yield return this;
 			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
@@ -902,6 +906,10 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Gets the events for the room.</summary>
 		public EventCollection Events {
 			get { return events; }
+		}
+		
+		public TriggerCollection Triggers {
+			get { return triggers; }
 		}
 
 		// Settings -------------------------------------------------------------------

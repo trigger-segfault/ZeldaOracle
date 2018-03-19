@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Worlds {
 	}
 
 	public class Level : IEventObjectContainer, IEventObject, IIDObject,
-		IVariableObjectContainer, IVariableObject
+		IVariableObjectContainer, IVariableObject, ITriggerObject
 	{
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
@@ -36,6 +36,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Properties	properties;
 		private Variables	variables;
 		private EventCollection events;
+		private TriggerCollection triggers;
 
 
 		//-----------------------------------------------------------------------------
@@ -48,6 +49,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.dimensions		= Point2I.Zero;
 
 			this.events			= new EventCollection(this);
+			this.triggers		= new TriggerCollection(this);
 			this.properties		= new Properties(this);
 			this.properties.BaseProperties	= new Properties();
 			this.variables		= new Variables(this);
@@ -140,12 +142,12 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public IEnumerable<IEventObject> GetEventObjects() {
+		public IEnumerable<ITriggerObject> GetEventObjects() {
 			yield return this;
 			for (int x = 0; x < Width; x++) {
 				for (int y = 0; y < Height; y++) {
 					//foreach (Room room in rooms) {
-					foreach (IEventObject eventObject in rooms[x, y].GetEventObjects()) {
+					foreach (ITriggerObject eventObject in rooms[x, y].GetEventObjects()) {
 						yield return eventObject;
 					}
 				}
@@ -681,6 +683,10 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public EventCollection Events {
 			get { return events; }
+		}
+		
+		public TriggerCollection Triggers {
+			get { return triggers; }
 		}
 	}
 }
