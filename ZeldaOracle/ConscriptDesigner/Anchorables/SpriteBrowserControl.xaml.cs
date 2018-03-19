@@ -80,7 +80,7 @@ namespace ConscriptDesigner.Anchorables {
 
 			spriteSizes.Clear();
 			orderedSpriteSizes = new List<Point2I>();
-			var spriteDictionary = ZeldaResources.GetResourceDictionary<ISprite>().ToArray();
+			var spriteDictionary = ZeldaResources.GetDictionary<ISprite>().ToArray();
 			foreach (var pair in spriteDictionary) {
 				ISprite sprite = pair.Value;
 				if (sprite is Animation) {

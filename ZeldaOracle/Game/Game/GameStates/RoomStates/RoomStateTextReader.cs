@@ -174,6 +174,10 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				else
 					readerPosition = TextReaderPosition.Top;
 			}
+
+			// Prevent any crashes whith empty wrapped strings
+			if (wrappedString.LineCount == 0)
+				state = TextReaderState.Finished;
 		}
 
 		public override void Update() {
@@ -316,26 +320,21 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			g.FillRectangle(new Rectangle2I(pos,
 				new Point2I(MaxWidth, 8 + 16 * linesPerWindow)), EntityColors.Black);
 
+			// Prevent any crashes whith empty wrapped strings
+			if (wrappedString.LineCount == 0) {
+				g.PopTranslation();
+				return;
+			}
+
 			int x = spacing * 8;
-			//Point2I alignPos;
 
 			// Draw the finished writting lines.
 			for (int i = 0; i < windowLine; i++) {
-				/*alignPos = pos + GetLineOffset(currentLine - windowLine + i);
-				if (state == TextReaderState.PushingLine && timer >= 2)
-					g.DrawLetterString(GameData.FONT_LARGE,
-						wrappedString.Lines[currentLine - windowLine + i],
-						alignPos + new Point2I(x, 6 + 16 * i + 8), TextColor);
-				else
-					g.DrawLetterString(GameData.FONT_LARGE,
-						wrappedString.Lines[currentLine - windowLine + i],
-						alignPos + new Point2I(x, 6 + 16 * i), TextColor);*/
 				g.DrawLetterString(GameData.FONT_LARGE,
 					wrappedString.Lines[currentLine - windowLine + i],
 					pos + GetLineOffset(currentLine - windowLine + i), TextColor);
 			}
 			// Draw the currently writting line.
-			//alignPos = pos + GetLineOffset(currentLine);
 			g.DrawLetterString(GameData.FONT_LARGE,
 				wrappedString.Lines[currentLine].Substring(0, currentChar),
 				pos + GetLineOffset(currentLine), TextColor);

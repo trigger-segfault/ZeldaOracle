@@ -28,8 +28,11 @@ namespace ZeldaOracle.Common.Ini {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Constructs the ini property with the specified name, value, and settings.</summary>
-		public IniProperty(string name, string value = "", string comments = "", bool useQuotes = false) {
+		/// <summary>Constructs the ini property with the specified name, value, and
+		/// settings.</summary>
+		public IniProperty(string name, string value = "", string comments = "",
+			bool useQuotes = false)
+		{
 			this.name       = name;
 			this.comments   = comments;
 			this.value      = value;
@@ -104,7 +107,8 @@ namespace ZeldaOracle.Common.Ini {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Trys to get the value of the property as an enum.</summary>
-		public bool TryGetEnum<TEnum>(out TEnum result, EnumFormat format = EnumFormat.String)
+		public bool TryGetEnum<TEnum>(out TEnum result,
+			EnumFormat format = EnumFormat.String)
 			where TEnum : struct, IConvertible
 		{
 			try {

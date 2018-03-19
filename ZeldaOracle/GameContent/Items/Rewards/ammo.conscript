@@ -1,0 +1,54 @@
+﻿#==============================================================
+# Ammo
+#==============================================================
+
+REWARD "ammo_ember_seeds_5", RewardAmmo;
+	SPRITE		"reward_seed_ember";
+	MESSAGE		"You got<n><red>5 Ember Seeds<red>!";
+	AMMO		"ember_seeds";
+	AMOUNT		5;
+END;
+
+REWARD "ammo_scent_seeds_5", RewardAmmo;
+	CLONE 		"ammo_ember_seeds_5";
+	SPRITE		"reward_seed_scent";
+	MESSAGE		"You got<n><red>5 Scent Seeds<red>!";
+	AMMO		"scent_seeds";
+END;
+
+REWARD "ammo_pegasus_seeds_5", RewardAmmo;
+	CLONE 		"ammo_ember_seeds_5";
+	SPRITE		"reward_seed_pegasus";
+	MESSAGE		"You got<n><red>5 Pegasus Seeds<red>!";
+	AMMO		"pegasus_seeds";
+END;
+
+REWARD "ammo_gale_seeds_5", RewardAmmo;
+	CLONE 		"ammo_ember_seeds_5";
+	SPRITE		"reward_seed_gale";
+	MESSAGE		"You got<n><red>5 Gale Seeds<red>!";
+	AMMO		"gale_seeds";
+END;
+
+REWARD "ammo_mystery_seeds_5", RewardAmmo;
+	CLONE 		"ammo_ember_seeds_5";
+	SPRITE		"reward_seed_mystery";
+	MESSAGE		"You got<n><red>5 Mystery Seeds<red>!";
+	AMMO		"mystery_seeds";
+END;
+
+REWARD "ammo_bombs_5", RewardAmmo;
+	SPRITE		"item_ammo_bomb";
+	MESSAGE		"You got<n><red>5 Bombs<red>!";
+	AMMO		"bombs";
+	AMOUNT		5;
+END;
+
+REWARD "ammo_arrows_5", RewardAmmo;
+	SPRITE		"item_ammo_arrow";
+	MESSAGE		"You got<n><red>5 Arrows<red>!";
+	AMMO		"arrows";
+	AMOUNT		5;
+END;
+
+#==============================================================

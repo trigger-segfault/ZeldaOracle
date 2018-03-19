@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		// Use Tile.CreateTile() instead of this constructor.
-		protected Tile() {
+		public Tile() {
 			tileGridArea	= Rectangle2I.Zero;
 			isAlive				= false;
 			isInitialized		= false;
@@ -335,9 +335,19 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Spawn the a "dug" tile or TileBelow in this tile's place.
 				TileData data = TileBelow ??
-					Resources.GetResource<TileData>("dug");
+					Resources.Get<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
+
+
+				// Spawn drops.
+				Entity dropEntity = SpawnDrop();
+				if (dropEntity != null) {
+					if (dropEntity is Collectible)
+						(dropEntity as Collectible).CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+
+					dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
+				}
 			}
 			else {
 				roomControl.RemoveTile(this);
@@ -345,15 +355,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (properties.GetBoolean("disable_on_destroy", false))
 				IsEnabled = false; // TODO: this won't exactly work anymore.
-
-			// Spawn drops.
-			Entity dropEntity = SpawnDrop();
-			if (dropEntity != null) {
-				if (dropEntity is Collectible)
-					(dropEntity as Collectible).CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-
-				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
-			}
 
 			return true;
 		}
@@ -680,7 +681,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (data.Type == null)
 				tile = new Tile();
 			else
-				tile = ReflectionHelper.Construct<Tile>(data.Type);
+				tile = ReflectionHelper.ConstructSafe<Tile>(data.Type);
 			
 			tile.location			= data.Location;
 			tile.layer				= data.Layer;
@@ -1174,8 +1175,13 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool ClingWhenStabbed {
-			get { return properties.GetBoolean("cling_on_stab", true); }
-			set { properties.Set("cling_on_stab", value); }
+			get { return !flags.HasFlag(TileFlags.NoClingOnStab); }
+			set {
+				if (value)
+					flags &= ~TileFlags.NoClingOnStab;
+				else
+					flags |= TileFlags.NoClingOnStab;
+			}
 		}
 
 		public Vector2F Velocity {

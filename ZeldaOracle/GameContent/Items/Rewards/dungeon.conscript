@@ -1,0 +1,31 @@
+﻿#==============================================================
+# Dungeon
+#==============================================================
+
+REWARD "small_key", RewardDungeonSmallKey;
+	SPRITE		"reward_small_key";
+	MESSAGE		"You found a <red>Small Key<red>!<n>Use it to open a locked door or block in this dungeon.";
+	CANTCOLLECT	"You can't carry anymore small keys.";
+	BOUNCESOUND	"key_bounce";
+END;
+
+REWARD "boss_key", RewardDungeonBossKey;
+	SPRITE		"reward_boss_key";
+	MESSAGE		"You found the <red>Boss Key<red>!";
+	CANTCOLLECT	"You already have a boss key.";
+	BOUNCESOUND	"key_bounce";
+END;
+
+REWARD "map", RewardDungeonMap;
+	SPRITE		"reward_map";
+	MESSAGE		"It's a <red>Dungeon Map<red>! Press SELECT to see it. The darkened rooms are ones you haven't been to yet.";
+	CANTCOLLECT	"You already have a dungeon map.";
+END;
+
+REWARD "compass", RewardDungeonCompass;
+	SPRITE		"reward_compass";
+	MESSAGE		"You found the <red>Compass<red>!<n>Use it to track your position, locate chests, and find keys.";
+	CANTCOLLECT	"You already have a compass.";
+END;
+
+#==============================================================

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
+using ZeldaOracle.Common.Converters;
 
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>The 2D integer precision point with basic operations and functions.</summary>
 	[Serializable]
+	[TypeConverter(typeof(Point2IConverter))]
 	public struct Point2I {
 
 		//-----------------------------------------------------------------------------

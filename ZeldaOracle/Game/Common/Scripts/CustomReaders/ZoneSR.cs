@@ -46,7 +46,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string id",
 			delegate (CommandParam parameters) {
 				zoneName = parameters.GetString(0);
-				if (!Resources.ContainsResource<Zone>(zoneName)) {
+				if (!Resources.Contains<Zone>(zoneName)) {
 					zone = new Zone();
 					zone.ID = zoneName;
 					AddResource<Zone>(zoneName, zone);

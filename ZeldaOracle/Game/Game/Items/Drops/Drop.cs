@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Items.Drops {
 
 		public bool IsAvailable(GameControl gameControl) {
 			if (reward != null)
-				return reward.IsAvailable(gameControl);
+				return reward.IsAvailable;
 			return true;
 		}
 	}

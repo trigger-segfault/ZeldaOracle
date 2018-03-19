@@ -9,8 +9,8 @@ using ZeldaOracle.Common.Graphics.Sprites;
 namespace ZeldaOracle.Game.Items {
 	public class ItemEquipment : Item {
 
-		protected bool isEquipped;
-		protected ISprite[] spriteEquipped;
+		private bool isEquipped;
+		private ISprite[] spriteEquipped;
 
 
 		//-----------------------------------------------------------------------------
@@ -18,8 +18,32 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		public ItemEquipment() {
-			isEquipped = false;
-			spriteEquipped = null;
+			isEquipped		= false;
+			spriteEquipped	= null;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Gets the equipped sprite of the item at the specified level.</summary>
+		public ISprite GetSpriteEquipped(int level) {
+			if (spriteEquipped == null)
+				return GetSprite(level);
+			if (level < spriteEquipped.Length)
+				return spriteEquipped[level] ?? GetSprite(level);
+			return spriteEquipped.LastOrDefault() ?? GetSprite(level);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Protected Mutators
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Sets the leveled equipped sprites of the item.</summary>
+		public void SetSpriteEquipped(params ISprite[] sprites) {
+			spriteEquipped = sprites;
 		}
 
 
@@ -27,7 +51,7 @@ namespace ZeldaOracle.Game.Items {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-		// Equips the item.
+		/// <summary>Equips the item.</summary>
 		public void Equip() {
 			if (!isEquipped) {
 				isEquipped = true;
@@ -35,7 +59,7 @@ namespace ZeldaOracle.Game.Items {
 			}
 		}
 
-		// Unequips the item.
+		/// <summary>Unequips the item.</summary>
 		public void Unequip() {
 			if (isEquipped) {
 				isEquipped = false;
@@ -45,21 +69,23 @@ namespace ZeldaOracle.Game.Items {
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		protected override void OnInitialize() {
+			spriteEquipped = ItemData.EquipSprites;
+		}
 
-		// Called when the item is equipped.
+		/// <summary>Called when the item is equipped.</summary>
 		public virtual void OnEquip() { }
 
-		// Called when the item is unequipped.
+		/// <summary>Called when the item is unequipped.</summary>
 		public virtual void OnUnequip() { }
-		
-		// Draws the item inside the inventory.
+
+		/// <summary>Draws the item inside the inventory.</summary>
 		protected override void DrawSprite(Graphics2D g, Point2I position) {
-			ISprite spr = sprite[level];
-			if (isEquipped && spriteEquipped != null)
-				spr = spriteEquipped[level];
-			g.DrawSprite(spr, position);
+			g.DrawSprite(SpriteCurrent, position);
 		}
 
 
@@ -67,11 +93,21 @@ namespace ZeldaOracle.Game.Items {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets if the item is equipped or not.
+		/// <summary>Gets or sets if the item is equipped or not.</summary>
 		public bool IsEquipped {
 			get { return isEquipped; }
 			set { isEquipped = value; }
 		}
+		
+		/// <summary>Gets the equipped sprite of the item.</summary>
+		public ISprite SpriteEquipped {
+			get { return GetSpriteEquipped(Level); }
+			//set { SetSpriteEquipped(value); }
+		}
 
+		/// <summary>Gets the current equipped or unquipped sprite of the item.</summary>
+		public ISprite SpriteCurrent {
+			get { return (isEquipped ? SpriteEquipped : Sprite); }
+		}
 	}
 }

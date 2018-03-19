@@ -604,7 +604,7 @@ namespace ConscriptDesigner {
 				spriteBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = spriteBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
 					spriteBrowser.Reload();
 			}
 			spriteBrowser.IsActive = true;
@@ -617,7 +617,7 @@ namespace ConscriptDesigner {
 				spriteSourceBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = spriteSourceBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
 					spriteSourceBrowser.Reload();
 			}
 			spriteSourceBrowser.IsActive = true;
@@ -630,7 +630,7 @@ namespace ConscriptDesigner {
 				styleBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = styleBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
 					styleBrowser.Reload();
 			}
 			styleBrowser.IsActive = true;
@@ -643,7 +643,7 @@ namespace ConscriptDesigner {
 				tileDataBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = tileDataBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
 					tileDataBrowser.Reload();
 			}
 			tileDataBrowser.IsActive = true;
@@ -656,7 +656,7 @@ namespace ConscriptDesigner {
 				tilesetBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = tilesetBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
 					tilesetBrowser.Reload();
 			}
 			tilesetBrowser.IsActive = true;
@@ -669,7 +669,7 @@ namespace ConscriptDesigner {
 				tileBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = tileBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
 					tileBrowser.Reload();
 			}
 			tileBrowser.IsActive = true;
@@ -680,7 +680,7 @@ namespace ConscriptDesigner {
 				tilesetEditor = new TilesetEditor();
 				tilesetEditor.Closed += OnAnchorableClosed;
 				DockDocument(tilesetEditor);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
 					tilesetEditor.Reload();
 			}
 			tilesetEditor.IsActive = true;

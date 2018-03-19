@@ -209,7 +209,7 @@ namespace ZeldaEditor.Windows {
 			// Set the object preview image and name
 			objectPreviewName.Text = "(none)";
 			if (tileData != null)
-				objectPreviewName.Text = tileData.BaseData.Name;
+				objectPreviewName.Text = tileData.BaseData.ResourceName;
 			tilePreview.UpdateTile(tileData);
 		}
 

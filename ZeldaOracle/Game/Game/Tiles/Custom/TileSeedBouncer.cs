@@ -70,9 +70,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Initializes the properties and events for the tile type.</summary>
 		public static void InitializeTileData(TileData data) {
-			data.Flags |= TileFlags.NotSurface;
-
-			data.Properties.Set("cling_on_stab", false);
+			data.Flags |= TileFlags.NotSurface | TileFlags.NoClingOnStab;
+			
 			data.Properties.Set("angle", Angle.Right)
 				.SetDocumentation("Angle", "angle", "", "Seed Bouncer", "The angle the seed bouncer is facing.");
 		}

@@ -44,7 +44,7 @@ namespace ZeldaEditor.Control {
 
 			// Save the XNA image to memory as a png, and load it as a bitmap.
 			MemoryStream ms = new System.IO.MemoryStream();
-			image.Texture.SaveAsPng(ms, image.Texture.Width, image.Texture.Height);
+			image.Texture2D.SaveAsPng(ms, image.Texture2D.Width, image.Texture2D.Height);
 			Bitmap bitmap = new System.Drawing.Bitmap(ms);
 
 			// Add the new bitmap to the resource map.

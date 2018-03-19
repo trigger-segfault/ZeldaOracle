@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.GameStates.RoomStates {
@@ -66,7 +67,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			timer++;
 			if (timer == (useChest ? RaiseDuration : NonChestDuration)) {
 				AudioSystem.PlaySound(GameData.SOUND_FANFARE_ITEM);
-				reward.OnDisplayMessage(GameControl);
+				reward.OnDisplayMessage();
 				//GameControl.DisplayMessage(new Message(reward.Message));
 
 				if (reward.HoldType == RewardHoldTypes.OneHand) {
@@ -81,7 +82,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			else if (timer == (useChest ? RaiseDuration : NonChestDuration) + 1) {
 				// Pop before incase the OnCollect pushes a new game state
 				gameControl.PopRoomState();
-				reward.OnCollect(GameControl);
+				reward.OnCollect();
 				completeAction?.Invoke();
 				return;
 			}
@@ -91,7 +92,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			g.PushTranslation(0, GameSettings.HUD_HEIGHT);
 			g.PushTranslation(-RoomControl.ViewControl.Camera.TopLeft);
 
-			if (reward.HoldType == RewardHoldTypes.Raise && useChest) {
+			if (!reward.HoldInChest && useChest) {
 				g.DrawAnimation(animationPlayer, chestPosition + new Point2I(0, -8 - (timer + 2) / 4));
 			}
 			else if (timer >= (useChest ? RaiseDuration : NonChestDuration)) {

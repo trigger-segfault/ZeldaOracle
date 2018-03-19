@@ -198,6 +198,9 @@
     <Compile Include="Windows\TilePathEditor.xaml.cs">
       <DependentUpon>TilePathEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WinForms\DummyGraphicsDeviceControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\FocusMessageFilter.cs" />
     <Compile Include="WinForms\SpritePreview.cs">
       <SubType>Component</SubType>

@@ -6,14 +6,35 @@ using System.Text;
 namespace ZeldaOracle.Game.Items {
 	public class ItemEssence : Item {
 
-		protected int slot;
+		private int slot;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public ItemEssence() {
-			this.slot = 0;
+			slot = 0;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		protected override void OnInitialize() {
+			slot = ItemData.Properties.Get("slot", 0);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the properties for the item type.</summary>
+		public static void InitializeItemData(ItemData data) {
+			data.Properties.Set("slot", 0);
 		}
 
 
@@ -23,6 +44,7 @@ namespace ZeldaOracle.Game.Items {
 
 		public int EssenceSlot {
 			get { return slot; }
+			set { slot = value; }
 		}
 	}
 }

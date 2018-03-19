@@ -42,10 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Converters\Point2IConverter.cs" />
+    <Compile Include="Common\Converters\Vector2FConverter.cs" />
     <Compile Include="Common\Geometry\Align.cs" />
     <Compile Include="Common\Geometry\Angle.cs" />
     <Compile Include="Common\Geometry\Axes.cs" />
     <Compile Include="Common\Geometry\Direction.cs" />
+    <Compile Include="Common\Converters\ColorConverter.cs" />
     <Compile Include="Common\Graphics\Flipping.cs" />
     <Compile Include="Common\Geometry\GMath.cs" />
     <Compile Include="Common\Geometry\GRandom.cs" />

@@ -10,80 +10,75 @@ using XnaColor = Microsoft.Xna.Framework.Color;
 
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Util;
+using System.IO;
+
+using Rectangle = System.Drawing.Rectangle;
+using Bitmap = System.Drawing.Bitmap;
+using BitmapData = System.Drawing.Imaging.BitmapData;
+using ImageLockMode = System.Drawing.Imaging.ImageLockMode;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>An image containing a texture.</summary>
-	public class Image {
+	public class Image : IDisposable {
 
 		/// <summary>The texture of the image.</summary>
-		private Texture2D texture;
-		/// <summary>The file path of the image.</summary>
-		private string filePath;
+		protected Texture2D texture;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Constructs an unassigned image.</summary>
-		public Image() {
-			this.texture		= null;
-			this.filePath		= "";
+		/// <summary>Constructs an unassigned image and does not add it to the
+		/// content database's independent resources.</summary>
+		protected Image() {
+			texture = null;
 		}
 
 		/// <summary>Constructs an image with the specified texture.</summary>
-		public Image(Texture2D texture, string filePath = "") {
-			this.texture		= texture;
-			this.filePath		= filePath;
+		protected Image(Texture2D texture) {
+			if (texture == null)
+				throw new ArgumentNullException("Image's texture cannot be null!");
+			this.texture = texture;
+			Resources.AddDisposable(texture);
 		}
 
-		/// <summary>Load an image from the specified file path.</summary>
-		public Image(ContentManager content, string filePath) {
-			if (filePath.Length != 0)
-				this.texture	= content.Load<Texture2D>(filePath);
-			else
-				this.texture	= null;
-			this.filePath		= filePath;
+		/// <summary>Constructs an new image with the specified texture size.</summary>
+		public Image(int width, int height) {
+			texture = new Texture2D(Resources.GraphicsDevice, width, height);
+			Resources.AddDisposable(texture);
 		}
 
-		/// <summary>Constructs an new image with the specified texture information.</summary>
-		public Image(GraphicsDevice graphicsDevice, int width, int height) {
-			this.texture		= new Texture2D(graphicsDevice, width, height);
-			this.filePath		= "";
-		}
-
-		/// <summary>Constructs an new image with the specified texture information.</summary>
-		public Image(GraphicsDevice graphicsDevice, Point2I size) {
-			this.texture		= new Texture2D(graphicsDevice, size.X, size.Y);
-			this.filePath		= "";
+		/// <summary>Constructs an new image with the specified texture size.</summary>
+		public Image(Point2I size) {
+			texture = new Texture2D(Resources.GraphicsDevice, size.X, size.Y);
+			Resources.AddDisposable(texture);
 		}
 
 		/// <summary>Constructs an new image with the specified texture information.</summary>
-		public Image(GraphicsDevice graphicsDevice, int width, int height, SurfaceFormat format) {
-			this.texture		= new Texture2D(graphicsDevice, width, height, false, format);
-			this.filePath		= "";
+		public Image(int width, int height, SurfaceFormat format) {
+			texture = new Texture2D(Resources.GraphicsDevice,
+				width, height, false, format);
+			Resources.AddDisposable(texture);
 		}
 
 		/// <summary>Constructs an new image with the specified texture information.</summary>
-		public Image(GraphicsDevice graphicsDevice, Point2I size, SurfaceFormat format) {
-			this.texture		= new Texture2D(graphicsDevice, size.X, size.Y, false, format);
-			this.filePath		= "";
+		public Image(Point2I size, SurfaceFormat format) {
+			texture = new Texture2D(Resources.GraphicsDevice,
+				size.X, size.Y, false, format);
+			Resources.AddDisposable(texture);
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Management
+		// Disposing
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Loads the image from the file path.</summary>
-		public void Load(ContentManager content) {
-			if ((texture == null || texture.IsDisposed) && filePath.Length != 0)
-				texture = content.Load<Texture2D>(filePath);
-		}
 
 		/// <summary>Immediately releases the unmanaged resources used by the texture.</summary>
 		public void Dispose() {
-			if (texture != null)
+			if (texture != null && !texture.IsDisposed)
 				texture.Dispose();
 		}
 
@@ -95,6 +90,90 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Used to auto-convert Images into XNA Texture2Ds.</summary>
 		public static implicit operator Texture2D(Image image) {
 			return image.texture;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Saving
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Saves the texture data as a .png to the specified file path.</summary>
+		public void SaveAsPng(string filePath) {
+			using (FileStream stream = File.OpenWrite(filePath)) {
+				stream.SetLength(0);
+				SaveAsPng(stream);
+			}
+		}
+
+		/// <summary>Saves the texture data as a .png to the specified stream.</summary>
+		public void SaveAsPng(Stream stream) {
+			texture.SaveAsPng(stream, Width, Height);
+		}
+
+		/// <summary>Saves the texture data as a .png to the specified stream and
+		/// writes the file size of the .png before the data.</summary>
+		public void SaveAsPngAndSize(Stream stream) {
+			BinaryWriter writer = new BinaryWriter(stream);
+			stream.Position += 4;
+			long streamStart = stream.Position;
+			SaveAsPng(stream);
+			int fileSize = (int) (stream.Position - streamStart);
+			stream.Position = streamStart - 4;
+			writer.Write(fileSize);
+			stream.Position = streamStart + fileSize;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Loads the texture from content.</summary>
+		public static Image FromContent(string assetName) {
+			Image image = new Image();
+			// Assign the texture this way so that is not added as
+			// an independent resource to the content database.
+			image.texture = Resources.ContentManager.Load<Texture2D>(assetName);
+			return image;
+		}
+
+		/// <summary>Loads the texture from the stream with the specified file size.</summary>
+		public static Image FromFile(string filePath, bool premultiply = false) {
+			using (FileStream stream = File.Open(filePath, FileMode.Open))
+				return FromStream(stream, premultiply);
+		}
+
+		/// <summary>Loads the texture from the stream with the specified file size.</summary>
+		public static Image FromStream(Stream stream, int fileSize,
+			bool premultiply = false)
+		{
+			BinaryReader reader = new BinaryReader(stream);
+			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
+				return FromStream(memory, premultiply);
+		}
+
+		/// <summary>Loads the texture from the stream with the specified file size.</summary>
+		public static Image FromStreamAndSize(Stream stream,
+			bool premultiply = false)
+		{
+			BinaryReader reader = new BinaryReader(stream);
+			int fileSize = reader.ReadInt32();
+			if (fileSize < 0)
+				throw new IOException("Png file size in file is less than zero!");
+			else if (fileSize == 0)
+				return null;
+			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
+				return FromStream(memory, premultiply);
+		}
+
+		/// <summary>Loads the texture from the stream.</summary>
+		public static unsafe Image FromStream(Stream stream,
+			bool premultiply = false)
+		{
+			Texture2D texture = Texture2DHelper.FromStream<Texture2D>(stream);
+			if (premultiply)
+				Texture2DHelper.PremultiplyAlpha(texture);
+			return new Image(texture);
 		}
 
 
@@ -127,14 +206,8 @@ namespace ZeldaOracle.Common.Graphics {
 		// Information ----------------------------------------------------------------
 
 		/// <summary>Gets the texture of the image.</summary>
-		public Texture2D Texture {
+		public Texture2D Texture2D {
 			get { return texture; }
-		}
-
-		/// <summary>Gets the file path of the image.</summary>
-		public string FilePath {
-			get { return filePath; }
-			set { filePath = value; }
 		}
 
 		/// <summary>Gets the format of the image.</summary>

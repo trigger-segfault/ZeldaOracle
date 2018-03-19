@@ -17,8 +17,6 @@ using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Drops;
-using ZeldaOracle.Game.Items.Equipment;
-using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Items.Weapons;
@@ -123,19 +121,15 @@ namespace ZeldaOracle.Game.Control {
 
 			mapDungeon = new ScreenDungeonMap(gameManager);
 
-			GameData.LoadInventory(inventory, true);
-
-			inventory.ObtainAmmo("ammo_ember_seeds");
-			inventory.ObtainAmmo("ammo_scent_seeds");
-			inventory.ObtainAmmo("ammo_pegasus_seeds");
-			inventory.ObtainAmmo("ammo_gale_seeds");
-			inventory.ObtainAmmo("ammo_mystery_seeds");
+			inventory.Initialize();
+			inventory.SetMaxLevel("wallet");
 
 			hud = new HUD(this);
 			hud.DynamicHealth = player.Health;
 
 			rewardManager = new RewardManager(this);
-			GameData.LoadRewards(rewardManager);
+			rewardManager.Initialize();
+
 			dropManager = new DropManager(this);
 			GameData.LoadDrops(dropManager, rewardManager);
 

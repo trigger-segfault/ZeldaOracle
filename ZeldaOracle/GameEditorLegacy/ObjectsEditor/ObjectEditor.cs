@@ -77,7 +77,7 @@ namespace ZeldaEditor.ObjectsEditor {
 			});
 
 			// Collision Models.
-			foreach (KeyValuePair<string, CollisionModel> model in ZeldaOracle.Common.Content.Resources.GetResourceDictionary<CollisionModel>()) {
+			foreach (KeyValuePair<string, CollisionModel> model in ZeldaOracle.Common.Content.Resources.GetDictionary<CollisionModel>()) {
 				comboBoxCollisionModel.Items.Add(new ComboBoxItem<CollisionModel>(model.Value, model.Key));
 			}
 

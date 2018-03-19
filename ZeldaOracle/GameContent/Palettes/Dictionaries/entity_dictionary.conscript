@@ -9,6 +9,7 @@ ENTITY	blue;
 ENTITY	red;
 ENTITY	orange;
 ENTITY	gold;
+ENTITY	brown;
 ENTITY	shaded_red;
 ENTITY	shaded_blue;
 ENTITY	shaded_pink;

@@ -93,7 +93,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 				if (currentSlotGroup.CurrentSlotIndex >= currentSlotGroup.NumSlots - 6) {
 					AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
 					ItemEquipment selectedItem = currentSlotGroup.CurrentSlot.SlotItem as ItemEquipment;
-					GameControl.Inventory.EquipEquipment(selectedItem);
+					GameControl.Inventory.EquipItem(selectedItem);
 				}
 			}
 		}

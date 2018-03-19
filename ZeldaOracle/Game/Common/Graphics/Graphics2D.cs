@@ -10,6 +10,7 @@ using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.API;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Graphics {
 
@@ -40,6 +41,9 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the 2D graphics object using Content's sprite batch.</summary>
+		public Graphics2D() : this(Resources.SpriteBatch) { }
 
 		/// <summary>Constructs a 2D graphics object containing the sprite batch.</summary>
 		public Graphics2D(SpriteBatch spriteBatch) {

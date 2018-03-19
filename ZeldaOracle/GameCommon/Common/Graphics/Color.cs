@@ -1,10 +1,12 @@
 ﻿using System;
-
+using System.ComponentModel;
+using ZeldaOracle.Common.Converters;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>A structure for storing color data.</summary>
 	[Serializable]
+	[TypeConverter(typeof(ColorConverter))]
 	public struct Color {
 
 		//-----------------------------------------------------------------------------

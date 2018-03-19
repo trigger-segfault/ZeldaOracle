@@ -87,11 +87,8 @@ namespace ZeldaOracle.Game.Debugging {
 		}
 
 		private static void EquipStartWeapon(string id, int slot) {
-			string weaponId = id;
-			if (!weaponId.StartsWith("item_"))
-				weaponId = "item_" + weaponId;
 			Inventory inventory = GameControl.RoomControl.Player.Inventory;
-			ItemWeapon weapon = inventory.GetItem(weaponId) as ItemWeapon;
+			ItemWeapon weapon = inventory.GetItem(id) as ItemWeapon;
 			if (weapon != null)
 				gameControl.MenuWeapons.EquipWeapon(weapon, slot);
 		}
@@ -104,6 +101,15 @@ namespace ZeldaOracle.Game.Debugging {
 				//PlayerSwimmingSkills.CanSwimInWater;
 				PlayerSwimmingSkills.CanSwimInWater |
 				PlayerSwimmingSkills.CanSwimInOcean;
+
+			// Obtain all items and ammo
+			foreach (Item item in GameControl.Inventory.GetItems()) {
+				GameControl.Inventory.ObtainItem(item);
+			}
+
+			foreach (Ammo ammo in GameControl.Inventory.GetAmmos()) {
+				GameControl.Inventory.ObtainAmmo(ammo);
+			}
 
 			// Equip starting weapons
 			EquipStartWeapon(DevSettings.Inventory.A, Inventory.SLOT_A);
@@ -316,13 +322,14 @@ namespace ZeldaOracle.Game.Debugging {
 				ChangeRooms(Direction.Left);
 			// Ctrl+Y: Cycle current room's zone
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Y)) {
-				List<string> zoneNames = Resources.GetResourceKeyList<Zone>();
+				List<string> zoneNames = new List<string>();
+				zoneNames.AddRange(Resources.GetDictionaryKeys<Zone>());
 				int index = zoneNames.IndexOf(RoomControl.Room.Zone.ID);
 				if (shift)
 					index = (index + zoneNames.Count - 1) % zoneNames.Count;
 				else
 					index = (index + 1) % zoneNames.Count;
-				RoomControl.Room.Zone = Resources.GetResource<Zone>(zoneNames[index]);
+				RoomControl.Room.Zone = Resources.Get<Zone>(zoneNames[index]);
 				//GameData.PaletteShader.TilePalette = RoomControl.Zone.Palette;
 				Console.WriteLine("Changed to zone '" + RoomControl.Zone.ID + "'");
 			}
@@ -443,13 +450,13 @@ namespace ZeldaOracle.Game.Debugging {
 			}
 			// B: Spawn bomb collectibles.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.B)) {
-				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
+				Collectible collectible = gameControl.RewardManager.SpawnCollectible("bombs_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
 			// J: Spawn arrow collectibles.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.J)) {
-				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
+				Collectible collectible = gameControl.RewardManager.SpawnCollectible("arrows_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
@@ -484,7 +491,7 @@ namespace ZeldaOracle.Game.Debugging {
 			{
 				Tile newSampledTile = RoomControl.GetTopTile(mouseTileLocation);
 				if (newSampledTile != null && newSampledTile.TileData.BaseData != null) {
-					sampledTileName = newSampledTile.TileData.BaseData.Name;
+					sampledTileName = newSampledTile.TileData.BaseData.ResourceName;
 				}
 			}
 
@@ -499,7 +506,7 @@ namespace ZeldaOracle.Game.Debugging {
 				Tile topTile = RoomControl.GetTopTile(mouseTileLocation);
 				if (topTile != null)
 					layer = topTile.Layer;
-				TileData tileData = Resources.GetResource<TileData>(sampledTileName);
+				TileData tileData = Resources.Get<TileData>(sampledTileName);
 				if (tileData != null) {
 					Tile tile = Tile.CreateTile(tileData);
 					if (tile != null)

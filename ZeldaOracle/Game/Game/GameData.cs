@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Initializes and loads the game content. NOTE: The order here is important.
-		public static void Initialize(bool preloadSprites = true, RewardManager rewardManager = null) {
+		public static void Initialize(bool preloadSprites = true) {
 			/*
 			CommandReferenceParam param = CommandParamParser.ParseReferenceParams(
 				"(any objs...)...");
@@ -91,12 +91,12 @@ namespace ZeldaOracle.Game {
 			LoadMusic();
 
 			audioWatch.Stop();
+			
+			Logs.Initialization.LogNotice("Loading Inventory");
+			LoadInventory();
 
-			// CONSCRIPT DESIGNER ONLY
-			if (rewardManager != null) {
-				Logs.Initialization.LogNotice("Loading Rewards");
-				LoadRewards(rewardManager);
-			}
+			Logs.Initialization.LogNotice("Loading Rewards");
+			LoadRewards();
 
 			Logs.Initialization.LogNotice("Loading Tiles");
 			LoadTiles();
@@ -107,23 +107,32 @@ namespace ZeldaOracle.Game {
 			Logs.Initialization.LogNotice("Loading Zones");
 			LoadZonesPostTileData();
 
-			//Logs.Initialization.LogNotice("Took " + spriteWatch.ElapsedMilliseconds + "ms to load sprites.");
-			//Logs.Initialization.LogNotice("Took " + audioWatch.ElapsedMilliseconds + "ms to load audio.");
-			if (rewardManager == null) {
-				Logs.Initialization.LogInfo("Took {0} ms to parse conscripts.",
-					ScriptReader.Watch.ElapsedMilliseconds);
-				Logs.Initialization.LogInfo("Took {0} ms to load game data.",
-					watch.ElapsedMilliseconds);
-			}
+			//Logs.Initialization.LogNotice("Took {0} ms to load sprites.",
+			//	spriteWatch.ElapsedMilliseconds);
+			//Logs.Initialization.LogNotice("Took {0} ms to load audio.",
+			//	audioWatch.ElapsedMilliseconds);
+			Logs.Initialization.LogInfo("Took {0} ms to parse conscripts.",
+				ScriptReader.Watch.ElapsedMilliseconds);
+			Logs.Initialization.LogInfo("Took {0} ms to load game data.",
+				watch.ElapsedMilliseconds);
 
 			if (!Resources.PalettedSpriteDatabase.IsPreloaded) {
 				watch.Restart();
 				Resources.PalettedSpriteDatabase.Save();
+				
+				Logs.Initialization.LogInfo(
+					"Took {0} ms to save sprite database.",
+					watch.ElapsedMilliseconds);
+			}
+		}
 
-				if (rewardManager == null)
-					Logs.Initialization.LogInfo(
-						"Took {0} ms to save sprite database.",
-						watch.ElapsedMilliseconds);
+		/// <summary>Unloads everything from GameData.</summary>
+		public static void Uninitialize() {
+			// Unset all game data
+			IEnumerable<FieldInfo> fields = typeof(GameData).GetFields()
+				.Where(field => field.IsStatic);
+			foreach (FieldInfo field in fields) {
+				field.SetValue(null, null);
 			}
 		}
 
@@ -144,8 +153,8 @@ namespace ZeldaOracle.Game {
 			foreach (FieldInfo field in fields) {
 				string name = field.Name.ToLower().Remove(0, prefix.Length);
 				
-				if (Resources.ContainsResource<T>(name)) {
-					field.SetValue(null, Resources.GetResource<T>(name));
+				if (Resources.Contains<T>(name)) {
+					field.SetValue(null, Resources.Get<T>(name));
 				}
 				else if (field.GetValue(null) != null) {
 					//Console.WriteLine("** WARNING: " + name + " is built programatically.");
@@ -157,7 +166,7 @@ namespace ZeldaOracle.Game {
 			
 			// Loop through resource dictionary.
 			// Find any resources that don't have corresponding fields in GameData.
-			Dictionary<string, T> dictionary = Resources.GetResourceDictionary<T>();
+			Dictionary<string, T> dictionary = Resources.GetDictionary<T>();
 			foreach (KeyValuePair<string, T> entry in dictionary) {
 				string name = prefix.ToLower() + entry.Key;
 				FieldInfo matchingField = fields.FirstOrDefault(
@@ -260,7 +269,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadPalettes("Palettes/palettes.conscript");
 
 			// Menu palette is made programatically as it's just a 16 unit offset (Maxes at 248)
-			Palette entitiesMenu = new Palette(Resources.GetResource<Palette>("entities_default"));
+			Palette entitiesMenu = new Palette(Resources.Get<Palette>("entities_default"));
 			foreach (var pair in entitiesMenu.GetDefinedConsts()) {
 				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
 					if (pair.Value[i].IsUndefined)
@@ -284,7 +293,7 @@ namespace ZeldaOracle.Game {
 				}
 			}
 			entitiesMenu.UpdatePalette();
-			Resources.AddResource<Palette>("entities_menu", entitiesMenu);
+			Resources.Add<Palette>("entities_menu", entitiesMenu);
 
 			IntegrateResources<Palette>("PAL_");
 			

@@ -1,0 +1,191 @@
+﻿#==============================================================
+# Weapons
+#==============================================================
+
+ITEM "sword", ItemSword;
+	NAME		"Wooden Sword", "Noble Sword", "Master Sword";
+	DESCRIPTION	"A hero's blade.", "A sacred blade.", "The blade of legends.";
+	MESSAGE		"You got a Hero's <red>Wooden Sword<red>! Hold <a> or <b> to charge it up, then release it for a spin attack!",
+				"You got the sacred <red>Noble Sword<red>!",
+				"You got the legendary <red>Master Sword<red>!";
+	SPRITE		"item_icon_sword_1", "item_icon_sword_2", "item_icon_sword_3";
+	MAXLEVEL	3;
+	HOLDTYPE	OneHand;
+END;
+
+ITEM "shield", ItemShield;
+	NAME		"Wooden Shield", "Iron Shield", "Mirror Shield";
+	DESCRIPTION	"A small shield.", "A large shield.", "A reflective shield.";
+	MESSAGE		"You got a <red>Wooden Shield<red>!",
+				"You got an <red>Iron Shield<red>!",
+				"You got the <red>Mirror Shield<red>!";
+	SPRITE		"item_icon_shield_1", "item_icon_shield_2", "item_icon_shield_3";
+	MAXLEVEL	3;
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "bracelet", ItemBracelet;
+	NAME		"Power Bracelet", "Power Glove";
+	DESCRIPTION	"A strength booster.", "Used to lift large objects.";
+	MESSAGE		"You got the <red>Power Bracelet<red>! Hold the button and press <dpad> to lift heavy objects!",
+				"You got the <red>Power Glove<red>! You can now lift heavy objects.";
+	SPRITE		"item_icon_bracelet", "item_icon_power_gloves";
+	MAXLEVEL	2;
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "feather", ItemFeather;
+	NAME		"Roc's Feather", "Roc's Cape";
+	DESCRIPTION	"A nice lift.", "A wing-riding cape.";
+	MESSAGE		"You got <red>Roc's Feather<red>! You feel as light as a feather!",
+				"You got <red>Roc's Cape<red>! Press and hold the button to do a double jump!";
+	SPRITE		"item_icon_feather", "item_icon_cape";
+	MAXLEVEL	2;
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "bombs", ItemBombs;
+	NAME		"Bombs";
+	DESCRIPTION	"Very explosive.";
+	MESSAGE		"You got <red>Bombs<red>! Use them to blow open false walls. Press <a> or <b> to set a Bomb. If you also press <dpad>, you can throw the Bomb.",
+				"You can now hold more <red>Bombs<red> than before!",
+				"You can now hold even more <red>Bombs<red> than before!";
+	SPRITE		"item_icon_bomb";
+	AMMO		"bombs";
+	MAXAMMO		10, 20, 30;
+	MAXLEVEL	3;
+	HOLDTYPE	TwoHands;
+	LEVELUPAMMO	true;
+END;
+
+ITEM "seed_satchel", ItemSeedSatchel;
+	NAME		"Seed Satchel";
+	DESCRIPTION	"A bag for carrying seeds.";
+	MESSAGE		"You got a <red>Seed Satchel<red>! And it has <red>20 Ember Seeds<red>!",
+				"You can now hold more <red>Mystical Seeds<red> than before!",
+				"You can now hold even more <red>Mystical Seeds<red> than before!";
+	SPRITE		"item_icon_satchel";
+	EQUIPSPRITE	"item_icon_satchel_equipped";
+	# Ammo is automatically set for seed weapons
+	#AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
+	MAXAMMO		20, 30, 50;
+	MAXLEVEL	3;
+	HOLDTYPE	TwoHands;
+	LEVELUPAMMO	true;
+END;
+
+ITEM "seed_shooter", ItemSeedShooter;
+	NAME		"Seed Shooter";
+	DESCRIPTION	"Used to bounce seeds around.";
+	MESSAGE		"You got a <red>Seed Satchel<red>! And it has <red>20 Ember Seeds<red>!",
+				"You can now hold more <red>Mystical Seeds<red> than before!",
+				"You can now hold even more <red>Mystical Seeds<red> than before!";
+	SPRITE		"item_icon_seed_shooter";
+	EQUIPSPRITE	"item_icon_seed_shooter_equipped";
+	# Ammo is automatically set for seed weapons
+	#AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "slingshot", ItemSlingshot;
+	NAME		"Slingshot", "Hyper Slingshot";
+	DESCRIPTION	"Used to shoot seeds.", "Shoots in 3 directions.";
+	MESSAGE		"You got the <red>Slingshot<red>! Choose your seeds and take aim!",
+				"You got the <red>Hyper Slingshot<red>! It shoots three seeds at a time!";
+	SPRITE		"item_icon_slingshot_1", "item_icon_slingshot_2";
+	EQUIPSPRITE	"item_icon_slingshot_1", "item_icon_slingshot_2_equipped";
+	# Ammo is automatically set for seed weapons
+	#AMMO		"ember_seeds", "scent_seeds", "pegasus_seeds", "gale_seeds", "mystery_seeds";
+	MAXLEVEL	2;
+	# TODO: Should this be OneHand?
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "bow", ItemBow;
+	NAME		"Wooden Bow";
+	DESCRIPTION	"Weapon of a marksman.";
+	MESSAGE		"You got <red>Bow<red>! Shoot arrows at your enemies!",
+				"Your <red>Bow Quiver<red> has been upgraded! You can now hold more arrows.",
+				"Your <red>Bow Quiver<red> has been upgraded! You can now hold even more arrows.";
+	SPRITE		"item_icon_bow";
+	AMMO		"arrows";
+	MAXAMMO		20, 30, 50;
+	MAXLEVEL	3;
+	HOLDTYPE	TwoHands;
+	LEVELUPAMMO	true;
+END;
+
+ITEM "switch_hook", ItemSwitchHook;
+	NAME		"Switch Hook", "Long Hook";
+	DESCRIPTION	"User and target trade places.", "Switches places from a distance.";
+	#TODO: Switch Hook Reward Messages
+	#MESSAGE		"You got <red>Bow<red>! Shoot arrows at your enemies!",
+	#			"Your <red>Bow Quiver<red> has been upgraded! You can now hold more arrows.";
+	SPRITE		"item_icon_switch_hook";
+	MAXLEVEL	2;
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "cane", ItemCane;
+	NAME		"Cane of Somaria";
+	DESCRIPTION	"Used to create blocks.";
+	#TODO: Cane of Somaria Reward Messages
+	#MESSAGE		"You got <red>Bow<red>! Shoot arrows at your enemies!";
+	SPRITE		"item_icon_cane";
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "magnet_gloves", ItemMagnetGloves;
+	NAME		"Magnetic Gloves";
+	DESCRIPTION	"Magnetically attractive!";
+	MESSAGE		"You got the Magnetic Gloves! Their magnetic might attracts and repels.";
+	SPRITE		"item_icon_magnet_gloves_south";
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "boomerang", ItemBoomerang;
+	NAME		"Boomerang", "Magic Boomerang";
+	DESCRIPTION	"Always comes back to you.", "A remote-control weapon.";
+	MESSAGE		"You got the <red>Boomerang<red>! Use it to stop enemies in their tracks!",
+				"It's the <red>Magical Boomerang<red>! Press <dpad> while holding the button to control its flight path!";
+	SPRITE		"item_icon_boomerang_1", "item_icon_boomerang_2";
+	MAXLEVEL	2;
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "shovel", ItemShovel;
+	NAME		"Shovel";
+	DESCRIPTION	"A handy tool.";
+	MESSAGE		"You got the <red>Shovel<red>! Now start digging!";
+	SPRITE		"item_icon_shovel";
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "biggoron_sword", ItemBigSword;
+	NAME		"Biggoron's Sword";
+	DESCRIPTION	"A powerful, two-handed sword.";
+	MESSAGE		"You got <red>Biggoron's Sword<red>! This two-handed sword is huge!";
+	SPRITE		"item_icon_biggoron_sword";
+	EQUIPSPRITE	"item_icon_biggoron_sword_equipped";
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "magic_rod", ItemMagicRod;
+	NAME		"Magic Rod";
+	DESCRIPTION	"Burn, baby burn!";
+	#TODO: Magic Rod Reward Message
+	#MESSAGE		"You got <red>Biggoron's Sword<red>! This two-handed sword is huge!";
+	SPRITE		"item_icon_magic_rod";
+	HOLDTYPE	TwoHands;
+END;
+
+ITEM "ocarina", ItemOcarina;
+	NAME		"Ocarina";
+	DESCRIPTION	"Plays a beautiful sound.";
+	#TODO: Ocarina Reward Message
+	#MESSAGE		"You got <red>Biggoron's Sword<red>! This two-handed sword is huge!";
+	SPRITE		"item_icon_ocarina";
+	HOLDTYPE	TwoHands;
+END;
+
+#==============================================================

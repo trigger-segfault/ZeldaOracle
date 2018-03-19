@@ -31,7 +31,8 @@ namespace ZeldaEditor.Windows {
 
 			this.textBlockLocate.Text = "Locate " + args.Type.Name + ": " + args.OldName;
 
-			orderedList = ZeldaResources.GetResourceKeyList(args.Type);
+			orderedList = new List<string>();
+			orderedList.AddRange(ZeldaResources.GetDictionaryKeys(args.Type));
 			orderedList.Sort();
 
 			filter = "";

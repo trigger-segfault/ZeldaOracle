@@ -18,9 +18,9 @@ namespace ZeldaOracle.Game.Tiles {
 	/// <summary>A static class used to initialize a tile type's properties
 	/// and events using static reflection.</summary>
 	public static class TileDataInitializing {
-		/// <summary>The collection of tile property functions.</summary>
+		/// <summary>The collection of tile initializer functions.</summary>
 		private static Dictionary<Type, TileDataInitializer> tileInitializers;
-		/// <summary>The collection of action property functions.</summary>
+		/// <summary>The collection of action initializer functions.</summary>
 		private static Dictionary<Type, ActionDataInitializer> actionInitializers;
 
 

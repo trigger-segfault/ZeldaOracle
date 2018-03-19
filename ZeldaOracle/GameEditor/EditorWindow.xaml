@@ -63,6 +63,7 @@
         <CommandBinding Command="cmd:EditorCommands.RefactorEvents" CanExecute="CanExecuteIsWorldOpen" Executed="OnRefactorEventsCommand"/>
     </Window.CommandBindings>
     <DockPanel LastChildFill="True" Grid.RowSpan="2">
+        <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0" />
         <Menu x:Name="menu" DockPanel.Dock="Top">
             <!--Style="{DynamicResource MenuStyle1}"-->
             <MenuItem Header="_File">

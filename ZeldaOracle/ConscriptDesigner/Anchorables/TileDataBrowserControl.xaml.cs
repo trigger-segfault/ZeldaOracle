@@ -75,7 +75,7 @@ namespace ConscriptDesigner.Anchorables {
 
 			tileData.Clear();
 			filteredTileData.Clear();
-			foreach (var pair in ZeldaResources.GetResourceDictionary<BaseTileData>()) {
+			foreach (var pair in ZeldaResources.GetDictionary<BaseTileData>()) {
 				tileData.Add(pair.Value);
 			}
 
@@ -100,7 +100,7 @@ namespace ConscriptDesigner.Anchorables {
 			filteredTileData = new List<BaseTileData>();
 			if (!string.IsNullOrEmpty(filter)) {
 				foreach (var tile in tileData) {
-					if (tile.Name.Contains(filter)) {
+					if (tile.ResourceName.Contains(filter)) {
 						filteredTileData.Add(tile);
 					}
 				}
@@ -139,7 +139,7 @@ namespace ConscriptDesigner.Anchorables {
 				statusTileInfo.Content = "";
 			}
 			else {
-				textBlockTileName.Text = hoverTileData.Name;
+				textBlockTileName.Text = hoverTileData.ResourceName;
 				if (hoverTileData.Type == null) {
 					if (hoverTileData is TileData)
 						statusTileInfo.Content = "Type: Tile";

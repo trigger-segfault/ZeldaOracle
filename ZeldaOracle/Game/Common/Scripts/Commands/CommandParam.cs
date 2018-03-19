@@ -236,6 +236,16 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			return null;
 		}
 
+		// Get an indexed child's value as an enum.
+		public E GetEnum<E>(int index, bool ignoreCase) where E : struct {
+			CommandParam parameter = GetParam(index);
+			if (parameter.IsValidType(CommandParamType.Integer))
+				return (E) Enum.ToObject(typeof(E), parameter.IntValue);
+			else if (parameter.IsValidType(CommandParamType.String))
+				return (E) Enum.Parse(typeof(E), parameter.StringValue, ignoreCase);
+			throw new Exception("Parameter type does not support enums!");
+		}
+
 		// Get an indexed child's string value.
 		public string GetString(int index) {
 			return GetParam(index).StringValue;
@@ -471,7 +481,23 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				return stringValue;
 			}
 		}
-			
+
+		public Point2I PointValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new Point2I(GetInt(0), GetInt(1));
+				return Point2I.Zero;
+			}
+		}
+
+		public Vector2F VectorValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new Vector2F(GetFloat(0), GetFloat(1));
+				return Vector2F.Zero;
+			}
+		}
+
 		// Script Reader Info ----------------------------------------------------------------
 
 		public int CharIndex {

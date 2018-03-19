@@ -573,12 +573,12 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int i = 0; i < count; i++) {
 				int index = reader.ReadInt32();
 				string name = strings[index];
-				T resource = Resources.GetResource<T>(name);
+				T resource = Resources.Get<T>(name);
 				if (resource == null && !skipRemainingResources && LocateResource != null) {
 					LocateResourceEventArgs e = new LocateResourceEventArgs(typeof(T), name);
 					LocateResource(e);
 					if (!e.SkipRemaining && e.NewName != null) {
-						resource = Resources.GetResource<T>(e.NewName);
+						resource = Resources.Get<T>(e.NewName);
 					}
 					skipRemainingResources = e.SkipRemaining;
 				}
@@ -1029,7 +1029,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Create a new entry in the resource list.
 			if (index < 0) {
-				Dictionary<string, T> resourceList = Resources.GetResourceDictionary<T>();
+				Dictionary<string, T> resourceList = Resources.GetDictionary<T>();
 				string name = resourceList.FirstOrDefault(x => x.Value == resource).Key;
 				index = list.Count;
 				list.Add(new ResourceInfo<T>(resource, strings.Count));

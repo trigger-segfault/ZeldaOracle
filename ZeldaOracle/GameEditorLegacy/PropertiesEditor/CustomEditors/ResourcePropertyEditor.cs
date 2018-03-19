@@ -10,7 +10,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class ResourcePropertyEditor<T> : DropDownPropertyEditor {
         
 		public override void CreateList(ListBox listBox, object value) {
-			Dictionary<string, T> resourceMap = Resources.GetResourceDictionary<T>();
+			Dictionary<string, T> resourceMap = Resources.GetDictionary<T>();
 			listBox.Items.Add("(none)");
 			foreach (KeyValuePair<string, T> entry in resourceMap) {
 				listBox.Items.Add(entry.Key);

@@ -90,7 +90,6 @@
   <ItemGroup>
     <Folder Include="Images\Editor\" />
     <Folder Include="Languages\" />
-    <Folder Include="Particles\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\collision_models.conscript">
@@ -104,6 +103,46 @@
     <None Include="Images\images.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>images</Name>
+    </None>
+    <None Include="Items\items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>items</Name>
+    </None>
+    <None Include="Items\Items\ammo.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ammo</Name>
+    </None>
+    <None Include="Items\Items\essences.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>essences</Name>
+    </None>
+    <None Include="Items\Items\key_items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>key_items</Name>
+    </None>
+    <None Include="Items\Items\weapons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>weapons</Name>
+    </None>
+    <None Include="Items\rewards.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>rewards</Name>
+    </None>
+    <None Include="Items\Rewards\ammo.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ammo</Name>
+    </None>
+    <None Include="Items\Rewards\dungeon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon</Name>
+    </None>
+    <None Include="Items\Rewards\health.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>health</Name>
+    </None>
+    <None Include="Items\Rewards\rupees.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>rupees</Name>
     </None>
     <None Include="Music\music.conscript">
       <Name>music</Name>
@@ -585,17 +624,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>general_objects</Name>
     </None>
-    <None Include="Tiles\Tiles\Objects\natural_objects_old.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>natural_objects_old</Name>
-    </None>
     <None Include="Tiles\Tiles\Objects\puzzle_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>puzzle_objects</Name>
-    </None>
-    <None Include="Tiles\Tiles\Objects\puzzle_objects_old.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>puzzle_objects_old</Name>
     </None>
     <None Include="Tiles\Tiles\overworld.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1282,6 +1313,16 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
+    <Compile Include="Sounds\Items\magnet_gloves_loop.wav">
+      <Name>magnet_gloves_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\magnet_gloves_stop.wav">
+      <Name>magnet_gloves_stop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="Sounds\Items\seed_shooter.wav">
       <Name>seed_shooter</Name>
       <Importer>WavImporter</Importer>
@@ -1565,18 +1606,7 @@
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\magnet_gloves_loop.wav">
-      <Name>magnet_gloves_loop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\Items\magnet_gloves_stop.wav">
-      <Name>magnet_gloves_stop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>

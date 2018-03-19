@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Entities {
 		protected int fadeDelay;
 		protected bool hasDuration;
 		private event Action collected;
-		protected bool isCollectibleWithItems;
+		protected bool isCollectibleWithWeapons;
 
 
 		//-----------------------------------------------------------------------------
@@ -48,13 +48,13 @@ namespace ZeldaOracle.Game.Entities {
 			Interactions.SetReaction(InteractionType.Sword,
 				delegate(Entity sender, EventArgs args)
 			{
-				if (IsCollectible && IsCollectibleWithItems)
+				if (IsCollectible && IsCollectibleWithWeapons)
 					Collect();
 			});
 			Interactions.SetReaction(InteractionType.Boomerang,
 				delegate(Entity sender, EventArgs args)
 			{
-				if (IsCollectible && IsCollectibleWithItems) {
+				if (IsCollectible && IsCollectibleWithWeapons) {
 					PlayerBoomerang boomerang = (PlayerBoomerang) sender;
 					boomerang.GrabCollectible(this);
 				}
@@ -62,7 +62,7 @@ namespace ZeldaOracle.Game.Entities {
 			Interactions.SetReaction(InteractionType.SwitchHook,
 				delegate(Entity sender, EventArgs args)
 			{
-				if (IsCollectible && IsCollectibleWithItems) {
+				if (IsCollectible && IsCollectibleWithWeapons) {
 					SwitchHookProjectile hook = (SwitchHookProjectile) sender;
 					hook.GrabCollectible(this);
 				}
@@ -70,7 +70,7 @@ namespace ZeldaOracle.Game.Entities {
 			
 			// Collectible
 			hasDuration				= true;
-			isCollectibleWithItems	= true;
+			isCollectibleWithWeapons	= true;
 			collected				= null;
 			aliveDuration			= GameSettings.COLLECTIBLE_ALIVE_DURATION;
 			fadeDelay				= GameSettings.COLLECTIBLE_FADE_DELAY;
@@ -120,8 +120,8 @@ namespace ZeldaOracle.Game.Entities {
 			get { return (timer >= collectibleDelay); }
 		}
 
-		public bool IsCollectibleWithItems {
-			get { return isCollectibleWithItems; }
+		public bool IsCollectibleWithWeapons {
+			get { return isCollectibleWithWeapons; }
 		}
 
 		public int CollectibleDelay {

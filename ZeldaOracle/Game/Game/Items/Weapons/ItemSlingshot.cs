@@ -25,15 +25,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		public ItemSlingshot() {
-			this.id				= "item_slingshot";
-			this.name			= new string[] { "Slingshot", "Hyper Slingshot" };
-			this.description	= new string[] { "Used to shoot seeds.", "Shoots in 3 directions." };
-			this.maxLevel		= Item.Level2;
-			this.currentAmmo	= 0;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
-			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2 };
-			this.spriteEquipped	= new ISprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED };
-			this.seedTracker	= new EntityTracker<SeedProjectile>(3);
+			Flags =
+				WeaponFlags.UsableInMinecart |
+				WeaponFlags.UsableWhileJumping |
+				WeaponFlags.UsableWhileInHole;
+
+			seedTracker = new EntityTracker<SeedProjectile>(3);
 		}
 
 
@@ -70,7 +67,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			seedTracker.TrackEntity(seed);
 
 			// Spawn the extra 2 seeds for the Hyper Slingshot.
-			if (level == Item.Level2) {
+			if (Level == Item.Level2) {
 				for (int i = 0; i < 2; i++) {
 					int sideDirection = direction + (i == 0 ? 1 : 3);
 					
@@ -91,7 +88,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			// Set the tool animation.
 			Player.EquipTool(Player.ToolVisual);
-			if (level == Item.Level1)
+			if (Level == Item.Level1)
 				Player.ToolVisual.PlayAnimation(GameData.ANIM_SLINGSHOT_1);
 			else
 				Player.ToolVisual.PlayAnimation(GameData.ANIM_SLINGSHOT_2);
@@ -111,7 +108,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
 			DrawAmmo(g, position);
-			g.DrawSprite(ammo[currentAmmo].Sprite, position + new Point2I(8, 0));
+			g.DrawSprite(CurrentAmmo.Sprite, position + new Point2I(8, 0));
 		}
 	}
 }

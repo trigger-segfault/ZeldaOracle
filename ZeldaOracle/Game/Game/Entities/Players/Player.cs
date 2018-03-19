@@ -1043,8 +1043,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public float PushSpeed {
 			get {
-				if (Inventory.IsItemObtained("item_bracelet")) {
-					int braceletLevel = Inventory.GetItem("item_bracelet").Level;
+				if (Inventory.IsItemObtained("bracelet")) {
+					int braceletLevel = Inventory.GetItem("bracelet").Level;
 					return GameSettings.BRACELET_PUSH_SPEEDS[braceletLevel];
 				}
 				return GameSettings.PLAYER_DEFAULT_PUSH_SPEED;

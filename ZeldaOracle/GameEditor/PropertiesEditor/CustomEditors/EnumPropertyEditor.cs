@@ -19,6 +19,7 @@ using System.Collections;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using System.Windows.Data;
 using System.Globalization;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class EnumPropertyEditor : EnumComboBoxEditor {
@@ -34,19 +35,10 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			return GetValues(enumType);
 		}
 
-		private static object[] GetValues(Type enumType) {
-			List<object> list = new List<object>();
-			if (enumType != null) {
-				foreach (FieldInfo fieldInfo in from x in enumType.GetFields()
-												where x.IsLiteral
-												select x) {
-					object[] customAttributes = fieldInfo.GetCustomAttributes(typeof(BrowsableAttribute), false);
-					if (customAttributes.Length != 1 || ((BrowsableAttribute)customAttributes[0]).Browsable) {
-						list.Add(fieldInfo.GetValue(enumType));
-					}
-				}
-			}
-			return list.ToArray();
+		private static IEnumerable<object> GetValues(Type enumType) {
+			if (enumType != null)
+				return EnumHelper.GetBrowsableValues(enumType);
+			return Enumerable.Empty<object>();
 		}
 
 		protected override IValueConverter CreateValueConverter() {

@@ -15,11 +15,12 @@ namespace ZeldaOracle.Game.Items {
 
 	public abstract class ItemWeapon : ItemEquipment {
 
-		// The flags describing the item.
-		protected ItemFlags	flags;
+		/// <summary>The flags describing how the weapon can be used.</summary>
+		private WeaponFlags	flags;
 		private int			equipSlot;
-		protected int		currentAmmo;
-		protected Ammo[]	ammo;
+
+		// TODO: Store these as properties for save format
+		private int			ammoIndex;
 
 
 		//-----------------------------------------------------------------------------
@@ -27,12 +28,29 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		public ItemWeapon() {
-			this.flags			= ItemFlags.None;
-			this.equipSlot		= 0;
-			this.currentAmmo	= -1;
-			this.ammo			= null;
+			flags			= WeaponFlags.None;
+			equipSlot		= 0;
+			ammoIndex		= -1;
 		}
-		
+
+
+
+		//-----------------------------------------------------------------------------
+		// Protected Mutators
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Sets the ammo types used by this weapon.</summary>
+		public override void SetAmmo(params string[] ammos) {
+			base.SetAmmo(ammos);
+			ammoIndex = 0;
+		}
+
+		/// <summary>Sets the ammo types used by this weapon.</summary>
+		public override void SetAmmo(params Ammo[] ammos) {
+			base.SetAmmo(ammos);
+			ammoIndex = 0;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Equipping
@@ -42,24 +60,21 @@ namespace ZeldaOracle.Game.Items {
 			equipSlot = slot;
 			base.Equip();
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Ammo
 		//-----------------------------------------------------------------------------
-		
-		// Return true if the given amount of ammo exists for the current type.
+
+		/// <summary>Return true if the given amount of ammo exists for the current
+		/// type.</summary>
 		public bool HasAmmo(int amount = 1) {
-			return (ammo[currentAmmo].Amount >= amount);
+			return (CurrentAmmo.Amount >= amount);
 		}
 
-		// Use up the given amount of ammo of the current type.
+		/// <summary>Use up the given amount of ammo of the current type.</summary>
 		public void UseAmmo(int amount = 1) {
-			ammo[currentAmmo].Amount -= amount;
-		}
-
-		public Ammo GetAmmoAt(int index) {
-			return ammo[index];
+			CurrentAmmo.Amount -= amount;
 		}
 
 
@@ -69,16 +84,16 @@ namespace ZeldaOracle.Game.Items {
 		
 		public bool IsButtonDown() {
 			if (IsTwoHanded)
-				return inventory.GetSlotButton(0).IsDown() ||
-					inventory.GetSlotButton(1).IsDown();
-			return inventory.GetSlotButton(equipSlot).IsDown();
+				return Inventory.GetSlotButton(0).IsDown() ||
+					Inventory.GetSlotButton(1).IsDown();
+			return Inventory.GetSlotButton(equipSlot).IsDown();
 		}
 		
 		public bool IsButtonPressed() {
 			if (IsTwoHanded)
-				return inventory.GetSlotButton(0).IsPressed() ||
-					inventory.GetSlotButton(1).IsPressed();
-			return inventory.GetSlotButton(equipSlot).IsPressed();
+				return Inventory.GetSlotButton(0).IsPressed() ||
+					Inventory.GetSlotButton(1).IsPressed();
+			return Inventory.GetSlotButton(equipSlot).IsPressed();
 		}
 
 
@@ -89,22 +104,22 @@ namespace ZeldaOracle.Game.Items {
 		public virtual bool IsUsable() {
 			if (Player.StateParameters.ProhibitWeaponUse)
 				return false;
-			if (Player.IsInMinecart && !flags.HasFlag(ItemFlags.UsableInMinecart))
+			if (Player.IsInMinecart && !flags.HasFlag(WeaponFlags.UsableInMinecart))
 				return false;
-			else if (Player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
+			else if (Player.IsInAir && !flags.HasFlag(WeaponFlags.UsableWhileJumping))
 				return false;
-			else if (Player.Physics.IsInHole && !flags.HasFlag(ItemFlags.UsableWhileInHole))
+			else if (Player.Physics.IsInHole && !flags.HasFlag(WeaponFlags.UsableWhileInHole))
 				return false;
 			else if ((Player.WeaponState is PlayerHoldSwordState ||
 				Player.WeaponState is PlayerSwingState ||
 				Player.WeaponState is PlayerSeedShooterState ||
 				Player.WeaponState is PlayerSpinSwordState) &&
-				!flags.HasFlag(ItemFlags.UsableWithSword))
+				!flags.HasFlag(WeaponFlags.UsableWithSword))
 			{
 				return false;
 			}
 			else if (Player.IsSwimmingUnderwater)
-				return flags.HasFlag(ItemFlags.UsableUnderwater);
+				return flags.HasFlag(WeaponFlags.UsableUnderwater);
 			else
 				return true;
 		}
@@ -130,30 +145,42 @@ namespace ZeldaOracle.Game.Items {
 
 		// Draws over link's sprite.
 		public virtual void DrawOver() { }
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
 
 		// Gets if the item has the specified flags.
-		public bool HasFlag(ItemFlags flags) {
+		public bool HasFlag(WeaponFlags flags) {
 			return this.flags.HasFlag(flags);
 		}
-		
 
+		
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		protected override void OnInitialize() {
+			base.OnInitialize();
+			if (UsesAmmo && ammoIndex == -1)
+				ammoIndex = 0;
+		}
 
 		protected virtual void DrawAmmo(Graphics2D g, Point2I position) {
-			g.DrawString(GameData.FONT_SMALL, ammo[currentAmmo].Amount.ToString("00"), position + new Point2I(8, 8), EntityColors.Black);
+			g.DrawString(GameData.FONT_SMALL,
+				CurrentAmmo.Amount.ToString("00"),
+				position + new Point2I(8, 8),
+				EntityColors.Black);
 		}
 		
 		// Draws the item inside the inventory.
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
-			if (maxLevel > Item.Level1)
+			if (UsesAmmo)
+				DrawAmmo(g, position);
+			if (MaxLevel > Item.Level1)
 				DrawLevel(g, position);
 		}
 
@@ -161,9 +188,9 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		// Gets or sets the item flags.
-		public ItemFlags Flags {
+
+		/// <summary>Gets or sets the item flags.</summary>
+		public WeaponFlags Flags {
 			get { return flags; }
 			set { flags = value; }
 		}
@@ -174,24 +201,24 @@ namespace ZeldaOracle.Game.Items {
 		}
 
 		public InputControl CurrentControl {
-			get { return inventory.GetSlotButton(equipSlot); }
+			get { return Inventory.GetSlotButton(equipSlot); }
 		}
 
 		public bool IsTwoHanded {
-			get { return flags.HasFlag(ItemFlags.TwoHanded); }
+			get { return flags.HasFlag(WeaponFlags.TwoHanded); }
 		}
 
-		public int NumAmmos {
+		public int AmmoIndex {
+			get { return ammoIndex; }
+			set { ammoIndex = GMath.Clamp(value, 0, AmmoCount - 1); }
+		}
+
+		public Ammo CurrentAmmo {
 			get {
-				if (ammo != null)
-					return ammo.Length;
-				return 0;
+				if (!UsesAmmo || ammoIndex == -1)
+					return null;
+				return GetAmmoAt(ammoIndex);
 			}
-		}
-
-		public int CurrentAmmo {
-			get { return currentAmmo; }
-			set { currentAmmo = GMath.Clamp(value, 0, ammo.Length - 1); }
 		}
 	}
 }

@@ -12,22 +12,17 @@ using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemShovel : ItemWeapon {
 		
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public ItemShovel() {
-			this.id				= "item_shovel";
-			this.name			= new string[] { "Shovel" };
-			this.description	= new string[] { "A handy tool." };
-			this.maxLevel		= Item.Level1;
-			this.flags			= ItemFlags.UsableWhileInHole;
-			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_SHOVEL };
+			Flags = WeaponFlags.UsableWhileInHole;
 		}
 
 

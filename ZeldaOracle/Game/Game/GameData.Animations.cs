@@ -327,7 +327,7 @@ namespace ZeldaOracle.Game {
 
 			for (int i = 0; i < 6; i++) {
 				for (int j = 0; j < 4; j++) {
-					ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[i, j] = Resources.GetResource<Animation>("color_cube_" + orientations[i] + "_" + directions[j]);
+					ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[i, j] = Resources.Get<Animation>("color_cube_" + orientations[i] + "_" + directions[j]);
 				}
 			}
 

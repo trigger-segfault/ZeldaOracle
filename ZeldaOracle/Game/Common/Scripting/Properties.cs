@@ -180,7 +180,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Get a resource value with a default value fallback.</summary>
 		public T GetResource<T>(string name) where T : class {
-			return Resources.GetResource<T>(GetString(name));
+			return Resources.Get<T>(GetString(name));
 		}
 
 		/// <summary>Get an enum property value.</summary>
@@ -251,7 +251,7 @@ namespace ZeldaOracle.Common.Scripting {
 			Property p = GetProperty(name, true);
 			T result = null;
 			if (p != null && p.StringValue.Length > 0)
-				result = Resources.GetResource<T>(p.StringValue);
+				result = Resources.Get<T>(p.StringValue);
 			return result ?? defaultValue;
 		}
 
@@ -408,7 +408,7 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property SetAsResource<T>(string name, T resource) where T : class {
 			string resourceName = "";
 			if (resource != null)
-				resourceName = Resources.GetResourceName<T>(resource);
+				resourceName = Resources.GetName<T>(resource);
 			return Set(name, resourceName);
 		}
 

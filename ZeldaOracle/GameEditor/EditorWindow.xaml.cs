@@ -98,7 +98,9 @@ namespace ZeldaEditor {
 			tilePreview.Name				= "tilePreview";
 			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
 			hostTilePreview.Child			= tilePreview;
-			
+
+			dummyHost.Child = new DummyGraphicsDeviceControl();
+
 			statusTask.Content = "";
 
 			// Setup layer combo-box.
@@ -337,7 +339,7 @@ namespace ZeldaEditor {
 			if (tileData == null)
 				textBlockTileName.Text = "";
 			else
-				textBlockTileName.Text = tileData.Name;
+				textBlockTileName.Text = tileData.ResourceName;
 		}
 
 		public void UpdatePropertyPreview(IPropertyObject obj) {
@@ -379,7 +381,7 @@ namespace ZeldaEditor {
 				BaseTileDataInstance tile = obj as BaseTileDataInstance;
 				tilePreview.UpdateTile(tile);
 				propertyPreviewImage.Content = null;
-				propertyPreviewName.Text = tile.BaseData.Name;
+				propertyPreviewName.Text = tile.BaseData.ResourceName;
 			}
 			else {
 				propertyPreviewImage.Content = null;

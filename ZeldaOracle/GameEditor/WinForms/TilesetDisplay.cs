@@ -14,7 +14,6 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
-using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using ZeldaOracle.Common.Graphics.Sprites;
 using System.Windows.Threading;
 using Size = System.Drawing.Size;
@@ -23,10 +22,7 @@ using ZeldaEditor.Util;
 namespace ZeldaEditor.WinForms {
 
 	public class TilesetDisplay : GraphicsDeviceControl {
-
-		private static ContentManager content;
-		private static SpriteBatch spriteBatch;
-
+		
 		private EditorWindow	editorWindow;
 		private EditorControl	editorControl;
 
@@ -45,11 +41,6 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Initialize() {
-			content		= new ContentManager(Services, "Content");
-			spriteBatch	= new SpriteBatch(GraphicsDevice);
-
-			editorControl.SetGraphics(spriteBatch, GraphicsDevice, content);
-
 			filteredTileData = null;
 			needsToInvalidate = false;
 			columns = 1;
@@ -81,14 +72,6 @@ namespace ZeldaEditor.WinForms {
 						TimerUpdate();
 				},
 				System.Windows.Application.Current.Dispatcher);*/
-		}
-
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				content.Unload();
-			}
-
-			base.Dispose(disposing);
 		}
 
 
@@ -244,10 +227,11 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
-			if (!editorControl.IsResourcesLoaded)
+			if (!Resources.IsInitialized) return;
+			if (!editorControl.IsInitialized)
 				return;
 			editorControl.UpdateTicks();
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			//g.SetRenderTarget(GameData.RenderTargetGame);
 			GameData.PaletteShader.TilePalette = Zone.Palette;
 			GameData.PaletteShader.ApplyPalettes();

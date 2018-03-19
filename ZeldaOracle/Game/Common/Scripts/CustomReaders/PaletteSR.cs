@@ -30,8 +30,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("PALETTE", (int) Modes.Root,
 				"string dictionary, string name",
 			delegate (CommandParam parameters) {
-				PaletteDictionary dictionary = Resources.GetPaletteDictionary(parameters.GetString(0));
-				palette = new Palette(Resources.GraphicsDevice, dictionary);
+				PaletteDictionary dictionary =
+					Resources.Get<PaletteDictionary>(parameters.GetString(0));
+				palette = new Palette(dictionary);
 				paletteName = parameters.GetString(1);
 				AddResource<Palette>(paletteName, palette);
 				Mode = Modes.Palette;

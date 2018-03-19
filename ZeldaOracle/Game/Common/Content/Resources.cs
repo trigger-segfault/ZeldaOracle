@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,29 +15,18 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using XnaSong = Microsoft.Xna.Framework.Media.Song;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
+using System.Collections;
 
 namespace ZeldaOracle.Common.Content {
 
-	/// <summary>A fatal exception that's thrown during the games LoadContent function
-	/// This is used to end the game before updates start happening.</summary>
-	public class LoadContentException : Exception {
-
-		/// <summary>Constructs the load content exception.</summary>
-		public LoadContentException(string message) :
-			base(message) {
-		}
-
-		/// <summary>Prints the exception message.</summary>
-		public virtual void PrintMessage() {
-			Console.WriteLine(Message);
-		}
-	}
 
 	/// <summary>A class for storing information about a style group.</summary>
 	public class StyleGroupCollection {
@@ -72,17 +62,26 @@ namespace ZeldaOracle.Common.Content {
 	/// It has methods to load in resources from the game
 	/// content and stores them in key/value maps.
 	/// </summary>
-	public class Resources {
+	public static class Resources {
 
 		// CONTAINMENT:
+		/// <summary>True if the resource manager has been fully initialized.</summary>
+		private static bool isInitialized;
 		/// <summary>The game's content manager.</summary>
 		private static ContentManager contentManager;
 		/// <summary>The game's graphics device.</summary>
 		private static GraphicsDevice graphicsDevice;
 		/// <summary>The game's sprite batch for drawing.</summary>
 		private static SpriteBatch spriteBatch;
+		/// <summary>True if the content manager was created by an IServiceProvider
+		/// and should be disposed of when calling Uninitialize().</summary>
+		private static bool disposeContent;
+		/// <summary>A collection of content that need to manually be disposed of
+		/// during unload.<para/>
+		/// This is a hashset to prevent resources from being added continuously.</summary>
+		private static HashSet<IDisposable> independentResources;
 		/// <summary>A map of the resource dictionaries by resource type.</summary>
-		private static Dictionary<Type, object> resourceDictionaries;
+		private static Dictionary<Type, IDictionary> resourceDictionaries;
 
 		// GRAPHICS:
 		/// <summary>The collection of loaded images.</summary>
@@ -103,8 +102,6 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, Palette> palettes;
 		/// <summary>The collection of loaded shaders.</summary>
 		private static Dictionary<string, Effect> shaders;
-		/// <summary>The texture loader for loading images from file.</summary>
-		private static TextureLoader textureLoader;
 
 		/// <summary>The database for creating paletted sprites.</summary>
 		private static PalettedSpriteDatabase palettedSpriteDatabase;
@@ -116,6 +113,9 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, ActionTileData> actionTileData;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, Zone> zones;
+		private static Dictionary<string, ItemData> items;
+		private static Dictionary<string, AmmoData> ammos;
+		private static Dictionary<string, RewardData> rewards;
 
 		// SOUNDS:
 		/// <summary>The collection of loaded sound effects.</summary>
@@ -164,16 +164,56 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>The directory for storing languages.</summary>
 		public const string LanguageDirectory = "Languages/";
 
+		// Items
+		/// <summary>The directory for storing items, ammos, and rewards.</summary>
+		public const string ItemDirectory = "Items/";
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Initializes the resource manager.</summary>
-		public static void Initialize(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
+		/// <summary>Initializes the resource manager class.</summary>
+		static Resources() {
+			isInitialized = false;
+			independentResources = new HashSet<IDisposable>();
+		}
+
+		/// <summary>Sets up the resource manager with the specified
+		/// GraphicDevice and IServiceProvider to use for the ContentManager.</summary>
+		public static void Initialize(GraphicsDevice graphicsDevice,
+			IServiceProvider serviceProvider)
+		{
+			// Make sure nothing is null
+			if (graphicsDevice == null)
+				throw new ArgumentNullException("GraphicsDevice cannot be null!");
+			if (serviceProvider == null)
+				throw new ArgumentNullException("IServiceProvider cannot be null!");
+
+			Initialize(graphicsDevice, new ContentManager(serviceProvider, "Content"));
+			// We made this ContentManager, so we need to dispose of it
+			disposeContent = true;
+		}
+
+		/// <summary>Sets up the resource manager with the specified
+		/// GraphicDevice and ContentManager.</summary>
+		public static void Initialize(GraphicsDevice graphicsDevice,
+			ContentManager contentManager)
+		{
+			// Uninitialize if we're already initialized
+			if (IsInitialized)
+				Uninitialize();
+
+			// Make sure nothing is null
+			if (graphicsDevice == null)
+				throw new ArgumentNullException("GraphicsDevice cannot be null!");
+			if (contentManager == null)
+				throw new ArgumentNullException("ContentManager cannot be null!");
+
 			// Containment
-			Resources.spriteBatch		= spriteBatch;
+			disposeContent  = false;
 			Resources.graphicsDevice	= graphicsDevice;
+			Resources.spriteBatch		= new SpriteBatch(graphicsDevice);
 			Resources.contentManager	= contentManager;
 
 			// Graphics
@@ -187,7 +227,7 @@ namespace ZeldaOracle.Common.Content {
 			paletteDictionaries = new Dictionary<string, PaletteDictionary>();
 			palettes            = new Dictionary<string, Palette>();
 			palettedSpriteDatabase  = new PalettedSpriteDatabase();
-			textureLoader       = new TextureLoader(graphicsDevice);
+			//textureLoader       = new TextureLoader(graphicsDevice);
 
 			// Sounds
 			sounds				= new Dictionary<string, Sound>();
@@ -203,6 +243,10 @@ namespace ZeldaOracle.Common.Content {
 			tilesets			= new Dictionary<string, Tileset>();
 			zones				= new Dictionary<string, Zone>();
 
+			items				= new Dictionary<string, ItemData>();
+			ammos				= new Dictionary<string, AmmoData>();
+			rewards				= new Dictionary<string, RewardData>();
+
 			// Settings
 			verboseOutput		= false;
 
@@ -210,7 +254,7 @@ namespace ZeldaOracle.Common.Content {
 			registeredStyles	= new Dictionary<string, StyleGroupCollection>();
 
 			// Setup the resource dictionary lookup map.
-			resourceDictionaries = new Dictionary<Type, object>();
+			resourceDictionaries = new Dictionary<Type, IDictionary>();
 			resourceDictionaries[typeof(Image)]				= images;
 			resourceDictionaries[typeof(RealFont)]			= realFonts;
 			resourceDictionaries[typeof(GameFont)]			= gameFonts;
@@ -226,15 +270,22 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(ActionTileData)]	= actionTileData;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(Zone)]				= zones;
-			resourceDictionaries[typeof(PaletteDictionary)] = paletteDictionaries;
-			resourceDictionaries[typeof(Palette)]           = palettes;
+			resourceDictionaries[typeof(PaletteDictionary)]	= paletteDictionaries;
+			resourceDictionaries[typeof(Palette)]			= palettes;
+			resourceDictionaries[typeof(ItemData)]			= items;
+			resourceDictionaries[typeof(AmmoData)]			= ammos;
+			resourceDictionaries[typeof(RewardData)]		= rewards;
+
+			isInitialized = true;
 		}
 
+		/// <summary>Uninitializes the resource manager and also unloads all content.</summary>
 		public static void Uninitialize() {
-			// Have we initialized yet?
-			if (images == null) return;
-			
-			contentManager.Unload();
+			if (!IsInitialized)
+				return;
+
+			// Unload and dispose of all resources beforehand
+			Unload();
 
 			images = null;
 			realFonts = null;
@@ -251,6 +302,9 @@ namespace ZeldaOracle.Common.Content {
 			actionTileData = null;
 			tilesets = null;
 			zones = null;
+			items = null;
+			ammos = null;
+			rewards = null;
 			paletteDictionaries = null;
 			foreach (var pair in palettes) {
 				pair.Value.Dispose();
@@ -259,9 +313,58 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries = null;
 			palettedSpriteDatabase.Dispose();
 			palettedSpriteDatabase = null;
-			textureLoader = null;
 
 			registeredStyles = null;
+
+			if (!SpriteBatch.IsDisposed)
+				spriteBatch.Dispose();
+			if (disposeContent)
+				contentManager.Dispose();
+			graphicsDevice  = null;
+			spriteBatch     = null;
+			contentManager  = null;
+
+			isInitialized = false;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Content Management
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Unloads and disposes of all resources.</summary>
+		public static void Unload() {
+			if (!IsInitialized)
+				return;
+
+			// Clear all resource dictionaries
+			foreach (var pair in resourceDictionaries) {
+				pair.Value.Clear();
+			}
+
+			// Clear the paletted sprite database
+			palettedSpriteDatabase.Clear();
+
+			// Clear the registered styles
+			registeredStyles.Clear();
+
+			// Unload resources loaded through the content manager
+			ContentManager.Unload();
+
+			// Dispose of all resources not loaded through the content manager
+			foreach (IDisposable resource in independentResources) {
+				resource.Dispose();
+			}
+			independentResources.Clear();
+		}
+
+		/// <summary>Adds an indenpendent resource that will be disposed
+		/// of during Unload().</summary>
+		public static void AddDisposable(IDisposable disposable) {
+			if (!IsInitialized)
+				throw new InvalidOperationException("Cannot add disposable when " +
+					"Resources has not been initialized!");
+			independentResources.Add(disposable);
 		}
 
 
@@ -270,107 +373,76 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Does the a resource with the given name and type exist?</summary>
-		public static bool ContainsResource<T>(T resource) {
-			if (!ContainsResourceType<T>())
-				return false; // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
-			return dictionary.ContainsValue(resource);
+		public static bool Contains<T>(T resource) {
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			return dictionary?.ContainsValue(resource) ?? false;
 		}
 
 		/// <summary>Does the a resource with the given name and type exist?</summary>
-		public static bool ContainsResource<T>(string name) {
-			if (!ContainsResourceType<T>())
-				return false; // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
-			return dictionary.ContainsKey(name);
+		public static bool Contains<T>(string name) {
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			return dictionary?.ContainsKey(name) ?? false;
 		}
 
 		/// <summary>Get the resource with the given name and type.</summary>
-		public static T GetResource<T>(string name, bool allowEmptyNames = false) {
+		public static T Get<T>(string name, bool allowEmptyNames = false) {
 			if (name.Length == 0 && !allowEmptyNames)
 				return default(T);
-			if (!ContainsResourceType<T>())
-				return default(T); // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
-			//if (!dictionary.ContainsKey(name))
-			//	return default(T); // A resource with the given name doesn't exist!
-			T result;
-			dictionary.TryGetValue(name, out result);
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			T result = default(T);
+			dictionary?.TryGetValue(name, out result);
 			return result;
 		}
 
 		/// <summary>Get the resource with the given name and type.</summary>
-		public static string GetResourceName<T>(T resource) where T : class {
-			if (!ContainsResourceType<T>())
-				return ""; // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
-			return dictionary.FirstOrDefault(x => x.Value == resource).Key;
+		public static string GetName<T>(T resource) where T : class {
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			if (dictionary == null)
+				return "";
+			return dictionary.FirstOrDefault(x => x.Value == resource).Key ?? "";
 		}
 
 		/// <summary>Get the dictionary used to store the given type of resources.</summary>
-		public static Dictionary<string, T> GetResourceDictionary<T>() {
-			if (!ContainsResourceType<T>())
-				return null; // This type of resource doesn't exist!
+		public static Dictionary<string, T> GetDictionary<T>() {
+			IDictionary dictionary;
+			resourceDictionaries.TryGetValue(typeof(T), out dictionary);
 			return (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 		}
 
-		/// <summary>Gets the list of resource keys for the given type of resource.</summary>
-		public static List<string> GetResourceKeyList(Type type) {
-			if (type == typeof(Image))
-				return GetResourceKeyList<Image>();
-			if (type == typeof(RealFont))
-				return GetResourceKeyList<RealFont>();
-			if (type == typeof(GameFont))
-				return GetResourceKeyList<GameFont>();
-			if (type == typeof(ISpriteSource))
-				return GetResourceKeyList<ISpriteSource>();
-			if (type == typeof(ISprite))
-				return GetResourceKeyList<ISprite>();
-			if (type == typeof(Animation))
-				return GetResourceKeyList<Animation>();
-			if (type == typeof(Effect))
-				return GetResourceKeyList<Effect>();
-			if (type == typeof(Sound))
-				return GetResourceKeyList<Sound>();
-			if (type == typeof(Song))
-				return GetResourceKeyList<Song>();
-
-			if (type == typeof(CollisionModel))
-				return GetResourceKeyList<CollisionModel>();
-			if (type == typeof(BaseTileData))
-				return GetResourceKeyList<BaseTileData>();
-			if (type == typeof(TileData))
-				return GetResourceKeyList<TileData>();
-			if (type == typeof(ActionTileData))
-				return GetResourceKeyList<ActionTileData>();
-			if (type == typeof(Tileset))
-				return GetResourceKeyList<Tileset>();
-			if (type == typeof(Zone))
-				return GetResourceKeyList<Zone>();
-
-			if (type == typeof(PaletteDictionary))
-				return GetResourceKeyList<PaletteDictionary>();
-			if (type == typeof(Palette))
-				return GetResourceKeyList<Palette>();
-
-			return new List<string>();
+		/// <summary>Clears the resource dictionary for the specified resource type.</summary>
+		public static void ClearDictionary<T>() {
+			IDictionary dictionary = GetDictionary<T>();
+			dictionary?.Clear();
 		}
 
 		/// <summary>Gets the list of resource keys for the given type of resource.</summary>
-		public static List<string> GetResourceKeyList<T>() {
-			return ((Dictionary<string, T>) resourceDictionaries[typeof(T)]).Keys.ToList();
+		public static IEnumerable<string> GetDictionaryKeys(Type type) {
+			IDictionary dictionary;
+			if (resourceDictionaries.TryGetValue(type, out dictionary)) {
+				foreach (object key in dictionary.Keys) {
+					yield return (string) key;
+				}
+			}
+		}
+
+		/// <summary>Gets the list of resource keys for the given type of resource.</summary>
+		public static IEnumerable<string> GetDictionaryKeys<T>() {
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			return dictionary?.Keys ?? Enumerable.Empty<string>();
 		}
 
 		/// <summary>Is the given type of resource handled by this class?</summary>
-		public static bool ContainsResourceType<T>() {
+		public static bool ContainsType<T>() {
 			return resourceDictionaries.ContainsKey(typeof(T));
 		}
 
 		/// <summary>Add the given resource under the given name.</summary>
-		public static void AddResource<T>(string assetName, T resource) {
-			if (!ContainsResourceType<T>())
-				return; // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+		public static void Add<T>(string assetName, T resource) {
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			if (dictionary == null) {
+				dictionary = new Dictionary<string, T>();
+				resourceDictionaries.Add(typeof(T), dictionary);
+			}
 			dictionary.Add(assetName, resource);
 			// TODO: Properly implement a way to separate animations from sprites.
 			if (resource is Animation)
@@ -378,18 +450,18 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Remove the resource under the given name from the database.</summary>
-		public static void RemoveResource<T>(string assetName) {
-			if (!ContainsResourceType<T>())
-				return; // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
-			dictionary.Remove(assetName);
+		public static void Remove<T>(string assetName) {
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			dictionary?.Remove(assetName);
 		}
 
 		/// <summary>Add the given resource under the given name.</summary>
-		public static void SetResource<T>(string assetName, T resource) {
-			if (!ContainsResourceType<T>())
-				return; // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+		public static void Set<T>(string assetName, T resource) {
+			Dictionary<string, T> dictionary = GetDictionary<T>();
+			if (dictionary == null) {
+				dictionary = new Dictionary<string, T>();
+				resourceDictionaries.Add(typeof(T), dictionary);
+			}
 			dictionary[assetName] = resource;
 			// TODO: Properly implement a way to separate animations from sprites.
 			if (resource is Animation)
@@ -400,14 +472,6 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 		// Resource Accessors
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Gets a sprite or animation depending on which one exists.</summary>
-		public static ISprite GetSpriteAnimation(string name) {
-			if (sprites.ContainsKey(name))
-				return sprites[name];
-			else
-				return animations[name];
-		}
 
 		/// <summary>Gets the image with the specified name.</summary>
 		public static Image GetImage(string name) {
@@ -526,21 +590,21 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Loads the image with the specified asset name.</summary>
 		public static Image LoadImage(string assetName, bool addToRegistry = true) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
-			Image resource = new Image(contentManager.Load<Texture2D>(assetName), name);
+			Image resource = Image.FromContent(assetName);
 			if (addToRegistry)
 				images.Add(name, resource);
 			return resource;
 		}
 
 		/// <summary>Loads the image with the specified asset name.</summary>
-		public static Image LoadImageFromFile(string assetName, bool addToRegistry = true) {
+		/*public static Image LoadImageFromFile(string assetName, bool addToRegistry = true) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			name = name.Substring(0, name.LastIndexOf('.'));
-			Image resource = new Image(textureLoader.FromFile(contentManager.RootDirectory + "/" + assetName), name);
+			Image resource = new Image(textureLoader.FromFile(Content.RootDirectory + "/" + assetName), name);
 			if (addToRegistry)
 				images.Add(name, resource);
 			return resource;
-		}
+		}*/
 
 		/// <summary>Loads the real font with the specified asset name.</summary>
 		public static RealFont LoadRealFont(string assetName) {
@@ -604,9 +668,20 @@ namespace ZeldaOracle.Common.Content {
 			LoadScript(assetName, new TileDataSR());
 		}
 
+		/// <summary>Loads/compiles items and ammos from a script file.</summary>
+		public static void LoadItems(string assetName) {
+			LoadScript(assetName, new ItemSR());
+		}
+
+		/// <summary>Loads/compiles items and rewards from a script file.</summary>
+		public static void LoadRewards(string assetName) {
+			LoadScript(assetName, new RewardSR());
+		}
+
 		/// <summary>Loads/compiles zones from a script file.</summary>
-		/// <param name="postTileData">Set to false when loading zones right after palettes in-case of an error
-		/// in order to continue previewing sprites with a specific zone.</param>
+		/// <param name="postTileData">Set to false when loading zones right after
+		/// palettes in-case of an error in order to continue previewing sprites
+		/// with a specific zone.</param>
 		public static void LoadZones(string assetName, bool postTileData) {
 			LoadScript(assetName, new ZoneSR(postTileData));
 		}
@@ -809,10 +884,6 @@ namespace ZeldaOracle.Common.Content {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the content manager.</summary>
-		public static ContentManager ContentManager {
-			get { return contentManager; }
-		}
 
 		/// <summary>Gets or sets if the resource manager should output load information to the console.</summary>
 		public static bool VerboseOutput {
@@ -820,49 +891,41 @@ namespace ZeldaOracle.Common.Content {
 			set { verboseOutput = value; }
 		}
 
-		/// <summary>Gets the dictionary of tilesets.</summary>
-		public static Dictionary<string, Tileset> Tilesets {
-			get { return tilesets; }
-		}
-
 		/// <summary>Gets the dictionary of sounds.</summary>
-		public static Dictionary<string, Sound> Sounds {
+		public static IReadOnlyDictionary<string, Sound> Sounds {
 			get { return sounds; }
 		}
 
-		/// <summary>Gets the list of langauges.</summary>
-		public static List<Language> Languages {
-			get { return languages; }
-		}
-
-		/// <summary>Gets the list of sprite sheets.</summary>
-		public static ISpriteSource[] SpriteSheets {
-			get {
-				ISpriteSource[] sheets = new ISpriteSource[spriteSheets.Count];
-				spriteSheets.Values.CopyTo(sheets, 0);
-				return sheets;
-			}
-		}
-
-		/// <summary>Gets the number of sprite sheets.</summary>
-		public static int SpriteSheetCount {
-			get { return spriteSheets.Count; }
-		}
-
+		/// <summary>Gets the graphics device for the game.</summary>
 		public static GraphicsDevice GraphicsDevice {
 			get { return graphicsDevice; }
 		}
 
+		/// <summary>Gets the sprite batch for the game.</summary>
 		public static SpriteBatch SpriteBatch {
 			get { return spriteBatch; }
 		}
 
-		public static PalettedSpriteDatabase PalettedSpriteDatabase {
-			get { return palettedSpriteDatabase; }
+		/// <summary>Gets the content manager for the game.</summary>
+		public static ContentManager ContentManager {
+			get { return contentManager; }
 		}
 
-		public static bool IsLoaded {
-			get { return resourceDictionaries != null; }
+		/// <summary>Gets if the resource manager has been fully been initialized.</summary>
+		public static bool IsInitialized {
+			get { return isInitialized; }
+		}
+
+		/// <summary>Gets or sets the root directory associated with the
+		/// ContentManager.</summary>
+		public static string RootDirectory {
+			get { return ContentManager.RootDirectory; }
+			set { ContentManager.RootDirectory = value; }
+		}
+
+		/// <summary>Gets the sprite database for palettizing images.</summary>
+		public static PalettedSpriteDatabase PalettedSpriteDatabase {
+			get { return palettedSpriteDatabase; }
 		}
 	}
 }

@@ -4,7 +4,6 @@ using Size = System.Drawing.Size;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -88,6 +87,7 @@ namespace ConscriptDesigner.WinForms {
 		}
 
 		protected override void Draw(Graphics2D g, SpriteSettings settings, Zone zone) {
+			if (!Resources.IsInitialized) return;
 			if (tileset == null)
 				return;
 

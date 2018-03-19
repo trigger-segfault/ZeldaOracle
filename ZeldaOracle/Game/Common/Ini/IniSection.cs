@@ -25,7 +25,8 @@ namespace ZeldaOracle.Common.Ini {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Constructs the ini section with the specified name and optional comments.</summary>
+		/// <summary>Constructs the ini section with the specified name and optional
+		/// comments.</summary>
 		public IniSection(string name, string comments = "") {
 			this.name       = name;
 			this.comments   = comments;
@@ -66,7 +67,8 @@ namespace ZeldaOracle.Common.Ini {
 			return properties.ContainsKey(property.Name);
 		}
 
-		/// <summary>Returns true if this section contains a property with the specified name.</summary>
+		/// <summary>Returns true if this section contains a property with the
+		/// specified name.</summary>
 		public bool Contains(string propertyName) {
 			return properties.ContainsKey(propertyName);
 		}
@@ -88,8 +90,8 @@ namespace ZeldaOracle.Common.Ini {
 		}
 
 		/// <summary>Adds a new property to the section.</summary>
-		public IniProperty Add(string propertyName, string value = "", string comments = "",
-			bool useQuotes = false)
+		public IniProperty Add(string propertyName, string value = "",
+			string comments = "", bool useQuotes = false)
 		{
 			return Add(new IniProperty(propertyName, value, comments, useQuotes));
 		}
@@ -115,7 +117,8 @@ namespace ZeldaOracle.Common.Ini {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the value of the property as an enum.</summary>
-		public TEnum GetEnum<TEnum>(string propertyName, EnumFormat format = EnumFormat.String)
+		public TEnum GetEnum<TEnum>(string propertyName,
+			EnumFormat format = EnumFormat.String)
 			where TEnum : struct, IConvertible
 		{
 			return Get(propertyName).GetEnum<TEnum>(format);
@@ -157,7 +160,8 @@ namespace ZeldaOracle.Common.Ini {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Trys to get the value of the property as an enum.</summary>
-		public bool TryGetEnum<TEnum>(string propertyName, out TEnum result, EnumFormat format = EnumFormat.String)
+		public bool TryGetEnum<TEnum>(string propertyName, out TEnum result,
+			EnumFormat format = EnumFormat.String)
 			where TEnum : struct, IConvertible
 		{
 			return Get(propertyName).TryGetEnum<TEnum>(out result);
@@ -194,7 +198,8 @@ namespace ZeldaOracle.Common.Ini {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Set the value of the property as an enum.</summary>
-		public void SetEnum<TEnum>(string propertyName, TEnum value, EnumFormat format = EnumFormat.String)
+		public void SetEnum<TEnum>(string propertyName, TEnum value,
+			EnumFormat format = EnumFormat.String)
 			where TEnum : struct, IConvertible
 		{
 			Get(propertyName).SetEnum<TEnum>(value, format);

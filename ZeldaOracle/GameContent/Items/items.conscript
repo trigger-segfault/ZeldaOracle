@@ -1,0 +1,10 @@
+﻿#==============================================================
+# Loading
+#==============================================================
+
+LOAD "Items/ammo.conscript", true;
+LOAD "Items/weapons.conscript", true;
+LOAD "Items/key_items.conscript", true;
+LOAD "Items/essences.conscript", true;
+
+#==============================================================

@@ -27,6 +27,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -42,9 +43,6 @@ namespace ConscriptDesigner.Control {
 
 		private static MainWindow mainWindow;
 		private static ContentRoot project;
-		private static GraphicsDevice graphicsDevice;
-		private static ContentManager contentManager;
-		private static SpriteBatch spriteBatch;
 		private static Task<ScriptReaderException> busyTask;
 		private static Thread busyThread;
 		private static bool busyTaskIsConscripts;
@@ -54,6 +52,7 @@ namespace ConscriptDesigner.Control {
 		private static List<IRequestCloseAnchorable> openAnchorables;
 		private static List<IRequestCloseAnchorable> closingAnchorables;
 
+		private static Inventory inventory;
 		private static RewardManager rewardManager;
 
 		private static Zone previewZone;
@@ -119,14 +118,6 @@ namespace ConscriptDesigner.Control {
 			selectedTileLocation = -Point2I.One;
 		}
 
-		public static void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
-			DesignerControl.spriteBatch		= spriteBatch;
-			DesignerControl.graphicsDevice	= graphicsDevice;
-			DesignerControl.contentManager	= contentManager;
-			if (IsProjectOpen) {
-				RunConscripts();
-			}
-		}
 
 		//-----------------------------------------------------------------------------
 		// Events
@@ -417,15 +408,21 @@ namespace ConscriptDesigner.Control {
 			busyThread = Thread.CurrentThread;
 			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
 			Clear();
-			Resources.Uninitialize();
+			GameData.Uninitialize();
+			Resources.Unload();
+			inventory = null;
+			rewardManager = null;
 
 			try {
 				Stopwatch watch = Stopwatch.StartNew();
 				UpdateContentFolder(project);
 
-				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
-				rewardManager = new RewardManager(null);
-				GameData.Initialize(false, rewardManager);
+				GameSettings.DesignerMode = true;
+				GameData.Initialize(false);
+				inventory = new Inventory();
+				inventory.Initialize();
+				rewardManager = new RewardManager(inventory);
+				rewardManager.Initialize();
 
 				//Console.WriteLine("Loading Rewards");
 				//rewardManager = new RewardManager(null);
@@ -495,7 +492,7 @@ namespace ConscriptDesigner.Control {
 		
 		private static void LoadPreviewZones() {
 			List<string> sortedList = new List<string>();
-			foreach (var pair in Resources.GetResourceDictionary<Zone>()) {
+			foreach (var pair in Resources.GetDictionary<Zone>()) {
 				sortedList.Add(pair.Key);
 			}
 			sortedList.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
@@ -503,11 +500,11 @@ namespace ConscriptDesigner.Control {
 			foreach (string zone in sortedList) {
 				previewZones.Add(zone);
 			}
-			if (!Resources.ContainsResource<Zone>(previewZoneID)) {
+			if (!Resources.Contains<Zone>(previewZoneID)) {
 				if (previewZones.Any())
 					previewZoneID = previewZones[0];
 			}
-			previewZone = Resources.GetResource<Zone>(previewZoneID);
+			previewZone = Resources.Get<Zone>(previewZoneID);
 		}
 
 		private static void LoadPalettes() {
@@ -515,7 +512,7 @@ namespace ConscriptDesigner.Control {
 			List<string> sortedEntityList = new List<string>();
 			sortedTileList.Add("(default)");
 			sortedEntityList.Add("(default)");
-			foreach (var pair in Resources.GetResourceDictionary<Palette>()) {
+			foreach (var pair in Resources.GetDictionary<Palette>()) {
 				if (pair.Value.PaletteType == PaletteTypes.Tile)
 					sortedTileList.Add(pair.Key);
 				else if (pair.Value.PaletteType == PaletteTypes.Entity)
@@ -526,11 +523,11 @@ namespace ConscriptDesigner.Control {
 			foreach (string palette in sortedTileList) {
 				previewTilePalettes.Add(palette);
 			}
-			if (!Resources.ContainsResource<Palette>(previewTilePaletteID)) {
+			if (!Resources.Contains<Palette>(previewTilePaletteID)) {
 				if (previewTilePalettes.Any())
 					previewTilePaletteID = previewTilePalettes[0];
 			}
-			previewTilePalette = Resources.GetResource<Palette>(previewTilePaletteID);
+			previewTilePalette = Resources.Get<Palette>(previewTilePaletteID);
 			if (previewTilePalette != null && previewTilePalette.PaletteType != PaletteTypes.Tile)
 				previewTilePalette = null;
 
@@ -539,11 +536,11 @@ namespace ConscriptDesigner.Control {
 			foreach (string palette in sortedEntityList) {
 				previewEntityPalettes.Add(palette);
 			}
-			if (!Resources.ContainsResource<Palette>(previewEntityPaletteID)) {
+			if (!Resources.Contains<Palette>(previewEntityPaletteID)) {
 				if (previewEntityPalettes.Any())
 					previewEntityPaletteID = previewEntityPalettes[0];
 			}
-			previewEntityPalette = Resources.GetResource<Palette>(previewEntityPaletteID);
+			previewEntityPalette = Resources.Get<Palette>(previewEntityPaletteID);
 			if (previewEntityPalette != null && previewEntityPalette.PaletteType != PaletteTypes.Entity)
 				previewEntityPalette = null;
 		}
@@ -680,7 +677,7 @@ namespace ConscriptDesigner.Control {
 						ResourcesUnloaded(null, EventArgs.Empty);
 					if (ProjectClosed != null)
 						ProjectClosed(null, EventArgs.Empty);
-					Resources.Uninitialize();
+					Resources.Unload();
 					selectedTileset = null;
 					selectedTileData = null;
 					selectedTileLocation = -Point2I.One;
@@ -707,7 +704,7 @@ namespace ConscriptDesigner.Control {
 					mainWindow.OpenOutputConsole();
 					mainWindow.OpenProjectExplorer();
 				}
-				if (IsGraphicsLoaded)
+				if (Resources.IsInitialized)
 					RunConscripts();
 				CommandManager.InvalidateRequerySuggested();
 			}
@@ -915,7 +912,10 @@ namespace ConscriptDesigner.Control {
 		//-----------------------------------------------------------------------------
 
 		public static string DesignerContentDirectory {
-			get { return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), contentManager.RootDirectory); }
+			get {
+				return Path.Combine(Path.GetDirectoryName(
+				Assembly.GetExecutingAssembly().Location), Resources.RootDirectory);
+			}
 		}
 
 		public static MainWindow MainWindow {
@@ -924,18 +924,6 @@ namespace ConscriptDesigner.Control {
 
 		public static ContentRoot Project {
 			get { return project; }
-		}
-
-		public static GraphicsDevice GraphicsDevice {
-			get { return graphicsDevice; }
-		}
-
-		public static ContentManager ContentManager {
-			get { return contentManager; }
-		}
-
-		public static SpriteBatch SpriteBatch {
-			get { return spriteBatch; }
 		}
 
 		public static bool IsBusy {
@@ -958,8 +946,8 @@ namespace ConscriptDesigner.Control {
 			get { return project.ProjectFile + ".designer.user"; }
 		}
 
-		public static bool IsGraphicsLoaded {
-			get { return graphicsDevice != null && contentManager != null; }
+		public static Inventory Inventory {
+			get { return inventory; }
 		}
 
 		public static RewardManager RewardManager {
@@ -975,7 +963,7 @@ namespace ConscriptDesigner.Control {
 			set {
 				if (previewZoneID != value && value != null) {
 					previewZoneID = value;
-					previewZone = Resources.GetResource<Zone>(previewZoneID);
+					previewZone = Resources.Get<Zone>(previewZoneID);
 					if (PreviewInvalidated != null)
 						PreviewInvalidated(null, EventArgs.Empty);
 				}
@@ -995,7 +983,7 @@ namespace ConscriptDesigner.Control {
 			set {
 				if (previewTilePaletteID != value && value != null) {
 					previewTilePaletteID = value;
-					previewTilePalette = Resources.GetResource<Palette>(previewTilePaletteID);
+					previewTilePalette = Resources.Get<Palette>(previewTilePaletteID);
 					if (previewTilePalette != null && previewTilePalette.PaletteType != PaletteTypes.Tile)
 						previewTilePalette = null;
 					if (PreviewInvalidated != null)
@@ -1023,7 +1011,7 @@ namespace ConscriptDesigner.Control {
 			set {
 				if (previewEntityPaletteID != value && value != null) {
 					previewEntityPaletteID = value;
-					previewEntityPalette = Resources.GetResource<Palette>(previewEntityPaletteID);
+					previewEntityPalette = Resources.Get<Palette>(previewEntityPaletteID);
 					if (previewEntityPalette != null && previewEntityPalette.PaletteType != PaletteTypes.Entity)
 						previewEntityPalette = null;
 					if (PreviewInvalidated != null)

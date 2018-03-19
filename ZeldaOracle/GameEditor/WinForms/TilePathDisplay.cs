@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using Microsoft.Xna.Framework.Content;
 using ZeldaEditor.Control;
 using ZeldaEditor.Util;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Util;
@@ -15,7 +16,6 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
-using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace ZeldaEditor.WinForms {
 	public class TilePathDisplay : GraphicsDeviceControl {
@@ -91,8 +91,7 @@ namespace ZeldaEditor.WinForms {
 
 		public readonly Color FadeAboveColor = new Color(200, 200, 200, 100);
 		public readonly Color FadeBelowColor = new Color(200, 200, 200, 150);
-
-		private static SpriteBatch spriteBatch;
+		
 		private StoppableTimer      dispatcherTimer;
 
 		private EditorControl    editorControl;
@@ -140,7 +139,6 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		protected override void Initialize() {
-			spriteBatch = new SpriteBatch(GraphicsDevice);
 			
 			this.ResizeRedraw = true;
 			
@@ -217,7 +215,8 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		protected override void Draw() {
-			if (!editorControl.IsResourcesLoaded)
+			if (!Resources.IsInitialized) return;
+			if (!editorControl.IsInitialized)
 				return;
 
 			int currentTicks = (int)(watch.Elapsed.TotalSeconds * 60);
@@ -233,7 +232,7 @@ namespace ZeldaEditor.WinForms {
 			GameData.PaletteShader.TilePalette = room.Zone.Palette;
 			GameData.PaletteShader.ApplyPalettes();
 
-			Graphics2D g = new Graphics2D(spriteBatch);
+			Graphics2D g = new Graphics2D();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.Clear(Color.White);
 

@@ -274,7 +274,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 					int slot = (Controls.A.IsPressed() ? 0 : 1);
 					ItemWeapon selectedItem = slotGroups[0].CurrentSlot.SlotItem as ItemWeapon;
 
-					if (selectedItem != null && selectedItem.NumAmmos > 1) {
+					if (selectedItem != null && selectedItem.AmmoCount > 1) {
 						ammoMenuSize		= new Point2I(16, 8);
 						ammoSlot			= slot;
 						inSubMenu			= true;
@@ -284,9 +284,9 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 						int currentAmmoIndex = 0;
 
-						for (int i = 0; i < selectedItem.NumAmmos; i++) {
+						for (int i = 0; i < selectedItem.AmmoCount; i++) {
 							if (selectedItem.GetAmmoAt(i).IsObtained) {
-								if (selectedItem.CurrentAmmo == i)
+								if (selectedItem.AmmoIndex == i)
 									currentAmmoIndex = ammo.Count;
 								ammo.Add(selectedItem.GetAmmoAt(i));
 							}
@@ -327,9 +327,9 @@ namespace ZeldaOracle.Game.Control.Menus {
 				else if (Controls.A.IsPressed() || Controls.B.IsPressed() || Controls.Start.IsPressed()) {
 					Ammo selectedAmmo = ammoSlotGroup.CurrentSlot.SlotItem as Ammo;
 					ItemWeapon weapon = slotGroups[0].CurrentSlot.SlotItem as ItemWeapon;
-					for (int i = 0; i < weapon.NumAmmos; i++) {
+					for (int i = 0; i < weapon.AmmoCount; i++) {
 						if (weapon.GetAmmoAt(i) == selectedAmmo)
-							weapon.CurrentAmmo = i;
+							weapon.AmmoIndex = i;
 					}
 					AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
 					EquipWeaponFromCursor(ammoSlot);

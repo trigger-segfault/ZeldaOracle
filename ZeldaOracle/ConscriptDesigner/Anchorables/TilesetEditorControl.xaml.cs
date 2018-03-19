@@ -120,7 +120,7 @@ namespace ConscriptDesigner.Anchorables {
 
 			tilesets.Clear();
 
-			foreach (var pair in ZeldaResources.GetResourceDictionary<Tileset>()) {
+			foreach (var pair in ZeldaResources.GetDictionary<Tileset>()) {
 				tilesets.Add(new KeyValuePair<string, Tileset>(pair.Key, pair.Value));
 			}
 			tilesets.Sort((a, b) => AlphanumComparator.Compare(a.Key, b.Key, true));
@@ -132,7 +132,7 @@ namespace ConscriptDesigner.Anchorables {
 				item.Tag = pair.Key;
 				comboBoxTilesets.Items.Add(item);
 			}
-			tileset = ZeldaResources.GetResource<Tileset>(tilesetName);
+			tileset = ZeldaResources.Get<Tileset>(tilesetName);
 			if (tilesets.Any() && tileset == null) {
 				tilesetName = tilesets[0].Key;
 				tileset = tilesets[0].Value;
@@ -214,7 +214,7 @@ namespace ConscriptDesigner.Anchorables {
 						Point2I point = new Point2I(x, y);
 						BaseTileData tileData = tileset.GetTileDataAtOrigin(point);
 						if (tileData != null) {
-							text.AppendLine("SETTILE " + point + ", \"" + tileData.Name + "\";");
+							text.AppendLine("SETTILE " + point + ", \"" + tileData.ResourceName + "\";");
 							lastRowEmpty = false;
 						}
 					}
@@ -231,7 +231,7 @@ namespace ConscriptDesigner.Anchorables {
 						script.Reload(false);
 					else
 						script.UnloadText();
-					ZeldaResources.SetResource<Tileset>(tileset.ID, tileset);
+					ZeldaResources.Set<Tileset>(tileset.ID, tileset);
 					int index = tilesets.FindIndex((a) => a.Key == tileset.ID);
 					tilesets[index] = new KeyValuePair<string, Tileset>(tileset.ID, tileset);
 					if (DesignerControl.MainWindow.TileBrowser != null)
@@ -297,7 +297,7 @@ namespace ConscriptDesigner.Anchorables {
 				statusTileInfo.Content = "";
 			}
 			else {
-				textBlockTileName.Text = hoverTileData.Name;
+				textBlockTileName.Text = hoverTileData.ResourceName;
 				if (hoverTileData.Type == null) {
 					if (hoverTileData is TileData)
 						statusTileInfo.Content = "Type: Tile";
@@ -348,7 +348,7 @@ namespace ConscriptDesigner.Anchorables {
 					}
 				}
 				tilesetName = (string) ((ComboBoxItem) comboBoxTilesets.SelectedItem).Tag;
-				tileset = ZeldaResources.GetResource<Tileset>(tilesetName);
+				tileset = ZeldaResources.Get<Tileset>(tilesetName);
 				UpdateTileset();
 			}
 		}
