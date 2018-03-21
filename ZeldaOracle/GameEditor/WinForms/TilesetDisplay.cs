@@ -183,7 +183,7 @@ namespace ZeldaEditor.WinForms {
 
 			if (mouse.HasValue) {
 				point = mouse.Value / (GameSettings.TILE_SIZE + spacing);
-				tileData = GetTileDataAtLocation(point);
+				tileData = GetTileDataAtLocation(ref point);
 				if (tileData == null)
 					point = -Point2I.One;
 			}
@@ -198,7 +198,7 @@ namespace ZeldaEditor.WinForms {
 
 		/// <summary>Return the tile data placed at the given tile location in the
 		/// tileset display.</summary>
-		private BaseTileData GetTileDataAtLocation(Point2I location) {
+		private BaseTileData GetTileDataAtLocation(ref Point2I location) {
 			if (location < Point2I.Zero) {
 				return null;
 			}
@@ -211,8 +211,10 @@ namespace ZeldaEditor.WinForms {
 			}
 			else if (source.IsTileset && location < source.Tileset.Dimensions) {
 				Point2I origin = source.Tileset.GetTileDataOrigin(location);
-				if (origin != -Point2I.One)
+				if (origin != -Point2I.One) {
+					location = origin;
 					return source.Tileset.GetTileDataAtOrigin(origin);
+				}
 				else
 					return null;
 			}
@@ -304,7 +306,7 @@ namespace ZeldaEditor.WinForms {
 				Point2I selectedSize = Point2I.One;
 				if (selectedTileData != null)
 					selectedSize = selectedTileData.Size;
-				if (source.IsTileset && source.Tileset.UsePreviewSprites)
+				if (source.IsList || source.Tileset.UsePreviewSprites)
 					selectedSize = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(
 					selectedPoint * (GameSettings.TILE_SIZE + spacing),
@@ -319,7 +321,7 @@ namespace ZeldaEditor.WinForms {
 				Point2I size = Point2I.One;
 				if (hoverTileData != null)
 					size = hoverTileData.Size;
-				if (source.IsTileset && source.Tileset.UsePreviewSprites)
+				if (source.IsList || source.Tileset.UsePreviewSprites)
 					size = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(
 					hoverPoint * (GameSettings.TILE_SIZE + spacing),

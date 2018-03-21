@@ -187,11 +187,6 @@ namespace ZeldaEditor.Windows {
 			scriptEditor.EditorControl = editorControl;
 			
 			SetObject(tileData);
-
-			TilesetPalette tilesetPalette = new TilesetPalette(editorControl.EditorWindow);
-			tilesetPalette.Name				= "tilesetPalette";
-			//tilesetPalette.doc				= System.Windows.Forms.DockStyle.Fill;
-			tabGeneral.Children.Add(tilesetPalette);
 		}
 
 		public static ObjectEditor Show(Window owner, EditorControl editorControl,

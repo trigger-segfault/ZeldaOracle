@@ -214,49 +214,8 @@
                         <RowDefinition Height="216" MinHeight="20"/>
                     </Grid.RowDefinitions>
                     <Border BorderThickness="1,1,0,1" BorderBrush="#FF828790" Grid.Row="0">
-                        <DockPanel>
-                            <ToolBar DockPanel.Dock="Top">
-                                <ToolBar.Resources>
-                                    <Style TargetType="{x:Type ToolBarPanel}">
-                                        <Setter Property="Orientation" Value="Vertical"/>
-                                    </Style>
-                                </ToolBar.Resources>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="4"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <ComboBox x:Name="comboBoxTilesets" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnTilesetChanged" VerticalAlignment="Center" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
-                                    <ComboBox x:Name="comboBoxZones" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnZoneChanged" VerticalAlignment="Center" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
-                                </Grid>
-
-                            </ToolBar>
-                            <ToolBar x:Name="toolbarTileSearch" DockPanel.Dock="Top">
-                                <ToolBar.Resources>
-                                    <Style TargetType="{x:Type ToolBarPanel}">
-                                        <Setter Property="Orientation" Value="Vertical"/>
-                                    </Style>
-                                </ToolBar.Resources>
-                                <xctk:WatermarkTextBox x:Name="textBoxTileSearch" Height="22" VerticalAlignment="Center" Watermark="Search" VerticalContentAlignment="Center" TextChanged="OnTileSearchTextChanged" Padding="3,0" Margin="0" KeepWatermarkOnGotFocus="True"/>
-                            </ToolBar>
-                            <Rectangle DockPanel.Dock="Top" Stroke="#FF828790"/>
-                            <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0" BorderBrush="#FF828790" BorderThickness="0,1,0,0">
-                                <StatusBarItem Height="44" VerticalContentAlignment="Top">
-                                    <TextBlock x:Name="textBlockTileName" TextWrapping="Wrap" Text="chest_ornate" TextTrimming="CharacterEllipsis"/>
-                                </StatusBarItem>
-                            </StatusBar>
-                            <WindowsFormsHost x:Name="hostTilesetDisplay"/>
+                        <DockPanel Name="panelTilesetPalette">
                         </DockPanel>
-                        <!--<DockPanel>
-                            <ToolBar DockPanel.Dock="Top" BorderThickness="0">
-                                <ComboBox x:Name="comboBoxTilesets" Width="121" SelectionChanged="OnTilesetChanged"/>
-                                <ComboBox x:Name="comboBoxZones" Width="121" SelectionChanged="OnZoneChanged"/>
-                            </ToolBar>
-                            <Border BorderBrush="#FF828790" BorderThickness="0,1,0,0">
-                                <WindowsFormsHost x:Name="hostTileDisplay"/>
-                            </Border>
-                        </DockPanel>-->
                     </Border>
                     <local:AirspaceGridSplitter Grid.Row="1" HorizontalAlignment="Stretch" ResizeDirection="Rows" ShowsPreview="True"/>
                     <props:ZeldaPropertyGrid x:Name="propertyGrid" IsVirtualizing="True" Grid.Row="2" BorderThickness="1,1,0,1" BorderBrush="#FF828790" ShowTitle="False" ShowSearchBox="False" VirtualizingPanel.IsVirtualizing="True"/>

@@ -242,12 +242,6 @@ namespace ZeldaEditor.Control {
 			}
 			EditorResources.Initialize(this);
 
-			// Create tileset combo box.
-			UpdateTilesets();
-
-			// Create zone combo box.
-			UpdateZones();
-
 			this.updateTimer = StoppableTimer.StartNew(
 				TimeSpan.FromMilliseconds(100),
 				DispatcherPriority.ApplicationIdle,
@@ -320,35 +314,6 @@ namespace ZeldaEditor.Control {
 			else {
 				editorWindow.SetLayersItemsSource(layers, -1);
 			}
-		}
-
-		private void UpdateTilesets() {
-			int index = 0;
-			List<string> tilesets = new List<string>();
-			foreach (var pair in Resources.GetDictionary<Tileset>()) {
-				tilesets.Add(pair.Key);
-				if (tileset != null && pair.Key == tileset.ID)
-					index = tilesets.Count; // No -1 because "<Tiel List>" is added after sorting to the front
-			}
-			tilesets.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
-
-			tilesets.Insert(0, "<Tile List>");
-
-			editorWindow.SetTilesetsItemsSource(tilesets, index);
-			UpdateTileSearch(tileSearchFilter);
-		}
-
-		private void UpdateZones() {
-			int index = -1;
-			List<string> zones = new List<string>();
-			foreach (var pair in Resources.GetDictionary<Zone>()) {
-				zones.Add(pair.Key);
-				if (pair.Key == zone.ID)
-					index = zones.Count - 1;
-			}
-			zones.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
-
-			editorWindow.SetZonesItemsSource(zones, index);
 		}
 
 
@@ -1204,7 +1169,7 @@ namespace ZeldaEditor.Control {
 						editorWindow.UpdateCurrentLayer();
 					}
 				}
-				editorWindow.TilesetDisplay.Invalidate();
+				editorWindow.TilesetPalette.SelectedTileData = selectedTileData;
 			}
 		}
 

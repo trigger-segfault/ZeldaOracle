@@ -1,26 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using ZeldaEditor;
 using ZeldaEditor.Control;
 using ZeldaEditor.Controls;
 using ZeldaEditor.PropertiesEditor;
-using ZeldaEditor.Scripting;
 using ZeldaEditor.Tools;
 using ZeldaEditor.TreeViews;
 using ZeldaEditor.Undo;
@@ -28,13 +18,11 @@ using ZeldaEditor.Util;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ZeldaEditor {
 	/// <summary>
@@ -43,7 +31,7 @@ namespace ZeldaEditor {
 	public partial class EditorWindow : Window {
 
 		private LevelDisplay		levelDisplay;
-		private TilesetDisplay		tilesetDisplay;
+		private TilesetPalette		tilesetPalette;
 		private TilePreview         tilePreview;
 		private EditorControl		editorControl;
 
@@ -84,13 +72,13 @@ namespace ZeldaEditor {
 			hostLevelDisplay.Child			= levelDisplay;
 
 			// Create the tileset display
-			tilesetDisplay					= new TilesetDisplay();
-			tilesetDisplay.EditorControl	= editorControl;
-			tilesetDisplay.Name				= "tilesetDisplay";
-			tilesetDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;
-			tilesetDisplay.EditorWindow		= this;
-			tilesetDisplay.HoverChanged		+= OnTilesetDisplayHoverChanged;
-			hostTilesetDisplay.Child		= tilesetDisplay;
+			tilesetPalette = new TilesetPalette(this);
+			tilesetPalette.Name				= "tilesetPalette";
+			panelTilesetPalette.Children.Add(tilesetPalette);
+			tilesetPalette.SelectionChanged += (object sender, EventArgs args) => {
+				editorControl.SelectedTileData = tilesetPalette.SelectedTileData;
+			};
+
 
 			// Create the tile preview
 			tilePreview						= new TilePreview();
@@ -152,6 +140,10 @@ namespace ZeldaEditor {
 			buttonToolFill.Tag = editorControl.ToolFill;
 			buttonToolSelection.Tag = editorControl.ToolSelection;
 			buttonToolEyedropper.Tag = editorControl.ToolEyedropper;
+
+			// Populate the tileset palette with the list of tilesets and zones
+			tilesetPalette.Tilesets = ZeldaResources.GetDictionary<Tileset>().Values;
+			tilesetPalette.Zones = ZeldaResources.GetDictionary<Zone>().Values;
 
 			UpdateCurrentTool();
 		}
@@ -215,13 +207,12 @@ namespace ZeldaEditor {
 			}
 		}
 
-
 		public void OpenLevelEditor(Level level) {
-
+			throw new NotImplementedException();
 		}
 
 		public void OpenObjectEditor(object obj) {
-
+			throw new NotImplementedException();
 		}
 
 
@@ -317,41 +308,6 @@ namespace ZeldaEditor {
 			editorControl.CurrentTool = (EditorTool) ((ToggleButton)sender).Tag;
 		}
 		
-		private void OnTilesetChanged(object sender, SelectionChangedEventArgs e) {
-			if (!suppressEvents) return;
-			if (comboBoxTilesets.SelectedIndex != -1) {
-				if (comboBoxTilesets.SelectedIndex == 0) {
-					toolbarTileSearch.Visibility = Visibility.Visible;
-					editorControl.UpdateTileSearch(textBoxTileSearch.Text);
-				}
-				else {
-					toolbarTileSearch.Visibility = Visibility.Collapsed;
-					editorControl.ChangeTileset(comboBoxTilesets.SelectedItem as string);
-				}
-			}
-			levelDisplay.Focus();
-		}
-
-		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			if (!suppressEvents) return;
-			if (comboBoxZones.SelectedIndex != -1) {
-				editorControl.ChangeZone(comboBoxZones.SelectedItem as string);
-			}
-			levelDisplay.Focus();
-		}
-
-		private void OnTileSearchTextChanged(object sender, TextChangedEventArgs e) {
-			editorControl.UpdateTileSearch(textBoxTileSearch.Text);
-		}
-
-		private void OnTilesetDisplayHoverChanged(object sender, EventArgs e) {
-			BaseTileData tileData = tilesetDisplay.HoverTileData;
-			if (tileData == null)
-				textBlockTileName.Text = "";
-			else
-				textBlockTileName.Text = tileData.ResourceName;
-		}
-
 		public void UpdatePropertyPreview(IPropertyObject obj) {
 			if (objectWindow != null)
 				objectWindow.SetObject(obj as BaseTileDataInstance);
@@ -830,21 +786,7 @@ namespace ZeldaEditor {
 		}
 		
 		// Combo Boxes ----------------------------------------------------------------
-
-		public void SetTilesetsItemsSource(IEnumerable<string> tilesets, int selectedIndex) {
-			suppressEvents = false;
-			comboBoxTilesets.ItemsSource = tilesets;
-			comboBoxTilesets.SelectedIndex = selectedIndex;
-			suppressEvents = true;
-		}
-
-		public void SetZonesItemsSource(IEnumerable<string> zones, int selectedIndex) {
-			suppressEvents = false;
-			comboBoxZones.ItemsSource = zones;
-			comboBoxZones.SelectedIndex = selectedIndex;
-			suppressEvents = true;
-		}
-
+		
 		public void SetLayersItemsSource(IEnumerable<string> layers, int selectedIndex) {
 			suppressEvents = false;
 			comboBoxLayers.ItemsSource = layers;
@@ -869,8 +811,8 @@ namespace ZeldaEditor {
 			get { return levelDisplay; }
 		}
 
-		public TilesetDisplay TilesetDisplay {
-			get { return tilesetDisplay; }
+		public TilesetPalette TilesetPalette {
+			get { return tilesetPalette; }
 		}
 
 		public WorldTreeView WorldTreeView {
