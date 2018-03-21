@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
@@ -12,51 +7,76 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
-using ZeldaOracle.Common.Graphics.Sprites;
 using System.Windows.Threading;
-using Size = System.Drawing.Size;
 using ZeldaEditor.Util;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.WinForms {
 
+	public struct TileDisplaySource {
+
+		public IList<BaseTileData> TileList { get; private set; }
+		public Tileset Tileset { get; private set; }
+
+		public static implicit operator TileDisplaySource(List<BaseTileData> tileList) {
+			return new TileDisplaySource() {
+				TileList = tileList,
+				Tileset = null,
+			};
+		}
+
+		public static implicit operator TileDisplaySource(Tileset tileset) {
+			return new TileDisplaySource() {
+				TileList = null,
+				Tileset = tileset,
+			};
+		}
+
+		public bool IsTileset {
+			get { return (Tileset != null); }
+		}
+
+		public bool IsList {
+			get { return (TileList != null); }
+		}
+	}
+
 	public class TilesetDisplay : GraphicsDeviceControl {
 		
-		private EditorWindow	editorWindow;
-		private EditorControl	editorControl;
-
+		private EditorWindow editorWindow;
+		private EditorControl editorControl;
 		private StoppableTimer dispatcherTimer;
-
-		private bool needsToInvalidate;
-
-		protected Point2I mouse;
-		protected Point2I hoverPoint;
-		private Point2I hoverSize;
-		private List<BaseTileData> filteredTileData;
+		private TileDisplaySource source;
+		private Zone zone;
+		private int spacing;
 		private int columns;
+		private BaseTileData selectedTileData;
+		private BaseTileData hoverTileData;
+		protected Point2I hoverPoint;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		protected override void Initialize() {
-			filteredTileData = null;
-			needsToInvalidate = false;
+			zone = null;
+			hoverTileData = null;
+			hoverPoint = -Point2I.One;
+			selectedTileData = null;
 			columns = 1;
+			spacing = 1;
 
-			// Wire the events.
+			// Setup the event handlers
 			MouseMove	+= OnMouseMove;
 			MouseDown	+= OnMouseDown;
 			MouseLeave	+= OnMouseLeave;
 			PostReset	+= OnPostReset;
 
-			// Start the timer to refresh the panel.
-			//Application.Idle += delegate { Invalidate(); };
-			this.ResizeRedraw = true;
+			ResizeRedraw = true;
 
-			//UpdateTileset();
-
+			// Start the timer to refresh the panel
 			dispatcherTimer = StoppableTimer.StartNew(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
@@ -64,14 +84,6 @@ namespace ZeldaEditor.WinForms {
 					if (editorControl.IsActive)
 						TimerUpdate();
 				});
-			/*dispatcherTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate {
-					if (editorControl.IsActive)
-						TimerUpdate();
-				},
-				System.Windows.Application.Current.Dispatcher);*/
 		}
 
 
@@ -80,27 +92,34 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		public event EventHandler HoverChanged;
+		public event EventHandler SelectionChanged;
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		/*public Point2I GetTileCoord(Point2I point) {
-			return ((point - Point2I.One) / (GameSettings.TILE_SIZE + 1));
-		}
+		//public Point2I GetTileCoord(Point2I point) {
+		//	return ((point - Point2I.One) / (GameSettings.TILE_SIZE + spacing));
+		//}
 
-		public Point2I GetSelectedTileLocation() {
-			for (int x = 0; x < Tileset.Width; x++) {
-				for (int y = 0; y < Tileset.Height; y++) {
-					BaseTileData tileData = Tileset.GetTileData(x, y);
-					if (tileData != null && tileData == editorControl.SelectedTileData) {
-						return new Point2I(x, y);
-					}
-				}
-			}
-			return -Point2I.One;
-		}*/
+		//public Point2I GetTileLocationInPalette(BaseTileData tileData) {
+		//	if (source.IsList) {
+		//		int index = source.TileList.IndexOf(tileData);
+		//		if (index >= 0)
+		//			return new Point2I(index % columns, index / columns);
+		//	}
+		//	else if (source.IsTileset) {
+		//		for (int x = 0; x < source.Tileset.Width; x++) {
+		//			for (int y = 0; y < source.Tileset.Height; y++) {
+		//				BaseTileData checkTileData = source.Tileset.GetTileData(x, y);
+		//				if (source.Tileset.GetTileData(x, y) == tileData)
+		//					return new Point2I(x, y);
+		//			}
+		//		}
+		//	}
+		//	return -Point2I.One;
+		//}
 
 
 		//-----------------------------------------------------------------------------
@@ -108,131 +127,110 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		private void TimerUpdate() {
-			if (editorControl.PlayAnimations || needsToInvalidate) {
-				needsToInvalidate = false;
-				Invalidate();
-			}
-			if (TileListMode && ClientSize.Width != AutoScrollMinSize.Width)
+			if (source.IsList && ClientSize.Width != AutoScrollMinSize.Width) {
 				UpdateSize();
+			}
+			else if (editorControl.PlayAnimations)
+				Invalidate();
 		}
 
 		private void OnPostReset(object sender, EventArgs e) {
-			if (HoverTileData != null) {
-				if (TileListMode) {
-					SelectedTileLocation = hoverPoint;
-					SelectedTileset = Tileset;
-				}
-				else {
-					SelectedTileLocation = Tileset.GetTileDataOrigin(hoverPoint);
-					SelectedTileset = Tileset;
-				}
-				SelectedTileData = HoverTileData;
+			if (hoverTileData != null) {
+				selectedTileData = hoverTileData;
 				Invalidate();
 			}
 			ScrollPosition = Point2I.Zero;
 		}
 
 		private void OnMouseDown(object sender, MouseEventArgs e) {
-			if (HoverTileData != null) {
-				if (!TileListMode) {
-					SelectedTileLocation = Tileset.GetTileDataOrigin(hoverPoint);
-					SelectedTileset = Tileset;
-				}
-				SelectedTileData = HoverTileData;
-				Invalidate();
-			}
-
-			this.Focus();
+			if (hoverTileData != null)
+				SelectedTileData = hoverTileData;
+			Focus();
 		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {
-			mouse = (ScrollPosition + new Point2I(e.X, e.Y));
-			UpdateHoverSprite();
+			UpdateHoverLocation(ScrollPosition + new Point2I(e.X, e.Y));
 		}
+
 		private void OnMouseLeave(object sender, EventArgs e) {
-			mouse = -Point2I.One;
-			UpdateHoverSprite();
+			UpdateHoverLocation(null);
 		}
 
 		private void UpdateSize() {
-			Point2I size = new Point2I(ClientSize.Width, 1);
-			if (TileListMode) {
-				columns = Math.Max(1, (ClientSize.Width - 1) / (GameSettings.TILE_SIZE + 1));
-				if (filteredTileData != null)
-					size.Y = 1 + ((filteredTileData.Count + columns - 1) / columns) * (GameSettings.TILE_SIZE + 1);
+			Point2I size = Point2I.One;
+			if (source.IsList) {
+				// Calculate the number of columns that would fit
+				columns = Math.Max(1, (ClientSize.Width - 1) /
+					(GameSettings.TILE_SIZE + spacing));
 				size.X = ClientSize.Width;
+				size.Y = 1 + ((source.TileList.Count + columns - 1) / columns) *
+					(GameSettings.TILE_SIZE + spacing);
 			}
-			else {
-				size = Tileset.Dimensions * (GameSettings.TILE_SIZE + 1) + Point2I.One;
+			else if (source.IsTileset) {
+				size = source.Tileset.Dimensions *
+					(GameSettings.TILE_SIZE + spacing) + Point2I.One;
 			}
-			AutoScrollMinSize = new Size(size.X, size.Y);
-			UpdateHoverSprite();
-			needsToInvalidate = true;
+			AutoScrollMinSize = new System.Drawing.Size(size.X, size.Y);
+			UpdateHoverLocation(ScrollPosition + GdiCasting.ToPoint2I(MousePosition));
+			Invalidate();
 		}
 
-		private void UpdateHoverSprite() {
-			int column = mouse.X / (GameSettings.TILE_SIZE + 1);
-			int row = mouse.Y / (GameSettings.TILE_SIZE + 1);
-			Point2I point = new Point2I(column, row);
-			Point2I newHoverPoint = -Point2I.One;
-			if (mouse >= Point2I.Zero && column < columns && IsValidHoverPoint(ref point, out hoverSize)) {
-				newHoverPoint = point;
+		private void UpdateHoverLocation(Point2I? mouse) {
+			// Get the mouse location and tile data under it
+			
+			Point2I point = -Point2I.One;
+			BaseTileData tileData = null;
+
+			if (mouse.HasValue) {
+				point = mouse.Value / (GameSettings.TILE_SIZE + spacing);
+				tileData = GetTileDataAtLocation(point);
+				if (tileData == null)
+					point = -Point2I.One;
 			}
-			if (newHoverPoint != hoverPoint) {
-				hoverPoint = newHoverPoint;
-				if (HoverChanged != null)
-					HoverChanged(this, EventArgs.Empty);
-				if (!editorControl.PlayAnimations)
-					Invalidate();
+
+			if (hoverPoint != point || hoverTileData != tileData) {
+				hoverPoint = point;
+				hoverTileData = tileData;
+				HoverChanged?.Invoke(this, EventArgs.Empty);
+				Invalidate();
 			}
 		}
 
-		private bool IsValidHoverPoint(ref Point2I point, out Point2I hoverSize) {
-			if (TileListMode) {
-				int index = (point.Y * columns) + point.X;
-				hoverSize = Point2I.One;
-				if (filteredTileData != null)
-					return index < filteredTileData.Count;
+		/// <summary>Return the tile data placed at the given tile location in the
+		/// tileset display.</summary>
+		private BaseTileData GetTileDataAtLocation(Point2I location) {
+			if (location < Point2I.Zero) {
+				return null;
+			}
+			else if (source.IsList) {
+				int index = (location.Y * columns) + location.X;
+				if (index >= 0 && index < source.TileList.Count)
+					return source.TileList[index];
 				else
-					return false;
+					return null;
 			}
-			else {
-				hoverSize = Point2I.One;
-				if (Tileset != null && point < Tileset.Dimensions) {
-					Point2I origin = Tileset.GetTileDataOrigin(point);
-					if (origin != -Point2I.One) {
-						if (!Tileset.UsePreviewSprites)
-							hoverSize = Tileset.GetTileDataAtOrigin(origin).Size;
-						point = origin;
-					}
-					return true;
-				}
-				return false;
+			else if (source.IsTileset && location < source.Tileset.Dimensions) {
+				Point2I origin = source.Tileset.GetTileDataOrigin(location);
+				if (origin != -Point2I.One)
+					return source.Tileset.GetTileDataAtOrigin(origin);
+				else
+					return null;
 			}
-		}
-
-		public void UpdateTileset(List<BaseTileData> filteredTileData = null) {
-			this.filteredTileData = filteredTileData;
-			UpdateSize();
-			Invalidate();
-		}
-
-		public void UpdateZone() {
-			Invalidate();
+			else
+				return null;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overriden methods
+		// Overriden Methods
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
-			if (!Resources.IsInitialized) return;
-			if (!editorControl.IsInitialized)
+			if (!Resources.IsInitialized || !editorControl.IsInitialized)
 				return;
 			editorControl.UpdateTicks();
+
 			Graphics2D g = new Graphics2D();
-			//g.SetRenderTarget(GameData.RenderTargetGame);
 			GameData.PaletteShader.TilePalette = Zone.Palette;
 			GameData.PaletteShader.ApplyPalettes();
 			TileDataDrawing.RewardManager = editorControl.RewardManager;
@@ -240,113 +238,98 @@ namespace ZeldaEditor.WinForms {
 			TileDataDrawing.Room = null;
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.PlaybackTime = editorControl.Ticks;
-
+			
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-
-			//Point2I selectedTileLocation = GetSelectedTileLocation();
-
-			// Draw the tileset.
 			g.Clear(Color.White);
 			g.PushTranslation(-ScrollPosition);
-			/*for (int y = 0; y < Tileset.Height; y++) {
-				for (int x = 0; x < Tileset.Width; x++) {
-					BaseTileData tileData = Tileset.GetTileDataAtOrigin(x, y);
-					if (tileData != null) {
-						int spacing = 1;
-						Point2I drawPos = new Point2I(x, y) * (GameSettings.TILE_SIZE + spacing) + spacing;
 
-						TileDataDrawing.DrawTilePreview(g, tileData, drawPos, Zone);
-						if (Tileset.UsePreviewSprites)
-							TileDataDrawing.DrawTilePreview(g, tileData, drawPos, Zone);
-						else
-							TileDataDrawing.DrawTile(g, tileData, drawPos, Zone);
-					}
-				}
-			}*/
-
-			Point2I selectionPoint = -Point2I.One;
-
-			if (TileListMode) {
-				int startRow = (ScrollPosition.Y + 1) / (GameSettings.TILE_SIZE + 1);
+			Point2I selectedPoint = -Point2I.One;
+			
+			if (source.IsList) {
+				// Draw the list of tiles
+				int startRow = (ScrollPosition.Y + 1) / (GameSettings.TILE_SIZE + spacing);
 				int startIndex = startRow * columns;
-				int endRow = (ScrollPosition.Y + ClientSize.Height + 1 + GameSettings.TILE_SIZE) / (GameSettings.TILE_SIZE + 1);
+				int endRow = (ScrollPosition.Y + ClientSize.Height + 1 +
+					GameSettings.TILE_SIZE) / (GameSettings.TILE_SIZE + spacing);
 				int endIndex = (endRow + 1) * columns;
-				for (int i = startIndex; i < endIndex && filteredTileData != null && i < filteredTileData.Count; i++) {
-					BaseTileData tile = filteredTileData[i];
+				for (int i = startIndex; i < endIndex &&
+					i < source.TileList.Count; i++)
+				{
+					BaseTileData tile = source.TileList[i];
 					int row = i / columns;
 					int column = i % columns;
-					int x = 1 + column * (GameSettings.TILE_SIZE + 1);
-					int y = 1 + row * (GameSettings.TILE_SIZE + 1);
-
-					if (tile == SelectedTileData)
-						selectionPoint = new Point2I(column, row);
+					int x = 1 + column * (GameSettings.TILE_SIZE + spacing);
+					int y = 1 + row * (GameSettings.TILE_SIZE + spacing);
+					
+					if (tile == selectedTileData)
+						selectedPoint = new Point2I(column, row);
 
 					try {
-						TileDataDrawing.DrawTilePreview(g, tile, new Point2I(x, y), Zone);
+						TileDataDrawing.DrawTilePreview(
+							g, tile, new Point2I(x, y), Zone);
 					}
 					catch (Exception) {
-
 					}
 				}
 			}
-			else {
-				for (int indexX = 0; indexX < Tileset.Width; indexX++) {
-					for (int indexY = 0; indexY < Tileset.Height; indexY++) {
-						BaseTileData tile = Tileset.GetTileDataAtOrigin(indexX, indexY);
+			else if (source.IsTileset) {
+				// Draw the selected tileset
+				for (int indexX = 0; indexX < source.Tileset.Width; indexX++) {
+					for (int indexY = 0; indexY < source.Tileset.Height; indexY++) {
+						BaseTileData tile = source.Tileset.GetTileDataAtOrigin(indexX, indexY);
 						if (tile != null) {
-							int x = 1 + indexX * (GameSettings.TILE_SIZE + 1);
-							int y = 1 + indexY * (GameSettings.TILE_SIZE + 1);
+							int x = 1 + indexX * (GameSettings.TILE_SIZE + spacing);
+							int y = 1 + indexY * (GameSettings.TILE_SIZE + spacing);
+							
+							if (tile == selectedTileData)
+								selectedPoint = new Point2I(indexX, indexY);
 
 							try {
-								if (Tileset.UsePreviewSprites)
-									TileDataDrawing.DrawTilePreview(g, tile, new Point2I(x, y), Zone);
+								if (source.Tileset.UsePreviewSprites)
+									TileDataDrawing.DrawTilePreview(
+										g, tile, new Point2I(x, y), Zone);
 								else
-									TileDataDrawing.DrawTile(g, tile, new Point2I(x, y), Zone);
+									TileDataDrawing.DrawTile(
+										g, tile, new Point2I(x, y), Zone);
 							}
 							catch (Exception) {
-
 							}
 						}
 					}
 				}
-				if (SelectedTileLocation >= Point2I.Zero && SelectedTileset == Tileset) {
-					selectionPoint = SelectedTileLocation;
-				}
 			}
 
-			if (selectionPoint != -Point2I.One) {
-				Point2I selectedSize = SelectedTileData.Size;
-				if (Tileset == null || Tileset.UsePreviewSprites)
+			// Draw a box around the selected tile
+			if (selectedPoint != -Point2I.One) {
+				Point2I selectedSize = Point2I.One;
+				if (selectedTileData != null)
+					selectedSize = selectedTileData.Size;
+				if (source.IsTileset && source.Tileset.UsePreviewSprites)
 					selectedSize = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(
-					selectionPoint * (GameSettings.TILE_SIZE + 1),
+					selectedPoint * (GameSettings.TILE_SIZE + spacing),
 					selectedSize * GameSettings.TILE_SIZE + 2);
 				g.DrawRectangle(selectRect, 1, Color.Black);
 				g.DrawRectangle(selectRect.Inflated(1, 1), 1, Color.White);
 				g.DrawRectangle(selectRect.Inflated(2, 2), 1, Color.Black);
 			}
 
+			// Draw a translucent box around the tile under the mouse cursor
 			if (hoverPoint != -Point2I.One) {
+				Point2I size = Point2I.One;
+				if (hoverTileData != null)
+					size = hoverTileData.Size;
+				if (source.IsTileset && source.Tileset.UsePreviewSprites)
+					size = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(
-					hoverPoint * (GameSettings.TILE_SIZE + 1),
-					hoverSize * GameSettings.TILE_SIZE + 2);
+					hoverPoint * (GameSettings.TILE_SIZE + spacing),
+					size * GameSettings.TILE_SIZE + 2);
 				g.DrawRectangle(selectRect, 1, Color.Black);
 				g.DrawRectangle(selectRect.Inflated(1, 1), 1, Color.White);
 				g.DrawRectangle(selectRect.Inflated(2, 2), 1, Color.Black);
 			}
 
-			// Draw the selection box.
-			/*if (selectedTileLocation >= Point2I.Zero) {
-				Point2I tilePoint = selectedTileLocation * (GameSettings.TILE_SIZE + 1);
-				//g.Translate(-this.HorizontalScroll.Value, -this.VerticalScroll.Value);
-				g.DrawRectangle(new Rectangle2I(tilePoint, (Point2I) GameSettings.TILE_SIZE + 1), 1, Color.White);
-				g.DrawRectangle(new Rectangle2I(tilePoint + 1, (Point2I) GameSettings.TILE_SIZE - 1), 1, Color.Black);
-				g.DrawRectangle(new Rectangle2I(tilePoint - 1, (Point2I) GameSettings.TILE_SIZE + 3), 1, Color.Black);
-				//g.ResetTranslation();
-			}*/
-
 			g.PopTranslation();
-
 			g.End();
 		}
 
@@ -365,27 +348,37 @@ namespace ZeldaEditor.WinForms {
 			set { editorControl = value; }
 		}
 
-		public Tileset Tileset {
-			get { return editorControl.Tileset; }
-		}
-
 		public Zone Zone {
-			get { return editorControl.Zone ?? GameData.ZONE_DEFAULT; }
-		}
-
-		public Tileset SelectedTileset {
-			get { return editorControl.SelectedTileset; }
-			set { editorControl.SelectedTileset = value; }
+			get { return (zone ?? GameData.ZONE_DEFAULT); }
+			set {
+				if (zone != value) {
+					zone = value;
+					Invalidate();
+				}
+			}
 		}
 
 		public BaseTileData SelectedTileData {
-			get { return editorControl.SelectedTileData; }
-			set { editorControl.SelectedTileData = value; }
+			get { return selectedTileData; }
+			set {
+				if (selectedTileData != value) {
+					selectedTileData = value;
+					SelectionChanged?.Invoke(this, EventArgs.Empty);
+					Invalidate();
+				}
+			}
 		}
 
-		public Point2I SelectedTileLocation {
-			get { return editorControl.SelectedTilesetLocation; }
-			set { editorControl.SelectedTilesetLocation = value; }
+		public BaseTileData HoverTileData {
+			get { return hoverTileData; }
+		}
+
+		public TileDisplaySource TilesSource {
+			get { return source; }
+			set {
+				source = value;
+				UpdateSize();
+			}
 		}
 
 		public Point2I ScrollPosition {
@@ -398,22 +391,12 @@ namespace ZeldaEditor.WinForms {
 			}
 		}
 
-		public bool TileListMode {
-			get { return Tileset == null; }
-		}
-
-		public BaseTileData HoverTileData {
-			get {
-				if (TileListMode) {
-					if (hoverPoint == -Point2I.One || filteredTileData == null)
-						return null;
-					int index = (hoverPoint.Y * columns) + hoverPoint.X;
-					return filteredTileData[index];
-				}
-				else {
-					if (hoverPoint == -Point2I.One)
-						return null;
-					return Tileset.GetTileData(hoverPoint.X, hoverPoint.Y);
+		public int Spacing {
+			get { return spacing; }
+			set {
+				if (spacing != value) {
+					spacing = value;
+					UpdateSize();
 				}
 			}
 		}

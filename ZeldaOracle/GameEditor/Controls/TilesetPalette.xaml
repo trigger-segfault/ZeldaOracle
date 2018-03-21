@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="ZeldaEditor.Controls.TilesetPalette"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZeldaEditor.Controls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <DockPanel>
+            <ToolBar DockPanel.Dock="Top">
+                <ToolBar.Resources>
+                    <Style TargetType="{x:Type ToolBarPanel}">
+                        <Setter Property="Orientation" Value="Vertical"/>
+                    </Style>
+                </ToolBar.Resources>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="comboBoxTilesets" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnTilesetChanged" VerticalAlignment="Center" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
+                    <ComboBox x:Name="comboBoxZones" Grid.Column="2" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnZoneChanged" VerticalAlignment="Center" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
+                </Grid>
+            </ToolBar>
+            
+            <ToolBar x:Name="toolbarTileSearch" DockPanel.Dock="Top">
+                <ToolBar.Resources>
+                    <Style TargetType="{x:Type ToolBarPanel}">
+                        <Setter Property="Orientation" Value="Vertical"/>
+                    </Style>
+                </ToolBar.Resources>
+                <xctk:WatermarkTextBox x:Name="textBoxTileSearch" Height="22" VerticalAlignment="Center" Watermark="Search" VerticalContentAlignment="Center" TextChanged="OnTileSearchTextChanged" Padding="3,0" Margin="0" KeepWatermarkOnGotFocus="True"/>
+            </ToolBar>
+            
+            <Rectangle DockPanel.Dock="Top" Stroke="#FF828790"/>
+            
+            <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0" BorderBrush="#FF828790" BorderThickness="0,1,0,0">
+                <StatusBarItem Height="44" VerticalContentAlignment="Top">
+                    <TextBlock x:Name="textBlockTileName" TextWrapping="Wrap" Text="chest_ornate" TextTrimming="CharacterEllipsis"/>
+                </StatusBarItem>
+            </StatusBar>
+            
+            <WindowsFormsHost x:Name="hostTilesetDisplay"/>
+        </DockPanel>
+    </Grid>
+</UserControl>

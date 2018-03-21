@@ -216,6 +216,15 @@ namespace ZeldaEditor {
 		}
 
 
+		public void OpenLevelEditor(Level level) {
+
+		}
+
+		public void OpenObjectEditor(object obj) {
+
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------

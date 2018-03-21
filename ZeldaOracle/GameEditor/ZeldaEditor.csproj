@@ -108,6 +108,9 @@
     <Compile Include="Controls\TilePathCommandItem.xaml.cs">
       <DependentUpon>TilePathCommandItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TilesetPalette.xaml.cs">
+      <DependentUpon>TilesetPalette.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorImages.cs" />
@@ -256,6 +259,10 @@
     <Compile Include="WinForms\ServiceContainer.cs" />
     <EmbeddedResource Include="Themes\TextMessageHighlighting.xshd" />
     <Page Include="Controls\TilePathCommandItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TilesetPalette.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

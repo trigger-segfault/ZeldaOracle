@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Control.Scripting;
 using ICSharpCode.CodeCompletion;
 using ZeldaOracle.Game;
 using ZeldaEditor.Scripting;
+using ZeldaEditor.Controls;
 
 namespace ZeldaEditor.Windows {
 	
@@ -184,8 +185,13 @@ namespace ZeldaEditor.Windows {
 			scriptEditor.Document.FileName = "dummyFileName.cs";
 			scriptEditor.Script = null;
 			scriptEditor.EditorControl = editorControl;
-
+			
 			SetObject(tileData);
+
+			TilesetPalette tilesetPalette = new TilesetPalette(editorControl.EditorWindow);
+			tilesetPalette.Name				= "tilesetPalette";
+			//tilesetPalette.doc				= System.Windows.Forms.DockStyle.Fill;
+			tabGeneral.Children.Add(tilesetPalette);
 		}
 
 		public static ObjectEditor Show(Window owner, EditorControl editorControl,

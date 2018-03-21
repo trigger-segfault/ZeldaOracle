@@ -510,7 +510,7 @@ namespace ZeldaEditor.Control {
 				if (Resources.Contains<Tileset>(name))
 					tileset = Resources.Get<Tileset>(name);
 
-				editorWindow.TilesetDisplay.UpdateTileset();
+				//editorWindow.TilesetDisplay.UpdateTileset();
 				//editorWindow.TilesetDisplay.UpdateZone();
 			}
 
@@ -523,7 +523,7 @@ namespace ZeldaEditor.Control {
 		public void ChangeZone(string name) {
 			if (name != "(none)") {
 				zone = Resources.Get<Zone>(name);
-				editorWindow.TilesetDisplay.UpdateZone();
+				//editorWindow.TilesetDisplay.UpdateZone();
 			}
 		}
 
@@ -536,7 +536,7 @@ namespace ZeldaEditor.Control {
 					filteredTileData.Add(pair.Value);
 				}
 			}
-			editorWindow.TilesetDisplay.UpdateTileset(filteredTileData);
+			//editorWindow.TilesetDisplay.UpdateTileset(filteredTileData);
 		}
 
 		// Open the properties for the given tile in the property grid.

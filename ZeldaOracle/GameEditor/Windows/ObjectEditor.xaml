@@ -33,7 +33,8 @@
         </ToolBar>
         <TabControl DockPanel.Dock="Bottom">
             <TabItem Header="General">
-                <Label Content="Content goes here..." />
+                <Grid x:Name="tabGeneral">
+                </Grid>
             </TabItem>
             <TabItem Header="Events">
                 <Grid>
