@@ -94,7 +94,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 			
-			int currentPosition = (int) GMath.Round(CurrentPosition);
+			int currentPosition = GMath.RoundI(CurrentPosition);
 			if (currentPosition == movePositions[0] && currentPosition != movePositions[1]) {
 				destination = 1;
 			}

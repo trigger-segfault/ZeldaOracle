@@ -321,7 +321,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("SIZE", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"Point size",
 			delegate (CommandParam parameters) {
-				baseTileData.Size = parameters.GetPoint(0);
+				baseTileData.TileSize = parameters.GetPoint(0);
 			});
 			//=====================================================================================
 			AddCommand("SPRITEINDEX", (int) Modes.Tile,

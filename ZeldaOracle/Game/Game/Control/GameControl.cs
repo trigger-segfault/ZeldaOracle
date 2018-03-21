@@ -191,7 +191,7 @@ namespace ZeldaOracle.Game.Control {
 				if (test) {
 					player.SetPositionByCenter(startPlayer * GameSettings.TILE_SIZE + new Point2I(8, 8));
 					player.MarkRespawn();
-					roomControl.BeginRoom(world.GetLevelAt(startLevel).Rooms[startRoom.X, startRoom.Y]);
+					roomControl.BeginRoom(world.GetLevelAt(startLevel).GetRoomAt(startRoom));
 				}
 				else if (devMode && GameDebug.DevSettings.StartLocation.Level != "default") {
 					Level level = world.GetLevel(GameDebug.DevSettings.StartLocation.Level);

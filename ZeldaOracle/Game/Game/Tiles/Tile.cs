@@ -693,7 +693,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.breakAnimation		= data.BreakAnimation;
 			tile.breakSound			= data.BreakSound;
 			tile.collisionModel		= data.CollisionModel;
-			tile.size				= data.Size;
+			tile.size				= data.TileSize;
 
 			tile.hurtArea			= data.HurtArea;
 			tile.hurtDamage			= data.HurtDamage;

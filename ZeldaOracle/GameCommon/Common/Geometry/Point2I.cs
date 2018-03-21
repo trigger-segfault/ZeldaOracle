@@ -377,7 +377,7 @@ namespace ZeldaOracle.Common.Geometry {
 			get {
 				if (X == 0 && Y == 0)
 					return 0f;
-				return GMath.Plusdir(GMath.Atan2(-Y, X));
+				return GMath.WrapAngle(GMath.Atan2(-Y, X));
 			}
 			set {
 				float length = GMath.Sqrt((X * X) + (Y * Y));
@@ -443,6 +443,11 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Returns true if the point is positioned at (0, 0).</summary>
 		public bool IsZero {
 			get { return (X == 0 && Y == 0); }
+		}
+
+		/// <summary>Returns true if either X or Y is positioned at 0.</summary>
+		public bool IsAnyZero {
+			get { return (X == 0 || Y == 0); }
 		}
 
 		/// <summary>Returns the perpendicular point.</summary>

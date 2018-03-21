@@ -49,8 +49,11 @@
     <Compile Include="Common\Geometry\Axes.cs" />
     <Compile Include="Common\Geometry\Direction.cs" />
     <Compile Include="Common\Converters\ColorConverter.cs" />
+    <Compile Include="Common\Geometry\GMath.Exponents.cs" />
+    <Compile Include="Common\Geometry\GMath.Angles.cs" />
+    <Compile Include="Common\Geometry\GMath.Sign.cs" />
     <Compile Include="Common\Graphics\Flipping.cs" />
-    <Compile Include="Common\Geometry\GMath.cs" />
+    <Compile Include="Common\Geometry\GMath.Constants.cs" />
     <Compile Include="Common\Geometry\GRandom.cs" />
     <Compile Include="Common\Geometry\Line2F.cs" />
     <Compile Include="Common\Geometry\Orientation.cs" />
@@ -69,7 +72,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\CommonTypes.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Common\Geometry\GMath.Rounding.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Geometry\GMath.Clamping.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

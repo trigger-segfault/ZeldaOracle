@@ -99,49 +99,25 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
-		public new static RenderTarget FromStream(Stream stream, int fileSize,
-			bool premultiply = false)
-		{
-			BinaryReader reader = new BinaryReader(stream);
-			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
-				return FromStream(memory, premultiply);
-		}
-
-		/// <summary>Loads the texture from the stream with the specified file size.</summary>
-		public static RenderTarget FromStream(Stream stream, int fileSize,
-			RenderTargetUsage usage, bool premultiply = false)
-		{
-			BinaryReader reader = new BinaryReader(stream);
-			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
-				return FromStream(memory, usage, premultiply);
-		}
-
-		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public new static RenderTarget FromStreamAndSize(Stream stream,
 			bool premultiply = false)
 		{
-			BinaryReader reader = new BinaryReader(stream);
-			int fileSize = reader.ReadInt32();
-			if (fileSize < 0)
-				throw new IOException("Png file size in file is less than zero!");
-			else if (fileSize == 0)
-				return null;
-			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
+			using (Stream memory = BinaryCounter.ReadStream(stream)) {
+				if (memory.Length == 0)
+					return null;
 				return FromStream(memory, premultiply);
+			}
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public static RenderTarget FromStreamAndSize(Stream stream,
 			RenderTargetUsage usage, bool premultiply = false)
 		{
-			BinaryReader reader = new BinaryReader(stream);
-			int fileSize = reader.ReadInt32();
-			if (fileSize < 0)
-				throw new IOException("Png file size in file is less than zero!");
-			else if (fileSize == 0)
-				return null;
-			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
+			using (Stream memory = BinaryCounter.ReadStream(stream)) {
+				if (memory.Length == 0)
+					return null;
 				return FromStream(memory, usage, premultiply);
+			}
 		}
 
 		/// <summary>Loads the texture from the stream.</summary>

@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.ResourceData {
 		/// This needs to be extended for each non-abstract class in order
 		/// to make use of compile-time generic arguments within
 		/// ResourceDataInitializing.InitializeData.</summary>
-		public abstract void InitializeData(Type previousType);
+		protected abstract void InitializeData(Type previousType);
 
 
 		//-----------------------------------------------------------------------------

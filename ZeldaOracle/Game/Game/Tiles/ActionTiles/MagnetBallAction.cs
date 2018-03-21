@@ -6,7 +6,7 @@ using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
-	public class MagnetBallActionTile : ActionTile {
+	public class MagnetBallAction : ActionTile {
 
 		private MagnetBall magnetBall;
 
@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public MagnetBallActionTile() {
+		public MagnetBallAction() {
 		}
 
 
@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			}
 			else {
 				// Remember the ball's position
-				Point2I ballPosition = (Point2I) GMath.Round(magnetBall.Position);
+				Point2I ballPosition = GMath.RoundI(magnetBall.Position);
 
 				// TODO: this needs to reset when leaving the dungeon
 

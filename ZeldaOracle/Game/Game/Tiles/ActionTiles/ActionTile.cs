@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
@@ -33,7 +34,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			roomControl		= null;
 			actionData		= null;
 			position		= Vector2F.Zero;
-			size			= Point2I.One;
+			size			= new Point2I(GameSettings.TILE_SIZE);
 			properties		= new Properties();
 			collisionBox	= new Rectangle2I(0, 0, 16, 16);
 		}
@@ -90,16 +91,16 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Instantiate an action tile from the given action-data.
 		public static ActionTile CreateAction(ActionTileDataInstance data) {
 			ActionTile tile;
-			
+
 			// Construct the action tile
 			if (data.Type == null)
 				tile = new ActionTile();
 			else
-				tile = (ActionTile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
+				tile = ReflectionHelper.Construct<ActionTile>(data.Type);
 			
 			tile.position	= data.Position;
 			tile.actionData	= data;
-			tile.size		= data.Size;
+			tile.size		= data.PixelSize;
 			//tile.properties.SetAll(data.BaseProperties);
 			//tile.properties.SetAll(data.Properties);
 			//tile.properties.BaseProperties	= data.Properties;
@@ -124,7 +125,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.TileSize * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
@@ -146,7 +147,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.TileSize * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
@@ -166,7 +167,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.TileSize * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
@@ -190,7 +191,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.Action.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.Action.TileSize * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
@@ -220,21 +221,27 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			get { return roomControl.GameControl; }
 		}
 
-
+		/// <summary>Gets or sets the instance associated with this action.</summary>
 		public ActionTileDataInstance ActionData {
 			get { return actionData; }
 			set { actionData = value; }
 		}
 		
-		// Get the position of this action.
+		/// <summary>Gets or sets the position of the action.</summary>
 		public Vector2F Position {
 			get { return position; }
 			set { position = value; }
 		}
-		
-		public Point2I Size {
+
+		/// <summary>Gets or sets the size of the action in pixels.</summary>
+		public Point2I PixelSize {
 			get { return size; }
 			set { size = value; }
+		}
+
+		/// <summary>Gets or sets the center of the action.</summary>
+		public Vector2F Center {
+			get { return position + (Vector2F) size / 2f; }
 		}
 		
 		// Get the properties for this action.

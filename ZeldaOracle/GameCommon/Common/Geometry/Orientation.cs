@@ -43,7 +43,7 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Return the nearest angle from an angle in radians.</summary>
 		public static Orientation FromRadians(float radians, int orientationCount) {
 			return new Orientation(
-				GMath.Wrap((int) GMath.Round(
+				GMath.Wrap(GMath.RoundI(
 					(radians * orientationCount) / GMath.TwoPi),
 					orientationCount),
 				orientationCount);

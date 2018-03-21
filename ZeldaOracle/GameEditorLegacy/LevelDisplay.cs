@@ -337,7 +337,7 @@ namespace ZeldaEditor {
 			Point2I roomOffset = GetRoomDrawPosition(room);
 			for (int i = 0; i < room.ActionData.Count; i++) {
 				ActionTileDataInstance eventTile = room.ActionData[i];
-				Rectangle2I tileRect = new Rectangle2I(eventTile.Position + roomOffset, eventTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I tileRect = new Rectangle2I(eventTile.Position + roomOffset, eventTile.TileSize * GameSettings.TILE_SIZE);
 				if (tileRect.Contains(point))
 					return eventTile;
 			}
@@ -450,8 +450,8 @@ namespace ZeldaEditor {
 			if (tile.Type == typeof(TilePlatform)) {
 				if (!tile.CurrentSprite.IsNull) {
 					// Draw the tile once per point within its size.
-					for (int y = 0; y < tile.Size.Y; y++) {
-						for (int x = 0; x < tile.Size.X; x++) {
+					for (int y = 0; y < tile.PixelSize.Y; y++) {
+						for (int x = 0; x < tile.PixelSize.X; x++) {
 							Point2I drawPos = position +
 								(new Point2I(x, y) * GameSettings.TILE_SIZE);
 							g.DrawSprite(tile.CurrentSprite,
@@ -567,7 +567,7 @@ namespace ZeldaEditor {
 				g.DrawAnimation(spr, editorControl.Ticks, position, drawColor);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(position, eventTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(position, eventTile.TileSize * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}

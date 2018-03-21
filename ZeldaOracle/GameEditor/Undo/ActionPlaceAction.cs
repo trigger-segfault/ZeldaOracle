@@ -65,8 +65,9 @@ namespace ZeldaEditor.Undo {
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			foreach (var actionTileInfo in overwrittenActionTiles) {
-				actionTileInfo.ActionTile.Position = actionTileInfo.Position;
-				actionTileInfo.Room.AddActionTile(actionTileInfo.ActionTile);
+				//actionTileInfo.ActionTile.Position = actionTileInfo.Position;
+				actionTileInfo.Room.PlaceActionTile(actionTileInfo.ActionTile,
+					actionTileInfo.Position);
 			}
 			if (placedActionTileInfo.ActionTile != null)
 				placedActionTileInfo.Room.RemoveActionTile(placedActionTileInfo.ActionTile);

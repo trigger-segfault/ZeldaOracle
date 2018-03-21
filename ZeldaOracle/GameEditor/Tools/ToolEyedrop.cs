@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
+using ZeldaOracle.Game;
 
 namespace ZeldaEditor.Tools {
 	public class ToolEyedrop : EditorTool {
@@ -44,11 +45,12 @@ namespace ZeldaEditor.Tools {
 		protected override void OnMouseMove(MouseEventArgs e) {
 			Point2I mousePos = e.MousePos();
 
-			if (!EditorControl.ActionMode) {
+			if (!ActionMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
+				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, Layer);
 				EditorControl.HighlightMouseTile = (tile != null);
-				LevelDisplay.CursorTileSize = (tile != null ? tile.Size : Point2I.One);
+				LevelDisplay.CursorPixelSize = (tile != null ? tile.TileSize :
+					new Point2I(GameSettings.TILE_SIZE));
 			}
 			else {
 				// Highlight action tiles.
@@ -58,7 +60,7 @@ namespace ZeldaEditor.Tools {
 					LevelDisplay.CursorHalfTileLocation =
 						LevelDisplay.SampleLevelHalfTileCoordinates(
 							LevelDisplay.GetRoomDrawPosition(actionTile.Room) + actionTile.Position);
-					LevelDisplay.CursorTileSize = actionTile.Size;
+					LevelDisplay.CursorPixelSize = actionTile.PixelSize;
 				}
 			}
 		}
@@ -84,8 +86,8 @@ namespace ZeldaEditor.Tools {
 
 			if (DragButton == MouseButtons.Left) {
 				// Sample the tile.
-				if (!EditorControl.ActionMode) {
-					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
+				if (!ActionMode) {
+					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, Layer);
 					if (tile != null) {
 						EditorControl.SelectedTilesetLocation = -Point2I.One;
 						EditorControl.SelectedTileset = null;

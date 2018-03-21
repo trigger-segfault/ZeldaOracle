@@ -139,7 +139,7 @@ namespace ZeldaOracle.Common.Geometry {
 		/// radians.</summary>
 		public static Direction FromRadians(float radians) {
 			return new Direction(GMath.Wrap(
-				(int) GMath.Round(radians / GMath.QuarterPi), 4));
+				GMath.RoundI(radians / GMath.QuarterPi), 4));
 		}
 		
 
@@ -517,7 +517,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static int RoundFromRadians(float radians, int numAngles) {
-			int angle = (int) GMath.Round((radians * numAngles) / GMath.FullAngle);
+			int angle = GMath.RoundI((radians * numAngles) / GMath.FullAngle);
 			return GMath.Wrap(angle, numAngles);
 		}
 
@@ -699,7 +699,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static int RoundFromRadians(float radians) {
-			int dir = (int) GMath.Round(radians / GMath.QuarterAngle);
+			int dir = GMath.RoundI(radians / GMath.QuarterAngle);
 			return GMath.Wrap(dir, Direction.Count);
 		}
 

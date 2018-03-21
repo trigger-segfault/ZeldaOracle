@@ -11,13 +11,13 @@ using ZeldaOracle.Game.ResourceData;
 using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
-	
+	/// <summary>The data structure detailing an action tile that is not confined
+	/// to the tile grid.</summary>
 	public class ActionTileData : BaseTileData {
-
-		private Point2I			size; // TODO: make this refer to pixels, not tiles.
-		private Point2I			position;
-		private ISprite			sprite;		// NOTE: This would only be visible in the editor.
-		//private bool			isVisible;	// Is the action visible in-game?
+		
+		/// <summary>The sprite for the action tile data that is only visible in the
+		/// editor.</summary>
+		private ISprite sprite;
 		
 
 		//-----------------------------------------------------------------------------
@@ -26,13 +26,14 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		public ActionTileData() {
 			sprite			= null;
-			position		= Point2I.Zero;
-			size			= Point2I.One;
 
 			// TODO: Switch this to color
 			/*properties.Set("image_variant", 0)
 				.SetDocumentation("Image Variant ID", "", "", "Internal",
 				"The image variant to draw the sprtie with.", true, false);*/
+
+			properties.Set("pixel_size", new Point2I(GameSettings.TILE_SIZE))
+				.SetDocumentation("Size", "General", "The size of the tile in pixels.").Hide();
 		}
 		
 		public ActionTileData(Type type) :
@@ -46,8 +47,6 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			base.Clone(baseCopy);
 
 			ActionTileData copy = (ActionTileData) baseCopy;
-			size				= copy.size;
-			position			= copy.position;
 			sprite				= copy.sprite;
 		}
 
@@ -60,7 +59,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		/// This needs to be extended for each non-abstract class in order
 		/// to make use of compile-time generic arguments within
 		/// ResourceDataInitializing.InitializeData.</summary>
-		public override void InitializeData(Type previousType) {
+		protected override void InitializeData(Type previousType) {
 			ResourceDataInitializing.InitializeData(
 				this, OutputType, Type, previousType);
 		}
@@ -69,7 +68,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		/// This needs to be extended for each non-abstract class in order
 		/// to make use of compile-time generic arguments within
 		/// ResourceDataInitializing.InitializeData.</summary>
-		public override void InitializeEntityData(Type previousType) {
+		protected override void InitializeEntityData(Type previousType) {
 			ResourceDataInitializing.InitializeData(
 				this, typeof(Entity), EntityType, previousType);
 		}
@@ -84,24 +83,28 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			get { return typeof(ActionTile); }
 		}
 
+		/// <summary>Gets or sets the sprite of the action data.</summary>
 		public override ISprite Sprite {
 			get { return sprite; }
 			set { sprite = value; }
 		}
 
-		public override Point2I Size {
-			get { return size; }
-			set { size = GMath.Max(Point2I.One, value); }
+		/// <summary>Gets or sets the size of the action data in pixels.</summary>
+		public override Point2I PixelSize {
+			get {
+				return GMath.Max(Point2I.One, properties.Get("size",
+					(Point2I) GameSettings.TILE_SIZE));
+			}
+			set { properties.Set("size", value); }
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public Point2I Position {
-			get { return position; }
-			set { position = value; }
+		/// <summary>Gets or sets the size of the action data in tiles.</summary>
+		public override Point2I TileSize {
+			get {
+				return (PixelSize + GameSettings.TILE_SIZE - 1) /
+					GameSettings.TILE_SIZE;
+			}
+			set { PixelSize = value * GameSettings.TILE_SIZE; }
 		}
 	}
 }

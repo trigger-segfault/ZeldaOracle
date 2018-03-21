@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Tiles.Clipboard;
 using Clipboard = System.Windows.Forms.Clipboard;
 
 namespace ZeldaOracle.Game.Worlds {
+	/// <summary>A grid of tiles that can be shifted around between levels.</summary>
 	public partial class TileGrid {
 
 		/// <summary>The structure used to serialize to the clipboard.</summary>
@@ -18,15 +19,15 @@ namespace ZeldaOracle.Game.Worlds {
 		private class TileGridReference {
 			
 			// UNUSED
-			private int     resourceChecksum;
+			private int		resourceChecksum;
 
-			private Point2I size;
-			private int     startLayer;
-			private int     layerCount;
-			private bool    includeTiles;
-			private bool    includeActions;
-			private TileDataReference[,,]           tiles;
-			private List<ActionTileDataReference>   actionTiles;
+			private Point2I	size;
+			private int		startLayer;
+			private int		layerCount;
+			private bool	includeTiles;
+			private bool	includeActions;
+			private TileInstanceReference[,,]			tiles;
+			private List<ActionTileInstanceReference>	actionTiles;
 
 
 			//-----------------------------------------------------------------------------
@@ -35,28 +36,30 @@ namespace ZeldaOracle.Game.Worlds {
 
 			/// <summary>Constructs a tile grid reference from the tile grid.</summary>
 			public TileGridReference(TileGrid tileGrid) {
-				this.resourceChecksum   = 0;// Resources.Checksum;
+				resourceChecksum	= 0;// Resources.Checksum;
 
-				this.size           = tileGrid.Size;
-				this.startLayer     = tileGrid.StartLayer;
-				this.layerCount     = tileGrid.LayerCount;
-				this.includeTiles   = tileGrid.IncludesTiles;
-				this.includeActions = tileGrid.IncludesActions;
-				this.tiles          = new TileDataReference[size.X, size.Y, layerCount];
-				this.actionTiles    = new List<ActionTileDataReference>();
-
-
+				size			= tileGrid.Size;
+				startLayer		= tileGrid.StartLayer;
+				layerCount		= tileGrid.LayerCount;
+				includeTiles	= tileGrid.IncludesTiles;
+				includeActions	= tileGrid.IncludesActions;
+				tiles			= new TileInstanceReference[size.X, size.Y, layerCount];
+				actionTiles		= new List<ActionTileInstanceReference>();
+				
 				if (tileGrid.IncludesTiles) {
-					foreach (TileDataInstance tile in tileGrid.GetTilesAtLocation()) {
+					foreach (TileInstanceLocation tile in
+						tileGrid.GetTilesAndLocations())
+					{
 						tiles[tile.Location.X, tile.Location.Y,
-							tile.Layer - startLayer] = new TileDataReference(tile);
+							tile.Layer - startLayer] = new TileInstanceReference(tile);
 					}
 				}
 
 				if (tileGrid.IncludesActions) {
-					foreach (ActionTileDataInstance actionTile in
-						tileGrid.GetActionTilesAtPosition()) {
-						actionTiles.Add(new ActionTileDataReference(actionTile));
+					foreach (ActionTileInstancePosition actionTile in
+						tileGrid.GetActionTilesAndPositions())
+					{
+						actionTiles.Add(new ActionTileInstanceReference(actionTile));
 					}
 				}
 			}
@@ -76,11 +79,12 @@ namespace ZeldaOracle.Game.Worlds {
 					for (int x = 0; x < size.X; x++) {
 						for (int y = 0; y < size.Y; y++) {
 							for (int i = 0; i < layerCount; i++) {
-								TileDataReference tile = tiles[x, y, i];
+								TileInstanceReference tile = tiles[x, y, i];
 								if (tile == null)
 									continue;
 								if (!tile.ConfirmResourceExists())
-									throw new ResourceReferenceException(typeof(TileData), tile.Name);
+									throw new ResourceReferenceException(
+										typeof(TileData), tile.Name);
 								tileGrid.PlaceTile(tile.Dereference(),
 									x, y, i + startLayer);
 							}
@@ -89,10 +93,12 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 
 				if (includeActions) {
-					foreach (ActionTileDataReference action in actionTiles) {
+					foreach (ActionTileInstanceReference action in actionTiles) {
 						if (!action.ConfirmResourceExists())
-							throw new ResourceReferenceException(typeof(ActionTileData), action.Name);
-						tileGrid.PlaceActionTile(action.Dereference(), action.Position);
+							throw new ResourceReferenceException(
+								typeof(ActionTileData), action.Name);
+						tileGrid.PlaceActionTile(action.Dereference(),
+							action.Position);
 					}
 				}
 
@@ -105,34 +111,42 @@ namespace ZeldaOracle.Game.Worlds {
 			// Propreties
 			//-----------------------------------------------------------------------------
 
+			/// <summary>Gets the checksum to confirm the resources all match.</summary>
 			public int ResourceChecksum {
 				get { return resourceChecksum; }
 			}
 
+			/// <summary>Gets if tiles are included.</summary>
 			public bool IncludesTiles {
 				get { return includeTiles; }
 			}
 
+			/// <summary>Gets if action tiles are included.</summary>
 			public bool IncludesActions {
 				get { return includeActions; }
 			}
 
+			/// <summary>Gets the starting layer for tiles.</summary>
 			public int StartLayer {
 				get { return startLayer; }
 			}
 
+			/// <summary>Gets the number of tile layers.</summary>
 			public int LayerCount {
 				get { return layerCount; }
 			}
 
+			/// <summary>Gets the tile width.</summary>
 			public int Width {
 				get { return size.X; }
 			}
 
+			/// <summary>Gets the tile height.</summary>
 			public int Height {
 				get { return size.Y; }
 			}
 
+			/// <summary>Gets the tile size.</summary>
 			public Point2I Size {
 				get { return size; }
 			}

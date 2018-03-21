@@ -90,6 +90,14 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Rectangle2I(min, max - min);
 		}
 
+		/// <summary>Constructs a rectangle from min and max endpoints.
+		/// Adds (1, 1) to the max value</summary>
+		public static Rectangle2I FromEndPointsOne(Point2I a, Point2I b) {
+			Point2I min = GMath.Min(a, b);
+			Point2I max = GMath.Max(a, b);
+			return new Rectangle2I(min, max - min + Point2I.One);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// General

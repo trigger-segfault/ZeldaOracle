@@ -236,7 +236,7 @@ namespace ConscriptDesigner.WinForms {
 				Point2I origin = tileset.GetTileDataOrigin(point);
 				if (origin != -Point2I.One) {
 					if (!tileset.UsePreviewSprites)
-						hoverSize = tileset.GetTileDataAtOrigin(origin).Size;
+						hoverSize = tileset.GetTileDataAtOrigin(origin).TileSize;
 					point = origin;
 				}
 				return true;

@@ -967,10 +967,7 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Get the size of the current room in pixels.</summary>
 		public Rectangle2I RoomBounds {
-			get {
-				return new Rectangle2I(Point2I.Zero,
-					room.Size * GameSettings.TILE_SIZE);
-			}
+			get { return room.Bounds; }
 		}
 
 		/// <summary>Get the current room's location within the level.</summary>

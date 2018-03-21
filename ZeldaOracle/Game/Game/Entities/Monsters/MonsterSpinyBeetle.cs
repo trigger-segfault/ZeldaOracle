@@ -80,7 +80,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveDuration		= 40;
 			moveTimer           = 0;
 			
-			chargeDuration		= (int) GMath.Ceiling(GameSettings.TILE_SIZE * 3 / moveSpeed);
+			chargeDuration		= GMath.CeilingI(GameSettings.TILE_SIZE * 3 / moveSpeed);
 			chargeCooldown      = 30;
 		}
 
