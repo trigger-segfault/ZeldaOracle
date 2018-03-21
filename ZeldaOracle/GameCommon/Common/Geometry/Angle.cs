@@ -127,7 +127,7 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Return the nearest angle from an angle in radians.</summary>
 		public static Angle FromRadians(float radians) {
 			return new Angle(GMath.Wrap(
-				(int) GMath.Round((radians * 4.0f) / GMath.Pi), 8));
+				GMath.RoundI((radians * 4.0f) / GMath.Pi), 8));
 		}
 		
 
@@ -546,7 +546,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static int RoundFromRadians(float radians) {
-			int angle = (int) GMath.Round(radians / GMath.EighthAngle);
+			int angle = GMath.RoundI(radians / GMath.EighthAngle);
 			return GMath.Wrap(angle, Angles.AngleCount);
 		}
 		

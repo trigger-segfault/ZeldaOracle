@@ -72,7 +72,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				}
 				else {
 					start = Position + GameSettings.TILE_SIZE;
-					distance = RoomControl.Room.Size * GameSettings.TILE_SIZE - start;
+					distance = RoomControl.Room.PixelSize - start;
 				}
 				if (Directions.IsHorizontal(Direction)) {
 					return new Rectangle2F(start.X, Position.Y - 3,

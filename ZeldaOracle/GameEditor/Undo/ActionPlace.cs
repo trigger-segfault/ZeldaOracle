@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaEditor.Control;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
@@ -48,25 +49,35 @@ namespace ZeldaEditor.Undo {
 			}
 		}
 
-		public void AddOverwrittenTile(TileDataInstance tile) {
+		public void AddPlacedTile(TileDataInstance tile) {
+			if (tile == null) return;
 			Point2I point = tile.LevelCoord;
-			if (tile != null && !overwrittenTiles.ContainsKey(point))
+			if (!placedTiles.ContainsKey(point))
+				placedTiles.Add(point, tile);
+		}
+
+		public void AddOverwrittenTile(TileDataInstance tile) {
+			if (tile == null) return;
+			Point2I point = tile.LevelCoord;
+			if (!overwrittenTiles.ContainsKey(point))
 				overwrittenTiles.Add(point, tile);
 		}
 
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			foreach (var pair in placedTiles) {
-				Point2I roomLocation = pair.Key / level.RoomSize;
+				/*Point2I roomLocation = pair.Key / level.RoomSize;
 				Point2I tileLocation = pair.Key % level.RoomSize;
 				Room room = level.GetRoomAt(roomLocation);
-				room.RemoveTile(tileLocation, layer);
+				room.RemoveTile(tileLocation, layer);*/
+				level.RemoveTile(pair.Key, layer);
 			}
 			foreach (var pair in overwrittenTiles) {
-				Point2I roomLocation = pair.Key / level.RoomSize;
+				/*Point2I roomLocation = pair.Key / level.RoomSize;
 				Point2I tileLocation = pair.Key % level.RoomSize;
 				Room room = level.GetRoomAt(roomLocation);
-				room.PlaceTile(pair.Value, tileLocation, layer);
+				room.PlaceTile(pair.Value, tileLocation, layer);*/
+				level.PlaceTile(pair.Value, pair.Key, layer);
 			}
 			editorControl.NeedsNewEventCache = true;
 		}
@@ -74,10 +85,11 @@ namespace ZeldaEditor.Undo {
 		public override void Redo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			foreach (var pair in placedTiles) {
-				Point2I roomLocation = pair.Key / level.RoomSize;
+				/*Point2I roomLocation = pair.Key / level.RoomSize;
 				Point2I tileLocation = pair.Key % level.RoomSize;
 				Room room = level.GetRoomAt(roomLocation);
-				room.PlaceTile(pair.Value, tileLocation, layer);
+				room.PlaceTile(pair.Value, tileLocation, layer);*/
+				level.PlaceTile(pair.Value, pair.Key, layer);
 			}
 			editorControl.NeedsNewEventCache = true;
 		}

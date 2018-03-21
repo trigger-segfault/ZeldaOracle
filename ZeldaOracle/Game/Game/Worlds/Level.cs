@@ -9,22 +9,11 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
+using ZeldaOracle.Game.Worlds.Editing;
 
 namespace ZeldaOracle.Game.Worlds {
-
-	public enum CreateTileGridMode {
-		/// <summary>The tile grid will contain the actual tile instances and remove
-		/// them from the level.</summary>
-		Remove,
-		/// <summary>The tile grid will contain copies of the tile instances without
-		/// removing them from the level.</summary>
-		Duplicate,
-		/// <summary>The tile grid will contain the actual tile instances without
-		/// removing them from the level.</summary>
-		Twin,
-	}
-
-	public class Level : IEventObjectContainer, IEventObject, IIDObject,
+	/// <summary>A single floor in a world containing a grid of rooms.</summary>
+	public partial class Level : IEventObjectContainer, IEventObject, IIDObject,
 		IVariableObjectContainer, IVariableObject
 	{
 		private World		world;
@@ -42,15 +31,16 @@ namespace ZeldaOracle.Game.Worlds {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs an empty level.</summary>
 		public Level() {
-			this.world			= null;
-			this.roomSize		= Point2I.Zero;
-			this.dimensions		= Point2I.Zero;
+			world			= null;
+			roomSize		= Point2I.Zero;
+			dimensions		= Point2I.Zero;
 
-			this.events			= new EventCollection(this);
-			this.properties		= new Properties(this);
-			this.properties.BaseProperties	= new Properties();
-			this.variables		= new Variables(this);
+			events			= new EventCollection(this);
+			properties		= new Properties(this);
+			properties.BaseProperties	= new Properties();
+			variables		= new Variables(this);
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this level.", false, false);
@@ -127,6 +117,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Property/Event objects
 		//-----------------------------------------------------------------------------
@@ -164,67 +155,29 @@ namespace ZeldaOracle.Game.Worlds {
 
 
 		//-----------------------------------------------------------------------------
-		// Level Coordinates
+		// Tile Grids
 		//-----------------------------------------------------------------------------
 
-		// Return true if the level tile coordinate is within the level's bounds.
-		public bool IsInBounds(LevelTileCoord levelCoord) {
-			return ContainsRoom(GetRoomLocation(levelCoord));
-		}
-		
-		// Get the room location containing the given level tile coordinate.
-		public Point2I GetRoomLocation(LevelTileCoord levelCoord) {
-			Point2I roomLocation = new Point2I(
-					levelCoord.X / roomSize.X,
-					levelCoord.Y / roomSize.Y);
-			if (levelCoord.X < 0)
-				roomLocation.X--;
-			if (levelCoord.Y < 0)
-				roomLocation.Y--;
-			return roomLocation;
-		}
-		
-		// Get the room location containing the given level tile coordinate, clamped to the level's bounds.
-		public Point2I GetRoomLocationClamped(LevelTileCoord levelCoord) {
-			return new Point2I(
-				GMath.Clamp(levelCoord.X / roomSize.X, 0, dimensions.X - 1),
-				GMath.Clamp(levelCoord.Y / roomSize.Y, 0, dimensions.Y - 1));
-		}
-		
-		// Get the room containing the given level tile coordinate.
-		public Room GetRoom(LevelTileCoord levelCoord) {
-			Point2I loc = GetRoomLocation(levelCoord);
-			if (ContainsRoom(loc))
-				return rooms[loc.X, loc.Y];
-			return null;
-		}
-		
-		// Get the room tile location of the given level tile coordinate.
-		public Point2I GetTileLocation(LevelTileCoord levelCoord) {
-			Point2I roomLocation = GetRoomLocation(levelCoord);
-			return new Point2I(levelCoord.X - (roomLocation.X * roomSize.X),
-							   levelCoord.Y - (roomLocation.Y * roomSize.Y));
-		}
-
-		// Take tiles from the level and put them into a tile grid.
+		/// <summary>Take tiles from the level and put them into a tile grid.</summary>
 		public TileGrid CreateFullTileGrid(Rectangle2I area, CreateTileGridMode mode) {
 			TileGrid tileGrid = TileGrid.CreateFullTileGrid(area.Size, roomLayerCount);
 			return SetupTileGrid(area, tileGrid, mode);
 		}
 
-		// Take tiles from the level and put them into a tile grid.
+		/// <summary>Take tiles from the level and put them into a tile grid.</summary>
 		public TileGrid CreateSingleLayerTileGrid(Rectangle2I area, int startLayer, CreateTileGridMode mode) {
 			TileGrid tileGrid = TileGrid.CreateSingleLayerTileGrid(area.Size, startLayer);
 			return SetupTileGrid(area, tileGrid, mode);
 		}
 
-		// Take tiles from the level and put them into a tile grid.
+		/// <summary>Take tiles from the level and put them into a tile grid.</summary>
 		public TileGrid CreateActionGrid(Rectangle2I area, CreateTileGridMode mode) {
 			TileGrid tileGrid = TileGrid.CreateActionGrid(area.Size);
 			return SetupTileGrid(area, tileGrid, mode);
 		}
 
-		// Take tiles from the level (or duplicate them) and put them into a tile grid.
+		/// <summary>Take tiles from the level (or duplicate them) and put them into
+		/// a tile grid.</summary>
 		private TileGrid SetupTileGrid(Rectangle2I area, TileGrid tileGrid, CreateTileGridMode mode) {
 			//TileGrid tileGrid = new TileGrid(area.Size, roomLayerCount);
 			BaseTileDataInstance[] tiles = GetTilesInArea(area, tileGrid).ToArray();
@@ -244,13 +197,13 @@ namespace ZeldaOracle.Game.Worlds {
 				// Add the tile to the tile grid.
 				if (baseTile is TileDataInstance) {
 					TileDataInstance tile = (TileDataInstance) baseTile;
-					Point2I location = tile.Location + tile.Room.Location * roomSize - area.Point;
+					Point2I location = tile.LevelCoord - area.Point;
 					tileGrid.PlaceTile(tile, location, tile.Layer);
 
 				}
 				else if (baseTile is ActionTileDataInstance) {
 					ActionTileDataInstance actionTile = (ActionTileDataInstance) baseTile;
-					Point2I position = (actionTile.Room.Location * roomSize - area.Point) * GameSettings.TILE_SIZE;
+					Point2I position = (actionTile.Room.LevelCoord - area.Point) * GameSettings.TILE_SIZE;
 					tileGrid.PlaceActionTile(actionTile, position + actionTile.Position);
 				}
 			}
@@ -258,54 +211,54 @@ namespace ZeldaOracle.Game.Worlds {
 			return tileGrid;
 		}
 
-		// Place the tiles in a tile grid starting at the given location.
-		public void PlaceTileGrid(TileGrid tileGrid, LevelTileCoord location, bool merge) {
-			// Remove tiles.
-			Rectangle2I area = new Rectangle2I((Point2I) location, tileGrid.Size);
-			if (!merge)
+		/// <summary>Place the tiles in a tile grid starting at the given location.</summary>
+		public void PlaceTileGrid(TileGrid tileGrid, Point2I levelCoord,
+			bool merge)
+		{
+			Rectangle2I area = new Rectangle2I(levelCoord, tileGrid.Size);
+			
+			if (!merge) // Remove tiles
 				RemoveArea(area, tileGrid);
 
 			if (tileGrid.IncludesTiles) {
 				// Place tiles
 				foreach (TileDataInstance tile in tileGrid.GetTilesAtLocation()) {
-					LevelTileCoord coord = (LevelTileCoord) ((Point2I) location + tile.Location);
+					this.PlaceTile(tile, tile.Location + levelCoord, tile.Layer, true);
+					/*LevelTileCoord coord = (LevelTileCoord) ((Point2I) levelCoord + tile.Location);
 					Room room = GetRoom(coord);
 
 					if (room != null) {
 						tile.Location = GetTileLocation(coord);
 						room.PlaceTile(tile, tile.Location, tile.Layer);
-					}
+					}*/
 				}
 			}
 
 			if (tileGrid.IncludesActions) {
+				Point2I levelPosition = this.LevelCoordToPosition(levelCoord);
 				// Place action tiles
-				foreach (ActionTileDataInstance actionTile in tileGrid.GetActionTilesAtPosition()) {
-					actionTile.Position += (Point2I) location * GameSettings.TILE_SIZE;
-					if (!(actionTile.Position >= Point2I.Zero))
+				foreach (ActionTileDataInstance action in tileGrid.GetActionTilesAtPosition()) {
+					this.PlaceActionTile(action, action.Position + levelPosition, true);
+					/*action.Position += (Point2I) levelCoord * GameSettings.TILE_SIZE;
+					if (!(action.Position >= Point2I.Zero))
 						continue;
-					Point2I roomLocation = actionTile.Position / (roomSize * GameSettings.TILE_SIZE);
+					Point2I roomLocation = action.Position / (roomSize * GameSettings.TILE_SIZE);
 					Room room = GetRoomAt(roomLocation);
 					if (room != null) {
-						actionTile.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
-						room.AddActionTile(actionTile);
-					}
+						action.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
+						room.AddActionTile(action);
+					}*/
 				}
 			}
 		}
 
-		// Remove all tiles within the given area.
-		public void RemoveArea(Rectangle2I area) {
-			RemoveArea(area, 0, roomLayerCount, true, true);
-		}
-
-		// Remove all tiles within the given area.
+		/// <summary>Remove all tiles within the given area.</summary>
 		public void RemoveArea(Rectangle2I area, TileGrid tileGrid) {
 			RemoveArea(area, tileGrid.StartLayer, tileGrid.LayerCount,
 				tileGrid.IncludesTiles, tileGrid.IncludesActions);
 		}
 
-		// Remove all tiles within the given area.
+		/// <summary>Remove all tiles within the given area.</summary>
 		public void RemoveArea(Rectangle2I area,
 			int startLayer = 0, int layerCount = -1,
 			bool includeTiles = true, bool includeActions = true)
@@ -321,7 +274,8 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 		// Internal Iteration
 		//-----------------------------------------------------------------------------
-
+		
+		/// <summary>Gets all tiles in the area using the tile grid's settings.</summary>
 		private IEnumerable<BaseTileDataInstance> GetTilesInArea(Rectangle2I area,
 			TileGrid tileGrid)
 		{
@@ -329,6 +283,7 @@ namespace ZeldaOracle.Game.Worlds {
 				tileGrid.IncludesTiles, tileGrid.IncludesActions);
 		}
 
+		/// <summary>Gets all tiles in the specified area.</summary>
 		private IEnumerable<BaseTileDataInstance> GetTilesInArea(Rectangle2I area,
 			int startLayer = 0, int layerCount = -1,
 			bool includeTiles = true, bool includeActions = true)
@@ -336,20 +291,22 @@ namespace ZeldaOracle.Game.Worlds {
 			if (layerCount == -1)
 				layerCount = roomLayerCount;
 			// Make sure the area is within the level bounds.
-			area = Rectangle2I.Intersect(area,
-				new Rectangle2I(Point2I.Zero, roomSize * dimensions));
+			area = Rectangle2I.Intersect(area, TileBounds);
 
 			if (includeTiles) {
 				// Iterate the tile grid. (Backwards to prevent large tiles from getting overwritten
 				for (int x = area.Width - 1; x >= 0; x--) {
 					for (int y = area.Height - 1; y >= 0; y--) {
-						LevelTileCoord coord = (LevelTileCoord) (area.Point + new Point2I(x, y));
-						Room room = GetRoom(coord);
+						//LevelTileCoord coord = (LevelTileCoord) (area.Point + new Point2I(x, y));
+						Point2I levelCoord = area.Point + new Point2I(x, y);
+						Room room;
+						Point2I location = this.LevelToRoomCoord(levelCoord, out room);
+						//Room room = GetRoom(coord);
 						if (room != null) {
-							Point2I tileLocation = GetTileLocation(coord);
+							//Point2I tileLocation = GetTileLocation(coord);
 							for (int i = startLayer; i < startLayer + layerCount; i++) {
-								TileDataInstance tile = room.GetTile(tileLocation, i);
-								if (tile != null && tile.Location == tileLocation)
+								TileDataInstance tile = room.GetTile(location, i);
+								if (tile != null && tile.Location == location)
 									yield return tile;
 							}
 						}
@@ -359,13 +316,18 @@ namespace ZeldaOracle.Game.Worlds {
 
 			if (includeActions) {
 				// Determine the collection of rooms that will contain the action tiles.
-				Point2I roomAreaMin = GetRoomLocation((LevelTileCoord) area.Min);
-				Point2I roomAreaMax = GetRoomLocation((LevelTileCoord) area.Max);
-				Rectangle2I roomArea = new Rectangle2I(roomAreaMin, roomAreaMax - roomAreaMin + Point2I.One);
-				roomArea = Rectangle2I.Intersect(roomArea, new Rectangle2I(Point2I.Zero, dimensions));
-				Rectangle2I pixelArea = new Rectangle2I(
+				//Point2I roomAreaMin = this.LevelCoordToRoomLocation(area.Min);
+				//Point2I roomAreaMax = this.LevelCoordToRoomLocation(area.Max);
+				Rectangle2I roomArea = this.LevelCoordToRoomLocation(area);
+				//Point2I roomAreaMin = GetRoomLocation((LevelTileCoord) area.Min);
+				//Point2I roomAreaMax = GetRoomLocation((LevelTileCoord) area.Max);
+				//Rectangle2I roomArea = Rectangle2I.FromEndPointsOne(
+				//	roomAreaMin, roomAreaMax);
+				roomArea = Rectangle2I.Intersect(roomArea, RoomBounds);
+				Rectangle2I pixelArea = this.LevelCoordToPosition(area);
+				/*	new Rectangle2I(
 					area.Point * GameSettings.TILE_SIZE,
-					area.Size  * GameSettings.TILE_SIZE);
+					area.Size  * GameSettings.TILE_SIZE);*/
 
 				// Iterate action tiles.
 				for (int x = roomArea.Left; x < roomArea.Right; x++) {
@@ -373,9 +335,7 @@ namespace ZeldaOracle.Game.Worlds {
 						Room room = rooms[x, y];
 						for (int i = 0; i < room.ActionCount; i++) {
 							ActionTileDataInstance actionTile = room.GetActionTileAt(i);
-							Rectangle2I tileBounds = actionTile.GetBounds();
-							tileBounds.Point += room.Location * roomSize * GameSettings.TILE_SIZE;
-							if (pixelArea.Contains(tileBounds.Point))
+							if (pixelArea.Contains(actionTile.LevelPosition))
 								yield return actionTile;
 						}
 					}
@@ -388,20 +348,26 @@ namespace ZeldaOracle.Game.Worlds {
 		// Accessors
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>Returns true if a room at the specified location exists.</summary>
 		public bool ContainsRoom(Point2I location) {
-			return (location.X >= 0 && location.Y >= 0 && location.X < dimensions.X && location.Y < dimensions.Y);
+			return RoomBounds.Contains(location);
 		}
 
-		public Room GetRoomAt(int x, int y) {
-			return GetRoomAt(new Point2I(x, y));
+		/// <summary>Gets the room at the specified location.</summary>
+		public Room GetRoomAt(int x, int y, bool clamp = false) {
+			return GetRoomAt(new Point2I(x, y), clamp);
 		}
 
-		public Room GetRoomAt(Point2I location) {
-			if (!ContainsRoom(location))
+		/// <summary>Gets the room at the specified location.</summary>
+		public Room GetRoomAt(Point2I location, bool clamp = false) {
+			if (clamp)
+				location = GMath.Clamp(location, RoomBounds);
+			else if (!RoomBounds.Contains(location) || roomSize.IsAnyZero)
 				return null;
 			return rooms[location.X, location.Y];
 		}
 
+		/// <summary>Gets all rooms in the level.</summary>
 		public IEnumerable<Room> GetRooms() {
 			for (int x = 0; x < dimensions.X; x++) {
 				for (int y = 0; y < dimensions.Y; y++) {
@@ -410,6 +376,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Finds the first action tile with the given ID.</summary>
 		public ActionTileDataInstance FindActionTileByID(string id) {
 			for (int x = 0; x < dimensions.X; x++) {
 				for (int y = 0; y < dimensions.Y; y++) {
@@ -426,7 +393,18 @@ namespace ZeldaOracle.Game.Worlds {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		// Resize the dimensions of the room grid.
+		/// <summary>Sets the room at the specified location.</summary>
+		public void SetRoom(Room room, int x, int y) {
+			SetRoom(room, new Point2I(x, y));
+		}
+
+		/// <summary>Sets the room at the specified location.</summary>
+		public void SetRoom(Room room, Point2I location) {
+			rooms[location.X, location.Y] = room;
+			room.Level = this;
+		}
+
+		/// <summary>Resize the dimensions of the room grid.</summary>
 		public void Resize(Point2I size) {
 			Room[,] oldRooms = rooms;
 			rooms = new Room[size.X, size.Y];
@@ -443,7 +421,8 @@ namespace ZeldaOracle.Game.Worlds {
 			dimensions = size;
 		}
 
-		// Resize the dimensions of the room grid.
+		/// <summary>Resize the dimensions of the room grid. And restores the cuttoff
+		/// rooms to their original positions.</summary>
 		public void Resize(Point2I size, Dictionary<Point2I, Room> restoredRooms) {
 			Room[,] oldRooms = rooms;
 			rooms = new Room[size.X, size.Y];
@@ -462,7 +441,7 @@ namespace ZeldaOracle.Game.Worlds {
 			dimensions = size;
 		}
 
-		// Shift the room grid.
+		/// <summary>Shift the room grid.</summary>
 		public void ShiftRooms(Point2I distance) {
 			Room[,] oldRooms = rooms;
 			rooms = new Room[dimensions.X, dimensions.Y];
@@ -480,8 +459,11 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		// Shift the room grid.
-		public void ShiftRooms(Point2I distance, Dictionary<Point2I, Room> restoredRooms) {
+		/// <summary>Shifts the room grid. And restores the cuttoff rooms to their
+		/// original positions.</summary>
+		public void ShiftRooms(Point2I distance,
+			Dictionary<Point2I, Room> restoredRooms)
+		{
 			Room[,] oldRooms = rooms;
 			rooms = new Room[dimensions.X, dimensions.Y];
 
@@ -489,7 +471,8 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int y = 0; y < dimensions.Y; y++) {
 					Point2I location = new Point2I(x, y);
 					if (x - distance.X >= 0 && x - distance.X < dimensions.X &&
-						y - distance.Y >= 0 && y - distance.Y < dimensions.Y) {
+						y - distance.Y >= 0 && y - distance.Y < dimensions.Y)
+					{
 						rooms[x, y] = oldRooms[x - distance.X, y - distance.Y];
 						rooms[x, y].Location = location;
 					}
@@ -503,6 +486,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Resizes the number of tile layers in the room.</summary>
 		public void ResizeLayerCount(int newLayerCount) {
 			newLayerCount = GMath.Max(1, newLayerCount);
 			if (newLayerCount != roomLayerCount) {
@@ -513,6 +497,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Fills all rooms in the level with the zone's default tile.</summary>
 		public void FillWithDefaultTiles() {
 			for (int x = 0; x < dimensions.X; x++) {
 				for (int y = 0; y < dimensions.Y; y++) {
@@ -521,66 +506,97 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Fills a room with the zone's default tile.</summary>
 		public void FillRoomWithDefaultTiles(Room room) {
 			for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
-					room.PlaceTile(new TileDataInstance(Zone.DefaultTileData), x, y, 0);
+					room.PlaceTile(new TileDataInstance(room.Zone.DefaultTileData), x, y, 0);
 				}
 			}
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets or sets the world containing this level.</summary>
 		public World World {
 			get { return world; }
 			set { world = value; }
 		}
 		
-		public Room[,] Rooms {
-			get { return rooms; }
-		}
-		
+		/// <summary>Gets the size of each room in tiles.</summary>
 		public Point2I RoomSize {
 			get { return roomSize; }
-			set { roomSize = value; }
-		}
-		
-		public Point2I Dimensions {
-			get { return dimensions; }
-			set { dimensions = value; }
 		}
 
-		public Point2I Span {
+		/// <summary>Gets the size of each room in pixels.</summary>
+		public Point2I RoomPixelSize {
+			get { return roomSize * GameSettings.TILE_SIZE; }
+		}
+
+		/// <summary>Gets the dimensions of the level in rooms.</summary>
+		public Point2I Dimensions {
+			get { return dimensions; }
+		}
+
+		/// <summary>Gets the dimensions of the level in tiles.</summary>
+		public Point2I TileDimensions {
 			get { return dimensions * roomSize; }
 		}
 
+		/// <summary>Gets the dimensions of the level in pixels.</summary>
+		public Point2I PixelDimensions {
+			get { return dimensions * roomSize * GameSettings.TILE_SIZE; }
+		}
+
+		/// <summary>Gets the boundaires of the level in rooms.</summary>
+		public Rectangle2I RoomBounds {
+			get { return new Rectangle2I(Dimensions); }
+		}
+
+		/// <summary>Gets the boundaires of the level in tiles.</summary>
+		public Rectangle2I TileBounds {
+			get { return new Rectangle2I(TileDimensions); }
+		}
+
+		/// <summary>Gets the boundaires of the level in pixels.</summary>
+		public Rectangle2I PixelBounds {
+			get { return new Rectangle2I(PixelDimensions); }
+		}
+
+		/// <summary>Gets the width of the level in rooms.</summary>
 		public int Width {
 			get { return dimensions.X; }
 			set { dimensions.X = value; }
 		}
-		
+
+		/// <summary>Gets the height of the level in rooms.</summary>
 		public int Height {
 			get { return dimensions.Y; }
 			set { dimensions.Y = value; }
 		}
-		
+
+		/// <summary>Gets the width of each room in tiles.</summary>
 		public int RoomWidth {
 			get { return roomSize.X; }
 			set { roomSize.X = value; }
 		}
-		
+
+		/// <summary>Gets the height of each room in tiles.</summary>
 		public int RoomHeight {
 			get { return roomSize.Y; }
 			set { roomSize.Y = value; }
 		}
-		
+
+		/// <summary>Gets the number of tile grid layers in each room.</summary>
 		public int RoomLayerCount {
 			get { return roomLayerCount; }
 			set { roomLayerCount = value; }
 		}
 
+		/// <summary>Gets or sets the properties for the level.</summary>
 		public Properties Properties {
 			get { return properties; }
 			set {
@@ -589,10 +605,12 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets the variables for the level.</summary>
 		public Variables Vars {
 			get { return variables; }
 		}
 
+		/// <summary>Gets or sets the zone for the level.</summary>
 		public Zone Zone {
 			get { return properties.GetResource<Zone>("zone", GameData.ZONE_DEFAULT); }
 			set {
@@ -603,11 +621,13 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets or sets the ID of the level.</summary>
 		public string ID {
 			get { return properties.GetString("id"); }
 			set { properties.Set("id", value); }
 		}
-		
+
+		/// <summary>Gets or sets the area for the level.</summary>
 		public Area Area {
 			get {
 				Area area = world.GetArea(properties.GetString("area", ""));
@@ -621,6 +641,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets or sets the area ID for the level.</summary>
 		public string AreaID {
 			get { return properties.GetString("area", ""); }
 			set { properties.Set("area", value); }
@@ -648,7 +669,8 @@ namespace ZeldaOracle.Game.Worlds {
 				return this;
 			}
 		}
-		
+
+		/// <summary>Gets or sets the level connected above this level.</summary>
 		public Level ConnectedLevelAbove {
 			get { return world.GetLevel(properties.GetString("connected_level_above", "")); }
 			set {
@@ -658,7 +680,8 @@ namespace ZeldaOracle.Game.Worlds {
 					properties.Set("connected_level_above", value.ID);
 			}
 		}
-		
+
+		/// <summary>Gets or sets the level connected below this level.</summary>
 		public Level ConnectedLevelBelow {
 			get { return world.GetLevel(properties.GetString("connected_level_below", "")); }
 			set {
@@ -668,17 +691,21 @@ namespace ZeldaOracle.Game.Worlds {
 					properties.Set("connected_level_below", value.ID);
 			}
 		}
-		
+
+		/// <summary>Gets or sets the floor number of this level.
+		/// Used for dungeon maps.</summary>
 		public int FloorNumber {
 			get { return properties.GetInteger("floor_number", 0); }
 			set { properties.Set("floor_number", value); }
 		}
 		
+		/// <summary>Gets or sets if the level has been discovered.</summary>
 		public bool IsDiscovered {
 			get { return properties.GetBoolean("discovered", false); }
 			set { properties.Set("discovered", value); }
 		}
-		
+
+		/// <summary>Gets the events for the level.</summary>
 		public EventCollection Events {
 			get { return events; }
 		}

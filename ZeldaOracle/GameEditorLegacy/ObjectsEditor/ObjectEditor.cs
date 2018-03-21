@@ -219,8 +219,8 @@ namespace ZeldaEditor.ObjectsEditor {
 			
 			if (tile != null) {
 				// Size.
-				numberBoxWidth.Value = tile.Size.X;
-				numberBoxHeight.Value = tile.Size.Y;
+				numberBoxWidth.Value = tile.PixelSize.X;
+				numberBoxHeight.Value = tile.PixelSize.Y;
 
 				// Solid type.
 				TileSolidType solidType = (TileSolidType)
@@ -278,7 +278,7 @@ namespace ZeldaEditor.ObjectsEditor {
 			
 			if (tile != null) {
 				// Size.
-				tile.Size = new Point2I((int) numberBoxWidth.Value, (int) numberBoxHeight.Value);
+				tile.PixelSize = new Point2I((int) numberBoxWidth.Value, (int) numberBoxHeight.Value);
 			
 				// Solid Type
 				tile.Properties.Set("solidity",

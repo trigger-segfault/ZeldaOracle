@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game;
 using ZeldaEditor.Undo;
@@ -68,7 +69,7 @@ namespace ZeldaEditor.Tools {
 
 		protected override void OnMouseDragBegin(MouseEventArgs e) {
 			// Draw a new selecion box.
-			if (DragButton.IsLeftOrRight() && !EditorControl.ActionMode && GetTileDataSize() == Point2I.One) {
+			if (DragButton.IsLeftOrRight() && !ActionMode && IsTileSingle) {
 				IsDrawing = true;
 
 				if (DragButton == MouseButtons.Left)
@@ -76,34 +77,37 @@ namespace ZeldaEditor.Tools {
 				else
 					drawTile = null;
 				
-				dragBeginTileCoord	= LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
+				dragBeginTileCoord = LevelDisplay.SampleLevelCoord(e.MousePos());
 				square = new Rectangle2I(dragBeginTileCoord, Point2I.One);
-				LevelDisplay.SetSelectionBox(dragBeginTileCoord * GameSettings.TILE_SIZE, (Point2I)GameSettings.TILE_SIZE);
+				LevelDisplay.SetSelectionBox(Level.LevelCoordToPosition(square));
 			}
 		}
 
 		protected override void OnMouseDragEnd(MouseEventArgs e) {
 			if (IsDrawing) {
 				IsDrawing = false;
-				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
-				Point2I totalSize   = Level.Dimensions * Level.RoomSize;
+				Point2I levelCoord = LevelDisplay.SampleLevelCoord(e.MousePos());
+				/*Point2I totalSize   = Level.Dimensions * Level.RoomSize;
 				Point2I minCoord  = GMath.Max(GMath.Min(dragBeginTileCoord, levelTileCoord), Point2I.Zero);
 				Point2I maxCoord  = GMath.Min(GMath.Max(dragBeginTileCoord, levelTileCoord), totalSize - 1);
-				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);
+				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);*/
+				square = Rectangle2I.FromEndPointsOne(dragBeginTileCoord, levelCoord);
+				square = Rectangle2I.Intersect(square, Level.TileBounds);
 
 				TileData tileData = EditorControl.SelectedTileData as TileData;
 				if (e.Button == MouseButtons.Right)
 					tileData = null;
-				ActionSquare action = new ActionSquare(Level, EditorControl.CurrentLayer, square, tileData);
-				for (int x = minCoord.X; x <= maxCoord.X && x < totalSize.X; x++) {
-					for (int y = minCoord.Y; y <= maxCoord.Y && y < totalSize.Y; y++) {
-						levelTileCoord = new Point2I(x, y);
-						Room room = Level.GetRoomAt(levelTileCoord / Level.RoomSize);
-						Point2I roomCoord = levelTileCoord % Level.RoomSize;
-						TileDataInstance tile = room.GetTile(roomCoord, EditorControl.CurrentLayer);
+				ActionSquare action = new ActionSquare(Level, Layer, square, tileData);
+				for (int x = square.Left; x < square.Right; x++) {
+					for (int y = square.Top; y < square.Bottom; y++) {
+						levelCoord = new Point2I(x, y);
+						/*Room room = Level.GetRoomAt(levelCoord / Level.RoomSize);
+						Point2I roomCoord = levelCoord % Level.RoomSize;
+						TileDataInstance tile = room.GetTile(roomCoord, Layer);
 						if (tile != null) {
 							action.AddOverwrittenTile(tile);
-						}
+						}*/
+						action.AddOverwrittenTile(Level.GetTileAt(levelCoord, Layer));
 					}
 				}
 				EditorControl.PushAction(action, ActionExecution.Execute);
@@ -114,12 +118,13 @@ namespace ZeldaEditor.Tools {
 		protected override void OnMouseDragMove(MouseEventArgs e) {
 			// Update selection box.
 			if (IsDrawing) {
-				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
-				Point2I totalSize   = Level.Dimensions * Level.RoomSize;
-				Point2I minCoord  = GMath.Max(GMath.Min(dragBeginTileCoord, levelTileCoord), Point2I.Zero);
-				Point2I maxCoord  = GMath.Min(GMath.Max(dragBeginTileCoord, levelTileCoord), totalSize - 1);
-				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);
-				LevelDisplay.SetSelectionBox(square.Point * GameSettings.TILE_SIZE, square.Size * GameSettings.TILE_SIZE);
+				Point2I levelCoord = LevelDisplay.SampleLevelCoord(e.MousePos());
+				/*Point2I totalSize	= Level.TileDimensions;
+				Point2I minCoord	= GMath.Max(GMath.Min(dragBeginTileCoord, levelCoord), Point2I.Zero);
+				Point2I maxCoord	= GMath.Min(GMath.Max(dragBeginTileCoord, levelCoord), totalSize - 1);*/
+				square = Rectangle2I.FromEndPointsOne(dragBeginTileCoord, levelCoord);
+				square = Rectangle2I.Intersect(square, Level.TileBounds);
+				LevelDisplay.SetSelectionBox(Level.LevelCoordToPosition(square));
 			}
 		}
 
@@ -138,14 +143,14 @@ namespace ZeldaEditor.Tools {
 		public override bool DrawHideTile(TileDataInstance tile, Room room,
 			Point2I levelCoord, int layer)
 		{
-			return (IsDrawing && square.Intersects(tile.LevelBounds) &&
-					layer == EditorControl.CurrentLayer);
+			return (IsDrawing && square.Intersects(tile.LevelTileBounds) &&
+					layer == Layer);
 		}
 
 		public override void DrawTile(Graphics2D g, Room room, Point2I position,
 			Point2I levelCoord, int layer)
 		{
-			if (!EditorControl.ActionMode && layer == EditorControl.CurrentLayer) {
+			if (!ActionMode && layer == Layer) {
 				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null) {
@@ -175,11 +180,13 @@ namespace ZeldaEditor.Tools {
 		private TileData GetTileData() {
 			return EditorControl.SelectedTileData as TileData;
 		}
-
-		private Point2I GetTileDataSize() {
-			if (GetTileData() != null)
-				return GMath.Max(Point2I.One, GetTileData().Size);
-			return Point2I.One;
+		
+		private bool IsTileSingle {
+			get {
+				if (GetTileData() != null)
+					return (GetTileData().TileSize == Point2I.One);
+				return true;
+			}
 		}
 	}
 }

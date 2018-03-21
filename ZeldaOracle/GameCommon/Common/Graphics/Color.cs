@@ -305,7 +305,7 @@ namespace ZeldaOracle.Common.Graphics {
 			sat = GMath.Clamp(sat, 0f, 1f);
 			val = GMath.Clamp(val, 0f, 1f);
 			float hue2 = hue * 6f;
-			float hueI = (float)GMath.Floor(hue2);
+			float hueI = GMath.Floor(hue2);
 
 			byte b0 = (byte) (255f * val);
 			byte b1 = (byte) (255f * val * (1f - sat));

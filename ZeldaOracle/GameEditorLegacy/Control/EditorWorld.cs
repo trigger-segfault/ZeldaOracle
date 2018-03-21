@@ -34,7 +34,7 @@ namespace ZeldaEditor.Control {
 		
 		// Returns true if there is free space to place the given tile at a location.
 		public bool CanPlaceTile(TileData tile, Room room, Point2I location, int layer) {
-			Point2I size = tile.Size;
+			Point2I size = tile.TileSize;
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					Point2I loc = location + new Point2I(x, y);
@@ -48,7 +48,7 @@ namespace ZeldaEditor.Control {
 		// Place a tile in a room, deleting any other tiles in the way.
 		public void PlaceTile(TileDataInstance tile, Room room, Point2I location, int layer) {
 			// Remove any tiles in the way.
-			Point2I size = tile.Size;
+			Point2I size = tile.PixelSize;
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					TileDataInstance t = room.GetTile(location, layer);

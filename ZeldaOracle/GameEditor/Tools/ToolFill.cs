@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaEditor.Undo;
@@ -51,16 +52,16 @@ namespace ZeldaEditor.Tools {
 			Point2I mousePos	= new Point2I(e.X, e.Y);
 			Room room			= LevelDisplay.SampleRoom(mousePos);
 			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
-			Point2I target		= LevelDisplay.SampleLevelTileCoordinates(mousePos);
+			Point2I target		= LevelDisplay.SampleLevelCoord(mousePos);
 			
-			if (!EditorControl.ActionMode && e.Button.IsLeftOrRight()) {
-				if ((EditorControl.CurrentLayer == 0 || GetTileAt(target) != null) && GetTileDataSize() == Point2I.One) {
+			if (!ActionMode && e.Button.IsLeftOrRight()) {
+				if ((Layer == 0 || GetTileAt(target) != null) && IsTileSingle) {
 					// Fill tiles.
 					TileData fillData = EditorControl.SelectedTileData as TileData;
 					if (fillData != null) {
 						if (e.Button == MouseButtons.Right)
 							fillData = null;
-						action = ActionPlace.CreateFillAction(Level, EditorControl.CurrentLayer, fillData);
+						action = ActionPlace.CreateFillAction(Level, Layer, fillData);
 						Fill(target, fillData);
 						EditorControl.PushAction(action, ActionExecution.None);
 						action = null;
@@ -75,7 +76,7 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
-			if (!EditorControl.ActionMode && layer == EditorControl.CurrentLayer) {
+			if (!ActionMode && layer == Layer) {
 				if (levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null)
@@ -89,18 +90,14 @@ namespace ZeldaEditor.Tools {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		private TileDataInstance GetTileAt(Point2I levelTileCoord) {
-			return Level.GetRoomAt(levelTileCoord / Level.RoomSize)
-				.GetTile(levelTileCoord % Level.RoomSize, EditorControl.CurrentLayer);
+		private TileDataInstance GetTileAt(Point2I levelCoord) {
+			return Level.GetTileAt(levelCoord, Layer);
 		}
 
 		private bool Matches(TileDataInstance targetTile, Point2I targetRoom, Point2I current) {
 			if (EditorControl.ToolOptionRoomOnly &&
-				targetRoom != (current / Level.RoomSize))
-			{
+				targetRoom != Level.LevelCoordToRoomLocation(current))
 				return false;
-			}
-			TileDataInstance currentTile = GetTileAt(current);
 			return Matches(targetTile, GetTileAt(current));
 		}
 
@@ -109,14 +106,13 @@ namespace ZeldaEditor.Tools {
 				return (tile2 == null);
 			}
 			else if (tile2 != null) {
-				return (tile1.TileData == tile2.TileData &&
-					(!EditorControl.ToolOptionRoomOnly || tile1.Room == tile2.Room));
+				return (tile1.TileData == tile2.TileData);
 			}
 			return false;
 		}
 
 		private void Fill(Point2I target, TileData fillData) {
-			Point2I totalSize = Level.Dimensions * Level.RoomSize;
+			Point2I totalSize = Level.TileDimensions;
 			TileDataInstance targetTile = GetTileAt(target);
 			Point2I point;
 			Point2I targetRoom = target / Level.RoomSize;
@@ -173,15 +169,13 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		private void ReplaceTile(Point2I levelTileCoord, TileData tileData) {
-			Room room = Level.GetRoomAt(levelTileCoord / Level.RoomSize);
-			Point2I tileCoord = levelTileCoord % Level.RoomSize;
+		private void ReplaceTile(Point2I levelCoord, TileData tileData) {
+			/*Room room = Level.GetRoomAt(levelCoord / Level.RoomSize);
+			Point2I tileCoord = levelCoord % Level.RoomSize;
 
-			TileDataInstance oldTile = room.GetTile(tileCoord, EditorControl.CurrentLayer);
-			action.AddOverwrittenTile(oldTile);
-			action.AddPlacedTile(levelTileCoord);
-
-			room.CreateTile(tileData, tileCoord, EditorControl.CurrentLayer);
+			TileDataInstance oldTile = room.GetTile(tileCoord, Layer);*/
+			action.AddOverwrittenTile(Level.GetTileAt(levelCoord, Layer));
+			action.AddPlacedTile(Level.CreateTile(tileData, levelCoord, Layer));
 		}
 
 		private TileDataInstance CreateDrawTile() {
@@ -194,11 +188,12 @@ namespace ZeldaEditor.Tools {
 			return EditorControl.SelectedTileData as TileData;
 		}
 
-		private Point2I GetTileDataSize() {
-			if (GetTileData() != null)
-				return GMath.Max(Point2I.One, GetTileData().Size);
-			return Point2I.One;
+		private bool IsTileSingle {
+			get {
+				if (GetTileData() != null)
+					return (GetTileData().TileSize == Point2I.One);
+				return true;
+			}
 		}
-
 	}
 }

@@ -11,6 +11,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
@@ -47,7 +48,7 @@ namespace ZeldaEditor.WinForms {
 		private Point2I			highlightedTile;
 		private Point2I         cursorPixelLocation;
 		private Point2I			cursorHalfTileLocation;
-		private Point2I         cursorTileSize;
+		private Point2I         cursorSize;
 		private Rectangle2I		selectionBox;
 		private Room			selectedRoom;
 		private bool            isSelectionRoom;
@@ -120,12 +121,7 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 		// Level Sampling
 		//-----------------------------------------------------------------------------
-
-		// Convert a tile location relative to a room, to an absolute tile location in the level.
-		public Point2I GetLocationInLevel(Room room, Point2I tileLocationInRoom) {
-			return ((Level.RoomSize * room.Location) + tileLocationInRoom);
-		}
-
+		
 		// Sample the room coordinates at the given point, clamping them to the level's dimensions if specified.
 		public Point2I SampleRoomCoordinates(Point2I point, bool clamp = false) {
 			Point2I span = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
@@ -170,7 +166,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		// Sample the tile coordinates at the given point (tile coordinates are absolute to the level).
-		public Point2I SampleLevelTileCoordinates(Point2I point) {
+		public Point2I SampleLevelCoord(Point2I point) {
 			Point2I roomCoord = SampleRoomCoordinates(point);
 			Point2I tileCoord = SampleTileCoordinates(point);
 			return ((roomCoord * Level.RoomSize) + tileCoord);
@@ -205,14 +201,17 @@ namespace ZeldaEditor.WinForms {
 			if (room == null)
 				return null;
 			Point2I roomOffset = GetRoomDrawPosition(room);
-			for (int i = 0; i < room.ActionCount; i++) {
+			Point2I position = SampleLevelPixelPosition(point);
+			return Level.GetActionTileAt(position);
+			/*for (int i = 0; i < room.ActionCount; i++) {
 				ActionTileDataInstance actionTile = room.GetActionTileAt(i);
-				Rectangle2I tileRect = new Rectangle2I(actionTile.Position + roomOffset, actionTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I tileRect = new Rectangle2I(actionTile.Position + roomOffset, actionTile.PixelSize);
 				if (tileRect.Contains(point))
 					return actionTile;
 			}
-			return null;
+			return null;*/
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Get Tile
@@ -231,11 +230,6 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 		// Coordinates Conversion
 		//-----------------------------------------------------------------------------
-
-		// Convert room tile coordinates level tile coordinates.
-		public Point2I ToLevelTileCoordinates(Room room, Point2I roomTileLocation) {
-			return ((Level.RoomSize * room.Location) + roomTileLocation);
-		}
 		
 		// Convert level tile coordinates room tile coordinates.
 		public Point2I ToRoomTileCoordinates(Point2I levelTileLocation) {
@@ -268,12 +262,10 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		public void SetSelectionBox(Room room) {
-			selectionBox = new Rectangle2I(room.Size * GameSettings.TILE_SIZE);
-			selectionBox.Point += room.Location * room.Size * GameSettings.TILE_SIZE;
+			selectionBox = room.LevelBounds;
 		}
 		public void SetSelectionBox(BaseTileDataInstance tile) {
-			selectionBox = tile.GetBounds();
-			selectionBox.Point += tile.Room.Location * tile.Room.Size * GameSettings.TILE_SIZE;
+			selectionBox = tile.LevelBounds;
 		}
 
 		public void CenterViewOnPoint(Point2I point) {
@@ -383,11 +375,11 @@ namespace ZeldaEditor.WinForms {
 		// Draw an entire room.
 		private void DrawRoom(Graphics2D g, Room room) {
 			TileDataDrawing.Room = room;
-			Point2I roomStartTile = room.Location * Level.RoomSize;
+			Point2I roomStartTile = room.LevelCoord;
 			Point2I roomStartPixel = roomStartTile * GameSettings.TILE_SIZE;
 
 			// Draw white background
-			g.FillRectangle(new Rectangle2I(Point2I.Zero, room.Size * GameSettings.TILE_SIZE), Color.White);
+			g.FillRectangle(room.Bounds, Color.White);
 
 			// Draw tile layers
 			for (int layer = 0; layer < room.LayerCount; layer++) {
@@ -462,7 +454,7 @@ namespace ZeldaEditor.WinForms {
 				
 				CurrentTool.DrawActionTiles(g);
 				
-				Point2I span = Level.Span;
+				Point2I span = Level.TileDimensions;
 				Point2I drawSpan = GetRoomDrawPosition(Level.Dimensions);
 				// Draw the tile grid.
 				if (editorControl.ShowGrid) {
@@ -522,7 +514,7 @@ namespace ZeldaEditor.WinForms {
 
 				// Draw the highlight box.
 				if (editorControl.HighlightMouseTile && cursorHalfTileLocation >= Point2I.Zero) {
-					Rectangle2I box = new Rectangle2I(GetLevelHalfTileCoordDrawPosition(cursorHalfTileLocation), cursorTileSize * 16);
+					Rectangle2I box = new Rectangle2I(GetLevelHalfTileCoordDrawPosition(cursorHalfTileLocation), cursorSize);
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.White);
 				}
 
@@ -630,13 +622,13 @@ namespace ZeldaEditor.WinForms {
 
 			if (editorControl.IsLevelOpen) {
 				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
-				cursorTileSize = Point2I.One;
+				cursorSize = new Point2I(GameSettings.TILE_SIZE);
 
 				// Find the highlighted room/tile coordinates.
 				if (editorControl.ActionMode)
 					cursorHalfTileLocation  = SampleLevelHalfTileCoordinates(mousePos);
 				else
-					cursorHalfTileLocation  = SampleLevelTileCoordinates(mousePos) * 2;
+					cursorHalfTileLocation  = SampleLevelCoord(mousePos) * 2;
 				cursorPixelLocation = SampleLevelPixelPosition(mousePos);
 				highlightedRoom		= SampleRoomCoordinates(mousePos, false);
 				highlightedTile		= SampleTileCoordinates(mousePos);
@@ -758,9 +750,9 @@ namespace ZeldaEditor.WinForms {
 			get { return cursorPixelLocation; }
 			set { cursorPixelLocation = value; }
 		}
-		public Point2I CursorTileSize {
-			get { return cursorTileSize; }
-			set { cursorTileSize = value; }
+		public Point2I CursorPixelSize {
+			get { return cursorSize; }
+			set { cursorSize = value; }
 		}
 		public bool IsSelectionRoom {
 			get { return isSelectionRoom; }

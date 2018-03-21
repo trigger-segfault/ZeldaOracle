@@ -121,20 +121,20 @@ namespace ZeldaOracle.Game.Tiles {
 					if (i <= location.Y) {
 						for (int x = 0; x < i && x <= location.X; x++) {
 							tileData = tileDataGrid[location.X - x, location.Y - i];
-							if (tileData != null && new Point2I(x, i) < tileData.Size)
+							if (tileData != null && new Point2I(x, i) < tileData.TileSize)
 								return location - new Point2I(x, i);
 						}
 					}
 					if (i <= location.X) {
 						for (int y = 0; y < i && y <= location.Y; y++) {
 							tileData = tileDataGrid[location.X - i, location.Y - y];
-							if (tileData != null && new Point2I(i, y) < tileData.Size)
+							if (tileData != null && new Point2I(i, y) < tileData.TileSize)
 								return location - new Point2I(i, y);
 						}
 					}
 					if (new Point2I(i, i) <= location) {
 						tileData = tileDataGrid[location.X - i, location.Y - i];
-						if (tileData != null && new Point2I(i, i) < tileData.Size)
+						if (tileData != null && new Point2I(i, i) < tileData.TileSize)
 							return location - new Point2I(i, i);
 					}
 				}
@@ -160,7 +160,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (tileData != null) {
 				count++;
 				if (!usePreviewSprites) {
-					Point2I size = tileData.Size;
+					Point2I size = tileData.TileSize;
 					for (int x = 0; x < size.X && x + location.X < Width; x++) {
 						for (int y = 0; y < size.Y && y + location.Y < Height; y++) {
 							Point2I newLoc = location + new Point2I(x, y);
@@ -189,7 +189,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (tileData != null) {
 				count++;
 				if (!usePreviewSprites) {
-					Point2I size = tileData.Size;
+					Point2I size = tileData.TileSize;
 					for (int x = 0; x < size.X && x + location.X < Width; x++) {
 						for (int y = 0; y < size.Y && y + location.Y < Height; y++) {
 							Point2I occupiedLoc = GetTileDataOrigin(location + new Point2I(x, y));

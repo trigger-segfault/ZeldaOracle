@@ -7,11 +7,11 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles.Clipboard {
+	/// <summary>The base class for tile instance references.</summary>
 	[Serializable]
-	public abstract class BaseTileDataReference<TData, TInstance>
+	public abstract class BaseTileInstanceReference<TData, TInstance>
 		where TData : BaseTileData where TInstance : BaseTileDataInstance
 	{
-
 		/// <summary>The name of the tile data resource.</summary>
 		private string				name;
 		/// <summary>The properties of the tile data.</summary>
@@ -24,12 +24,12 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Consctructs an instance of </summary>
-		public BaseTileDataReference(BaseTileDataInstance baseTileData) {
-			this.name		= baseTileData.BaseData.ResourceName;
-			this.properties	= new Properties(baseTileData);
-			this.events		= new EventCollection(baseTileData.Events, baseTileData);
-			this.properties.Clone(baseTileData.Properties);
+		/// <summary>Constructs a reference to the tile or action tile instance.</summary>
+		public BaseTileInstanceReference(BaseTileDataInstance baseTile) {
+			name		= baseTile.BaseData.ResourceName;
+			properties	= new Properties(baseTile);
+			events		= new EventCollection(baseTile.Events, baseTile);
+			properties.Clone(baseTile.Properties);
 		}
 		
 
@@ -44,12 +44,12 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 
 		/// <summary>Creates and returns the dereferenced tile data.</summary>
 		public TInstance Dereference() {
-			TInstance baseTileData = SetupInstance(Resources.Get<TData>(name));
-			baseTileData.Properties	= properties;
-			baseTileData.Events		= events;
-			properties.RestoreFromClipboard(baseTileData.BaseData.Properties, baseTileData);
-			events.RestoreFromClipboard(baseTileData.BaseData.Events, baseTileData);
-			return baseTileData;
+			TInstance baseTile = SetupInstance(Resources.Get<TData>(name));
+			baseTile.Properties	= properties;
+			baseTile.Events		= events;
+			properties.RestoreFromClipboard(baseTile.BaseData.Properties, baseTile);
+			events.RestoreFromClipboard(baseTile.BaseData.Events, baseTile);
+			return baseTile;
 		}
 
 
@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Creates the tile data instance and sets up any extended members.</summary>
-		protected abstract TInstance SetupInstance(TData tileData);
+		protected abstract TInstance SetupInstance(TData baseData);
 
 
 		//-----------------------------------------------------------------------------

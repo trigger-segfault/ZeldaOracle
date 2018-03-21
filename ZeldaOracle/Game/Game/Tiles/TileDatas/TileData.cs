@@ -13,10 +13,10 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Tiles {
-
+	/// <summary>The data structure detailing a normal tile that is confined
+	/// to the tile grid.</summary>
 	public class TileData : BaseTileData {
-
-
+		
 		private ISprite[]			spriteList;
 		private ISprite             spriteAbove;
 		private ISprite				spriteAsObject;
@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// General
 			properties.Set("size", Point2I.One)
-				.SetDocumentation("Size", "General", "");
+				.SetDocumentation("Size", "General", "The size of the tile in tiles.");
 			properties.SetEnumInt("flags", TileFlags.Default)
 				.SetDocumentation("Tile Flags", "enum_flags", typeof(TileFlags), "General", "");
 			properties.SetEnumInt("solidity", TileSolidType.NotSolid)
@@ -162,7 +162,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// This needs to be extended for each non-abstract class in order
 		/// to make use of compile-time generic arguments within
 		/// ResourceDataInitializing.InitializeData.</summary>
-		public override void InitializeData(Type previousType) {
+		protected override void InitializeData(Type previousType) {
 			ResourceDataInitializing.InitializeData(
 				this, OutputType, Type, previousType);
 		}
@@ -171,7 +171,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// This needs to be extended for each non-abstract class in order
 		/// to make use of compile-time generic arguments within
 		/// ResourceDataInitializing.InitializeData.</summary>
-		public override void InitializeEntityData(Type previousType) {
+		protected override void InitializeEntityData(Type previousType) {
 			ResourceDataInitializing.InitializeData(
 				this, typeof(Entity), EntityType, previousType);
 		}
@@ -186,6 +186,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return typeof(Tile); }
 		}
 
+		/// <summary>Gets or sets the sprite of the tile data.</summary>
 		public override ISprite Sprite {
 			get {
 				if (spriteList.Length > 0)
@@ -201,9 +202,23 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		public override Point2I Size {
-			get { return GMath.Max(Point2I.One, properties.Get<Point2I>("size")); }
-			set { properties.SetGeneric("size", value); }
+		/// <summary>Gets or sets the size of the tile in pixels.
+		/// Setter cannot be called for normal tiles.</summary>
+		public override Point2I PixelSize {
+			get { return TileSize * GameSettings.TILE_SIZE; }
+			set {
+				throw new NotImplementedException("Cannot call " +
+					"TileData.Size setter!");
+			}
+		}
+
+		/// <summary>Gets or sets the size of the tile in tiles.</summary>
+		public override Point2I TileSize {
+			get {
+				return GMath.Max(Point2I.One, properties.GetPoint("size",
+					Point2I.One));
+			}
+			set { properties.Set("size", value); }
 		}
 
 

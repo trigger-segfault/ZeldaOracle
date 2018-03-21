@@ -306,7 +306,7 @@ namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 		}
 
 		public static Point2I MouseTile(this MouseEventArgs e) {
-			return (Point2I) GMath.Floor((new Vector2F(e.X, e.Y) - 1) / (GameSettings.TILE_SIZE + 1));
+			return GMath.FloorI((new Vector2F(e.X, e.Y) - 1) / (GameSettings.TILE_SIZE + 1));
 		}
 	}
 }

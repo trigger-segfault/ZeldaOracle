@@ -69,13 +69,25 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public abstract BaseTileDataInstance Duplicate();
 
-		public abstract Point2I GetPosition();
-		
-		public abstract Rectangle2I GetBounds();
+		/// <summary>Gets or sets the pixel position of the base tile in the room.
+		/// Setter only applies for actions.</summary>
+		public abstract Point2I Position { get; set; }
 
-		public abstract ISprite CurrentSprite { get; }
+		/// <summary>Gets the pixel position of the base tile in the level.</summary>
+		public abstract Point2I LevelPosition { get; }
 
-		public abstract ISprite Sprite { get; set; }
+		/// <summary>Gets the pixel bounds of the base tile in the room.</summary>
+		public abstract Rectangle2I Bounds { get; }
+
+		/// <summary>Gets the pixel bounds of the base tile in the level.</summary>
+		public abstract Rectangle2I LevelBounds { get; }
+
+		/// <summary>Gets or sets the size of the base tile in pixels.
+		/// Setter only applies for actions.</summary>
+		public abstract Point2I PixelSize { get; set; }
+
+		/// <summary>Gets or sets the size of the base tile in tiles.</summary>
+		public abstract Point2I TileSize { get; set; }
 
 
 		//-----------------------------------------------------------------------------

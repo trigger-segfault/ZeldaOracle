@@ -202,7 +202,7 @@ namespace ZeldaEditor.WinForms {
 					Point2I origin = Tileset.GetTileDataOrigin(point);
 					if (origin != -Point2I.One) {
 						if (!Tileset.UsePreviewSprites)
-							hoverSize = Tileset.GetTileDataAtOrigin(origin).Size;
+							hoverSize = Tileset.GetTileDataAtOrigin(origin).TileSize;
 						point = origin;
 					}
 					return true;
@@ -315,7 +315,7 @@ namespace ZeldaEditor.WinForms {
 			}
 
 			if (selectionPoint != -Point2I.One) {
-				Point2I selectedSize = SelectedTileData.Size;
+				Point2I selectedSize = SelectedTileData.TileSize;
 				if (Tileset == null || Tileset.UsePreviewSprites)
 					selectedSize = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(

@@ -11,9 +11,13 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game;
 using ZeldaEditor.Undo;
 using Key = System.Windows.Input.Key;
+using ModifierKeys = System.Windows.Input.ModifierKeys;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
+		private const ModifierKeys RoomModeModifier = ModifierKeys.Shift;
+
+
 		private TileDataInstance selectedTile;
 		private ActionTileDataInstance selectedActionTile;
 		private Room selectedRoom;
@@ -49,7 +53,7 @@ namespace ZeldaEditor.Tools {
 		public override void Delete() {
 			if (selectedTile != null && selectedTile.Room.ContainsTile(selectedTile)) {
 				ActionPlace action = ActionPlace.CreatePlaceAction(selectedTile.Room.Level, selectedTile.Layer, null);
-				Point2I location = selectedTile.Location + selectedTile.Room.Location * selectedTile.Room.Size;
+				Point2I location = selectedTile.LevelCoord;
 				action.AddOverwrittenTile(selectedTile);
 				action.AddPlacedTile(location);
 				EditorControl.PushAction(action, ActionExecution.Execute);
@@ -133,10 +137,10 @@ namespace ZeldaEditor.Tools {
 			
 			// Sample the tile at the mouse position.
 			BaseTileDataInstance baseTile = null;
-			if (EditorControl.ActionMode)
+			if (ActionMode)
 				baseTile = LevelDisplay.SampleActionTile(mousePos);
 			else
-				baseTile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
+				baseTile = LevelDisplay.SampleTile(mousePos, Layer);
 
 			// Select or deselect the tile.
 			if (e.Button == MouseButtons.Left) {
@@ -147,7 +151,7 @@ namespace ZeldaEditor.Tools {
 
 				Room room = null;
 				bool roomSelect = false;
-				if (System.Windows.Forms.Control.ModifierKeys.HasFlag(Keys.Shift)) {
+				if (Modifiers.HasFlag(RoomModeModifier)) {
 					room = LevelDisplay.SampleRoom(mousePos, false);
 					roomSelect = true;
 				}
@@ -186,15 +190,15 @@ namespace ZeldaEditor.Tools {
 		protected override void OnMouseMove(MouseEventArgs e) {
 			Point2I mousePos = e.MousePos();
 
-			if (!EditorControl.ActionMode) {
+			if (!ActionMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
+				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, Layer);
 				EditorControl.HighlightMouseTile = (tile != null);
 				if (tile != null) {
-					LevelDisplay.CursorTileLocation = tile.Room.Location * Level.RoomSize +
-						tile.Location;
+					LevelDisplay.CursorTileLocation = tile.LevelCoord;
 				}
-				LevelDisplay.CursorTileSize = (tile != null ? tile.Size : Point2I.One);
+				LevelDisplay.CursorPixelSize = (tile != null ? tile.PixelSize :
+					new Point2I(GameSettings.TILE_SIZE));
 			}
 			else {
 				// Highlight action tiles.
@@ -204,10 +208,10 @@ namespace ZeldaEditor.Tools {
 					LevelDisplay.CursorHalfTileLocation =
 						LevelDisplay.SampleLevelHalfTileCoordinates(
 							LevelDisplay.GetRoomDrawPosition(actionTile.Room) + actionTile.Position);
-					LevelDisplay.CursorTileSize = actionTile.Size;
+					LevelDisplay.CursorPixelSize = actionTile.PixelSize;
 				}
 				else {
-					LevelDisplay.CursorTileSize = Point2I.One;
+					LevelDisplay.CursorPixelSize = new Point2I(GameSettings.TILE_SIZE);
 				}
 			}
 		}
@@ -234,12 +238,12 @@ namespace ZeldaEditor.Tools {
 			if (baseTile is TileDataInstance) {
 				selectedTile = baseTile as TileDataInstance;
 				pixelPosition = LevelDisplay.GetRoomDrawPosition(selectedTile.Room) +
-					(selectedTile.Location * GameSettings.TILE_SIZE) + selectedTile.GetBounds().Size / 2;
+					(selectedTile.Location * GameSettings.TILE_SIZE) + selectedTile.PixelSize / 2;
 			}
 			else if (baseTile is ActionTileDataInstance) {
 				selectedActionTile = baseTile as ActionTileDataInstance;
 				pixelPosition = LevelDisplay.GetRoomDrawPosition(selectedActionTile.Room) +
-					selectedActionTile.Position + selectedActionTile.GetBounds().Size / 2;
+					selectedActionTile.Position + selectedActionTile.PixelSize / 2;
 			}
 
 			LevelDisplay.SetSelectionBox(baseTile);
@@ -251,7 +255,7 @@ namespace ZeldaEditor.Tools {
 			selectedActionTile = null;
 			selectedRoom = room;
 
-			Point2I pixelPosition = LevelDisplay.GetRoomDrawPosition(room) + room.Size * GameSettings.TILE_SIZE / 2;
+			Point2I pixelPosition = LevelDisplay.GetRoomDrawPosition(room) + room.PixelSize / 2;
 
 			LevelDisplay.SetSelectionBox(room);
 			LevelDisplay.CenterViewOnPoint(pixelPosition);

@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
+using ModifierKeys = System.Windows.Input.ModifierKeys;
 using ZeldaOracle.Common.Scripting;
 
 using WFClipboard = System.Windows.Clipboard;
@@ -30,15 +32,15 @@ namespace ZeldaEditor.Tools {
 		private static readonly Cursor SelectionCursor = LoadCursor("Selection");
 		private static readonly Cursor DraggingCursor = Cursors.SizeAll;
 
-		private const Keys DuplicateModifier = Keys.Control;
-		private const Keys RoomModeModifier = Keys.Shift;
+		private const ModifierKeys DuplicateModifier = ModifierKeys.Control;
+		private const ModifierKeys RoomModeModifier = ModifierKeys.Shift;
 
 
 		//-----------------------------------------------------------------------------
 		// Members
 		//-----------------------------------------------------------------------------
 
-		private Point2I dragBeginRoomCoord;
+		private Point2I dragBeginRoomLocation;
 		private Point2I dragBeginTileCoord;
 		private bool isCreatingSelectionBox;
 		private bool isMovingSelectionBox;
@@ -99,9 +101,8 @@ namespace ZeldaEditor.Tools {
 			if (CanCopyCut) {
 				if (selectionGrid == null) {
 					selectionGrid = CreateTileGrid(CreateTileGridMode.Twin);
-					//clipboard = selectionGrid.Duplicate();
-					selectionGrid.Duplicate().SaveClipboard();
 				}
+				selectionGrid.SaveClipboard();
 				if (mode != SelectionModes.Duplicate && mode != SelectionModes.Paste) {
 					mode = SelectionModes.Cut;
 					Finish();
@@ -117,7 +118,7 @@ namespace ZeldaEditor.Tools {
 					selectionGrid = CreateTileGrid(CreateTileGridMode.Twin);
 				}
 				//clipboard = selectionGrid.Duplicate();
-				selectionGrid.Duplicate().SaveClipboard();
+				selectionGrid.SaveClipboard();
 				UpdateCommands();
 			}
 		}
@@ -140,7 +141,7 @@ namespace ZeldaEditor.Tools {
 				}
 				//selectionGrid = clipboard.Duplicate();
 				Point2I scroll = new Point2I(LevelDisplay.HorizontalScroll.Value, LevelDisplay.VerticalScroll.Value) + GameSettings.TILE_SIZE - 1;
-				Point2I gridStart = LevelDisplay.SampleLevelTileCoordinates(scroll);
+				Point2I gridStart = LevelDisplay.SampleLevelCoord(scroll);
 				selectionGridArea = new Rectangle2I(gridStart, selectionGrid.Size);
 				mode = SelectionModes.Paste;
 				UpdateSelectionBox();
@@ -211,7 +212,7 @@ namespace ZeldaEditor.Tools {
 					// in order to preserve tiles overwritten by tiles with sizes larger than 1x1.
 					Rectangle2I remainingRoomGrid = selectionGridArea;
 					remainingRoomGrid.Size =
-						(Point2I) GMath.Ceiling(remainingRoomGrid.BottomRight, Level.RoomSize) -
+						GMath.CeilingI(remainingRoomGrid.BottomRight, Level.RoomSize) -
 						remainingRoomGrid.Point;
 					switch (mode) {
 					case SelectionModes.Move:
@@ -235,7 +236,7 @@ namespace ZeldaEditor.Tools {
 				}
 				else {
 					Level.PlaceTileGrid(selectionGrid,
-						(LevelTileCoord) selectionGridArea.Point,
+						selectionGridArea.Point,
 						EditorControl.ToolOptionMerge);
 				}
 				selectionGrid = null;
@@ -264,8 +265,8 @@ namespace ZeldaEditor.Tools {
 		protected override void OnMouseDragBegin(MouseEventArgs e) {
 
 			Point2I mousePos = e.MousePos();
-			Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
-			Point2I point = LevelDisplay.SampleLevelPixelPosition(mousePos);
+			Point2I levelCoord = LevelDisplay.SampleLevelCoord(mousePos);
+			Point2I roomLocation = Level.LevelCoordToRoomLocation(levelCoord);
 
 			if (isCreatingSelectionBox || isMovingSelectionBox)
 				return;
@@ -273,15 +274,15 @@ namespace ZeldaEditor.Tools {
 			// Draw a new selecion box.
 			if (e.Button == MouseButtons.Left) {
 
-				if (selectionGridArea.Contains(levelTileCoord)) {
+				if (selectionGridArea.Contains(levelCoord)) {
 					// Begin moving the selection box.
-					isMovingSelectionBox    = true;
-					dragBeginTileCoord      = levelTileCoord;
-					dragBeginRoomCoord      = LevelDisplay.SampleRoomCoordinates(mousePos, false);
-					selectionBoxBeginPoint  = selectionGridArea.Point;
+					isMovingSelectionBox	= true;
+					dragBeginTileCoord		= levelCoord;
+					dragBeginRoomLocation	= roomLocation;
+					selectionBoxBeginPoint	= selectionGridArea.Point;
 
 					// Duplicate selection if holding Ctrl.
-					if (System.Windows.Forms.Control.ModifierKeys.HasFlag(DuplicateModifier)) {
+					if (Modifiers.HasFlag(DuplicateModifier)) {
 						if (selectionGrid != null) {
 							TileGrid newSelectionGrid = selectionGrid.Duplicate();
 							OnFinish();
@@ -305,20 +306,20 @@ namespace ZeldaEditor.Tools {
 
 					// Create a new selection box.
 					isCreatingSelectionBox  = true;
-					dragBeginTileCoord      = levelTileCoord;
+					dragBeginTileCoord      = levelCoord;
 
 
-					if (System.Windows.Forms.Control.ModifierKeys.HasFlag(RoomModeModifier)) {
-						selectionGridArea = new Rectangle2I(Level.GetRoomLocation(
-							(LevelTileCoord)dragBeginTileCoord), Point2I.One);
-						Rectangle2I levelBounds = new Rectangle2I(Point2I.Zero, Level.Dimensions);
-						selectionGridArea = Rectangle2I.Intersect(selectionGridArea, levelBounds);
-						selectionGridArea *= Level.RoomSize;
+					if (!Level.ContainsLevelCoord(dragBeginTileCoord)) {
+						// Do nothing
+					}
+					else if (Modifiers.HasFlag(RoomModeModifier)) {
+						selectionGridArea = new Rectangle2I(
+							Level.LevelCoordToRoomCoord(dragBeginTileCoord),
+							Level.RoomSize);
 					}
 					else {
-						selectionGridArea = new Rectangle2I(dragBeginTileCoord, Point2I.One);
-						Rectangle2I levelBounds = new Rectangle2I(Point2I.Zero, Level.RoomSize * Level.Dimensions);
-						selectionGridArea = Rectangle2I.Intersect(selectionGridArea, levelBounds);
+						selectionGridArea = new Rectangle2I(
+							dragBeginTileCoord, Point2I.One);
 					}
 
 					UpdateSelectionBox();
@@ -343,27 +344,35 @@ namespace ZeldaEditor.Tools {
 
 			// Update selection box.
 			if (e.Button == MouseButtons.Left && isCreatingSelectionBox) {
-				Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
+				Point2I tileCoord = LevelDisplay.SampleLevelCoord(mousePos);
 				Level level = EditorControl.Level;
 
-				if (System.Windows.Forms.Control.ModifierKeys.HasFlag(RoomModeModifier)) {
-					Point2I roomCoord1 = level.GetRoomLocation((LevelTileCoord) dragBeginTileCoord);
-					Point2I roomCoord2 = level.GetRoomLocation((LevelTileCoord) tileCoord);
+				if (Modifiers.HasFlag(RoomModeModifier)) {
+					selectionGridArea = Rectangle2I.FromEndPointsOne(
+						dragBeginTileCoord, tileCoord);
+					selectionGridArea = level.LevelCoordToRoomCoord(
+						selectionGridArea, true);
+					/*Point2I roomCoord1 = level.LevelCoordToRoomLocation(dragBeginTileCoord);
+					Point2I roomCoord2 = level.LevelCoordToRoomLocation(tileCoord);
 					Point2I roomCoordMin = GMath.Min(roomCoord1, roomCoord2);
 					Point2I roomCoordMax = GMath.Max(roomCoord1, roomCoord2);
 
 					Rectangle2I levelDimensions = new Rectangle2I(Point2I.Zero, level.Dimensions);
 					selectionGridArea = new Rectangle2I(roomCoordMin, roomCoordMax - roomCoordMin + Point2I.One);
 					selectionGridArea = Rectangle2I.Intersect(selectionGridArea, levelDimensions);
-					selectionGridArea *= level.RoomSize;
+					selectionGridArea *= level.RoomSize;*/
 				}
 				else {
-					Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
+					selectionGridArea = Rectangle2I.FromEndPointsOne(
+						dragBeginTileCoord, tileCoord);
+					selectionGridArea = Rectangle2I.Intersect(
+						selectionGridArea, level.TileBounds);
+					/*Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
 					Point2I maxCoord  = GMath.Max(dragBeginTileCoord, tileCoord);
 
 					Rectangle2I levelBounds = new Rectangle2I(Point2I.Zero, level.RoomSize * level.Dimensions);
 					selectionGridArea = new Rectangle2I(minCoord, maxCoord - minCoord + Point2I.One);
-					selectionGridArea = Rectangle2I.Intersect(selectionGridArea, levelBounds);
+					selectionGridArea = Rectangle2I.Intersect(selectionGridArea, levelBounds);*/
 				}
 
 				UpdateSelectionBox();
@@ -371,12 +380,12 @@ namespace ZeldaEditor.Tools {
 			else if (e.Button == MouseButtons.Left && isMovingSelectionBox) {
 				Point2I moveAmount;
 
-				if (System.Windows.Forms.Control.ModifierKeys.HasFlag(RoomModeModifier)) {
+				if (Modifiers.HasFlag(RoomModeModifier)) {
 					Point2I roomCoord = LevelDisplay.SampleRoomCoordinates(mousePos);
-					moveAmount = (roomCoord - dragBeginRoomCoord) * Level.RoomSize;
+					moveAmount = (roomCoord - dragBeginRoomLocation) * Level.RoomSize;
 				}
 				else {
-					Point2I levelCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
+					Point2I levelCoord = LevelDisplay.SampleLevelCoord(mousePos);
 					moveAmount = levelCoord - dragBeginTileCoord;
 				}
 
@@ -390,11 +399,12 @@ namespace ZeldaEditor.Tools {
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e) {
-			// Check if mouse is over selection.
-			Point2I point = new Point2I(e.X, e.Y);
-			Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(point);
+			Point2I tileCoord = LevelDisplay.SampleLevelCoord(e.MousePos());
 
-			if ((!isCreatingSelectionBox && selectionGridArea.Contains(tileCoord)) || isMovingSelectionBox) {
+			// Check if mouse is over selection
+			if ((!isCreatingSelectionBox && selectionGridArea.Contains(tileCoord)) ||
+				isMovingSelectionBox)
+			{
 				MouseCursor = DraggingCursor;
 				EditorControl.HighlightMouseTile = false;
 			}
@@ -455,7 +465,7 @@ namespace ZeldaEditor.Tools {
 			{
 				if (layer < selectionGrid.StartLayer || layer > selectionGrid.EndLayer)
 					return;
-				TileDataInstance tile = selectionGrid.GetTileIfAtLocation(levelCoord -
+				TileDataInstance tile = selectionGrid.GetTile(levelCoord -
 					selectionGridArea.Point, layer);
 				if (tile != null) {
 					LevelDisplay.DrawTile(g, room, tile, position, LevelDisplay.NormalColor);
@@ -471,7 +481,7 @@ namespace ZeldaEditor.Tools {
 					(new Rectangle2I(start, selectionGrid.Size) *
 					GameSettings.TILE_SIZE).Contains(levelPosition))
 					return true;
-				return (selectionGridArea * GameSettings.TILE_SIZE).
+				return Level.LevelCoordToPosition(selectionGridArea).
 					Contains(levelPosition) && !EditorControl.ToolOptionMerge;
 			}
 			return false;
@@ -481,12 +491,12 @@ namespace ZeldaEditor.Tools {
 			if (selectionGrid != null && selectionGrid.IncludesActions) {
 				Point2I startLevelPixel = selectionGridArea.Point *
 					GameSettings.TILE_SIZE;
-				foreach (var actionPair in selectionGrid.GetActionTilesAndPositions()) {
+				foreach (var action in selectionGrid.GetActionTilesAndPositions()) {
 					Point2I position = LevelDisplay.
-						GetLevelPixelDrawPosition(startLevelPixel + actionPair.Key);
+						GetLevelPixelDrawPosition(startLevelPixel + action.Position);
 					Room room = LevelDisplay.SampleRoom(position);
 					if (room != null)
-						LevelDisplay.DrawActionTile(g, room, actionPair.Value, position,
+						LevelDisplay.DrawActionTile(g, room, action.Action, position,
 							LevelDisplay.NormalColor);
 				}
 			}
@@ -503,11 +513,10 @@ namespace ZeldaEditor.Tools {
 
 		private TileGrid CreateTileGrid(Rectangle2I area, CreateTileGridMode mode) {
 			if (EditorControl.ToolOptionSingleLayer) {
-				if (EditorControl.ActionMode)
+				if (ActionMode)
 					return Level.CreateActionGrid(area, mode);
 				else
-					return Level.CreateSingleLayerTileGrid(area,
-						EditorControl.CurrentLayer, mode);
+					return Level.CreateSingleLayerTileGrid(area, Layer, mode);
 			}
 			else {
 				return Level.CreateFullTileGrid(area, mode);
@@ -529,16 +538,21 @@ namespace ZeldaEditor.Tools {
 
 
 		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Gets the selection grid area at the starting point.</summary>
+		private Rectangle2I StartGridArea {
+			get { return new Rectangle2I(start, selectionGridArea.Size); }
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Tool-Specific Properties
 		//-----------------------------------------------------------------------------
-
-		/*public TileGrid Clipboard {
-			get { return clipboard; }
-			set { clipboard = value; }
-		}*/
-
+		
 		public bool CanPaste {
-			get { return /*clipboard != null || */TileGrid.ContainsClipboard(); }
+			get { return TileGrid.ContainsClipboard(); }
 		}
 
 		public bool HasSelection {

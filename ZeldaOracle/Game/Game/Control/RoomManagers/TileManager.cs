@@ -31,8 +31,8 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 
 		public void Initialize(Room room) {
 			layerCount = room.LayerCount;
-			gridDimensions = (Point2I) GMath.Ceiling((Vector2F)
-				(room.Size * GameSettings.TILE_SIZE) / tileGridCellSize);
+			gridDimensions = GMath.CeilingI((Vector2F)
+				room.PixelSize / tileGridCellSize);
 			tiles = new Tile[gridDimensions.X, gridDimensions.Y, layerCount];
 		}
 
@@ -50,14 +50,14 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 
 		// Return the tile location that the given position in pixels is situated in.
 		public Point2I GetTileLocation(Vector2F position) {
-			return (Point2I) GMath.Floor(position / tileGridCellSize);
+			return GMath.FloorI(position / tileGridCellSize);
 		}
 
 		// inflateAmount inflates the output rectangle.
 		public Rectangle2I GetTileAreaFromRect(Rectangle2F rect, int inflateAmount = 0) {
 			Rectangle2I area;
-			area.Point	= (Point2I) GMath.Floor(rect.TopLeft / tileGridCellSize);
-			area.Size	= (Point2I) GMath.Ceiling(rect.BottomRight / tileGridCellSize) - area.Point;
+			area.Point	= GMath.FloorI(rect.TopLeft / tileGridCellSize);
+			area.Size	= GMath.CeilingI(rect.BottomRight / tileGridCellSize) - area.Point;
 			if (inflateAmount != 0)
 				area.Inflate(inflateAmount, inflateAmount);
 			return Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, gridDimensions));

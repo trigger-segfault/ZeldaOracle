@@ -69,15 +69,14 @@ namespace ZeldaEditor.Undo {
 			editorControl.OpenLevel(level);
 			switch (mode) {
 			case SelectionModes.Move:
-				level.PlaceTileGrid(overwrittenTileGrid, (LevelTileCoord)end, false);
-				level.PlaceTileGrid(tileGrid, (LevelTileCoord)start, false);
+				level.PlaceTileGrid(overwrittenTileGrid, end, false);
+				level.PlaceTileGrid(tileGrid, start, false);
 				break;
 			case SelectionModes.Delete:
-				//UpdateTileGridLocations();
-				level.PlaceTileGrid(tileGrid, (LevelTileCoord)start, false);
+				level.PlaceTileGrid(tileGrid, start, false);
 				break;
 			case SelectionModes.Duplicate:
-				level.PlaceTileGrid(overwrittenTileGrid, (LevelTileCoord)end, false);
+				level.PlaceTileGrid(overwrittenTileGrid, end, false);
 				break;
 			}
 			editorControl.NeedsNewEventCache = true;
@@ -88,13 +87,13 @@ namespace ZeldaEditor.Undo {
 			switch (mode) {
 			case SelectionModes.Move:
 				level.RemoveArea(new Rectangle2I(start, tileGrid.Size), tileGrid);
-				level.PlaceTileGrid(tileGrid, (LevelTileCoord)end, merge);
+				level.PlaceTileGrid(tileGrid, end, merge);
 				break;
 			case SelectionModes.Delete:
 				level.RemoveArea(new Rectangle2I(start, tileGrid.Size), tileGrid);
 				break;
 			case SelectionModes.Duplicate:
-				level.PlaceTileGrid(tileGrid, (LevelTileCoord)end, merge);
+				level.PlaceTileGrid(tileGrid, end, merge);
 				break;
 			}
 			editorControl.NeedsNewEventCache = true;

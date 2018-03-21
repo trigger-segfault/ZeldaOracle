@@ -219,7 +219,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Initializes the properties and events for the tile type.</summary>
 		public static void InitializeTileData(TileData data) {
-			data.Size = new Point2I(3, 3);
+			data.TileSize = new Point2I(3, 3);
 			data.ResetCondition = TileResetCondition.LeaveArea;
 
 			data.Properties.Set("clockwise", false)

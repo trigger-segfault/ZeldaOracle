@@ -16,6 +16,8 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
+using ModifierKeys = System.Windows.Input.ModifierKeys;
+using FormsControl = System.Windows.Forms.Control;
 
 namespace ZeldaEditor.Tools {
 	public abstract class EditorTool {
@@ -272,6 +274,18 @@ namespace ZeldaEditor.Tools {
 			get { return editorControl.Level; }
 		}
 
+		public int Layer {
+			get { return editorControl.CurrentLayer; }
+		}
+
+		public bool ActionLayer {
+			get { return editorControl.ActionLayer; }
+		}
+
+		public bool ActionMode {
+			get { return editorControl.ActionMode; }
+		}
+
 		public Cursor MouseCursor {
 			get { return mouseCursor; }
 			set { mouseCursor = value; }
@@ -292,6 +306,20 @@ namespace ZeldaEditor.Tools {
 
 		public HashSet<string> Options {
 			get { return options; }
+		}
+
+		public ModifierKeys Modifiers {
+			get {
+				ModifierKeys modifiers = ModifierKeys.None;
+				Keys formModifiers = FormsControl.ModifierKeys;
+				if (formModifiers.HasFlag(Keys.Control))
+					modifiers |= ModifierKeys.Control;
+				if (formModifiers.HasFlag(Keys.Shift))
+					modifiers |= ModifierKeys.Shift;
+				if (formModifiers.HasFlag(Keys.Alt))
+					modifiers |= ModifierKeys.Alt;
+				return modifiers;
+			}
 		}
 	}
 

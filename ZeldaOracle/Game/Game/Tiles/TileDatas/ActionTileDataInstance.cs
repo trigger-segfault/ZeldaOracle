@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
-	
+
 	public class ActionTileDataInstance : BaseTileDataInstance {
 
 		private Point2I			position;
@@ -62,29 +62,45 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Overridden Properties
 		//-----------------------------------------------------------------------------
 
-		public override Point2I GetPosition() {
-			return position;
+
+		/// <summary>Gets or sets the pixel position of the action in the room.</summary>
+		public override Point2I Position {
+			get { return position; }
+			set { position = value; }
 		}
 
-		public override Rectangle2I GetBounds() {
-			return new Rectangle2I(
-					position,
-					Size * GameSettings.TILE_SIZE);
+		/// <summary>Gets the pixel position of the action from the start of the
+		/// level.</summary>
+		public override Point2I LevelPosition {
+			get { return room.LevelPosition + Position; }
 		}
 
-		// The current sprite/animation to visually display.
-		public override ISprite CurrentSprite {
+		/// <summary>Gets the pixel bounds of the action in the room.</summary>
+		public override Rectangle2I Bounds {
+			get { return new Rectangle2I(Position, PixelSize); }
+		}
+
+		/// <summary>Gets the pixel bounds of the action in the level.</summary>
+		public override Rectangle2I LevelBounds {
+			get { return new Rectangle2I(LevelPosition, PixelSize); }
+		}
+
+		/// <summary>Gets or sets the size of the action in pixels.</summary>
+		public override Point2I PixelSize {
 			get {
-				if (sprite is Animation) {
-					return ((Animation) sprite).GetSubstrip(SubStripIndex);
-				}
-				return sprite;
+				return GMath.Max(Point2I.One, properties.Get("size",
+					(Point2I) GameSettings.TILE_SIZE));
 			}
+			set { properties.Set("size", value); }
 		}
 
-		public override ISprite Sprite {
-			get { return sprite; }
-			set { sprite = value; }
+		/// <summary>Gets or sets the size of the action in tiles.</summary>
+		public override Point2I TileSize {
+			get {
+				return (PixelSize + GameSettings.TILE_SIZE - 1) /
+					GameSettings.TILE_SIZE;
+			}
+			set { PixelSize = value * GameSettings.TILE_SIZE; }
 		}
 
 
@@ -97,23 +113,6 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public ActionTileData ActionTileData {
 			get { return (ActionTileData) tileData; }
 			set { base.BaseData = value; }
-		}
-
-		/// <summary>Gets or sets the pixel position of the action in the room.</summary>
-		public Point2I Position {
-			get { return position; }
-			set { position = value; }
-		}
-
-		/// <summary>Gets the pixel position of the action from the start of the
-		/// level.</summary>
-		public Point2I LevelPosition {
-			get { return room.LevelPosition + Position; }
-		}
-
-		/// <summary>Gets the size of the action in tiles.</summary>
-		public Point2I Size {
-			get { return ActionTileData.Size; }
 		}
 
 		public int SubStripIndex {

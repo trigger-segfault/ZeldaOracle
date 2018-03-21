@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Tiles {
-
+	/// <summary>The base data structure detailing tiles and action tiles.</summary>
 	public abstract class BaseTileData : BaseResourceData {
 		
 		/// <summary>The type of entity this tile spawns.</summary>
@@ -87,16 +87,22 @@ namespace ZeldaOracle.Game.Tiles {
 		/// This needs to be extended for each non-abstract class in order
 		/// to make use of compile-time generic arguments within
 		/// ResourceDataInitializing.InitializeData.</summary>
-		public abstract void InitializeEntityData(Type previousType);
-		
+		protected abstract void InitializeEntityData(Type previousType);
+
 
 		//-----------------------------------------------------------------------------
 		// Abstract Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets or sets the sprite of the base tile data.</summary>
 		public abstract ISprite Sprite { get; set; }
 
-		public abstract Point2I Size { get; set; }
+		/// <summary>Gets or sets the size of the base tile data in tiles.</summary>
+		public abstract Point2I TileSize { get; set; }
+
+		/// <summary>Gets or sets the size of the base tile data in pixels.
+		/// Setter only applies for actions.</summary>
+		public abstract Point2I PixelSize { get; set; }
 
 
 		//-----------------------------------------------------------------------------

@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaEditor.Undo;
@@ -64,13 +65,12 @@ namespace ZeldaEditor.Tools {
 			Point2I mousePos    = e.MousePos();
 			Room room			= LevelDisplay.SampleRoom(mousePos);
 
-			Point2I size = GetTileDataSize();
 
 			if (IsDrawing && e.Button.IsOpposite(DragButton)) {
 				Cancel();
 			}
 			else if (e.Button.IsLeftOrRight()) {
-				if (EditorControl.ActionMode) {
+				if (ActionMode) {
 					if (room == null)
 						return;
 
@@ -79,7 +79,7 @@ namespace ZeldaEditor.Tools {
 						actionTileData = null;
 
 					Point2I levelHalfTileCoord = LevelDisplay.SampleLevelHalfTileCoordinates(mousePos);
-					Point2I position = (levelHalfTileCoord - room.Location * Level.RoomSize * 2) * (GameSettings.TILE_SIZE / 2);
+					Point2I position = (levelHalfTileCoord - room.LevelCoord * 2) * (GameSettings.TILE_SIZE / 2);
 					ActionPlaceAction actionAction = new ActionPlaceAction(Level, actionTileData, room, position);
 
 					ActionTileDataInstance actionTile = LevelDisplay.SampleActionTile(mousePos);
@@ -97,21 +97,25 @@ namespace ZeldaEditor.Tools {
 					EditorControl.PushAction(actionAction, ActionExecution.PostExecute);
 					actionAction = null;
 				}
-				else if (size >= Point2I.One && size != Point2I.One) {
-					tileAction = ActionPlace.CreatePlaceAction(Level, EditorControl.CurrentLayer, GetTileData());
+				else if (!IsTileSingle) {
+					Point2I size = GetTileDataSize();
 
-					Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
+					tileAction = ActionPlace.CreatePlaceAction(Level, Layer, GetTileData());
+
+					Point2I levelCoord = LevelDisplay.SampleLevelCoord(mousePos);
 					
-					tileAction.AddPlacedTile(levelTileCoord);
+					tileAction.AddPlacedTile(levelCoord);
 					for (int x = 0; x < size.X; x++) {
 						for (int y = 0; y < size.Y; y++) {
-							Point2I point = levelTileCoord + new Point2I(x, y);
-							Point2I roomLocation = point / Level.RoomSize;
-							room = Level.GetRoomAt(roomLocation);
-							if (room == null) continue;
-							TileDataInstance tile = LevelDisplay.GetTile(point, EditorControl.CurrentLayer);
+							Point2I point = levelCoord + new Point2I(x, y);
+							TileDataInstance tile = Level.GetTileAt(point, Layer);
 							if (tile == null) continue;
 							tileAction.AddOverwrittenTile(tile);
+							/*Point2I roomLocation = point / Level.RoomSize;
+							room = Level.GetRoomAt(roomLocation);
+							if (room == null) continue;
+							TileDataInstance tile = LevelDisplay.GetTile(point, Layer);
+							if (tile == null) continue;*/
 						}
 					}
 
@@ -122,7 +126,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		protected override void OnMouseDragBegin(MouseEventArgs e) {
-			if (!EditorControl.ActionMode && GetTileDataSize() == Point2I.One && DragButton.IsLeftOrRight()) {
+			if (!ActionMode && IsTileSingle && DragButton.IsLeftOrRight()) {
 				IsDrawing = true;
 				drawTileData = GetTileData();
 				if (DragButton == MouseButtons.Left) {
@@ -132,7 +136,7 @@ namespace ZeldaEditor.Tools {
 					drawTileData = null;
 					drawTile = null;
 				}
-				tileAction = ActionPlace.CreatePlaceAction(Level, EditorControl.CurrentLayer, drawTileData);
+				tileAction = ActionPlace.CreatePlaceAction(Level, Layer, drawTileData);
 				OnMouseDragMove(e);
 			}
 		}
@@ -150,16 +154,17 @@ namespace ZeldaEditor.Tools {
 		protected override void OnMouseDragMove(MouseEventArgs e) {
 			if (IsDrawing) {
 				Point2I mousePos = e.MousePos();
-				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
+				Point2I levelCoord = LevelDisplay.SampleLevelCoord(mousePos);
 				Room room = LevelDisplay.SampleRoom(mousePos);
-				if (room != null && !placedTiles.ContainsKey(levelTileCoord)) {
-					placedTiles.Add(levelTileCoord, drawTile);
-					tileAction.AddPlacedTile(levelTileCoord);
-					
-					TileDataInstance tile = LevelDisplay.GetTile(levelTileCoord, EditorControl.CurrentLayer);
-					if (tile != null) {
-						if (!overwrittenTiles.Contains(tile.LevelCoord))
-							overwrittenTiles.Add(tile.LevelCoord);
+				if (Level.ContainsLevelCoord(levelCoord) &&
+					!placedTiles.ContainsKey(levelCoord))
+				{
+					placedTiles.Add(levelCoord, drawTile);
+					tileAction.AddPlacedTile(levelCoord);
+					//TileDataInstance tile = LevelDisplay.GetTile(levelCoord, Layer);
+					TileDataInstance tile = Level.GetTileAt(levelCoord, Layer);
+					if (tile != null && !overwrittenTiles.Contains(tile.LevelCoord)) {
+						overwrittenTiles.Add(tile.LevelCoord);
 						tileAction.AddOverwrittenTile(tile);
 					}
 				}
@@ -181,7 +186,7 @@ namespace ZeldaEditor.Tools {
 		public override bool DrawHideTile(TileDataInstance tile, Room room,
 			Point2I levelCoord, int layer)
 		{
-			if (IsDrawing && layer == EditorControl.CurrentLayer) {
+			if (IsDrawing && layer == Layer) {
 				return (placedTiles.ContainsKey(levelCoord) ||
 						overwrittenTiles.Contains(levelCoord));
 			}
@@ -191,7 +196,7 @@ namespace ZeldaEditor.Tools {
 		public override void DrawTile(Graphics2D g, Room room, Point2I position,
 			Point2I levelCoord, int layer)
 		{
-			if (!EditorControl.ActionMode && layer == EditorControl.CurrentLayer) {
+			if (!ActionMode && layer == Layer) {
 				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null)
@@ -208,7 +213,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void DrawActionTiles(Graphics2D g) {
-			if (EditorControl.ActionMode) {
+			if (ActionMode) {
 				ActionTileDataInstance actionTile = CreateDrawActionTile();
 				if (actionTile != null) {
 					Point2I position = LevelDisplay
@@ -251,8 +256,16 @@ namespace ZeldaEditor.Tools {
 
 		private Point2I GetTileDataSize() {
 			if (GetTileData() != null)
-				return GMath.Max(Point2I.One, GetTileData().Size);
+				return GMath.Max(Point2I.One, GetTileData().TileSize);
 			return Point2I.One;
+		}
+
+		private bool IsTileSingle {
+			get {
+				if (GetTileData() != null)
+					return (GetTileData().TileSize == Point2I.One);
+				return true;
+			}
 		}
 	}
 }

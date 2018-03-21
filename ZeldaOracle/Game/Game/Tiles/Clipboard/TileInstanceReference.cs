@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Tiles.Clipboard {
+	/// <summary>A reference to a tile instance that can be safetly copied
+	/// to the clipboard.</summary>
 	[Serializable]
-	public class TileDataReference :
-		BaseTileDataReference<TileData, TileDataInstance>
+	public class TileInstanceReference
+		: BaseTileInstanceReference<TileData, TileDataInstance>
 	{
 		/// <summary>The location of the tile in the clipboard.</summary>
 		private Point2I location;
@@ -20,9 +22,26 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileDataReference(TileDataInstance tileData) : base(tileData) {
-			this.location	= tileData.Location;
-			this.layer		= tileData.Layer;
+		/// <summary>Constructs a reference to the tile instance.</summary>
+		public TileInstanceReference(TileDataInstance tile) : base(tile) {
+			location	= tile.Location;
+			layer		= tile.Layer;
+		}
+
+		/// <summary>Constructs a reference to the tile instance with the temporary
+		/// location.</summary>
+		public TileInstanceReference(TileInstanceLocation tile) : base(tile.Tile) {
+			location	= tile.Location;
+			layer		= tile.Layer;
+		}
+
+		/// <summary>Constructs a reference to the tile instance with the custom
+		/// location.</summary>
+		public TileInstanceReference(TileDataInstance tile, Point2I location,
+			int layer) : base(tile)
+		{
+			this.location	= location;
+			this.layer		= layer;
 		}
 
 
@@ -32,10 +51,10 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 
 		/// <summary>Creates the tile data instance and sets up any extended members.</summary>
 		protected override TileDataInstance SetupInstance(TileData data) {
-			TileDataInstance tileData = new TileDataInstance(data);
-			tileData.Location	= location;
-			tileData.Layer		= layer;
-			return tileData;
+			TileDataInstance tileInstance = new TileDataInstance(data);
+			tileInstance.Location	= location;
+			tileInstance.Layer		= layer;
+			return tileInstance;
 		}
 
 

@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		/// This needs to be extended for each non-abstract class in order
 		/// to make use of compile-time generic arguments within
 		/// ResourceDataInitializing.InitializeData.</summary>
-		public override void InitializeData(Type previousType) {
+		protected override void InitializeData(Type previousType) {
 			ResourceDataInitializing.InitializeData(
 				this, OutputType, Type, previousType);
 		}

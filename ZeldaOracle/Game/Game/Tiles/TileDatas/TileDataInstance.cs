@@ -2,6 +2,7 @@
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities;
+using System;
 
 namespace ZeldaOracle.Game.Tiles {
 	public class TileDataInstance : BaseTileDataInstance {
@@ -70,7 +71,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Returns true if this tile contains the tile location in the room.</summary>
 		public bool ContainsLocation(Point2I location) {
-			return new Rectangle2I(Location, Size).Contains(location);
+			return new Rectangle2I(Location, TileSize).Contains(location);
 		}
 
 		/// <summary>Returns true if this tile contains the tile location in the room.</summary>
@@ -80,7 +81,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Returns true if this tile contains the tile location in the level.</summary>
 		public bool ContainsLevelCoord(Point2I location) {
-			return new Rectangle2I(LevelCoord, Size).Contains(location);
+			return new Rectangle2I(LevelCoord, TileSize).Contains(location);
 		}
 
 		/// <summary>Returns true if this tile contains the tile location in the level.</summary>
@@ -107,27 +108,48 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden Methods and Properties
 		//-----------------------------------------------------------------------------
 
-		public override Point2I GetPosition() {
-			return (location * GameSettings.TILE_SIZE);
-		}
-
-		public override Rectangle2I GetBounds() {
-			return new Rectangle2I(
-					location * GameSettings.TILE_SIZE,
-					Size * GameSettings.TILE_SIZE);
-		}
-		
-		public override ISprite Sprite {
-			get { return tileData.Sprite; }
-			set { } // Don't see a need to set this.
-		}
-
-		public override ISprite CurrentSprite {
-			get {
-				if (TileData.SpriteList.Length > 0)
-					return TileData.SpriteList[properties.GetInteger("sprite_index")];
-				return null;
+		/// <summary>Gets or sets the pixel position of the tile in the room.
+		/// Setter cannot be called for normal tiles.</summary>
+		public override Point2I Position {
+			get { return location * GameSettings.TILE_SIZE; }
+			set {
+				throw new NotImplementedException("Cannot call " +
+					"TileDataInstance.Position setter!");
 			}
+		}
+
+		/// <summary>Gets the pixel position of the tile in the level.</summary>
+		public override Point2I LevelPosition {
+			get { return room.LevelPosition + Position; }
+		}
+
+		/// <summary>Gets the pixel bounds of the tile in the room.</summary>
+		public override Rectangle2I Bounds {
+			get { return new Rectangle2I(Position, PixelSize); }
+		}
+
+		/// <summary>Gets the pixel bounds of the tile in the level.</summary>
+		public override Rectangle2I LevelBounds {
+			get { return new Rectangle2I(LevelPosition, PixelSize); }
+		}
+
+		/// <summary>Gets or sets the size of the tile in pixels.
+		/// Setter cannot be called for normal tiles.</summary>
+		public override Point2I PixelSize {
+			get { return TileSize * GameSettings.TILE_SIZE; }
+			set {
+				throw new NotImplementedException("Cannot call " +
+					"TileDataInstance.Size setter!");
+			}
+		}
+
+		/// <summary>Gets or sets the size of the tile in tiles.</summary>
+		public override Point2I TileSize {
+			get {
+				return GMath.Max(Point2I.One, properties.GetPoint("size",
+					Point2I.One));
+			}
+			set { properties.Set("size", value); }
 		}
 
 
@@ -147,45 +169,26 @@ namespace ZeldaOracle.Game.Tiles {
 			set { location = value; }
 		}
 
-		/// <summary>Gets the pixel position of the tile in the room.</summary>
-		public Point2I Position {
-			get { return location * GameSettings.TILE_SIZE; }
-		}
-
 		/// <summary>Gets the coordinates of the tile in tiles from the start of the
 		/// level.</summary>
 		public Point2I LevelCoord {
 			get { return room.LevelCoord + location; }
 		}
 
-		/// <summary>Gets the pixel position of the tile from the start of the
-		/// level.</summary>
-		public Point2I LevelPosition {
-			get { return room.LevelPosition + Position; }
+		/// <summary>Gets the boundaries of the tile in the room in tiles.</summary>
+		public Rectangle2I TileBounds {
+			get { return new Rectangle2I(location, TileSize); }
 		}
 
-		public Rectangle2I Bounds {
-			get { return new Rectangle2I(location, Size); }
-		}
-
-		public Rectangle2I LevelBounds {
-			get { return new Rectangle2I(LevelCoord, Size); }
-		}
-
-		public Rectangle2I PixelBounds {
-			get { return Bounds * GameSettings.TILE_SIZE; }
+		/// <summary>Gets the boundaries of the tile in the level in tiles.</summary>
+		public Rectangle2I LevelTileBounds {
+			get { return new Rectangle2I(LevelCoord, TileSize); }
 		}
 
 		/// <summary>Gets or sets the layer this tile is located on.</summary>
 		public int Layer {
 			get { return layer; }
 			set { layer = value; }
-		}
-
-		/// <summary>Gets or sets the size of the tiles in tiles.</summary>
-		public Point2I Size {
-			get { return GMath.Max(Point2I.One, properties.GetPoint("size", Point2I.One)); }
-			set { properties.Set("size", value); }
 		}
 
 		public ISprite[] SpriteList {

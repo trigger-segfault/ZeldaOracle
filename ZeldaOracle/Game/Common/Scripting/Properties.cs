@@ -534,6 +534,13 @@ namespace ZeldaOracle.Common.Scripting {
 				p.Hide();
 		}
 
+		/// <summary>Marks a property as browsable and writable in the documentation.</summary>
+		public void Unhide(string name) {
+			Property p = GetProperty(name, false);
+			if (p != null)
+				p.Unhide();
+		}
+
 		/// <summary>Used to restore properties that were aquired from the clipboard.</summary>
 		public void RestoreFromClipboard(Properties baseProperties,
 			IPropertyObject propertyObject)

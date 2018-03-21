@@ -179,6 +179,14 @@ namespace ZeldaOracle.Common.Scripting {
 			documentation.IsBrowsable = false;
 		}
 
+		/// <summary>Marks a property as browsable and writable in the documentation.</summary>
+		public void Unhide() {
+			if (documentation == null)
+				documentation = new PropertyDocumentation(name, "Misc", "");
+			documentation.IsReadOnly = false;
+			documentation.IsBrowsable = true;
+		}
+
 		/// <summary>Set the property action to occur when this property is modified.</summary>
 		public Property SetAction(PropertyAction action) {
 			this.action = action;

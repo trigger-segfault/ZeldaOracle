@@ -123,7 +123,7 @@ namespace ZeldaEditor.WinForms {
 			this.paths = new List<TilePathInfo>();
 			this.pathTiles = new HashSet<TileDataInstance>();
 
-			Size = (room.Size * GameSettings.TILE_SIZE).ToGdiSize();
+			Size = room.PixelSize.ToGdiSize();
 
 			foreach (var tileData in room.GetTiles()) {
 				if (tileData == tile || !string.IsNullOrWhiteSpace(

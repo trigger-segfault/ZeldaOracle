@@ -66,15 +66,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					int useAngle = player.UseAngle;
 					float currentAngle = boomerangMotionDirection;
 					float goalAngle = player.UseAngle * GMath.EighthAngle;
-					float distCW = GMath.DeltaDirection(
+					float distCW = GMath.DeltaAngle(
 						currentAngle, goalAngle, WindingOrder.Clockwise);
-					float distCCW = GMath.DeltaDirection(
+					float distCCW = GMath.DeltaAngle(
 						currentAngle, goalAngle, WindingOrder.CounterClockwise);
 
 					if (distCW != 0.0f || distCCW != 0.0f) {
 						int sign = (distCW <= distCCW ? -1 : 1);
 						boomerangMotionDirection += sign * GMath.FullAngle / 50f;
-						boomerangMotionDirection = GMath.Plusdir(boomerangMotionDirection);
+						boomerangMotionDirection = GMath.WrapAngle(boomerangMotionDirection);
 					}
 
 					Vector2F velocity = Vector2F.FromPolar(boomerang.Speed, boomerangMotionDirection);
