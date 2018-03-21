@@ -50,10 +50,6 @@ namespace ZeldaEditor.PropertiesEditor {
 			this.messageFilter.AddFilter(true);
 		}
 
-		public void Initialize(EditorControl editorControl) {
-			this.editorControl = editorControl;
-		}
-
 		
 		//-----------------------------------------------------------------------------
 		// Properties Methods

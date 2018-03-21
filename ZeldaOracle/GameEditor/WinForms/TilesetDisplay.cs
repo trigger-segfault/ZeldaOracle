@@ -14,8 +14,9 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.WinForms {
 
+	/// <summary>Represents the source of tiles from which a tileset display will get
+	/// its tiles. This is a Tileset or a list of tiles.</summary>
 	public struct TileDisplaySource {
-
 		public IList<BaseTileData> TileList { get; private set; }
 		public Tileset Tileset { get; private set; }
 
@@ -42,9 +43,9 @@ namespace ZeldaEditor.WinForms {
 		}
 	}
 
+	/// <summary>A display of tiles where a tile can be selected.</summary>
 	public class TilesetDisplay : GraphicsDeviceControl {
 		
-		private EditorWindow editorWindow;
 		private EditorControl editorControl;
 		private StoppableTimer dispatcherTimer;
 		private TileDisplaySource source;
@@ -91,7 +92,10 @@ namespace ZeldaEditor.WinForms {
 		// Events
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Called when the moused-over tile has changed.</summary>
 		public event EventHandler HoverChanged;
+
+		/// <summary>Called when the selected tile has changed.</summary>
 		public event EventHandler SelectionChanged;
 
 
@@ -339,11 +343,6 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public EditorWindow EditorWindow {
-			get { return editorWindow; }
-			set { editorWindow = value; }
-		}
 
 		public EditorControl EditorControl {
 			get { return editorControl; }

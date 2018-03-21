@@ -41,8 +41,6 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.Control {
 
-	public delegate void ScriptCompileCallback(ScriptCompileResult result);
-
 	public class EditorControl {
 
 		//-----------------------------------------------------------------------------
@@ -56,29 +54,36 @@ namespace ZeldaEditor.Control {
 		// Members
 		//-----------------------------------------------------------------------------
 
+		// Control
 		private bool isInitialized;
 		private bool isActive;
-
-		// Control
 		private EditorWindow        editorWindow;
 		private string              worldFilePath;
-		private World               world;
-		/// <summary>Set to true during world file load if the world should be flagged as
-		/// modified because a resource was located.</summary>
+		/// <summary>Set to true during world file load if the world should be flagged
+		/// as modified because a resource was located.</summary>
 		private bool                worldFileLocatedResource;
-		private Level               level;
-		private Tileset             tileset;
-		private Zone                zone;
 		private RewardManager       rewardManager;
 		private Inventory           inventory;
 
 		private Stopwatch           timer;
 		private int                 ticks;
-		private bool                isModified;
+		private StoppableTimer		updateTimer;
 
 		// Settings
 		private bool                playAnimations;
 		private bool                actionMode;
+		private int					previousToolIndex;
+		private TileDrawModes		aboveTileDrawMode;
+		private TileDrawModes		belowTileDrawMode;
+		private bool				showRewards;
+		private bool				showGrid;
+		private bool				showModified;
+		private bool				showStartLocation;
+		private bool				showActions;
+		private bool				showShared;
+		private bool				singleLayer;
+		private bool				roomOnly;
+		private bool				merge;
 
 		// Debug
 		private bool                debugConsole;
@@ -92,55 +97,34 @@ namespace ZeldaEditor.Control {
 		private ToolFill            toolFill;
 		private ToolSelection       toolSelection;
 		private ToolEyedrop         toolEyedropper;
-		private ObservableCollection<EditorAction>  undoActions;
+		private ObservableCollection<EditorAction> undoActions;
 		private int                 undoPosition;
 
 		// Editing
+		private World			world;
+		private Level			level;
+		private Zone			zone;
+		private bool            isModified;
 		private int             roomSpacing;
 		private int             currentLayer;
 		private int             currentToolIndex;
-		private int             previousToolIndex;
-		private TileDrawModes   aboveTileDrawMode;
-		private TileDrawModes   belowTileDrawMode;
-		private bool            showRewards;
-		private bool            showGrid;
-		private bool            showModified;
 		private bool            highlightMouseTile;
 		private Tileset         selectedTileset;
 		private Point2I         selectedTilesetLocation;
 		private BaseTileData    selectedTileData;
-		private string          tileSearchFilter;
 		private bool            playerPlaceMode;
 		private bool            startLocationMode;
-		private bool            showStartLocation;
-		private bool            showActions;
-		private bool			showShared;
-		private bool            singleLayer;
-		private bool            roomOnly;
-		private bool            merge;
-
 		private Room editingRoom;
 		private BaseTileDataInstance editingTileData;
-
-		private StoppableTimer				updateTimer;
-
+		
+		// Scripts
+		private ScriptCompileService		scriptCompileService;
 		private bool                        needsRecompiling;
-		private List<ScriptStart>			scriptStarts;
-		private Thread						compileThread;
-		private ScriptCompileCallback       compileCallback;
-		private HashSet<string>				scriptsToRecompile;
-		private HashSet<Event>				eventsToRecompile;
-		private bool                        isCompilingForScriptEditor;
-		private Script                      currentCompilingScript;
-
+		private ScriptCompileResult			scriptCompileResult;
 		private Task<List<Event>>           eventCacheTask;
 		private List<Event>                 eventCache;
 		private bool                        needsNewEventCache;
 
-		private bool                        noScriptErrors;
-		private bool                        noScriptWarnings;
-
-		private ScriptCompileService		scriptCompileService;
 
 
 		//-----------------------------------------------------------------------------
@@ -149,61 +133,56 @@ namespace ZeldaEditor.Control {
 
 		public EditorControl(EditorWindow editorWindow) {
 			this.editorWindow       = editorWindow;
-			this.isActive           = true;
+			
+			isActive				= true;
+			worldFilePath			= string.Empty;
+			rewardManager			= null;
+			inventory				= null;
+			timer					= null;
+			ticks					= 0;
+			isInitialized			= false;
 
-			this.worldFilePath  = string.Empty;
-			this.world          = null;
-			this.level          = null;
-			this.tileset        = null;
-			this.zone           = null;
-			this.rewardManager  = null;
-			this.inventory      = null;
-			this.timer          = null;
-			this.ticks          = 0;
-			this.roomSpacing    = 1;
-			this.playAnimations = false;
-			this.isInitialized  = false;
-			this.isModified = false;
-			this.needsRecompiling   = false;
-			this.compileCallback    = null;
-			this.scriptsToRecompile = new HashSet<string>();
-			this.eventsToRecompile = new HashSet<Event>();
-			this.isCompilingForScriptEditor = false;
-			this.eventCache  = new List<Event>();
-			this.eventCacheTask = null;
-			this.needsNewEventCache = false;
-			this.currentCompilingScript = null;
-			this.noScriptErrors     = false;
-			this.noScriptWarnings   = false;
-			this.scriptStarts		= new List<ScriptStart>();
+			// Settings
+			roomSpacing				= 1;
+			playAnimations			= false;
+			aboveTileDrawMode		= TileDrawModes.Fade;
+			belowTileDrawMode		= TileDrawModes.Fade;
+			showRewards				= true;
+			showGrid				= false;
+			showModified			= false;
+			showActions				= false;
+			showShared				= true;
+			highlightMouseTile		= true;
+			playerPlaceMode			= false;
+			startLocationMode		= false;
+			showStartLocation		= true;
+			singleLayer				= false;
+			roomOnly				= false;
+			merge					= false;
 
-			this.currentLayer				= 0;
-			this.currentToolIndex			= 0;
-			this.previousToolIndex			= 0;
-			this.aboveTileDrawMode			= TileDrawModes.Fade;
-			this.belowTileDrawMode			= TileDrawModes.Fade;
-			this.showRewards				= true;
-			this.showGrid					= false;
-			this.showModified				= false;
-			this.showActions				= false;
-			this.showShared					= true;
-			this.highlightMouseTile			= true;
-			this.selectedTileset			= null;
-			this.selectedTilesetLocation	= Point2I.Zero;
-			this.selectedTileData			= null;
-			this.tileSearchFilter			= "";
-			this.playerPlaceMode			= false;
-			this.startLocationMode			= false;
-			this.showStartLocation			= true;
-			this.singleLayer				= false;
-			this.roomOnly					= false;
-			this.merge						= false;
+			// Editing
+			isModified				= false;
+			world					= null;
+			level					= null;
+			zone					= null;
+			currentLayer			= 0;
+			currentToolIndex		= 0;
+			previousToolIndex		= 0;
+			selectedTileset			= null;
+			selectedTilesetLocation	= Point2I.Zero;
+			selectedTileData		= null;
 
-			scriptCompileService = new ScriptCompileService();
+			// Scripts
+			scriptCompileService	= new ScriptCompileService();
+			needsRecompiling		= false;
+			scriptCompileResult		= null;
+			eventCache				= new List<Event>();
+			eventCacheTask			= null;
+			needsNewEventCache		= false;
 		}
 
 		public void Initialize() {
-			// Create tools.
+			// Create tools
 			tools = new List<EditorTool>();
 			AddTool(toolPointer     = new ToolPointer());
 			AddTool(toolPan         = new ToolPan());
@@ -227,7 +206,6 @@ namespace ZeldaEditor.Control {
 				this.ticks          = 0;
 				this.roomSpacing    = 1;
 				this.playAnimations = false;
-				this.tileset        = null;
 				this.zone           = GameData.ZONE_DEFAULT;
 				this.selectedTileData = null;
 				this.actionMode      = false;
@@ -276,15 +254,7 @@ namespace ZeldaEditor.Control {
 		// General
 		//-----------------------------------------------------------------------------
 
-		public void UpdateWindowTitle() {
-			editorWindow.Title = "Oracle Engine Editor - " + WorldFileName;
-			if (isModified)
-				editorWindow.Title += "*";
-			if (level != null)
-				editorWindow.Title += " [" + level.Properties.GetString("id") + "]";
-		}
-
-		// Called with Application.Idle.
+		/// <summary>Called with Application.Idle.</summary>
 		private void Update() {
 			UpdateScriptCompiling();
 			UpdateEventCache();
@@ -318,12 +288,6 @@ namespace ZeldaEditor.Control {
 
 
 		//-----------------------------------------------------------------------------
-		// Script Compiling
-		//-----------------------------------------------------------------------------
-
-
-
-		//-----------------------------------------------------------------------------
 		// World
 		//-----------------------------------------------------------------------------
 
@@ -348,9 +312,9 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		// Open a world file with the given filename.
+		/// <summary>Open a world file with the given filename.</summary>
 		public void OpenWorld(string fileName) {
-			// Load the world.
+			// Load the world
 			WorldFile worldFile = new WorldFile();
 			worldFile.LocateResource += OnWorldLocateResource;
 			worldFileLocatedResource = false;
@@ -385,13 +349,13 @@ namespace ZeldaEditor.Control {
 				undoActions.Clear();
 				undoPosition = -1;
 				PushAction(new ActionOpenWorld(), ActionExecution.None);
-				IsModified          = worldFileLocatedResource;
-
-				//CheckAllScriptsIndividually();
+				IsModified = worldFileLocatedResource;
 			}
 			else {
-				// Display the error.
-				TriggerMessageBox.Show(editorWindow, MessageIcon.Warning, "Failed to open world file:\n" + worldFile.ErrorMessage, "Error Opening World", MessageBoxButton.OK);
+				// Display the error
+				TriggerMessageBox.Show(editorWindow, MessageIcon.Warning,
+					"Failed to open world file:\n" + worldFile.ErrorMessage,
+					"Error Opening World", MessageBoxButton.OK);
 			}
 		}
 
@@ -466,44 +430,6 @@ namespace ZeldaEditor.Control {
 			editorWindow.FinishStartLocation();
 		}
 
-		public void ChangeTileset(string name) {
-			if (name == "<Tile List>") {
-				tileset = null;
-				UpdateTileSearch(tileSearchFilter);
-			}
-			else {
-				if (Resources.Contains<Tileset>(name))
-					tileset = Resources.Get<Tileset>(name);
-
-				//editorWindow.TilesetDisplay.UpdateTileset();
-				//editorWindow.TilesetDisplay.UpdateZone();
-			}
-
-			//if (tileset.SpriteSheet != null) {
-			// Setup zone combo box for the new tileset.
-			//	UpdateZones();
-			//}
-		}
-
-		public void ChangeZone(string name) {
-			if (name != "(none)") {
-				zone = Resources.Get<Zone>(name);
-				//editorWindow.TilesetDisplay.UpdateZone();
-			}
-		}
-
-		public void UpdateTileSearch(string filter) {
-			tileset = null;
-			tileSearchFilter = filter;
-			List<BaseTileData> filteredTileData = new List<BaseTileData>();
-			foreach (var pair in Resources.GetDictionary<BaseTileData>()) {
-				if (pair.Key.Contains(filter)) {
-					filteredTileData.Add(pair.Value);
-				}
-			}
-			//editorWindow.TilesetDisplay.UpdateTileset(filteredTileData);
-		}
-
 		// Open the properties for the given tile in the property grid.
 		public void OpenProperties(IPropertyObject propertyObject) {
 			PropertyGrid.OpenProperties(propertyObject);
@@ -518,14 +444,14 @@ namespace ZeldaEditor.Control {
 		// Level Display
 		//-----------------------------------------------------------------------------
 
-		// Open the given level.
+		/// <summary>Open the given level in the level display.</summary>
 		public void OpenLevel(Level level) {
 			if (this.level != level) {
 				this.level = level;
 				CurrentTool.End();
 				CurrentTool.Begin();
 				LevelDisplay.ChangeLevel();
-				UpdateWindowTitle();
+				editorWindow.UpdateWindowTitle();
 				PropertyGrid.OpenProperties(level);
 				if (currentLayer >= level.RoomLayerCount)
 					currentLayer = level.RoomLayerCount - 1;
@@ -534,7 +460,7 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		// Open the given level index in the level display.
+		/// <summary>Open the given level index in the level display.</summary>
 		public void OpenLevel(int index) {
 			OpenLevel(world.GetLevelAt(index));
 		}
@@ -543,7 +469,7 @@ namespace ZeldaEditor.Control {
 			level = null;
 			LevelDisplay.ChangeLevel();
 			CurrentTool.Finish();
-			UpdateWindowTitle();
+			editorWindow.UpdateWindowTitle();
 			UpdateLayers();
 		}
 
@@ -751,32 +677,6 @@ namespace ZeldaEditor.Control {
 		public void OnScriptRenamed(string oldName, string newName) {
 			scriptCompileService.CancelAllTasks();
 			needsRecompiling = true;
-
-			//CancelCompilation();
-			//
-			//if (scriptsToRecompile != null && oldName != null && newName != null && scriptsToRecompile.Contains(oldName)) {
-			//	scriptsToRecompile.Remove(oldName);
-			//	scriptsToRecompile.Add(newName);
-			//}
-			//foreach (Script script in world.ScriptManager.Scripts.Values) {
-			//	if (!scriptsToRecompile.Contains(script.ID)) {
-			//		if (ScriptCallsScript(script, oldName) || ScriptCallsScript(script, newName)) {
-			//			scriptsToRecompile.Add(script.ID);
-			//		}
-			//	}
-			//}
-			//foreach (Event evnt in world.GetDefinedEvents()) {
-			//	if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
-			//		Script script = evnt.Script;
-			//		if (!eventsToRecompile.Contains(evnt)) {
-			//			if (ScriptCallsScript(script, oldName) || ScriptCallsScript(script, newName)) {
-			//				eventsToRecompile.Add(evnt);
-			//			}
-			//		}
-			//	}
-			//}
-			//if (HasScriptsToCheck)
-			//	needsRecompiling = true;
 		}
 
 		// Internal -------------------------------------------------------------------
@@ -795,6 +695,8 @@ namespace ZeldaEditor.Control {
 			needsRecompiling = false;
 			world.ScriptManager.RawAssembly = result.RawAssembly;
 			
+			scriptCompileResult = result;
+
 			LogLevel level = LogLevel.Notice;
 			if (result.Errors.Count > 0)
 				level = LogLevel.Error;
@@ -803,138 +705,8 @@ namespace ZeldaEditor.Control {
 			Logs.Scripts.LogMessage(level,
 				"Compiled scripts with {0} errors and {0} warnings",
 				result.Errors.Count, result.Warnings.Count);
-
-			//if (!scriptCompileService.IsCompiling) {
-			//	editorWindow.ClearStatusBarTask();
-			//	editorWindow.WorldTreeView.RefreshScripts(true, true);
-			//}
 		}
 
-		//private void OnCompileScriptCompleted(ScriptCompileResult result) {
-		//	compileTask = null;
-		//	compileThread = null;
-
-		//	currentCompilingScript.Errors   = result.Errors;
-		//	currentCompilingScript.Warnings = result.Warnings;
-		//	currentCompilingScript = null;
-
-		//	if (!HasScriptsToCheck) {
-		//		editorWindow.ClearStatusBarTask();
-		//		editorWindow.WorldTreeView.RefreshScripts(true, true);
-		//	}
-		//}
-
-		//private void CompileAllScriptsAsync(ScriptCompileCallback callback) {
-		//	Logs.Scripts.LogNotice("Compiling scripts...");
-		//	compileCallback = callback;
-		//	compileTask = Task.Run(() => {
-		//		compileThread = Thread.CurrentThread;
-		//		try {
-		//			return world.ScriptManager.CompileScripts(world, true, scriptStarts);
-		//		}
-		//		catch (ThreadAbortException) {
-		//			return null;
-		//		}
-		//	});
-		//	editorWindow.SetStatusBarTask("Compiling scripts...");
-		//	currentCompilingScript = null;
-		//}
-
-		//private void OnCompileCompleted(ScriptCompileResult result) {
-		//	needsRecompiling = false;
-		//	compileTask = null;
-		//	compileThread = null;
-
-		//	world.ScriptManager.RawAssembly = result.RawAssembly;
-
-		//	LogLevel level = LogLevel.Notice;
-		//	if (result.Errors.Count > 0)
-		//		level = LogLevel.Error;
-		//	else if (result.Warnings.Count > 0)
-		//		level = LogLevel.Warning;
-		//	Logs.Scripts.LogMessage(level,
-		//		"Compiled scripts with {0} errors and {0} warnings",
-		//		result.Errors.Count, result.Warnings.Count);
-
-		//	noScriptErrors = !result.Errors.Any();
-		//	noScriptWarnings = !result.Warnings.Any();
-
-		//	if (!HasScriptsToCheck || (noScriptErrors && noScriptWarnings)) {
-		//		editorWindow.ClearStatusBarTask();
-		//		editorWindow.WorldTreeView.RefreshScripts(true, true);
-		//		scriptsToRecompile.Clear();
-		//		eventsToRecompile.Clear();
-		//	}
-		//}
-
-		//private void OnCompileScriptCompleted(ScriptCompileResult result) {
-		//	compileTask = null;
-		//	compileThread = null;
-
-		//	currentCompilingScript.Errors   = result.Errors;
-		//	currentCompilingScript.Warnings = result.Warnings;
-		//	currentCompilingScript = null;
-
-		//	if (!HasScriptsToCheck) {
-		//		editorWindow.ClearStatusBarTask();
-		//		editorWindow.WorldTreeView.RefreshScripts(true, true);
-		//	}
-		//}
-
-		//private void CompileNextScript() {
-		//	Script script = null;
-		//	if (scriptsToRecompile.Any()) {
-		//		string first = scriptsToRecompile.First();
-		//		script = world.GetScript(first);
-		//		scriptsToRecompile.Remove(first);
-		//	}
-		//	else if (eventsToRecompile.Any()) {
-		//		Event first = eventsToRecompile.First();
-		//		script = eventsToRecompile.First().Script;
-		//		eventsToRecompile.Remove(first);
-		//	}
-		//	if (script != null) {
-		//		CompileScriptAsync(script, OnCompileScriptCompleted, false);
-		//		currentCompilingScript = script;
-		//	}
-		//}
-
-		//private bool CancelCompilation(bool scriptEditor = false) {
-		//	if (compileTask != null && !compileTask.IsCompleted && compileThread != null) {
-		//		if (scriptEditor || !isCompilingForScriptEditor) {
-		//			compileThread.Abort();
-		//			compileThread = null;
-		//			compileTask = null;
-		//			currentCompilingScript = null;
-		//			return true;
-		//		}
-		//		else {
-		//			return false;
-		//		}
-		//	}
-		//	return true;
-		//}
-
-		//private bool ScriptCallsScript(Script script, string scriptName) {
-		//	if (scriptName == null)
-		//		return false;
-		//	int index = script.Code.IndexOf(scriptName + "(");
-		//	if (index != -1) {
-		//		if (index != 0) {
-		//			char c = script.Code[index - 1];
-		//			if (!char.IsLetterOrDigit(c) && c != '_')
-		//				return true;
-		//		}
-		//		else {
-		//			return true;
-		//		}
-		//	}
-		//	return false;
-		//}
-
-		//private bool HasScriptsToCheck {
-		//	get { return scriptsToRecompile.Any() || eventsToRecompile.Any(); }
-		//}
 
 		//-----------------------------------------------------------------------------
 		// Events
@@ -1061,7 +833,7 @@ namespace ZeldaEditor.Control {
 				if (value != isModified) {
 					isModified = value;
 					CommandManager.InvalidateRequerySuggested();
-					UpdateWindowTitle();
+					editorWindow.UpdateWindowTitle();
 				}
 			}
 		}
@@ -1089,10 +861,6 @@ namespace ZeldaEditor.Control {
 
 		public bool IsLevelOpen {
 			get { return (world != null && level != null); }
-		}
-
-		public Tileset Tileset {
-			get { return tileset; }
 		}
 
 		public Zone Zone {
@@ -1370,11 +1138,17 @@ namespace ZeldaEditor.Control {
 		}
 
 		public bool NoScriptErrors {
-			get { return noScriptErrors; }
+			get {
+				return (scriptCompileResult == null ||
+					scriptCompileResult.Errors.Count == 0);
+			}
 		}
 
 		public bool NoScriptWarnings {
-			get { return noScriptWarnings; }
+			get {
+				return (scriptCompileResult == null ||
+					scriptCompileResult.Warnings.Count == 0);
+			}
 		}
 
 		public bool DebugConsole {

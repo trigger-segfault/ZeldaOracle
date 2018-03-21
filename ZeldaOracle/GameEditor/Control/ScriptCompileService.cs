@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.Control {
 
-	public delegate void CompileEventHandler(ScriptCompileResult result);
+	public delegate void CompileCompletedCallback(ScriptCompileResult result);
 
 	public class CompileTask {
 
@@ -24,7 +24,7 @@ namespace ZeldaEditor.Control {
 		public ScriptCompileResult Result { get; set; }
 		public string Code { get; set; }
 		public bool IsCancelled { get; set; }
-		private event CompileEventHandler completed;
+		private event CompileCompletedCallback completed;
 		private event Action cancelled;
 		
 		public CompileTask(string code) {
@@ -57,7 +57,7 @@ namespace ZeldaEditor.Control {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public event CompileEventHandler Completed {
+		public event CompileCompletedCallback Completed {
 			add { completed += value; }
 			remove { completed -= value; }
 		}

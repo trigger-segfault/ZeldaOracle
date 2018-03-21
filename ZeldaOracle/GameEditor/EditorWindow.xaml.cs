@@ -54,14 +54,17 @@ namespace ZeldaEditor {
 			InitializeComponent();
 			// Create the editor control instance.
 			editorControl = new EditorControl(this);
-
-			// Initialize world tree view.
 			treeViewWorld.EditorControl = editorControl;
-
-			// Initialize property grid.
-			propertyGrid.Initialize(editorControl);
+			propertyGrid.EditorControl = editorControl;
 
 			ScriptEditor.Initialize();
+
+			// Setup window event handlers
+			//Loaded += OnWindowLoaded;
+			//PreviewKeyDown += OnPreviewKeyDown;
+			//PreviewMouseDown += OnPreviewMouseDown;
+			//SizeChanged += OnWindowSizeChanged;
+			//Closing += OnWindowClosing;
 
 			// Create the level display
 			levelDisplay					= new LevelDisplay();
@@ -71,14 +74,13 @@ namespace ZeldaEditor {
 			levelDisplay.EditorWindow		= this;
 			hostLevelDisplay.Child			= levelDisplay;
 
-			// Create the tileset display
+			// Create the tileset palette
 			tilesetPalette = new TilesetPalette(this);
 			tilesetPalette.Name				= "tilesetPalette";
 			panelTilesetPalette.Children.Add(tilesetPalette);
 			tilesetPalette.SelectionChanged += (object sender, EventArgs args) => {
 				editorControl.SelectedTileData = tilesetPalette.SelectedTileData;
 			};
-
 
 			// Create the tile preview
 			tilePreview						= new TilePreview();
@@ -91,10 +93,10 @@ namespace ZeldaEditor {
 
 			statusTask.Content = "";
 
-			// Setup layer combo-box.
+			// Setup layer combo-box
 			comboBoxLayers.Items.Clear();
 
-			// Create tools.
+			// Create tools
 			toolButtons = new ToggleButton[] {
 				buttonToolPointer,
 				buttonToolPan,
@@ -113,11 +115,6 @@ namespace ZeldaEditor {
 				TimeSpan.FromSeconds(0.4),
 				DispatcherPriority.ApplicationIdle,
 				Update);
-			/*updateTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.4),
-				DispatcherPriority.ApplicationIdle,
-				delegate { Update(); },
-				Dispatcher);*/
 
 			Application.Current.Activated += OnApplicationActivated;
 			Application.Current.Deactivated += OnApplicationDeactivated;
@@ -166,6 +163,62 @@ namespace ZeldaEditor {
 
 			return result;
 		}
+
+		public void UpdateWindowTitle() {
+			Title = "Oracle Engine Editor - " + editorControl.WorldFileName;
+			if (editorControl.IsModified)
+				Title += "*";
+			if (editorControl.Level != null)
+				Title += " [" + editorControl.Level.ID +  "]";
+		}
+		
+		public void UpdatePropertyPreview(IPropertyObject obj) {
+			if (objectWindow != null)
+				objectWindow.SetObject(obj as BaseTileDataInstance);
+
+			System.Windows.Controls.Image image = new System.Windows.Controls.Image();
+			image.Stretch = Stretch.None;
+			image.HorizontalAlignment = HorizontalAlignment.Left;
+			image.VerticalAlignment = VerticalAlignment.Top;
+			tilePreview.UpdateTile(null);
+			if (obj is Room) {
+				Room room = obj as Room;
+				image.Source = EditorImages.Room;
+				propertyPreviewImage.Content = image;
+				propertyPreviewName.Text = "Room[" + room.Location.X + ", " + room.Location.Y + "]";
+				hostTilePreview.Visibility = Visibility.Hidden;
+			}
+			else if (obj is Level) {
+				image.Source = EditorImages.Level;
+				propertyPreviewImage.Content = image;
+				propertyPreviewName.Text = (obj as Level).ID;
+				hostTilePreview.Visibility = Visibility.Hidden;
+			}
+			else if (obj is Area) {
+				image.Source = EditorImages.Area;
+				propertyPreviewImage.Content = image;
+				propertyPreviewName.Text = (obj as Area).ID;
+				hostTilePreview.Visibility = Visibility.Hidden;
+			}
+			else if (obj is World) {
+				image.Source = EditorImages.World;
+				propertyPreviewImage.Content = image;
+				propertyPreviewName.Text = (obj as World).ID;
+				hostTilePreview.Visibility = Visibility.Hidden;
+			}
+			else if (obj is BaseTileDataInstance) {
+				hostTilePreview.Visibility = Visibility.Visible;
+				BaseTileDataInstance tile = obj as BaseTileDataInstance;
+				tilePreview.UpdateTile(tile);
+				propertyPreviewImage.Content = null;
+				propertyPreviewName.Text = tile.BaseData.ResourceName;
+			}
+			else {
+				propertyPreviewImage.Content = null;
+				propertyPreviewName.Text = "";
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers
@@ -306,53 +359,6 @@ namespace ZeldaEditor {
 
 		private void OnToolChanged(object sender, RoutedEventArgs e) {
 			editorControl.CurrentTool = (EditorTool) ((ToggleButton)sender).Tag;
-		}
-		
-		public void UpdatePropertyPreview(IPropertyObject obj) {
-			if (objectWindow != null)
-				objectWindow.SetObject(obj as BaseTileDataInstance);
-
-			System.Windows.Controls.Image image = new System.Windows.Controls.Image();
-			image.Stretch = Stretch.None;
-			image.HorizontalAlignment = HorizontalAlignment.Left;
-			image.VerticalAlignment = VerticalAlignment.Top;
-			tilePreview.UpdateTile(null);
-			if (obj is Room) {
-				Room room = obj as Room;
-				image.Source = EditorImages.Room;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = "Room[" + room.Location.X + ", " + room.Location.Y + "]";
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is Level) {
-				image.Source = EditorImages.Level;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as Level).ID;
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is Area) {
-				image.Source = EditorImages.Area;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as Area).ID;
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is World) {
-				image.Source = EditorImages.World;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as World).ID;
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is BaseTileDataInstance) {
-				hostTilePreview.Visibility = Visibility.Visible;
-				BaseTileDataInstance tile = obj as BaseTileDataInstance;
-				tilePreview.UpdateTile(tile);
-				propertyPreviewImage.Content = null;
-				propertyPreviewName.Text = tile.BaseData.ResourceName;
-			}
-			else {
-				propertyPreviewImage.Content = null;
-				propertyPreviewName.Text = "";
-			}
 		}
 
 		private void OnViewPathsCommands(object sender, ExecutedRoutedEventArgs e) {
@@ -743,6 +749,7 @@ namespace ZeldaEditor {
 		}
 
 		public void UpdateCurrentTool() {
+			// Only one tool can be selected at once
 			for (int i = 0; i < toolButtons.Length; i++)
 				toolButtons[i].IsChecked = (toolButtons[i].Tag == editorControl.CurrentTool);
 			separatorToolOptions.Visibility = (editorControl.CurrentTool.Options.Any() ?
