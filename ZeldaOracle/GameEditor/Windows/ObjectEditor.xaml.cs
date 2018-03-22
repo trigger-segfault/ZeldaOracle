@@ -14,7 +14,7 @@ using ZeldaEditor.Scripting;
 using ZeldaEditor.Controls;
 
 namespace ZeldaEditor.Windows {
-	
+
 	public class ObjectEditorModel {
 
 		private ObservableCollection<Trigger> triggers;
@@ -38,20 +38,21 @@ namespace ZeldaEditor.Windows {
 		//-----------------------------------------------------------------------------
 
 		public void OnChangeObject() {
-			// Populate the trigger list
 			triggers.Clear();
-			if (tileData != null) {
-				foreach (Trigger trigger in tileData.Triggers) {
-					triggers.Add(trigger);
-				}
-			}
-
-			// Populate the list of event types
 			eventTypes.Clear();
+
+			// First populate the list of event types
 			eventTypes.Add(TriggerEvent.None);
 			if (tileData != null) {
 				foreach (Event e in tileData.Events.GetEvents())
 					eventTypes.Add(new TriggerEvent(e));
+			}
+
+			// Then populate the trigger list
+			if (tileData != null) {
+				foreach (Trigger trigger in tileData.Triggers) {
+					triggers.Add(trigger);
+				}
 			}
 		}
 
@@ -196,8 +197,7 @@ namespace ZeldaEditor.Windows {
 			window.Owner = owner;
 			window.Show();
 			return window;
-		}
-		
+		}		
 
 		public void SetObject(BaseTileDataInstance tileData) {
 			// Update the model
@@ -205,7 +205,6 @@ namespace ZeldaEditor.Windows {
 
 			if (model.Triggers.Count >= 0)
 				listBoxTriggers.SelectedIndex = 0;
-			comboBoxEventType.SelectedIndex = 0;
 
 			// Set the object preview image and name
 			objectPreviewName.Text = "(none)";
@@ -229,7 +228,7 @@ namespace ZeldaEditor.Windows {
 					checkBoxInitiallyOn.IsChecked = false;
 					checkBoxFireOnce.IsChecked = false;
 					scriptEditor.Text = "";
-					scriptEditor.Script = null;
+					scriptEditor.Trigger = null;
 				}
 			}
 			else {
@@ -245,7 +244,7 @@ namespace ZeldaEditor.Windows {
 						scriptEditor.Text = model.SelectedTrigger.Script.Code;
 					else
 						scriptEditor.Text = "";
-					scriptEditor.Script = model.SelectedTrigger.Script;
+					scriptEditor.Trigger = model.SelectedTrigger;
 				}
 			}
 		}
@@ -314,7 +313,6 @@ namespace ZeldaEditor.Windows {
 				if (model.SelectedTrigger.Script == null)
 					model.SelectedTrigger.CreateScript();
 				model.SelectedTrigger.Script.Code = scriptEditor.Text;
-				scriptEditor.Script = model.SelectedTrigger.Script;
 				//needsRecompiling = true;
 				//UpdateStatusBar();
 				//CommandManager.InvalidateRequerySuggested();

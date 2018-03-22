@@ -183,11 +183,11 @@ namespace ZeldaOracle.Game.Worlds {
 				Console.WriteLine("Error loading world: " + ex.Message);
 				return null;
 			}
-			catch (Exception ex) {
-				exception = ex;
-				Console.WriteLine("Error loading world: " + ex.Message);
-				return null;
-			}
+			//catch (Exception ex) {
+			//	exception = ex;
+			//	Console.WriteLine("Error loading world: " + ex.Message);
+			//	return null;
+			//}
 
 			return world;
 		}
@@ -384,7 +384,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the tile's properties
 			ReadProperties(reader, tile.Properties);
-			ReadEvents(reader, tile.Events, world);
+			//ReadEvents(reader, tile.Events, world); TODO
+			ReadTriggers(reader, tile, world);
 			if (tile.TileData != null)
 				tile.Properties.BaseProperties = tile.TileData.Properties;
 			tile.ModifiedProperties.BaseProperties = tile.Properties;
@@ -408,6 +409,29 @@ namespace ZeldaOracle.Game.Worlds {
 			actionTile.ModifiedProperties.BaseProperties = actionTile.Properties;
 
 			return (actionTile.ActionTileData != null ? actionTile : null);
+		}
+
+		private void ReadTriggers(BinaryReader reader, ITriggerObject triggerObject, World world) {
+			if (version < 3)
+				return;
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++) {
+				string eventName = ReadString(reader);
+				string eventScriptID = ReadString(reader);
+
+				Event evnt = triggerObject.Events.GetEvent(eventName);
+				Script script = world.GetScript(eventScriptID);
+				if (evnt != null) {
+					triggerObject.Triggers.AddTrigger(new Trigger(triggerObject.Triggers) {
+						Name = evnt.Name,
+						Script = script,
+						InitiallyOn = true,
+						IsEnabled = true,
+						FireOnce = false,
+						EventType = new TriggerEvent(evnt),
+					});
+				}
+			}
 		}
 
 		private void ReadEvents(BinaryReader reader, EventCollection events, World world) {
@@ -641,7 +665,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 		
 		private void WriteScripts(BinaryWriter writer, World world) {
-			// Write the compiled assembly.
+			// Write the compiled assembly
 			byte[] rawAssembly = world.ScriptManager.RawAssembly;
 			if (rawAssembly != null) {
 				writer.Write(world.ScriptManager.RawAssembly.Length);
@@ -650,35 +674,35 @@ namespace ZeldaOracle.Game.Worlds {
 			else
 				writer.Write((int) 0);
 
-			List<KeyValuePair<Script, Event>> internalScripts =
-				new List<KeyValuePair<Script, Event>>();
-			if (editorMode) {
-				int internalID = 0;
-				foreach (IEventObject eventObject in world.GetEventObjects()) {
-					foreach (Event evnt in eventObject.Events.GetDefinedEvents()) {
-						string existingScript =
-							evnt.GetExistingScript(world.ScriptManager.Scripts);
-						if (existingScript == null) {
-							evnt.Script.ID = ScriptManager.
-								CreateInternalScriptName(internalID);
-							evnt.InternalScriptID = evnt.Script.ID;
-							internalScripts.Add(
-								new KeyValuePair<Script, Event>(evnt.Script, evnt));
-							internalID++;
-						}
-						else {
-							evnt.InternalScriptID = existingScript;
-						}
-					}
-				}
-			}
+			//List<KeyValuePair<Script, Event>> internalScripts =
+				//new List<KeyValuePair<Script, Event>>();
+			//if (editorMode) {
+				//int internalID = 0;
+				//foreach (ITriggerObject triggerObject in world.GetEventObjects()) {
+					//foreach (Event evnt in eventObject.Events.GetDefinedEvents()) {
+					//	string existingScript =
+					//		evnt.GetExistingScript(world.ScriptManager.Scripts);
+					//	if (existingScript == null) {
+					//		evnt.Script.ID = ScriptManager.
+					//			CreateInternalScriptName(internalID);
+					//		evnt.InternalScriptID = evnt.Script.ID;
+					//		internalScripts.Add(
+					//			new KeyValuePair<Script, Event>(evnt.Script, evnt));
+					//		internalID++;
+					//	}
+					//	else {
+					//		evnt.InternalScriptID = existingScript;
+					//	}
+					//}
+				//}
+			//}
 
-			// Write the individual scripts.
-			writer.Write(world.Scripts.Count + internalScripts.Count);
-			foreach (Script script in world.Scripts.Values)
-				WriteScript(writer, script);
-			foreach (var scriptPair in internalScripts)
-				WriteScript(writer, scriptPair.Key, scriptPair.Value);
+			//// Write the individual scripts.
+			//writer.Write(world.Scripts.Count + internalScripts.Count);
+			//foreach (Script script in world.Scripts.Values)
+			//	WriteScript(writer, script);
+			//foreach (var scriptPair in internalScripts)
+			//	WriteScript(writer, scriptPair.Key, scriptPair.Value);
 		}
 		
 		private void WriteScript(BinaryWriter writer, Script script, Event evnt = null) {
@@ -722,28 +746,34 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 				
 		private void ReadScripts(BinaryReader reader, World world) {
-			// Read the raw assembly.
+			// Read the raw assembly
 			int byteCount = reader.ReadInt32();
 			if (byteCount > 0)
 				world.ScriptManager.RawAssembly = reader.ReadBytes(byteCount);
 			else
 				world.ScriptManager.RawAssembly = null;
 
-			// Read the individual scripts.
+			// Read the individual scripts
 			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
-				world.AddScript(ReadScript(reader));
+			for (int i = 0; i < count; i++) {
+				Script script = ReadScript(reader);
+				if (!script.IsHidden)
+					//if (script != null)
+					world.AddScript(script);
+				//else
+				//	Console.WriteLine("ASDADS");
+			}
 		}
 		
 		private Script ReadScript(BinaryReader reader) {
 			Script script = new Script();
 
-			// Read the name and source code.
+			// Read the name and source code
 			script.ID       = ReadString(reader);
 			script.Code		= ReadString(reader);
 			script.IsHidden	= reader.ReadBoolean();
 			
-			// Read the parameters.
+			// Read the parameters
 			int paramCount = reader.ReadInt32();
 			for (int i = 0; i < paramCount; i++) {
 				ScriptParameter param = new ScriptParameter();

@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Control.Scripting;
@@ -22,12 +23,12 @@ namespace ZeldaEditor.Control {
 		public Task<ScriptCompileResult> Task { get; set; }
 		public Thread Thread { get; set; }
 		public ScriptCompileResult Result { get; set; }
-		public string Code { get; set; }
+		public GeneratedScriptCode Code { get; set; }
 		public bool IsCancelled { get; set; }
 		private event CompileCompletedCallback completed;
 		private event Action cancelled;
 		
-		public CompileTask(string code) {
+		public CompileTask(GeneratedScriptCode code) {
 			Code = code;
 			Result = null;
 			Thread = null;
@@ -131,7 +132,9 @@ namespace ZeldaEditor.Control {
 		/// <summary>Begin compiling the scripts in a background task.</summary>
 		public CompileTask CompileAllScripts(World world) {
 			Logs.Scripts.LogNotice("Compiling all scripts...");
-			string code = world.ScriptManager.CreateCode(world, false);
+			// Generate the code first
+			ScriptCodeGenerator codeGenerator = new ScriptCodeGenerator(world);
+			GeneratedScriptCode code = codeGenerator.GenerateCode(true);
 			return BeginCompileTask(code);
 		}
 
@@ -139,7 +142,19 @@ namespace ZeldaEditor.Control {
 		/// </summary>
 		public CompileTask CompileSingleScript(Script script, World world) {
 			Logs.Scripts.LogInfo("Compiling script {0}...", script.ID);
-			string code = world.ScriptManager.CreateTestScriptCode(script);
+			ScriptCodeGenerator codeGenerator = new ScriptCodeGenerator(world);
+			GeneratedScriptCode code =
+				codeGenerator.GenerateTestCode(script, script.Code);
+			return BeginCompileTask(code);
+		}
+
+		/// <summary>Compile a single trgiger script in order to check for
+		/// errors/warnings.</summary>
+		public CompileTask CompileSingleTrigger(Trigger trigger, World world) {
+			Logs.Scripts.LogInfo("Compiling trigger {0}...", trigger.Name);
+			ScriptCodeGenerator codeGenerator = new ScriptCodeGenerator(world);
+			GeneratedScriptCode code =
+				codeGenerator.GenerateTestCode(trigger, trigger.Script.Code);
 			return BeginCompileTask(code);
 		}
 
@@ -156,7 +171,7 @@ namespace ZeldaEditor.Control {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		private CompileTask BeginCompileTask(string code) {
+		private CompileTask BeginCompileTask(GeneratedScriptCode code) {
 			return BeginCompileTask(new CompileTask(code));
 		}
 
@@ -167,8 +182,9 @@ namespace ZeldaEditor.Control {
 
 			task.Task = Task.Run(() => {
 				task.Thread = Thread.CurrentThread;
+				ScriptCompiler compiler = new ScriptCompiler();
 				try {
-					return Compile(task.Code);
+					return compiler.Compile(task.Code.Code);
 				}
 				catch (ThreadAbortException) {
 					return null;
@@ -179,73 +195,73 @@ namespace ZeldaEditor.Control {
 		}
 
 		/// <summary>Compile the specified code.</summary>
-		private static ScriptCompileResult Compile(string code,
-			bool generateAssembly = true, int firstLineStart = 0)
-		{
-			ScriptCompileResult result = new ScriptCompileResult();
-			string pathToAssembly = "";
-			bool hasErrors = false;
+		//private static ScriptCompileResult Compile(string code,
+		//	bool generateAssembly = true, int firstLineStart = 0)
+		//{
+		//	ScriptCompileResult result = new ScriptCompileResult();
+		//	string pathToAssembly = "";
+		//	bool hasErrors = false;
 			
-			// Setup the compile options
-			CompilerParameters options = new CompilerParameters();
-			options.GenerateExecutable = false;
-			options.GenerateInMemory = !generateAssembly;
-			options.OutputAssembly =
-				Path.GetFileNameWithoutExtension(
-					Assembly.GetEntryAssembly().Location) + "Scripts.dll";
+		//	// Setup the compile options
+		//	CompilerParameters options = new CompilerParameters();
+		//	options.GenerateExecutable = false;
+		//	options.GenerateInMemory = !generateAssembly;
+		//	options.OutputAssembly =
+		//		Path.GetFileNameWithoutExtension(
+		//			Assembly.GetEntryAssembly().Location) + "Scripts.dll";
 
-			// Add the assembly references
-			options.ReferencedAssemblies.Add(Assemblies.ZeldaCommon.Location);
-			options.ReferencedAssemblies.Add(Assemblies.ZeldaAPI.Location);
+		//	// Add the assembly references
+		//	options.ReferencedAssemblies.Add(Assemblies.ZeldaCommon.Location);
+		//	options.ReferencedAssemblies.Add(Assemblies.ZeldaAPI.Location);
 
-			// Create a C# code provider and compile the code.
-			// The 'using' statement is necessary so the created DLL file isn't
-			// locked when we try to load its contents.
-			using (CSharpCodeProvider csProvider = new CSharpCodeProvider()) {
-				CompilerResults csResult = csProvider.CompileAssemblyFromSource(options, code);
-				pathToAssembly = csResult.PathToAssembly;
-				hasErrors = csResult.Errors.HasErrors;
+		//	// Create a C# code provider and compile the code.
+		//	// The 'using' statement is necessary so the created DLL file isn't
+		//	// locked when we try to load its contents.
+		//	using (CSharpCodeProvider csProvider = new CSharpCodeProvider()) {
+		//		CompilerResults csResult = csProvider.CompileAssemblyFromSource(options, code);
+		//		pathToAssembly = csResult.PathToAssembly;
+		//		hasErrors = csResult.Errors.HasErrors;
 				
-				// Disable System.IO access
-				int index = code.IndexOf("System.IO");
-				if (index != -1) {
-					int line = code.Take(index).Count(c => c == '\n') + 1;
-					int column = 0;
-					for (int i = index; i >= 0; i--, column++) {
-						if (code[i] == '\n')
-							break;
-					}
-					if (line == 0)
-						column -= firstLineStart;
-					result.Errors.Add(new ScriptCompileError(
-						line, column, "", "System.IO is not allowed", false));
-				}
+		//		// Disable System.IO access
+		//		int index = code.IndexOf("System.IO");
+		//		if (index != -1) {
+		//			int line = code.Take(index).Count(c => c == '\n') + 1;
+		//			int column = 0;
+		//			for (int i = index; i >= 0; i--, column++) {
+		//				if (code[i] == '\n')
+		//					break;
+		//			}
+		//			if (line == 0)
+		//				column -= firstLineStart;
+		//			result.Errors.Add(new ScriptCompileError(
+		//				line, column, "", "System.IO is not allowed", false));
+		//		}
 
-				// Copy warnings and errors into the compile result
-				foreach (CompilerError csError in csResult.Errors) {
-					if (csError.Line == 0)
-						csError.Column -= firstLineStart;
-					ScriptCompileError error = new ScriptCompileError(
-						csError.Line, csError.Column, csError.ErrorNumber,
-						csError.ErrorText, csError.IsWarning);
-					if (error.IsWarning)
-						result.Warnings.Add(error);
-					else
-						result.Errors.Add(error);
-				}
-			}
+		//		// Copy warnings and errors into the compile result
+		//		foreach (CompilerError csError in csResult.Errors) {
+		//			if (csError.Line == 0)
+		//				csError.Column -= firstLineStart;
+		//			ScriptCompileError error = new ScriptCompileError(
+		//				csError.Line, csError.Column, csError.ErrorNumber,
+		//				csError.ErrorText, csError.IsWarning);
+		//			if (error.IsWarning)
+		//				result.Warnings.Add(error);
+		//			else
+		//				result.Errors.Add(error);
+		//		}
+		//	}
 
-			// If the compile was successful, then load the DLL's file contents and
-			// remove the DLL file.
-			if (!hasErrors && generateAssembly) {
-				result.RawAssembly = File.ReadAllBytes(pathToAssembly);
-				try {
-					File.Delete(pathToAssembly);
-				} catch { }
-			}
+		//	// If the compile was successful, then load the DLL's file contents and
+		//	// remove the DLL file.
+		//	if (!hasErrors && generateAssembly) {
+		//		result.RawAssembly = File.ReadAllBytes(pathToAssembly);
+		//		try {
+		//			File.Delete(pathToAssembly);
+		//		} catch { }
+		//	}
 
-			return result;
-		}
+		//	return result;
+		//}
 
 		/// <summary>Compile a script in a background task.</summary>
 		//public void CompileScriptAsync(Script script,

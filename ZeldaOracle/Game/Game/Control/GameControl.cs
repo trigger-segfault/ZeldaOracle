@@ -93,7 +93,10 @@ namespace ZeldaOracle.Game.Control {
 			this.world = world;
 
 			if (recompile) {
-				world.ScriptManager.CompileAndWriteAssembly(null);
+				//throw new NotImplementedException();
+				//ScriptCompiler compiler = new ScriptCompiler();
+				//compiler.Compile(
+				//world.ScriptManager.CompileAndWriteAssembly(null);
 			}
 			scriptRunner.OnLoadWorld(world);
 			world.AssignMonsterIDs();

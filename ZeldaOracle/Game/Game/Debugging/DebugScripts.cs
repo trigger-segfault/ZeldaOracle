@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Debugging {
 			Actions.Unit.MakeUnitFaceDirection(actor, Direction.Right);
 
 			Actions.General.EndCutscene();
-			
+
 			//Actions.General.BeginCutscene();
 			//Actions.General.Wait(30);
 			//Actions.Unit.MakeUnitFaceDirection(player, Direction.Down);

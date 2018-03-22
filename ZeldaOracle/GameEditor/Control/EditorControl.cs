@@ -705,6 +705,10 @@ namespace ZeldaEditor.Control {
 			Logs.Scripts.LogMessage(level,
 				"Compiled scripts with {0} errors and {0} warnings",
 				result.Errors.Count, result.Warnings.Count);
+			foreach (ScriptCompileError error in result.Errors)
+				Logs.Scripts.LogMessage(LogLevel.Error, error.ToString());
+			foreach (ScriptCompileError warning in result.Warnings)
+				Logs.Scripts.LogMessage(LogLevel.Warning, warning.ToString());
 		}
 
 
@@ -725,20 +729,20 @@ namespace ZeldaEditor.Control {
 
 		private List<Event> ReloadEventCache() {
 			List<Event> cache = new List<Event>();
-			int internalID = 0;
-			if (IsWorldOpen) {
-				foreach (Trigger trigger in world.GetAllTriggers()) {
+			//int internalID = 0;
+			//if (IsWorldOpen) {
+			//	foreach (Trigger trigger in world.GetAllTriggers()) {
 
-				}
+			//	}
 
-				foreach (Event evnt in world.GetDefinedEvents()) {
-					if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
-						evnt.InternalScriptID = ScriptManager.CreateInternalScriptName(internalID);
-						cache.Add(evnt);
-						internalID++;
-					}
-				}
-			}
+			//	foreach (Event evnt in world.GetDefinedEvents()) {
+			//		if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
+			//			evnt.InternalScriptID = ScriptManager.CreateInternalScriptName(internalID);
+			//			cache.Add(evnt);
+			//			internalID++;
+			//		}
+			//	}
+			//}
 			return cache;
 		}
 

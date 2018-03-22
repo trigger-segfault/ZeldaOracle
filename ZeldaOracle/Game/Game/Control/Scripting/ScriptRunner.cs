@@ -28,7 +28,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private GameControl gameControl;
 		private Assembly compiledAssembly;
 		private ZeldaAPI.CustomScriptBase context;
-		private Dictionary<Script, MethodInfo> scriptMethods;
 		private List<ScriptInstance> runningScripts;
 
 
@@ -40,7 +39,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			this.gameControl	= gameControl;
 			context				= null;
 			compiledAssembly	= null;
-			scriptMethods		= new Dictionary<Script, MethodInfo>();
 			runningScripts		= new List<ScriptInstance>();
 		}
 
@@ -71,8 +69,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 
 		public bool OnLoadWorld(World world) {
-			scriptMethods.Clear();
-
 			// Load the assembly
 			byte[] rawAssembly = world.ScriptManager.RawAssembly;
 			if (rawAssembly == null || rawAssembly.Length == 0)
@@ -80,25 +76,20 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			compiledAssembly = Assembly.Load(rawAssembly);
 			if (compiledAssembly == null)
 				return false;
-
-			// Find the type (class) of the custom script method
-			Type type = compiledAssembly.GetType("ZeldaAPI.CustomScripts.CustomScript");
-			if (type == null)
+			
+			// Construct the script context class
+			Type contextType = compiledAssembly.GetType(
+				ScriptCodeGenerator.ScriptContextFullPath);
+			if (contextType == null)
 				return false;
-
-			// Find the default constructor for the type
-			ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
-			if (constructor == null)
-				return false;
-
-			// Construct the script object
-			context = (ZeldaAPI.CustomScriptBase) constructor.Invoke(null);
+			context = ReflectionHelper.Construct
+				<ZeldaAPI.CustomScriptBase>(contextType);
 			if (context == null)
 				return false;
 
-			// Create a mapping of scripts to method infos
-			foreach (KeyValuePair<string, Script> script in world.Scripts)
-				scriptMethods[script.Value] = type.GetMethod(script.Key);
+			// Find the MethodInfo for each script
+			foreach (Script script in world.Scripts.Values)
+				script.MethodInfo = contextType.GetMethod(script.MethodName);
 
 			return true;
 		}
@@ -116,8 +107,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		/// <summary>Run a script with the given parameters.</summary>
 		public void RunScript(Script script, object[] parameters) {
-			MethodInfo method = scriptMethods[script];
-			RunScript(context, script.ID, method, parameters);
+			RunScript(context, script.ID, script.MethodInfo, parameters);
 		}
 
 		/// <summary>Run a method as a script with the given parameters.</summary>

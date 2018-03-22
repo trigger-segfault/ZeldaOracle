@@ -9,7 +9,7 @@ namespace ZeldaEditor.Scripting {
 	class ScriptProvider : ICSharpScriptProvider {
 
 		public string GetUsing() {
-			return ScriptManager.CreateUsingsString();
+			return ScriptCodeGenerator.CreateUsingsString();
 		}
 		
 		public string GetVars() => null;

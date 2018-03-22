@@ -280,6 +280,8 @@
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Camera.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.General.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptCompiler.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptCodeGenerator.cs" />
     <Compile Include="Game\Control\Scripting\ScriptInstance.cs" />
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
