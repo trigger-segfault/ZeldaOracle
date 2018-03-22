@@ -35,6 +35,24 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		/// <summary>Constructs the tile instance location with the specified tile.</summary>
+		public TileInstanceLocation(TileData tileData, int x, int y, int layer) {
+			Tile		= null;
+			if (tileData != null)
+				Tile	= new TileDataInstance(tileData);
+			Location	= new Point2I(x, y);
+			Layer		= layer;
+		}
+
+		/// <summary>Constructs the tile instance location with the specified tile.</summary>
+		public TileInstanceLocation(TileData tileData, Point2I location, int layer) {
+			Tile		= null;
+			if (tileData != null)
+				Tile	= new TileDataInstance(tileData);
+			Location	= location;
+			Layer		= layer;
+		}
+
+		/// <summary>Constructs the tile instance location with the specified tile.</summary>
 		public TileInstanceLocation(TileDataInstance tile, int x, int y, int layer) {
 			Tile		= tile;
 			Location	= new Point2I(x, y);
@@ -48,6 +66,22 @@ namespace ZeldaOracle.Game.Tiles {
 			Tile		= tile;
 			Location	= location;
 			Layer		= layer;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs a tile instance location from the tile's room
+		/// location.</summary>
+		public static TileInstanceLocation FromRoom(TileDataInstance tile) {
+			return new TileInstanceLocation(tile, tile.Location, tile.Layer);
+		}
+
+		/// <summary>Constructs a tile instance location from the tile's level coord.</summary>
+		public static TileInstanceLocation FromLevel(TileDataInstance tile) {
+			return new TileInstanceLocation(tile, tile.LevelCoord, tile.Layer);
 		}
 
 

@@ -44,16 +44,13 @@ namespace ZeldaEditor.WinForms {
 
 		private EditorWindow	editorWindow;
 		private EditorControl	editorControl;
+		private Rectangle2I		cursorBox;
 		private Point2I			highlightedRoom;
 		private Point2I			highlightedTile;
-		private Point2I         cursorPixelLocation;
-		private Point2I			cursorHalfTileLocation;
-		private Point2I         cursorSize;
+		private bool			showCursor;
 		private Rectangle2I		selectionBox;
-		private Room			selectedRoom;
-		private bool            isSelectionRoom;
 		
-		private StoppableTimer		dispatcherTimer;
+		private StoppableTimer	dispatcherTimer;
 
 		// Frame Rate:
 		/// <summary>The total number of frames passed since the last frame rate check.</summary>
@@ -64,11 +61,7 @@ namespace ZeldaEditor.WinForms {
 		private double fps;
 
 		private Stopwatch fpsWatch;
-
-
-		//-----------------------------------------------------------------------------
-		// Individual Tile Selection
-		//-----------------------------------------------------------------------------
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -83,6 +76,7 @@ namespace ZeldaEditor.WinForms {
 			MouseUp             += OnMouseUp;
 			MouseLeave          += OnMouseLeave;
 			MouseDoubleClick    += OnMouseDoubleClick;
+			MouseWheel          += OnMouseWheel;
 
 			totalFrames = 0;
 			elapsedTime = 0.0;
@@ -93,49 +87,35 @@ namespace ZeldaEditor.WinForms {
 
 			UpdateLevel();
 
-			this.highlightedRoom = -Point2I.One;
-			this.highlightedTile = -Point2I.One;
+			cursorBox = Rectangle2I.Zero;
+
+			highlightedRoom = -Point2I.One;
+			highlightedTile = -Point2I.One;
 
 			dispatcherTimer = StoppableTimer.StartNew(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
 				delegate {
 					if (editorControl.IsActive) {
-						editorControl.CurrentTool.Update();
+						if (editorControl.IsLevelOpen)
+							editorControl.CurrentTool.Update();
 						Invalidate();
 					}
 				});
-			/*dispatcherTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate {
-					if (editorControl.IsActive) {
-						editorControl.CurrentTool.Update();
-						Invalidate();
-					}
-				},
-				System.Windows.Application.Current.Dispatcher);*/
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Level Sampling
 		//-----------------------------------------------------------------------------
-		
+
 		// Sample the room coordinates at the given point, clamping them to the level's dimensions if specified.
-		public Point2I SampleRoomCoordinates(Point2I point, bool clamp = false) {
-			Point2I span = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
-			Point2I roomCoord = point / span;
-			if (point.X < 0)
-				roomCoord.X--;
-			if (point.Y < 0)
-				roomCoord.Y--;
-			if (clamp && editorControl.IsLevelOpen) {
-				if (editorControl.IsLevelOpen)
-					return GMath.Clamp(roomCoord, Point2I.Zero, Level.Dimensions - 1);
-				else
-					return Point2I.Zero;
-			}
+		public Point2I SampleRoomLocation(Point2I point, bool clamp = false) {
+			Point2I span = Level.RoomPixelSize + RoomSpacing;
+			Point2I roomCoord = GMath.FloorDiv(point, span);
+			if (clamp)
+				return GMath.Clamp(roomCoord, Point2I.Zero,
+					Level.Dimensions - Point2I.One);
 			return roomCoord;
 		}
 
@@ -143,47 +123,32 @@ namespace ZeldaEditor.WinForms {
 		public Room SampleRoom(Point2I point, bool clamp = false) {
 			if (!editorControl.IsLevelOpen)
 				return null;
-			Point2I roomCoord = SampleRoomCoordinates(point, clamp);
-			if (Level.ContainsRoom(roomCoord))
-				return Level.GetRoomAt(roomCoord);
-			return null;
+			Point2I roomCoord = SampleRoomLocation(point, clamp);
+			return Level.GetRoomAt(roomCoord);
 		}
 
 		// Sample the tile coordinates at the given point (tile coordinates are relative to their room).
-		public Point2I SampleTileCoordinates(Point2I point) {
-			Point2I span = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
-			Point2I begin = SampleRoomCoordinates(point) * span;
-			Point2I tileCoord = (point - begin) / GameSettings.TILE_SIZE;
+		public Point2I SampleTileLocation(Point2I point) {
+			Point2I span = Level.RoomPixelSize + RoomSpacing;
+			Point2I begin = SampleRoomLocation(point) * span;
+			Point2I tileCoord = GMath.FloorDiv(point - begin, GameSettings.TILE_SIZE);
 			return GMath.Clamp(tileCoord, Point2I.Zero, Level.RoomSize - Point2I.One);
-		}
-
-		// Sample the half-tile coordinates at the given point (tile coordinates are relative to their room).
-		public Point2I SampleHalfTileCoordinates(Point2I point) {
-			Point2I span = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
-			Point2I begin = SampleRoomCoordinates(point) * span;
-			Point2I tileCoord = (point - begin) / (GameSettings.TILE_SIZE / 2);
-			return GMath.Clamp(tileCoord, Point2I.Zero, Level.RoomSize * 2 - Point2I.One);
 		}
 
 		// Sample the tile coordinates at the given point (tile coordinates are absolute to the level).
 		public Point2I SampleLevelCoord(Point2I point) {
-			Point2I roomCoord = SampleRoomCoordinates(point);
-			Point2I tileCoord = SampleTileCoordinates(point);
-			return ((roomCoord * Level.RoomSize) + tileCoord);
-		}
-
-		// Sample the half-tile coordinates at the given point (tile coordinates are absolute to the level).
-		public Point2I SampleLevelHalfTileCoordinates(Point2I point) {
-			Point2I roomCoord = SampleRoomCoordinates(point);
-			Point2I halfTileCoord = SampleHalfTileCoordinates(point);
-			return ((roomCoord * Level.RoomSize * 2) + halfTileCoord);
+			Point2I roomCoord = SampleRoomLocation(point) * Level.RoomSize;
+			Point2I tileCoord = SampleTileLocation(point);
+			return (roomCoord + tileCoord);
 		}
 
 		// Sample the tile coordinates at the given point (tile coordinates are absolute to the level).
-		public Point2I SampleLevelPixelPosition(Point2I point) {
-			Point2I roomCoord = SampleRoomCoordinates(point);
-			Point2I pointInRoom = point - GetRoomDrawPosition(roomCoord);
-			return ((roomCoord * Level.RoomSize * GameSettings.TILE_SIZE) + pointInRoom);
+		public Point2I SampleLevelPosition(Point2I point) {
+			Point2I roomLocation = SampleRoomLocation(point);
+			point -= GetRoomDrawPosition(roomLocation);
+			point = GMath.Min(point, Level.RoomPixelSize - 1);
+			point += Level.RoomLocationToLevelPosition(roomLocation);
+			return point;
 		}
 		
 		// Convert a tile location relative to a room, to an absolute tile location in the level.
@@ -191,8 +156,8 @@ namespace ZeldaEditor.WinForms {
 			Room room = SampleRoom(point);
 			if (room == null)
 				return null;
-			Point2I tileCoord = SampleTileCoordinates(point);
-			return room.GetTile(tileCoord.X, tileCoord.Y, layer);
+			Point2I tileCoord = SampleTileLocation(point);
+			return room.GetTile(tileCoord, layer);
 		}
 		
 		// Sample an action tile at the given point.
@@ -201,44 +166,8 @@ namespace ZeldaEditor.WinForms {
 			if (room == null)
 				return null;
 			Point2I roomOffset = GetRoomDrawPosition(room);
-			Point2I position = SampleLevelPixelPosition(point);
+			Point2I position = SampleLevelPosition(point);
 			return Level.GetActionTileAt(position);
-			/*for (int i = 0; i < room.ActionCount; i++) {
-				ActionTileDataInstance actionTile = room.GetActionTileAt(i);
-				Rectangle2I tileRect = new Rectangle2I(actionTile.Position + roomOffset, actionTile.PixelSize);
-				if (tileRect.Contains(point))
-					return actionTile;
-			}
-			return null;*/
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Get Tile
-		//-----------------------------------------------------------------------------
-
-		public TileDataInstance GetTile(Point2I levelTileCoord, int layer) {
-			Point2I roomLocation = levelTileCoord / Level.RoomSize;
-			Point2I roomCoord = GMath.Wrap(levelTileCoord, Level.RoomSize);
-			if (roomLocation >= Point2I.Zero && roomLocation < Level.Dimensions) {
-				return Level.GetRoomAt(roomLocation).GetTile(roomCoord, layer);
-			}
-			return null;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Coordinates Conversion
-		//-----------------------------------------------------------------------------
-		
-		// Convert level tile coordinates room tile coordinates.
-		public Point2I ToRoomTileCoordinates(Point2I levelTileLocation) {
-			return GMath.Wrap(levelTileLocation, Level.RoomSize);
-		}
-
-		// Convert level tile coordinates room half-tile coordinates.
-		public Point2I ToRoomHalfTileCoordinates(Point2I levelTileLocation) {
-			return GMath.Wrap(levelTileLocation, Level.RoomSize * 2);
 		}
 
 
@@ -256,11 +185,6 @@ namespace ZeldaEditor.WinForms {
 			selectionBox = box;
 		}
 
-		// Set the selection box
-		public void SetSelectionBox(Point2I start, Point2I size) {
-			selectionBox = new Rectangle2I(start, size);
-		}
-
 		public void SetSelectionBox(Room room) {
 			selectionBox = room.LevelBounds;
 		}
@@ -269,12 +193,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		public void CenterViewOnPoint(Point2I point) {
-			ScrollPosition = point - new Point2I(ClientSize.Width, ClientSize.Height) / 2;
-
-			/*this.AutoScrollPosition = new System.Drawing.Point(
-				GMath.Clamp(point.X - ClientSize.Width / 2, HorizontalScroll.Minimum, HorizontalScroll.Maximum),
-				GMath.Clamp(point.Y - ClientSize.Height / 2, VerticalScroll.Minimum, VerticalScroll.Maximum)
-			);*/
+			ScrollPosition = point - ClientSize / 2;
 		}
 
 
@@ -289,40 +208,21 @@ namespace ZeldaEditor.WinForms {
 
 		// Get the top-left position to draw the room of the given coordinates.
 		public Point2I GetRoomDrawPosition(Point2I roomCoord) {
-			return (roomCoord * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing));
+			return (roomCoord * (Level.RoomPixelSize + RoomSpacing));
 		}
 
 		// Get the top-left position to draw a tile with the given absolute coordinates.
-		private Point2I GetLevelTileCoordDrawPosition(Point2I levelTileCoord) {
-			Point2I roomCoord = levelTileCoord / Level.RoomSize;
-			if (levelTileCoord.X < 0)
-				roomCoord.X--;
-			if (levelTileCoord.Y < 0)
-				roomCoord.Y--;
-			Point2I tileCoord = ToRoomTileCoordinates(levelTileCoord);
-			return (GetRoomDrawPosition(roomCoord) + (tileCoord * GameSettings.TILE_SIZE));
+		private Point2I GetLevelCoordDrawPosition(Point2I levelCoord) {
+			Point2I roomLocation = Level.LevelCoordToRoomLocation(levelCoord);
+			Point2I roomPosition = Level.LevelCoordToRoomPosition(levelCoord);
+			return (GetRoomDrawPosition(roomLocation) + roomPosition);
 		}
-
+		
 		// Get the top-left position to draw a tile with the given absolute coordinates.
-		private Point2I GetLevelHalfTileCoordDrawPosition(Point2I levelHalfTileCoord) {
-			Point2I roomCoord = levelHalfTileCoord / (Level.RoomSize * 2);
-			if (levelHalfTileCoord.X < 0)
-				roomCoord.X--;
-			if (levelHalfTileCoord.Y < 0)
-				roomCoord.Y--;
-			Point2I halfTileCoord = ToRoomHalfTileCoordinates(levelHalfTileCoord);
-			return (GetRoomDrawPosition(roomCoord) + (halfTileCoord * GameSettings.TILE_SIZE / 2));
-		}
-
-		// Get the top-left position to draw a tile with the given absolute coordinates.
-		public Point2I GetLevelPixelDrawPosition(Point2I pixelInLevel) {
-			Point2I roomCoord   = pixelInLevel / (Level.RoomSize * GameSettings.TILE_SIZE);
-			Point2I pixelInRoom = pixelInLevel % (Level.RoomSize * GameSettings.TILE_SIZE);
-			if (pixelInLevel.X < 0)
-				roomCoord.X--;
-			if (pixelInLevel.Y < 0)
-				roomCoord.Y--;
-			return (GetRoomDrawPosition(roomCoord) + pixelInRoom);
+		public Point2I GetLevelPixelDrawPosition(Point2I levelPosition) {
+			Point2I roomLocation = Level.LevelPositionToRoomLocation(levelPosition);
+			Point2I roomPosition = Level.LevelToRoomPosition(levelPosition);
+			return (GetRoomDrawPosition(roomLocation) + roomPosition);
 		}
 
 
@@ -331,16 +231,24 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		// Draw a tile.
-		public void DrawTile(Graphics2D g, Room room, TileDataInstance tile, Point2I position, Color drawColor) {
-			if (editorControl.ShowModified && !tile.HasModifiedProperties && !tile.HasDefinedEvents)
+		public void DrawTile(Graphics2D g, Room room, TileDataInstance tile,
+			Point2I position, Color drawColor)
+		{
+			if (editorControl.ShowModified &&
+				!tile.HasModifiedProperties &&
+				!tile.HasDefinedEvents)
 				return;
 
 			TileDataDrawing.DrawTile(g, tile, position, room.Zone, drawColor);
 		}
 
 		// Draw an action tile.
-		public void DrawActionTile(Graphics2D g, Room room, ActionTileDataInstance action, Point2I position, Color drawColor) {
-			if (editorControl.ShowModified && !action.HasModifiedProperties && !action.HasDefinedEvents)
+		public void DrawActionTile(Graphics2D g, Room room,
+			ActionTileDataInstance action, Point2I position, Color drawColor)
+		{
+			if (editorControl.ShowModified &&
+				!action.HasModifiedProperties &&
+				!action.HasDefinedEvents)
 				return;
 
 			TileDataDrawing.DrawTile(g, action, position, room.Zone, drawColor);
@@ -414,7 +322,9 @@ namespace ZeldaEditor.WinForms {
 					Color color = GetActionColor(action.Room != room);
 					if (color.IsTransparent)
 						continue;
-					if (!CurrentTool.DrawHideActionTile(action, room, roomStartPixel + action.Position)) {
+					if (!CurrentTool.DrawHideActionTile(action, room,
+						roomStartPixel + action.Position))
+					{
 						DrawActionTile(g, room, action, action.Position, color);
 					}
 				}
@@ -434,9 +344,11 @@ namespace ZeldaEditor.WinForms {
 				// Draw the rooms.
 				for (int x = 0; x < Level.Width; x++) {
 					for (int y = 0; y < Level.Height; y++) {
-						Point2I roomPosition = GetRoomDrawPosition(new Point2I(x, y)) - new Point2I(HorizontalScroll.Value, VerticalScroll.Value);
-						if (roomPosition + (Level.RoomSize * GameSettings.TILE_SIZE) >= Point2I.Zero && roomPosition < new Point2I(ClientSize.Width, ClientSize.Height)) {
-							g.PushTranslation((Vector2F)(new Point2I(x, y) * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing)));
+						Point2I roomPosition = GetRoomDrawPosition(new Point2I(x, y));
+						Rectangle2I roomBounds = new Rectangle2I(roomPosition,
+							Level.RoomPixelSize + Point2I.One);
+						if (roomBounds.Intersects(ClientView)) {
+							g.PushTranslation(roomPosition);
 							Room room = Level.GetRoomAt(x, y);
 							Palette newPalette = room.Zone.Palette;
 							if (lastPalette != newPalette) {
@@ -456,45 +368,46 @@ namespace ZeldaEditor.WinForms {
 				
 				Point2I span = Level.TileDimensions;
 				Point2I drawSpan = GetRoomDrawPosition(Level.Dimensions);
-				// Draw the tile grid.
+				// Draw the tile grid
+				Color tileGridColor = new Color(0, 0, 0, 150);
 				if (editorControl.ShowGrid) {
 					for (int x = 0; x < span.X; x++) {
-						int drawX = GetLevelTileCoordDrawPosition(new Point2I(x, 0)).X;
-						if (drawX >= HorizontalScroll.Value || drawX < HorizontalScroll.Value + ClientSize.Width) {
+						int drawX = GetLevelCoordDrawPosition(new Point2I(x, 0)).X;
+						if (drawX >= ScrollX || drawX < ScrollX + ClientWidth) {
 							g.FillRectangle(new Rectangle2F(
-								drawX, VerticalScroll.Value,
-								1, Math.Min(drawSpan.Y, ClientSize.Height)),
-								Color.Black);
+								drawX, ScrollY,
+								1, Math.Min(drawSpan.Y, ClientHeight)),
+								tileGridColor);
 						}
 					}
 					for (int y = 0; y < span.Y; y++) {
-						int drawY = GetLevelTileCoordDrawPosition(new Point2I(0, y)).Y;
-						if (drawY >= VerticalScroll.Value || drawY < VerticalScroll.Value + ClientSize.Height) {
+						int drawY = GetLevelCoordDrawPosition(new Point2I(0, y)).Y;
+						if (drawY >= ScrollY || drawY < ScrollY + ClientHeight) {
 							g.FillRectangle(new Rectangle2F(
-								HorizontalScroll.Value, drawY,
-								Math.Min(drawSpan.X, ClientSize.Width), 1),
-								Color.Black);
+								ScrollX, drawY,
+								Math.Min(drawSpan.X, ClientWidth), 1),
+								tileGridColor);
 						}
 					}
 				}
 
-				// Draw the room spacing.
-				if (editorControl.RoomSpacing > 0) {
+				// Draw the room spacing
+				if (RoomSpacing > 0) {
 					for (int x = 0; x < Level.Width; x++) {
-						int drawX = GetRoomDrawPosition(new Point2I(x + 1, 0)).X - editorControl.RoomSpacing;
-						if (drawX >= HorizontalScroll.Value || drawX < HorizontalScroll.Value + ClientSize.Width) {
-							g.FillRectangle(new Rectangle2F(
-								drawX, VerticalScroll.Value,
-								editorControl.RoomSpacing, Math.Min(drawSpan.Y, ClientSize.Height)),
+						int drawX = GetRoomDrawPosition(new Point2I(x + 1, 0)).X -
+							RoomSpacing;
+						if (ClientView.LeftRight.Contains(drawX)) {
+							g.FillRectangle(new Rectangle2F(drawX, ScrollY,
+								RoomSpacing, ClientView.Height),
 								Color.Black);
 						}
 					}
 					for (int y = 0; y < Level.Height; y++) {
-						int drawY = GetRoomDrawPosition(new Point2I(0, y + 1)).Y - editorControl.RoomSpacing;
-						if (drawY >= VerticalScroll.Value || drawY < VerticalScroll.Value + ClientSize.Height) {
-							g.FillRectangle(new Rectangle2F(
-								HorizontalScroll.Value, drawY,
-								Math.Min(drawSpan.X, ClientSize.Width), editorControl.RoomSpacing),
+						int drawY = GetRoomDrawPosition(new Point2I(0, y + 1)).Y -
+							RoomSpacing;
+						if (ClientView.TopBottom.Contains(drawY)) {
+							g.FillRectangle(new Rectangle2F(ScrollX, drawY,
+								ClientView.Width, RoomSpacing),
 								Color.Black);
 						}
 					}
@@ -502,34 +415,41 @@ namespace ZeldaEditor.WinForms {
 
 				
 				if (!selectionBox.IsEmpty) {
-					// Draw the selection box.
+					// Draw the selection box
 					Point2I start = GetLevelPixelDrawPosition(selectionBox.TopLeft);
-					Point2I end   = GetLevelPixelDrawPosition(selectionBox.BottomRight);
-					Rectangle2I box = new Rectangle2I(start, end - start);
+					Point2I end = GetLevelPixelDrawPosition(selectionBox.BottomRight);
+					Rectangle2I box = Rectangle2I.FromEndPoints(start, end);
 
 					g.DrawRectangle(box, 1, Color.White);
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.Black);
 					g.DrawRectangle(box.Inflated(-1, -1), 1, Color.Black);
 				}
 
-				// Draw the highlight box.
-				if (editorControl.HighlightMouseTile && cursorHalfTileLocation >= Point2I.Zero) {
-					Rectangle2I box = new Rectangle2I(GetLevelHalfTileCoordDrawPosition(cursorHalfTileLocation), cursorSize);
+				// Draw the highlight cursor
+				if (CanUpdateTool && showCursor && !cursorBox.IsEmpty &&
+					cursorBox.Intersects(ClientView))
+				{
+					Rectangle2I box = new Rectangle2I(
+						GetLevelPixelDrawPosition(cursorBox.Point), cursorBox.Size);
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.White);
 				}
 
 				// Draw the player start location
-				if ((editorControl.ShowStartLocation || editorControl.StartLocationMode) && Level == World.StartLevel) {
-					Point2I levelTileCoord = World.StartRoomLocation * World.StartLevel.RoomSize + World.StartTileLocation;
-					Point2I position = GetLevelTileCoordDrawPosition(levelTileCoord);
+				if (Level == World.StartLevel && (editorControl.ShowStartLocation ||
+					editorControl.StartLocationMode))
+				{
+					Point2I position = GetLevelCoordDrawPosition(
+						World.StartLevelCoord);
 					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, position);
 				}
 
 				// Draw player sprite for 'Test At Position'
-				Point2I roomSize = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
-				Point2I tilePoint = highlightedRoom * roomSize + highlightedTile * GameSettings.TILE_SIZE;
-				if ((editorControl.PlayerPlaceMode || editorControl.StartLocationMode) && highlightedTile >= Point2I.Zero) {
-					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, tilePoint);
+				if (IsMouseOver && (editorControl.PlayerPlaceMode ||
+					editorControl.StartLocationMode))
+				{
+					Point2I tilePosition = GetRoomDrawPosition(highlightedRoom) +
+						Level.LevelCoordToPosition(highlightedTile);
+					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, tilePosition);
 				}
 
 				g.PopTranslation();
@@ -543,15 +463,12 @@ namespace ZeldaEditor.WinForms {
 		
 		public void UpdateLevel() {
 			if (editorControl.IsLevelOpen) {
-				this.AutoScrollMinSize = (Level.Dimensions * (Level.RoomSize *
-					GameSettings.TILE_SIZE + editorControl.RoomSpacing)).ToGdiSize();
-				this.HorizontalScroll.Value = 0;
-				this.VerticalScroll.Value = 0;
+				this.AutoScrollMinSize = (Level.Dimensions * (Level.RoomPixelSize +
+					RoomSpacing)).ToGdiSize();
 			}
 			else {
 				this.AutoScrollMinSize = Point2I.One.ToGdiSize();
-				this.HorizontalScroll.Value = 0;
-				this.VerticalScroll.Value = 0;
+				ScrollPosition = Point2I.Zero;
 			}
 		}
 
@@ -564,39 +481,39 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 		// Form Events
 		//-----------------------------------------------------------------------------
-
+		
 		private void OnMouseEnter(object sender, EventArgs e) {
-
+			Cursor = CurrentTool.MouseCursor;
 		}
+
 		private void OnMouseLeave(object sender, EventArgs e) {
-			// Clear any highlighted tile/rooms.
-			highlightedRoom = new Point2I(-1000);
-			highlightedTile = new Point2I(-2000);
-			cursorHalfTileLocation	= new Point2I(-4000);
-			cursorPixelLocation = new Point2I(-32000);
+			// Clear any highlighted tile/rooms
+			highlightedRoom = new Point2I(short.MinValue);
+			highlightedTile = new Point2I(short.MinValue);
+			cursorBox.Point = new Point2I(short.MinValue);
 			editorWindow.SetStatusBarInvalidLevelLocations();
 		}
 
 		private void OnMouseDown(object sender, MouseEventArgs e) {
-			Cursor = editorControl.CurrentTool.MouseCursor;
+			Cursor = CurrentTool.MouseCursor;
 
 			if (editorControl.IsLevelOpen) {
-				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
-
+				bool containsRoom = Level.ContainsRoom(highlightedRoom);
 				if (editorControl.PlayerPlaceMode) {
-					// Test the world after placing the player.
-					if (highlightedTile != -Point2I.One) {
+					// Test the world after placing the player
+					if (containsRoom) {
 						editorControl.TestWorld(highlightedRoom, highlightedTile);
 					}
 				}
 				else if (editorControl.StartLocationMode) {
-					if (highlightedTile != -Point2I.One) {
-						editorControl.SetStartLocation(highlightedRoom, highlightedTile);
+					// Set the new player start location
+					if (containsRoom) {
+						editorControl.SetStartLocation(
+							highlightedRoom, highlightedTile);
 					}
 				}
-				else {
-					// Notify the current tool.
-					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
+				else if (CanUpdateTool) {
+					// Notify the current tool
 					CurrentTool.MouseDown(e);
 				}
 			}
@@ -606,14 +523,9 @@ namespace ZeldaEditor.WinForms {
 		private void OnMouseUp(object sender, MouseEventArgs e) {
 			Cursor = CurrentTool.MouseCursor;
 
-			if (editorControl.IsLevelOpen) {
-				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
-
-				// Notify the current tool.
-				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {
-					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
-					CurrentTool.MouseUp(e);
-				}
+			if (editorControl.IsLevelOpen && CanUpdateTool) {
+				// Notify the current tool
+				CurrentTool.MouseUp(e);
 			}
 		}
 
@@ -622,32 +534,24 @@ namespace ZeldaEditor.WinForms {
 
 			if (editorControl.IsLevelOpen) {
 				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
-				cursorSize = new Point2I(GameSettings.TILE_SIZE);
 
-				// Find the highlighted room/tile coordinates.
-				if (editorControl.ActionMode)
-					cursorHalfTileLocation  = SampleLevelHalfTileCoordinates(mousePos);
-				else
-					cursorHalfTileLocation  = SampleLevelCoord(mousePos) * 2;
-				cursorPixelLocation = SampleLevelPixelPosition(mousePos);
-				highlightedRoom		= SampleRoomCoordinates(mousePos, false);
-				highlightedTile		= SampleTileCoordinates(mousePos);
-				if (!(highlightedRoom < Level.Dimensions)) {
-					highlightedRoom = new Point2I(-1000);
-					highlightedTile = new Point2I(-2000);
-					cursorHalfTileLocation  = new Point2I(-4000);
-					cursorPixelLocation = new Point2I(-32000);
+				highlightedRoom		= SampleRoomLocation(mousePos, false);
+				highlightedTile		= SampleTileLocation(mousePos);
+				if (!Level.ContainsRoom(highlightedRoom)) {
+					highlightedRoom = new Point2I(short.MinValue);
+					highlightedTile = new Point2I(short.MinValue);
+					cursorBox.Point = new Point2I(short.MinValue);
 				}
 
-				// Notify the current tool.
-				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {
-					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
+				// Notify the current tool
+				if (CanUpdateTool) {
 					CurrentTool.MouseMove(e);
 				}
 
-				// Update the status bar for tile and room coordinates.
+				// Update the status bar for tile and room coordinates
 				if (Level.ContainsRoom(highlightedRoom)) {
-					editorWindow.SetStatusBarLevelLocations(highlightedRoom, highlightedTile);
+					editorWindow.SetStatusBarLevelLocations(
+						highlightedRoom, highlightedTile);
 					return;
 				}
 			}
@@ -655,17 +559,19 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		private void OnMouseDoubleClick(object sender, MouseEventArgs e) {
-			if (editorControl.IsLevelOpen) {
-				Point2I mousePos = ScrollPosition + e.Location.ToPoint2I();
-
-				// Notify the current tool.
-				if (!editorControl.PlayerPlaceMode && !editorControl.StartLocationMode) {
-					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
-					CurrentTool.MouseDoubleClick(e);
-				}
+			if (editorControl.IsLevelOpen && CanUpdateTool) {
+				// Notify the current tool
+				CurrentTool.MouseDoubleClick(e);
 			}
 		}
-		
+
+		private void OnMouseWheel(object sender, MouseEventArgs e) {
+			if (editorControl.IsLevelOpen && CanUpdateTool) {
+				// Notify the current tool
+				CurrentTool.MouseMove(e);
+			}
+		}
+
 		/// <summary>Called every step to update the frame rate.</summary>
 		private void UpdateFrameRate() {
 			// FPS Counter from:
@@ -696,20 +602,22 @@ namespace ZeldaEditor.WinForms {
 			TileDataDrawing.PlaybackTime = editorControl.Ticks;
 			TileDataDrawing.Extras = editorControl.ShowRewards;
 			TileDataDrawing.Level = Level;
-			//GraphicsDevice.Textures[1] = Resources.GetPalette("dungeon_ages_1").PaletteTexture;
 			Graphics2D g = new Graphics2D();
-			//g.Begin(paletteDrawMode);
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-			//GameSettings.DRAW_MODE_DEFAULT.Effect.CurrentTechnique.Passes[0].Apply();
-			//paletteShader.CurrentTechnique.Passes[0].Apply();
 			DrawLevel(g);
-			//g.DrawImage(palette, Point2I.Zero);
 			g.End();
 		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		private bool CanUpdateTool {
+			get {
+				return	!editorControl.PlayerPlaceMode &&
+						!editorControl.StartLocationMode;
+			}
+		}
 
 		public EditorWindow EditorWindow {
 			get { return editorWindow; }
@@ -731,33 +639,41 @@ namespace ZeldaEditor.WinForms {
 
 		public Rectangle2I SelectionBox {
 			get { return selectionBox; }
-			set {
-				selectionBox = value;
-				Point2I roomLoc = GMath.Clamp(value.Point / Level.RoomSize, Point2I.Zero, Level.Dimensions);
-				selectedRoom = Level.GetRoomAt(roomLoc);
-			}
+		}
+		
+		public Point2I CursorLevelCoord {
+			get { return GMath.FloorDiv(cursorBox.Point, GameSettings.TILE_SIZE); }
+			set { cursorBox.Point = value * GameSettings.TILE_SIZE; }
+		}
+		public Point2I CursorRoomLocation {
+			get { return GMath.FloorDiv(cursorBox.Point, GameSettings.TILE_SIZE); }
+			set { cursorBox.Point = value * GameSettings.TILE_SIZE; }
 		}
 
-		public Point2I CursorTileLocation {
-			get { return cursorHalfTileLocation / 2; }
-			set { cursorHalfTileLocation = value * 2; }
+		public bool ShowCursor {
+			get { return showCursor; }
+			set { showCursor = value; }
 		}
-		public Point2I CursorHalfTileLocation {
-			get { return cursorHalfTileLocation; }
-			set { cursorHalfTileLocation = value; }
+		public Point2I CursorPosition {
+			get { return cursorBox.Point; }
+			set { cursorBox.Point = value; }
 		}
-		public Point2I CursorPixelLocation {
-			get { return cursorPixelLocation; }
-			set { cursorPixelLocation = value; }
+		public Point2I CursorSize {
+			get { return cursorBox.Size; }
+			set { cursorBox.Size = value; }
 		}
-		public Point2I CursorPixelSize {
-			get { return cursorSize; }
-			set { cursorSize = value; }
+		public Point2I CursorTileSize {
+			get { return GMath.CeilingDiv(cursorBox.Size, GameSettings.TILE_SIZE); }
+			set { cursorBox.Size = value * GameSettings.TILE_SIZE; }
 		}
-		public bool IsSelectionRoom {
-			get { return isSelectionRoom; }
-			set { isSelectionRoom = value; }
+		public Point2I CursorRoomSize {
+			get {
+				return GMath.CeilingDiv(cursorBox.Size,
+					GameSettings.TILE_SIZE * Level.RoomSize);
+			}
+			set { cursorBox.Size = value * GameSettings.TILE_SIZE * Level.RoomSize; }
 		}
+		
 		public EditorTool CurrentTool {
 			get { return editorControl.CurrentTool; }
 		}
@@ -765,10 +681,46 @@ namespace ZeldaEditor.WinForms {
 		public Point2I ScrollPosition {
 			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
 			set {
-				AutoScrollPosition = new System.Drawing.Point(
-					GMath.Clamp(value.X, HorizontalScroll.Minimum, HorizontalScroll.Maximum),
-					GMath.Clamp(value.Y, VerticalScroll.Minimum, VerticalScroll.Maximum)
-				);
+				AutoScrollPosition = GMath.Clamp(value,
+					new Point2I(HorizontalScroll.Minimum, VerticalScroll.Minimum),
+					new Point2I(HorizontalScroll.Maximum, VerticalScroll.Maximum))
+						.ToGdiPoint();
+			}
+		}
+
+		public int RoomSpacing {
+			get { return editorControl.RoomSpacing; }
+		}
+
+		public new Point2I ClientSize {
+			get { return base.ClientSize.ToPoint2I(); }
+		}
+
+		public int ClientWidth {
+			get { return base.ClientSize.Width; }
+		}
+
+		public int ClientHeight {
+			get { return base.ClientSize.Height; }
+		}
+
+		public Point2I ScrollSize {
+			get { return AutoScrollMinSize.ToPoint2I(); }
+			set { AutoScrollMinSize = value.ToGdiSize(); }
+		}
+
+		public int ScrollX {
+			get { return HorizontalScroll.Value; }
+		}
+
+		public int ScrollY {
+			get { return VerticalScroll.Value; }
+		}
+
+		public Rectangle2I ClientView {
+			get {
+				return new Rectangle2I(ScrollPosition,
+					GMath.Min(ScrollSize, ClientSize));
 			}
 		}
 

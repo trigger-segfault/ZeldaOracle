@@ -9,6 +9,7 @@ using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
+using ZeldaOracle.Game.Worlds.Editing;
 
 namespace ZeldaOracle.Game.Worlds {
 	/// <summary>The world class containing everything about the game.</summary>
@@ -149,7 +150,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets the area with the specified ID.</summary>
 		public Area GetArea(string areaID) {
-			return areas.Find(area => { return area.Properties.GetString("id") == areaID; });
+			return areas.Find(area => area.Properties.GetString("id") == areaID);
 		}
 
 		/// <summary>Gets the area at the specified index.</summary>
@@ -200,12 +201,27 @@ namespace ZeldaOracle.Game.Worlds {
 		public IEnumerable<IPropertyObject> GetPropertyObjects() {
 			yield return this;
 			foreach (Level level in levels) {
-				foreach (IPropertyObject propertyObject in level.GetPropertyObjects()) {
+				foreach (IPropertyObject propertyObject in
+					level.GetPropertyObjects())
+				{
 					yield return propertyObject;
 				}
 			}
 			foreach (Area area in areas) {
 				yield return area;
+			}
+		}
+
+		/// <summary>Gets the collection of modified properties in the world.</summary>
+		public IEnumerable<Property> GetModifiedProperties() {
+			foreach (IPropertyObject propertyObject in GetPropertyObjects()) {
+				if (!propertyObject.Properties.HasModifiedProperties)
+					continue;
+				foreach (Property property in
+					propertyObject.Properties.GetProperties())
+				{
+					yield return property;
+				}
 			}
 		}
 
@@ -244,7 +260,9 @@ namespace ZeldaOracle.Game.Worlds {
 		public IEnumerable<IVariableObject> GetVariableObjects() {
 			yield return this;
 			foreach (Level level in levels) {
-				foreach (IVariableObject variableObject in level.GetVariableObjects()) {
+				foreach (IVariableObject variableObject in
+					level.GetVariableObjects())
+				{
 					yield return variableObject;
 				}
 			}
@@ -317,9 +335,11 @@ namespace ZeldaOracle.Game.Worlds {
 
 			if (startLevelIndex == oldIndex)
 				startLevelIndex = newIndex;
-			else if (startLevelIndex > oldIndex && startLevelIndex <= newIndex && oldIndex < newIndex)
+			else if (startLevelIndex > oldIndex &&
+				startLevelIndex <= newIndex && oldIndex < newIndex)
 				startLevelIndex--;
-			else if (startLevelIndex >= newIndex && startLevelIndex < oldIndex && oldIndex > newIndex)
+			else if (startLevelIndex >= newIndex &&
+				startLevelIndex < oldIndex && oldIndex > newIndex)
 				startLevelIndex++;
 
 			Level level = levels[oldIndex];
@@ -517,15 +537,29 @@ namespace ZeldaOracle.Game.Worlds {
 
 		// Startup --------------------------------------------------------------------
 
-		/// <summary>Gets the start room for the world.</summary>
-		public Room StartRoom {
-			get { return levels[startLevelIndex].GetRoomAt(startRoomLocation); }
-		}
-
-		/// <summary>Gets the index of the starting level for the world.</summary>
+		/// <summary>Gets or sets the index of the starting level for the world.</summary>
 		public int StartLevelIndex {
 			get { return startLevelIndex; }
 			set { startLevelIndex = value; }
+		}
+
+		/// <summary>Gets or sets the starting location of the start room for the
+		/// world.</summary>
+		public Point2I StartRoomLocation {
+			get { return startRoomLocation; }
+			set { startRoomLocation = value; }
+		}
+
+		/// <summary>Gets or sets the starting location in the start room for the
+		/// world.</summary>
+		public Point2I StartTileLocation {
+			get { return startTileLocation; }
+			set { startTileLocation = value; }
+		}
+
+		/// <summary>Gets the start room for the world.</summary>
+		public Room StartRoom {
+			get { return levels[startLevelIndex].GetRoomAt(startRoomLocation); }
 		}
 
 		/// <summary>Gets the starting level for the world.</summary>
@@ -533,16 +567,17 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return levels[startLevelIndex]; }
 		}
 
-		/// <summary>Gets the starting location of the start room for the world.</summary>
-		public Point2I StartRoomLocation {
-			get { return startRoomLocation; }
-			set { startRoomLocation = value; }
+		/// <summary>Gets the starting level coord for the world.</summary>
+		public Point2I StartLevelCoord {
+			get { return StartRoom.LevelCoord + startTileLocation; }
 		}
 
-		/// <summary>Gets the starting location in the start room for the world.</summary>
-		public Point2I StartTileLocation {
-			get { return startTileLocation; }
-			set { startTileLocation = value; }
+		/// <summary>Gets the starting level position for the world.</summary>
+		public Point2I StartLevelPosition {
+			get {
+				return StartRoom.LevelPosition +
+					startTileLocation * GameSettings.TILE_SIZE;
+			}
 		}
 	}
 }

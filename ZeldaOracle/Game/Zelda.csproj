@@ -328,7 +328,10 @@
     <None Include="Game\Tiles\TileDataInitializing.cs" />
     <Compile Include="Game\Tiles\ActionTiles\TriggerAction.cs" />
     <Compile Include="Game\Tiles\TileDatas\ActionTileInstancePosition.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileInstanceDictionary.cs" />
     <Compile Include="Game\Tiles\TileDatas\TileInstanceLocation.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileLocation.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileLocationHashSet.cs" />
     <Compile Include="Game\Worlds\LevelEditorExtensions.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\JumpMonster.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />

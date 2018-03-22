@@ -315,6 +315,9 @@ namespace ZeldaOracle.Common.Geometry {
 		public Point2I BottomLeft  { get { return new Point2I(Left,  Bottom); } }
 		public int     Parimeter   { get { return (2 * (Math.Abs(Width) + Math.Abs(Height))); } }
 
+		public RangeI LeftRight { get { return new RangeI(Left, Right); } }
+		public RangeI TopBottom { get { return new RangeI(Top, Bottom); } }
+
 
 		//-----------------------------------------------------------------------------
 		// Calculations

@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 			if (clamp)
 				position = GMath.Clamp(position, level.PixelBounds);
 			room = level.GetRoomAt(GMath.FloorDiv(levelPosition,
-				GameSettings.TILE_SIZE, level.RoomSize));
+				level.RoomPixelSize));
 			return position;
 		}
 
@@ -64,6 +64,57 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 				coord = GMath.Clamp(coord, level.TileBounds);
 			room = level.GetRoomAt(GMath.FloorDiv(levelCoord, level.RoomSize));
 			return coord;
+		}
+
+		/// <summary>Converts the level position to a room coord and optionally
+		/// clamps to be within the level boundaries.</summary>
+		public static Point2I LevelPositionToRoomCoord(this Level level,
+			Point2I levelPosition, bool clamp = false)
+		{
+			Point2I coord = GMath.Wrap(levelPosition, level.RoomSize);
+			coord = GMath.FloorDiv(coord, GameSettings.TILE_SIZE);
+			if (clamp)
+				return GMath.Clamp(coord, level.TileBounds);
+			return coord;
+		}
+
+		/// <summary>Converts the level position to a room coord and optionally
+		/// clamps to be within the level boundaries.</summary>
+		public static Point2I LevelPositionToRoomCoord(this Level level,
+			Point2I levelPosition, out Room room, bool clamp = false)
+		{
+			Point2I coord = GMath.Wrap(levelPosition, level.RoomPixelSize);
+			coord = GMath.FloorDiv(coord, GameSettings.TILE_SIZE);
+			if (clamp)
+				coord = GMath.Clamp(coord, level.TileBounds);
+			room = level.GetRoomAt(GMath.FloorDiv(levelPosition, level.RoomPixelSize));
+			return coord;
+		}
+
+		/// <summary>Converts the level position to a room coord and optionally
+		/// clamps to be within the level boundaries.</summary>
+		public static Point2I LevelCoordToRoomPosition(this Level level,
+			Point2I levelCoord, bool clamp = false)
+		{
+			Point2I position = GMath.Wrap(levelCoord, level.RoomSize) *
+				GameSettings.TILE_SIZE;
+			if (clamp)
+				return GMath.Clamp(position, level.PixelBounds);
+			return position;
+		}
+
+		/// <summary>Converts the level position to a room coord and optionally
+		/// clamps to be within the level boundaries.</summary>
+		public static Point2I LevelCoordToRoomPosition(this Level level,
+			Point2I levelCoord, out Room room, bool clamp = false)
+		{
+			Point2I position = GMath.Wrap(levelCoord, level.RoomSize) *
+				GameSettings.TILE_SIZE;
+			if (clamp)
+				position = GMath.Clamp(position, level.PixelBounds);
+			room = level.GetRoomAt(GMath.FloorDiv(levelCoord,
+				level.RoomSize));
+			return position;
 		}
 
 		// Room -> Level --------------------------------------------------------------
@@ -272,7 +323,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		// Postion/Coord -> Room ------------------------------------------------------
 
 		/// <summary>Gets the room's level position from the level position.</summary>
-		public static Point2I LevelPositionToRoomPosition(this Level level,
+		public static Point2I LevelToRoomLocationPosition(this Level level,
 			Point2I levelPosition, bool clamp = false)
 		{
 			Point2I location = GMath.FloorDiv(levelPosition,
@@ -283,7 +334,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 		
 		/// <summary>Gets the room's level position from the level position.</summary>
-		public static Rectangle2I LevelPositionToRoomPosition(this Level level,
+		public static Rectangle2I LevelToRoomLocationPosition(this Level level,
 			Rectangle2I levelPosition, bool clamp = false)
 		{
 			Point2I position1 = GMath.FloorI(levelPosition.Min,
@@ -298,7 +349,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 
 		/// <summary>Gets the room's level coord from the level coord.</summary>
-		public static Point2I LevelCoordToRoomCoord(this Level level,
+		public static Point2I LevelToRoomLocationCoord(this Level level,
 			Point2I levelCoord, bool clamp = false)
 		{
 			Point2I location = GMath.FloorDiv(levelCoord, level.RoomSize);
@@ -308,7 +359,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 
 		/// <summary>Gets the room's level coord from the level coord.</summary>
-		public static Rectangle2I LevelCoordToRoomCoord(this Level level,
+		public static Rectangle2I LevelToRoomLocationCoord(this Level level,
 			Rectangle2I levelCoord, bool clamp = false)
 		{
 			Point2I coord1 = GMath.FloorI(levelCoord.Min, level.RoomSize);
@@ -321,7 +372,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 
 		/// <summary>Gets the room's level coord from the level position.</summary>
-		public static Point2I LevelPositionToRoomCoord(this Level level,
+		public static Point2I LevelPositionToRoomLocationCoord(this Level level,
 			Point2I levelPosition, bool clamp = false)
 		{
 			Point2I location = GMath.FloorDiv(levelPosition,
@@ -332,7 +383,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 
 		/// <summary>Gets the room's level coord from the level position.</summary>
-		public static Rectangle2I LevelPositionToRoomCoord(this Level level,
+		public static Rectangle2I LevelPositionToRoomLocationCoord(this Level level,
 			Rectangle2I levelPosition, bool clamp = false)
 		{
 			Point2I location1 = GMath.FloorDiv(levelPosition.Max,
@@ -348,7 +399,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 
 		/// <summary>Gets the room's level position from the level coord.</summary>
-		public static Point2I LevelCoordToRoomPosition(this Level level,
+		public static Point2I LevelCoordToRoomLocationPosition(this Level level,
 			Point2I levelCoord, bool clamp = false)
 		{
 			Point2I location = GMath.FloorDiv(levelCoord, level.RoomSize);
@@ -358,7 +409,7 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 
 		/// <summary>Gets the room's level position from the level coord.</summary>
-		public static Rectangle2I LevelCoordToRoomPosition(this Level level,
+		public static Rectangle2I LevelCoordToRoomLocationPosition(this Level level,
 			Rectangle2I levelCoord, bool clamp = false)
 		{
 			Point2I location1 = GMath.FloorDiv(levelCoord.Min, level.RoomSize);
@@ -468,6 +519,13 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		//-----------------------------------------------------------------------------
 
 		// Tiles ----------------------------------------------------------------------
+		
+		/// <summary>Places the tile at the specified coord in the level.</summary>
+		public static void PlaceTile(this Level level, TileInstanceLocation tile,
+			bool safe = false)
+		{
+			PlaceTile(level, tile.Tile, tile.Location, tile.Layer, safe);
+		}
 
 		/// <summary>Places the tile at the specified coord in the level.</summary>
 		public static void PlaceTile(this Level level, TileDataInstance tile,
@@ -534,6 +592,13 @@ namespace ZeldaOracle.Game.Worlds.Editing {
 		}
 
 		// Actions --------------------------------------------------------------------
+
+		/// <summary>Places an action tile at the specified position in the level.</summary>
+		public static void PlaceActionTile(this Level level,
+			ActionTileInstancePosition action, bool safe = false)
+		{
+			PlaceActionTile(level, action.Action, action.Position, safe);
+		}
 
 		/// <summary>Places an action tile at the specified position in the level.</summary>
 		public static void PlaceActionTile(this Level level,
