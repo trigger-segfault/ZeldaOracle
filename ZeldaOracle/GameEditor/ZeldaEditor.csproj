@@ -131,7 +131,6 @@
     <Compile Include="PropertiesEditor\CustomEditors\Point2IPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\ResourcePropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EventPropertyEditor.cs" />
-    <None Include="PropertiesEditor\CustomEditors\SpriteIndexComboBox.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\RewardPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEventDescriptor.cs" />
     <Compile Include="PropertiesEditor\CustomProperties.cs" />

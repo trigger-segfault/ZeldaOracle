@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
-using Key = System.Windows.Input.Key;
+using System.Windows.Input;
+using Cursor = System.Windows.Forms.Cursor;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPan : EditorTool {
@@ -29,12 +30,13 @@ namespace ZeldaEditor.Tools {
 		// Overridden State Methods
 		//-----------------------------------------------------------------------------
 		
-		protected override void OnBegin() {
+		protected override void OnBegin(ToolEventArgs e) {
 			isPanning = false;
 			MouseCursor = HandOpenCursor;
+			ShowCursor = false;
 		}
 
-		protected override void OnCancel() {
+		protected override void OnCancel(ToolEventArgs e) {
 			isPanning = false;
 		}
 
@@ -43,25 +45,25 @@ namespace ZeldaEditor.Tools {
 		// Overridden Mouse Methods
 		//-----------------------------------------------------------------------------
 
-		protected override void OnMouseDragBegin(MouseEventArgs e) {
-			if (DragButton == MouseButtons.Left) {
+		protected override void OnMouseDragBegin(ToolEventArgs e) {
+			if (DragButton == MouseButton.Left) {
 				isPanning = true;
-				panStart = e.MousePos() - LevelDisplay.ScrollPosition;
-				scrollStart = LevelDisplay.ScrollPosition;
+				scrollStart = ScrollPosition;
+				panStart = e.Position - scrollStart;
 				MouseCursor = HandClosedCursor;
 			}
 		}
 
-		protected override void OnMouseDragEnd(MouseEventArgs e) {
+		protected override void OnMouseDragEnd(ToolEventArgs e) {
 			if (isPanning) {
 				isPanning = false;
 				MouseCursor = HandOpenCursor;
 			}
 		}
 
-		protected override void OnMouseDragMove(MouseEventArgs e) {
+		protected override void OnMouseDragMove(ToolEventArgs e) {
 			if (isPanning) {
-				LevelDisplay.ScrollPosition = scrollStart + panStart - (e.MousePos() - LevelDisplay.ScrollPosition);
+				ScrollPosition = scrollStart + panStart - (e.Position - ScrollPosition);
 			}
 		}
 	}

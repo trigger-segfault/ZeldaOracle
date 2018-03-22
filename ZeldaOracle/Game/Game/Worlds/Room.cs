@@ -562,6 +562,11 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		// Tiles ----------------------------------------------------------------------
+		
+		/// <summary>Places the tile at the specified location.</summary>
+		public void PlaceTile(TileInstanceLocation tile) {
+			PlaceTile(tile.Tile, tile.Location, tile.Layer);
+		}
 
 		/// <summary>Places the tile at the specified location.</summary>
 		public void PlaceTile(TileDataInstance tile, int x, int y, int layer) {
@@ -654,6 +659,11 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		// Action Tiles ---------------------------------------------------------------
+		
+		/// <summary>Places an action tile at the specified position in the room.</summary>
+		public void PlaceActionTile(ActionTileInstancePosition action) {
+			PlaceActionTile(action.Action, action.Position);
+		}
 
 		/// <summary>Places an action tile at the specified position in the room.</summary>
 		public void PlaceActionTile(ActionTileDataInstance action, int x, int y) {

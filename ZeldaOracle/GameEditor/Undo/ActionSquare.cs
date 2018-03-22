@@ -53,18 +53,10 @@ namespace ZeldaEditor.Undo {
 			for (int x = 0; x < square.Width; x++) {
 				for (int y = 0; y < square.Height; y++) {
 					Point2I levelCoord = square.Point + new Point2I(x, y);
-					/*Point2I roomLocation = levelCoord / level.RoomSize;
-					Point2I tileLocation = levelCoord % level.RoomSize;
-					Room room = level.GetRoomAt(roomLocation);
-					room.RemoveTile(tileLocation, layer);*/
 					level.RemoveTile(levelCoord, layer);
 				}
 			}
 			foreach (var pair in overwrittenTiles) {
-				/*Point2I roomLocation = pair.Key / level.RoomSize;
-				Point2I tileLocation = pair.Key % level.RoomSize;
-				Room room = level.GetRoomAt(roomLocation);
-				room.PlaceTile(pair.Value, tileLocation, layer);*/
 				level.PlaceTile(pair.Value, pair.Key, layer);
 			}
 			editorControl.NeedsNewEventCache = true;
@@ -75,10 +67,6 @@ namespace ZeldaEditor.Undo {
 			for (int x = 0; x < square.Width; x++) {
 				for (int y = 0; y < square.Height; y++) {
 					Point2I levelCoord = square.Point + new Point2I(x, y);
-					/*Point2I roomLocation = levelCoord / level.RoomSize;
-					Point2I tileLocation = levelCoord % level.RoomSize;
-					Room room = level.GetRoomAt(roomLocation);
-					room.PlaceTile(placedTiles[x, y], tileLocation, layer);*/
 					level.PlaceTile(placedTiles[x, y], levelCoord, layer);
 				}
 			}

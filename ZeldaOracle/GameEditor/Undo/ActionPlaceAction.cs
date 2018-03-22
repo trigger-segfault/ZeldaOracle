@@ -8,82 +8,91 @@ using ZeldaEditor.Control;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
+using ZeldaOracle.Game.Worlds.Editing;
 
 namespace ZeldaEditor.Undo {
 	public class ActionPlaceAction : EditorAction {
 
-		private struct ActionTileInfo {
-			public ActionTileDataInstance ActionTile { get; set; }
-			public Point2I Position { get; set; }
-			public Room Room { get; set; }
-
-			public ActionTileInfo(ActionTileDataInstance actionTile) {
-				this.ActionTile = actionTile;
-				this.Position = actionTile.Position;
-				this.Room = actionTile.Room;
-			}
-		}
-
 		private Level level;
-		private ActionTileData placedActionTileData;
-		private ActionTileInfo placedActionTileInfo;
-		private Point2I placedPosition;
-		private Room placedRoom;
-		private List<ActionTileInfo> overwrittenActionTiles;
+		private ActionTileData placedActionData;
+		private ActionTileInstancePosition placedActionTile;
+		//private Point2I placedPosition;
+		//private Room placedRoom;
+		private List<ActionTileInstancePosition> overwrittenActionTiles;
 
-		public ActionPlaceAction(Level level, ActionTileData placedActionTile, Room room, Point2I position) {
-			this.ActionName = (placedActionTile == null ? "Erase" : "Place") + " Action";
-			this.ActionIcon = (placedActionTile == null ? EditorImages.ToolPlaceErase : EditorImages.ToolPlace);
+		public ActionPlaceAction(Level level, ActionTileData placedActionData, Point2I position) {
+			ActionName = (placedActionData == null ?
+				"Erase" : "Place") + " Action";
+			ActionIcon = (placedActionData == null ?
+				EditorImages.ToolPlaceErase : EditorImages.ToolPlace);
+
 			this.level = level;
-			this.placedActionTileData = placedActionTile;
-			this.placedPosition = position;
-			this.placedRoom = room;
-			this.overwrittenActionTiles = new List<ActionTileInfo>();
+			this.placedActionData = placedActionData;
+			placedActionTile = new ActionTileInstancePosition(
+				placedActionData, position);
+			overwrittenActionTiles = new List<ActionTileInstancePosition>();
 		}
 
 		public ActionPlaceAction(Level level) :
-			this(level, null, null, Point2I.Zero) {
+			this(level, null, Point2I.Zero)
+		{
 		}
 
 		public void AddOverwrittenActionTile(ActionTileDataInstance actionTile) {
-			overwrittenActionTiles.Add(new ActionTileInfo(actionTile));
+			overwrittenActionTiles.Add(
+				ActionTileInstancePosition.FromLevel(actionTile));
 		}
 
 		public override void Execute(EditorControl editorControl) {
-			foreach (var actionTileInfo in overwrittenActionTiles) {
-				actionTileInfo.Room.RemoveActionTile(actionTileInfo.ActionTile);
+			foreach (var actionTile in overwrittenActionTiles) {
+				level.RemoveActionTile(actionTile.Action);
 			}
-			if (placedActionTileData != null)
-				placedActionTileInfo = new ActionTileInfo(placedRoom.CreateActionTile(placedActionTileData, placedPosition));
+			if (placedActionData != null) {
+				level.PlaceActionTile(placedActionTile);
+			}
 		}
 
 		public override void PostExecute(EditorControl editorControl) {
-			if (placedActionTileData != null)
-				placedActionTileInfo = new ActionTileInfo(placedRoom.CreateActionTile(placedActionTileData, placedPosition));
+			if (placedActionData != null) {
+				level.PlaceActionTile(placedActionTile);
+			}
 		}
 
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
-			foreach (var actionTileInfo in overwrittenActionTiles) {
+			foreach (var actionTile in overwrittenActionTiles) {
+				level.PlaceActionTile(actionTile);
 				//actionTileInfo.ActionTile.Position = actionTileInfo.Position;
-				actionTileInfo.Room.PlaceActionTile(actionTileInfo.ActionTile,
-					actionTileInfo.Position);
+				//actionTileInfo.Room.PlaceActionTile(actionTileInfo.ActionTile,
+				//	actionTileInfo.Position);
 			}
-			if (placedActionTileInfo.ActionTile != null)
-				placedActionTileInfo.Room.RemoveActionTile(placedActionTileInfo.ActionTile);
+			if (placedActionData != null) {
+				level.RemoveActionTile(placedActionTile.Action);
+			}
+			//if (placedActionTileInfo.ActionTile != null)
+			//	placedActionTileInfo.Room.RemoveActionTile(placedActionTileInfo.ActionTile);
 			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
-			foreach (var actionTileInfo in overwrittenActionTiles) {
-				actionTileInfo.Room.RemoveActionTile(actionTileInfo.ActionTile);
+			foreach (var actionTile in overwrittenActionTiles) {
+				level.RemoveActionTile(actionTile.Action);
+				//actionTileInfo.ActionTile.Position = actionTileInfo.Position;
+				//actionTileInfo.Room.PlaceActionTile(actionTileInfo.ActionTile,
+				//	actionTileInfo.Position);
 			}
-			if (placedActionTileInfo.ActionTile != null)
-				placedActionTileInfo.Room.AddActionTile(placedActionTileInfo.ActionTile);
+			/*foreach (var actionTileInfo in overwrittenActionTiles) {
+				actionTileInfo.Room.RemoveActionTile(actionTileInfo.ActionTile);
+			}*/
+			if (placedActionData != null) {
+				level.PlaceActionTile(placedActionTile);
+			}
 			editorControl.NeedsNewEventCache = true;
 		}
 
-		public override bool IgnoreAction { get { return !overwrittenActionTiles.Any() && placedActionTileData == null; } }
+		public override bool IgnoreAction {
+			get { return !overwrittenActionTiles.Any() && placedActionData == null; }
+		}
 	}
 }

@@ -66,17 +66,9 @@ namespace ZeldaEditor.Undo {
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			foreach (var pair in placedTiles) {
-				/*Point2I roomLocation = pair.Key / level.RoomSize;
-				Point2I tileLocation = pair.Key % level.RoomSize;
-				Room room = level.GetRoomAt(roomLocation);
-				room.RemoveTile(tileLocation, layer);*/
 				level.RemoveTile(pair.Key, layer);
 			}
 			foreach (var pair in overwrittenTiles) {
-				/*Point2I roomLocation = pair.Key / level.RoomSize;
-				Point2I tileLocation = pair.Key % level.RoomSize;
-				Room room = level.GetRoomAt(roomLocation);
-				room.PlaceTile(pair.Value, tileLocation, layer);*/
 				level.PlaceTile(pair.Value, pair.Key, layer);
 			}
 			editorControl.NeedsNewEventCache = true;
@@ -84,16 +76,20 @@ namespace ZeldaEditor.Undo {
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
+			// Remove overwritten tiles manually if we have nothing to place
+			if (!placedTiles.Any()) {
+				foreach (var pair in overwrittenTiles) {
+					level.RemoveTile(pair.Key, layer);
+				}
+			}
 			foreach (var pair in placedTiles) {
-				/*Point2I roomLocation = pair.Key / level.RoomSize;
-				Point2I tileLocation = pair.Key % level.RoomSize;
-				Room room = level.GetRoomAt(roomLocation);
-				room.PlaceTile(pair.Value, tileLocation, layer);*/
 				level.PlaceTile(pair.Value, pair.Key, layer);
 			}
 			editorControl.NeedsNewEventCache = true;
 		}
 
-		public override bool IgnoreAction { get { return !placedTiles.Any() && !overwrittenTiles.Any(); } }
+		public override bool IgnoreAction {
+			get { return !placedTiles.Any() && !overwrittenTiles.Any(); }
+		}
 	}
 }

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game;
 using ZeldaEditor.Undo;
-using Key = System.Windows.Input.Key;
-using ModifierKeys = System.Windows.Input.ModifierKeys;
+using System.Windows.Input;
+using Cursor = System.Windows.Forms.Cursor;
+using ZeldaOracle.Game.Worlds.Editing;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
@@ -89,20 +89,21 @@ namespace ZeldaEditor.Tools {
 		// Overridden State Methods
 		//-----------------------------------------------------------------------------
 
-		protected override void OnBegin() {
+		protected override void OnBegin(ToolEventArgs e) {
 			selectedTile		= null;
 			selectedActionTile	= null;
 			selectedRoom        = null;
-			EditorControl.HighlightMouseTile = false;
+			ShowCursor = false;
+			CursorPosition = e.SnappedPosition;
 		}
 
-		protected override void OnEnd() {
+		protected override void OnEnd(ToolEventArgs e) {
 			LevelDisplay.ClearSelectionBox();
 			EditorControl.EditingTileData = null;
 			UpdateCommands();
 		}
 
-		protected override void OnUpdate() {
+		protected override void OnUpdate(ToolEventArgs e) {
 			if (selectedTile != null) {
 				if (selectedTile.Room.ContainsTile(selectedTile))
 					LevelDisplay.SetSelectionBox(selectedTile);
@@ -132,18 +133,16 @@ namespace ZeldaEditor.Tools {
 		// Overridden Mouse Methods
 		//-----------------------------------------------------------------------------
 
-		protected override void OnMouseDown(MouseEventArgs e) {
-			Point2I mousePos = e.MousePos();
-			
+		protected override void OnMouseDown(ToolEventArgs e) {
 			// Sample the tile at the mouse position.
 			BaseTileDataInstance baseTile = null;
 			if (ActionMode)
-				baseTile = LevelDisplay.SampleActionTile(mousePos);
+				baseTile = e.SampleActionTile;
 			else
-				baseTile = LevelDisplay.SampleTile(mousePos, Layer);
+				baseTile = e.SampleTile;
 
 			// Select or deselect the tile.
-			if (e.Button == MouseButtons.Left) {
+			if (e.Button == MouseButton.Left) {
 				// Set to null by default
 				selectedTile = null;
 				selectedActionTile = null;
@@ -152,7 +151,8 @@ namespace ZeldaEditor.Tools {
 				Room room = null;
 				bool roomSelect = false;
 				if (Modifiers.HasFlag(RoomModeModifier)) {
-					room = LevelDisplay.SampleRoom(mousePos, false);
+					room = e.SampleRoom;
+					//room = LevelDisplay.SampleRoom(e.Position, false);
 					roomSelect = true;
 				}
 				
@@ -165,13 +165,20 @@ namespace ZeldaEditor.Tools {
 						EditorControl.EditingRoom = room;
 						UpdateCommands();
 					}
+
+					CursorPosition = Level.RoomLocationToLevelPosition(e.RoomLocation);
+					CursorSize = Level.RoomPixelSize;
+					ShowCursor = true;
 				}
 				else if (baseTile != null) {
 					if (baseTile is TileDataInstance)
 						selectedTile = baseTile as TileDataInstance;
 					else if (baseTile is ActionTileDataInstance)
 						selectedActionTile = baseTile as ActionTileDataInstance;
-					selectedRoom = null;
+
+					CursorPosition = baseTile.LevelPosition;
+					CursorSize = baseTile.PixelSize;
+					ShowCursor = true;
 
 					LevelDisplay.SetSelectionBox(baseTile);
 					EditorControl.PropertyGrid.OpenProperties(baseTile);
@@ -182,36 +189,29 @@ namespace ZeldaEditor.Tools {
 					LevelDisplay.ClearSelectionBox();
 					EditorControl.PropertyGrid.CloseProperties();
 					EditorControl.EditingTileData = null;
+					ShowCursor = false;
 					UpdateCommands();
 				}
 			}
 		}
 
-		protected override void OnMouseMove(MouseEventArgs e) {
-			Point2I mousePos = e.MousePos();
-
+		protected override void OnMouseMove(ToolEventArgs e) {
 			if (!ActionMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, Layer);
-				EditorControl.HighlightMouseTile = (tile != null);
+				TileDataInstance tile = e.SampleTile;
+				ShowCursor = (tile != null);
 				if (tile != null) {
-					LevelDisplay.CursorTileLocation = tile.LevelCoord;
+					CursorPosition = tile.LevelPosition;
+					CursorSize = tile.PixelSize;
 				}
-				LevelDisplay.CursorPixelSize = (tile != null ? tile.PixelSize :
-					new Point2I(GameSettings.TILE_SIZE));
 			}
 			else {
 				// Highlight action tiles.
-				ActionTileDataInstance actionTile = LevelDisplay.SampleActionTile(mousePos);
-				EditorControl.HighlightMouseTile = (actionTile != null);
+				ActionTileDataInstance actionTile = e.SampleActionTile;
+				ShowCursor = (actionTile != null);
 				if (actionTile != null) {
-					LevelDisplay.CursorHalfTileLocation =
-						LevelDisplay.SampleLevelHalfTileCoordinates(
-							LevelDisplay.GetRoomDrawPosition(actionTile.Room) + actionTile.Position);
-					LevelDisplay.CursorPixelSize = actionTile.PixelSize;
-				}
-				else {
-					LevelDisplay.CursorPixelSize = new Point2I(GameSettings.TILE_SIZE);
+					CursorPosition = actionTile.LevelPosition;
+					CursorSize = actionTile.PixelSize;
 				}
 			}
 		}
@@ -225,6 +225,11 @@ namespace ZeldaEditor.Tools {
 			get { return selectedTile != null || selectedActionTile != null || selectedRoom != null; }
 		}
 
+		public override int Snapping {
+			// Always snap directly
+			get { return 1; }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Tool-Specific Methods
@@ -235,7 +240,9 @@ namespace ZeldaEditor.Tools {
 			selectedActionTile = null;
 			selectedRoom = null;
 			Point2I pixelPosition = Point2I.Zero;
-			if (baseTile is TileDataInstance) {
+			pixelPosition = LevelDisplay.GetLevelPixelDrawPosition(
+				baseTile.LevelPosition + baseTile.PixelSize / 2);
+			/*if (baseTile is TileDataInstance) {
 				selectedTile = baseTile as TileDataInstance;
 				pixelPosition = LevelDisplay.GetRoomDrawPosition(selectedTile.Room) +
 					(selectedTile.Location * GameSettings.TILE_SIZE) + selectedTile.PixelSize / 2;
@@ -244,7 +251,7 @@ namespace ZeldaEditor.Tools {
 				selectedActionTile = baseTile as ActionTileDataInstance;
 				pixelPosition = LevelDisplay.GetRoomDrawPosition(selectedActionTile.Room) +
 					selectedActionTile.Position + selectedActionTile.PixelSize / 2;
-			}
+			}*/
 
 			LevelDisplay.SetSelectionBox(baseTile);
 			LevelDisplay.CenterViewOnPoint(pixelPosition);
