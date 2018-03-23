@@ -426,6 +426,9 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 				editorElement = editor.ResolveEditor(propertyItem);
 			}
 
+			if (pd.IsReadOnly)
+				editorElement.IsEnabled = false;
+
 			return editorElement;
 		}
 

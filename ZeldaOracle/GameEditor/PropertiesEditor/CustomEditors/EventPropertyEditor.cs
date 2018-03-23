@@ -69,6 +69,8 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 			// Send a dummy value to update the control
 			SetValue("");
+			if (evnt.Script != null)
+				SetValue(EventDescriptor.GetValue(null) as string);
 		}
 	}
 }

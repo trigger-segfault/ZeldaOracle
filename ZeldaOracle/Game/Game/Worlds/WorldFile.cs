@@ -425,12 +425,15 @@ namespace ZeldaOracle.Game.Worlds {
 					if (!string.IsNullOrWhiteSpace(eventScriptID)) {
 						Script script = world.GetScript(eventScriptID);
 						Event evnt = events.GetEvent(eventName);
-						if (evnt == null)
+						if (evnt == null) {
 							evnt = new Event(eventName, script.Parameters.ToArray());
+							events.AddEvent(evnt);
+						}
 						if (script.IsHidden) {
 							events.GetEvent(eventName).Script = script;
 							// Assign the correct parameters
 							script.Parameters = evnt.Parameters;
+							// Hidden scripts are not stored in the manager while in the editor
 							world.RemoveScript(eventScriptID);
 						}
 						else {
