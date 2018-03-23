@@ -28,10 +28,12 @@ using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 namespace Xceed.Wpf.Toolkit.PropertyGrid {
 	internal class ObjectContainerHelper : ObjectContainerHelperBase {
 		private object _selectedObject;
+		private bool _useDummyInstances;
 
-		public ObjectContainerHelper(IPropertyContainer propertyContainer, object selectedObject)
+		public ObjectContainerHelper(IPropertyContainer propertyContainer, object selectedObject, bool useDummyInstances)
 		  : base(propertyContainer) {
 			_selectedObject = selectedObject;
+			_useDummyInstances = useDummyInstances;
 		}
 
 		private object SelectedObject {
@@ -102,16 +104,19 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 
 
 		private PropertyItem CreatePropertyItem(PropertyDescriptor property, PropertyDefinition propertyDef) {
+			object instance = SelectedObject;
+			if (_useDummyInstances)
+				instance = new DummyInstance(property, SelectedObject);
 			DescriptorPropertyDefinition definition = new DescriptorPropertyDefinition( property,
-																				  SelectedObject,
+																				  instance,
 																				  this.PropertyContainer.IsCategorized
 																				 );
-			definition.InitProperties();
+			definition.InitProperties(_useDummyInstances);
 
 			this.InitializeDescriptorDefinition(definition, propertyDef);
 			PropertyItem propertyItem = new PropertyItem( definition );
 			Debug.Assert(SelectedObject != null);
-			propertyItem.Instance = SelectedObject;
+			propertyItem.Instance = instance;
 			propertyItem.CategoryOrder = this.GetCategoryOrder(definition.CategoryValue);
 			propertyItem.WillRefreshPropertyGrid = this.GetWillRefreshPropertyGrid(property);
 			return propertyItem;

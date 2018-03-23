@@ -73,7 +73,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 		#region Override Methods
 
 		internal override ObjectContainerHelperBase CreateContainerHelper(IPropertyContainer parent) {
-			return new ObjectContainerHelper(parent, this.Value);
+			return new ObjectContainerHelper(parent, this.Value, false);
 		}
 
 		internal override void OnValueChanged(object oldValue, object newValue) {
@@ -81,12 +81,12 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 			this.RaiseContainerHelperInvalidated();
 		}
 
-		protected override BindingBase CreateValueBinding() {
+		protected override BindingBase CreateValueBinding(bool dummyInstance) {
 			var selectedObject = this.SelectedObject;
 			var propertyName = this.PropertyDescriptor.Name;
 
 			//Bind the value property with the source object.
-			var binding = new Binding( propertyName )
+			var binding = new Binding( dummyInstance ? "Value" : propertyName )
 	  {
 				Source = this.GetValueInstance( selectedObject ),
 				Mode = PropertyDescriptor.IsReadOnly ? BindingMode.OneWay : BindingMode.TwoWay,

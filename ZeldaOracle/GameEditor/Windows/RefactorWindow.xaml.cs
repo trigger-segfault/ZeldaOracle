@@ -196,6 +196,8 @@ namespace ZeldaEditor.Windows {
 			if (count > 0) {
 				editorControl.PopToOriginalAction();
 				editorControl.PropertyGrid.RefreshProperties();
+				editorControl.IsModified = true;
+				needsToSearch = true;
 			}
 		}
 

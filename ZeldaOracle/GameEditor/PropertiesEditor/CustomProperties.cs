@@ -22,36 +22,30 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Tiles;
 using System.Diagnostics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace ZeldaEditor.PropertiesEditor {
-	
-
-	//[TypeConverter(typeof(PropertiesContainer.CustomObjectConverter))]
 	public class PropertiesContainer : ICustomTypeDescriptor {
-		
-		private ZeldaPropertyGrid	propertyGrid;
-		private Properties			properties;
-		private EventCollection     events;
-		private List<Property>		propertyList;
-		private List<Event>			eventList;
-
-		private Dictionary<string, Type> typeEditors;
 
 		private static readonly Type EventEditor = typeof(EventPropertyEditor);
+
+		private static Dictionary<string, Type> typeEditors;
+
+
+		private ZeldaPropertyGrid	propertyGrid;
+		private IPropertyObject		propertyObject;
+		private IEventObject		eventObject;
+
+		private PropertyDescriptorCollection propertyDescriptors;
+		private PropertyDescriptorCollection eventDescriptors;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public PropertiesContainer(ZeldaPropertyGrid propertyGrid) {
-			this.properties		= null;
-			this.events         = null;
-			this.propertyList	= new List<Property>();
-			this.eventList      = new List<Event>();
-			this.propertyGrid	= propertyGrid;
-			this.typeEditors    = new Dictionary<string, Type>();
-
+		static PropertiesContainer() {
+			typeEditors = new Dictionary<string, Type>();
 
 			AddEditor<ResourcePropertyEditor<Animation>>("animation");
 			AddEditor<ResourcePropertyEditor<CollisionModel>>("collision_model");
@@ -72,64 +66,37 @@ namespace ZeldaEditor.PropertiesEditor {
 			AddEditor<PathPropertyEditor>("path");
 		}
 
-		public void AddEditor<Editor>(string typeName) where Editor : ITypeEditor {
+		public PropertiesContainer(ZeldaPropertyGrid propertyGrid, IPropertyObject obj) {
+			this.propertyGrid   = propertyGrid;
+
+			propertyObject	= obj;
+			if (obj is IEventObject)
+				eventObject = (IEventObject) obj;
+			
+			propertyDescriptors = CollectProperties();
+			eventDescriptors = CollectEvents();
+		}
+
+		public static void AddEditor<Editor>(string typeName) where Editor : ITypeEditor {
 			typeEditors.Add(typeName, typeof(Editor));
 		}
 		
-		//-----------------------------------------------------------------------------
-		// Mutators
-		//-----------------------------------------------------------------------------
-
-		public void Clear() {
-			properties = null;
-			events = null;
-			propertyList.Clear();
-			eventList.Clear();
-		}
-
-		public void AddProperties(Properties properties) {
-			foreach (Property property in  properties.GetAllProperties()) {
-				if (property.IsBrowsable)
-					propertyList.Add(property);
-			}
-		}
-
-		public void AddEvents(EventCollection events) {
-			if (events != null) {
-				foreach (Event evnt in events.GetEvents()) {
-					eventList.Add(evnt);
-				}
-			}
-		}
-
-		public void Set(Properties properties, EventCollection events) {
-			Clear();
-			this.properties = properties;
-			this.events = events;
-			AddProperties(properties);
-			AddEvents(events);
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
+		
 		[Browsable(false)]
 		public Properties Properties {
-			get { return properties; }
+			get { return propertyObject?.Properties; }
 		}
 
 		[Browsable(false)]
-		public List<Property> PropertyList {
-			get { return propertyList; }
+		public EventCollection Events {
+			get { return eventObject?.Events; }
 		}
 
-		[Browsable(false)]
-		public ZeldaPropertyGrid PropertyGrid {
-			get { return propertyGrid; }
-		}
-		
+
 		//-----------------------------------------------------------------------------
 		// ICustomTypeDescriptor
 		//-----------------------------------------------------------------------------
@@ -181,28 +148,23 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		/// <summary>Gets the properties.</summary>
 		PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) {
-			if (propertyGrid.IsEvents) {
-				return CollectEvents();
-			}
-			else {
-				return CollectProperties();
-			}
+			if (propertyGrid.IsEvents)
+				return eventDescriptors;
+			else
+				return propertyDescriptors;
 		}
 
 		public PropertyDescriptorCollection CollectProperties() {
 			List<PropertyDescriptor> props  = new List<PropertyDescriptor>();
-			
-			// Create the list of property descriptors.
-			for (int i = 0; i < propertyList.Count; i++) {
-				Property property   = propertyList[i];
+
+			if (propertyObject == null)
+				return new PropertyDescriptorCollection(props.ToArray());
+
+			// Create the list of property descriptors
+			foreach (Property property in Properties.GetAllProperties()) {
 				PropertyDocumentation documentation = property.Documentation;
-
-				bool isEvent = (documentation != null && documentation.EditorType == "script");
-
-				if (isEvent != propertyGrid.IsEvents)
-					continue;
-
-				// Find the editor.
+				
+				// Find the editor
 				List<Attribute> propertyAttributes = new List<Attribute>();
 				EditorAttribute editorAttr = null;
 				if (documentation != null && documentation.EditorType != "") {
@@ -218,17 +180,17 @@ namespace ZeldaEditor.PropertiesEditor {
 				if (editorAttr != null)
 					propertyAttributes.Add(editorAttr);
 
-				if (properties.BaseProperties != null) {
-					Property baseProperty = properties.BaseProperties.GetProperty(property.Name, true);
+				if (Properties.BaseProperties != null) {
+					Property baseProperty = Properties.BaseProperties.GetProperty(property.Name, true);
 					if (baseProperty != null) {
 						var defaultAttr = new DefaultValueAttribute(baseProperty.ObjectValue);
 						propertyAttributes.Add(defaultAttr);
 					}
 				}
 
-				// Create the property descriptor.
-				props.Add(new CustomPropertyDescriptor(propertyGrid.EditorControl, propertyGrid.PropertyObject,
-					property.Name, properties, propertyAttributes.ToArray()));
+				// Create the property descriptor
+				props.Add(new CustomPropertyDescriptor(propertyGrid.EditorControl, propertyObject,
+					property.Name, Properties, propertyAttributes.ToArray()));
 			}
 			return new PropertyDescriptorCollection(props.ToArray());
 		}
@@ -237,19 +199,19 @@ namespace ZeldaEditor.PropertiesEditor {
 		public PropertyDescriptorCollection CollectEvents() {
 			List<PropertyDescriptor> props  = new List<PropertyDescriptor>();
 
-			if (events == null)
-				new PropertyDescriptorCollection(props.ToArray());
+			if (eventObject == null)
+				return new PropertyDescriptorCollection(props.ToArray());
 
-			// Create the list of property descriptors.
-			foreach (Event evnt in events.GetEvents()) {
-				// Find the editor.
+			// Create the list of property descriptors
+			foreach (Event evnt in Events.GetEvents()) {
+				// Find the editor
 				List<Attribute> eventAttributes = new List<Attribute>();
 				eventAttributes.Add(new EditorAttribute(EventEditor, EventEditor));
 				eventAttributes.Add(new DefaultValueAttribute(""));
 				
-				// Create the event descriptor.
-				props.Add(new CustomEventDescriptor(propertyGrid.EditorControl, propertyGrid.EventObject,
-					evnt.Name, events, eventAttributes.ToArray()));
+				// Create the event descriptor
+				props.Add(new CustomEventDescriptor(propertyGrid.EditorControl, eventObject,
+					evnt.Name, Events, eventAttributes.ToArray()));
 			}
 			return new PropertyDescriptorCollection(props.ToArray());
 		}
@@ -257,7 +219,7 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		/// <summary>gets the Properties.</summary>
 		PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() {
-			return ((ICustomTypeDescriptor)this).GetProperties(null);
+			return ((ICustomTypeDescriptor) this).GetProperties(null);
 		}
 
 		/// <summary>Gets the property owner.</summary>
