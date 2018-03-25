@@ -178,7 +178,8 @@ namespace ZeldaOracle.Common.Util {
 			if (!typeof(T).IsInteger())
 				throw new ArgumentException("Unsupported type for for " +
 					"BinaryCounter.ReadStream!");
-			int size = (int) (object) reader.ReadGeneric<T>();
+			
+			int size = Convert.ToInt32(reader.ReadGeneric<T>());
 			if (size < 0)
 				throw new IOException("Size cannot be less than zero!");
 			return new MemoryStream(reader.ReadBytes(size));
@@ -194,7 +195,7 @@ namespace ZeldaOracle.Common.Util {
 			if (!typeof(T).IsInteger())
 				throw new ArgumentException("Unsupported type for for " +
 					"BinaryCounter.ReadBytes!");
-			int size = (int) (object) reader.ReadGeneric<T>();
+			int size = Convert.ToInt32(reader.ReadGeneric<T>());
 			if (size < 0)
 				throw new IOException("Size cannot be less than zero!");
 			return reader.ReadBytes(size);
@@ -234,6 +235,8 @@ namespace ZeldaOracle.Common.Util {
 		/// <summary>Writes the accumulated size and returns to the end position.
 		/// Automatically sets the end position if unset.</summary>
 		public void WriteSizeAndReturn() {
+			if (!IsEndPositionSet)
+				SetEnd();
 			WriteAndReturn(Size);
 		}
 
@@ -309,7 +312,7 @@ namespace ZeldaOracle.Common.Util {
 
 		/// <summary>Gets the size as the numeric type T.</summary>
 		public T Size {
-			get { return (T) (object) (endPosition - ValueSize - startPosition); }
+			get { return (T) Convert.ChangeType(endPosition - ValueSize - startPosition, typeof(T)); }
 		}
 
 		/// <summary>Gets or sets the stored count value.</summary>
