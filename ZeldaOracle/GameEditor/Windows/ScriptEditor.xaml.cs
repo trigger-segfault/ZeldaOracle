@@ -14,9 +14,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml;
+using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Indentation;
-using ICSharpCode.CodeCompletion;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.CodeAnalysis.Options;
+using RoslynPad.Editor;
+//using ICSharpCode.CodeCompletion;
+using RoslynPad.Roslyn;
 using ZeldaEditor.Control;
 using ZeldaEditor.Scripting;
 using ZeldaEditor.Util;
@@ -42,12 +52,30 @@ namespace ZeldaEditor.Windows {
 		//private bool                        compileOnClose;
 		private StoppableTimer				timer;
 		private bool                        loaded;
+		private int scriptStart;
+		
+		private FieldInfo completionFieldInfo;
 
-		private static CSharpCompletion     completion;
+		private DocumentId documentID;
+
+		//private static CSharpCompletion     completion;
+
+		private static CustomRoslynHost host;
+		static IHighlightingDefinition highlightingDefinition;
 
 		public static void Initialize() {
-			completion = new CSharpCompletion(new ScriptProvider(),
-				Assemblies.Scripting);
+			/*List<Assembly> assemblies = new List<Assembly>();
+			assemblies.Add(Assembly.Load("RoslynPad.Roslyn.Windows"));
+			assemblies.Add(Assembly.Load("RoslynPad.Editor.Windows"));
+			//assemblies.AddRange(Assemblies.Scripting);
+			RoslynHostReferences refs = RoslynHostReferences.Default;
+			refs = refs.With(assemblyReferences: Assemblies.PureScripting);
+			host = new RoslynHost(additionalAssemblies: assemblies, references: refs);*/
+			host = new CustomRoslynHost();
+			var fullName = "ZeldaEditor.Themes.CSharpMultilineHighlighting.xshd";
+			using (var stream = typeof(TextMessageEditor).Assembly.GetManifestResourceStream(fullName))
+			using (var reader = new XmlTextReader(stream))
+				highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
 		}
 
 		public ScriptEditor(Script script, EditorControl editorControl,
@@ -86,15 +114,16 @@ namespace ZeldaEditor.Windows {
 				Title = "Script Editor: " + script.ID;
 				textBoxName.Text = script.ID;
 			}
-
-			editor.Completion = completion;
-			editor.Document.FileName = "dummyFileName.cs";
-			editor.Script = script;
-			editor.EditorControl = editorControl;
-			editor.Text = script.Code;
+			this.editor.Loaded += OnEditorLoaded;
+			//editor.Completion = completion;
+			//editor.Document.FileName = "dummyFileName.cs";
+			//editor.Script = script;
+			//editor.EditorControl = editorControl;
+			//editor.Text = script.Code;
+			editor.TextArea.TextEntering += OnTextEntering;
 			editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
 			editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
-			editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
+			//editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
 
 			// Selection Style
 			editor.TextArea.SelectionCornerRadius = 0;
@@ -111,11 +140,56 @@ namespace ZeldaEditor.Windows {
 			TextOptions.SetTextFormattingMode(editor, TextFormattingMode.Display);
 			editor.IsModified = false;
 			editor.Focus();
-			editor.TextArea.IndentationStrategy = new DefaultIndentationStrategy();
+			//editor.TextArea.IndentationStrategy = new DefaultIndentationStrategy();
 			UpdateStatusBar();
 			loaded = true;
+
+			completionFieldInfo = typeof(CodeTextEditor).GetField("_completionWindow", BindingFlags.Instance | BindingFlags.NonPublic);
 		}
 
+		private void OnTextEntering(object sender, TextCompositionEventArgs e) {
+			// Prevent typeing at the first index because we want it to be readonly
+			if (editor.CaretOffset == 0)
+				e.Handled = true;
+		}
+
+		private void OnEditorLoaded(object sender, RoutedEventArgs e2) {
+
+			editor.Loaded -= OnEditorLoaded;
+			string workDir = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+			/*DocumentCreationArgs args = new DocumentCreationArgs(
+					new ScriptTextContainer(editorControl, editor, script),
+					workDir);
+			editor.CreatingDocument += (o, e) => {
+				e.DocumentId = host.AddDocument(args);
+				//documentID = e.DocumentId;
+			};*/
+
+			
+			string code = editorControl.World.ScriptManager.CreateRoslynScriptCode(script, out scriptStart);
+			
+			documentID = editor.Initialize(host, new ClassificationHighlightColors(),
+				workDir, code);
+
+			var p = new TextSegmentReadOnlySectionProvider<TextSegment>(editor.TextArea.Document);
+			p.Segments.Add(new TextSegment() { StartOffset = 0, Length = scriptStart });
+			editor.TextArea.ReadOnlySectionProvider = p;
+			editor.CaretOffset = scriptStart;
+			editor.TextArea.TextView.LineTransformers.Add(new HighlightingColorizer(highlightingDefinition));
+			editor.IsModified = false;
+			//var space = host.CreateWorkspace();
+			/*var space = MSBuildWorkspace.Create();
+			var p = ProjectInfo.Create(null, VersionStamp.Default,
+				"derp", "derp.dll", LanguageNames.CSharp, );
+			var d = DocumentInfo.Create(null, null);
+			d.SourceCodeKind = SourceCodeKind.
+			p.ParseOptions.
+			space.SetCurrentSolution(Solution);
+			space.Options = DocumentOptionSet
+			Console.WriteLine(editor.CompletionProvider.GetType());
+			Console.WriteLine(editor.CompletionProvider.GetType());*/
+		}
 
 		private void OnCaretPositionChanged(object sender, EventArgs e) {
 			if (!loaded) return;
@@ -172,6 +246,7 @@ namespace ZeldaEditor.Windows {
 			}
 
 			if (DialogResult.HasValue && DialogResult.Value) {
+				host.CloseDocument(documentID);
 				editorControl.EditorWindow.WorldTreeView.RefreshScripts(!script.IsHidden, script.IsHidden);
 				editorControl.NeedsRecompiling = true;
 			}
@@ -206,8 +281,8 @@ namespace ZeldaEditor.Windows {
 						editorControl.World.RenameScript(script, newID);
 				}
 				previousName = newID;
-				previousCode = editor.Text;
-				script.Code = editor.Text;
+				previousCode = editor.Text.Substring(scriptStart);
+				script.Code = editor.Text.Substring(scriptStart);
 				editor.IsModified = false;
 				return true;
 			}
@@ -233,7 +308,7 @@ namespace ZeldaEditor.Windows {
 
 		// Begin compiling the script asyncronously.
 		private void BeginCompilingScript() {
-			script.Code = editor.Text;
+			script.Code = editor.Text.Substring(scriptStart);
 
 			editorControl.CompileScriptAsync(script, OnCompileComplete, true);
 
@@ -261,7 +336,7 @@ namespace ZeldaEditor.Windows {
 		private void OnCompileComplete(ScriptCompileResult results) {
 			Dispatcher.Invoke(() => {
 				// Update the script object.
-				script.Code             = editor.Text;
+				script.Code             = editor.Text.Substring(scriptStart);
 				script.Errors           = results.Errors;
 				script.Warnings         = results.Warnings;
 
@@ -292,7 +367,7 @@ namespace ZeldaEditor.Windows {
 
 		private void OnDeleteScript(object sender, RoutedEventArgs e) {
 			var result = MessageBoxResult.Yes;
-			if (string.IsNullOrWhiteSpace(previousCode) && string.IsNullOrWhiteSpace(editor.Text))
+			if (string.IsNullOrWhiteSpace(previousCode) && string.IsNullOrWhiteSpace(editor.Text.Substring(scriptStart)))
 				result = TriggerMessageBox.Show(this, MessageIcon.Warning, "Are you sure you want to delete this script?", "Delete Script", MessageBoxButton.YesNo);
 
 			if (result == MessageBoxResult.Yes) {

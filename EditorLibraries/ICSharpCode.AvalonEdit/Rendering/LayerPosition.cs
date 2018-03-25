@@ -76,7 +76,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		}
 
 		public static LayerPosition GetLayerPosition(UIElement layer) {
-			return (LayerPosition)layer.GetValue(LayerPositionProperty);
+			return (LayerPosition) layer.GetValue(LayerPositionProperty);
 		}
 
 		internal readonly KnownLayer KnownLayer;

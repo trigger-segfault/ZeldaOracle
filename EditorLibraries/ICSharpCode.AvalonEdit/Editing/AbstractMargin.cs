@@ -44,14 +44,14 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// </summary>
 		/// <remarks>Adding a margin to <see cref="TextArea.LeftMargins"/> will automatically set this property to the text area's TextView.</remarks>
 		public TextView TextView {
-			get { return (TextView)GetValue(TextViewProperty); }
+			get { return (TextView) GetValue(TextViewProperty); }
 			set { SetValue(TextViewProperty, value); }
 		}
 
 		static void OnTextViewChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) {
 			AbstractMargin margin = (AbstractMargin)dp;
 			margin.wasAutoAddedToTextView = false;
-			margin.OnTextViewChanged((TextView)e.OldValue, (TextView)e.NewValue);
+			margin.OnTextViewChanged((TextView) e.OldValue, (TextView) e.NewValue);
 		}
 
 		// automatically set/unset TextView property using ITextViewConnect

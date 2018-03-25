@@ -52,7 +52,7 @@ namespace ICSharpCode.AvalonEdit.Folding {
 		/// Gets/sets the Brush used for displaying the lines of folding markers.
 		/// </summary>
 		public Brush FoldingMarkerBrush {
-			get { return (Brush)GetValue(FoldingMarkerBrushProperty); }
+			get { return (Brush) GetValue(FoldingMarkerBrushProperty); }
 			set { SetValue(FoldingMarkerBrushProperty, value); }
 		}
 
@@ -67,7 +67,7 @@ namespace ICSharpCode.AvalonEdit.Folding {
 		/// Gets/sets the Brush used for displaying the background of folding markers.
 		/// </summary>
 		public Brush FoldingMarkerBackgroundBrush {
-			get { return (Brush)GetValue(FoldingMarkerBackgroundBrushProperty); }
+			get { return (Brush) GetValue(FoldingMarkerBackgroundBrushProperty); }
 			set { SetValue(FoldingMarkerBackgroundBrushProperty, value); }
 		}
 
@@ -83,7 +83,7 @@ namespace ICSharpCode.AvalonEdit.Folding {
 		/// Gets/sets the Brush used for displaying the lines of selected folding markers.
 		/// </summary>
 		public Brush SelectedFoldingMarkerBrush {
-			get { return (Brush)GetValue(SelectedFoldingMarkerBrushProperty); }
+			get { return (Brush) GetValue(SelectedFoldingMarkerBrushProperty); }
 			set { SetValue(SelectedFoldingMarkerBrushProperty, value); }
 		}
 
@@ -99,21 +99,21 @@ namespace ICSharpCode.AvalonEdit.Folding {
 		/// Gets/sets the Brush used for displaying the background of selected folding markers.
 		/// </summary>
 		public Brush SelectedFoldingMarkerBackgroundBrush {
-			get { return (Brush)GetValue(SelectedFoldingMarkerBackgroundBrushProperty); }
+			get { return (Brush) GetValue(SelectedFoldingMarkerBackgroundBrushProperty); }
 			set { SetValue(SelectedFoldingMarkerBackgroundBrushProperty, value); }
 		}
 
 		static void OnUpdateBrushes(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			FoldingMargin m = null;
 			if (d is FoldingMargin)
-				m = (FoldingMargin)d;
+				m = (FoldingMargin) d;
 			else if (d is TextEditor)
-				m = ((TextEditor)d).TextArea.LeftMargins.FirstOrDefault(c => c is FoldingMargin) as FoldingMargin;
+				m = ((TextEditor) d).TextArea.LeftMargins.FirstOrDefault(c => c is FoldingMargin) as FoldingMargin;
 			if (m == null) return;
 			if (e.Property.Name == FoldingMarkerBrushProperty.Name)
-				m.foldingControlPen = MakeFrozenPen((Brush)e.NewValue);
+				m.foldingControlPen = MakeFrozenPen((Brush) e.NewValue);
 			if (e.Property.Name == SelectedFoldingMarkerBrushProperty.Name)
-				m.selectedFoldingControlPen = MakeFrozenPen((Brush)e.NewValue);
+				m.selectedFoldingControlPen = MakeFrozenPen((Brush) e.NewValue);
 		}
 		#endregion
 

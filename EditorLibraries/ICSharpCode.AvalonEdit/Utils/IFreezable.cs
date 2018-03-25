@@ -78,7 +78,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 		/// </summary>
 		public static T GetFrozenClone<T>(T item) where T : IFreezable, ICloneable {
 			if (!item.IsFrozen) {
-				item = (T)item.Clone();
+				item = (T) item.Clone();
 				item.Freeze();
 			}
 			return item;

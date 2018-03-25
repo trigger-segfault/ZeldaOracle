@@ -79,7 +79,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		}
 
 		public override bool Equals(object obj) {
-			return (obj is SimpleSegment) && Equals((SimpleSegment)obj);
+			return (obj is SimpleSegment) && Equals((SimpleSegment) obj);
 		}
 
 		public bool Equals(SimpleSegment other) {

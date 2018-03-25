@@ -103,7 +103,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		}
 
 		void CreateContext() {
-			hwndSource = (HwndSource)PresentationSource.FromVisual(this.textArea);
+			hwndSource = (HwndSource) PresentationSource.FromVisual(this.textArea);
 			if (hwndSource != null) {
 				if (isReadOnly) {
 					defaultImeWnd = IntPtr.Zero;

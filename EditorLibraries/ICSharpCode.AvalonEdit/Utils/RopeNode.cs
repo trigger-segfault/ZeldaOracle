@@ -151,7 +151,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 				int leftLength = leftSide * NodeSize;
 				result.left = CreateNodes(leftSide, leftLength);
 				result.right = CreateNodes(rightSide, totalLength - leftLength);
-				result.height = (byte)(1 + Math.Max(result.left.height, result.right.height));
+				result.height = (byte) (1 + Math.Max(result.left.height, result.right.height));
 			}
 			return result;
 		}
@@ -198,7 +198,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 			}
 
 			Debug.Assert(Math.Abs(this.Balance) <= 1);
-			this.height = (byte)(1 + Math.Max(left.height, right.height));
+			this.height = (byte) (1 + Math.Max(left.height, right.height));
 		}
 
 		void RotateLeft() {
@@ -220,7 +220,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 			this.left.left = a;
 			this.left.right = b;
 			this.left.length = a.length + b.length;
-			this.left.height = (byte)(1 + Math.Max(a.height, b.height));
+			this.left.height = (byte) (1 + Math.Max(a.height, b.height));
 			this.right = c;
 
 			this.left.MergeIfPossible();
@@ -245,7 +245,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 			this.right.left = b;
 			this.right.right = c;
 			this.right.length = b.length + c.length;
-			this.right.height = (byte)(1 + Math.Max(b.height, c.height));
+			this.right.height = (byte) (1 + Math.Max(b.height, c.height));
 			this.left = a;
 
 			this.right.MergeIfPossible();

@@ -108,7 +108,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// This is a dependency property.
 		/// </summary>
 		public TextDocument Document {
-			get { return (TextDocument)GetValue(DocumentProperty); }
+			get { return (TextDocument) GetValue(DocumentProperty); }
 			set { SetValue(DocumentProperty, value); }
 		}
 
@@ -127,7 +127,7 @@ namespace ICSharpCode.AvalonEdit {
 		}
 
 		static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) {
-			((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
+			((TextEditor) dp).OnDocumentChanged((TextDocument) e.OldValue, (TextDocument) e.NewValue);
 		}
 
 		void OnDocumentChanged(TextDocument oldValue, TextDocument newValue) {
@@ -156,7 +156,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// Gets/Sets the options currently used by the text editor.
 		/// </summary>
 		public TextEditorOptions Options {
-			get { return (TextEditorOptions)GetValue(OptionsProperty); }
+			get { return (TextEditorOptions) GetValue(OptionsProperty); }
 			set { SetValue(OptionsProperty, value); }
 		}
 
@@ -175,7 +175,7 @@ namespace ICSharpCode.AvalonEdit {
 		}
 
 		static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) {
-			((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
+			((TextEditor) dp).OnOptionsChanged((TextEditorOptions) e.OldValue, (TextEditorOptions) e.NewValue);
 		}
 
 		void OnOptionsChanged(TextEditorOptions oldValue, TextEditorOptions newValue) {
@@ -192,7 +192,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// <inheritdoc cref="IWeakEventListener.ReceiveWeakEvent"/>
 		protected virtual bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e) {
 			if (managerType == typeof(PropertyChangedWeakEventManager)) {
-				OnOptionChanged((PropertyChangedEventArgs)e);
+				OnOptionChanged((PropertyChangedEventArgs) e);
 				return true;
 			}
 			else if (managerType == typeof(TextDocumentWeakEventManager.TextChanged)) {
@@ -200,7 +200,7 @@ namespace ICSharpCode.AvalonEdit {
 				return true;
 			}
 			else if (managerType == typeof(PropertyChangedEventManager)) {
-				return HandleIsOriginalChanged((PropertyChangedEventArgs)e);
+				return HandleIsOriginalChanged((PropertyChangedEventArgs) e);
 			}
 			return false;
 		}
@@ -261,7 +261,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// </summary>
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
-			scrollViewer = (ScrollViewer)Template.FindName("PART_ScrollViewer", this);
+			scrollViewer = (ScrollViewer) Template.FindName("PART_ScrollViewer", this);
 		}
 
 		/// <summary>
@@ -303,14 +303,14 @@ namespace ICSharpCode.AvalonEdit {
 		/// Gets/sets the syntax highlighting definition used to colorize the text.
 		/// </summary>
 		public IHighlightingDefinition SyntaxHighlighting {
-			get { return (IHighlightingDefinition)GetValue(SyntaxHighlightingProperty); }
+			get { return (IHighlightingDefinition) GetValue(SyntaxHighlightingProperty); }
 			set { SetValue(SyntaxHighlightingProperty, value); }
 		}
 
 		IVisualLineTransformer colorizer;
 
 		static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition);
+			((TextEditor) d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition);
 		}
 
 		void OnSyntaxHighlightingChanged(IHighlightingDefinition newValue) {
@@ -353,7 +353,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// HorizontalScrollBarVisibility setting.
 		/// </remarks>
 		public bool WordWrap {
-			get { return (bool)GetValue(WordWrapProperty); }
+			get { return (bool) GetValue(WordWrapProperty); }
 			set { SetValue(WordWrapProperty, Boxes.Box(value)); }
 		}
 		#endregion
@@ -372,21 +372,21 @@ namespace ICSharpCode.AvalonEdit {
 		/// <see cref="Editing.TextArea.ReadOnlySectionProvider">TextArea.ReadOnlySectionProvider</see>.
 		/// </summary>
 		public bool IsReadOnly {
-			get { return (bool)GetValue(IsReadOnlyProperty); }
+			get { return (bool) GetValue(IsReadOnlyProperty); }
 			set { SetValue(IsReadOnlyProperty, Boxes.Box(value)); }
 		}
 
 		static void OnIsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			TextEditor editor = d as TextEditor;
 			if (editor != null) {
-				if ((bool)e.NewValue)
+				if ((bool) e.NewValue)
 					editor.TextArea.ReadOnlySectionProvider = ReadOnlySectionDocument.Instance;
 				else
 					editor.TextArea.ReadOnlySectionProvider = NoReadOnlySections.Instance;
 
 				TextEditorAutomationPeer peer = TextEditorAutomationPeer.FromElement(editor) as TextEditorAutomationPeer;
 				if (peer != null) {
-					peer.RaiseIsReadOnlyChanged((bool)e.OldValue, (bool)e.NewValue);
+					peer.RaiseIsReadOnlyChanged((bool) e.OldValue, (bool) e.NewValue);
 				}
 			}
 		}
@@ -404,7 +404,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// Gets/Sets the 'modified' flag.
 		/// </summary>
 		public bool IsModified {
-			get { return (bool)GetValue(IsModifiedProperty); }
+			get { return (bool) GetValue(IsModifiedProperty); }
 			set { SetValue(IsModifiedProperty, Boxes.Box(value)); }
 		}
 
@@ -414,7 +414,7 @@ namespace ICSharpCode.AvalonEdit {
 				TextDocument document = editor.Document;
 				if (document != null) {
 					UndoStack undoStack = document.UndoStack;
-					if ((bool)e.NewValue) {
+					if ((bool) e.NewValue) {
 						if (undoStack.IsOriginalFile)
 							undoStack.DiscardOriginalFileMarker();
 					}
@@ -451,14 +451,14 @@ namespace ICSharpCode.AvalonEdit {
 		/// Specifies whether line numbers are shown on the left to the text view.
 		/// </summary>
 		public bool ShowLineNumbers {
-			get { return (bool)GetValue(ShowLineNumbersProperty); }
+			get { return (bool) GetValue(ShowLineNumbersProperty); }
 			set { SetValue(ShowLineNumbersProperty, Boxes.Box(value)); }
 		}
 
 		static void OnShowLineNumbersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			TextEditor editor = (TextEditor)d;
 			var leftMargins = editor.TextArea.LeftMargins;
-			if ((bool)e.NewValue) {
+			if ((bool) e.NewValue) {
 				LineNumberMargin lineNumbers = new LineNumberMargin();
 				Line line = (Line)DottedLineMargin.Create();
 				leftMargins.Insert(0, lineNumbers);
@@ -493,7 +493,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// Gets/sets the Brush used for displaying the foreground color of line numbers.
 		/// </summary>
 		public Brush LineNumbersForeground {
-			get { return (Brush)GetValue(LineNumbersForegroundProperty); }
+			get { return (Brush) GetValue(LineNumbersForegroundProperty); }
 			set { SetValue(LineNumbersForegroundProperty, value); }
 		}
 
@@ -914,7 +914,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// </remarks>
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Encoding Encoding {
-			get { return (Encoding)GetValue(EncodingProperty); }
+			get { return (Encoding) GetValue(EncodingProperty); }
 			set { SetValue(EncodingProperty, value); }
 		}
 
@@ -1019,7 +1019,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// Gets/Sets the horizontal scroll bar visibility.
 		/// </summary>
 		public ScrollBarVisibility HorizontalScrollBarVisibility {
-			get { return (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty); }
+			get { return (ScrollBarVisibility) GetValue(HorizontalScrollBarVisibilityProperty); }
 			set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
 		}
 
@@ -1032,7 +1032,7 @@ namespace ICSharpCode.AvalonEdit {
 		/// Gets/Sets the vertical scroll bar visibility.
 		/// </summary>
 		public ScrollBarVisibility VerticalScrollBarVisibility {
-			get { return (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); }
+			get { return (ScrollBarVisibility) GetValue(VerticalScrollBarVisibilityProperty); }
 			set { SetValue(VerticalScrollBarVisibilityProperty, value); }
 		}
 		#endregion

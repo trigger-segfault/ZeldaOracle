@@ -53,7 +53,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets/Sets the popup that is used as drop-down content.
 		/// </summary>
 		public Popup DropDownContent {
-			get { return (Popup)GetValue(DropDownContentProperty); }
+			get { return (Popup) GetValue(DropDownContentProperty); }
 			set { SetValue(DropDownContentProperty, value); }
 		}
 
@@ -61,7 +61,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets whether the drop-down is opened.
 		/// </summary>
 		public bool IsDropDownContentOpen {
-			get { return (bool)GetValue(IsDropDownContentOpenProperty); }
+			get { return (bool) GetValue(IsDropDownContentOpenProperty); }
 			protected set { SetValue(IsDropDownContentOpenPropertyKey, value); }
 		}
 
@@ -77,7 +77,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		}
 
 		void DropDownContent_Closed(object sender, EventArgs e) {
-			((Popup)sender).Closed -= DropDownContent_Closed;
+			((Popup) sender).Closed -= DropDownContent_Closed;
 			this.IsDropDownContentOpen = false;
 		}
 	}

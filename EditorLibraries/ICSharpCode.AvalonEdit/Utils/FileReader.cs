@@ -137,7 +137,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 					stream.Position = 0;
 					return new StreamReader(stream);
 				default:
-					return AutoDetect(stream, (byte)firstByte, (byte)secondByte, defaultEncoding);
+					return AutoDetect(stream, (byte) firstByte, (byte) secondByte, defaultEncoding);
 				}
 			}
 			else {
@@ -169,7 +169,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 					b = secondByte;
 				}
 				else {
-					b = (byte)fs.ReadByte();
+					b = (byte) fs.ReadByte();
 				}
 				if (b < 0x80) {
 					// normal ASCII character

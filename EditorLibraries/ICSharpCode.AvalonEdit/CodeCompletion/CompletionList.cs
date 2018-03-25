@@ -60,7 +60,7 @@ namespace ICSharpCode.AvalonEdit.CodeCompletion {
 		/// If EmptyTemplate is null, nothing will be shown.
 		/// </summary>
 		public ControlTemplate EmptyTemplate {
-			get { return (ControlTemplate)GetValue(EmptyTemplateProperty); }
+			get { return (ControlTemplate) GetValue(EmptyTemplateProperty); }
 			set { SetValue(EmptyTemplateProperty, value); }
 		}
 
