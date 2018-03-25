@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:scripting="clr-namespace:ZeldaEditor.Scripting"
+        xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         xmlns:cmd="clr-namespace:ZeldaEditor"
         mc:Ignorable="d"
         Title="Script Editor" Height="400" Width="631" Icon="/Resources/Icons/Script.png" Closing="OnWindowClosing" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
@@ -49,7 +50,7 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
-        <scripting:ScriptTextEditor x:Name="editor"/>
+        <roslyn:RoslynCodeEditor x:Name="editor"/>
     </DockPanel>
 
 </Window>

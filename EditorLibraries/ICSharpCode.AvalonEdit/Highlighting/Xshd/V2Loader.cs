@@ -296,7 +296,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd {
 			if (color.StartsWith("SystemColors.", StringComparison.Ordinal))
 				return GetSystemColorBrush(lineInfo, color);
 			else
-				return FixedColorHighlightingBrush((Color?)ColorConverter.ConvertFromInvariantString(color));
+				return FixedColorHighlightingBrush((Color?) ColorConverter.ConvertFromInvariantString(color));
 		}
 
 		internal static SystemColorHighlightingBrush GetSystemColorBrush(IXmlLineInfo lineInfo, string name) {
@@ -317,13 +317,13 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd {
 		static FontWeight? ParseFontWeight(string fontWeight) {
 			if (string.IsNullOrEmpty(fontWeight))
 				return null;
-			return (FontWeight?)FontWeightConverter.ConvertFromInvariantString(fontWeight);
+			return (FontWeight?) FontWeightConverter.ConvertFromInvariantString(fontWeight);
 		}
 
 		static FontStyle? ParseFontStyle(string fontStyle) {
 			if (string.IsNullOrEmpty(fontStyle))
 				return null;
-			return (FontStyle?)FontStyleConverter.ConvertFromInvariantString(fontStyle);
+			return (FontStyle?) FontStyleConverter.ConvertFromInvariantString(fontStyle);
 		}
 		#endregion
 	}

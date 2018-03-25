@@ -275,7 +275,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 						// If word-wrap is enabled and the segment continues into the next line,
 						// or if the extendToFullWidthAtLineEnd option is used (segmentEndVC == int.MaxValue),
 						// we select the full width of the viewport.
-						right = Math.Max(((IScrollInfo)textView).ExtentWidth, ((IScrollInfo)textView).ViewportWidth);
+						right = Math.Max(((IScrollInfo) textView).ExtentWidth, ((IScrollInfo) textView).ViewportWidth);
 					}
 					else {
 						right = visualLine.GetTextLineVisualXPosition(lastTextLine, segmentEndVC);

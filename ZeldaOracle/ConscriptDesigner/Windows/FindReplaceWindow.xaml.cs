@@ -21,7 +21,6 @@ using ConscriptDesigner.Controls.TextEditing;
 using ConscriptDesigner.Util;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Rendering;
-using ICSharpCode.NRefactory;
 using ZeldaOracle.Common.Util;
 
 namespace ConscriptDesigner.Windows {

@@ -56,7 +56,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// <inheritdoc/>
 		protected override Size MeasureOverride(Size availableSize) {
 			typeface = this.CreateTypeface();
-			emSize = (double)GetValue(TextBlock.FontSizeProperty);
+			emSize = (double) GetValue(TextBlock.FontSizeProperty);
 
 			FormattedText text = TextFormatterFactory.CreateFormattedText(
 				this,

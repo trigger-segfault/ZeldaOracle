@@ -263,7 +263,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd {
 
 			HighlightingColor GetColor(XshdElement position, XshdReference<XshdColor> colorReference) {
 				if (colorReference.InlineElement != null) {
-					return (HighlightingColor)colorReference.InlineElement.AcceptVisitor(this);
+					return (HighlightingColor) colorReference.InlineElement.AcceptVisitor(this);
 				}
 				else if (colorReference.ReferencedElement != null) {
 					IHighlightingDefinition definition = GetDefinition(position, colorReference.ReferencedDefinition);
@@ -290,7 +290,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd {
 
 			HighlightingRuleSet GetRuleSet(XshdElement position, XshdReference<XshdRuleSet> ruleSetReference) {
 				if (ruleSetReference.InlineElement != null) {
-					return (HighlightingRuleSet)ruleSetReference.InlineElement.AcceptVisitor(this);
+					return (HighlightingRuleSet) ruleSetReference.InlineElement.AcceptVisitor(this);
 				}
 				else if (ruleSetReference.ReferencedElement != null) {
 					IHighlightingDefinition definition = GetDefinition(position, ruleSetReference.ReferencedDefinition);

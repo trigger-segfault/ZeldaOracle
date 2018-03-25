@@ -184,7 +184,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 			}
 			internal set {
 				Debug.Assert(value >= 0 && value <= 2);
-				delimiterLength = (byte)value;
+				delimiterLength = (byte) value;
 			}
 		}
 		#endregion

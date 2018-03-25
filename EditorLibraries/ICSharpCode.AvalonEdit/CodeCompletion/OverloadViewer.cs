@@ -44,7 +44,7 @@ namespace ICSharpCode.AvalonEdit.CodeCompletion {
 		/// Gets/Sets the text between the Up and Down buttons.
 		/// </summary>
 		public string Text {
-			get { return (string)GetValue(TextProperty); }
+			get { return (string) GetValue(TextProperty); }
 			set { SetValue(TextProperty, value); }
 		}
 
@@ -75,7 +75,7 @@ namespace ICSharpCode.AvalonEdit.CodeCompletion {
 		/// Gets/Sets the item provider.
 		/// </summary>
 		public IOverloadProvider Provider {
-			get { return (IOverloadProvider)GetValue(ProviderProperty); }
+			get { return (IOverloadProvider) GetValue(ProviderProperty); }
 			set { SetValue(ProviderProperty, value); }
 		}
 
@@ -98,7 +98,7 @@ namespace ICSharpCode.AvalonEdit.CodeCompletion {
 
 	sealed class CollapseIfSingleOverloadConverter : IValueConverter {
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-			return ((int)value < 2) ? Visibility.Collapsed : Visibility.Visible;
+			return ((int) value < 2) ? Visibility.Collapsed : Visibility.Visible;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

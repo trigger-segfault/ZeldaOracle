@@ -298,6 +298,26 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			return code;
 		}
 
+		/// <summary>Creates script code for use with RoslynPad's script editor.</summary>
+		public string CreateRoslynScriptCode(Script script, out int scriptStart) {
+			string code = "";
+			code += "// Members:" + Environment.NewLine;
+			foreach (FieldInfo fieldInfo in typeof(ZeldaAPI.CustomScriptBase).GetFields()) {
+				code += fieldInfo.FieldType.Name + " " + fieldInfo.Name + ";" + Environment.NewLine;
+			}
+			if (script.ParameterCount > 0) {
+				code += Environment.NewLine;
+				code += "// Parameters:" + Environment.NewLine;
+				foreach (ScriptParameter parameter in script.Parameters) {
+					code += parameter.Type + " " + parameter.Name + ";" +  Environment.NewLine;
+				}
+			}
+			code += Environment.NewLine;
+			scriptStart = code.Length;
+			code += script.Code;
+			return code;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Static Methods

@@ -75,12 +75,12 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd {
 			if (info == null)
 				throw new ArgumentNullException("info");
 			this.Name = info.GetString("Name");
-			this.Foreground = (HighlightingBrush)info.GetValue("Foreground", typeof(HighlightingBrush));
-			this.Background = (HighlightingBrush)info.GetValue("Background", typeof(HighlightingBrush));
+			this.Foreground = (HighlightingBrush) info.GetValue("Foreground", typeof(HighlightingBrush));
+			this.Background = (HighlightingBrush) info.GetValue("Background", typeof(HighlightingBrush));
 			if (info.GetBoolean("HasWeight"))
 				this.FontWeight = System.Windows.FontWeight.FromOpenTypeWeight(info.GetInt32("Weight"));
 			if (info.GetBoolean("HasStyle"))
-				this.FontStyle = (FontStyle?)new FontStyleConverter().ConvertFromInvariantString(info.GetString("Style"));
+				this.FontStyle = (FontStyle?) new FontStyleConverter().ConvertFromInvariantString(info.GetString("Style"));
 			this.ExampleText = info.GetString("ExampleText");
 			if (info.GetBoolean("HasUnderline"))
 				this.Underline = info.GetBoolean("Underline");

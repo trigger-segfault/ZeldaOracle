@@ -135,12 +135,12 @@ namespace ICSharpCode.AvalonEdit.Editing {
 			Rect characterBounds = textArea.TextView.GetCharacterBounds(textArea.Caret.Position, source);
 			CompositionForm form = new CompositionForm();
 			form.dwStyle = 0x0020;
-			form.ptCurrentPos.x = (int)Math.Max(characterBounds.Left, textViewBounds.Left);
-			form.ptCurrentPos.y = (int)Math.Max(characterBounds.Top, textViewBounds.Top);
-			form.rcArea.left = (int)textViewBounds.Left;
-			form.rcArea.top = (int)textViewBounds.Top;
-			form.rcArea.right = (int)textViewBounds.Right;
-			form.rcArea.bottom = (int)textViewBounds.Bottom;
+			form.ptCurrentPos.x = (int) Math.Max(characterBounds.Left, textViewBounds.Left);
+			form.ptCurrentPos.y = (int) Math.Max(characterBounds.Top, textViewBounds.Top);
+			form.rcArea.left = (int) textViewBounds.Left;
+			form.rcArea.top = (int) textViewBounds.Top;
+			form.rcArea.right = (int) textViewBounds.Right;
+			form.rcArea.bottom = (int) textViewBounds.Bottom;
 			return ImmSetCompositionWindow(hIMC, ref form);
 		}
 
@@ -150,7 +150,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 			LOGFONT lf = new LOGFONT();
 			Rect characterBounds = textArea.TextView.GetCharacterBounds(textArea.Caret.Position, source);
 			lf.lfFaceName = textArea.FontFamily.Source;
-			lf.lfHeight = (int)characterBounds.Height;
+			lf.lfHeight = (int) characterBounds.Height;
 			return ImmSetCompositionFont(hIMC, ref lf);
 		}
 

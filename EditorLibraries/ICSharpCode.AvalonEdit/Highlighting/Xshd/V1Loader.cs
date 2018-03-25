@@ -131,13 +131,13 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd {
 				int r = Int32.Parse(c.Substring(1 + offset,2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 				int g = Int32.Parse(c.Substring(3 + offset,2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 				int b = Int32.Parse(c.Substring(5 + offset,2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-				return new SimpleHighlightingBrush(Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b));
+				return new SimpleHighlightingBrush(Color.FromArgb((byte) a, (byte) r, (byte) g, (byte) b));
 			}
 			else if (c.StartsWith("SystemColors.", StringComparison.Ordinal)) {
 				return V2Loader.GetSystemColorBrush(null, c);
 			}
 			else {
-				return new SimpleHighlightingBrush((Color)V2Loader.ColorConverter.ConvertFromInvariantString(c));
+				return new SimpleHighlightingBrush((Color) V2Loader.ColorConverter.ConvertFromInvariantString(c));
 			}
 		}
 
