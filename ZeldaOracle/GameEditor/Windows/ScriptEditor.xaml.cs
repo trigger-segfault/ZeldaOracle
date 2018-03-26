@@ -303,9 +303,20 @@ namespace ZeldaEditor.Windows {
 
 		private void UpdateStatusBar() {
 			int line = (editor.TextArea.Caret.Position.Line - lineStart);
-			statusLine.Content = "Line " + line;
-			statusColumn.Content = "Col " + editor.TextArea.Caret.Position.Column;
-			statusChar.Content = "Char " + editor.CaretOffset;
+			if (line <= 0) {
+				statusLine.Content = "Line -";
+				statusColumn.Content = "Col -";
+				statusChar.Content = "Char -";
+			}
+			else {
+				int visualColumn = editor.TextArea.Caret.Position.VisualColumn;
+				statusLine.Content = "Line " + line;
+				if (visualColumn == -1)
+					statusColumn.Content = "Col ?";
+				else
+					statusColumn.Content = "Col " + visualColumn;
+				statusChar.Content = "Char " + editor.TextArea.Caret.Position.Column;
+			}
 		}
 
 
