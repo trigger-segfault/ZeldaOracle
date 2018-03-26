@@ -352,7 +352,9 @@
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
     <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs" />
     <Compile Include="Controls\FolderTreeViewItem.cs" />
-    <Compile Include="Scripting\CustomRoslynHost.cs" />
+    <Compile Include="Scripting\NoBraceCompletionProvider.cs" />
+    <Compile Include="Scripting\ScriptRoslynHost.cs" />
+    <Compile Include="Scripting\ScriptFoldingStrategy.cs" />
     <Compile Include="Tools\ToolPan.cs" />
     <Compile Include="TreeViews\EventTreeViewItem.cs" />
     <Compile Include="Undo\ActionChangeEvent.cs" />
