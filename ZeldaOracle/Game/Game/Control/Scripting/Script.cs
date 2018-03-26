@@ -160,5 +160,10 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public bool HasWarnings {
 			get { return (warnings.Count > 0); }
 		}
+
+		/// <summary>Gets if the script has any parameters.</summary>
+		public bool HasParameteres {
+			get { return parameters.Any(); }
+		}
 	}
 }

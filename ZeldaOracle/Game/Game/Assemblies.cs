@@ -64,11 +64,12 @@ namespace ZeldaOracle.Game {
 			}
 		}
 
+		/// <summary>All of the using imports for scripting.</summary>
 		public static string[] ScriptUsings {
 			get {
 				return new string[] {
+					"System.Collections",
 					"System.Collections.Generic",
-					//"Console = System.Console",
 					"ZeldaAPI",
 					"ZeldaOracle.Game",
 					"ZeldaOracle.Game.API",

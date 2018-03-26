@@ -299,20 +299,26 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 
 		/// <summary>Creates script code for use with RoslynPad's script editor.</summary>
-		public string CreateRoslynScriptCode(Script script, out int scriptStart) {
+		public static string CreateRoslynScriptCode(Script script, out int scriptStart, out int lineStart) {
 			string code = "";
+			lineStart = 0;
 			code += "// Members:" + Environment.NewLine;
+			lineStart++;
 			foreach (FieldInfo fieldInfo in typeof(ZeldaAPI.CustomScriptBase).GetFields()) {
 				code += fieldInfo.FieldType.Name + " " + fieldInfo.Name + ";" + Environment.NewLine;
+				lineStart++;
 			}
 			if (script.ParameterCount > 0) {
 				code += Environment.NewLine;
 				code += "// Parameters:" + Environment.NewLine;
+				lineStart += 2;
 				foreach (ScriptParameter parameter in script.Parameters) {
 					code += parameter.Type + " " + parameter.Name + ";" +  Environment.NewLine;
+					lineStart++;
 				}
 			}
 			code += Environment.NewLine;
+			lineStart++;
 			scriptStart = code.Length;
 			code += script.Code;
 			return code;
@@ -332,12 +338,11 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		/// <summary>Creates the default usings.</summary>
 		public static string CreateUsingsString() {
-			return	"using System.Collections.Generic; " +
-					"using Console = System.Console; " +
-					"using ZeldaAPI; " +
-					"using ZeldaOracle.Game; " +
-					"using ZeldaOracle.Game.API; " +
-					"using ZeldaOracle.Common.Geometry; ";
+			string usings = "";
+			foreach (string use in Assemblies.ScriptUsings) {
+				usings += "using " + use + "; ";
+			}
+			return usings;
 		}
 
 		/// <summary>Creates the opening namespace and class.</summary>

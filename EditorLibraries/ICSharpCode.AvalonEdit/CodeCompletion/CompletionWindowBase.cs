@@ -22,6 +22,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 using ICSharpCode.AvalonEdit.Document;
@@ -37,6 +38,8 @@ namespace ICSharpCode.AvalonEdit.CodeCompletion {
 	public class CompletionWindowBase : Window {
 		static CompletionWindowBase() {
 			ResizeModeProperty.OverrideMetadata(typeof(CompletionWindowBase), new FrameworkPropertyMetadata(ResizeMode.NoResize));
+			AllowsTransparencyProperty.OverrideMetadata(typeof(CompletionWindowBase), new FrameworkPropertyMetadata(true));
+			BackgroundProperty.OverrideMetadata(typeof(CompletionWindowBase), new FrameworkPropertyMetadata(null));
 			WindowStyleProperty.OverrideMetadata(typeof(CompletionWindowBase), new FrameworkPropertyMetadata(WindowStyle.None));
 			ShowActivatedProperty.OverrideMetadata(typeof(CompletionWindowBase), new FrameworkPropertyMetadata(Boxes.False));
 			ShowInTaskbarProperty.OverrideMetadata(typeof(CompletionWindowBase), new FrameworkPropertyMetadata(Boxes.False));
