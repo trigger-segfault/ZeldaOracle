@@ -19,7 +19,7 @@
 using System;
 using System.Diagnostics;
 using System.Windows;
-
+using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 
@@ -54,6 +54,23 @@ namespace ICSharpCode.AvalonEdit.Editing {
 			margin.OnTextViewChanged((TextView) e.OldValue, (TextView) e.NewValue);
 		}
 
+		/// <summary>
+		/// Background dependency property.
+		/// </summary>
+		public static readonly DependencyProperty BackgroundProperty =
+			DependencyProperty.RegisterAttached("Background", typeof(Brush), typeof(AbstractMargin),
+												new FrameworkPropertyMetadata(null,
+													FrameworkPropertyMetadataOptions.Inherits |
+													FrameworkPropertyMetadataOptions.AffectsRender));
+
+		/// <summary>
+		/// Gets/sets the background brush for the margin.
+		/// </summary>
+		public Brush Background {
+			get { return (Brush) GetValue(BackgroundProperty); }
+			set { SetValue(BackgroundProperty, value); }
+		}
+
 		// automatically set/unset TextView property using ITextViewConnect
 		bool wasAutoAddedToTextView;
 
@@ -75,6 +92,13 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		}
 
 		TextDocument document;
+
+		/// <inheritdoc/>
+		protected override void OnRender(DrawingContext drawingContext) {
+			Rect rect = new Rect(RenderSize);
+			drawingContext.DrawRectangle(Background, new Pen(Background, 1), rect);
+			base.OnRender(drawingContext);
+		}
 
 		/// <summary>
 		/// Gets the document associated with the margin.

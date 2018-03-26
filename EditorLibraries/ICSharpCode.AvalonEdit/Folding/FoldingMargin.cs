@@ -210,6 +210,8 @@ namespace ICSharpCode.AvalonEdit.Folding {
 			if (TextView.VisualLines.Count == 0 || FoldingManager == null)
 				return;
 
+			base.OnRender(drawingContext);
+
 			var allTextLines = TextView.VisualLines.SelectMany(vl => vl.TextLines).ToList();
 			Pen[] colors = new Pen[allTextLines.Count + 1];
 			Pen[] endMarker = new Pen[allTextLines.Count];
@@ -217,8 +219,6 @@ namespace ICSharpCode.AvalonEdit.Folding {
 			CalculateFoldLinesForFoldingsActiveAtStart(allTextLines, colors, endMarker);
 			CalculateFoldLinesForMarkers(allTextLines, colors, endMarker);
 			DrawFoldLines(drawingContext, colors, endMarker);
-
-			base.OnRender(drawingContext);
 		}
 
 		/// <summary>

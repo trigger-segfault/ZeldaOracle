@@ -78,6 +78,8 @@ namespace ICSharpCode.AvalonEdit.Editing {
 			TextView textView = this.TextView;
 			Size renderSize = this.RenderSize;
 			if (textView != null && textView.VisualLinesValid) {
+				base.OnRender(drawingContext);
+
 				var foreground = (Brush)GetValue(Control.ForegroundProperty);
 				foreach (VisualLine line in textView.VisualLines) {
 					int lineNumber = line.FirstDocumentLine.LineNumber - StartingLine;

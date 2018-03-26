@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
+using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
@@ -180,17 +181,21 @@ namespace ZeldaEditor.Windows {
 				new HighlightingColorizer(highlightingDefinition));
 			editor.IsModified = false;
 
+			Line line = null;
 			foreach (var margin in editor.TextArea.LeftMargins) {
 				if (margin is LineNumberMargin) {
 					var lineNumbers = (LineNumberMargin) margin;
 					lineNumbers.StartingLine = lineStart;
 				}
 			}
-			
+			if (line != null)
+				editor.TextArea.LeftMargins.Remove(line);
+
 			foldingManager = FoldingManager.Install(editor.TextArea);
 			foldingStrategy = new ScriptFoldingStrategy();
 			foldingStrategy.UpdateFoldings(foldingManager, editor.Document,
 				scriptStart);
+			
 		}
 
 		private void OnCaretPositionChanged(object sender, EventArgs e) {
@@ -302,21 +307,32 @@ namespace ZeldaEditor.Windows {
 		}
 
 		private void UpdateStatusBar() {
-			int line = (editor.TextArea.Caret.Position.Line - lineStart);
-			if (line <= 0) {
+			var position = CaretPosition;
+			if (position.Line == -1) {
 				statusLine.Content = "Line -";
 				statusColumn.Content = "Col -";
 				statusChar.Content = "Char -";
 			}
 			else {
-				int visualColumn = editor.TextArea.Caret.Position.VisualColumn;
-				statusLine.Content = "Line " + line;
-				if (visualColumn == -1)
-					statusColumn.Content = "Col ?";
-				else
-					statusColumn.Content = "Col " + visualColumn;
-				statusChar.Content = "Char " + editor.TextArea.Caret.Position.Column;
+				statusLine.Content = "Line " + position.Line;
+				statusColumn.Content = "Col " + position.VisualColumn;
+				statusChar.Content = "Char " + position.Column;
 			}
+		}
+
+		private int CalculateVisualColumn() {
+			var position = editor.TextArea.Caret.Position;
+			int column = position.Column;
+			string line = editor.Text.Substring(editor.CaretOffset -
+				(position.Column - 1), position.Column - 1);
+			int tabSize = editor.Options.IndentationSize;
+			if (tabSize != 1) {
+				foreach (char c in line) {
+					if (c == '\t')
+						column += tabSize - 1;
+				}
+			}
+			return column;
 		}
 
 
@@ -326,6 +342,17 @@ namespace ZeldaEditor.Windows {
 
 		public bool IsCompiling {
 			get { return (compileTask != null); }
+		}
+
+		public TextViewPosition CaretPosition {
+			get {
+				if (editor.TextArea.Caret.Position.Line <= lineStart)
+					return new TextViewPosition(-1, -1, -1);
+				return new TextViewPosition(
+					editor.TextArea.Caret.Line - lineStart,
+					editor.TextArea.Caret.Column,
+					CalculateVisualColumn());
+			}
 		}
 
 
