@@ -355,6 +355,7 @@
     <Compile Include="Scripting\NoBraceCompletionProvider.cs" />
     <Compile Include="Scripting\ScriptRoslynHost.cs" />
     <Compile Include="Scripting\ScriptFoldingStrategy.cs" />
+    <Compile Include="Themes\Highlighting.cs" />
     <Compile Include="Tools\ToolPan.cs" />
     <Compile Include="TreeViews\EventTreeViewItem.cs" />
     <Compile Include="Undo\ActionChangeEvent.cs" />
@@ -908,4 +909,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" />
+  </Target>
 </Project>

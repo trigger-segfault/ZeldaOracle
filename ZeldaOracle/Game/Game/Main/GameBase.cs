@@ -104,8 +104,9 @@ namespace ZeldaOracle.Game.Main {
 			this.graphics.PreferMultiSampling	= true;
 			this.graphics.PreferredBackBufferWidth	= windowSize.X;
 			this.graphics.PreferredBackBufferHeight	= windowSize.Y;
-			
-			Form.Icon = new Icon("Game.ico");
+
+			using (Stream stream = Embedding.Get(nameof(ZeldaOracle), "Game.ico"))
+				Form.Icon = new Icon(stream);
 			Form.MinimumSize = new Size(32, 32);
 			Form.Shown += OnWindowShown;
 		}
@@ -131,12 +132,12 @@ namespace ZeldaOracle.Game.Main {
 			base.Initialize();
 
 			if (!isContentLoaded) {
-				// BAD STUFF.
+				// BAD STUFF
 				Exit();
 				return;
 			}
 
-			// Create and initialize the game.
+			// Create and initialize the game
 			game.Initialize();
 
 			Window.ClientSizeChanged += OnClientSizeChanged;
@@ -200,8 +201,8 @@ namespace ZeldaOracle.Game.Main {
 		// Events
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Called when the window is shown for the first time.
-		/// This event is primarily used to steal focus from the debug console on startup.</summary>
+		/// <summary>Called when the window is shown for the first time. This event is
+		/// primarily used to steal focus from the debug console on startup.</summary>
 		private void OnWindowShown(object sender, EventArgs e) {
 			Form.Activate();
 		}
@@ -242,7 +243,7 @@ namespace ZeldaOracle.Game.Main {
 				Mouse.Enable();
 				Keyboard.Update(gameTime);
 				GamePad.Update(gameTime);
-				Mouse.Update(gameTime, (IsFullScreen ? -Window.ClientBounds.Location.ToVector2F() : Vector2F.Zero));
+				Mouse.Update(gameTime, MouseOffset);
 			}
 			else {
 				Keyboard.Disable(false);
@@ -421,12 +422,25 @@ namespace ZeldaOracle.Game.Main {
 			texture.Dispose();
 		}
 
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Gets the mouse offset used for Mouse.Update.</summary>
+		private Vector2F MouseOffset {
+			get {
+				if (IsFullScreen)
+					return -Window.ClientBounds.Location.ToVector2F();
+				return Vector2F.Zero;
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		/// <summary>Returns the stored sprite batch class.</summary>
+
+				/// <summary>Returns the stored sprite batch class.</summary>
 		public SpriteBatch SpriteBatch {
 			get { return Resources.SpriteBatch; }
 		}
