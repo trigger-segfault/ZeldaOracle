@@ -228,6 +228,7 @@
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Common\Util\BinaryExtensions.cs" />
     <Compile Include="Common\Util\BinaryCounter.cs" />
+    <Compile Include="Common\Util\Embedding.cs" />
     <Compile Include="Common\Util\EnumHelper.cs" />
     <Compile Include="Common\Util\GdiCasting.cs" />
     <Compile Include="Common\Util\GenericHelper.cs" />
@@ -637,9 +638,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Game.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
@@ -695,4 +694,10 @@
       <Target Name="AfterBuild">
       </Target>
     -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" />
+  </Target>
 </Project>
