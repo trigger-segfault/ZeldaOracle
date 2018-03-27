@@ -12,6 +12,7 @@ using System.Xml;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Controls;
 using ConscriptDesigner.Controls.TextEditing;
+using ConscriptDesigner.Themes;
 using ConscriptDesigner.Util;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -21,18 +22,6 @@ using ICSharpCode.NRefactory;
 
 namespace ConscriptDesigner.Anchorables {
 	public class ConscriptEditor : ContentFileDocument, ICommandAnchorable {
-
-		//-----------------------------------------------------------------------------
-		// Static Members
-		//-----------------------------------------------------------------------------
-
-		/// <summary>The highlighting definition for all conscripts. May be split up later.</summary>
-		private static IHighlightingDefinition highlightingDefinition;
-
-
-		//-----------------------------------------------------------------------------
-		// Members
-		//-----------------------------------------------------------------------------
 
 		/// <summary>The text editor for the conscript.</summary>
 		private TextEditor editor;
@@ -49,51 +38,37 @@ namespace ConscriptDesigner.Anchorables {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Initializes the conscript editor and loads the highlighting.</summary>
-		static ConscriptEditor() {
-			string fullName = "ConscriptDesigner.Themes.ConscriptHighlighting.xshd";
-			using (var stream = typeof(ConscriptEditor).Assembly.GetManifestResourceStream(fullName))
-			using (var reader = new XmlTextReader(stream))
-				highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-		}
-
+		
 		/// <summary>Constructs the conscript editor for serialization.</summary>
 		public ConscriptEditor() {
 			Border border = CreateBorder();
-			this.editor = new TextEditor();
-			this.editor.TextArea.TextView.LineSpacing = 1.24;
-			this.editor.TextChanged += OnTextChanged;
-			this.isTitleModified = false;
+			editor = new TextEditor();
+			editor.TextArea.TextView.LineSpacing = 1.24;
+			editor.TextChanged += OnTextChanged;
+			isTitleModified = false;
 
-			this.editor.PreviewMouseDown += OnPreviewMouseDown;
-			this.editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
-			this.editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
-			this.editor.TextArea.SelectionCornerRadius = 0;
-			this.editor.TextArea.SelectionBorder = null;
-			this.editor.FontFamily = new FontFamily("Consolas");
-			this.editor.FontSize = 12;
-			this.editor.TextChanged += OnTextChanged;
-			this.editor.TextArea.IndentationStrategy = new DefaultIndentationStrategy();
-			this.editor.ShowLineNumbers = true;
-			this.editor.SyntaxHighlighting = highlightingDefinition;
+			editor.PreviewMouseDown += OnPreviewMouseDown;
+			editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
+			editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
+			editor.TextArea.SelectionCornerRadius = 0;
+			editor.TextArea.SelectionBorder = null;
+			editor.FontFamily = new FontFamily("Consolas");
+			editor.FontSize = 12;
+			editor.TextChanged += OnTextChanged;
+			editor.TextArea.IndentationStrategy = new DefaultIndentationStrategy();
+			editor.ShowLineNumbers = true;
+			editor.SyntaxHighlighting = Highlighting.Conscript;
 			//this.editor.TextArea.TextView.Margin = new Thickness(10, 0, 0, 0);
-			this.editor.TextArea.TextView.BackgroundRenderers.Add(
+			editor.TextArea.TextView.BackgroundRenderers.Add(
 				new HighlightCurrentLineBackgroundRenderer(this.editor));
 			//this.editor.TextArea.Options.HighlightCurrentLine = true;
 			TextOptions.SetTextFormattingMode(this.editor, TextFormattingMode.Display);
 			border.Child = this.editor;
 
-			this.modifiedTimer = StoppableTimer.Create(
+			modifiedTimer = StoppableTimer.Create(
 				TimeSpan.FromSeconds(0.05),
 				DispatcherPriority.ApplicationIdle,
 				delegate { CheckModified(); });
-			/*this.modifiedTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate { CheckModified(); }, Dispatcher);
-
-			this.modifiedTimer.Stop();*/
 
 			Content = border;
 		}
@@ -116,7 +91,7 @@ namespace ConscriptDesigner.Anchorables {
 			if (file == null)
 				Close();
 
-			this.editor.Load(file.FilePath);
+			editor.Load(file.FilePath);
 			Title = file.Name;
 		}
 
@@ -259,14 +234,6 @@ namespace ConscriptDesigner.Anchorables {
 					navigateTimer.Stop();
 					navigateTimer = null;
 				});
-			/*navigateTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					action();
-					navigateTimer.Stop();
-					navigateTimer = null;
-				}, Dispatcher);*/
 		}
 
 		
