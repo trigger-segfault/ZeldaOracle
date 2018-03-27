@@ -317,8 +317,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 					lineStart++;
 				}
 			}
-			code += Environment.NewLine;
-			lineStart++;
+			lineStart += 0;
 			scriptStart = code.Length;
 			code += script.Code;
 			return code;

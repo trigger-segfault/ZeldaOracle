@@ -50,7 +50,11 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
-        <roslyn:RoslynCodeEditor x:Name="editor"/>
+        <roslyn:RoslynCodeEditor x:Name="editor">
+            <roslyn:RoslynCodeEditor.Resources>
+                <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
+            </roslyn:RoslynCodeEditor.Resources>
+        </roslyn:RoslynCodeEditor>
     </DockPanel>
 
 </Window>
