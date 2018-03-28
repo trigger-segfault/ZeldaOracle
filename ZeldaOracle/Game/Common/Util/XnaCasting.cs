@@ -1,6 +1,7 @@
 ﻿using XnaColor		= Microsoft.Xna.Framework.Color;
 using XnaPoint		= Microsoft.Xna.Framework.Point;
 using XnaVector2	= Microsoft.Xna.Framework.Vector2;
+using XnaVector4	= Microsoft.Xna.Framework.Vector4;
 using XnaRectangle	= Microsoft.Xna.Framework.Rectangle;
 
 using ZeldaOracle.Common.Graphics;
@@ -17,6 +18,11 @@ namespace ZeldaOracle.Common.Util {
 		/// <summary>Casts the Zelda Color to an Xna Color.</summary>
 		public static XnaColor ToXnaColor(this Color color) {
 			return new XnaColor(color.R, color.G, color.B, color.A);
+		}
+
+		/// <summary>Casts the Zelda Color to an Xna Color.</summary>
+		public static XnaVector4 ToXnaVector4(this Color color) {
+			return new XnaVector4(color.RF, color.GF, color.BF, color.AF);
 		}
 
 		/// <summary>Casts the Xna Color to a Zelda Color.</summary>

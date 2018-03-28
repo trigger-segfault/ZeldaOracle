@@ -214,14 +214,14 @@ namespace ConscriptDesigner.WinForms {
 			Zone zone = DesignerControl.PreviewZone ?? defaultZone;
 			Graphics2D g = new Graphics2D();
 
-			if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
+			if (GameData.SHADER_PALETTE != null && !GameData.SHADER_PALETTE.Effect.IsDisposed) {
 				//GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
 				//GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
 				//if (zone.Palette != null)
 				//	GameData.PaletteShader.TilePalette = zone.Palette;
-				GameData.PaletteShader.TilePalette = DesignerControl.PreviewTilePalette;
-				GameData.PaletteShader.EntityPalette = DesignerControl.PreviewEntityPalette;
-				GameData.PaletteShader.ApplyPalettes();
+				GameData.SHADER_PALETTE.TilePalette = DesignerControl.PreviewTilePalette;
+				GameData.SHADER_PALETTE.EntityPalette = DesignerControl.PreviewEntityPalette;
+				GameData.SHADER_PALETTE.ApplyParameters();
 			}
 			else {
 				g.Clear(Color.White);
@@ -237,7 +237,7 @@ namespace ConscriptDesigner.WinForms {
 			}
 			g.Clear(Color.White);
 			g.PushTranslation(-ScrollPosition / DesignerControl.PreviewScale);
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 
 			Draw(g, settings, zone);
 
@@ -254,7 +254,7 @@ namespace ConscriptDesigner.WinForms {
 			g.PopTranslation();
 			if (DesignerControl.PreviewScale > 1) {
 				g.SetRenderTarget(null);
-				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+				g.Begin(GameSettings.DRAW_MODE_PALLETE);
 				g.DrawImage(renderTarget, Vector2F.Zero, DesignerControl.PreviewScale);
 				g.End();
 			}

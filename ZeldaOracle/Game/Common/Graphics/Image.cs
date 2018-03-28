@@ -123,6 +123,15 @@ namespace ZeldaOracle.Common.Graphics {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Wraps the XNA Texture2D into an Image.</summary>
+		public static Image Wrap(Texture2D texture) {
+			Image wrapper = new Image();
+			// Assign the render target this way so that is not added
+			// as an independent resource to the content database.
+			wrapper.texture = texture;
+			return wrapper;
+		}
+
 		/// <summary>Loads the texture from content.</summary>
 		public static Image FromContent(string assetName) {
 			Image image = new Image();
@@ -195,17 +204,17 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the format of the image.</summary>
 		public SurfaceFormat Format {
-			get { return (texture != null ? texture.Format : SurfaceFormat.Color); }
+			get { return texture?.Format ?? SurfaceFormat.Color; }
 		}
 
 		/// <summary>Gets the graphics device associated with the image.</summary>
 		public GraphicsDevice GraphicsDevice {
-			get { return (texture != null ? texture.GraphicsDevice : null); }
+			get { return texture?.GraphicsDevice; }
 		}
 
 		/// <summary>Returns true if the image has been disposed.</summary>
 		public bool IsDisposed {
-			get { return (texture != null ? texture.IsDisposed : true); }
+			get { return texture?.IsDisposed ?? true; }
 		}
 	}
 }

@@ -32,6 +32,7 @@ using ZeldaOracle.Game.Entities.Monsters.JumpMonsters;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Control.RoomManagers;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game.Control.VisualEffects;
 
 namespace ZeldaOracle.Game.Debugging {
 	public class GameDebug {
@@ -467,6 +468,10 @@ namespace ZeldaOracle.Game.Debugging {
 				//Monster monster		= new MonsterMoblin();
 				Vector2F position	= new Vector2F(32, 32) + new Vector2F(8, 14);
 				RoomControl.SpawnEntity(monster, position);
+			}
+
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.W)) {
+				RoomControl.VisualEffect = new SubrosiaWarpVisualEffect();
 			}
 
 			mousePosition = Mouse.GetPosition();

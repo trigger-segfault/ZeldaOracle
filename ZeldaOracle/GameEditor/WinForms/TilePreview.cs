@@ -63,15 +63,15 @@ namespace ZeldaEditor.WinForms {
 			if (tile == null)
 				return;
 
-			GameData.PaletteShader.TilePalette = tile.Room.Zone.Palette;
-			GameData.PaletteShader.ApplyPalettes();
+			GameData.SHADER_PALETTE.TilePalette = tile.Room.Zone.Palette;
+			GameData.SHADER_PALETTE.ApplyParameters();
 			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.Level = tile.Room.Level;
 			TileDataDrawing.Room = tile.Room;
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.PlaybackTime = 0f;
 
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 
 			TileDataDrawing.DrawTilePreview(g, tile, Point2I.Zero, tile.Room.Zone);
 

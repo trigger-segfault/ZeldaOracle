@@ -5,11 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ZeldaOracle.Common.Graphics {
+namespace ZeldaOracle.Common.Graphics.Shaders {
 	/// <summary>A wrapper class for the shader used for palettizing while drawing.</summary>
-	public class PaletteShader {
-		/// <summary>The palette shader.</summary>
-		private Effect shader;
+	public class PaletteShader : Shader {
 
 		/// <summary>The current tile palette.</summary>
 		private Palette tilePalette;
@@ -24,33 +22,31 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Constructs the palette shader wrapper.</summary>
-		public PaletteShader(Effect shader) {
-			this.shader = shader;
-		}
+		
+		/// <summary>Constructs the palette shader.</summary>
+		public PaletteShader(Effect effect) : base(effect) { }
 
 
 		//-----------------------------------------------------------------------------
 		// Management
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Applies the palettes to the graphics device.</summary>
-		public void ApplyPalettes() {
-			shader.GraphicsDevice.Textures[1] = tilePalette.PaletteTexture;
-			shader.GraphicsDevice.Textures[2] = entityPalette.PaletteTexture;
+		/// <summary>Applies the parameters to the shader and graphics device.</summary>
+		public override void ApplyParameters() {
+			Textures[1] = tilePalette.PaletteTexture;
+			Textures[2] = entityPalette.PaletteTexture;
 			if (tilePaletteLerp != null)
-				shader.GraphicsDevice.Textures[3] = tilePaletteLerp.PaletteTexture;
+				Textures[3] = tilePaletteLerp?.PaletteTexture;
 			else
-				shader.GraphicsDevice.Textures[3] = tilePalette.PaletteTexture;
+				Textures[3] = tilePalette.PaletteTexture;
 			if (entityPaletteLerp != null)
-				shader.GraphicsDevice.Textures[4] = entityPaletteLerp.PaletteTexture;
+				Textures[4] = entityPaletteLerp.PaletteTexture;
 			else
-				shader.GraphicsDevice.Textures[4] = entityPalette.PaletteTexture;
+				Textures[4] = entityPalette.PaletteTexture;
 		}
 
-		/// <summary>Resets the lerping to zero.</summary>
-		public void ResetLerp() {
+		/// <summary>Resets the shader parameters.</summary>
+		public override void ResetParameters() {
 			tilePaletteLerp = null;
 			entityPaletteLerp = null;
 			TileRatio = 0f;
@@ -59,20 +55,26 @@ namespace ZeldaOracle.Common.Graphics {
 
 
 		//-----------------------------------------------------------------------------
-		// Properties
+		// Operators
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the underlying shader effect.</summary>
-		public Effect Effect {
-			get { return shader; }
+		/// <summary>Used to auto-convert Shaders into XNA Effects.</summary>
+		public static implicit operator Effect(PaletteShader shader) {
+			return shader.effect;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets or sets the current tile palette.</summary>
 		public Palette TilePalette {
 			get { return tilePalette; }
 			set {
 				if (value.PaletteType != PaletteTypes.Tile)
-					throw new ArgumentException("Cannot set tile palette using a non-tile palette!");
+					throw new ArgumentException("Cannot set tile palette using a " +
+						"non-tile palette!");
 				tilePalette = value;
 			}
 		}
@@ -82,7 +84,8 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return entityPalette; }
 			set {
 				if (value.PaletteType != PaletteTypes.Entity)
-					throw new ArgumentException("Cannot set entity palette using a non-entity palette!");
+					throw new ArgumentException("Cannot set entity palette using a " +
+						"non-entity palette!");
 				entityPalette = value;
 			}
 		}
@@ -92,7 +95,8 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return tilePaletteLerp; }
 			set {
 				if (value != null && value.PaletteType != PaletteTypes.Tile)
-					throw new ArgumentException("Cannot set tile palette using a non-tile palette!");
+					throw new ArgumentException("Cannot set tile palette using a " +
+						"non-tile palette!");
 				tilePaletteLerp = value;
 			}
 		}
@@ -102,7 +106,8 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return entityPaletteLerp; }
 			set {
 				if (value != null && value.PaletteType != PaletteTypes.Entity)
-					throw new ArgumentException("Cannot set entity palette using a non-entity palette!");
+					throw new ArgumentException("Cannot set entity palette using a " +
+						"non-entity palette!");
 				entityPaletteLerp = value;
 			}
 		}
@@ -110,15 +115,15 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Gets or sets the ratio for lerping from the current to upcoming
 		/// tile palette. This cannot be set while the sprite batch is drawing!</summary>
 		public float TileRatio {
-			get { return shader.Parameters["TileRatio"].GetValueSingle(); }
-			set { shader.Parameters["TileRatio"].SetValue(value); }
+			get { return Parameters["TileRatio"].GetValueSingle(); }
+			set { Parameters["TileRatio"].SetValue(value); }
 		}
 
 		/// <summary>Gets or sets the ratio for lerping from the current to upcoming
 		/// entity palette. This cannot be set while the sprite batch is drawing!</summary>
 		public float EntityRatio {
-			get { return shader.Parameters["EntityRatio"].GetValueSingle(); }
-			set { shader.Parameters["EntityRatio"].SetValue(value); }
+			get { return Parameters["EntityRatio"].GetValueSingle(); }
+			set { Parameters["EntityRatio"].SetValue(value); }
 		}
 	}
 }

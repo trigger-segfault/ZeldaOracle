@@ -24,6 +24,7 @@ using XnaSong = Microsoft.Xna.Framework.Media.Song;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Items.Rewards;
 using System.Collections;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Content {
 
@@ -101,7 +102,7 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>The collection of loaded palettes.</summary>
 		private static Dictionary<string, Palette> palettes;
 		/// <summary>The collection of loaded shaders.</summary>
-		private static Dictionary<string, Effect> shaders;
+		private static Dictionary<string, Shader> shaders;
 
 		/// <summary>The database for creating paletted sprites.</summary>
 		private static PalettedSpriteDatabase palettedSpriteDatabase;
@@ -224,7 +225,7 @@ namespace ZeldaOracle.Common.Content {
 			spriteSheets		= new Dictionary<string, ISpriteSource>();
 			sprites				= new Dictionary<string, ISprite>();
 			animations			= new Dictionary<string, Animation>();
-			shaders				= new Dictionary<string, Effect>();
+			shaders				= new Dictionary<string, Shader>();
 			paletteDictionaries = new Dictionary<string, PaletteDictionary>();
 			palettes            = new Dictionary<string, Palette>();
 			palettedSpriteDatabase  = new PalettedSpriteDatabase();
@@ -264,7 +265,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(ISpriteSource)]		= spriteSheets;
 			resourceDictionaries[typeof(ISprite)]			= sprites;
 			resourceDictionaries[typeof(Animation)]			= animations;
-			resourceDictionaries[typeof(Effect)]			= shaders;
+			resourceDictionaries[typeof(Shader)]			= shaders;
 			resourceDictionaries[typeof(Sound)]				= sounds;
 			resourceDictionaries[typeof(Song)]				= songs;
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
@@ -559,7 +560,7 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Gets the shader with the specified name.</summary>
-		public static Effect GetShader(string name) {
+		public static Shader GetShader(string name) {
 			return shaders[name];
 		}
 
@@ -629,10 +630,20 @@ namespace ZeldaOracle.Common.Content {
 			LoadScript(assetName, new PaletteSR());
 		}
 
-		/// <summary>Loads a shader (Effect).</summary>
-		public static Effect LoadShader(string assetName) {
+		/// <summary>Loads a shader (effect).</summary>
+		public static Shader LoadShader(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
-			Effect resource = contentManager.Load<Effect>(assetName);
+			Shader resource = Shader.FromContent(assetName);
+			shaders.Add(name, resource);
+			return resource;
+		}
+
+		/// <summary>Loads a shader (effect) with the specified type.</summary>
+		public static TShader LoadShader<TShader>(string assetName)
+			where TShader : Shader
+		{
+			string name = assetName.Substring(assetName.IndexOf('/') + 1);
+			TShader resource = Shader.FromContent<TShader>(assetName);
 			shaders.Add(name, resource);
 			return resource;
 		}

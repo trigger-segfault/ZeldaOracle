@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Items.Rewards.Linked {
 				as CanvasSprite;
 			if (spriteUp == null) {
 				spriteUp = new CanvasSprite(new Point2I(8, 8));
-				Graphics2D g = spriteUp.Begin(GameSettings.DRAW_MODE_DEFAULT);
+				Graphics2D g = spriteUp.Begin(GameSettings.DRAW_MODE_PALLETE);
 				foreach (Angle a in Angle.Range) {
 					g.DrawString(GameData.FONT_SMALL, "<up>", a.ToPoint(), Color.Black);
 				}

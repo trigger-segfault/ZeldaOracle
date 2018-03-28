@@ -137,13 +137,11 @@ namespace ZeldaOracle.Game.Main {
 			// Setup the render targets
 			// Preserve contents is needed in order to draw to this
 			// render target after setting it multiple times.
-			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice,
-				GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT,
-				false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+			GameData.RenderTargetGame = new RenderTarget(
+				GameSettings.SCREEN_SIZE, RenderTargetUsage.PreserveContents);
 
-			GameData.RenderTargetGameTemp = new RenderTarget2D(gameBase.GraphicsDevice,
-				GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT,
-				false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+			GameData.RenderTargetGameTemp = new RenderTarget(
+				GameSettings.SCREEN_SIZE, RenderTargetUsage.PreserveContents);
 		}
 
 		/// <summary>Called to unload game manager content.</summary>
@@ -283,18 +281,18 @@ namespace ZeldaOracle.Game.Main {
 			
 			// Render the game-state stack to a buffer.
 			g.SetRenderTarget(GameData.RenderTargetGame);
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 			g.Clear(Color.Black);
-			GameData.PaletteShader.ResetLerp();
+			GameData.SHADER_PALETTE.ResetParameters();
 			gameStateStack.AssignPalettes();
-			GameData.PaletteShader.ApplyPalettes();
+			GameData.SHADER_PALETTE.ApplyParameters();
 			gameStateStack.Draw(g);
 			g.End();
 
 			// Draw the buffer to the screen scaled.
 			g.SetRenderTarget(null);
 			//g.ResetTranslation();
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, gameScale);
 			g.End();
 

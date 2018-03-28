@@ -135,6 +135,7 @@
     <Compile Include="Common\Graphics\MappedColors.cs" />
     <Compile Include="Common\Graphics\PaletteColors.cs" />
     <Compile Include="Common\Graphics\RenderTarget.cs" />
+    <Compile Include="Common\Graphics\Shader.cs" />
     <Compile Include="Common\Graphics\Sprites\CanvasSprite.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Misc.cs" />
@@ -152,7 +153,7 @@
     <Compile Include="Common\Graphics\Sprites\DefinitionSprite.cs" />
     <Compile Include="Common\Graphics\Palette.cs" />
     <Compile Include="Common\Graphics\PaletteDictionary.cs" />
-    <Compile Include="Common\Graphics\PaletteShader.cs" />
+    <Compile Include="Common\Graphics\Shaders\PaletteShader.cs" />
     <Compile Include="Common\Graphics\Sprites\UnmappedSprite.cs" />
     <Compile Include="Common\Graphics\Unmapping.cs" />
     <Compile Include="Common\Ini\IniDocument.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Common\Util\Texture2DHelper.cs" />
     <Compile Include="Common\Util\TypeHelper.cs" />
     <Compile Include="Common\Util\XnaCasting.cs" />
+    <Compile Include="Common\Util\XnaExtensions.cs" />
     <Compile Include="Game\Assemblies.cs" />
     <Compile Include="Game\CommonTypes.cs" />
     <Compile Include="Game\Control\AreaControl.cs" />
@@ -266,7 +268,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\RoomManagers\RoomGraphics.cs" />
     <Compile Include="Game\Control\RoomManagers\RoomPhysics.cs" />
-    <Compile Include="Game\Control\RoomVisualEffect.cs" />
+    <Compile Include="Game\Control\VisualEffects\RoomVisualEffect.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Sound.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Item.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Functions\ScriptFunctions.cs" />
@@ -283,6 +285,10 @@
     <Compile Include="Game\Control\RoomManagers\TileManager.cs" />
     <Compile Include="Game\Control\RoomManagers\InteractionManager.cs" />
     <Compile Include="Game\Control\Camera.cs" />
+    <Compile Include="Common\Graphics\Shaders\SineShiftShader.cs" />
+    <Compile Include="Game\Control\VisualEffects\ShaderVisualEffect.cs" />
+    <Compile Include="Game\Control\VisualEffects\SubrosiaWarpVisualEffect.cs" />
+    <Compile Include="Game\Control\VisualEffects\UnderwaterVisualEffect.cs" />
     <Compile Include="Game\Debugging\DebugScripts.cs" />
     <Compile Include="Game\Debugging\DevSettings.cs" />
     <Compile Include="Game\Debugging\GameDebug.cs" />
@@ -698,6 +704,6 @@
     <ItemGroup>
       <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
     </ItemGroup>
-    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue"/>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue" />
   </Target>
 </Project>

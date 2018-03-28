@@ -233,15 +233,15 @@ namespace ZeldaEditor.WinForms {
 			editorControl.UpdateTicks();
 			Graphics2D g = new Graphics2D();
 			//g.SetRenderTarget(GameData.RenderTargetGame);
-			GameData.PaletteShader.TilePalette = Zone.Palette;
-			GameData.PaletteShader.ApplyPalettes();
+			GameData.SHADER_PALETTE.TilePalette = Zone.Palette;
+			GameData.SHADER_PALETTE.ApplyParameters();
 			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.Level = editorControl.Level;
 			TileDataDrawing.Room = null;
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.PlaybackTime = editorControl.Ticks;
 
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 
 			//Point2I selectedTileLocation = GetSelectedTileLocation();
 
