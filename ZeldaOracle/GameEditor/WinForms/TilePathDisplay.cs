@@ -229,11 +229,11 @@ namespace ZeldaEditor.WinForms {
 			TileDataDrawing.Level = room.Level;
 			TileDataDrawing.Room = room;
 
-			GameData.PaletteShader.TilePalette = room.Zone.Palette;
-			GameData.PaletteShader.ApplyPalettes();
+			GameData.SHADER_PALETTE.TilePalette = room.Zone.Palette;
+			GameData.SHADER_PALETTE.ApplyParameters();
 
 			Graphics2D g = new Graphics2D();
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 			g.Clear(Color.White);
 
 			DrawRoomTiles(g);

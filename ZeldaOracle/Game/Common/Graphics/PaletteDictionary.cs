@@ -160,7 +160,9 @@ namespace ZeldaOracle.Common.Graphics {
 			color.A = AlphaIdentifier;
 
 			// The lookup index of the palette color
-			int index = Get(name) + (int)subtype;
+			int index = Get(name);
+			if (index == -1) return Color.Black;
+			index += (int) subtype;
 			color.R = (byte) (index % Dimensions.X);
 			color.G = (byte) (index / Dimensions.Y);
 

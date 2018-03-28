@@ -17,6 +17,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 using System.Diagnostics;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Common.Graphics.Shaders;
 
 namespace ZeldaOracle.Game {
 	
@@ -141,12 +142,15 @@ namespace ZeldaOracle.Game {
 		// Internal
 		//-----------------------------------------------------------------------------
 
-		// Assign static fields from their corresponding loaded resources.
-		private static void IntegrateResources<T>(string prefix) {
+		/// <summary>Assign static fields from their corresponding loaded resources.</summary>
+		private static void IntegrateResources<T>(string prefix,
+			bool subtypes = false)
+		{
 			IEnumerable<FieldInfo> fields = typeof(GameData).GetFields()
 				.Where(field =>
 					field.Name.StartsWith(prefix) &&
-					field.FieldType == typeof(T) &&
+					(subtypes || field.FieldType == typeof(T)) &&
+					(!subtypes || typeof(T).IsAssignableFrom(field.FieldType)) &&
 					field.IsStatic);
 
 			// Set the values of the static fields to their corresponding loaded resources.
@@ -154,7 +158,12 @@ namespace ZeldaOracle.Game {
 				string name = field.Name.ToLower().Remove(0, prefix.Length);
 				
 				if (Resources.Contains<T>(name)) {
-					field.SetValue(null, Resources.Get<T>(name));
+					T resource = Resources.Get<T>(name);
+					if (subtypes && !field.FieldType.IsAssignableFrom(resource.GetType()))
+						throw new LoadContentException("Field of type '" +
+							field.FieldType.Name + " cannot be assigned to resource '" +
+							name + "' of type '" + resource.GetType().Name + "'!");
+					field.SetValue(null, resource);
 				}
 				else if (field.GetValue(null) != null) {
 					//Console.WriteLine("** WARNING: " + name + " is built programatically.");
@@ -309,24 +318,34 @@ namespace ZeldaOracle.Game {
 			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.InverseBlue]	= "inverse_blue";
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Shader Loading
 		//-----------------------------------------------------------------------------
 
 		// Loads the shaders.
 		private static void LoadShaders() {
-			PALETTE_SHADER		= Resources.LoadShader("Shaders/palette_shader");
-			PALETTE_LERP_SHADER	= Resources.LoadShader("Shaders/palette_lerp_shader");
-			
-			GameSettings.DRAW_MODE_DEFAULT.Effect = PALETTE_LERP_SHADER;
+			Resources.LoadShader<PaletteShader>("Shaders/palette");
+			Resources.LoadShader<SineShiftShader>("Shaders/sine_shift");
+			IntegrateResources<Shader>("SHADER_", true);
+			/*SHADER_PALETTE =
+				Resources.LoadShader<PaletteShader>("Shaders/palette");
+			SHADER_SINE_SHIFT = Resources.LoadShader("Shaders/sine_shift");*/
 
-			PaletteShader = new PaletteShader(PALETTE_LERP_SHADER);
-			PaletteShader.TilePalette = PAL_TILES_DEFAULT;
-			PaletteShader.EntityPalette = PAL_ENTITIES_DEFAULT;
+			//SHADER_PALETTE = new PaletteShader(SHADER_PALETTE_LERP);
+			if (SHADER_PALETTE != null) {
+				SHADER_PALETTE.TilePalette = PAL_TILES_DEFAULT;
+				SHADER_PALETTE.EntityPalette = PAL_ENTITIES_DEFAULT;
+			}
+
+			GameSettings.DRAW_MODE_PALLETE.Effect = SHADER_PALETTE;
 		}
+		
+		//public static Effect SHADER_PALETTE_LERP;
 
-		public static Effect PALETTE_SHADER;
-		public static Effect PALETTE_LERP_SHADER;
+		public static PaletteShader SHADER_PALETTE;
+
+		public static SineShiftShader SHADER_SINE_SHIFT;
 
 
 		//-----------------------------------------------------------------------------
@@ -404,10 +423,8 @@ namespace ZeldaOracle.Game {
 		// Render Targets
 		//-----------------------------------------------------------------------------
 
-		public static PaletteShader PaletteShader;
-
-		public static RenderTarget2D RenderTargetGame;
-		public static RenderTarget2D RenderTargetGameTemp;
-		public static RenderTarget2D RenderTargetDebug;
+		public static RenderTarget RenderTargetGame;
+		public static RenderTarget RenderTargetGameTemp;
+		public static RenderTarget RenderTargetDebug;
 	}
 }

@@ -601,7 +601,9 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Pops the current translation from the translation stack.</summary>
 		public void PopTranslation() {
 			translationStack.Pop();
-			translation = (translationStack.Any() ? translationStack.Peek() : Vector2F.Zero);
+			translation = (translationStack.Any() ?
+				translationStack.Peek() :
+				Vector2F.Zero);
 		}
 
 		/// <summary>Pops the current translation from the translation stack.</summary>
@@ -609,7 +611,9 @@ namespace ZeldaOracle.Common.Graphics {
 			for (int i = 0; i < popCount; i++) {
 				translationStack.Pop();
 			}
-			translation = (translationStack.Any() ? translationStack.Peek() : Vector2F.Zero);
+			translation = (translationStack.Any() ?
+				translationStack.Peek() :
+				Vector2F.Zero);
 		}
 
 		/// <summary>Resets the translation of the graphics object and clears
@@ -650,6 +654,14 @@ namespace ZeldaOracle.Common.Graphics {
 			drawing = true;
 		}
 
+		/// <summary>Begins the drawing to the sprite batch with a different shader.</summary>
+		public void Begin(DrawMode mode, Effect shader) {
+			spriteBatch.Begin(mode.SortMode, mode.BlendState,
+				mode.SamplerState, mode.DepthStencilState,
+				mode.RasterizerState, shader, mode.Transform);
+			drawing = true;
+		}
+
 		/// <summary>Ends the drawing to the sprite batch.</summary>
 		public void End() {
 			spriteBatch.End();
@@ -660,6 +672,11 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Render Targets
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the current render target.</summary>
+		public RenderTarget GetRenderTarget() {
+			return RenderTarget.Wrap(GraphicsDevice.GetRenderTarget());
+		}
 
 		/// <summary>Sets the render target to draw to.</summary>
 		public void SetRenderTarget(RenderTarget2D renderTarget) {

@@ -210,8 +210,8 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 
-			GameData.PaletteShader.TilePalette = roomControl.Zone.Palette;
-			GameData.PaletteShader.TileRatio = 0f;
+			GameData.SHADER_PALETTE.TilePalette = roomControl.Zone.Palette;
+			GameData.SHADER_PALETTE.TileRatio = 0f;
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
 			roomStateStack.Begin(this);
 

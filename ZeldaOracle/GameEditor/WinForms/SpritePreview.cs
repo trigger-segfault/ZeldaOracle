@@ -55,11 +55,11 @@ namespace ZeldaEditor.WinForms {
 			if (sprite == null)
 				return;
 
-			GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
-			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
-			GameData.PaletteShader.ApplyPalettes();
+			GameData.SHADER_PALETTE.TilePalette = GameData.PAL_TILES_DEFAULT;
+			GameData.SHADER_PALETTE.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+			GameData.SHADER_PALETTE.ApplyParameters();
 
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 
 			g.DrawSprite(sprite, Point2I.Zero);
 

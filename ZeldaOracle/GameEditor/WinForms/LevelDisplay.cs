@@ -353,9 +353,9 @@ namespace ZeldaEditor.WinForms {
 							Palette newPalette = room.Zone.Palette;
 							if (lastPalette != newPalette) {
 								g.End();
-								GameData.PaletteShader.TilePalette = newPalette;
-								GameData.PaletteShader.ApplyPalettes();
-								g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+								GameData.SHADER_PALETTE.TilePalette = newPalette;
+								GameData.SHADER_PALETTE.ApplyParameters();
+								g.Begin(GameSettings.DRAW_MODE_PALLETE);
 							}
 							lastPalette = newPalette;
 							DrawRoom(g, room);
@@ -603,7 +603,7 @@ namespace ZeldaEditor.WinForms {
 			TileDataDrawing.Extras = editorControl.ShowRewards;
 			TileDataDrawing.Level = Level;
 			Graphics2D g = new Graphics2D();
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 			DrawLevel(g);
 			g.End();
 		}

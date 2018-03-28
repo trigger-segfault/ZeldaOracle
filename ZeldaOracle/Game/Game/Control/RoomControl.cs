@@ -20,6 +20,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Tiles.Custom.Monsters;
 using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.RoomManagers;
+using ZeldaOracle.Game.Control.VisualEffects;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -67,8 +68,8 @@ namespace ZeldaOracle.Game.Control {
 		/// </summary>
 		private bool				deathOutOfBounds;
 		
-		private RoomVisualEffect	visualEffect;
-		private RoomVisualEffect	visualEffectUnderwater;
+		private RoomVisualEffect		visualEffect;
+		private UnderwaterVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
 		private int					currentRoomTicks;
 		private Color				colorOverlay;
@@ -120,7 +121,7 @@ namespace ZeldaOracle.Game.Control {
 
 			lingeringMonsters		= new HashSet<Monster>();
 
-			visualEffectUnderwater	= new RoomVisualEffect();
+			visualEffectUnderwater	= new UnderwaterVisualEffect();
 			visualEffectUnderwater.RoomControl = this;
 		}
 		
@@ -787,13 +788,13 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public override void AssignPalettes() {
-			GameData.PaletteShader.TilePalette = TilePalette;
-			GameData.PaletteShader.EntityPalette = EntityPalette;
+			GameData.SHADER_PALETTE.TilePalette = TilePalette;
+			GameData.SHADER_PALETTE.EntityPalette = EntityPalette;
 		}
 
 		public void AssignLerpPalettes() {
-			GameData.PaletteShader.LerpTilePalette = TilePalette;
-			GameData.PaletteShader.LerpEntityPalette = EntityPalette;
+			GameData.SHADER_PALETTE.LerpTilePalette = TilePalette;
+			GameData.SHADER_PALETTE.LerpEntityPalette = EntityPalette;
 		}
 
 		public override void Draw(Graphics2D g) {
@@ -1099,6 +1100,20 @@ namespace ZeldaOracle.Game.Control {
 		public Color OverlayColor {
 			get { return colorOverlay; }
 			set { colorOverlay = value; }
+		}
+
+		public RoomVisualEffect VisualEffect {
+			get { return visualEffect; }
+			set {
+				if (value == null && isUnderwater)
+					visualEffect = visualEffectUnderwater;
+				else if (value != null) {
+					visualEffect = value;
+					visualEffect.RoomControl = this;
+				}
+				else
+					visualEffect = null;
+			}
 		}
 	}
 }

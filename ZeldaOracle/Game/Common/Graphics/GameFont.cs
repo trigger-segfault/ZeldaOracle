@@ -78,7 +78,7 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Gets the colored sprite for the specified string.</summary>
 		public CanvasSprite GetSprite(DrawableString text, ColorOrPalette color) {
 			CanvasSprite canvas = new CanvasSprite(MeasureString(text));
-			Graphics2D g = canvas.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			Graphics2D g = canvas.Begin(GameSettings.DRAW_MODE_PALLETE);
 			g.DrawString(this, text, Vector2F.Zero, color);
 			canvas.End(g);
 			return canvas;

@@ -92,26 +92,44 @@ namespace ZeldaOracle.Common.Graphics {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the final mapped color using the palette shader's current palettes
-		/// This should only be used during a draw function.</summary>
+		/// <summary>Gets the final mapped color using the palette shader's current
+		/// palettes. This should only be used during a draw function. Returns black
+		/// if the color group does not exist.</summary>
 		public Color MappedColor {
 			get {
 				if (Type == PaletteTypes.Entity)
-					return GameData.PaletteShader.EntityPalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
+					return GameData.SHADER_PALETTE.EntityPalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
 				else if (Type == PaletteTypes.Tile)
-					return GameData.PaletteShader.TilePalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
+					return GameData.SHADER_PALETTE.TilePalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
 				return Color.Black;
 			}
 		}
 
-		/// <summary>Gets the final unmapped color using the palette shader's current palettes
-		/// This should only be used during a draw function.</summary>
+		/// <summary>Gets the final unmapped color using the palette shader's current
+		/// palettes. This should only be used during a draw function.</summary>
 		public Color UnmappedColor {
 			get {
 				if (Type == PaletteTypes.Entity)
-					return GameData.PaletteShader.EntityPalette.LookupColor(ColorGroup, Subtype);
+					return GameData.SHADER_PALETTE.EntityPalette
+						.LookupColor(ColorGroup, Subtype);
 				else if (Type == PaletteTypes.Tile)
-					return GameData.PaletteShader.TilePalette.LookupColor(ColorGroup, Subtype);
+					return GameData.SHADER_PALETTE.TilePalette
+						.LookupColor(ColorGroup, Subtype);
+				return Color.Black;
+			}
+		}
+
+		/// <summary>Gets the final unmapped color using the palette shader's current
+		/// palettes. This should only be used during a draw function. Returns black
+		/// if the color group does not exist.</summary>
+		public Color UnmappedColorSafe {
+			get {
+				if (Type == PaletteTypes.Entity)
+					return GameData.SHADER_PALETTE.EntityPalette
+						.LookupColor(ColorGroup, Subtype, true);
+				else if (Type == PaletteTypes.Tile)
+					return GameData.SHADER_PALETTE.TilePalette
+						.LookupColor(ColorGroup, Subtype, true);
 				return Color.Black;
 			}
 		}
@@ -213,8 +231,9 @@ namespace ZeldaOracle.Common.Graphics {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the final (mapped) color using the palette shader's current palettes
-		/// This should only be used during a draw function.</summary>
+		/// <summary>Gets the final (mapped) color using the palette shader's current
+		/// palettes  This should only be used during a draw function. Returns black
+		/// if the color group is unknown.</summary>
 		public Color MappedColor {
 			get {
 				if (value is PaletteReference)
@@ -224,12 +243,24 @@ namespace ZeldaOracle.Common.Graphics {
 			}
 		}
 
-		/// <summary>Gets the final (unmapped) color using the palette shader's current palettes
-		/// This should only be used during a draw function.</summary>
+		/// <summary>Gets the final (unmapped) color using the palette shader's current
+		/// palettes This should only be used during a draw function.</summary>
 		public Color UnmappedColor {
 			get {
 				if (value is PaletteReference)
 					return ((PaletteReference) value).UnmappedColor;
+				else
+					return (Color) value;
+			}
+		}
+
+		/// <summary>Gets the final (unmapped) color using the palette shader's current
+		/// palettes This should only be used during a draw function. Returns black
+		/// if the color group is unknown.</summary>
+		public Color UnmappedColorSafe {
+			get {
+				if (value is PaletteReference)
+					return ((PaletteReference) value).UnmappedColorSafe;
 				else
 					return (Color) value;
 			}

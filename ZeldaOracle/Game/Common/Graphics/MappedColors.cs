@@ -21,9 +21,6 @@ namespace ZeldaOracle.Common.Graphics {
 		public static readonly PaletteReference DarkRed		= new PaletteReference("shaded_red", LookupSubtypes.Dark);
 		public static readonly PaletteReference LightBlue	= new PaletteReference("shaded_blue", LookupSubtypes.Light);
 		public static readonly PaletteReference DarkBlue	= new PaletteReference("shaded_blue", LookupSubtypes.Dark);
-
-		public static readonly PaletteReference MenuWhite	= new PaletteReference("background", LookupSubtypes.Light, PaletteTypes.Tile);
-		public static readonly PaletteReference MenuDark	= new PaletteReference("background", LookupSubtypes.Black, PaletteTypes.Tile);
 	}
 
 	/// <summary>Predefined palette references for mapped tile colors.</summary>
@@ -36,5 +33,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public static readonly PaletteReference DungeonMapKeyText = new PaletteReference("background", LookupSubtypes.Black, PaletteTypes.Tile);
 		public static readonly PaletteReference DungeonMapKeyTextShadow = new PaletteReference("background", LookupSubtypes.Medium, PaletteTypes.Tile);
+
+		public static readonly PaletteReference SubrosiaWarpBackground = new PaletteReference("dirt", LookupSubtypes.Light, PaletteTypes.Tile);
 	}
 }

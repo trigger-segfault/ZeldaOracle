@@ -287,7 +287,7 @@ namespace ZeldaEditor.WinForms {
 			if (!editorControl.IsInitialized)
 				return;
 			Graphics2D g = new Graphics2D();
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 			g.Clear(Color.White);
 
 			int currentTicks = (int)(watch.Elapsed.TotalSeconds * 60);
