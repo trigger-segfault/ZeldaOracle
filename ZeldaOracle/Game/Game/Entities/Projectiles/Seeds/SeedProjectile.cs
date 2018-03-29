@@ -151,7 +151,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 		public override void OnCollideSolid(Collision collision) {
 			bool absorbSeeds = (collision.IsTile &&
-				collision.Tile.Flags.HasFlag(TileFlags.AbsorbSeeds));
+				(collision.Tile.Flags.HasFlag(TileFlags.AbsorbSeeds) ||
+				(collision.Tile.Flags.HasFlag(TileFlags.Burnable) &&
+				SeedType == SeedType.Ember)));
+
+			// TODO: Fix this not triggering in base.Update
+			Tile tile = collision.Tile;
+			if (tile != null) {
+				tile.OnHitByProjectile(this);
+				if (IsDestroyed)
+					return;
+			}
 
 			// Keep track of number of rebounds
 			if (reboundOffWalls && collision.IsResolved && !absorbSeeds) {

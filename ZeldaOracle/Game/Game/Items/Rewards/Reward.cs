@@ -25,6 +25,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		private string			message;
 		private string			obtainMessage;
 		private string			cantCollectMessage;
+		/// <summary>The message displayed when the cannot be carried because the
+		/// container is full.</summary>
+		private string fullMessage;
 		private bool			holdInChest;
 		private RewardHoldTypes	holdType;
 		private bool			hasDuration;
@@ -47,6 +50,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			message				= "";
 			obtainMessage		= "";
 			cantCollectMessage	= "";
+			fullMessage			= "";
 			holdInChest			= true;
 			holdType			= RewardHoldTypes.TwoHands;
 			hasDuration			= false;
@@ -77,6 +81,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			reward.message				= data.Message;
 			reward.obtainMessage		= data.ObtainMessage;
 			reward.cantCollectMessage	= data.CantCollectMessage;
+			reward.fullMessage			= data.FullMessage;
 			reward.holdInChest			= data.HoldInChest;
 			reward.holdType				= data.HoldType;
 			reward.hasDuration			= data.HasDuration;
@@ -130,13 +135,20 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			get { return true; }
 		}
 
+		/// <summary>Gets if the reward is already at capacity.</summary>
+		public virtual bool IsFull {
+			get { return false; }
+		}
+
 		/// <summary>Gets the appropriate message to display when collecting the
 		/// reward.</summary>
 		public virtual string AppropriateMessage {
 			get {
 				string text = message;
 				if (!CanCollect && !string.IsNullOrWhiteSpace(CantCollectMessage))
-					text = CantCollectMessage;
+					text += "<p>" + CantCollectMessage;
+				else if (IsFull && !string.IsNullOrWhiteSpace(FullMessage))
+					text += "<p>" + FullMessage;
 				return text;
 			}
 		}
@@ -225,6 +237,12 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		public string CantCollectMessage {
 			get { return cantCollectMessage; }
 			set { cantCollectMessage = value; }
+		}
+
+		/// <summary>Gets the message displayed when the reward is already at capacity.</summary>
+		public string FullMessage {
+			get { return fullMessage; }
+			set { fullMessage = value; }
 		}
 
 		/// <summary>Gets if the reward does not rise out of chests and instead, is

@@ -11,9 +11,6 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		
 		/// <summary>The amount of the reward to give.</summary>
 		private int amount;
-		/// <summary>The message displayed when the cannot be carried because the
-		/// container is full.</summary>
-		private string fullMessage;
 
 
 		//-----------------------------------------------------------------------------
@@ -23,30 +20,6 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		/// <summary>Constructs an amount reward.</summary>
 		public RewardAmount() {
 			amount			= 0;
-			fullMessage		= "";
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Virtual Properties
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Gets if the reward is already at capacity.</summary>
-		public virtual bool IsFull {
-			get { return false; }
-		}
-
-		/// <summary>Gets the appropriate message to display when collecting the
-		/// reward.</summary>
-		public override string AppropriateMessage {
-			get {
-				string text = Message;
-				if (!CanCollect && !string.IsNullOrWhiteSpace(CantCollectMessage))
-					text = CantCollectMessage;
-				else if (IsFull && !string.IsNullOrWhiteSpace(FullMessage))
-					text = FullMessage;
-				return text;
-			}
 		}
 
 
@@ -56,7 +29,6 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		
 		/// <summary>Called when the reward is being initialized.</summary>
 		protected override void OnInitialize() {
-			FullMessage			= RewardData.FullMessage;
 			Amount				= RewardData.Amount;
 		}
 
@@ -83,12 +55,6 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		public int Amount {
 			get { return amount; }
 			set { amount = value; }
-		}
-
-		/// <summary>Gets the message displayed when the reward is already at capacity.</summary>
-		public string FullMessage {
-			get { return fullMessage; }
-			set { fullMessage = value; }
 		}
 	}
 }

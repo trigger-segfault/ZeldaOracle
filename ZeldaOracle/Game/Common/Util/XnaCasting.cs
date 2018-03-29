@@ -20,7 +20,7 @@ namespace ZeldaOracle.Common.Util {
 			return new XnaColor(color.R, color.G, color.B, color.A);
 		}
 
-		/// <summary>Casts the Zelda Color to an Xna Color.</summary>
+		/// <summary>Casts the Zelda Color to an Xna Vector4.</summary>
 		public static XnaVector4 ToXnaVector4(this Color color) {
 			return new XnaVector4(color.RF, color.GF, color.BF, color.AF);
 		}
@@ -28,6 +28,11 @@ namespace ZeldaOracle.Common.Util {
 		/// <summary>Casts the Xna Color to a Zelda Color.</summary>
 		public static Color ToColor(this XnaColor color) {
 			return new Color(color.R, color.G, color.B, color.A);
+		}
+
+		/// <summary>Casts the Xna Vector4 to a Zelda Color.</summary>
+		public static Color ToColor(this XnaVector4 vector) {
+			return new Color(vector.X, vector.Y, vector.Z, vector.W);
 		}
 
 
