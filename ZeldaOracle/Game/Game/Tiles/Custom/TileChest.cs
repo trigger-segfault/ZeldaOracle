@@ -22,9 +22,21 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 
 		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Closes and the chest and allows looting again.</summary>
+		public void Close() {
+			IsLooted = false;
+			AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
+			Graphics.PlayAnimation(SpriteList[0]);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		
+
 		// Called when the player presses A on this tile, when facing the given direction.
 		public override bool OnAction(Direction direction) {
 			if (!IsLooted) {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ZeldaOracle.Common.Util {
-	/// <summary>A static class for XNA Extensions.</summary>
+	/// <summary>A static class for Xna Extensions.</summary>
 	public static class XnaExtensions {
 
 		/// <summary>Gets the current render target for the graphics device.</summary>
