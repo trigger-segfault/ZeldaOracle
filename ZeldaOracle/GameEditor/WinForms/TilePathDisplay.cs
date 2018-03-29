@@ -255,7 +255,7 @@ namespace ZeldaEditor.WinForms {
 						TileDataInstance tile = room.GetTile(x, y, layer);
 						Point2I position = new Point2I(x, y) * GameSettings.TILE_SIZE;
 						if (tile != null && tile.IsAtLocation(x, y) && !IsPathTile(tile)) {
-							TileDataDrawing.DrawTile(g, tile, position, room.Zone, color);
+							TileDataDrawing.DrawTileObject(g, tile, position, room.Zone, color);
 						}
 					}
 				}
