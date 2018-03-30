@@ -12,14 +12,16 @@ using ICSharpCode.CodeCompletion;
 using ZeldaOracle.Game;
 using ZeldaEditor.Scripting;
 using ZeldaEditor.Controls;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.Windows {
 
 	public class ObjectEditorModel {
 
+		private object obj;
 		private ObservableCollection<Trigger> triggers;
 		private ObservableCollection<TriggerEvent> eventTypes;
-		private BaseTileDataInstance tileData;
+		private ITriggerObject triggerObject;
 		
 
 		//-----------------------------------------------------------------------------
@@ -27,7 +29,8 @@ namespace ZeldaEditor.Windows {
 		//-----------------------------------------------------------------------------
 
 		public ObjectEditorModel() {
-			tileData = null;
+			obj = null;
+			triggerObject = null;
 			triggers = new ObservableCollection<Trigger>();
 			eventTypes = new ObservableCollection<TriggerEvent>();
 		}
@@ -37,22 +40,22 @@ namespace ZeldaEditor.Windows {
 		// Object Management
 		//-----------------------------------------------------------------------------
 
-		public void OnChangeObject() {
+		public void SetObject(object obj) {
+			this.obj = obj;
+			triggerObject = obj as ITriggerObject;
+
 			triggers.Clear();
 			eventTypes.Clear();
 
-			// First populate the list of event types
 			eventTypes.Add(TriggerEvent.None);
-			if (tileData != null) {
-				foreach (Event e in tileData.Events.GetEvents())
+			if (triggerObject != null) {
+				// First populate the list of event types
+				foreach (Event e in triggerObject.Events.GetEvents())
 					eventTypes.Add(new TriggerEvent(e));
-			}
 
-			// Then populate the trigger list
-			if (tileData != null) {
-				foreach (Trigger trigger in tileData.Triggers) {
+				// Then populate the trigger list
+				foreach (Trigger trigger in triggerObject.Triggers)
 					triggers.Add(trigger);
-				}
 			}
 		}
 
@@ -78,14 +81,15 @@ namespace ZeldaEditor.Windows {
 			}
 
 			triggers.Add(trigger);
-			if (tileData != null)
-				tileData.Triggers.AddTrigger(trigger);
+			if (triggerObject != null)
+				triggerObject.Triggers.AddTrigger(trigger);
 			return trigger;
 		}
 
 		public void DeleteTrigger(Trigger trigger) {
 			triggers.Remove(trigger);
-			tileData.Triggers.RemoveTrigger(trigger);
+			if (triggerObject != null)
+				triggerObject.Triggers.RemoveTrigger(trigger);
 		}
 				
 		
@@ -111,28 +115,22 @@ namespace ZeldaEditor.Windows {
 			}
 		}
 
-		public BaseTileDataInstance TileData {
-			get { return tileData; }
-			set {
-				if (tileData != value) {
-					tileData = value;
-					OnChangeObject();
-				}
-			}
+		public object Object {
+			get { return obj; }
 		}
 
 		public EventCollection EventCollection {
 			get {
-				if (tileData != null)
-					return tileData.Events;
+				if (triggerObject != null)
+					return triggerObject.Events;
 				return null;
 			}
 		}
 
 		public TriggerCollection TriggerCollection {
 			get {
-				if (tileData != null)
-					return tileData.Triggers;
+				if (triggerObject != null)
+					return triggerObject.Triggers;
 				return null;
 			}
 		}
@@ -155,9 +153,7 @@ namespace ZeldaEditor.Windows {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public ObjectEditor(EditorControl editorControl,
-			BaseTileDataInstance tileData)
-		{
+		public ObjectEditor(EditorControl editorControl, object obj) {
 			InitializeComponent();
 			this.editorControl = editorControl;
 			model = new ObjectEditorModel();
@@ -187,30 +183,55 @@ namespace ZeldaEditor.Windows {
 			scriptEditor.Script = null;
 			scriptEditor.EditorControl = editorControl;
 			
-			SetObject(tileData);
+			SetObject(obj);
 		}
 
 		public static ObjectEditor Show(Window owner, EditorControl editorControl,
-			BaseTileDataInstance tileData = null)
+			object obj = null)
 		{
-			ObjectEditor window = new ObjectEditor(editorControl, tileData);
+			ObjectEditor window = new ObjectEditor(editorControl, obj);
 			window.Owner = owner;
 			window.Show();
 			return window;
 		}		
 
-		public void SetObject(BaseTileDataInstance tileData) {
+		/// <summary>Set the object to show properties for.</summary>
+		public void SetObject(object obj) {
 			// Update the model
-			model.TileData = tileData;
+			model.SetObject(obj);
 
 			if (model.Triggers.Count >= 0)
 				listBoxTriggers.SelectedIndex = 0;
 
 			// Set the object preview image and name
 			objectPreviewName.Text = "(none)";
-			if (tileData != null)
-				objectPreviewName.Text = tileData.BaseData.ResourceName;
-			tilePreview.UpdateTile(tileData);
+			if (obj is BaseTileDataInstance) {
+				objectPreviewName.Text =
+					((BaseTileDataInstance) obj).BaseData.ResourceName;
+				if (obj is TileDataInstance)
+					Title = "Tile Properties";
+				else
+					Title = "Action Tile Properties";
+			}
+			else if (obj is Area) {
+				Title = "Area Properties";
+				objectPreviewName.Text = ((Area) obj).ID;
+			}
+			else if (obj is Room) {
+				Title = "Room Properties";
+				objectPreviewName.Text = "Room";
+				if (!string.IsNullOrWhiteSpace(((Room) obj).ID))
+					objectPreviewName.Text += " - " + ((Room) obj).ID;
+			}
+			else if (obj is Level) {
+				Title = "Level Properties";
+				objectPreviewName.Text = ((Level) obj).ID;
+			}
+			else if (obj is World) {
+				Title = "World Properties";
+				objectPreviewName.Text = "World";
+			}
+			tilePreview.UpdateTile(obj as BaseTileDataInstance);
 		}
 
 

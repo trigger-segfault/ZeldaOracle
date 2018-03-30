@@ -114,7 +114,7 @@ namespace ZeldaEditor.Scripting {
 			get { return trigger; }
 			set {
 				trigger = value;
-				script = trigger.Script;
+				script = (trigger != null ? trigger.Script : null);
 				needsRegeneration = true;
 			}
 		}

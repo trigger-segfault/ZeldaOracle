@@ -221,7 +221,7 @@ namespace ZeldaOracle.Game.Worlds {
 			ReadProperties(reader, world.Properties);
 			//if (version >= 4)
 			//	ReadVariables(reader, world.Variables);
-			ReadEvents(reader, world.Events, world);
+			ReadEvents(reader, world, world);
 
 			// Read the areas.
 			int areaCount = reader.ReadInt32();
@@ -288,7 +288,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Area ReadArea(BinaryReader reader, World world) {
 			Area area = new Area();
 			ReadProperties(reader, area.Properties);
-			ReadEvents(reader, area.Events, world);
+			ReadEvents(reader, area, world);
 			return area;
 		}
 
@@ -303,7 +303,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the level's properties.
 			ReadProperties(reader, level.Properties);
-			ReadEvents(reader, level.Events, world);
+			ReadEvents(reader, level, world);
 
 			// Read all the rooms in the level.
 			for (int y = 0; y < level.Height; y++) {
@@ -325,7 +325,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the room's properties.
 			ReadProperties(reader, room.Properties);
-			ReadEvents(reader, room.Events, world);
+			ReadEvents(reader, room, world);
 
 			// Read tile data for first layer (stored as a grid of tiles).
 			for (int y = 0; y < room.Height; y++) {
@@ -384,8 +384,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the tile's properties
 			ReadProperties(reader, tile.Properties);
-			//ReadEvents(reader, tile.Events, world); TODO
-			ReadTriggers(reader, tile, world);
+			ReadEvents(reader, tile, world);
 			if (tile.TileData != null)
 				tile.Properties.BaseProperties = tile.TileData.Properties;
 			tile.ModifiedProperties.BaseProperties = tile.Properties;
@@ -402,7 +401,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			ActionTileDataInstance actionTile = new ActionTileDataInstance(tileData, position);
 			ReadProperties(reader, actionTile.Properties);
-			ReadEvents(reader, actionTile.Events, world);
+			ReadEvents(reader, actionTile, world);
 			actionTile.Properties.PropertyObject = actionTile;
 			if (tileData != null)
 				actionTile.Properties.BaseProperties = actionTile.ActionTileData.Properties;
@@ -434,34 +433,69 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		private void ReadEvents(BinaryReader reader, EventCollection events, World world) {
+		private void ReadEvents(BinaryReader reader, ITriggerObject triggerObject, World world) {
 			if (version < 3)
 				return;
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++) {
 				string eventName = ReadString(reader);
 				string eventScriptID = ReadString(reader);
-				if (editorMode) {
-					if (!string.IsNullOrWhiteSpace(eventScriptID)) {
-						Script script = world.GetScript(eventScriptID);
-						Event evnt = events.GetEvent(eventName);
-						if (evnt == null)
-							evnt = new Event(eventName, script.Parameters.ToArray());
-						if (script.IsHidden) {
-							events.GetEvent(eventName).Script = script;
-							// Assign the correct parameters
-							script.Parameters = evnt.Parameters;
-							world.RemoveScript(eventScriptID);
-						}
-						else {
-							events.GetEvent(eventName).DefineScript(eventScriptID + "();");
-						}
-					}
-				}
-				else {
-					events.GetEvent(eventName).InternalScriptID = eventScriptID;
+
+				Event evnt = triggerObject.Events.GetEvent(eventName);
+				Script script = world.GetScript(eventScriptID);
+				
+				if (evnt != null) {
+					//Console.WriteLine("Reading event " + evnt.Name + " with script " + eventScriptID);
+					//if (script != null)
+					if (script != null)
+						world.ScriptManager.RemoveScript(script);
+					triggerObject.Triggers.AddTrigger(new Trigger(triggerObject.Triggers) {
+						Name = evnt.Name,
+						Script = script,
+						InitiallyOn = true,
+						IsEnabled = true,
+						FireOnce = false,
+						EventType = new TriggerEvent(evnt),
+					});
 				}
 			}
+			//int count = reader.ReadInt32();
+			//for (int i = 0; i < count; i++) {
+			//	string eventName = ReadString(reader);
+			//	string eventScriptID = ReadString(reader);
+			//	if (editorMode) {
+			//		if (!string.IsNullOrWhiteSpace(eventScriptID)) {
+			//			Script script = world.GetScript(eventScriptID);
+			//			Event evnt = events.GetEvent(eventName);
+						
+			//			if (evnt != null) {
+			//				((ITriggerObject) events).Triggers.AddTrigger(new Trigger(triggerObject.Triggers) {
+			//					Name = evnt.Name,
+			//					Script = script,
+			//					InitiallyOn = true,
+			//					IsEnabled = true,
+			//					FireOnce = false,
+			//					EventType = new TriggerEvent(evnt),
+			//				});
+			//			}
+
+			//			if (evnt == null)
+			//				evnt = new Event(eventName, script.Parameters.ToArray());
+			//			if (script != null) {
+			//				events.GetEvent(eventName).Script = script;
+			//				// Assign the correct parameters
+			//				script.Parameters = evnt.Parameters;
+			//				world.RemoveScript(eventScriptID);
+			//			}
+			//			else {
+			//				events.GetEvent(eventName).DefineScript(eventScriptID + "();");
+			//			}
+			//		}
+			//	}
+			//	else {
+			//		events.GetEvent(eventName).InternalScriptID = eventScriptID;
+			//	}
+			//}
 		}
 
 		private Properties ReadProperties(BinaryReader reader, Properties properties) {
@@ -757,7 +791,7 @@ namespace ZeldaOracle.Game.Worlds {
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++) {
 				Script script = ReadScript(reader);
-				if (!script.IsHidden)
+				//if (!script.IsHidden)
 					//if (script != null)
 					world.AddScript(script);
 				//else

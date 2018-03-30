@@ -38,8 +38,13 @@ namespace ZeldaEditor.TreeViews {
 		//-----------------------------------------------------------------------------
 
 		public override void Open(EditorControl editorControl) {
-			// Open the areas's properties.
+			OpenProperties(editorControl);
+		}
+
+		public override void OpenProperties(EditorControl editorControl) {
+			// Open the areas's properties
 			editorControl.OpenProperties(area);
+			editorControl.EditorWindow.OpenObjectEditor(area);
 		}
 
 		public override void Delete(EditorControl editorControl) {

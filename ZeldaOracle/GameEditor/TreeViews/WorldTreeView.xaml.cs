@@ -524,7 +524,7 @@ namespace ZeldaEditor.TreeViews {
 		//-----------------------------------------------------------------------------
 
 		private void OnEditProperties(object sender, RoutedEventArgs e) {
-			(treeView.SelectedItem as IWorldTreeViewItem).Open(editorControl);
+			(treeView.SelectedItem as IWorldTreeViewItem).OpenProperties(editorControl);
 		}
 
 		private void OnEdit(object sender, RoutedEventArgs e) {
@@ -603,7 +603,7 @@ namespace ZeldaEditor.TreeViews {
 		private void OnTreeViewMouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
 			if (treeViewItem is IWorldTreeViewItem)
-				((IWorldTreeViewItem)treeViewItem).Open(editorControl);
+				((IWorldTreeViewItem) treeViewItem).Open(editorControl);
 		}
 
 		private void OnTreeViewMouseDown(object sender, MouseButtonEventArgs e) {

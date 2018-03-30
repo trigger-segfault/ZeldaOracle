@@ -233,8 +233,15 @@ namespace ZeldaOracle.Game.Control {
 		// Scripts
 		//-----------------------------------------------------------------------------
 
-		public void FireEvent(IEventObject caller, string eventName, params object[] parameters) {
-			Logs.Scripts.LogError("Outdated FireEvent on " + caller.GetType().Name);
+		public void FireEvent(IEventObject caller, string eventName,
+			params object[] parameters)
+		{
+			if (caller is ITriggerObject) {
+				FireEvent((ITriggerObject) caller, eventName);
+			}
+			else {
+				Logs.Scripts.LogError("Outdated FireEvent on " + caller.GetType().Name);
+			}
 		}
 
 		public void FireEvent(ITriggerObject caller, string eventName) {
@@ -245,7 +252,7 @@ namespace ZeldaOracle.Game.Control {
 				if (trigger.FireOnce)
 					trigger.IsEnabled = false;
 				if (trigger.Script != null) {
-					ScriptRunner.RunScript(trigger.Script, new object[] {});
+					ScriptRunner.RunScript(trigger.Script, new object[] { caller });
 				}
 			}
 		}

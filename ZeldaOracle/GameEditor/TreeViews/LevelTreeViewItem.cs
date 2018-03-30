@@ -33,6 +33,10 @@ namespace ZeldaEditor.TreeViews {
 			editorControl.OpenProperties(level);
 		}
 
+		public override void OpenProperties(EditorControl editorControl) {
+			editorControl.EditorWindow.OpenObjectEditor(level);
+		}
+
 		public override void Delete(EditorControl editorControl) {
 			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Warning,
 				"Are you sure you want to delete the level '" + level.ID + "'?", "Confirm",

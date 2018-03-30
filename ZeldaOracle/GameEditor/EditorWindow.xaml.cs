@@ -174,7 +174,7 @@ namespace ZeldaEditor {
 		
 		public void UpdatePropertyPreview(IPropertyObject obj) {
 			if (objectWindow != null)
-				objectWindow.SetObject(obj as BaseTileDataInstance);
+				objectWindow.SetObject(obj);
 
 			System.Windows.Controls.Image image = new System.Windows.Controls.Image();
 			image.Stretch = Stretch.None;
@@ -264,8 +264,19 @@ namespace ZeldaEditor {
 			throw new NotImplementedException();
 		}
 
+		/// <summary>Open the Object Properties window for the given object.</summary>
 		public void OpenObjectEditor(object obj) {
-			throw new NotImplementedException();
+			if (objectWindow == null) {
+				objectWindow = new ObjectEditor(editorControl, obj);
+				objectWindow.Owner = this;
+				objectWindow.Closed += delegate(object unused1, EventArgs unused2) {
+					objectWindow = null;
+				};
+				objectWindow.Show();
+			}
+			else {
+				objectWindow.Focus();
+			}
 		}
 
 
@@ -378,18 +389,7 @@ namespace ZeldaEditor {
 		}
 
 		private void OnObjectEditorCommand(object sender, ExecutedRoutedEventArgs e) {
-			if (objectWindow == null) {
-				objectWindow = new ObjectEditor(editorControl,
-					editorControl.EditingTileData);
-				objectWindow.Owner = this;
-				objectWindow.Closed += delegate(object unused1, EventArgs unused2) {
-					objectWindow = null;
-				};
-				objectWindow.Show();
-			}
-			else {
-				objectWindow.Focus();
-			}
+			OpenObjectEditor(editorControl.EditingTileData);
 		}
 
 		private void CanAlwaysExecute(object sender, CanExecuteRoutedEventArgs e) {
