@@ -112,7 +112,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 		protected virtual void ResetValue() {
 		}
 
-		protected abstract BindingBase CreateValueBinding();
+		protected abstract BindingBase CreateValueBinding(bool dummyInstance);
 
 		#endregion
 
@@ -519,7 +519,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 
 		#endregion //Value Property
 
-		public virtual void InitProperties() {
+		public virtual void InitProperties(bool dummyInstance) {
 			// Do "IsReadOnly" and PropertyName first since the others may need that value.
 			_isReadOnly = ComputeIsReadOnly();
 			_category = ComputeCategory();
@@ -538,7 +538,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 			UpdateIsExpandable();
 			UpdateAdvanceOptions();
 
-			BindingBase valueBinding = this.CreateValueBinding();
+			BindingBase valueBinding = this.CreateValueBinding(dummyInstance);
 			BindingOperations.SetBinding(this, DescriptorPropertyDefinitionBase.ValueProperty, valueBinding);
 		}
 

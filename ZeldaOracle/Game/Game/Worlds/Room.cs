@@ -174,10 +174,10 @@ namespace ZeldaOracle.Game.Worlds {
 		// Tiles ----------------------------------------------------------------------
 
 		public TileDataInstance GetTile(Point2I location, int layer,
-			bool includeParented = false)
+			bool includeShared = false)
 		{
 			TileDataInstance tile = tileData[location.X, location.Y, layer];
-			if (tile != null || !includeParented)
+			if (tile != null || !includeShared)
 				return tile;
 
 			Room parentRoom = ParentRoom;
@@ -188,7 +188,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public TileDataInstance GetTile(int x, int y, int layer,
-			bool includeParented = false)
+			bool includeShared = false)
 		{
 			return GetTile(new Point2I(x, y), layer);
 		}
@@ -219,12 +219,12 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public bool ContainsTile(TileDataInstance tile,
-			bool includeParented = false)
+			bool includeShared = false)
 		{
 			if (tile == tileData[tile.Location.X, tile.Location.Y, tile.Layer])
 				return true;
 
-			if (!includeParented || !tile.IsShared)
+			if (!includeShared || !tile.IsShared)
 				return false;
 			
 			Room parentRoom = ParentRoom;
@@ -250,9 +250,9 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public TileDataInstance FindTileOfTypeByID<TileType>(string tileID,
-			bool includeParented = true)
+			bool includeShared = true)
 		{
-			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+			foreach (TileDataInstance tile in GetTiles(includeShared)) {
 				if (tile.ID == tileID && TypeHelper.TypeHasBase<TileType>(tile.Type))
 					return tile;
 			}
@@ -260,9 +260,9 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public TileDataInstance FindTileByID(string tileID,
-			bool includeParented = true)
+			bool includeShared = true)
 		{
-			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+			foreach (TileDataInstance tile in GetTiles(includeShared)) {
 				if (tile.ID == tileID)
 					return tile;
 			}
@@ -270,16 +270,16 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public IEnumerable<TileDataInstance> FindTilesByID(string tileID,
-			bool includeParented = true)
+			bool includeShared = true)
 		{
-			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+			foreach (TileDataInstance tile in GetTiles(includeShared)) {
 				if (tile.ID == tileID)
 					yield return tile;
 			}
 		}
 
 		/// <summary>Gets all tiles in the room.</summary>
-		public IEnumerable<TileDataInstance> GetTiles(bool includeParented = false) {
+		public IEnumerable<TileDataInstance> GetTiles(bool includeShared = false) {
 			// Get this rooms tiles
 			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
@@ -291,7 +291,7 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 
-			if (!includeParented)
+			if (!includeShared)
 				yield break;
 
 			// Get the parent room's shared tiles
@@ -306,7 +306,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets all tiles in the room's layer.</summary>
 		public IEnumerable<TileDataInstance> GetTileLayer(int layer,
-			bool includeParented = false)
+			bool includeShared = false)
 		{
 			// Get this rooms tiles
 			for (int x = 0; x < Width; x++) {
@@ -317,7 +317,7 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 
-			if (!includeParented)
+			if (!includeShared)
 				yield break;
 
 			// Get the parent room's shared tiles
@@ -397,7 +397,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Checks if the area used by this tile is unoccupied.</summary>
 		private bool IsTileAreaClear(TileDataInstance tile) {
-			Point2I size = tile.Size;
+			Point2I size = tile.TileSize;
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					if (tileData[x, y, tile.Layer] != null)
@@ -411,14 +411,14 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets all action tiles in the room.</summary>
 		public IEnumerable<ActionTileDataInstance> GetActionTiles(
-			bool includeParented = false)
+			bool includeShared = false)
 		{
 			// Get this rooms action tiles
 			foreach (ActionTileDataInstance action in actionData) {
 				yield return action;
 			}
 
-			if (!includeParented)
+			if (!includeShared)
 				yield break;
 
 			// Get the parent room's shared action tiles
@@ -432,9 +432,34 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets the index of the action tile in the room's list.</summary>
+		public int IndexOfActionTile(ActionTileDataInstance actionTile) {
+			return actionData.IndexOf(actionTile);
+		}
+
 		/// <summary>Gets the action tile at the specified index in the list.</summary>
 		public ActionTileDataInstance GetActionTileAt(int index) {
 			return actionData[index];
+		}
+
+		/// <summary>Gets all action tiles at the specified position in the room.</summary>
+		public IEnumerable<ActionTileDataInstance> GetActionTilesAt(Point2I position,
+			bool includeShared = false) {
+			foreach (ActionTileDataInstance action in GetActionTiles(includeShared)) {
+				if (action.Bounds.Contains(position))
+					yield return action;
+			}
+		}
+
+		/// <summary>Gets the first action tile at the specified position in the room.</summary>
+		public ActionTileDataInstance GetActionTileAt(Point2I position,
+			bool includeShared = false)
+		{
+			foreach (ActionTileDataInstance action in GetActionTiles(includeShared)) {
+				if (action.Bounds.Contains(position))
+					return action;
+			}
+			return null;
 		}
 
 		/// <summary>Gets all shared parented action tiles in the room.</summary>
@@ -467,12 +492,12 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Returns true if this room contains the action tile.</summary>
 		public bool ContainsActionTile(ActionTileDataInstance action,
-			bool includeParented = false)
+			bool includeShared = false)
 		{
 			if (actionData.Contains(action))
 				return true;
 
-			if (!includeParented || !action.IsShared)
+			if (!includeShared || !action.IsShared)
 				return false;
 
 			Room parentRoom = ParentRoom;
@@ -497,13 +522,13 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public ActionTileDataInstance FindActionTileByID(string actionTileID,
-			bool includeParented = true)
+			bool includeShared = true)
 		{
 			var action = actionData.Find(actionTile => actionTile.ID == actionTileID);
 			if (action != null)
 				return action;
 
-			if (!includeParented)
+			if (!includeShared)
 				return null;
 
 			Room parentRoom = ParentRoom;
@@ -519,13 +544,13 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets all tiles and action tiles in the room.</summary>
 		public IEnumerable<BaseTileDataInstance> GetAllTiles(
-			bool includeParented = false)	
+			bool includeShared = false)	
 		{
-			foreach (TileDataInstance tile in GetTiles(includeParented)) {
+			foreach (TileDataInstance tile in GetTiles(includeShared)) {
 				yield return tile;
 			}
 
-			foreach (ActionTileDataInstance action in GetActionTiles(includeParented)) {
+			foreach (ActionTileDataInstance action in GetActionTiles(includeShared)) {
 				yield return action;
 			}
 		}
@@ -541,6 +566,11 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		// Tiles ----------------------------------------------------------------------
+		
+		/// <summary>Places the tile at the specified location.</summary>
+		public void PlaceTile(TileInstanceLocation tile) {
+			PlaceTile(tile.Tile, tile.Location, tile.Layer);
+		}
 
 		/// <summary>Places the tile at the specified location.</summary>
 		public void PlaceTile(TileDataInstance tile, int x, int y, int layer) {
@@ -549,7 +579,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Places the tile at the specified location.</summary>
 		public void PlaceTile(TileDataInstance tile, Point2I location, int layer) {
-			Point2I size = (tile != null ? tile.Size : Point2I.One);
+			Point2I size = (tile != null ? tile.TileSize : Point2I.One);
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					Point2I loc = new Point2I(location.X + x, location.Y + y);
@@ -572,7 +602,7 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Removes the tile from the room.</summary>
 		public void RemoveTile(TileDataInstance tile) {
 			if (tile.Room == this) {
-				Point2I size = tile.Size;
+				Point2I size = tile.TileSize;
 				for (int x = 0; x < size.X; x++) {
 					for (int y = 0; y < size.Y; y++) {
 						Point2I loc = new Point2I(tile.Location.X + x, tile.Location.Y + y);
@@ -624,37 +654,63 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Updates the area the tile contains in the room based on its size.</summary>
 		public void UpdateTileSize(TileDataInstance tile, Point2I oldSize) {
 			if (ContainsTile(tile)) {
-				Point2I newSize = tile.Size;
-				tile.Size = oldSize;
+				Point2I newSize = tile.TileSize;
+				tile.TileSize = oldSize;
 				RemoveTile(tile);
-				tile.Size = newSize;
+				tile.TileSize = newSize;
 				PlaceTile(tile, tile.Location, tile.Layer);
 			}
 		}
 
 		// Action Tiles ---------------------------------------------------------------
+		
+		/// <summary>Places an action tile at the specified position in the room.</summary>
+		public void PlaceActionTile(ActionTileInstancePosition action) {
+			PlaceActionTile(action.Action, action.Position);
+		}
+
+		/// <summary>Places an action tile at the specified position in the room.</summary>
+		public void PlaceActionTile(ActionTileDataInstance action, int x, int y) {
+			PlaceActionTile(action, new Point2I(x, y));
+		}
+
+		/// <summary>Places an action tile at the specified position in the room.</summary>
+		public void PlaceActionTile(ActionTileDataInstance action, Point2I position) {
+			action.Position = position;
+			AddActionTile(action);
+		}
 
 		/// <summary>Creates an action tile at the specified position in the room.</summary>
-		public ActionTileDataInstance CreateActionTile(ActionTileData data, int x, int y) {
+		public ActionTileDataInstance CreateActionTile(ActionTileData data,
+			int x, int y)
+		{
 			return CreateActionTile(data, new Point2I(x, y));
 		}
 
 		/// <summary>Creates an action tile at the specified position in the room.</summary>
-		public ActionTileDataInstance CreateActionTile(ActionTileData data, Point2I position) {
-			ActionTileDataInstance dataInstance = new ActionTileDataInstance(data, position);
-			AddActionTile(dataInstance);
-			return dataInstance;
+		public ActionTileDataInstance CreateActionTile(ActionTileData data,
+			Point2I position)
+		{
+			ActionTileDataInstance action = new ActionTileDataInstance(data, position);
+			AddActionTile(action);
+			return action;
 		}
 
 		/// <summary>Adds an action tile to the room.</summary>
-		public void AddActionTile(ActionTileDataInstance actionTile) {
-			actionData.Add(actionTile);
-			actionTile.Room = this;
+		public void AddActionTile(ActionTileDataInstance action) {
+			actionData.Add(action);
+			action.Room = this;
 		}
-		
+
+		/// <summary>Inserts an action tile into the room.</summary>
+		public void InsertActionTile(int index, ActionTileDataInstance action) {
+			actionData.Insert(index, action);
+			action.Room = this;
+		}
+
 		/// <summary>Removes the action tile from the room.</summary>
-		public void RemoveActionTile(ActionTileDataInstance actionTile) {
-			actionData.Remove(actionTile);
+		public void RemoveActionTile(ActionTileDataInstance action) {
+			actionData.Remove(action);
 		}
 
 
@@ -790,8 +846,28 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return tileData.GetLength(1); }
 		}
 
+		/// <summary>Gets the size of the room in pixels.</summary>
+		public Point2I PixelSize {
+			get { return Size * GameSettings.TILE_SIZE; }
+		}
+
+		/// <summary>Gets the boundaries of the room in pixels.</summary>
+		public Rectangle2I Bounds {
+			get { return new Rectangle2I(PixelSize); }
+		}
+
+		/// <summary>Gets the boundaries of the room in the level in tiles.</summary>
+		public Rectangle2I LevelTileBounds {
+			get { return new Rectangle2I(Location, Size); }
+		}
+
+		/// <summary>Gets the boundaries of the room in the level in pixels.</summary>
+		public Rectangle2I LevelBounds {
+			get { return new Rectangle2I(LevelPosition, PixelSize); }
+		}
+
 		// Tiles ----------------------------------------------------------------------
-		
+
 		/// <summary>Gets the number of tile layers in the room.</summary>
 		public int LayerCount {
 			get { return tileData.GetLength(2); }

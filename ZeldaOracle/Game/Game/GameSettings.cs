@@ -286,8 +286,8 @@ namespace ZeldaOracle.Game {
 			SamplerState    = SamplerState.PointClamp
 		};
 
-		// Effect is set to PAL_LERP_SHADER
-		public static DrawMode DRAW_MODE_DEFAULT = new DrawMode() {
+		// Effect is set to PALETTE_LERP_SHADER
+		public static DrawMode DRAW_MODE_PALLETE = new DrawMode() {
 			BlendState		= BlendState.AlphaBlend,
 			SortMode		= SpriteSortMode.Deferred,
 			SamplerState	= SamplerState.PointClamp

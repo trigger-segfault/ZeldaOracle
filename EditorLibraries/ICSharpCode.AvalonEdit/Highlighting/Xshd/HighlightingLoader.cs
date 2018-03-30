@@ -17,6 +17,8 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.IO;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 
@@ -101,6 +103,36 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd {
 		/// </summary>
 		public static IHighlightingDefinition Load(XmlReader reader, IHighlightingDefinitionReferenceResolver resolver) {
 			return Load(LoadXshd(reader), resolver);
+		}
+
+		/// <summary>
+		/// Creates a highlighting definition from the XSHD stream.
+		/// </summary>
+		public static IHighlightingDefinition Load(Stream stream) {
+			using (var reader = new XmlTextReader(stream))
+				return Load(LoadXshd(reader), HighlightingManager.Instance);
+		}
+
+		/// <summary>
+		/// Creates a highlighting definition from the XSHD file path and entry assembly.
+		/// </summary>
+		public static IHighlightingDefinition Load(string path) {
+			using (var stream = Assembly.GetEntryAssembly().GetManifestResourceStream(path)) {
+				using (var reader = new XmlTextReader(stream)) {
+					return Load(LoadXshd(reader), HighlightingManager.Instance);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Creates a highlighting definition from the XSHD file path and specified assembly.
+		/// </summary>
+		public static IHighlightingDefinition Load(Assembly assembly, string path) {
+			using (var stream = assembly.GetManifestResourceStream(path)) {
+				using (var reader = new XmlTextReader(stream)) {
+					return Load(LoadXshd(reader), HighlightingManager.Instance);
+				}
+			}
 		}
 		#endregion
 	}

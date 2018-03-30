@@ -21,7 +21,7 @@ namespace ZeldaEditor.Undo {
 			overwrittenTiles = new Dictionary<Point2I, TileDataInstance>();
 			if (tileData.Room.ContainsTile(tileData)) {
 				foreach (TileDataInstance tile in tileData.Room.GetTilesInArea(
-					new Rectangle2I(tileData.Location, tileData.Size), tileData.Layer))
+					new Rectangle2I(tileData.Location, tileData.TileSize), tileData.Layer))
 				{
 					if (tile != tileData)
 						overwrittenTiles.Add(tile.Location, tile);

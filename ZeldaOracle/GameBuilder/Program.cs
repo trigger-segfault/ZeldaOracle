@@ -24,6 +24,7 @@ namespace ZeldaOracleBuilder {
 			Release
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
@@ -31,16 +32,16 @@ namespace ZeldaOracleBuilder {
 		/// <summary>The game binaries that need copying to the output directory.</summary>
 		private static readonly string[] RequiredGameBinaries = {
 			"ZeldaOracle.exe",
-			"ZeldaOracle.exe.config",
+			"ZeldaOracle.exe.config"/*,
 			"ZeldaCommon.dll",
 			"ZeldaAPI.dll",
-			"ZeldaAPI.xml"
+			"ZeldaAPI.xml"*/
 		};
 
 		/// <summary>The editor binaries that need copying to the output directory.</summary>
 		private static readonly string[] RequiredEditorBinaries = {
 			"ZeldaEditor.exe",
-			"ZeldaEditor.exe.config",
+			"ZeldaEditor.exe.config"/*,
 			"ICSharpCode.AvalonEdit.dll",
 			"ICSharpCode.CodeCompletion.dll",
 			"ICSharpCode.NRefactory.Cecil.dll",
@@ -48,8 +49,10 @@ namespace ZeldaOracleBuilder {
 			"ICSharpCode.NRefactory.dll",
 			"ICSharpCode.NRefactory.Xml.dll",
 			"Mono.Cecil.dll",
-			"Xceed.Wpf.Toolkit.dll"
+			"Xceed.Wpf.Toolkit.dll"*/
 		};
+
+		private const string LibDirectory = "lib";
 
 
 		//-----------------------------------------------------------------------------
@@ -63,16 +66,29 @@ namespace ZeldaOracleBuilder {
 			get { return Path.GetDirectoryName(ContentProjectFile); }
 		}
 
-		/// <summary>The path to the game binaries directory.</summary>
+		/// <summary>The path to the game binary's directory.</summary>
 		public static string GameBinDirectory { get; private set; }
-		/// <summary>The path to the editor binaries directory.</summary>
+		/// <summary>The path to the game binary's lib directory.</summary>
+		public static string GameLibDirectory {
+			get { return Path.Combine(GameBinDirectory, LibDirectory); }
+		}
+
+		/// <summary>The path to the editor binary's directory.</summary>
 		public static string EditorBinDirectory { get; private set; }
+		/// <summary>The path to the editor binary's lib directory.</summary>
+		public static string EditorLibDirectory {
+			get { return Path.Combine(EditorBinDirectory, LibDirectory); }
+		}
 
 		/// <summary>The path to the output binaries directory.</summary>
 		public static string OutputBinDirectory { get; private set; }
-		/// <summary>The path to the output binaries content directory.</summary>
+		/// <summary>The path to the output binary's content directory.</summary>
 		public static string OutputContentDirectory {
 			get { return Path.Combine(OutputBinDirectory, "Content"); }
+		}
+		/// <summary>The path to the output binary's lib directory.</summary>
+		public static string OutputLibDirectory {
+			get { return Path.Combine(OutputBinDirectory, LibDirectory); }
 		}
 		/// <summary>The path to the preloaded paletted sprite database file.</summary>
 		public static string OutputSpriteDatabaseFile {
@@ -83,9 +99,14 @@ namespace ZeldaOracleBuilder {
 		public static bool NoCompile { get; private set; }
 		/// <summary>The binary path type to append to the supplied paths.</summary>
 		public static BinTypes BinType { get; private set; }
+		/// <summary>True if no compile logging is output.</summary>
+		public static bool CompileSilent { get; private set; }
+		/// <summary>True if no logging at all is output.</summary>
+		public static bool Silent { get; private set; }
 
 
-		/// <summary>The content project containing information about all content files.</summary>
+		/// <summary>The content project containing information about all content
+		/// files.</summary>
 		public static ContentRoot Project { get; private set; }
 
 
@@ -136,6 +157,14 @@ namespace ZeldaOracleBuilder {
 						ThrowIf(BinType != BinTypes.Current, "-debug or -release already specified!");
 						BinType = BinTypes.Release;
 					}
+					else if (arg == "-compile-silent" || arg == "-cs") {
+						ThrowIf(CompileSilent || Silent, "-compile-silent or -silent already specified!");
+						CompileSilent = true;
+					}
+					else if (arg == "-silent" || arg == "-s") {
+						ThrowIf(Silent, "-silent already specified!");
+						Silent = true;
+					}
 					else {
 						throw new ArgumentException("Unknown command '" + arg + "'!");
 					}
@@ -151,28 +180,31 @@ namespace ZeldaOracleBuilder {
 				OutputBinDirectory	= AppendBin(OutputBinDirectory);
 
 
-				Console.WriteLine("Beginning Post-build!");
+				LogLine("Beginning Post-build!");
 				
 				// Update content
-				Console.WriteLine("Updating Content...");
+				LogLine("Loading Content...");
 				Project = new ContentRoot();
 				Project.LoadContentProject(ContentProjectFile);
-				if (!NoCompile)
+				if (!NoCompile) {
+					LogLine("Compiling Content...");
 					CompileContent();
+				}
+				LogLine("Updating Content...");
 				UpdateContentFolder();
 				
 				// Update game binaries
-				Console.WriteLine("Copying Game Binaries...");
+				LogLine("Copying Game Binaries...");
 				CopyGameBinaries();
 
 				// Update editor binaries
 				if (EditorBinDirectory != null) {
-					Console.WriteLine("Copying Editor Binaries...");
+					LogLine("Copying Editor Binaries...");
 					CopyEditorBinaries();
 				}
 				
-				Console.WriteLine("Post-build Complete!");
-				Console.WriteLine();
+				LogLine("Post-build Complete!");
+				LogLine();
 
 				return 0;
 			}
@@ -198,6 +230,8 @@ namespace ZeldaOracleBuilder {
 			Console.WriteLine("-nc -no-compile           Skip recompiling the content files.");
 			Console.WriteLine("-d  -debug                Binary directories will append /Debug to the end.");
 			Console.WriteLine("-r  -release              Binary directories will append /Release to the end.");
+			Console.WriteLine("-cs -compile-silent       No compile logging is output.");
+			Console.WriteLine("-s  -silent               No logging at all is output.");
 		}
 
 		/// <summary>Throws an error with the specified message if the value is true.</summary>
@@ -225,6 +259,21 @@ namespace ZeldaOracleBuilder {
 			}
 		}
 
+		/// <summary>Writes the text if silent mode is not enabled.</summary>
+		private static void Log(string text) {
+			if (!Silent) Console.Write(text);
+		}
+
+		/// <summary>Writes the line if silent mode is not enabled.</summary>
+		private static void LogLine(string line) {
+			if (!Silent) Console.WriteLine(line);
+		}
+
+		/// <summary>Writes the empty line if silent mode is not enabled.</summary>
+		private static void LogLine() {
+			if (!Silent) Console.WriteLine();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Updating Methods
@@ -234,11 +283,13 @@ namespace ZeldaOracleBuilder {
 		private static void CompileContent() {
 			foreach (ContentFile file in Project.GetAllFiles()) {
 				if (file.ShouldCompile) {
-					string outPath = file.OutputFilePath;
+					string filePath = file.Path.Replace('/', '\\');
+					string outPath = file.OutputFilePath.Replace('/', '\\');
 					string outDir = Path.GetDirectoryName(outPath);
 					if (!Directory.Exists(outDir))
 						Directory.CreateDirectory(outDir);
-					Console.WriteLine("Building " + file.Path.Replace('/', '\\') + " -> " + outPath.Replace('/', '\\'));
+					if (!CompileSilent)
+						LogLine("Building " + filePath + " -> " + outPath);
 					file.Compile();
 				}
 			}
@@ -248,7 +299,8 @@ namespace ZeldaOracleBuilder {
 		private static void UpdateContentFolder(ContentFolder folder = null) {
 			if (folder == null)
 				folder = Project;
-			HashSet<string> existingFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+			HashSet<string> existingFiles = new HashSet<string>(
+				StringComparer.OrdinalIgnoreCase);
 			foreach (string file in Directory.GetFiles(folder.OutputFilePath)) {
 				existingFiles.Add(Path.GetFileName(file));
 			}
@@ -262,7 +314,7 @@ namespace ZeldaOracleBuilder {
 					continue;
 				string outName = Path.GetFileName(outPath);
 				if (existingFiles.Contains(outName)) {
-					if (file.ShouldCopyToOutput /*&& File.GetLastWriteTimeUtc(inPath) != File.GetLastWriteTimeUtc(outPath)*/) {
+					if (file.ShouldCopyToOutput) {
 						File.Copy(inPath, outPath, true);
 					}
 					existingFiles.Remove(outName);
@@ -289,7 +341,8 @@ namespace ZeldaOracleBuilder {
 			}
 		}
 
-		/// <summary>Copy all binary files required by the game to the output directory.</summary>
+		/// <summary>Copy all binary files required by the game to the output
+		/// directory.</summary>
 		private static void CopyGameBinaries() {
 			foreach (string file in RequiredGameBinaries) {
 				string source = Path.Combine(GameBinDirectory, file);
@@ -297,9 +350,13 @@ namespace ZeldaOracleBuilder {
 				ThrowIf(!File.Exists(source), "Missing game binary '" + file + "'!");
 				File.Copy(source, dest, true);
 			}
+
+			// Copy over game .dll and .xml files
+			PathHelper.CopyDirectory(GameLibDirectory, OutputLibDirectory, true);
 		}
 
-		/// <summary>Copy all binary files required by the editor to the output directory.</summary>
+		/// <summary>Copy all binary files required by the editor to the output
+		/// directory.</summary>
 		private static void CopyEditorBinaries() {
 			foreach (string file in RequiredEditorBinaries) {
 				string source = Path.Combine(EditorBinDirectory, file);
@@ -307,6 +364,9 @@ namespace ZeldaOracleBuilder {
 				ThrowIf(!File.Exists(source), "Missing editor binary '" + file + "'!");
 				File.Copy(source, dest, true);
 			}
+
+			// Copy over editor .dll and .xml files
+			PathHelper.CopyDirectory(EditorLibDirectory, OutputLibDirectory, true);
 		}
 	}
 }

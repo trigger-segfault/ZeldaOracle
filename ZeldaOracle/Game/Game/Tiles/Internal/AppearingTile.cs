@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Tiles.Internal {
 
 			// Spawn the poof effect.
 			if (spawnOptions.PoofEffect) {
-				Point2I size = tile.Size;
+				Point2I size = tile.TileSize;
 				for (int x = 0; x < size.X; x++) {
 					for (int y = 0; y < size.Y; y++) {
 						Effect effect = new Effect(GameData.ANIM_EFFECT_BLOCK_POOF,

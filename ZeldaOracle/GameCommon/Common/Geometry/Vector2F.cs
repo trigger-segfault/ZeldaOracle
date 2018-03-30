@@ -430,7 +430,7 @@ namespace ZeldaOracle.Common.Geometry {
 			get {
 				if (IsZero)
 					return 0f;
-				return GMath.Plusdir(GMath.Atan2(-Y, X));
+				return GMath.WrapAngle(GMath.Atan2(-Y, X));
 			}
 			set {
 				float length = Length;
@@ -548,22 +548,22 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the direction from this vector to another.</summary>
 		public float DirectionTo(float x, float y) {
-			return GMath.Plusdir((new Vector2F(x, y) - this).Direction);
+			return GMath.WrapAngle((new Vector2F(x, y) - this).Direction);
 		}
 
 		/// <summary>Returns the direction from this vector to another.</summary>
 		public float DirectionTo(Vector2F v) {
-			return GMath.Plusdir((v - this).Direction);
+			return GMath.WrapAngle((v - this).Direction);
 		}
 
 		/// <summary>Returns the angle between this vector and another.</summary>
 		public float AngleBetween(float x, float y) {
-			return GMath.Plusdir3(new Vector2F(x, y).Direction - Direction);
+			return GMath.WrapAngle3(new Vector2F(x, y).Direction - Direction);
 		}
 
 		/// <summary>Returns the angle between this vector and another.</summary>
 		public float AngleBetween(Vector2F v) {
-			return GMath.Plusdir3(v.Direction - Direction);
+			return GMath.WrapAngle3(v.Direction - Direction);
 		}
 
 		/// <summary>Returns the shortest distance from this point to the specified line.</summary>

@@ -292,11 +292,16 @@ namespace ZeldaOracle.Game.Tiles {
 				TileDataDrawArgs args = new TileDataDrawArgs((TileData) data,
 					properties, position, zone, color);
 
+				bool isEntity = true;
 				TileDataDrawer func = ResourceDataDrawing.GetDrawer<TileDataDrawer>(
 					data, typeof(Entity), data.EntityType);
-				if (func == null)
+				if (func == null) {
 					func = ResourceDataDrawing.GetDrawer<TileDataDrawer>(data);
+					isEntity = false;
+				}
 				func?.Invoke(g, args);
+				if (!isEntity)
+					Tile.DrawTileDataAbove(g, args);
 			}
 			else if (data is ActionTileData) {
 				ActionDataDrawArgs args = new ActionDataDrawArgs((ActionTileData) data,

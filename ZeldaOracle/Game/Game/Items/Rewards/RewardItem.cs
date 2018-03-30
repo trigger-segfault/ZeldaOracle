@@ -44,6 +44,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		/// <summary>Called when the player collects the reward.</summary>
 		public override void OnCollect() {
 			Inventory.ObtainItem(item);
+			item.IsLost = false;
 			// Don't level-down the item
 			item.Level = GMath.Max(item.Level, level);
 		}

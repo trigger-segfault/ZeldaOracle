@@ -184,8 +184,8 @@ namespace ZeldaOracle.Game.Control.Maps {
 		}
 
 		public override void AssignPalettes() {
-			GameData.PaletteShader.TilePalette = GameData.PAL_DUNGEON_MAP_DEFAULT;
-			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_MENU;
+			GameData.SHADER_PALETTE.TilePalette = GameData.PAL_DUNGEON_MAP_DEFAULT;
+			GameData.SHADER_PALETTE.EntityPalette = GameData.PAL_ENTITIES_MENU;
 		}
 
 		public override void Draw(Graphics2D g) {

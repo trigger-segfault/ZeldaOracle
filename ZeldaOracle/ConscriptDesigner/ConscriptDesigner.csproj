@@ -137,6 +137,7 @@
     <Compile Include="Anchorables\TilesetEditorTools\ToolEyedrop.cs" />
     <Compile Include="Anchorables\TilesetEditorTools\ToolPlace.cs" />
     <Compile Include="Anchorables\TilesetEditorTools\ToolSelection.cs" />
+    <Compile Include="Themes\Highlighting.cs" />
     <Compile Include="Util\StoppableTimer.cs" />
     <Compile Include="Windows\ResizeTilesetWindow.xaml.cs">
       <DependentUpon>ResizeTilesetWindow.xaml</DependentUpon>
@@ -522,4 +523,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue"/>
+  </Target>
 </Project>

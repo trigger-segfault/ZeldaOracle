@@ -68,10 +68,12 @@ namespace ZeldaOracle.Game.Entities {
 			if (!submerged || RoomControl.Player.IsSubmerged) {
 				if (showMessage || submerged) {
 					if (submerged) {
-						RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH,
+						RoomControl.SpawnEntity(new Effect(
+							GameData.ANIM_EFFECT_WATER_SPLASH,
 							DepthLayer.EffectSplash, true), position);
 					}
-					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
+					RoomControl.GameControl.PushRoomState(
+						new RoomStateReward(reward, this));
 				}
 				else {
 					reward.OnCollectNoMessage();

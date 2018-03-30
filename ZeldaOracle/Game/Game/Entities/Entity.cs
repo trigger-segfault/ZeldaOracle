@@ -292,8 +292,9 @@ namespace ZeldaOracle.Game.Entities {
 				isInRoom = false;
 				OnDestroy();
 			}
-			if (properties != null)
-				properties.Set("enabled", false);
+			// TODO: Why was this here? This breaks most action and regular tiles
+			//if (properties != null)
+			//	properties.Set("enabled", false);
 		}
 
 		/// <summary>Mark the entity as having been removed from the current room.

@@ -237,15 +237,20 @@ namespace ZeldaEditor.WinForms {
 			editorControl.UpdateTicks();
 
 			Graphics2D g = new Graphics2D();
-			GameData.PaletteShader.TilePalette = Zone.Palette;
-			GameData.PaletteShader.ApplyPalettes();
+			//g.SetRenderTarget(GameData.RenderTargetGame);
+			GameData.SHADER_PALETTE.TilePalette = Zone.Palette;
+			GameData.SHADER_PALETTE.ApplyParameters();
 			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.Level = editorControl.Level;
 			TileDataDrawing.Room = null;
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.PlaybackTime = editorControl.Ticks;
-			
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
+
+			//Point2I selectedTileLocation = GetSelectedTileLocation();
+
+			// Draw the tileset.
 			g.Clear(Color.White);
 			g.PushTranslation(-ScrollPosition);
 
@@ -309,7 +314,7 @@ namespace ZeldaEditor.WinForms {
 			if (selectedPoint != -Point2I.One) {
 				Point2I selectedSize = Point2I.One;
 				if (selectedTileData != null)
-					selectedSize = selectedTileData.Size;
+					selectedSize = selectedTileData.TileSize;
 				if (source.IsList || source.Tileset.UsePreviewSprites)
 					selectedSize = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(
@@ -324,7 +329,7 @@ namespace ZeldaEditor.WinForms {
 			if (hoverPoint != -Point2I.One) {
 				Point2I size = Point2I.One;
 				if (hoverTileData != null)
-					size = hoverTileData.Size;
+					size = hoverTileData.TileSize;
 				if (source.IsList || source.Tileset.UsePreviewSprites)
 					size = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(

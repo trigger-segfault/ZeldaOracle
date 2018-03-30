@@ -11,7 +11,6 @@ using System.Windows.Input;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaEditor.Control;
-using ZeldaEditor.PropertiesEditor.CustomEditors;
 using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
@@ -24,10 +23,9 @@ namespace ZeldaEditor.PropertiesEditor {
 	public class ZeldaPropertyGrid : PropertyGrid {
 
 		private EditorControl editorControl;
-		private IPropertyObject propertyObject;
-		private PropertiesContainer propertiesContainer;
+		private static IPropertyObject propertyObject;
+		//private PropertiesContainer propertiesContainer;
 		private WpfFocusMessageFilter messageFilter;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -36,9 +34,9 @@ namespace ZeldaEditor.PropertiesEditor {
 		public ZeldaPropertyGrid() {
 			editorControl		= null;
 			propertyObject		= null;
-			propertiesContainer	= new PropertiesContainer(this);
+			//propertiesContainer = null;// new PropertiesContainer(this);
 
-			this.SelectedObject			= propertiesContainer;
+			//this.SelectedObject			= propertiesContainer;
 			this.PropertyValueChanged	+= OnPropertyChange;
 			this.IsMiscCategoryLabelHidden = false;
 			this.ShowAdvancedOptions	= false;
@@ -55,32 +53,29 @@ namespace ZeldaEditor.PropertiesEditor {
 		// Properties Methods
 		//-----------------------------------------------------------------------------
 
-		public void OpenProperties(IPropertyObject propertyObject) {
-			if (propertyObject != this.propertyObject) {
+		public void OpenProperties(IPropertyObject propObject) {
+			if (propObject != propertyObject) {
 				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
-				this.propertyObject = propertyObject;
-				EventCollection events = null;
-				if (propertyObject is IEventObject) {
-					events = (propertyObject as IEventObject).Events;
-				}
-				propertiesContainer.Set(propertyObject.Properties, events);
-				UpdateContainerHelper();
+				propertyObject = propObject;
+				SelectedObject = new PropertiesContainer(this, propertyObject);
 			}
 		}
 
 		public void UpdateProperties() {
-			Update();
+			if (SelectedObject != null)
+				Update();
 		}
 
 		public void RefreshProperties() {
-			UpdateContainerHelper();
+			if (SelectedObject != null) {
+				SelectedObject = new PropertiesContainer(this, propertyObject);
+			}
 		}
 
 		public void CloseProperties() {
 			if (propertyObject != null) {
 				propertyObject = null;
-				propertiesContainer.Clear();
-				UpdateContainerHelper();
+				SelectedObject = new PropertiesContainer(this, null);
 				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
 			}
 		}

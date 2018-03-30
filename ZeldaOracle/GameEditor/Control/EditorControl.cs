@@ -126,6 +126,8 @@ namespace ZeldaEditor.Control {
 		private bool                        needsNewEventCache;
 
 
+		private HashSet<DispatcherTimer>	scheduledEvents;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -133,7 +135,7 @@ namespace ZeldaEditor.Control {
 
 		public EditorControl(EditorWindow editorWindow) {
 			this.editorWindow       = editorWindow;
-			
+
 			isActive				= true;
 			worldFilePath			= string.Empty;
 			rewardManager			= null;
@@ -249,6 +251,14 @@ namespace ZeldaEditor.Control {
 				}
 			}
 		}
+
+		public void Uninitialize() {
+			foreach (DispatcherTimer timer in scheduledEvents) {
+				timer.Stop();
+			}
+			scheduledEvents.Clear();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// General
@@ -419,11 +429,14 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		public void SetStartLocation(Point2I roomCoord, Point2I playerCoord) {
+		public void SetStartLocation(Point2I roomLocation, Point2I playerCoord) {
 			startLocationMode = false;
-			if (World.StartRoomLocation != roomCoord && World.StartTileLocation != playerCoord) {
+			if (World.StartRoomLocation != roomLocation ||
+				World.StartTileLocation != playerCoord ||
+				World.StartLevel != Level)
+			{
 				World.StartLevelIndex = World.IndexOfLevel(Level);
-				World.StartRoomLocation = roomCoord;
+				World.StartRoomLocation = roomLocation;
 				World.StartTileLocation = playerCoord;
 				IsModified = true;
 			}
@@ -712,6 +725,7 @@ namespace ZeldaEditor.Control {
 		}
 
 
+
 		//-----------------------------------------------------------------------------
 		// Events
 		//-----------------------------------------------------------------------------
@@ -763,6 +777,47 @@ namespace ZeldaEditor.Control {
 				editorWindow.WorldTreeView.RefreshScripts(false, true);
 			}
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Event Scheduling
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Schedules a delayed event.</summary>
+		public void ScheduleEvent(double seconds, Action action) {
+			ScheduleEvent(TimeSpan.FromSeconds(seconds), false, action);
+		}
+
+		/// <summary>Schedules a delayed event.</summary>
+		public void ScheduleEvent(double seconds, bool highPriority, Action action) {
+			ScheduleEvent(TimeSpan.FromSeconds(seconds), highPriority, action);
+		}
+
+		/// <summary>Schedules a delayed event.</summary>
+		public void ScheduleEvent(TimeSpan delay, Action action) {
+			ScheduleEvent(delay, false, action);
+		}
+
+		/// <summary>Schedules a delayed event.</summary>
+		public void ScheduleEvent(TimeSpan delay, bool highPriority,
+			Action action)
+		{
+			DispatcherPriority priority = DispatcherPriority.ApplicationIdle;
+			if (highPriority)
+				priority = DispatcherPriority.Render;
+			DispatcherTimer timer = new DispatcherTimer(
+				priority, Application.Current.Dispatcher);
+			timer.Interval = delay;
+			/*DispatcherTimer timer = new DispatcherTimer(
+				delay, priority, null, Application.Current.Dispatcher);*/
+			timer.Tick += (s, e) => {
+				action();
+				timer.Stop();
+				scheduledEvents.Remove((DispatcherTimer) s);
+			};
+			timer.Start();
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Ticks
@@ -1096,11 +1151,6 @@ namespace ZeldaEditor.Control {
 		
 		public bool ShouldDrawActions {
 			get { return (showActions || actionMode || selectedTileData is ActionTileData); }
-		}
-		
-		public bool HighlightMouseTile {
-			get { return highlightMouseTile; }
-			set { highlightMouseTile = value; }
 		}
 
 		// Undo Actions ---------------------------------------------------------------

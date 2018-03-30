@@ -109,8 +109,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void AssignPalettes() {
 			OldRoomControl.AssignPalettes();
 			NewRoomControl.AssignLerpPalettes();
-			GameData.PaletteShader.TileRatio = lerpRatio;
-			GameData.PaletteShader.EntityRatio = lerpRatio;
+			GameData.SHADER_PALETTE.TileRatio = lerpRatio;
+			GameData.SHADER_PALETTE.EntityRatio = lerpRatio;
 		}
 
 		public override void Draw(Graphics2D g) {

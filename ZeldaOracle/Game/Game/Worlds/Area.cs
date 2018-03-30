@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("name", "")
 				.SetDocumentation("Name", "", "", "General", "The readable name of this area in-game.");
 			properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "General", "The default music to play in this area.", true, true);
+				.SetDocumentation("Music", "song", "", "General", "The default music to play in this area.", false, true);
 
 			// Settings
 			//properties.BaseProperties.Set("dungeon", false)

@@ -113,20 +113,24 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Saves the texture data as a .png to the specified stream and
 		/// writes the file size of the .png before the data.</summary>
 		public void SaveAsPngAndSize(Stream stream) {
-			BinaryWriter writer = new BinaryWriter(stream);
-			stream.Position += 4;
-			long streamStart = stream.Position;
+			var counter = BinaryCounter.Start(stream);
 			SaveAsPng(stream);
-			int fileSize = (int) (stream.Position - streamStart);
-			stream.Position = streamStart - 4;
-			writer.Write(fileSize);
-			stream.Position = streamStart + fileSize;
+			counter.WriteSizeAndReturn();
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Wraps the XNA Texture2D into an Image.</summary>
+		public static Image Wrap(Texture2D texture) {
+			Image wrapper = new Image();
+			// Assign the render target this way so that is not added
+			// as an independent resource to the content database.
+			wrapper.texture = texture;
+			return wrapper;
+		}
 
 		/// <summary>Loads the texture from content.</summary>
 		public static Image FromContent(string assetName) {
@@ -144,30 +148,18 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
-		public static Image FromStream(Stream stream, int fileSize,
-			bool premultiply = false)
-		{
-			BinaryReader reader = new BinaryReader(stream);
-			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
-				return FromStream(memory, premultiply);
-		}
-
-		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public static Image FromStreamAndSize(Stream stream,
 			bool premultiply = false)
 		{
-			BinaryReader reader = new BinaryReader(stream);
-			int fileSize = reader.ReadInt32();
-			if (fileSize < 0)
-				throw new IOException("Png file size in file is less than zero!");
-			else if (fileSize == 0)
-				return null;
-			using (Stream memory = new MemoryStream(reader.ReadBytes(fileSize)))
+			using (Stream memory = BinaryCounter.ReadStream(stream)) {
+				if (memory.Length == 0)
+					return null;
 				return FromStream(memory, premultiply);
+			}
 		}
 
 		/// <summary>Loads the texture from the stream.</summary>
-		public static unsafe Image FromStream(Stream stream,
+		public static Image FromStream(Stream stream,
 			bool premultiply = false)
 		{
 			Texture2D texture = Texture2DHelper.FromStream<Texture2D>(stream);
@@ -212,17 +204,17 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the format of the image.</summary>
 		public SurfaceFormat Format {
-			get { return (texture != null ? texture.Format : SurfaceFormat.Color); }
+			get { return texture?.Format ?? SurfaceFormat.Color; }
 		}
 
 		/// <summary>Gets the graphics device associated with the image.</summary>
 		public GraphicsDevice GraphicsDevice {
-			get { return (texture != null ? texture.GraphicsDevice : null); }
+			get { return texture?.GraphicsDevice; }
 		}
 
 		/// <summary>Returns true if the image has been disposed.</summary>
 		public bool IsDisposed {
-			get { return (texture != null ? texture.IsDisposed : true); }
+			get { return texture?.IsDisposed ?? true; }
 		}
 	}
 }

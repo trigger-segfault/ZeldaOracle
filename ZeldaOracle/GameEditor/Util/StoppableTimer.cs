@@ -54,11 +54,33 @@ namespace ZeldaEditor.Util {
 		/// <summary>Creates a stopped new timer and adds it to the list for stoppable
 		/// timers.</summary>
 		public static StoppableTimer Create(TimeSpan interval,
+			DispatcherPriority priority)
+		{
+			StoppableTimer timer = StartNew(interval, priority);
+			timer.timer.Stop();
+			return timer;
+		}
+
+		/// <summary>Creates a stopped new timer and adds it to the list for stoppable
+		/// timers.</summary>
+		public static StoppableTimer Create(TimeSpan interval,
 			DispatcherPriority priority, Action callback)
 		{
 			StoppableTimer timer = StartNew(interval, priority, callback);
 			timer.timer.Stop();
 			return timer;
+		}
+
+		/// <summary>Creates and starts a new timer and adds it to the list for
+		/// stoppable timers.</summary>
+		public static StoppableTimer StartNew(TimeSpan interval,
+			DispatcherPriority priority)
+		{
+			CleanupTimers();
+			DispatcherTimer timer = new DispatcherTimer(interval, priority,
+				null, Application.Current.Dispatcher);
+			timers.Add(new WeakReference<DispatcherTimer>(timer));
+			return new StoppableTimer(timer);
 		}
 
 		/// <summary>Creates and starts a new timer and adds it to the list for

@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Threading;
 using ZeldaEditor.Util;
 using ZeldaEditor.Windows;
+using ZeldaOracle.Common.Util;
 using WinFormsApplication = System.Windows.Forms.Application;
 
 namespace ZeldaEditor {
@@ -47,7 +48,7 @@ namespace ZeldaEditor {
 				path = string.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
 			}
 
-			using (Stream stream = executingAssembly.GetManifestResourceStream(path)) {
+			using (Stream stream = Embedding.Get(path)) {
 				if (stream == null)
 					return null;
 

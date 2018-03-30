@@ -175,8 +175,8 @@ namespace ZeldaOracle.Common.Scripting {
 					else {
 						oldEvent.Documentation.Name = newName;
 					}
-					events[newName] = oldEvent;
 					events.Remove(oldName);
+					events[newName] = oldEvent;
 				}
 				return true;
 			}

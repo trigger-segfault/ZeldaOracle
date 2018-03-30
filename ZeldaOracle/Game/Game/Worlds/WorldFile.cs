@@ -68,6 +68,8 @@ namespace ZeldaOracle.Game.Worlds {
 		private static char[] MAGIC = { 'Z', 'w', 'd', '2' };
 		private const int WORLDFILE_VERSION = 3;
 
+		private const int NULL_TILE = -11;
+
 		private string fileName;
 		private int version;
 		private bool editorMode; // If set, event scripts will go back to being stored by the object itself
@@ -294,12 +296,10 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private Level ReadLevel(BinaryReader reader, World world) {
 			// Read the level dimensions.
-			int width			= reader.ReadInt32();
-			int height			= reader.ReadInt32();
-			int roomWidth		= reader.ReadInt32();
-			int roomHeight		= reader.ReadInt32();
+			Point2I dimensions	= reader.ReadPoint2I();
+			Point2I roomSize	= reader.ReadPoint2I();
 			int roomLayerCount	= reader.ReadInt32();
-			Level level = new Level(new Point2I(width, height), roomLayerCount, new Point2I(roomWidth, roomHeight));
+			Level level = new Level(dimensions, roomLayerCount, roomSize);
 
 			// Read the level's properties.
 			ReadProperties(reader, level.Properties);
@@ -310,7 +310,7 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int x = 0; x < level.Width; x++) {
 					Room room = new Room(level, x, y);
 					ReadRoom(reader, room, level, world);
-					level.Rooms[x, y] = room;
+					level.SetRoom(room, x, y);
 				}
 			}
 
@@ -319,8 +319,7 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		private void ReadRoom(BinaryReader reader, Room room, Level level, World world) {
 			// Read the dimensions.
-			int width  = reader.ReadInt32();
-			int height = reader.ReadInt32();
+			Point2I size = reader.ReadPoint2I();
 			int layerCount = reader.ReadInt32();
 
 			// Read the room's properties.
@@ -339,12 +338,11 @@ namespace ZeldaOracle.Game.Worlds {
 			// Read tile data for higher layers (stored as a list of non-null tiles).
 			int tileDataCount = reader.ReadInt32();
 			for (int i = 0; i < tileDataCount; i++) {
-				int x		= reader.ReadInt32();
-				int y		= reader.ReadInt32();
-				int layer	= reader.ReadInt32();
+				Point2I location	= reader.ReadPoint2I();
+				int layer			= reader.ReadInt32();
 				TileDataInstance tile = ReadTileData(reader, world);
 				if (tile != null)
-					room.PlaceTile(tile, new Point2I(x, y), layer);
+					room.PlaceTile(tile, location, layer);
 			}
 
 			// Read action tile data.
@@ -358,7 +356,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private TileDataInstance ReadTileData(BinaryReader reader, World world) {
 			int tilesetIndex = reader.ReadInt32();
-			if (tilesetIndex == -11) // -11 indicates a null tile.
+			if (tilesetIndex == NULL_TILE) // -11 indicates a null tile.
 				return null;
 			
 			TileDataInstance tile = new TileDataInstance();
@@ -868,10 +866,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private void WriteLevel(BinaryWriter writer, Level level) {
 			//WriteString(writer, level.Name);
-			writer.Write(level.Width);
-			writer.Write(level.Height);
-			writer.Write(level.RoomWidth);
-			writer.Write(level.RoomHeight);
+			writer.Write(level.Dimensions);
+			writer.Write(level.RoomSize);
 			writer.Write(level.RoomLayerCount);
 			WriteProperties(writer, level.Properties);
 			WriteEvents(writer, level.Events);
@@ -886,8 +882,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void WriteRoom(BinaryWriter writer, Room room) {
-			writer.Write(room.Width);
-			writer.Write(room.Height);
+			writer.Write(room.Size);
 			writer.Write(room.LayerCount);
 			WriteProperties(writer, room.Properties);
 			WriteEvents(writer, room.Events);
@@ -899,13 +894,17 @@ namespace ZeldaOracle.Game.Worlds {
 					if (tile != null && tile.IsAtLocation(x, y))
 						WriteTileData(writer, tile);
 					else
-						writer.Write(-11); // -11 signifies a null tile.
+						writer.Write(NULL_TILE); // -11 signifies a null tile.
 				}
 			}
 			
 			// Count non-null tile data for higher layers.
-			int tileDataCount = 0;
+			/*int tileDataCount = 0;
 			for (int i = 1; i < room.LayerCount; i++) {
+				tileDataCount += room.GetTileLayer(i).Count();
+				foreach (TileDataInstance tile in room.GetTileLayer(i)) {
+
+				}
 				for (int y = 0; y < room.Height; y++) {
 					for (int x = 0; x < room.Width; x++) {
 						TileDataInstance tile = room.GetTile(x, y, i);
@@ -913,12 +912,19 @@ namespace ZeldaOracle.Game.Worlds {
 							tileDataCount++;
 					}
 				}
-			}
+			}*/
 
 			// Write non-null tile data for higher layers.
-			writer.Write(tileDataCount);
+			var counter = BinaryCounter.Start(writer);
+			//writer.Write(tileDataCount);
 			for (int i = 1; i < room.LayerCount; i++) {
-				for (int y = 0; y < room.Height; y++) {
+				foreach (TileDataInstance tile in room.GetTileLayer(i)) {
+					writer.Write(tile.Location);
+					writer.Write(tile.Layer);
+					WriteTileData(writer, tile);
+					counter.Count++;
+				}
+				/*for (int y = 0; y < room.Height; y++) {
 					for (int x = 0; x < room.Width; x++) {
 						TileDataInstance tile = room.GetTile(x, y, i);
 						if (tile != null && tile.IsAtLocation(x, y)) {
@@ -928,10 +934,11 @@ namespace ZeldaOracle.Game.Worlds {
 							WriteTileData(writer, tile);
 						}
 					}
-				}
+				}*/
 			}
+			counter.WriteCountAndReturn();
 
-			// Write action tile data.
+			// Write action tile data
 			writer.Write(room.ActionCount);
 			for (int i = 0; i < room.ActionCount; i++) {
 				ActionTileDataInstance actionTile = room.GetActionTileAt(i);
@@ -943,8 +950,7 @@ namespace ZeldaOracle.Game.Worlds {
 			if (tile.Tileset != null) {
 				//WriteTileset(writer, tileData.Tileset);
 				WriteResource(writer, tile.Tileset, tilesets);
-				writer.Write((int) tile.SheetLocation.X);
-				writer.Write((int) tile.SheetLocation.Y);
+				writer.Write(tile.SheetLocation);
 				WriteProperties(writer, tile.Properties);
 				WriteEvents(writer, tile.Events);
 				//WriteTriggers(writer, tile.Triggers);
@@ -967,8 +973,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private void WriteActionTileData(BinaryWriter writer, ActionTileDataInstance actionTileTile) {
 			WriteResource(writer, actionTileTile.ActionTileData, actionTileData);
-			writer.Write(actionTileTile.Position.X);
-			writer.Write(actionTileTile.Position.Y);
+			writer.Write(actionTileTile.Position);
 			WriteProperties(writer, actionTileTile.Properties);
 			WriteEvents(writer, actionTileTile.Events);
 		}

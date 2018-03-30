@@ -441,6 +441,7 @@
     <Compile Include="PropertyGrid\Implementation\CategoryGroupStyleSelector.cs" />
     <Compile Include="PropertyGrid\Implementation\Converters\IsDefaultCategoryConverter.cs" />
     <Compile Include="PropertyGrid\Implementation\Converters\IsStringEmptyConverter.cs" />
+    <Compile Include="PropertyGrid\Implementation\DummyInstance.cs" />
     <Compile Include="PropertyGrid\Implementation\Editors\CollectionEditor.cs" />
     <Compile Include="PropertyGrid\Implementation\Editors\SourceComboBoxEditor.cs" />
     <Compile Include="PropertyGrid\Implementation\TrimmedTextBlock.cs" />
@@ -789,6 +790,7 @@
     <Resource Include="PropertyGrid\Images\Events16.png" />
     <Resource Include="PropertyGrid\Images\Wrench16.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

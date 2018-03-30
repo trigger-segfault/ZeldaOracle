@@ -177,6 +177,14 @@ namespace ZeldaOracle.Common.Scripting {
 			documentation.IsBrowsable = false;
 		}
 
+		/// <summary>Marks a property as browsable and writable in the documentation.</summary>
+		public void Unhide() {
+			if (documentation == null)
+				documentation = new PropertyDocumentation(name, "Misc", "");
+			documentation.IsReadOnly = false;
+			documentation.IsBrowsable = true;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Static Factory Methods

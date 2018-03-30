@@ -75,9 +75,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnEnterRoom() {
 			if (isResurfacing) {
 				// Snap the player's position to the nearest tile location
-				player.Position = GMath.Floor(player.Position /
-					new Vector2F(GameSettings.TILE_SIZE)) *
-					new Vector2F(GameSettings.TILE_SIZE) +
+				player.Position = GMath.Floor(player.Position,
+					GameSettings.TILE_SIZE) +
 					new Vector2F(GameSettings.TILE_SIZE / 2) - player.CenterOffset;
 
 				// Change to standing animation and face downwards

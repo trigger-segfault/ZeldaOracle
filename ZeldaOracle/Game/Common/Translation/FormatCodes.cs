@@ -183,6 +183,11 @@ namespace ZeldaOracle.Common.Translation {
 			return Letter.DefaultColor;
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Formatting
+		//-----------------------------------------------------------------------------
+
 		/// <summary>Returns the text formatted without any format codes in.</summary>
 		public static LetterString FormatString(string text, Variables variables) {
 			int caretPosition = 0;
@@ -251,6 +256,91 @@ namespace ZeldaOracle.Common.Translation {
 
 			return letterString;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Escaping
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Escapes the message from an editor format to a Zelda format.</summary>
+		public static string EscapeMessage(string text) {
+			int caretPosition = 0;
+			return EscapeMessage(text, ref caretPosition);
+		}
+
+		/// <summary>Escapes the message from an editor format to a Zelda format.
+		/// Also stores updates the caret postion as the text is modified.</summary>
+		public static string EscapeMessage(string text, ref int caretPosition) {
+			int originalCaretPosition = caretPosition;
+			string newText = "";
+			bool lastWasNewLine = true;
+			bool inCode = false;
+			string currentCode = "";
+			caretPosition = -1;
+			for (int i = 0; i < text.Length; i++) {
+				if (i == originalCaretPosition)
+					caretPosition = newText.Length;
+				char c = text[i];
+				if (inCode) {
+					if (c == '>') {
+						if (currentCode == "n" || currentCode == "p") {
+							if (!lastWasNewLine) {
+								lastWasNewLine = true;
+								newText += "<" + currentCode + ">";
+							}
+							else if (currentCode == "p" && newText.Any()) {
+								newText = newText.Substring(0, newText.Length - 3);
+								if (caretPosition > newText.Length)
+									caretPosition = newText.Length;
+								newText += "<" + currentCode + ">";
+							}
+						}
+						else {
+							newText += "<" + currentCode + ">";
+							lastWasNewLine = false;
+						}
+						inCode = false;
+					}
+					else {
+						currentCode += c;
+					}
+				}
+				else if (c == '\r') {
+					// Skip this character
+				}
+				else if (c == '\n') {
+					if (!lastWasNewLine) {
+						lastWasNewLine = true;
+						newText += "<n>";
+					}
+				}
+				else if (c == '<') {
+					inCode = true;
+					currentCode = "";
+				}
+				else {
+					lastWasNewLine = false;
+					newText += c;
+				}
+			}
+			if (caretPosition == -1)
+				caretPosition = newText.Length;
+
+			return newText;
+		}
+
+		/// <summary>Unescapes the message so that it is readable in an editor./</summary>
+		public static string UnescapeMessage(string text) {
+			return text.Replace("\r", "")
+						.Replace("<n>", "\n")
+						.Replace("<p>", "<p>\n")
+						.Replace("\n", Environment.NewLine);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the enumeration of color codes.</summary>
 		public static IEnumerable<KeyValuePair<string, ColorOrPalette>> GetColorCodes() {

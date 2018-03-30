@@ -32,15 +32,17 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 		protected override IEnumerable CreateItemsSource(PropertyItem item) {
 			Dictionary<string, T> resourceMap = Resources.GetDictionary<T>();
-			string[] resourceIds = new string[resourceMap.Count + 1];
-			int index = 0;
-			resourceIds[index] = "(none)";
-			index++;
+			//string[] resourceIds = new string[resourceMap.Count + 1];
+			//int index = 0;
+			//resourceIds[index] = "(none)";
+			//index++;
+			yield return "(none)";
 			foreach (var resource in resourceMap) {
-				resourceIds[index] = resource.Key;
-				index++;
+				yield return resource.Key;
+				//resourceIds[index] = resource.Key;
+				//index++;
 			}
-			return resourceIds;
+			//return resourceIds;
 		}
 	}
 }

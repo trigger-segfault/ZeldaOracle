@@ -160,6 +160,12 @@ namespace ZeldaOracle.Common.Util {
 			return Construct(type) as T;
 		}
 
+		/// <summary>Constructs an object from the type's empty constructor.</summary>
+		/// <exception cref="MissingConstructorException">No constructor was found.</exception>
+		public static T Construct<T>() where T : class {
+			return Construct(typeof(T)) as T;
+		}
+
 		/// <summary>Constructs an object from the type's constructor that uses the
 		/// passed parameters.</summary>
 		/// <exception cref="MissingConstructorException">No constructor was found.</exception>
@@ -175,6 +181,13 @@ namespace ZeldaOracle.Common.Util {
 		/// <exception cref="MissingConstructorException">No constructor was found.</exception>
 		public static T Construct<T, P1>(Type type, P1 param1) where T : class {
 			return Construct(type, param1) as T;
+		}
+
+		/// <summary>Constructs an object from the type's constructor that uses the
+		/// passed parameters.</summary>
+		/// <exception cref="MissingConstructorException">No constructor was found.</exception>
+		public static T Construct<T, P1>(P1 param1) where T : class {
+			return Construct(typeof(T), param1) as T;
 		}
 
 		/// <summary>Constructs an object from the type's constructor that uses the
@@ -199,6 +212,15 @@ namespace ZeldaOracle.Common.Util {
 		/// <summary>Constructs an object from the type's constructor that uses the
 		/// passed parameters.</summary>
 		/// <exception cref="MissingConstructorException">No constructor was found.</exception>
+		public static T Construct<T, P1, P2>(P1 param1, P2 param2)
+			where T : class
+		{
+			return Construct(typeof(T), param1, param2) as T;
+		}
+
+		/// <summary>Constructs an object from the type's constructor that uses the
+		/// passed parameters.</summary>
+		/// <exception cref="MissingConstructorException">No constructor was found.</exception>
 		public static object Construct<P1, P2, P3>(Type type, P1 param1, P2 param2,
 			P3 param3)
 		{
@@ -216,6 +238,15 @@ namespace ZeldaOracle.Common.Util {
 			P3 param3) where T : class
 		{
 			return Construct(type, param1, param2, param3) as T;
+		}
+
+		/// <summary>Constructs an object from the type's constructor that uses the
+		/// passed parameters.</summary>
+		/// <exception cref="MissingConstructorException">No constructor was found.</exception>
+		public static T Construct<T, P1, P2, P3>(P1 param1, P2 param2, P3 param3)
+			where T : class
+		{
+			return Construct(typeof(T), param1, param2, param3) as T;
 		}
 
 
@@ -238,6 +269,12 @@ namespace ZeldaOracle.Common.Util {
 			return ConstructSafe(type) as T;
 		}
 
+		/// <summary>Constructs an object from the type's empty constructor.
+		/// Returns null if the constructor could not be found.</summary>
+		public static T ConstructSafe<T>() where T : class {
+			return ConstructSafe(typeof(T)) as T;
+		}
+
 		/// <summary>Constructs an object from the type's constructor that uses the
 		/// passed parameters. Returns null if the constructor could not be found.</summary>
 		public static object ConstructSafe<P1>(Type type, P1 param1) {
@@ -255,6 +292,12 @@ namespace ZeldaOracle.Common.Util {
 		/// passed parameters. Returns null if the constructor could not be found.</summary>
 		public static T ConstructSafe<T, P1>(Type type, P1 param1) where T : class {
 			return ConstructSafe(type, param1) as T;
+		}
+
+		/// <summary>Constructs an object from the type's constructor that uses the
+		/// passed parameters. Returns null if the constructor could not be found.</summary>
+		public static T ConstructSafe<T, P1>(P1 param1) where T : class {
+			return ConstructSafe(typeof(T), param1) as T;
 		}
 
 		/// <summary>Constructs an object from the type's constructor that uses the
@@ -281,6 +324,13 @@ namespace ZeldaOracle.Common.Util {
 
 		/// <summary>Constructs an object from the type's constructor that uses the
 		/// passed parameters. Returns null if the constructor could not be found.</summary>
+		public static T ConstructSafe<T, P1, P2>(P1 param1, P2 param2)
+			where T : class {
+			return ConstructSafe(typeof(T), param1, param2) as T;
+		}
+
+		/// <summary>Constructs an object from the type's constructor that uses the
+		/// passed parameters. Returns null if the constructor could not be found.</summary>
 		public static object ConstructSafe<P1, P2, P3>(Type type, P1 param1, P2 param2,
 			P3 param3) {
 			Type[] types = new Type[1];
@@ -302,6 +352,13 @@ namespace ZeldaOracle.Common.Util {
 		public static T ConstructSafe<T, P1, P2, P3>(Type type, P1 param1, P2 param2,
 			P3 param3) where T : class {
 			return ConstructSafe(type, param1, param2, param3) as T;
+		}
+
+		/// <summary>Constructs an object from the type's constructor that uses the
+		/// passed parameters. Returns null if the constructor could not be found.</summary>
+		public static T ConstructSafe<T, P1, P2, P3>(P1 param1, P2 param2,
+			P3 param3) where T : class {
+			return ConstructSafe(typeof(T), param1, param2, param3) as T;
 		}
 
 

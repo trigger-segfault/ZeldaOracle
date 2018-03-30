@@ -108,6 +108,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				rewardData.CantCollectMessage = parameters.GetString(0);
 			});
 			//=====================================================================================
+			AddCommand("FULL", (int) Modes.Reward,
+				"string fullMessage",
+			delegate (CommandParam parameters) {
+				rewardData.FullMessage = parameters.GetString(0);
+			});
+			//=====================================================================================
 			AddCommand("HOLDINCHEST", (int) Modes.Reward,
 				"bool cantCollectMessage",
 			delegate (CommandParam parameters) {
@@ -147,15 +153,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowCommandParseError("Can only call AMOUNT when constructing a " +
 						"RewardAmount!");
 				rewardData.Amount = parameters.GetInt(0);
-			});
-			//=====================================================================================
-			AddCommand("FULL", (int) Modes.Reward,
-				"string fullMessage",
-			delegate (CommandParam parameters) {
-				if (!TypeHelper.TypeHasBase<RewardAmount>(rewardData.Type))
-					ThrowCommandParseError("Can only call FULL when constructing a " +
-						"RewardAmount!");
-				rewardData.FullMessage = parameters.GetString(0);
 			});
 			//=====================================================================================
 			// AMMO REWARD BUILDING

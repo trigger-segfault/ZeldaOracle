@@ -14,6 +14,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 using ZeldaEditor.Control;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace ZeldaEditor.PropertiesEditor {
 	
@@ -29,7 +30,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 
 		public CustomPropertyDescriptor(EditorControl editorControl, IPropertyObject propertyObject, string propertyName, Properties modifiedProperties, Attribute[] attributes) :
-			base(modifiedProperties.GetProperty(propertyName, true).FinalReadableName, attributes)
+			base(propertyName, attributes)
 		{
 			this.editorControl      = editorControl;
 			this.propertyObject     = propertyObject;
@@ -100,7 +101,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		public override Type ComponentType {
-			get { return typeof(PropertiesContainer); }
+			get { return propertyObject.GetType(); }
 		}
 
 		// Get the category this property should be listed under.
@@ -114,10 +115,10 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		// Get the display name for the property.
-		public override string Name {
+		public override string DisplayName {
 			get { return Property.FinalReadableName; }
 		}
-			
+
 		public override Type PropertyType {
 			get { return Property.PropertyTypeToType(Property.Type); }
 		}

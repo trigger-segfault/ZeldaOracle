@@ -90,6 +90,14 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Rectangle2I(min, max - min);
 		}
 
+		/// <summary>Constructs a rectangle from min and max endpoints.
+		/// Adds (1, 1) to the max value</summary>
+		public static Rectangle2I FromEndPointsOne(Point2I a, Point2I b) {
+			Point2I min = GMath.Min(a, b);
+			Point2I max = GMath.Max(a, b);
+			return new Rectangle2I(min, max - min + Point2I.One);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// General
@@ -306,6 +314,9 @@ namespace ZeldaOracle.Common.Geometry {
 		public Point2I BottomRight { get { return new Point2I(Right, Bottom); } }
 		public Point2I BottomLeft  { get { return new Point2I(Left,  Bottom); } }
 		public int     Parimeter   { get { return (2 * (Math.Abs(Width) + Math.Abs(Height))); } }
+
+		public RangeI LeftRight { get { return new RangeI(Left, Right); } }
+		public RangeI TopBottom { get { return new RangeI(Top, Bottom); } }
 
 
 		//-----------------------------------------------------------------------------

@@ -87,6 +87,14 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 		}
 
+		/// <summary>Get an enumerable list of all root base properties.</summary>
+		public IEnumerable<Property> GetRootProperties() {
+			foreach (Property property in RootProperties.map.Values) {
+				if (GetProperty(property.Name, true) == property)
+					yield return property;
+			}
+		}
+
 		/// <summary>Get the property with the given name.</summary>
 		public Property GetProperty(string name, bool acceptBaseProperties) {
 			Property property;
@@ -380,8 +388,8 @@ namespace ZeldaOracle.Common.Scripting {
 			Property p = GetProperty(oldName, false);
 			if (p != null && (!onlyIfNoBase || !p.HasBase)) {
 				p.Name = newName;
-				map[newName] = p;
 				map.Remove(oldName);
+				map[newName] = p;
 				if (baseProperties != null)
 					p.BaseProperty = baseProperties.GetProperty(newName, true);
 				else
@@ -532,6 +540,13 @@ namespace ZeldaOracle.Common.Scripting {
 				p.Hide();
 		}
 
+		/// <summary>Marks a property as browsable and writable in the documentation.</summary>
+		public void Unhide(string name) {
+			Property p = GetProperty(name, false);
+			if (p != null)
+				p.Unhide();
+		}
+
 		/// <summary>Used to restore properties that were aquired from the clipboard.</summary>
 		public void RestoreFromClipboard(Properties baseProperties,
 			IPropertyObject propertyObject)
@@ -576,8 +591,11 @@ namespace ZeldaOracle.Common.Scripting {
 				Property baseProperty = null;
 				if (baseProperties != null) {
 					baseProperty = baseProperties.GetProperty(name, true);
-					if (baseProperty != null && baseProperty.ObjectValue.Equals(value))
-						redundantValue = true;
+					if (baseProperty != null) {
+						if (baseProperty.ObjectValue.Equals(value))
+							redundantValue = true;
+					}
+					else { }
 				}
 
 				// Set the property value.
@@ -675,6 +693,15 @@ namespace ZeldaOracle.Common.Scripting {
 		public Properties BaseProperties {
 			get { return baseProperties; }
 			set { baseProperties = value; ConnectBaseProperties(); }
+		}
+
+		/// <summary>Gets the root base properties. Can be this.</summary>
+		public Properties RootProperties {
+			get {
+				if (baseProperties != null)
+					return baseProperties.RootProperties;
+				return this;
+			}
 		}
 
 		/// <summary>Returns true if the property collection has defined properties

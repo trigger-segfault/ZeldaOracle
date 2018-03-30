@@ -171,53 +171,6 @@ namespace ZeldaEditor {
 			if (editorControl.Level != null)
 				Title += " [" + editorControl.Level.ID +  "]";
 		}
-		
-		public void UpdatePropertyPreview(IPropertyObject obj) {
-			if (objectWindow != null)
-				objectWindow.SetObject(obj);
-
-			System.Windows.Controls.Image image = new System.Windows.Controls.Image();
-			image.Stretch = Stretch.None;
-			image.HorizontalAlignment = HorizontalAlignment.Left;
-			image.VerticalAlignment = VerticalAlignment.Top;
-			tilePreview.UpdateTile(null);
-			if (obj is Room) {
-				Room room = obj as Room;
-				image.Source = EditorImages.Room;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = "Room[" + room.Location.X + ", " + room.Location.Y + "]";
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is Level) {
-				image.Source = EditorImages.Level;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as Level).ID;
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is Area) {
-				image.Source = EditorImages.Area;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as Area).ID;
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is World) {
-				image.Source = EditorImages.World;
-				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = (obj as World).ID;
-				hostTilePreview.Visibility = Visibility.Hidden;
-			}
-			else if (obj is BaseTileDataInstance) {
-				hostTilePreview.Visibility = Visibility.Visible;
-				BaseTileDataInstance tile = obj as BaseTileDataInstance;
-				tilePreview.UpdateTile(tile);
-				propertyPreviewImage.Content = null;
-				propertyPreviewName.Text = tile.BaseData.ResourceName;
-			}
-			else {
-				propertyPreviewImage.Content = null;
-				propertyPreviewName.Text = "";
-			}
-		}
 
 
 		//-----------------------------------------------------------------------------
@@ -370,6 +323,57 @@ namespace ZeldaEditor {
 
 		private void OnToolChanged(object sender, RoutedEventArgs e) {
 			editorControl.CurrentTool = (EditorTool) ((ToggleButton)sender).Tag;
+		}
+
+		public void UpdatePropertyPreview(IPropertyObject obj) {
+			if (objectWindow != null)
+				objectWindow.SetObject(obj);
+
+			System.Windows.Controls.Image image =
+				(System.Windows.Controls.Image) propertyPreviewImage.Content;
+			image.Stretch = Stretch.None;
+			image.HorizontalAlignment = HorizontalAlignment.Left;
+			image.VerticalAlignment = VerticalAlignment.Top;
+			// The scheduled events below prevent white flickering
+			// when transitioning from WinForms to Wpf images.
+			if (obj is Room) {
+				Room room = obj as Room;
+				image.Source = EditorImages.Room;
+				propertyPreviewName.Text = "Room[" + room.Location.X + ", " + room.Location.Y + "]";
+				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
+			}
+			else if (obj is Level) {
+				image.Source = EditorImages.Level;
+				propertyPreviewName.Text = (obj as Level).ID;
+				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
+			}
+			else if (obj is Area) {
+				image.Source = EditorImages.Area;
+				propertyPreviewName.Text = (obj as Area).ID;
+				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
+			}
+			else if (obj is World) {
+				image.Source = EditorImages.World;
+				propertyPreviewName.Text = (obj as World).ID;
+				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
+			}
+			else if (obj is BaseTileDataInstance) {
+				hostTilePreview.Visibility = Visibility.Visible;
+				BaseTileDataInstance tile = obj as BaseTileDataInstance;
+				tilePreview.UpdateTile(tile);
+				image.Source = null;
+				propertyPreviewName.Text = tile.BaseData.ResourceName;
+			}
+			else {
+				image.Source = null;
+				propertyPreviewName.Text = "";
+				HideTilePreview();
+			}
+		}
+
+		private void HideTilePreview() {
+			hostTilePreview.Visibility = Visibility.Hidden;
+			tilePreview.UpdateTile(null);
 		}
 
 		private void OnViewPathsCommands(object sender, ExecutedRoutedEventArgs e) {

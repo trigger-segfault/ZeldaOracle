@@ -15,6 +15,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 using ZeldaEditor.Control;
 using ZeldaOracle.Game.Worlds;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace ZeldaEditor.PropertiesEditor {
 
@@ -30,7 +31,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 
 		public CustomEventDescriptor(EditorControl editorControl, IEventObject eventObject, string eventName, EventCollection events, Attribute[] attributes) :
-			base(events.GetEvent(eventName).FinalReadableName, attributes) {
+			base(eventName, attributes) {
 			this.editorControl      = editorControl;
 			this.eventObject        = eventObject;
 			this.eventName			= eventName;
@@ -100,7 +101,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		public override Type ComponentType {
-			get { return typeof(PropertiesContainer); }
+			get { return eventObject.GetType(); }
 		}
 
 		// Get the category this property should be listed under.
@@ -114,7 +115,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		// Get the display name for the property.
-		public override string Name {
+		public override string DisplayName {
 			get { return Event.FinalReadableName; }
 		}
 

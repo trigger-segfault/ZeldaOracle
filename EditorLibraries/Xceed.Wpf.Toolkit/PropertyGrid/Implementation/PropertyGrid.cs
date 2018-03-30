@@ -245,7 +245,31 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 			UpdateContainerHelper();
 		}
 
-		#endregion //IsCategorized
+		#endregion //IsViewingEvents
+
+		#region UseDummyInstances
+
+		public static readonly DependencyProperty UseDummyInstancesProperty = DependencyProperty.Register( "UseDummyInstances", typeof( bool ), typeof( PropertyGrid ), new UIPropertyMetadata( false, OnUseDummyInstancesChanged ) );
+		public bool UseDummyInstances {
+			get {
+				return (bool) GetValue(UseDummyInstancesProperty);
+			}
+			set {
+				SetValue(UseDummyInstancesProperty, value);
+			}
+		}
+
+		private static void OnUseDummyInstancesChanged(DependencyObject o, DependencyPropertyChangedEventArgs e) {
+			PropertyGrid propertyGrid = o as PropertyGrid;
+			if (propertyGrid != null)
+				propertyGrid.OnUseDummyInstancesChanged((bool) e.OldValue, (bool) e.NewValue);
+		}
+
+		protected virtual void OnUseDummyInstancesChanged(bool oldValue, bool newValue) {
+			UpdateContainerHelper();
+		}
+
+		#endregion //UseDummyInstances
 
 		#region IsMiscCategoryLabelHidden
 
@@ -950,7 +974,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 
 
 			if (SelectedObject != null) {
-				_containerHelper = new ObjectContainerHelper(this, SelectedObject);
+				_containerHelper = new ObjectContainerHelper(this, SelectedObject, UseDummyInstances);
 				((ObjectContainerHelper)_containerHelper).GenerateProperties();
 			}
 

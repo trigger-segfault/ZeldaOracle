@@ -246,26 +246,7 @@ namespace ZeldaOracle.Common.Graphics {
 				(byte) (GMath.Clamp((a.A / 255.0f) * scalar, 0.0f, 1.0f) * 255));
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Conversions
-		//-----------------------------------------------------------------------------
-
-		/*public static explicit operator Color(XnaColor c) {
-			return new Color(c.R, c.G, c.B, c.A);
-		}
-
-		public static implicit operator XnaColor(Color c) {
-			return new XnaColor(c.R, c.G, c.B, c.A);
-		}
-
-		public static explicit operator Color(GdiColor c) {
-			return new Color(c.R, c.G, c.B, c.A);
-		}
-
-		public static implicit operator GdiColor(Color c) {
-			return GdiColor.FromArgb(c.A, c.R, c.G, c.B);
-		}*/
+		
 		//-----------------------------------------------------------------------------
 		// Management
 		//-----------------------------------------------------------------------------
@@ -305,7 +286,7 @@ namespace ZeldaOracle.Common.Graphics {
 			sat = GMath.Clamp(sat, 0f, 1f);
 			val = GMath.Clamp(val, 0f, 1f);
 			float hue2 = hue * 6f;
-			float hueI = (float)GMath.Floor(hue2);
+			float hueI = GMath.Floor(hue2);
 
 			byte b0 = (byte) (255f * val);
 			byte b1 = (byte) (255f * val * (1f - sat));
@@ -352,6 +333,30 @@ namespace ZeldaOracle.Common.Graphics {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets or sets the red value as a float between 0 and 1.</summary>
+		public float RF {
+			get { return R / 255f; }
+			set { R = (byte) GMath.Clamp(value * 255, 0, 255); }
+		}
+
+		/// <summary>Gets or sets the green value as a float between 0 and 1.</summary>
+		public float GF {
+			get { return G / 255f; }
+			set { G = (byte) GMath.Clamp(value * 255, 0, 255); }
+		}
+
+		/// <summary>Gets or sets the blue value as a float between 0 and 1.</summary>
+		public float BF {
+			get { return B / 255f; }
+			set { B = (byte) GMath.Clamp(value * 255, 0, 255); }
+		}
+
+		/// <summary>Gets or sets the alpha value as a float between 0 and 1.</summary>
+		public float AF {
+			get { return A / 255f; }
+			set { A = (byte) GMath.Clamp(value * 255, 0, 255); }
+		}
+
 		/// <summary>Gets the packed color with all the values inside an unsigned int.</summary>
 		public uint PackedColor {
 			get {
@@ -393,8 +398,13 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		/// <summary>Gets the total of the RGB channels.</summary>
-		public int Total {
+		public int RGBTotal {
 			get { return R + G + B; }
+		}
+
+		/// <summary>Gets the total of the RGBA channels.</summary>
+		public int RGBATotal {
+			get { return R + G + B + A; }
 		}
 
 		/// <summary>Returns true if the color is fully transparent.</summary>

@@ -135,6 +135,7 @@
     <Compile Include="Common\Graphics\MappedColors.cs" />
     <Compile Include="Common\Graphics\PaletteColors.cs" />
     <Compile Include="Common\Graphics\RenderTarget.cs" />
+    <Compile Include="Common\Graphics\Shader.cs" />
     <Compile Include="Common\Graphics\Sprites\CanvasSprite.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Misc.cs" />
@@ -152,7 +153,7 @@
     <Compile Include="Common\Graphics\Sprites\DefinitionSprite.cs" />
     <Compile Include="Common\Graphics\Palette.cs" />
     <Compile Include="Common\Graphics\PaletteDictionary.cs" />
-    <Compile Include="Common\Graphics\PaletteShader.cs" />
+    <Compile Include="Common\Graphics\Shaders\PaletteShader.cs" />
     <Compile Include="Common\Graphics\Sprites\UnmappedSprite.cs" />
     <Compile Include="Common\Graphics\Unmapping.cs" />
     <Compile Include="Common\Ini\IniDocument.cs" />
@@ -230,8 +231,11 @@
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Common\Util\BinaryExtensions.cs" />
+    <Compile Include="Common\Util\BinaryCounter.cs" />
+    <Compile Include="Common\Util\Embedding.cs" />
     <Compile Include="Common\Util\EnumHelper.cs" />
     <Compile Include="Common\Util\GdiCasting.cs" />
+    <Compile Include="Common\Util\GenericHelper.cs" />
     <Compile Include="Common\Util\LogUtility.cs" />
     <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Common\Util\PathHelper.cs" />
@@ -239,6 +243,7 @@
     <Compile Include="Common\Util\Texture2DHelper.cs" />
     <Compile Include="Common\Util\TypeHelper.cs" />
     <Compile Include="Common\Util\XnaCasting.cs" />
+    <Compile Include="Common\Util\XnaExtensions.cs" />
     <Compile Include="Game\Assemblies.cs" />
     <Compile Include="Game\CommonTypes.cs" />
     <Compile Include="Game\Control\AreaControl.cs" />
@@ -266,7 +271,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\RoomManagers\RoomGraphics.cs" />
     <Compile Include="Game\Control\RoomManagers\RoomPhysics.cs" />
-    <Compile Include="Game\Control\RoomVisualEffect.cs" />
+    <Compile Include="Game\Control\VisualEffects\RoomVisualEffect.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Sound.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Item.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Trigger.cs" />
@@ -288,6 +293,10 @@
     <Compile Include="Game\Control\RoomManagers\TileManager.cs" />
     <Compile Include="Game\Control\RoomManagers\InteractionManager.cs" />
     <Compile Include="Game\Control\Camera.cs" />
+    <Compile Include="Common\Graphics\Shaders\SineShiftShader.cs" />
+    <Compile Include="Game\Control\VisualEffects\ShaderVisualEffect.cs" />
+    <Compile Include="Game\Control\VisualEffects\SubrosiaWarpVisualEffect.cs" />
+    <Compile Include="Game\Control\VisualEffects\UnderwaterVisualEffect.cs" />
     <Compile Include="Game\Debugging\DebugScripts.cs" />
     <Compile Include="Game\Debugging\DevSettings.cs" />
     <Compile Include="Game\Debugging\GameDebug.cs" />
@@ -332,8 +341,13 @@
     <Compile Include="Game\ResourceData\ResourceDataDrawing.cs" />
     <Compile Include="Game\ResourceData\ResourceDataInitializing.cs" />
     <None Include="Game\Tiles\TileDataInitializing.cs" />
-    <Compile Include="Game\Worlds\MonsterSpawnMode.cs" />
-    <Compile Include="Game\Worlds\RoomRespawnMode.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\TriggerAction.cs" />
+    <Compile Include="Game\Tiles\TileDatas\ActionTileInstancePosition.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileInstanceDictionary.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileInstanceLocation.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileLocation.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileLocationHashSet.cs" />
+    <Compile Include="Game\Worlds\LevelEditorExtensions.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\JumpMonster.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
@@ -541,9 +555,9 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
-    <Compile Include="Game\Tiles\ActionTiles\MagnetBallActionTile.cs" />
-    <Compile Include="Game\Tiles\Clipboard\ActionTileDataReference.cs" />
-    <Compile Include="Game\Tiles\Clipboard\TileDataReference.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\MagnetBallAction.cs" />
+    <Compile Include="Game\Tiles\Clipboard\ActionTileInstanceReference.cs" />
+    <Compile Include="Game\Tiles\Clipboard\TileInstanceReference.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonster.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterArmos.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
@@ -560,7 +574,7 @@
     <Compile Include="Game\Tiles\Custom\Traps\TileFireShooter.cs" />
     <Compile Include="Game\Tiles\Custom\Traps\TileSpikeRoller.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
-    <Compile Include="Game\Tiles\Clipboard\BaseTileDataReference.cs" />
+    <Compile Include="Game\Tiles\Clipboard\BaseTileInstanceReference.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
@@ -611,23 +625,22 @@
     <Compile Include="Game\Tiles\Custom\TileChest.cs" />
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />
     <Compile Include="Game\Tiles\Custom\TileLantern.cs" />
-    <Compile Include="Game\Tiles\BaseTileData.cs" />
+    <Compile Include="Game\Tiles\TileDatas\BaseTileData.cs" />
     <Compile Include="Game\Tiles\ActionTiles\ActionTile.cs" />
-    <Compile Include="Game\Tiles\ActionTiles\ActionTileDataInstance.cs" />
-    <Compile Include="Game\Tiles\ActionTiles\ActionTileData.cs" />
+    <Compile Include="Game\Tiles\TileDatas\ActionTileDataInstance.cs" />
+    <Compile Include="Game\Tiles\TileDatas\ActionTileData.cs" />
     <Compile Include="Game\Tiles\ActionTiles\MonsterAction.cs" />
     <Compile Include="Game\Tiles\ActionTiles\NPCAction.cs" />
     <Compile Include="Game\Tiles\ActionTiles\WarpAction.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
-    <Compile Include="Game\Tiles\TileData.cs" />
-    <Compile Include="Game\Tiles\BaseTileDataInstance.cs" />
-    <Compile Include="Game\Tiles\TileDataInstance.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileData.cs" />
+    <Compile Include="Game\Tiles\TileDatas\BaseTileDataInstance.cs" />
+    <Compile Include="Game\Tiles\TileDatas\TileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Common\Scripting\IPropertyObject.cs" />
     <Compile Include="Game\Worlds\Area.cs" />
     <Compile Include="Game\Worlds\DungeonFloor.cs" />
-    <Compile Include="Game\Worlds\LevelTileCoord.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
     <Compile Include="Game\Worlds\RoomIdentifier.cs" />
@@ -639,9 +652,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Game.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
@@ -697,4 +708,10 @@
       <Target Name="AfterBuild">
       </Target>
     -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue" />
+  </Target>
 </Project>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics.Shaders;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
 
@@ -141,11 +142,11 @@ namespace ZeldaOracle.Common.Graphics {
 			Rectangle2I bounds = sprite.GetBounds(settings);
 			bounds.Size = GMath.Max(Point2I.One, bounds.Size);
 			RenderTarget renderTarget = new RenderTarget(bounds.Size, SurfaceFormat.Color);
-			GameData.PaletteShader.TilePalette = tilePalette;
-			GameData.PaletteShader.EntityPalette = entityPalette;
-			GameData.PaletteShader.ApplyPalettes();
+			GameData.SHADER_PALETTE.TilePalette = tilePalette;
+			GameData.SHADER_PALETTE.EntityPalette = entityPalette;
+			GameData.SHADER_PALETTE.ApplyParameters();
 			g.SetRenderTarget(renderTarget);
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 			g.Clear(Color.Transparent);
 			g.DrawSprite(sprite, settings, -bounds.Point);
 			g.End();

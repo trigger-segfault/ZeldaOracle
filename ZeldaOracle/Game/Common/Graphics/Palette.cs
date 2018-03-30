@@ -228,9 +228,12 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Looks up the color with the specified name and subtype.</summary>
-		public Color LookupColor(string name, LookupSubtypes subtype) {
-			if (!dictionary.Contains(name) && !constColorGroups.ContainsKey(name))
+		public Color LookupColor(string name, LookupSubtypes subtype, bool safe = false) {
+			if (!dictionary.Contains(name) && !constColorGroups.ContainsKey(name)) {
+				if (safe)
+					return Color.Black;
 				throw new ArgumentException("Unknown color group '" + name + "'!");
+			}
 			while (lookupGroups.ContainsKey(name)) {
 				LookupPair lookupPair = lookupGroups[name][(int) subtype];
 				if (!lookupPair.IsUndefined) {

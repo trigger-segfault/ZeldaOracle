@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
-using Key = System.Windows.Input.Key;
+using System.Windows.Input;
+using Cursor = System.Windows.Forms.Cursor;
+using ZeldaOracle.Game;
+using ZeldaOracle.Game.Worlds.Editing;
 
 namespace ZeldaEditor.Tools {
 	public class ToolEyedrop : EditorTool {
@@ -32,8 +34,10 @@ namespace ZeldaEditor.Tools {
 			MouseCursor = EyedropperCursor;
 		}
 
-		protected override void OnBegin() {
-			EditorControl.HighlightMouseTile = false;
+		protected override void OnBegin(ToolEventArgs e) {
+			ShowCursor = false;
+			CursorPosition = e.SnappedPosition;
+			CursorTileSize = Point2I.One;
 		}
 
 
@@ -41,51 +45,47 @@ namespace ZeldaEditor.Tools {
 		// Overridden Mouse Methods
 		//-----------------------------------------------------------------------------
 
-		protected override void OnMouseMove(MouseEventArgs e) {
-			Point2I mousePos = e.MousePos();
-
-			if (!EditorControl.ActionMode) {
-				// Highlight tiles.
-				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
-				EditorControl.HighlightMouseTile = (tile != null);
-				LevelDisplay.CursorTileSize = (tile != null ? tile.Size : Point2I.One);
+		protected override void OnMouseMove(ToolEventArgs e) {
+			if (!ActionMode) {
+				// Highlight tiles
+				TileDataInstance tile = e.SampleTile;
+				ShowCursor = (tile != null);
+				if (tile != null) {
+					CursorPosition = tile.LevelPosition;
+					CursorSize = tile.PixelSize;
+				}
 			}
 			else {
-				// Highlight action tiles.
-				ActionTileDataInstance actionTile = LevelDisplay.SampleActionTile(mousePos);
-				EditorControl.HighlightMouseTile = (actionTile != null);
+				// Highlight action tiles
+				ActionTileDataInstance actionTile = e.SampleActionTile;
+				ShowCursor = (actionTile != null);
 				if (actionTile != null) {
-					LevelDisplay.CursorHalfTileLocation =
-						LevelDisplay.SampleLevelHalfTileCoordinates(
-							LevelDisplay.GetRoomDrawPosition(actionTile.Room) + actionTile.Position);
-					LevelDisplay.CursorTileSize = actionTile.Size;
+					CursorPosition = actionTile.LevelPosition;
+					CursorSize = actionTile.PixelSize;
 				}
 			}
 		}
 
-		protected override void OnMouseDragBegin(MouseEventArgs e) {
+		protected override void OnMouseDragBegin(ToolEventArgs e) {
 			OnMouseDragMove(e);
 		}
 
-		protected override void OnMouseDragEnd(MouseEventArgs e) {
+		protected override void OnMouseDragEnd(ToolEventArgs e) {
 			// Switch back to last placement-based tool.
-			if (DragButton == MouseButtons.Left) {
-				if (EditorControl.PreviousTool is ToolFill)
-					EditorControl.CurrentTool = EditorControl.ToolFill;
-				else if (EditorControl.PreviousTool is ToolSquare)
-					EditorControl.CurrentTool = EditorControl.ToolSquare;
+			if (DragButton == MouseButton.Left) {
+				if (EditorControl.PreviousTool is ToolFill ||
+					EditorControl.PreviousTool is ToolSquare)
+					EditorControl.CurrentTool = EditorControl.PreviousTool;
 				else
 					EditorControl.CurrentTool = EditorControl.ToolPlace;
 			}
 		}
 
-		protected override void OnMouseDragMove(MouseEventArgs e) {
-			Point2I mousePos	= e.MousePos();
-
-			if (DragButton == MouseButtons.Left) {
-				// Sample the tile.
-				if (!EditorControl.ActionMode) {
-					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
+		protected override void OnMouseDragMove(ToolEventArgs e) {
+			if (DragButton == MouseButton.Left) {
+				if (!ActionMode) {
+					// Sample the tile
+					TileDataInstance tile = e.SampleTile;
 					if (tile != null) {
 						EditorControl.SelectedTilesetLocation = -Point2I.One;
 						EditorControl.SelectedTileset = null;
@@ -93,7 +93,8 @@ namespace ZeldaEditor.Tools {
 					}
 				}
 				else {
-					ActionTileDataInstance actionTile = LevelDisplay.SampleActionTile(mousePos);
+					// Sample the action tile
+					ActionTileDataInstance actionTile = e.SampleActionTile;
 					if (actionTile != null) {
 						EditorControl.SelectedTilesetLocation = -Point2I.One;
 						EditorControl.SelectedTileset = null;
@@ -101,6 +102,15 @@ namespace ZeldaEditor.Tools {
 					}
 				}
 			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+
+		public override int Snapping {
+			// Always snap directly
+			get { return 1; }
 		}
 	}
 }

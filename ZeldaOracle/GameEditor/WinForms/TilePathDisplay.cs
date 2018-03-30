@@ -123,7 +123,7 @@ namespace ZeldaEditor.WinForms {
 			this.paths = new List<TilePathInfo>();
 			this.pathTiles = new HashSet<TileDataInstance>();
 
-			Size = (room.Size * GameSettings.TILE_SIZE).ToGdiSize();
+			Size = room.PixelSize.ToGdiSize();
 
 			foreach (var tileData in room.GetTiles()) {
 				if (tileData == tile || !string.IsNullOrWhiteSpace(
@@ -229,11 +229,11 @@ namespace ZeldaEditor.WinForms {
 			TileDataDrawing.Level = room.Level;
 			TileDataDrawing.Room = room;
 
-			GameData.PaletteShader.TilePalette = room.Zone.Palette;
-			GameData.PaletteShader.ApplyPalettes();
+			GameData.SHADER_PALETTE.TilePalette = room.Zone.Palette;
+			GameData.SHADER_PALETTE.ApplyParameters();
 
 			Graphics2D g = new Graphics2D();
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			g.Begin(GameSettings.DRAW_MODE_PALLETE);
 			g.Clear(Color.White);
 
 			DrawRoomTiles(g);
@@ -255,7 +255,7 @@ namespace ZeldaEditor.WinForms {
 						TileDataInstance tile = room.GetTile(x, y, layer);
 						Point2I position = new Point2I(x, y) * GameSettings.TILE_SIZE;
 						if (tile != null && tile.IsAtLocation(x, y) && !IsPathTile(tile)) {
-							TileDataDrawing.DrawTile(g, tile, position, room.Zone, color);
+							TileDataDrawing.DrawTileObject(g, tile, position, room.Zone, color);
 						}
 					}
 				}

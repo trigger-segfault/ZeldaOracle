@@ -100,7 +100,7 @@ namespace ConscriptDesigner.WinForms {
 				Point2I origin = tileset.GetTileDataOrigin(point);
 				if (origin != -Point2I.One) {
 					if (!tileset.UsePreviewSprites)
-						hoverSize = tileset.GetTileDataAtOrigin(origin).Size;
+						hoverSize = tileset.GetTileDataAtOrigin(origin).TileSize;
 					point = origin;
 				}
 				return true;
@@ -185,7 +185,7 @@ namespace ConscriptDesigner.WinForms {
 			}
 
 			if (selectionPoint != -Point2I.One) {
-				Point2I selectedSize = DesignerControl.SelectedTileData.Size;
+				Point2I selectedSize = DesignerControl.SelectedTileData.TileSize;
 				if (tileset == null || tileset.UsePreviewSprites)
 					selectedSize = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(
