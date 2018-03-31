@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Sword Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnSwingTilePeak(int angle, Vector2F hitPoint) {
+		public override void OnSwingTilePeak(Angle angle, Vector2F hitPoint) {
 			// Don't cut the tile when the swing is started
 			if (SwingAngleIndex > 0)
 				base.OnSwingTilePeak(angle, hitPoint);

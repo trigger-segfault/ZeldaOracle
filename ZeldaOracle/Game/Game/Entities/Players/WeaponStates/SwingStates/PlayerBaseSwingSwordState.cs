@@ -39,8 +39,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			return player.ToolSword;
 		}
 
-		public override void OnSwingTilePeak(int angle, Vector2F hitPoint) {
-			if ((angle == Directions.ToAngle(SwingDirection)
+		public override void OnSwingTilePeak(Angle angle, Vector2F hitPoint) {
+			if ((angle == SwingDirection.ToAngle()
 				|| !limitTilesToDirection) && player.IsOnGround)
 			{
 				CutTilesAtPoint(hitPoint);

@@ -6,9 +6,9 @@ using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
-	public class PlayerSwingState : PlayerState {
 
-		
+	public class PlayerSwingState : PlayerState {
+				
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
@@ -138,7 +138,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			swingDirection = direction;
 			swingAngleDirection = swingWindingOrders[swingDirection];
 			swingAngleStart = swingDirection.ToAngle()
-				.Rotate(swingAngleStart, swingAngleDirection);
+				.Rotate(-swingAnglePullBack, swingAngleDirection);
 			swingAngle = swingAngleStart;
 			swingAngleIndex = 0;
 
@@ -200,9 +200,9 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			End();
 		}
 
-		public virtual void OnSwingTilePeak(int angle, Vector2F hitPoint) {}
+		public virtual void OnSwingTilePeak(Angle angle, Vector2F hitPoint) {}
 
-		public virtual void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {}
+		public virtual void OnSwingEntityPeak(Angle angle, Rectangle2F collisionBox) {}
 
 
 		//-----------------------------------------------------------------------------
