@@ -59,7 +59,7 @@ SPRITESET "tiles_general_objects" (14, 5);
 	
 	# Dirt Pile ---------------------------------------------------
 	
-	MAPPEDCOLORS	"tiles_default", ("dirt");
+	MAPPEDCOLORS	"tiles_default", ("dirt_pile");
 	SINGLE BASIC	(1, 4); END;
 	
 	# Burnable Trees ----------------------------------------------

@@ -83,6 +83,34 @@ ZONE "summer";
 	SETSTYLE "vertical_wall_top", "seasons";
 END;
 
+ZONE "winter";
+	CLONE "summer";
+	NAME "winter";
+	DEFAULTTILE "ground";
+	PALETTE "winter";
+	
+	SETSTYLE "cliff", "seasons";
+	SETSTYLE "cliff_railing", "seasons";
+	SETSTYLE "grass", "seasons";
+	SETSTYLE "grass_ground", "groomed";
+	SETSTYLE "grass_green", "groomed";
+	SETSTYLE "tree", "snow_topped";
+	SETSTYLE "tree_alt", "snow_covered";
+	
+	SETSTYLE "roof_tiled", "past";
+	SETSTYLE "fence_post", "wooden";
+	SETSTYLE "bridge", "past";
+	SETSTYLE "fountain_jet", "continuous";
+	SETSTYLE "vines", "seasons";
+	SETSTYLE "vine_cliff", "seasons";
+	SETSTYLE "water_rocks", "seasons";
+	SETSTYLE "dirt_rough", "seasons";
+	SETSTYLE "flying_tile", "seasons";
+	SETSTYLE "hardened_lava", "seasons";
+	SETSTYLE "house_wall", "seasons";
+	SETSTYLE "vertical_wall_top", "seasons";
+END;
+
 ZONE "summer_forest";
 	CLONE "summer";
 	NAME "Summer (Forest)";

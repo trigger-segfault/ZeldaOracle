@@ -224,6 +224,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>underwater_present</Name>
     </None>
+    <None Include="Palettes\Overworld\winter.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>winter</Name>
+    </None>
     <None Include="Palettes\palettes.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>palettes</Name>
@@ -1600,14 +1604,13 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Shaders\sine_shift.fx">
       <Name>sine_shift</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>

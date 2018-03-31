@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.BiggoronSword,	MonsterReactions.Kill);
-			Interactions.SetReaction(InteractionType.Shield,			SenderReactions.Bump,		MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.Shield,		SenderReactions.Bump,		MonsterReactions.Kill);
 			// Seed interations
 			Interactions.SetReaction(InteractionType.EmberSeed,		SenderReactions.Destroy,	MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.ScentSeed,		SenderReactions.Destroy,	MonsterReactions.Kill);
@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Interactions.SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept,	MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.RodFire,		SenderReactions.Destroy,	MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	MonsterReactions.Kill);
-			Interactions.SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept,	MonsterReactions.Kill);
+			Interactions.SetReaction(InteractionType.SwitchHook,	SenderReactions.Intercept,	MonsterReactions.Kill);
 			// Environment interations
 			Interactions.SetReaction(InteractionType.Fire,			MonsterReactions.Kill);
 			Interactions.SetReaction(InteractionType.Gale,			MonsterReactions.Kill);
