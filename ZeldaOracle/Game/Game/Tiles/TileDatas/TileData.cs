@@ -57,8 +57,6 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Environment Type", "enum", typeof(TileEnvironmentType), "General", "");
 			properties.SetEnumStr("polarity", Polarity.None)
 				.SetDocumentation("Polarity", "enum", typeof(Polarity), "General", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
-			properties.Set("disable_on_destroy", false)
-				.SetDocumentation("Disable on Destroy", "General", "");
 
 			// Motion
 			properties.Set("path", "")

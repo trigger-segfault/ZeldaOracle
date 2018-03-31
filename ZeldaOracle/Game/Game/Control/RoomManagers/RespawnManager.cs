@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control.RoomManagers {
-	/// <summary>Manages room clearing and tells a room to respawn when it needs to.</summary>
+
+	/// <summary>Manages room clearing and tells a room to respawn when it needs to.
+	/// </summary>
 	public class RespawnManager : AreaManager {
 
 		//-----------------------------------------------------------------------------
@@ -24,15 +22,12 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 			private HashSet<RoomIdentifier> visitedRooms;
 			/// <summary>The collection of dead monsters.</summary>
 			private HashSet<int> deadMonsters;
-
-			/// <summary>The number of new rooms visited since clearing.</summary>
-			private int visitCount;
 			/// <summary>True if the room is currently cleared.</summary>
 			private bool cleared;
 
 
 			//-----------------------------------------------------------------------------
-			// Constructor
+			// Constructors
 			//-----------------------------------------------------------------------------
 
 			/// <summary>Constructed the visited rooms.</summary>
@@ -41,7 +36,6 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 				this.respawnMode = respawnMode;
 				this.visitedRooms = new HashSet<RoomIdentifier>();
 				this.deadMonsters = new HashSet<int>();
-				this.visitCount = 0;
 				this.cleared = false;
 			}
 
@@ -50,22 +44,27 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 			// Visiting
 			//-----------------------------------------------------------------------------
 			
-			/// <summary>Tries to add this room to the list of visited rooms.
-			/// Returns true if this room was respawned.</summary>
-			public bool Visit(RoomIdentifier room) {
-				if (IsCleared) {
-					if (visitedRooms.Add(room))
-						visitCount++;
-					if (room == this.room && CanRespawn) {
-						cleared = false;
-						visitCount = 0;
-						if (respawnMode != RoomRespawnMode.Dungeon)
-							visitedRooms.Clear();
-						deadMonsters.Clear();
+			/// <summary>Tries to add this room to the list of visited rooms. Returns true
+			/// if the room was respawned.</summary>
+			public bool OnVisitRoom(RoomIdentifier room) {
+				if (cleared) {
+					if (room != this.room) {
+						// Add this room to our list of visited rooms.
+						visitedRooms.Add(room);
+					}
+					else if (CanRespawn) {
+						RespawnRoom();
 						return true;
 					}
 				}
 				return false;
+			}
+
+			private void RespawnRoom() {
+				cleared = false;
+				if (respawnMode != RoomRespawnMode.Dungeon)
+					visitedRooms.Clear();
+				deadMonsters.Clear();
 			}
 
 			/// <summary>Marks the room as cleared so that visited rooms are counted.
@@ -84,7 +83,8 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 					deadMonsters.Add(id);
 			}
 
-			/// <summary>Returns true if the monster with the specified ID is dead.</summary>
+			/// <summary>Returns true if the monster with the specified ID is dead.
+			/// </summary>
 			public bool IsMonsterDead(int id) {
 				return (cleared || (id != 0 && id != -1 && deadMonsters.Contains(id)));
 			}
@@ -94,12 +94,12 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 			// Properties
 			//-----------------------------------------------------------------------------
 
-			/// <summary>Gets the number of rooms visited.</summary>
-			public int Count {
-				get { return visitCount; }
+			/// <summary>Gets the number of other rooms visited.</summary>
+			public int VisitedRoomCount {
+				get { return visitedRooms.Count; }
 			}
 
-			/// <summary>Gets if the room is currently cleared.</summary>
+			/// <summary>True if the room is currently cleared.</summary>
 			public bool IsCleared {
 				get { return cleared; }
 			}
@@ -107,8 +107,8 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 			/// <summary>True if the respawn requirements have been fulfilled.</summary>
 			public bool CanRespawn {
 				get {
-					return (cleared && visitCount >=
-						GameSettings.ROOM_RESPAWN_VISIT_COUNT &&
+					return (cleared && visitedRooms.Count >=
+							GameSettings.ROOM_RESPAWN_VISIT_COUNT &&
 						respawnMode != RoomRespawnMode.Never) ||
 						respawnMode == RoomRespawnMode.Always;
 				}
@@ -125,12 +125,12 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 
 
 		//-----------------------------------------------------------------------------
-		// Constructor
+		// Constructors
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs the room clear manager for the area.</summary>
 		public RespawnManager(AreaControl areaControl) : base(areaControl) {
-			this.managedRooms = new Dictionary<RoomIdentifier, RoomRespawning>();
+			managedRooms = new Dictionary<RoomIdentifier, RoomRespawning>();
 		}
 
 
@@ -149,8 +149,8 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 		public bool VisitRoom(RoomIdentifier room) {
 			bool respawned = false;
 			foreach (var pair in managedRooms) {
-				if (pair.Value.Visit(room))
-					respawned= true;
+				if (pair.Value.OnVisitRoom(room))
+					respawned = true;
 			}
 			return respawned;
 		}

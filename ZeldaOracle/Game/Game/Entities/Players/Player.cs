@@ -451,7 +451,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void PickupTile(Tile tile) {
 			if (tile.IsAlive) {
 				tile.SpawnDrop();
-				RoomControl.RemoveTile(tile);
+				tile.Destroy();
 			}
 			stateCarry.SetCarriedObject(tile);
 			BeginWeaponState(stateCarry);

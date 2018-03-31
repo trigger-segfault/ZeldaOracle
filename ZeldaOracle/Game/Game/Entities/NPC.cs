@@ -55,6 +55,8 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public NPC() {
+			disableOnDestroy = true;
+
 			// Graphics
 			Graphics.IsShadowVisible		= true;
 			Graphics.IsGrassEffectVisible	= true;

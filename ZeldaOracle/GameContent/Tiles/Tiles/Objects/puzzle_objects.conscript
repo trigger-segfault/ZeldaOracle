@@ -125,7 +125,6 @@ TILE "temp_wall_webbed";
 	FLAGS		Burnable;
 	SOLID		block;
 	RESETWHEN	Never;
-	PROPERTY	(disable_on_destroy, true);
 END;
 
 # Bridge ------------------------------------------------------

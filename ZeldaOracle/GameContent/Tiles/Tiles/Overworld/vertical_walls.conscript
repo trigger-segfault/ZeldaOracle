@@ -56,7 +56,6 @@ TILE "vertical_brick_wall_bombable";
 	BREAKSOUND	"rock_shatter";
 	TILEBELOW	"vertical_brick_wall_hole";
 	SAMESPRITE;
-	PROPERTY	(disable_on_destroy, true);
 END;
 TILE "vertical_brick_wall_cliff_1"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_brick_wall_cliff_2"; SAMESPRITE; LEDGE block, down; END;

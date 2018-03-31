@@ -35,6 +35,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			physics.DisableSurfaceContact	= true;
 
 			// Interactions
+			Interactions.InteractionZRange = new RangeF(-100, 100);
 			Interactions.InteractionBox = new Rectangle2F(-4, -10, 8, 8);
 			
 			// Monster & unit settings
@@ -42,7 +43,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isStunnable				= false;
 			isGaleable				= false;
 			isBurnable				= false;
-			ignoreZPosition			= true;
 
 			// Weapon interations
 			Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept, MonsterReactions.Kill);

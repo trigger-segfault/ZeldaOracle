@@ -239,7 +239,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return SolidType != TileSolidType.NotSolid; }
 		}
 
-		public int ConveyorAngle {
+		public Angle ConveyorAngle {
 			get { return properties.GetInteger("conveyor_angle", -1); }
 			set { properties.Set("conveyor_angle", value); }
 		}
