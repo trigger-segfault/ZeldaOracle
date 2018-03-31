@@ -219,6 +219,10 @@ namespace ZeldaOracle.Game.Debugging {
 			Console.WriteLine("Player.MoveDirection: {0}", player.MoveDirection.ToString());
 			Console.WriteLine("Player.MoveAngle:     {0}", player.MoveAngle.ToPoint());
 			Console.WriteLine("Player.IsMoving:      {0}", player.Movement.IsMoving);
+			
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("");
+			Console.WriteLine("Player States:");
 			Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.WriteLine("Ctl: {0}", controlStateName);
 			Console.ForegroundColor = ConsoleColor.Red;
