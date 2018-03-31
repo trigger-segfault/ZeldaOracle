@@ -115,6 +115,7 @@ namespace ZeldaOracle.Game.Entities {
 		private int						edgeClipAmount;
 		private int						crushMaxGapSize;
 		private Vector2F				topTilePointOffset;
+		private CollisionStyle			collisionStyle;
 
 		// Internal physics state
 		private Vector2F			previousVelocity;	// XY-Velocity before physics update is called.
@@ -147,6 +148,7 @@ namespace ZeldaOracle.Game.Entities {
 			gravity				= GameSettings.DEFAULT_GRAVITY;
 			maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
 			collisionBox		= new Rectangle2F(-1, -1, 2, 2);
+			collisionStyle		= CollisionStyle.Rectangular;
 			topTile				= null;
 			topTilePointOffset	= Vector2F.Zero;
 			isColliding			= false;
@@ -698,6 +700,11 @@ namespace ZeldaOracle.Game.Entities {
 		public Vector2F TopTilePointOffset {
 			get { return topTilePointOffset; }
 			set { topTilePointOffset = value; }
+		}
+
+		public CollisionStyle CollisionStyle {
+			get { return collisionStyle; }
+			set { collisionStyle = value; }
 		}
 
 

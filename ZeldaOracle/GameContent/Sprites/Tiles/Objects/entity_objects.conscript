@@ -116,8 +116,9 @@ ANIMATION "tile_crossing_gate_raise";
 
 # Pull Handle -------------------------------------------------
 
-NAME "tile_pull_handle_bar_horizontal"		(9, 2);
-NAME "tile_pull_handle_bar_vertical"		(9, 3);
+OFFSET "tile_pull_handle_bar_horizontal"	(9, 2), (-8, -8); END;
+OFFSET "tile_pull_handle_bar_vertical"		(9, 3), (-8, -8); END;
+
 NAME "tile_pull_handle_up"					(10, 2);
 NAME "tile_pull_handle_left"				(11, 2);
 NAME "tile_pull_handle_down"				(10, 3);

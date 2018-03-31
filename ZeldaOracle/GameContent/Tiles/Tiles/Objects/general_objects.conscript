@@ -199,10 +199,12 @@ END;
 
 TILE "magnet_stone_north";
 	SAMESPRITE;
+	SOLID block;
 	PROPERTY (polarity, North);
 END;
 TILE "magnet_stone_south";
 	SAMESPRITE;
+	SOLID block;
 	PROPERTY (polarity, South);
 END;
 

@@ -184,13 +184,6 @@ TILE "sarcophagus";
 	PROPERTY	(pickupable_bracelet_level, 1);
 END;
 
-# Pull Handle -------------------------------------------------
-
-TILE "pull_handle";
-	TYPE		TilePullHandle;
-	SPRITE		"tile_pull_handle_down";
-END;
-
 # Seed Bouncer ------------------------------------------------
 
 TILE "seed_bouncer";

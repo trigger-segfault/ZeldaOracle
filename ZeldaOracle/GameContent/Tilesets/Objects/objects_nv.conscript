@@ -11,7 +11,6 @@ ADDTILE ( 1, 0), "chest";
 ADDTILE ( 2, 0), "chest";
 ADDTILE ( 3, 0), "reward";
 ADDTILE ( 4, 0), "color_switch_blue";
-ADDTILE ( 5, 0), "pull_handle";
 ADDTILE ( 6, 0), "trampoline";
 ADDTILE ( 7, 0), "roller_horizontal";
 ADDTILE ( 8, 0), "roller_vertical";
