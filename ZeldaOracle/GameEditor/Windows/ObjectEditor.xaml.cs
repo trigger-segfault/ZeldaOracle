@@ -8,11 +8,13 @@ using Trigger = ZeldaOracle.Common.Scripting.Trigger;
 using TriggerCollection = ZeldaOracle.Common.Scripting.TriggerCollection;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Game.Control.Scripting;
-using ICSharpCode.CodeCompletion;
 using ZeldaOracle.Game;
 using ZeldaEditor.Scripting;
 using ZeldaEditor.Controls;
 using ZeldaOracle.Game.Worlds;
+using System.Drawing;
+using System.Windows.Media;
+using ICSharpCode.AvalonEdit.Indentation.CSharp;
 
 namespace ZeldaEditor.Windows {
 
@@ -144,9 +146,6 @@ namespace ZeldaEditor.Windows {
 		private EditorControl editorControl;
 		private ObjectEditorModel model;
 		private TilePreview tilePreview;
-		
-		private static CSharpCompletion completion = new CSharpCompletion(
-			new ScriptProvider(), Assemblies.Scripting);
 
 
 		//-----------------------------------------------------------------------------
@@ -178,10 +177,38 @@ namespace ZeldaEditor.Windows {
 			scriptEditor.TextChanged += OnScriptTextChanged;
 			//scriptEditor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
 			
-			scriptEditor.Completion = completion;
-			scriptEditor.Document.FileName = "dummyFileName.cs";
-			scriptEditor.Script = null;
-			scriptEditor.EditorControl = editorControl;
+			RoslynPad.Editor.RoslynCodeEditor editor = scriptEditor;
+			
+			//editor.Loaded += OnEditorLoaded;
+			//editor.TextArea.TextEntering += OnTextEntering;
+			editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
+			editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
+
+			// Selection Style
+			editor.TextArea.SelectionCornerRadius = 0;
+			editor.TextArea.SelectionBorder = null;
+			//editor.FontFamily = new FontFamily("Lucida Console");
+			editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
+			editor.FontSize = 12.667;
+			//editor.TextChanged += OnTextChanged;
+			//editor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
+
+			//timer = StoppableTimer.StartNew(
+			//	TimeSpan.FromMilliseconds(500),
+			//	DispatcherPriority.ApplicationIdle,
+			//	TimerUpdate);
+			TextOptions.SetTextFormattingMode(editor, TextFormattingMode.Display);
+			editor.IsModified = false;
+			editor.Focus();
+			editor.TextArea.IndentationStrategy = new CSharpIndentationStrategy();
+			editor.Options.ConvertTabsToSpaces = false;
+			editor.TextArea.TextView.LineSpacing = 17.0 / 15.0;
+
+
+			//scriptEditor.Completion = completion;
+			//scriptEditor.Document.FileName = "dummyFileName.cs";
+			//scriptEditor.Script = null;
+			//scriptEditor.EditorControl = editorControl;
 			
 			SetObject(obj);
 		}
@@ -249,7 +276,7 @@ namespace ZeldaEditor.Windows {
 					checkBoxInitiallyOn.IsChecked = false;
 					checkBoxFireOnce.IsChecked = false;
 					scriptEditor.Text = "";
-					scriptEditor.Trigger = null;
+					//scriptEditor.Trigger = null;
 				}
 			}
 			else {
@@ -265,7 +292,7 @@ namespace ZeldaEditor.Windows {
 						scriptEditor.Text = model.SelectedTrigger.Script.Code;
 					else
 						scriptEditor.Text = "";
-					scriptEditor.Trigger = model.SelectedTrigger;
+					//scriptEditor.Trigger = model.SelectedTrigger;
 				}
 			}
 		}

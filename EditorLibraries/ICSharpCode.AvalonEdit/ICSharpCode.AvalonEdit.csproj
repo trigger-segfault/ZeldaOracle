@@ -12,7 +12,7 @@
     <NoStdLib>False</NoStdLib>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ICSharpCode.AvalonEdit.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
     <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
@@ -39,6 +39,7 @@
   <PropertyGroup Condition=" '$(Platform)' == 'WithNRefactory' ">
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DefineConstants>DOTNET4;NREFACTORY</DefineConstants>
+    <AssemblyOriginatorKeyFile>..\..\NRefactory\ICSharpCode.NRefactory.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DefineConstants>DEBUG;$(DefineConstants)</DefineConstants>
@@ -61,37 +62,10 @@
     <DebugType>Full</DebugType>
     <DefineTrace>True</DefineTrace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|WithNRefactory'">
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|WithNRefactory'">
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
-    <Reference Include="ICSharpCode.NRefactory, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory.Cecil, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory.CSharp, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory.Xml, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+    <Reference Include="Microsoft.CSharp">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -138,7 +112,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CodeCompletion\ICompletionData.cs" />
-    <Compile Include="CodeCompletion\Images\CompletionImage.cs" />
     <Compile Include="CodeCompletion\InsightWindow.cs" />
     <Compile Include="CodeCompletion\IOverloadProvider.cs" />
     <Compile Include="CodeCompletion\OverloadInsightWindow.cs" />
@@ -477,35 +450,5 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Highlighting\Resources\TSQL-Mode.xshd" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="CodeCompletion\Images\Class.png" />
-    <Resource Include="CodeCompletion\Images\Constructor.png" />
-    <Resource Include="CodeCompletion\Images\Delegate.png" />
-    <Resource Include="CodeCompletion\Images\Enum.png" />
-    <Resource Include="CodeCompletion\Images\EnumValue.png" />
-    <Resource Include="CodeCompletion\Images\Event.png" />
-    <Resource Include="CodeCompletion\Images\ExtensionMethod.png" />
-    <Resource Include="CodeCompletion\Images\Field.png" />
-    <Resource Include="CodeCompletion\Images\FieldReadOnly.png" />
-    <Resource Include="CodeCompletion\Images\Indexer.png" />
-    <Resource Include="CodeCompletion\Images\Interface.png" />
-    <Resource Include="CodeCompletion\Images\Literal.png" />
-    <Resource Include="CodeCompletion\Images\Method.png" />
-    <Resource Include="CodeCompletion\Images\NameSpace.png" />
-    <Resource Include="CodeCompletion\Images\Operator.png" />
-    <Resource Include="CodeCompletion\Images\OverlayInternal.png" />
-    <Resource Include="CodeCompletion\Images\OverlayPrivate.png" />
-    <Resource Include="CodeCompletion\Images\OverlayProtected.png" />
-    <Resource Include="CodeCompletion\Images\OverlayProtectedInternal.png" />
-    <Resource Include="CodeCompletion\Images\OverlayStatic.png" />
-    <Resource Include="CodeCompletion\Images\PInvokeMethod.png" />
-    <Resource Include="CodeCompletion\Images\Property.png" />
-    <Resource Include="CodeCompletion\Images\StaticClass.png" />
-    <Resource Include="CodeCompletion\Images\Struct.png" />
-    <Resource Include="CodeCompletion\Images\VirtualMethod.png" />
   </ItemGroup>
 </Project>

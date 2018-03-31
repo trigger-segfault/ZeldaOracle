@@ -83,7 +83,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 			if (isVisible && blink) {
 				Brush caretBrush = this.CaretBrush;
 				if (caretBrush == null)
-					caretBrush = (Brush)textView.GetValue(TextBlock.ForegroundProperty);
+					caretBrush = (Brush) textView.GetValue(TextBlock.ForegroundProperty);
 
 				if (this.textArea.OverstrikeMode) {
 					SolidColorBrush scBrush = caretBrush as SolidColorBrush;

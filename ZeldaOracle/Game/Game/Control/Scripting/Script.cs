@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ZeldaOracle.Common.Scripting;
 
@@ -165,6 +166,11 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		/// <summary>True if the script has compiler warnings.</summary>
 		public bool HasWarnings {
 			get { return (warnings.Count > 0); }
+		}
+
+		/// <summary>Gets if the script has any parameters.</summary>
+		public bool HasParameteres {
+			get { return parameters.Any(); }
 		}
 
 		// Loaded Assembly ------------------------------------------------------------

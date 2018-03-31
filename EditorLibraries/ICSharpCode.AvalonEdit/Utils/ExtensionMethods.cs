@@ -86,10 +86,10 @@ namespace ICSharpCode.AvalonEdit.Utils {
 		/// Creates typeface from the framework element.
 		/// </summary>
 		public static Typeface CreateTypeface(this FrameworkElement fe) {
-			return new Typeface((FontFamily)fe.GetValue(TextBlock.FontFamilyProperty),
-								(FontStyle)fe.GetValue(TextBlock.FontStyleProperty),
-								(FontWeight)fe.GetValue(TextBlock.FontWeightProperty),
-								(FontStretch)fe.GetValue(TextBlock.FontStretchProperty));
+			return new Typeface((FontFamily) fe.GetValue(TextBlock.FontFamilyProperty),
+								(FontStyle) fe.GetValue(TextBlock.FontStyleProperty),
+								(FontWeight) fe.GetValue(TextBlock.FontWeightProperty),
+								(FontStretch) fe.GetValue(TextBlock.FontStretchProperty));
 		}
 		#endregion
 
@@ -121,7 +121,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 		/// </summary>
 		public static bool? GetBoolAttribute(this XmlElement element, string attributeName) {
 			XmlAttribute attr = element.GetAttributeNode(attributeName);
-			return attr != null ? (bool?)XmlConvert.ToBoolean(attr.Value) : null;
+			return attr != null ? (bool?) XmlConvert.ToBoolean(attr.Value) : null;
 		}
 
 		/// <summary>
@@ -170,7 +170,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 
 		#region System.Drawing <-> WPF conversions
 		public static System.Drawing.Point ToSystemDrawing(this Point p) {
-			return new System.Drawing.Point((int)p.X, (int)p.Y);
+			return new System.Drawing.Point((int) p.X, (int) p.Y);
 		}
 
 		public static Point ToWpf(this System.Drawing.Point p) {
@@ -195,7 +195,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 				else if (obj is FrameworkContentElement) {
 					// When called with a non-visual such as a TextElement, walk up the
 					// logical tree instead.
-					obj = ((FrameworkContentElement)obj).Parent;
+					obj = ((FrameworkContentElement) obj).Parent;
 				}
 				else {
 					break;
@@ -205,8 +205,9 @@ namespace ICSharpCode.AvalonEdit.Utils {
 
 		[Conditional("DEBUG")]
 		public static void CheckIsFrozen(Freezable f) {
-			//if (f != null && !f.IsFrozen)
-			//Debug.WriteLine("Performance warning: Not frozen: " + f.ToString());
+			if (f != null && !f.IsFrozen) {
+				//Debug.WriteLine("Performance warning: Not frozen: " + f.ToString());
+			}
 		}
 
 		[Conditional("DEBUG")]

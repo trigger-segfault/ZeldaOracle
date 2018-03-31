@@ -8,6 +8,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:scripting="clr-namespace:ZeldaEditor.Scripting"
         xmlns:cmd="clr-namespace:ZeldaEditor"
+        xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         mc:Ignorable="d"
         Title="Object Editor" Height="494" Width="768" Icon="/Resources/Icons/Script.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Window.Resources>
@@ -62,7 +63,12 @@
                         <xctk:WatermarkTextBox x:Name="textBoxTriggerName" BorderBrush="#FFC8C8C8" Margin="165,10,0,15" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Grid.Row="0" TextChanged="OnRenameEvent" Width="244"/>
                         <CheckBox x:Name="checkBoxInitiallyOn" Content="Initially On" Margin="394,13,82,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickInitiallyOn"/>
                         <CheckBox x:Name="checkBoxFireOnce" Content="Fire Once" Margin="473,13,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickFireOnce"/>
-                        <scripting:ScriptTextEditor x:Name="scriptEditor" Grid.Row="1"/>
+
+                        <roslyn:RoslynCodeEditor x:Name="scriptEditor" Grid.Row="1">
+                            <roslyn:RoslynCodeEditor.Resources>
+                                <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
+                            </roslyn:RoslynCodeEditor.Resources>
+                        </roslyn:RoslynCodeEditor>
                     </Grid>
                 </Grid>
             </TabItem>

@@ -175,7 +175,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		void MakeNewBuffer(int newGapOffset, int newGapLength)
 		{
 			char[] newBuffer = new char[Length + newGapLength];
-			Debug.WriteLine("GapTextBuffer was reallocated, new size=" + newBuffer.Length);
+			//Debug.WriteLine("GapTextBuffer was reallocated, new size=" + newBuffer.Length);
 			if (newGapOffset < gapBeginOffset) {
 				// gap is moving backwards
 				

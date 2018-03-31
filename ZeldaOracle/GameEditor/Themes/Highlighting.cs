@@ -30,8 +30,8 @@ namespace ZeldaEditor.Themes {
 
 		/// <summary>Loads all highlighting definitions.</summary>
 		static Highlighting() {
-			textMessageDefinition	= Load("TextMessageHighlighting");
-			//scriptDefinition		= Load("CSharpMultilineHighlighting");
+			textMessageDefinition = Load("TextMessageHighlighting");
+			scriptDefinition = Load("CSharpMultilineHighlighting");
 		}
 
 

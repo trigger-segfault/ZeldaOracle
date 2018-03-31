@@ -227,7 +227,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		/// Returns 0 if this entry represents a removal.
 		/// </summary>
 		public int InsertionLength {
-			get { return (int)(insertionLengthWithMovementFlag & 0x7fffffff); }
+			get { return (int) (insertionLengthWithMovementFlag & 0x7fffffff); }
 		}
 
 		/// <summary>
@@ -235,7 +235,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		/// Returns 0 if this entry represents an insertion.
 		/// </summary>
 		public int RemovalLength {
-			get { return (int)(removalLengthWithDeletionFlag & 0x7fffffff); }
+			get { return (int) (removalLengthWithDeletionFlag & 0x7fffffff); }
 		}
 
 		/// <summary>
@@ -290,8 +290,8 @@ namespace ICSharpCode.AvalonEdit.Document {
 			ThrowUtil.CheckNotNegative(insertionLength, "insertionLength");
 
 			this.offset = offset;
-			this.removalLengthWithDeletionFlag = (uint)removalLength;
-			this.insertionLengthWithMovementFlag = (uint)insertionLength;
+			this.removalLengthWithDeletionFlag = (uint) removalLength;
+			this.insertionLengthWithMovementFlag = (uint) insertionLength;
 		}
 
 		/// <summary>
@@ -308,13 +308,13 @@ namespace ICSharpCode.AvalonEdit.Document {
 		/// <inheritdoc/>
 		public override int GetHashCode() {
 			unchecked {
-				return offset + 3559 * (int)insertionLengthWithMovementFlag + 3571 * (int)removalLengthWithDeletionFlag;
+				return offset + 3559 * (int) insertionLengthWithMovementFlag + 3571 * (int) removalLengthWithDeletionFlag;
 			}
 		}
 
 		/// <inheritdoc/>
 		public override bool Equals(object obj) {
-			return obj is OffsetChangeMapEntry && this.Equals((OffsetChangeMapEntry)obj);
+			return obj is OffsetChangeMapEntry && this.Equals((OffsetChangeMapEntry) obj);
 		}
 
 		/// <inheritdoc/>

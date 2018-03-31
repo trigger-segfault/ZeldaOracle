@@ -15,10 +15,10 @@ using ConscriptDesigner.Controls.TextEditing;
 using ConscriptDesigner.Themes;
 using ConscriptDesigner.Util;
 using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Indentation;
-using ICSharpCode.NRefactory;
 
 namespace ConscriptDesigner.Anchorables {
 	public class ConscriptEditor : ContentFileDocument, ICommandAnchorable {

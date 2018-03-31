@@ -65,7 +65,7 @@ SPRITESET "tiles_general_objects" (14, 5);
 		ADD "dirt_pile"		(1, 4);
 		ADD "snow_pile"		(1, 5);
 		END;
-	
+
 	# Burnable Trees ----------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_trunk_leaves");

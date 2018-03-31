@@ -151,7 +151,7 @@ namespace ICSharpCode.AvalonEdit.CodeCompletion {
 		UIElement GetScrollEventTarget() {
 			if (completionList == null)
 				return this;
-			return completionList.ScrollViewer ?? completionList.ListBox ?? (UIElement)completionList;
+			return completionList.ScrollViewer ?? completionList.ListBox ?? (UIElement) completionList;
 		}
 
 		/// <summary>

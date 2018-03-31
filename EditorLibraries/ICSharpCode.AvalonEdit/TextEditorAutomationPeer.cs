@@ -38,7 +38,7 @@ namespace ICSharpCode.AvalonEdit {
 		}
 
 		private TextEditor TextEditor {
-			get { return (TextEditor)base.Owner; }
+			get { return (TextEditor) base.Owner; }
 		}
 
 		void IValueProvider.SetValue(string value) {

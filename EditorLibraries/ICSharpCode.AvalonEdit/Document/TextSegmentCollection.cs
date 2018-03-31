@@ -98,7 +98,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		#region OnDocumentChanged / UpdateOffsets
 		bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e) {
 			if (managerType == typeof(TextDocumentWeakEventManager.Changed)) {
-				OnDocumentChanged((DocumentChangeEventArgs)e);
+				OnDocumentChanged((DocumentChangeEventArgs) e);
 				return true;
 			}
 			return false;
@@ -269,7 +269,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		public T GetNextSegment(T segment) {
 			if (!Contains(segment))
 				throw new ArgumentException("segment is not inside the segment tree");
-			return (T)segment.Successor;
+			return (T) segment.Successor;
 		}
 
 		/// <summary>
@@ -280,7 +280,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		public T GetPreviousSegment(T segment) {
 			if (!Contains(segment))
 				throw new ArgumentException("segment is not inside the segment tree");
-			return (T)segment.Predecessor;
+			return (T) segment.Predecessor;
 		}
 		#endregion
 
@@ -290,7 +290,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		/// </summary>
 		public T FirstSegment {
 			get {
-				return root == null ? null : (T)root.LeftMost;
+				return root == null ? null : (T) root.LeftMost;
 			}
 		}
 
@@ -299,7 +299,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 		/// </summary>
 		public T LastSegment {
 			get {
-				return root == null ? null : (T)root.RightMost;
+				return root == null ? null : (T) root.RightMost;
 			}
 		}
 		#endregion
@@ -313,7 +313,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 			if (root == null)
 				return null;
 			if (startOffset <= 0)
-				return (T)root.LeftMost;
+				return (T) root.LeftMost;
 			TextSegment s = FindNode(ref startOffset);
 			// startOffset means that the previous segment is starting at the offset we were looking for
 			while (startOffset == 0) {
@@ -324,7 +324,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 				startOffset += p.nodeLength;
 				s = p;
 			}
-			return (T)s;
+			return (T) s;
 		}
 
 		/// <summary>
@@ -427,7 +427,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 			}
 
 			if (nodeLow <= node.segmentLength) {
-				results.Add((T)node);
+				results.Add((T) node);
 			}
 
 			if (node.right != null)
@@ -934,7 +934,7 @@ namespace ICSharpCode.AvalonEdit.Document {
 			if (root != null) {
 				TextSegment current = root.LeftMost;
 				while (current != null) {
-					yield return (T)current;
+					yield return (T) current;
 					// TODO: check if collection was modified during enumeration
 					current = current.Successor;
 				}

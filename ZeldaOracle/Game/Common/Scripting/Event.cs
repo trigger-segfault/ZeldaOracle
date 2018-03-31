@@ -55,19 +55,8 @@ namespace ZeldaOracle.Common.Scripting {
 			script.ID = "__internal_script__";
 			script.IsHidden = true;
 			script.Parameters = Parameters;
-			if (code != null) {
+			if (code != null)
 				script.Code = code;
-			}
-			else if (Parameters.Any()) {
-				script.Code = "// Parameters = (";
-				for (int i = 0; i < Parameters.Count; i++) {
-					ScriptParameter parameter = Parameters[i];
-					if (i > 0)
-						script.Code += ", ";
-					script.Code += parameter.Type + " " + parameter.Name;
-				}
-				script.Code += ")\r\n\r\n";
-			}
 		}
 
 		/// <summary>Undefines the script and sets it back to null.</summary>

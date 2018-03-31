@@ -71,7 +71,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 				string text = input as string;
 				if (text != null) {
 					// if a string is IEnumerable<T>, then T must be char
-					((Rope<char>)(object)this).root = CharRope.InitFromString(text);
+					((Rope<char>) (object) this).root = CharRope.InitFromString(text);
 				}
 				else {
 					T[] arr = ToArray(input);
@@ -441,7 +441,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 		public T this[int index] {
 			get {
 				// use unsigned integers - this way negative values for index overflow and can be tested for with the same check
-				if (unchecked((uint)index >= (uint)this.Length)) {
+				if (unchecked((uint) index >= (uint) this.Length)) {
 					throw new ArgumentOutOfRangeException("index", index, "0 <= index < " + this.Length.ToString(CultureInfo.InvariantCulture));
 				}
 				RopeCacheEntry entry = FindNodeUsingCache(index).PeekOrDefault();

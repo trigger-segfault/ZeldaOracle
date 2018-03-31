@@ -11,6 +11,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         mc:Ignorable="d"
         Title="Oracle Engine Editor" Width="1100" Height="640" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="Editor.ico" ResizeMode="CanResizeWithGrip" Loaded="OnWindowLoaded" PreviewKeyDown="OnPreviewKeyDown" SizeChanged="OnWindowSizeChanged" Closing="OnWindowClosing" PreviewMouseDown="OnPreviewMouseDown">
     <Window.Resources>
@@ -62,7 +63,8 @@
         <CommandBinding Command="cmd:EditorCommands.RefactorProperties" CanExecute="CanExecuteIsWorldOpen" Executed="OnRefactorPropertiesCommand"/>
         <CommandBinding Command="cmd:EditorCommands.RefactorEvents" CanExecute="CanExecuteIsWorldOpen" Executed="OnRefactorEventsCommand"/>
     </Window.CommandBindings>
-    <DockPanel LastChildFill="True" Grid.RowSpan="2">
+    <DockPanel x:Name="clientDockPanel" LastChildFill="True" Grid.RowSpan="2">
+        <!--<roslyn:RoslynCodeEditor x:Name="dummyEditor" Visibility="Collapsed"/>-->
         <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0" />
         <Menu x:Name="menu" DockPanel.Dock="Top">
             <!--Style="{DynamicResource MenuStyle1}"-->

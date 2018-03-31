@@ -44,7 +44,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 			HwndSource source = PresentationSource.FromVisual(owner) as HwndSource;
 			if (source != null) {
 				Vector r = owner.PointToScreen(new Point(size.Width, size.Height)) - owner.PointToScreen(new Point(0, 0));
-				return SafeNativeMethods.CreateCaret(source.Handle, IntPtr.Zero, (int)Math.Ceiling(r.X), (int)Math.Ceiling(r.Y));
+				return SafeNativeMethods.CreateCaret(source.Handle, IntPtr.Zero, (int) Math.Ceiling(r.X), (int) Math.Ceiling(r.Y));
 			}
 			else {
 				return false;
@@ -61,7 +61,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 			if (source != null) {
 				Point pointOnRootVisual = owner.TransformToAncestor(source.RootVisual).Transform(position);
 				Point pointOnHwnd = pointOnRootVisual.TransformToDevice(source.RootVisual);
-				return SafeNativeMethods.SetCaretPos((int)pointOnHwnd.X, (int)pointOnHwnd.Y);
+				return SafeNativeMethods.SetCaretPos((int) pointOnHwnd.X, (int) pointOnHwnd.Y);
 			}
 			else {
 				return false;

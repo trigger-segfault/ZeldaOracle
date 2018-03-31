@@ -458,11 +458,11 @@ namespace ICSharpCode.AvalonEdit.Editing {
 				//  - Text
 				// (but don't try the same format twice)
 				if (pastingEventArgs.FormatToApply != null && dataObject.GetDataPresent(pastingEventArgs.FormatToApply))
-					text = (string)dataObject.GetData(pastingEventArgs.FormatToApply);
+					text = (string) dataObject.GetData(pastingEventArgs.FormatToApply);
 				else if (pastingEventArgs.FormatToApply != DataFormats.UnicodeText && dataObject.GetDataPresent(DataFormats.UnicodeText))
-					text = (string)dataObject.GetData(DataFormats.UnicodeText);
+					text = (string) dataObject.GetData(DataFormats.UnicodeText);
 				else if (pastingEventArgs.FormatToApply != DataFormats.Text && dataObject.GetDataPresent(DataFormats.Text))
-					text = (string)dataObject.GetData(DataFormats.Text);
+					text = (string) dataObject.GetData(DataFormats.Text);
 				else
 					return null; // no text data format
 								 // convert text back to correct newlines for this document

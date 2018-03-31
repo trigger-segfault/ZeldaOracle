@@ -189,7 +189,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets the document displayed by the text editor.
 		/// </summary>
 		public TextDocument Document {
-			get { return (TextDocument)GetValue(DocumentProperty); }
+			get { return (TextDocument) GetValue(DocumentProperty); }
 			set { SetValue(DocumentProperty, value); }
 		}
 
@@ -197,7 +197,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		public event EventHandler DocumentChanged;
 
 		static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) {
-			((TextArea)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
+			((TextArea) dp).OnDocumentChanged((TextDocument) e.OldValue, (TextDocument) e.NewValue);
 		}
 
 		void OnDocumentChanged(TextDocument oldValue, TextDocument newValue) {
@@ -235,7 +235,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets the document displayed by the text editor.
 		/// </summary>
 		public TextEditorOptions Options {
-			get { return (TextEditorOptions)GetValue(OptionsProperty); }
+			get { return (TextEditorOptions) GetValue(OptionsProperty); }
 			set { SetValue(OptionsProperty, value); }
 		}
 
@@ -254,7 +254,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		}
 
 		static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) {
-			((TextArea)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
+			((TextArea) dp).OnOptionsChanged((TextEditorOptions) e.OldValue, (TextEditorOptions) e.NewValue);
 		}
 
 		void OnOptionsChanged(TextEditorOptions oldValue, TextEditorOptions newValue) {
@@ -277,7 +277,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 				return true;
 			}
 			else if (managerType == typeof(TextDocumentWeakEventManager.Changed)) {
-				OnDocumentChanged((DocumentChangeEventArgs)e);
+				OnDocumentChanged((DocumentChangeEventArgs) e);
 				return true;
 			}
 			else if (managerType == typeof(TextDocumentWeakEventManager.UpdateStarted)) {
@@ -289,7 +289,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 				return true;
 			}
 			else if (managerType == typeof(PropertyChangedWeakEventManager)) {
-				OnOptionChanged((PropertyChangedEventArgs)e);
+				OnOptionChanged((PropertyChangedEventArgs) e);
 				return true;
 			}
 			return false;
@@ -387,7 +387,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 				if (value.textArea != this)
 					throw new ArgumentException("Cannot use a Selection instance that belongs to another text area.");
 				if (!object.Equals(selection, value)) {
-					//					Debug.WriteLine("Selection change from " + selection + " to " + value);
+					//					//Debug.WriteLine("Selection change from " + selection + " to " + value);
 					if (textView != null) {
 						ISegment oldSegment = selection.SurroundingSegment;
 						ISegment newSegment = value.SurroundingSegment;
@@ -440,7 +440,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets the background brush used for the selection.
 		/// </summary>
 		public Brush SelectionBrush {
-			get { return (Brush)GetValue(SelectionBrushProperty); }
+			get { return (Brush) GetValue(SelectionBrushProperty); }
 			set { SetValue(SelectionBrushProperty, value); }
 		}
 
@@ -454,7 +454,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets the foreground brush used for selected text.
 		/// </summary>
 		public Brush SelectionForeground {
-			get { return (Brush)GetValue(SelectionForegroundProperty); }
+			get { return (Brush) GetValue(SelectionForegroundProperty); }
 			set { SetValue(SelectionForegroundProperty, value); }
 		}
 
@@ -468,7 +468,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets the pen used for the border of the selection.
 		/// </summary>
 		public Pen SelectionBorder {
-			get { return (Pen)GetValue(SelectionBorderProperty); }
+			get { return (Pen) GetValue(SelectionBorderProperty); }
 			set { SetValue(SelectionBorderProperty, value); }
 		}
 
@@ -483,7 +483,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets the corner radius of the selection.
 		/// </summary>
 		public double SelectionCornerRadius {
-			get { return (double)GetValue(SelectionCornerRadiusProperty); }
+			get { return (double) GetValue(SelectionCornerRadiusProperty); }
 			set { SetValue(SelectionCornerRadiusProperty, value); }
 		}
 
@@ -940,7 +940,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets the indentation strategy used when inserting new lines.
 		/// </summary>
 		public IIndentationStrategy IndentationStrategy {
-			get { return (IIndentationStrategy)GetValue(IndentationStrategyProperty); }
+			get { return (IIndentationStrategy) GetValue(IndentationStrategyProperty); }
 			set { SetValue(IndentationStrategyProperty, value); }
 		}
 		#endregion
@@ -1025,7 +1025,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// Gets/Sets whether overstrike mode is active.
 		/// </summary>
 		public bool OverstrikeMode {
-			get { return (bool)GetValue(OverstrikeModeProperty); }
+			get { return (bool) GetValue(OverstrikeModeProperty); }
 			set { SetValue(OverstrikeModeProperty, value); }
 		}
 

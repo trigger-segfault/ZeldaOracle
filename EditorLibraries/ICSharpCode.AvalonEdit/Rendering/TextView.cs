@@ -95,17 +95,17 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Gets/Sets the document displayed by the text editor.
 		/// </summary>
 		public TextDocument Document {
-			get { return (TextDocument)GetValue(DocumentProperty); }
+			get { return (TextDocument) GetValue(DocumentProperty); }
 			set { SetValue(DocumentProperty, value); }
 		}
 
 		static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) {
-			((TextView)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
+			((TextView) dp).OnDocumentChanged((TextDocument) e.OldValue, (TextDocument) e.NewValue);
 		}
 
 		internal double FontSize {
 			get {
-				return (double)GetValue(TextBlock.FontSizeProperty);
+				return (double) GetValue(TextBlock.FontSizeProperty);
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 				return true;
 			}
 			else if (managerType == typeof(PropertyChangedWeakEventManager)) {
-				OnOptionChanged((PropertyChangedEventArgs)e);
+				OnOptionChanged((PropertyChangedEventArgs) e);
 				return true;
 			}
 			return false;
@@ -193,7 +193,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Gets/Sets the options used by the text editor.
 		/// </summary>
 		public TextEditorOptions Options {
-			get { return (TextEditorOptions)GetValue(OptionsProperty); }
+			get { return (TextEditorOptions) GetValue(OptionsProperty); }
 			set { SetValue(OptionsProperty, value); }
 		}
 
@@ -220,7 +220,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		}
 
 		static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) {
-			((TextView)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
+			((TextView) dp).OnOptionsChanged((TextEditorOptions) e.OldValue, (TextEditorOptions) e.NewValue);
 		}
 
 		void OnOptionsChanged(TextEditorOptions oldValue, TextEditorOptions newValue) {
@@ -362,9 +362,9 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 			if (layer == null)
 				throw new ArgumentNullException("layer");
 			if (!Enum.IsDefined(typeof(KnownLayer), referencedLayer))
-				throw new InvalidEnumArgumentException("referencedLayer", (int)referencedLayer, typeof(KnownLayer));
+				throw new InvalidEnumArgumentException("referencedLayer", (int) referencedLayer, typeof(KnownLayer));
 			if (!Enum.IsDefined(typeof(LayerInsertionPosition), position))
-				throw new InvalidEnumArgumentException("position", (int)position, typeof(LayerInsertionPosition));
+				throw new InvalidEnumArgumentException("position", (int) position, typeof(LayerInsertionPosition));
 			if (referencedLayer == KnownLayer.Background && position != LayerInsertionPosition.Above)
 				throw new InvalidOperationException("Cannot replace or insert below the background layer.");
 
@@ -532,7 +532,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Gets/sets the Brush used for displaying non-printable characters.
 		/// </summary>
 		public Brush NonPrintableCharacterBrush {
-			get { return (Brush)GetValue(NonPrintableCharacterBrushProperty); }
+			get { return (Brush) GetValue(NonPrintableCharacterBrushProperty); }
 			set { SetValue(NonPrintableCharacterBrushProperty, value); }
 		}
 
@@ -547,7 +547,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Gets/sets the Brush used for displaying link texts.
 		/// </summary>
 		public Brush LinkTextForegroundBrush {
-			get { return (Brush)GetValue(LinkTextForegroundBrushProperty); }
+			get { return (Brush) GetValue(LinkTextForegroundBrushProperty); }
 			set { SetValue(LinkTextForegroundBrushProperty, value); }
 		}
 
@@ -562,7 +562,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Gets/sets the Brush used for the background of link texts.
 		/// </summary>
 		public Brush LinkTextBackgroundBrush {
-			get { return (Brush)GetValue(LinkTextBackgroundBrushProperty); }
+			get { return (Brush) GetValue(LinkTextBackgroundBrushProperty); }
 			set { SetValue(LinkTextBackgroundBrushProperty, value); }
 		}
 		#endregion
@@ -593,7 +593,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Set TextEditorOptions.EnableHyperlinks and EnableEmailHyperlinks to false to disable links completely.
 		/// </remarks>
 		public bool LinkTextUnderline {
-			get { return (bool)GetValue(LinkTextUnderlineProperty); }
+			get { return (bool) GetValue(LinkTextUnderlineProperty); }
 			set { SetValue(LinkTextUnderlineProperty, value); }
 		}
 
@@ -1012,7 +1012,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 			var p = new GlobalTextRunProperties();
 			p.typeface = this.CreateTypeface();
 			p.fontRenderingEmSize = FontSize;
-			p.foregroundBrush = (Brush)GetValue(Control.ForegroundProperty);
+			p.foregroundBrush = (Brush) GetValue(Control.ForegroundProperty);
 			ExtensionMethods.CheckIsFrozen(p.foregroundBrush);
 			p.cultureInfo = CultureInfo.CurrentCulture;
 			return p;
@@ -1381,57 +1381,57 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		ScrollViewer IScrollInfo.ScrollOwner { get; set; }
 
 		void IScrollInfo.LineUp() {
-			((IScrollInfo)this).SetVerticalOffset(scrollOffset.Y - DefaultLineHeight);
+			((IScrollInfo) this).SetVerticalOffset(scrollOffset.Y - DefaultLineHeight);
 		}
 
 		void IScrollInfo.LineDown() {
-			((IScrollInfo)this).SetVerticalOffset(scrollOffset.Y + DefaultLineHeight);
+			((IScrollInfo) this).SetVerticalOffset(scrollOffset.Y + DefaultLineHeight);
 		}
 
 		void IScrollInfo.LineLeft() {
-			((IScrollInfo)this).SetHorizontalOffset(scrollOffset.X - WideSpaceWidth);
+			((IScrollInfo) this).SetHorizontalOffset(scrollOffset.X - WideSpaceWidth);
 		}
 
 		void IScrollInfo.LineRight() {
-			((IScrollInfo)this).SetHorizontalOffset(scrollOffset.X + WideSpaceWidth);
+			((IScrollInfo) this).SetHorizontalOffset(scrollOffset.X + WideSpaceWidth);
 		}
 
 		void IScrollInfo.PageUp() {
-			((IScrollInfo)this).SetVerticalOffset(scrollOffset.Y - scrollViewport.Height);
+			((IScrollInfo) this).SetVerticalOffset(scrollOffset.Y - scrollViewport.Height);
 		}
 
 		void IScrollInfo.PageDown() {
-			((IScrollInfo)this).SetVerticalOffset(scrollOffset.Y + scrollViewport.Height);
+			((IScrollInfo) this).SetVerticalOffset(scrollOffset.Y + scrollViewport.Height);
 		}
 
 		void IScrollInfo.PageLeft() {
-			((IScrollInfo)this).SetHorizontalOffset(scrollOffset.X - scrollViewport.Width);
+			((IScrollInfo) this).SetHorizontalOffset(scrollOffset.X - scrollViewport.Width);
 		}
 
 		void IScrollInfo.PageRight() {
-			((IScrollInfo)this).SetHorizontalOffset(scrollOffset.X + scrollViewport.Width);
+			((IScrollInfo) this).SetHorizontalOffset(scrollOffset.X + scrollViewport.Width);
 		}
 
 		void IScrollInfo.MouseWheelUp() {
-			((IScrollInfo)this).SetVerticalOffset(
+			((IScrollInfo) this).SetVerticalOffset(
 				scrollOffset.Y - (SystemParameters.WheelScrollLines * DefaultLineHeight));
 			OnScrollChange();
 		}
 
 		void IScrollInfo.MouseWheelDown() {
-			((IScrollInfo)this).SetVerticalOffset(
+			((IScrollInfo) this).SetVerticalOffset(
 				scrollOffset.Y + (SystemParameters.WheelScrollLines * DefaultLineHeight));
 			OnScrollChange();
 		}
 
 		void IScrollInfo.MouseWheelLeft() {
-			((IScrollInfo)this).SetHorizontalOffset(
+			((IScrollInfo) this).SetHorizontalOffset(
 				scrollOffset.X - (SystemParameters.WheelScrollLines * WideSpaceWidth));
 			OnScrollChange();
 		}
 
 		void IScrollInfo.MouseWheelRight() {
-			((IScrollInfo)this).SetHorizontalOffset(
+			((IScrollInfo) this).SetHorizontalOffset(
 				scrollOffset.X + (SystemParameters.WheelScrollLines * WideSpaceWidth));
 			OnScrollChange();
 		}
@@ -1507,7 +1507,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 			else {
 				wideSpaceWidth = FontSize / 2;
 				defaultBaseline = FontSize;
-				defaultLineHeight = (FontSize + 3);
+				defaultLineHeight = FontSize + 3;
 			}
 			// Update heightTree.DefaultLineHeight, if a document is loaded.
 			if (heightTree != null)
@@ -1948,8 +1948,8 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 				|| e.Property == Control.FontSizeProperty
 				|| e.Property == Control.FontStretchProperty
 				|| e.Property == Control.FontStyleProperty
-				|| e.Property == Control.FontWeightProperty
-				|| e.Property == LineSpacingProperty) {
+				|| e.Property == LineSpacingProperty
+				|| e.Property == Control.FontWeightProperty) {
 				// changing font properties requires recreating cached elements
 				RecreateCachedElements();
 				// and we need to re-measure the font metrics:
@@ -1986,7 +1986,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// <seealso cref="TextEditorOptions.ShowColumnRuler"/>
 		/// </summary>
 		public Pen ColumnRulerPen {
-			get { return (Pen)GetValue(ColumnRulerPenProperty); }
+			get { return (Pen) GetValue(ColumnRulerPenProperty); }
 			set { SetValue(ColumnRulerPenProperty, value); }
 		}
 
@@ -2000,7 +2000,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Gets/Sets the background brush used by current line highlighter.
 		/// </summary>
 		public Brush CurrentLineBackground {
-			get { return (Brush)GetValue(CurrentLineBackgroundProperty); }
+			get { return (Brush) GetValue(CurrentLineBackgroundProperty); }
 			set { SetValue(CurrentLineBackgroundProperty, value); }
 		}
 
@@ -2014,7 +2014,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		/// Gets/Sets the background brush used for the current line.
 		/// </summary>
 		public Pen CurrentLineBorder {
-			get { return (Pen)GetValue(CurrentLineBorderProperty); }
+			get { return (Pen) GetValue(CurrentLineBorderProperty); }
 			set { SetValue(CurrentLineBorderProperty, value); }
 		}
 

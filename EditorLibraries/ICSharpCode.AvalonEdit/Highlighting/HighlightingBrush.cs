@@ -79,7 +79,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting {
 		}
 
 		SimpleHighlightingBrush(SerializationInfo info, StreamingContext context) {
-			this.brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(info.GetString("color")));
+			this.brush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(info.GetString("color")));
 			brush.Freeze();
 		}
 
@@ -115,7 +115,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting {
 		}
 
 		public override Brush GetBrush(ITextRunConstructionContext context) {
-			return (Brush)property.GetValue(null, null);
+			return (Brush) property.GetValue(null, null);
 		}
 
 		public override string ToString() {

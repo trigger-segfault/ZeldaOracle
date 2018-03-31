@@ -243,6 +243,7 @@
     <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Common\Util\PathHelper.cs" />
     <Compile Include="Common\Util\ReflectionHelper.cs" />
+    <Compile Include="Common\Util\StringExtensions.cs" />
     <Compile Include="Common\Util\Texture2DHelper.cs" />
     <Compile Include="Common\Util\TypeHelper.cs" />
     <Compile Include="Common\Util\XnaCasting.cs" />
@@ -717,6 +718,6 @@
     <ItemGroup>
       <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
     </ItemGroup>
-    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue" />
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue"/>
   </Target>
 </Project>

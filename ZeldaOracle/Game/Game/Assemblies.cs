@@ -53,5 +53,29 @@ namespace ZeldaOracle.Game {
 				};
 			}
 		}
+
+		/// <summary>Gets the (Zelda-specific) assemblies used for compiling scripts.</summary>
+		public static Assembly[] PureScripting {
+			get {
+				return new Assembly[] {
+					ZeldaCommon,
+					ZeldaAPI
+				};
+			}
+		}
+
+		/// <summary>All of the using imports for scripting.</summary>
+		public static string[] ScriptUsings {
+			get {
+				return new string[] {
+					"System.Collections",
+					"System.Collections.Generic",
+					"ZeldaAPI",
+					"ZeldaOracle.Game",
+					"ZeldaOracle.Game.API",
+					"ZeldaOracle.Common.Geometry",
+				};
+			}
+		}
 	}
 }
