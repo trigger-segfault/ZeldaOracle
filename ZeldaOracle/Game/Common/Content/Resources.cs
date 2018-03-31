@@ -52,48 +52,8 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<Type, IDictionary> resourceDictionaries;
 
 		// GRAPHICS:
-		/// <summary>The collection of loaded images.</summary>
-		//private static Dictionary<string, Image> images;
-		/// <summary>The collection of loaded real fonts.</summary>
-		//private static Dictionary<string, RealFont> realFonts;
-		/// <summary>The collection of loaded game fonts.</summary>
-		//private static Dictionary<string, GameFont> gameFonts;
-		/// <summary>The collection of loaded sprite sheets.</summary>
-		//private static Dictionary<string, ISpriteSource> spriteSheets;
-		/// <summary>The collection of loaded sprites.</summary>
-		//private static Dictionary<string, ISprite> sprites;
-		/// <summary>The collection of loaded animations.</summary>
-		//private static Dictionary<string, Animation> animations;
-		/// <summary>The collection of loaded palette dictionaries.</summary>
-		//private static Dictionary<string, PaletteDictionary> paletteDictionaries;
-		/// <summary>The collection of loaded palettes.</summary>
-		//private static Dictionary<string, Palette> palettes;
-		/// <summary>The collection of loaded shaders.</summary>
-		//private static Dictionary<string, Shader> shaders;
-
 		/// <summary>The database for creating paletted sprites.</summary>
 		private static PalettedSpriteDatabase spriteDatabase;
-
-		/// <summary>The collection of loaded collision models.</summary>
-		/*private static Dictionary<string, CollisionModel> collisionModels;
-		private static Dictionary<string, BaseTileData> baseTileData;
-		private static Dictionary<string, TileData> tileData;
-		private static Dictionary<string, ActionTileData> actionTileData;
-		private static Dictionary<string, Tileset> tilesets;
-		private static Dictionary<string, Zone> zones;
-		private static Dictionary<string, ItemData> items;
-		private static Dictionary<string, AmmoData> ammos;
-		private static Dictionary<string, RewardData> rewards;*/
-
-		// SOUNDS:
-		/// <summary>The collection of loaded sound effects.</summary>
-		//private static Dictionary<string, Sound> sounds;
-		/// <summary>The collection of loaded music.</summary>
-		//private static Dictionary<string, Music> music;
-
-		// LANGUAGES:
-		/// <summary>The collection of loaded languages.</summary>
-		//private static List<Language> languages;
 
 		// STYLE PREVIEWS:
 		/// <summary>The list of registered style groups along with their previews for each style.</summary>
@@ -182,43 +142,12 @@ namespace ZeldaOracle.Common.Content {
 
 			// Graphics
 			spriteDatabase		= new PalettedSpriteDatabase();
-			/*images				= new Dictionary<string, Image>();
-			realFonts			= new Dictionary<string, RealFont>();
-			gameFonts			= new Dictionary<string, GameFont>();
-			spriteSheets		= new Dictionary<string, ISpriteSource>();
-			sprites				= new Dictionary<string, ISprite>();
-			animations			= new Dictionary<string, Animation>();
-			shaders				= new Dictionary<string, Shader>();
-			paletteDictionaries	= new Dictionary<string, PaletteDictionary>();
-			palettes			= new Dictionary<string, Palette>();
-			spriteDatabase		= new PalettedSpriteDatabase();
-
-			// Sounds
-			music				= new Dictionary<string, Music>();
-
-			// Languages
-			languages			= new List<Language>();
-
-			collisionModels		= new Dictionary<string, CollisionModel>();
-			baseTileData        = new Dictionary<string, BaseTileData>();
-			tileData			= new Dictionary<string, TileData>();
-			actionTileData		= new Dictionary<string, ActionTileData>();
-			tilesets			= new Dictionary<string, Tileset>();
-			zones				= new Dictionary<string, Zone>();
-
-			items				= new Dictionary<string, ItemData>();
-			ammos				= new Dictionary<string, AmmoData>();
-			rewards				= new Dictionary<string, RewardData>();
-
-			propertyActions		= new Dictionary<string, PropertyAction>();*/
-			//sounds              = new Dictionary<string, Sound>();
 
 			// Style previews
 			registeredStyles	= new Dictionary<string, StyleGroupCollection>();
 
 			// Setup the resource dictionary lookup map.
 			resourceDictionaries = new Dictionary<Type, IDictionary>();
-			//resourceDictionaries.Add(typeof(Sound), sounds);
 
 			isInitialized = true;
 		}
@@ -230,34 +159,9 @@ namespace ZeldaOracle.Common.Content {
 
 			// Unload and dispose of all resources beforehand
 			Unload();
-
-			/*images = null;
-			realFonts = null;
-			gameFonts = null;
-			spriteSheets = null;
-			sprites = null;
-			animations = null;
-			shaders = null;
-			sounds = null;
-			music = null;
-			collisionModels = null;
-			baseTileData = null;
-			tileData = null;
-			actionTileData = null;
-			tilesets = null;
-			zones = null;
-			items = null;
-			ammos = null;
-			rewards = null;
-			paletteDictionaries = null;
-			foreach (var pair in palettes) {
-				pair.Value.Dispose();
-			}
-			palettes = null;*/
+			
 			resourceDictionaries = null;
-			//spriteDatabase.Dispose();
 			spriteDatabase = null;
-
 			registeredStyles = null;
 
 			if (!SpriteBatch.IsDisposed)
@@ -282,9 +186,6 @@ namespace ZeldaOracle.Common.Content {
 				return;
 
 			// Clear all resource dictionaries
-			/*foreach (var pair in resourceDictionaries) {
-				pair.Value.Clear();
-			}*/
 			resourceDictionaries.Clear();
 
 			// Clear the paletted sprite database
