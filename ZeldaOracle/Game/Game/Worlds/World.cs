@@ -14,7 +14,7 @@ using ZeldaOracle.Game.Worlds.Editing;
 namespace ZeldaOracle.Game.Worlds {
 	/// <summary>The world class containing everything about the game.</summary>
 	public class World : IEventObjectContainer, IEventObject, IIDObject,
-		IVariableObjectContainer, IVariableObject, ITriggerObject
+		IVariableObjectContainer, IVariableObject, ITriggerObject, ZeldaAPI.World
 	{
 		private Properties properties;
 		private EventCollection events;
@@ -504,6 +504,10 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public TriggerCollection Triggers {
 			get { return triggers; }
+		}
+
+		public Type TriggerObjectType {
+			get { return typeof(ZeldaAPI.World); }
 		}
 
 		/// <summary>Gets the variables for the world.</summary>

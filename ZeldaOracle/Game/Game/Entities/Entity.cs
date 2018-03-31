@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -548,6 +549,10 @@ namespace ZeldaOracle.Game.Entities {
 		public TriggerCollection Triggers {
 			get { return triggers; }
 			set { triggers = value; }
+		}
+
+		public Type TriggerObjectType {
+			get { return GetType(); }
 		}
 
 		public Entity Parent {

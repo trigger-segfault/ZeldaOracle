@@ -15,7 +15,9 @@ namespace ZeldaOracle.Game.Worlds {
 		Dungeon,
 	}
 
-	public class Area : IEventObject, IIDObject, IVariableObject, ITriggerObject {
+	public class Area : IEventObject, IIDObject, IVariableObject, ITriggerObject,
+		ZeldaAPI.AreaTODO
+	{
 		private World world;
 		private Properties properties;
 		private Variables variables;
@@ -190,6 +192,10 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Gets the events for this area.</summary>
 		public TriggerCollection Triggers {
 			get { return triggers; }
+		}
+
+		public Type TriggerObjectType {
+			get { return typeof(ZeldaAPI.AreaTODO); }
 		}
 
 		/// <summary>Gets the variables for this area.</summary>

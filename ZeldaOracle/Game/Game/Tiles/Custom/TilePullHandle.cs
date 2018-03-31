@@ -45,9 +45,9 @@ namespace ZeldaOracle.Game.Tiles {
 			bool wasFullyExtended = IsFullyExtended;
 			SetLength(extendDistance + amount);
 			if (!wasFullyExtended) {
-				GameControl.FireEvent(this, "extending", this);
+				GameControl.FireEvent(this, "extending");
 				if (IsFullyExtended)
-					GameControl.FireEvent(this, "fully_extend", this);
+					GameControl.FireEvent(this, "fully_extend");
 			}
 		}
 
@@ -55,9 +55,9 @@ namespace ZeldaOracle.Game.Tiles {
 			bool wasFullyRetracted = IsFullyRetracted;
 			SetLength(extendDistance - amount);
 			if (!wasFullyRetracted) {
-				GameControl.FireEvent(this, "retracting", this);
+				GameControl.FireEvent(this, "retracting");
 				if (IsFullyRetracted)
-					GameControl.FireEvent(this, "fully_retract", this);
+					GameControl.FireEvent(this, "fully_retract");
 			}
 		}
 

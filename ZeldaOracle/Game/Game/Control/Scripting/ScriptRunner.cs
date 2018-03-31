@@ -100,14 +100,22 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Run a script with the given parameters.</summary>
-		public void RunScript(string scriptId, object[] parameters) {
-			Script script = gameControl.World.Scripts[scriptId];
-			RunScript(script, parameters);
-		}
+		//public void RunScript(string scriptId, object[] parameters) {
+		//	Script script = gameControl.World.Scripts[scriptId];
+		//	RunScript(script, parameters);
+		//}
 
 		/// <summary>Run a script with the given parameters.</summary>
 		public void RunScript(Script script, object[] parameters) {
-			RunScript(context, script.ID, script.MethodInfo, parameters);
+			// Get the script's MethodInfo from the scripting assembly
+			if (script.MethodInfo == null)
+				script.MethodInfo = context.GetType().GetMethod(script.MethodName);
+
+			if (script.MethodInfo != null)
+				RunScript(context, script.ID, script.MethodInfo, parameters);
+			else
+				Logs.Scripts.LogError("No MethodInfo found for trigger script '" +
+					script.MethodName + "'");
 		}
 
 		/// <summary>Run a method as a script with the given parameters.</summary>

@@ -24,6 +24,16 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		/// <summary>Warnings encountered during compilation.</summary>
 		public List<ScriptCompileError> Warnings { get; set; }
+		
+		/// <summary>True if there where no errors.</summary>
+		public bool Succeeded {
+			get { return (Errors.Count == 0); }
+		}
+
+		/// <summary>True if there where errors.</summary>
+		public bool Failed {
+			get { return (Errors.Count > 0); }
+		}
 
 		/// <summary>Raw assembly output from the compiler. If there where compiler
 		/// errors, then this will be null.</summary>

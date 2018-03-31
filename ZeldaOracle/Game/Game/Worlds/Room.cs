@@ -17,7 +17,7 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Room : IEventObjectContainer, IEventObject, IVariableObject,
-		ITriggerObject
+		ITriggerObject, ZeldaAPI.RoomTODO
 	{
 
 		private Level							level;		// The level this room is in.
@@ -986,6 +986,10 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public TriggerCollection Triggers {
 			get { return triggers; }
+		}
+
+		public Type TriggerObjectType {
+			get { return typeof(ZeldaAPI.RoomTODO); }
 		}
 
 		// Settings -------------------------------------------------------------------

@@ -6,8 +6,11 @@ using ZeldaOracle.Game;
 
 namespace ZeldaAPI {
 
+	public interface ActionTile : ApiObject {
+	}
+
 	/// <summary>Access to a base tile.</summary>
-	public interface Tile {
+	public interface Tile : ApiObject {
 		/// <summary>Overrides the default properties of the tile to its current properties.</summary>
 		void OverrideDefaultState();
 		/// <summary>Gets the ID of the tile.</summary>

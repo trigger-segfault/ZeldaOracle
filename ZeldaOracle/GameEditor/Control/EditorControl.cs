@@ -143,6 +143,7 @@ namespace ZeldaEditor.Control {
 			timer					= null;
 			ticks					= 0;
 			isInitialized			= false;
+			scheduledEvents			= new HashSet<DispatcherTimer>();
 
 			// Settings
 			roomSpacing				= 1;
@@ -704,12 +705,22 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		private void OnCompleteCompiling(ScriptCompileResult result) {
+		private void OnCompleteCompiling(ScriptCompileResult result,
+			GeneratedScriptCode code)
+		{
 			needsRecompiling = false;
 			world.ScriptManager.RawAssembly = result.RawAssembly;
 			
 			scriptCompileResult = result;
 
+			if (result.Succeeded) {
+				// Update info about scripts from the generated code
+				foreach (var info in code.ScriptInfo) {
+					info.Key.MethodName = info.Value.MethodName;
+					info.Key.OffsetInCode = info.Value.Offset;
+				}
+			}
+			
 			LogLevel level = LogLevel.Notice;
 			if (result.Errors.Count > 0)
 				level = LogLevel.Error;

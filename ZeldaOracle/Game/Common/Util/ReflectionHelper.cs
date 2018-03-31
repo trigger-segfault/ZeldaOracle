@@ -79,6 +79,21 @@ namespace ZeldaOracle.Common.Util {
 			}*/
 		}
 
+		public static Type GetApiObjectType(Type type) {
+			Type apiObjectType = typeof(ZeldaAPI.ApiObject);
+			bool found = false;
+			foreach (Type interfaceType in type.GetInterfaces()) {
+				if (apiObjectType.IsAssignableFrom(interfaceType)) {
+					apiObjectType = interfaceType;
+					found = true;
+				}
+			}
+			if (found)
+				return apiObjectType;
+			else
+				return null;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Accessor Extensions

@@ -16,8 +16,9 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.Control {
 
-	public delegate void CompileCompletedCallback(ScriptCompileResult result);
-
+	public delegate void CompileCompletedCallback(
+		ScriptCompileResult result, GeneratedScriptCode code);
+	
 	public class CompileTask {
 
 		public Task<ScriptCompileResult> Task { get; set; }
@@ -50,7 +51,7 @@ namespace ZeldaEditor.Control {
 			Result = Task.Result;
 			Task = null;
 			Thread = null;
-			completed?.Invoke(Result);
+			completed?.Invoke(Result, Code);
 		}
 
 

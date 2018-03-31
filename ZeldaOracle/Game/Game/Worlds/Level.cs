@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 	/// <summary>A single floor in a world containing a grid of rooms.</summary>
 	public partial class Level : IEventObjectContainer, IEventObject, IIDObject,
-		IVariableObjectContainer, IVariableObject, ITriggerObject
+		IVariableObjectContainer, IVariableObject, ITriggerObject, ZeldaAPI.Level
 	{
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
@@ -715,6 +715,10 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public TriggerCollection Triggers {
 			get { return triggers; }
+		}
+
+		public Type TriggerObjectType {
+			get { return typeof(ZeldaAPI.Level); }
 		}
 	}
 }

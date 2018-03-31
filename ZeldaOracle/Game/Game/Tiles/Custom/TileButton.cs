@@ -45,11 +45,11 @@ namespace ZeldaOracle.Game.Tiles {
 				// Fire the event.
 				if (isPressed) {
 					//Graphics.PlaySprite(GameData.SPR_TILE_BUTTON_DOWN);
-					GameControl.FireEvent(this, "press", this);
+					GameControl.FireEvent(this, "press");
 				}
 				else {
 					//Graphics.PlaySprite(GameData.SPR_TILE_BUTTON_UP);
-					GameControl.FireEvent(this, "release", this);
+					GameControl.FireEvent(this, "release");
 				}
 
 				Graphics.PlayAnimation(SpriteList[isPressed ? 1 : 0]);

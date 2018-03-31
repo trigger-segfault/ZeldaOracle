@@ -296,7 +296,7 @@ namespace ZeldaEditor.Windows {
 				if (compileTask.IsCompleted) {
 					ScriptCompileResult results = compileTask.Result;
 					compileTask = null;
-					OnCompileComplete(results);
+					OnCompileComplete(results, null);
 				}
 			}
 			// Begin recompiling
@@ -307,7 +307,9 @@ namespace ZeldaEditor.Windows {
 
 		/// <summary>Called once an asyncronous compiling task has completed.
 		/// </summary>
-		private void OnCompileComplete(ScriptCompileResult result) {
+		private void OnCompileComplete(ScriptCompileResult result,
+			GeneratedScriptCode code)
+		{
 			// Update the script object
 			script.Code      = editor.Text;
 			script.Errors    = result.Errors;

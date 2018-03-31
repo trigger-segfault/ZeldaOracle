@@ -7,7 +7,7 @@ using ZeldaOracle.Game.API;
 
 namespace ZeldaAPI {
 	/// <summary>Access to the current area.</summary>
-	public interface Area {
+	public interface Area : ApiObject {
 		/// <summary>Completes the area.</summary>
 		void Complete();
 

@@ -8,8 +8,21 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.API;
 
 namespace ZeldaAPI {
+	
+	public interface AreaTODO : ApiObject {
+	}
+	
+	public interface RoomTODO : ApiObject {
+	}
+
+	public interface World : ApiObject {
+	}
+
+	public interface Level : ApiObject {
+	}
+
 	/// <summary>Access to a single room within a level.</summary>
-	public interface Room {
+	public interface Room : ApiObject {
 		/// <summary>Open all doors in the room.</summary>
 		/// <param name="instantaneous">If true, the door animation does not play.</param>
 		/// <param name="rememberState">True if the doors stays in its new state.</param>

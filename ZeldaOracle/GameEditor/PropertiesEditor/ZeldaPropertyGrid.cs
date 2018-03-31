@@ -55,8 +55,8 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		public void OpenProperties(IPropertyObject propObject) {
 			if (propObject != propertyObject) {
-				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
 				propertyObject = propObject;
+				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
 				SelectedObject = new PropertiesContainer(this, propertyObject);
 			}
 		}

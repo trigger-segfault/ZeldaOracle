@@ -142,6 +142,10 @@ namespace ZeldaOracle.Game.Tiles {
 			set { triggers = value; }
 		}
 
+		public Type TriggerObjectType {
+			get { return Type; }
+		}
+
 		public Properties BaseProperties {
 			get { return tileData.Properties; }
 		}

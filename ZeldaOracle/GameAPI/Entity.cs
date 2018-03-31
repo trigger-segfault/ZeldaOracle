@@ -6,8 +6,12 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaAPI {
 
+	public interface ApiObject {
+	}
+
+
 	/// <summary>Access to an entity.</summary>
-	public interface Entity {
+	public interface Entity : ApiObject {
 
 		string ID { get; }
 		Vector2F Position { get; set; }

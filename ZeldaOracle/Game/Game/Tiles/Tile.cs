@@ -960,6 +960,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Triggers; }
 		}
 
+		public Type TriggerObjectType {
+			get { return GetType(); }
+		}
+
 		// Get the original tile data from which this was created.
 		public TileDataInstance TileData {
 			get { return tileData; }

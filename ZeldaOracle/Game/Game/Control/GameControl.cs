@@ -225,39 +225,46 @@ namespace ZeldaOracle.Game.Control {
 			//roomControl.Player.RequestSpawnNaturalState();
 			roomControl.Player.OnEnterRoom();
 
-			FireEvent(world, "start_game", this);
+			FireEvent(world, "start_game");
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Scripts
+		// Events, Triggers, Scripts
 		//-----------------------------------------------------------------------------
-
-		public void FireEvent(IEventObject caller, string eventName,
-			params object[] parameters)
-		{
-			if (caller is ITriggerObject) {
-				FireEvent((ITriggerObject) caller, eventName);
-			}
-			else {
-				Logs.Scripts.LogError("Outdated FireEvent on " + caller.GetType().Name);
-			}
-		}
-
+		
+		/// <summary>Fire an event for the given caller object. This will execute any
+		/// of the object's triggers that fire from this event.</summary>
 		public void FireEvent(ITriggerObject caller, string eventName) {
+			// Get the event with the specified name
 			Event evnt = caller.Events.GetEvent(eventName);
+			if (evnt == null)
+				throw new Exception(String.Format(
+					"Unknown event type '{0}' for type {1}",
+					eventName, caller.GetType().Name));
+
+			// Fire any triggers that use this event
 			List<Trigger> triggers = caller.Triggers.GetTriggersByEvent(evnt).ToList();
 			foreach (Trigger trigger in triggers) {
-				Logs.Scripts.LogNotice("Running trigger {0}", trigger.Name);
-				if (trigger.FireOnce)
-					trigger.IsEnabled = false;
-				if (trigger.Script != null) {
-					ScriptRunner.RunScript(trigger.Script, new object[] { caller });
-				}
+				if (trigger.IsEnabled)
+					ExecuteTrigger(trigger, caller);
 			}
 		}
 
-		// Execute a script with the given name.
+		/// <summary>Execute the given trigger for its caller. If the trigger is set to
+		/// fire-once, then the trigger will be disabled afterward.</summary>
+		public void ExecuteTrigger(Trigger trigger, object caller) {
+			Logs.Scripts.LogNotice("Running trigger {0}", trigger.Name);
+
+			if (trigger.FireOnce)
+				trigger.IsEnabled = false;
+
+			if (trigger.Script != null) {
+				ScriptRunner.RunScript(trigger.Script, new object[] { caller });
+			}
+		}
+
+		/// <summary>Execute a script with the given parameters.</summary>
 		public void ExecuteScript(string scriptID, params object[] parameters) {
 			if (!string.IsNullOrEmpty(scriptID)) {
 				Script script = world.GetScript(scriptID);
@@ -266,19 +273,16 @@ namespace ZeldaOracle.Game.Control {
 					ExecuteScript(script, parameters);
 				}
 				else {
-					Console.WriteLine("Error trying to execute non-existent script '" + scriptID + "'");
+					Logs.Scripts.LogError(
+						"Unable to execute non-existent script '" + scriptID + "'");
 				}
 			}
 		}
-
-		// Execute a script.
+		/// <summary>Execute a script with the given parameters.</summary>
 		public void ExecuteScript(Script script, params object[] parameters) {
 			if (script != null) {
 				// Only internal scripts take in parameters
-				if (script.IsHidden)
-					scriptRunner.RunScript(script.ID, parameters);
-				else
-					scriptRunner.RunScript(script.ID, new object[] {});
+				scriptRunner.RunScript(script, parameters);
 			}
 		}
 

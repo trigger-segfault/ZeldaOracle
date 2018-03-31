@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control.Scripting {
@@ -75,9 +76,10 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 			// Generate function for the trigger script to test
 			if (trigger != null && trigger.Script != null) {
-				result.Code += CreateTriggerMethodOpening(trigger, 0);
+				string methodName = "";
+				result.Code += CreateTriggerMethodOpening(trigger, 0, out methodName);
 				result.ScriptInfo[trigger.Script] = new ScriptCodeGenerationInfo() {
-					MethodName = trigger.Script.ID,
+					MethodName = methodName,
 					Offset = result.Code.Length,
 				};
 				result.Code += code;
@@ -119,9 +121,13 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			foreach (ITriggerObject triggerObject in world.GetEventObjects()) {
 				foreach (Trigger trigger in triggerObject.Triggers) {
 					if (trigger.Script != null) {
-						result.Code += CreateTriggerMethodOpening(trigger, index);
-						result.ScriptInfo[trigger.Script] = new ScriptCodeGenerationInfo() {
-							MethodName = trigger.Script.ID,
+						string methodName = "";
+						result.Code += CreateTriggerMethodOpening(
+							trigger, index, out methodName);
+						result.ScriptInfo[trigger.Script] =
+							new ScriptCodeGenerationInfo()
+						{
+							MethodName = methodName,
 							Offset = result.Code.Length,
 						};
 
@@ -182,10 +188,13 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			return	"\n        }\n";
 		}
 
-		private static string CreateTriggerMethodOpening(Trigger trigger, int triggerIndex) {
+		private static string CreateTriggerMethodOpening(
+			Trigger trigger, int triggerIndex, out string methodName)
+		{
 			ITriggerObject owner = trigger.Collection.TriggerObject;
-			string methodName = CreateTriggerMethodName(trigger, triggerIndex);
-			Type ownerType = typeof(ZeldaAPI.Entity);
+			methodName = CreateTriggerMethodName(trigger, triggerIndex);
+			Type ownerType = ReflectionHelper.GetApiObjectType(
+				trigger.Collection.TriggerObject.TriggerObjectType);
 			return "        public void " + methodName + "(" + ownerType.Name + " This) {\n";
 		}
 
