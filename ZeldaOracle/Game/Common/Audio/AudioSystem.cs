@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
-using XnaSong = Microsoft.Xna.Framework.Media.Song;
 
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
-using Song = ZeldaOracle.Common.Audio.Song;
 
 namespace ZeldaOracle.Common.Audio {
 	/// <summary>A static class for game-related audio functions and management.</summary>
@@ -28,8 +23,8 @@ namespace ZeldaOracle.Common.Audio {
 		//-----------------------------------------------------------------------------
 
 		// Containment
-		/// <summary>The current song playing.</summary>
-		private static Song currentSong;
+		/// <summary>The currently playing music.</summary>
+		private static Music currentMusic;
 
 		// Playback
 		/// <summary>The master volume of the game.</summary>
@@ -67,7 +62,7 @@ namespace ZeldaOracle.Common.Audio {
 		/// <summary>Initializes the audio manager.</summary>
 		public static void Initialize() {
 			// Containment
-			currentSong			= null;
+			currentMusic		= null;
 
 			// Playback
 			masterVolume		= 1.0f;
@@ -88,13 +83,224 @@ namespace ZeldaOracle.Common.Audio {
 
 		/// <summary>Uninitializes the audio manager.</summary>
 		public static void Uninitialize() {
-			//sounds.Stop();
-
 			// Containment
-			currentSong		= null;
+			currentMusic		= null;
 		}
 
 
+		//-----------------------------------------------------------------------------
+		// Updating
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Called every step to update the audio manager.</summary>
+		public static void Update(GameTime gameTime) {
+			currentMusic?.UpdateSoundInstance();
+
+			foreach (var pair in Resources.GetDictionary<Sound>()) {
+				pair.Value.Update();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Playback
+		//-----------------------------------------------------------------------------
+
+		// Music ----------------------------------------------------------------------
+
+		/// <summary>Plays the specified music.</summary>
+		public static void PlayMusic(Music music, bool looped = true) {
+			currentMusic?.Stop();
+
+			currentMusic = music;
+			music.Play(looped);
+		}
+
+		/// <summary>Plays the specified music.</summary>
+		public static void PlayMusic(Music music, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
+			currentMusic?.Stop();
+
+			currentMusic = music;
+			music.Play(looped, volume, pitch, pan);
+		}
+
+		/// <summary>Plays the music with the specified name.</summary>
+		public static void PlayMusic(string name, bool looped = true) {
+			PlayMusic(Resources.Get<Music>(name), looped);
+		}
+
+		/// <summary>Plays the music with the specified name.</summary>
+		public static void PlayMusic(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
+			PlayMusic(Resources.Get<Music>(name), looped, volume, pitch, pan);
+		}
+
+		// Sound ----------------------------------------------------------------------
+
+		/// <summary>Plays the specified sound effect.</summary>
+		public static SoundInstance PlaySound(Sound sound, bool looped = false) {
+			return sound.Play(looped);
+		}
+
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance ForcePlaySound(Sound sound, bool looped = false) {
+			return sound.ForcePlay(looped);
+		}
+
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance PlaySound(Sound sound, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+			return sound.Play(looped, volume, pitch, pan, muted);
+		}
+
+		/// <summary>Plays the specified sound effect.</summary>
+		public static SoundInstance ForcePlaySound(Sound sound, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+			return sound.ForcePlay(looped, volume, pitch, pan, muted);
+		}
+
+		/// <summary>Plays the sound effect with the specified name.</summary>
+		public static SoundInstance PlaySound(string name, bool looped = false) {
+			return PlaySound(Resources.Get<Sound>(name), looped);
+		}
+
+		/// <summary>Forces the sound effect with the specified name to play.</summary>
+		public static SoundInstance ForcePlaySound(string name, bool looped = false) {
+			return ForcePlaySound(Resources.Get<Sound>(name), looped);
+		}
+
+		/// <summary>Plays the sound effect with the specified name.</summary>
+		public static SoundInstance PlaySound(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+			return PlaySound(Resources.Get<Sound>(name), looped, volume, pitch, pan, muted);
+		}
+
+		/// <summary>Forces the sound effect with the specified name to play.</summary>
+		public static SoundInstance ForcePlaySound(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+			return ForcePlaySound(Resources.Get<Sound>(name), looped, volume, pitch, pan, muted);
+		}
+
+		/// <summary>Stops the specified sound effect.</summary>
+		public static void StopSound(Sound sound) {
+			sound.Stop();
+		}
+
+		/// <summary>Stops the sound effect with the specified name.</summary>
+		public static void StopSound(string name) {
+			StopSound(Resources.Get<Sound>(name));
+		}
+
+		// Random Sound ---------------------------------------------------------------
+
+		/// <summary>Plays the specified sound effect.</summary>
+		public static SoundInstance PlayRandomSound(params Sound[] soundList) {
+			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+		}
+
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance ForcePlayRandomSound(params Sound[] soundList) {
+			return ForcePlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+		}
+
+		/// <summary>Plays the specified sound effect.</summary>
+		public static SoundInstance PlayRandomSound(params string[] soundList) {
+			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+		}
+
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance ForcePlayRandomSound(params string[] soundList) {
+			return ForcePlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+		}
+
+		// Loop While Active Sound ----------------------------------------------------
+
+		/// <summary>Play the sound looped if it is not already playing. The sound will
+		/// automatically stop if this function is not called again before the next
+		/// audio system update step.</summary>
+		public static void LoopSoundWhileActive(Sound sound) {
+			sound.LoopWhileActive();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the music with the specified name is playing.</summary>
+		public static bool IsMusicPlaying(Music music) {
+			return music.IsPlaying;
+		}
+
+		/// <summary>Returns true if the music with the specified name is playing.</summary>
+		public static bool IsMusicPlaying(string name) {
+			return IsMusicPlaying(Resources.Get<Music>(name));
+		}
+
+		/// <summary>Returns true if the sound with the specified name is playing.</summary>
+		public static bool IsSoundPlaying(Sound sound) {
+			return sound.IsPlaying;
+		}
+
+		/// <summary>Returns true if the sound with the specified name is playing.</summary>
+		public static bool IsSoundPlaying(string name) {
+			return IsSoundPlaying(Resources.Get<Sound>(name));
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// All Sounds
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Updates the sounds.</summary>
+		internal static void UpdateSounds() {
+			foreach (var pair in Resources.GetDictionary<Sound>()) {
+				pair.Value.UpdateSoundInstances();
+			}
+		}
+
+		/// <summary>Stops every sound in the game.</summary>
+		public static void StopAllSounds() {
+			foreach (var pair in Resources.GetDictionary<Sound>()) {
+				pair.Value.Stop();
+			}
+		}
+
+		/// <summary>Pauses every sound in the game.</summary>
+		public static void PauseAllSounds() {
+			foreach (var pair in Resources.GetDictionary<Sound>()) {
+				pair.Value.Pause();
+			}
+		}
+
+		/// <summary>Resumes every sound in the game.</summary>
+		public static void ResumeAllSounds() {
+			foreach (var pair in Resources.GetDictionary<Sound>()) {
+				pair.Value.Resume();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Current Music
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Updates the music.</summary>
+		internal static void UpdateMusic() {
+			currentMusic?.UpdateSoundInstance();
+		}
+
+		/// <summary>Pauses the current playing music.</summary>
+		public static void PauseMusic() {
+			currentMusic?.Pause();
+		}
+
+		/// <summary>Resumes the current playing music.</summary>
+		public static void ResumeMusic() {
+			currentMusic?.Pause();
+		}
+
+		/// <summary>Stops the current music.</summary>
+		public static void StopMusic() {
+			currentMusic?.Stop();
+		}
+
+		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -216,246 +422,27 @@ namespace ZeldaOracle.Common.Audio {
 				UpdateMusic();
 			}
 		}
-		
+
 		// Playback -------------------------------------------------------------------
 
-		/// <summary>Gets the current song playing.</summary>
-		public static Song CurrentSong {
-			get { return currentSong; }
+		/// <summary>Gets the current music playing.</summary>
+		public static Music CurrentMusic {
+			get { return currentMusic; }
 		}
 
 		/// <summary>Returns true if the music in the game is playing.</summary>
-		public static bool IsMusicPlaying {
-			get {
-				if (currentSong != null)
-					return currentSong.IsPlaying;
-				return false;
-			}
+		public static bool IsCurrentMusicPlaying {
+			get { return currentMusic?.IsPlaying ?? false; }
 		}
 
 		/// <summary>Returns true if the music in the game is paused.</summary>
-		public static bool IsMusicPaused {
-			get {
-				if (currentSong != null)
-					return currentSong.IsPaused;
-				return false;
-			}
+		public static bool IsCurrentMusicPaused {
+			get { return currentMusic?.IsPaused ?? false; }
 		}
 
 		/// <summary>Returns true if the music in the game is stopped.</summary>
-		public static bool IsMusicStopped {
-			get {
-				if (currentSong != null)
-					return currentSong.IsStopped;
-				return true;
-			}
+		public static bool IsCurrentMusicStopped {
+			get { return currentMusic?.IsStopped ?? true; }
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Updating
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Called every step to update the audio manager.</summary>
-		public static void Update(GameTime gameTime) {
-			if (currentSong != null)
-				currentSong.UpdateSoundInstance();
-
-			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
-				entry.Value.Update();
-			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Playback
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Plays the specified song.</summary>
-		public static void PlaySong(Song song, bool looped = true) {
-			if (currentSong != null)
-				currentSong.Stop();
-
-			currentSong = song;
-			song.Play(looped);
-		}
-
-		/// <summary>Plays the specified song.</summary>
-		public static void PlaySong(Song song, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
-			if (currentSong != null)
-				currentSong.Stop();
-
-			currentSong = song;
-			song.Play(looped, volume, pitch, pan);
-		}
-
-		/// <summary>Plays the song with the specified name.</summary>
-		public static void PlaySong(string name, bool looped = true) {
-			PlaySong(Resources.GetSong(name), looped);
-		}
-
-		/// <summary>Plays the song with the specified name.</summary>
-		public static void PlaySong(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
-			PlaySong(Resources.GetSong(name), looped, volume, pitch, pan);
-		}
-
-		/// <summary>Plays the specified sound effect.</summary>
-		public static SoundInstance PlaySound(Sound sound, bool looped = false) {
-			return sound.Play(looped);
-		}
-
-		/// <summary>Forces the specified sound effect to play.</summary>
-		public static SoundInstance ForcePlaySound(Sound sound, bool looped = false) {
-			return sound.ForcePlay(looped);
-		}
-
-		/// <summary>Forces the specified sound effect to play.</summary>
-		public static SoundInstance PlaySound(Sound sound, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
-			return sound.Play(looped, volume, pitch, pan, muted);
-		}
-
-		/// <summary>Plays the specified sound effect.</summary>
-		public static SoundInstance ForcePlaySound(Sound sound, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
-			return sound.ForcePlay(looped, volume, pitch, pan, muted);
-		}
-
-		/// <summary>Plays the sound effect with the specified name.</summary>
-		public static SoundInstance PlaySound(string name, bool looped = false) {
-			return PlaySound(Resources.GetSound(name), looped);
-		}
-
-		/// <summary>Forces the sound effect with the specified name to play.</summary>
-		public static SoundInstance ForcePlaySound(string name, bool looped = false) {
-			return ForcePlaySound(Resources.GetSound(name), looped);
-		}
-
-		/// <summary>Plays the sound effect with the specified name.</summary>
-		public static SoundInstance PlaySound(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
-			return PlaySound(Resources.GetSound(name), looped, volume, pitch, pan, muted);
-		}
-
-		/// <summary>Forces the sound effect with the specified name to play.</summary>
-		public static SoundInstance ForcePlaySound(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
-			return ForcePlaySound(Resources.GetSound(name), looped, volume, pitch, pan, muted);
-		}
-
-		/// <summary>Plays the specified sound effect.</summary>
-		public static SoundInstance PlayRandomSound(params Sound[] soundList) {
-			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
-		}
-
-		/// <summary>Forces the specified sound effect to play.</summary>
-		public static SoundInstance ForcePlayRandomSound(params Sound[] soundList) {
-			return ForcePlaySound(soundList[GRandom.NextInt(soundList.Length)]);
-		}
-
-		/// <summary>Plays the specified sound effect.</summary>
-		public static SoundInstance PlayRandomSound(params string[] soundList) {
-			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
-		}
-
-		/// <summary>Forces the specified sound effect to play.</summary>
-		public static SoundInstance ForcePlayRandomSound(params string[] soundList) {
-			return ForcePlaySound(soundList[GRandom.NextInt(soundList.Length)]);
-		}
-
-		/// <summary>Play the sound looped if it is not already playing. The sound will
-		/// automatically stop if this function is not called again before the next
-		/// audio system update step.</summary>
-		public static void LoopSoundWhileActive(Sound sound) {
-			sound.LoopWhileActive();
-		}
-
-		/// <summary>Stops the specified sound effect.</summary>
-		public static void StopSound(Sound sound) {
-			sound.Stop();
-		}
-
-		/// <summary>Stops the sound effect with the specified name.</summary>
-		public static void StopSound(string name) {
-			StopSound(Resources.GetSound(name));
-		}
-
-		/// <summary>Returns true if the song with the specified name is playing.</summary>
-		public static bool IsSongPlaying(Song song) {
-			return song.IsPlaying;
-		}
-
-		/// <summary>Returns true if the song with the specified name is playing.</summary>
-		public static bool IsSongPlaying(string name) {
-			return IsSongPlaying(Resources.GetSong(name));
-		}
-
-		/// <summary>Returns true if the sound with the specified name is playing.</summary>
-		public static bool IsSoundPlaying(Sound sound) {
-			return sound.IsPlaying;
-		}
-
-		/// <summary>Returns true if the sound with the specified name is playing.</summary>
-		public static bool IsSoundPlaying(string name) {
-			return IsSoundPlaying(Resources.GetSound(name));
-		}
-
-		//-----------------------------------------------------------------------------
-		// Sound Playback
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Updates the sounds.</summary>
-		internal static void UpdateSounds() {
-			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
-				entry.Value.UpdateSoundInstances();
-			}
-		}
-
-		/// <summary>Stops every sound in the group.</summary>
-		public static void StopAllSounds() {
-			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
-				entry.Value.Stop();
-			}
-		}
-
-		/// <summary>Pauses every sound in the group.</summary>
-		public static void PauseAllSounds() {
-			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
-				entry.Value.Pause();
-			}
-		}
-
-		/// <summary>Resumes every sound in the group.</summary>
-		public static void ResumeAllSounds() {
-			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
-				entry.Value.Resume();
-			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Music Playback
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Updates the music.</summary>
-		internal static void UpdateMusic() {
-			if (currentSong != null)
-				currentSong.UpdateSoundInstance();
-		}
-
-		/// <summary>Pauses the current playing song.</summary>
-		public static void PauseMusic() {
-			if (currentSong != null)
-				currentSong.Pause();
-		}
-
-		/// <summary>Resumes the current playing song.</summary>
-		public static void ResumeMusic() {
-			if (currentSong != null)
-				currentSong.Pause();
-		}
-
-		/// <summary>Stops the current song.</summary>
-		public static void StopMusic() {
-			if (currentSong != null)
-				currentSong.Stop();
-		}
-
 	}
 }

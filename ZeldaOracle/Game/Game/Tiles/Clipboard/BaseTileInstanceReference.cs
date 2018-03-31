@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 		/// <summary>The properties of the tile data.</summary>
 		private Properties			properties;
 		/// <summary>The events of the tile data.</summary>
-		protected EventCollection	events;
+		private EventCollection		events;
 
 
 		//-----------------------------------------------------------------------------
@@ -44,11 +44,12 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 
 		/// <summary>Creates and returns the dereferenced tile data.</summary>
 		public TInstance Dereference() {
-			TInstance baseTile = SetupInstance(Resources.Get<TData>(name));
+			TData data = Resources.Get<TData>(name);
+			TInstance baseTile	= SetupInstance(data);
 			baseTile.Properties	= properties;
 			baseTile.Events		= events;
-			properties.RestoreFromClipboard(baseTile.BaseData.Properties, baseTile);
-			events.RestoreFromClipboard(baseTile.BaseData.Events, baseTile);
+			properties.RestoreFromClipboard(data.Properties, baseTile);
+			events.RestoreFromClipboard(data.Events, baseTile);
 			return baseTile;
 		}
 

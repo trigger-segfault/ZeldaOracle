@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
+﻿using Microsoft.Xna.Framework.Audio;
 
 using ZeldaOracle.Common.Geometry;
 
@@ -16,7 +9,7 @@ namespace ZeldaOracle.Common.Audio {
 		/// <summary>The sound effect instance class contained by this sound.</summary>
 		private SoundEffectInstance soundInstance;
 		/// <summary>The sound class of the sound instance.</summary>
-		private Sound sound;
+		private ISound sound;
 
 		// Settings
 		/// <summary>The default volume of the sound effect.</summary>
@@ -40,7 +33,7 @@ namespace ZeldaOracle.Common.Audio {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs the default sound.</summary>
-		public SoundInstance(SoundEffectInstance soundInstance, Sound sound,
+		public SoundInstance(SoundEffectInstance soundInstance, ISound sound,
 			bool looped = false, float volume = 1.0f, float pitch = 0.0f,
 			float pan = 0.0f, bool muted = false)
 		{
@@ -124,7 +117,7 @@ namespace ZeldaOracle.Common.Audio {
 		}
 
 		/// <summary>Gets the sound containing this sound instance.</summary>
-		public Sound Sound {
+		public ISound Sound {
 			get { return sound; }
 		}
 

@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("name", "")
 				.SetDocumentation("Name", "", "", "General", "The readable name of this area in-game.");
 			properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "General", "The default music to play in this area.", false, true);
+				.SetDocumentation("Music", "music", "", "General", "The default music to play in this area.", false, true);
 
 			// Settings
 			//properties.BaseProperties.Set("dungeon", false)
@@ -212,8 +212,8 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 		
 		/// <summary>Gets or sets the music for this area.</summary>
-		public Song Music {
-			get { return properties.GetResource<Song>("music", null); }
+		public Music Music {
+			get { return properties.GetResource<Music>("music", null); }
 		}
 
 		// Puzzle ---------------------------------------------------------------------

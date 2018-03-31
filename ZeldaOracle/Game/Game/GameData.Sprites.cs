@@ -302,7 +302,7 @@ namespace ZeldaOracle.Game {
 
 		// Loads the sprites and sprite-sheets.
 		private static void LoadSprites() {
-			Resources.LoadSpriteSheets("Sprites/sprites.conscript");
+			Resources.LoadSprites("Sprites/sprites.conscript");
 			IntegrateResources<ISprite>("SPR_");
 
 			// TEMPORARY: Create sprite arrays here.

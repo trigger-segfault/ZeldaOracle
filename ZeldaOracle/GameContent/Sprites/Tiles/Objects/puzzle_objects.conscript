@@ -60,8 +60,8 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 	
 	MAPPEDCOLORS	"tiles_default", ("flying_tile");
 	SINGLE STYLE	"flying_tile", (11, 0);
-		ADD "ages"			(11, 0);
-		ADD "seasons"		(11, 1);
+		ADD "normal"		(11, 0);
+		ADD "outline"		(11, 1);
 		END;
 	
 	# Bridges -----------------------------------------------------

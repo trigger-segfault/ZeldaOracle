@@ -39,8 +39,6 @@ namespace ZeldaOracle.Game.Main {
 		// Graphics:
 		/// <summary>The graphics manager.</summary>
 		private GraphicsDeviceManager graphics;
-		/// <summary>The sprite batch to draw to.</summary>
-		//private SpriteBatch spriteBatch;
 		/// <summary>True if the game is in fullscreen mode.</summary>
 		private bool fullScreen;
 		/// <summary>The current size of the non-fullscreen window.</summary>
@@ -79,34 +77,32 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>Constructs the game base class.</summary>
 		public GameBase(string[] launchParameters) {
 			// Graphics
-			this.graphics				= new GraphicsDeviceManager(this);
-			//this.spriteBatch			= null;
-			this.Content.RootDirectory	= "Content";
-			this.fullScreen				= false;
-			this.windowSize             = GameSettings.SCREEN_SIZE * 4;
-			this.windowSizeChanged		= false;
-			this.isContentLoaded		= true;
-			this.launchParameters		= launchParameters;
+			graphics				= new GraphicsDeviceManager(this);
+			Content.RootDirectory	= "Content";
+			fullScreen				= false;
+			windowSize				= GameSettings.SCREEN_SIZE * 4;
+			windowSizeChanged		= false;
+			isContentLoaded			= true;
+			this.launchParameters	= launchParameters;
 
 			// Game
-			this.game					= null;
-			this.screenShotRequested	= false;
-			this.screenShotName			= "";
+			game					= null;
+			screenShotRequested		= false;
+			screenShotName			= "";
 
 			// Frame Rate
-			this.totalFrames			= 0;
-			this.elapsedTime			= 0.0;
-			this.fps					= 0.0;
+			totalFrames				= 0;
+			elapsedTime				= 0.0;
+			fps						= 0.0;
 
 			// Setup
-			this.IsMouseVisible					= true;
-			this.Window.AllowUserResizing		= false;
-			this.graphics.PreferMultiSampling	= true;
-			this.graphics.PreferredBackBufferWidth	= windowSize.X;
-			this.graphics.PreferredBackBufferHeight	= windowSize.Y;
+			IsMouseVisible					= true;
+			Window.AllowUserResizing		= false;
+			graphics.PreferMultiSampling	= true;
+			graphics.PreferredBackBufferWidth	= windowSize.X;
+			graphics.PreferredBackBufferHeight	= windowSize.Y;
 
-			using (Stream stream = Embedding.Get(nameof(ZeldaOracle), "Game.ico"))
-				Form.Icon = new Icon(stream);
+			SetIcon();
 			Form.MinimumSize = new Size(32, 32);
 			Form.Shown += OnWindowShown;
 		}
@@ -159,10 +155,7 @@ namespace ZeldaOracle.Game.Main {
 
 			try {
 				Logs.Initialization.LogNotice("Begin Load Content");
-
-				// Create a new SpriteBatch, which can be used to draw textures.
-				//spriteBatch = new SpriteBatch(GraphicsDevice);
-
+				
 				AudioSystem.Initialize();
 
 				Resources.Initialize(GraphicsDevice, Content);
@@ -187,7 +180,7 @@ namespace ZeldaOracle.Game.Main {
 			Logs.Initialization.LogNotice("Begin Unload Content");
 
 			AudioSystem.Uninitialize();
-			//Resources.Uninitialize();
+			Resources.Uninitialize();
 
 			game.UnloadContent(Content);
 
@@ -282,7 +275,7 @@ namespace ZeldaOracle.Game.Main {
 		}
 
 		/// <summary>Called every step to update the frame rate.</summary>
-		protected void UpdateFrameRate(GameTime gameTime) {
+		private void UpdateFrameRate(GameTime gameTime) {
 
 			// FPS Counter from:
 			// http://www.david-amador.com/2009/11/how-to-do-a-xna-fps-counter/
@@ -295,7 +288,7 @@ namespace ZeldaOracle.Game.Main {
 		}
 
 		/// <summary>Called every step to update the fullscreen toggle.</summary>
-		protected void UpdateFullScreen() {
+		private void UpdateFullScreen() {
 			
 			if (fullScreen != graphics.IsFullScreen) {
 				Logs.Initialization.LogInfo("UpdateFullScreen");
@@ -310,7 +303,7 @@ namespace ZeldaOracle.Game.Main {
 
 					Form.FormBorderStyle				= FormBorderStyle.Sizable;
 					Application.VisualStyleState		= VisualStyleState.ClientAndNonClientAreasEnabled;
-					Form.Icon							= new Icon("Game.ico");
+					SetIcon();
 					Window.AllowUserResizing = true;
 				}
 				else {
@@ -323,7 +316,7 @@ namespace ZeldaOracle.Game.Main {
 					graphics.ApplyChanges();
 
 					Application.VisualStyleState		= VisualStyleState.ClientAndNonClientAreasEnabled;
-					Form.Icon							= new Icon("Game.ico");
+					SetIcon();
 					Window.AllowUserResizing = true;
 				}
 				Logs.Initialization.LogInfo("End UpdateFullScreen");
@@ -331,11 +324,18 @@ namespace ZeldaOracle.Game.Main {
 		}
 
 		/// <summary>Called every step to update the screenshot requests.</summary>
-		protected void UpdateScreenShot() {
+		private void UpdateScreenShot() {
 			if (screenShotRequested) {
 				screenShotRequested = false;
 				SaveScreenShot();
 			}
+		}
+
+		/// <summary>Sets the icon for the form. This is needed due to fullscreen
+		/// unsetting the icon.</summary>
+		private void SetIcon() {
+			using (Stream stream = Embedding.Get(nameof(ZeldaOracle), "Game.ico"))
+				Form.Icon = new Icon(stream);
 		}
 
 
