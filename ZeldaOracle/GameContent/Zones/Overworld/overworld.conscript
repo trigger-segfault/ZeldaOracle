@@ -105,7 +105,7 @@ ZONE "winter";
 	SETSTYLE "vine_cliff", "seasons";
 	SETSTYLE "water_rocks", "seasons";
 	SETSTYLE "dirt_rough", "seasons";
-	SETSTYLE "flying_tile", "seasons";
+	SETSTYLE "flying_tile", "normal";
 	SETSTYLE "hardened_lava", "seasons";
 	SETSTYLE "house_wall", "seasons";
 	SETSTYLE "vertical_wall_top", "seasons";
