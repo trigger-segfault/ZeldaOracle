@@ -384,7 +384,7 @@ namespace ZeldaOracle.Game.Control {
 			
 			if (room.Area != null) {
 				if (room.Area.Music != null)
-					AudioSystem.PlaySong(room.Area.Music);
+					AudioSystem.PlayMusic(room.Area.Music);
 				else
 					AudioSystem.StopMusic();
 			}

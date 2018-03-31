@@ -10,7 +10,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 		}
 
 		public void PlayMusic(ZeldaAPI.Music music) {
-			AudioSystem.PlaySong((Song) music);
+			AudioSystem.PlayMusic((Music) music);
 		}
 		
 		public void StopMusic() {

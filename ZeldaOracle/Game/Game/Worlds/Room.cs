@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this room.");
 			properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "General", "The music to play in this room. Select none to choose the default music.", true, false);
+				.SetDocumentation("Music", "music", "", "General", "The music to play in this room. Select none to choose the default music.", true, false);
 			properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "General", "The zone type for this room.");
 			properties.BaseProperties.SetEnumStr("spawn_mode", MonsterSpawnMode.Normal)

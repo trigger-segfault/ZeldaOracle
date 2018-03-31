@@ -49,7 +49,7 @@ namespace ZeldaEditor.PropertiesEditor {
 
 			AddEditor<ResourcePropertyEditor<Animation>>("animation");
 			AddEditor<ResourcePropertyEditor<CollisionModel>>("collision_model");
-			AddEditor<ResourcePropertyEditor<Song>>("song");
+			AddEditor<ResourcePropertyEditor<Music>>("music");
 			AddEditor<ResourcePropertyEditor<Sound>>("sound");
 			AddEditor<ResourcePropertyEditor<ISprite>>("sprite");
 			AddEditor<ResourcePropertyEditor<Zone>>("zone");

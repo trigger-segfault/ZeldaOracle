@@ -6,13 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using XnaSong		= Microsoft.Xna.Framework.Media.Song;
-using XnaKeys		= Microsoft.Xna.Framework.Input.Keys;
 
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
@@ -29,7 +24,6 @@ using Keys			= ZeldaOracle.Common.Input.Keys;
 using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
 using Color			= ZeldaOracle.Common.Graphics.Color;
-using Song			= ZeldaOracle.Common.Audio.Song;
 
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Control.Menus;
@@ -81,13 +75,13 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>Constructs the game manager.</summary>
 		public GameManager(string[] launchParameters, GameBase gameBase) {
 			this.gameBase			= gameBase;
-			this.gameScale			= 4;
-			this.debugMode			= false;
 			this.launchParameters	= launchParameters;
-			this.isGamePaused       = false;
-			this.isConsoleOpen      = false;
-			this.defaultConsoleOut	= Console.Out;
-			this.userSettings       = null;
+			gameScale			= 4;
+			debugMode			= false;
+			isGamePaused		= false;
+			isConsoleOpen		= false;
+			defaultConsoleOut	= Console.Out;
+			userSettings		= null;
 
 			// Initialize logging system
 			Logs.InitializeLogs();
@@ -122,7 +116,7 @@ namespace ZeldaOracle.Game.Main {
 
 		/// <summary>Uninitializes the game manager.</summary>
 		public void Uninitialize() {
-			this.gameBase = null;
+			gameBase = null;
 		}
 
 
@@ -241,8 +235,6 @@ namespace ZeldaOracle.Game.Main {
 
 		/// <summary>Called every step to update the game.</summary>
 		public void Update(float timeDelta) {
-			//prop.Update(1.0 / 60.0, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
-			
 			//if (Keyboard.IsKeyPressed(Keys.F4))
 			//	GameBase.IsFullScreen = !GameBase.IsFullScreen;
 
@@ -250,7 +242,10 @@ namespace ZeldaOracle.Game.Main {
 			Controls.Update();
 
 			// Toggle debug mode
-			if (Keyboard.IsKeyPressed(Keys.F2) || (GamePad.IsButtonDown(Buttons.Back) && GamePad.IsButtonPressed(Buttons.RightStickButton))) {
+			if (Keyboard.IsKeyPressed(Keys.F2) ||
+				(GamePad.IsButtonDown(Buttons.Back) &&
+				GamePad.IsButtonPressed(Buttons.RightStickButton)))
+			{
 				debugMode = !debugMode;
 			}
 
@@ -291,8 +286,7 @@ namespace ZeldaOracle.Game.Main {
 
 			// Draw the buffer to the screen scaled.
 			g.SetRenderTarget(null);
-			//g.ResetTranslation();
-			g.Begin(GameSettings.DRAW_MODE_PALLETE);
+			g.Begin(GameSettings.DRAW_MODE_BASIC);
 			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, gameScale);
 			g.End();
 
