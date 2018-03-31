@@ -84,7 +84,7 @@ namespace ZeldaOracle.Common.Util {
 		//-----------------------------------------------------------------------------
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void LogMessage(LogLevel level, string format, params object[] args) {
+		public void LogMessage(LogLevel level, string format, params object[] args) {
 			StackTrace stackTrace = new StackTrace();
 			StackFrame stackFrame = stackTrace.GetFrame(2);
 
@@ -177,9 +177,9 @@ namespace ZeldaOracle.Common.Util {
 
 			logLevelNames = new string[(int) LogLevel.Count];
 			logLevelNames[(int) LogLevel.Info]		= "INFO";
-			logLevelNames[(int) LogLevel.Notice]	= "NOTICE";
-			logLevelNames[(int) LogLevel.Warning]	= "WARNING";
-			logLevelNames[(int) LogLevel.Error]		= "ERROR";
+			logLevelNames[(int) LogLevel.Notice]	= "NOTE";
+			logLevelNames[(int) LogLevel.Warning]	= "WARN";
+			logLevelNames[(int) LogLevel.Error]		= "ERR!";
 		}
 		
 
@@ -213,8 +213,9 @@ namespace ZeldaOracle.Common.Util {
 					Console.ForegroundColor = logLevelColors[(int) message.LogLevel];
 				}
 
-				Console.WriteLine("{0} : {1}.{2} : {3}", message.GameTime,
-					 message.Logger.Name, message.LogLevel.ToString(), message.Text);
+				Console.WriteLine("{0} : {1} : {2} : {3}",
+					logLevelNames[(int) message.LogLevel], message.GameTime,
+					message.Logger.Name, message.Text);
 
 				if (colorizeLogMessages)
 					Console.ForegroundColor = placeholder;
@@ -227,7 +228,7 @@ namespace ZeldaOracle.Common.Util {
 				PrintLogMessage(messages[i]);
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

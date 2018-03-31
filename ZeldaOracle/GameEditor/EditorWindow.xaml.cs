@@ -1,26 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using ZeldaEditor;
 using ZeldaEditor.Control;
 using ZeldaEditor.Controls;
 using ZeldaEditor.PropertiesEditor;
-using ZeldaEditor.Scripting;
 using ZeldaEditor.Tools;
 using ZeldaEditor.TreeViews;
 using ZeldaEditor.Undo;
@@ -28,13 +18,11 @@ using ZeldaEditor.Util;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ZeldaEditor {
 	/// <summary>
@@ -43,7 +31,7 @@ namespace ZeldaEditor {
 	public partial class EditorWindow : Window {
 
 		private LevelDisplay		levelDisplay;
-		private TilesetDisplay		tilesetDisplay;
+		private TilesetPalette		tilesetPalette;
 		private TilePreview         tilePreview;
 		private EditorControl		editorControl;
 
@@ -51,6 +39,7 @@ namespace ZeldaEditor {
 
 		private HistoryWindow		historyWindow;
 		private RefactorWindow      refactorWindow;
+		private ObjectEditor		objectWindow;
 
 		private bool suppressEvents = false;
 
@@ -65,16 +54,19 @@ namespace ZeldaEditor {
 			InitializeComponent();
 			// Create the editor control instance.
 			editorControl = new EditorControl(this);
-
-			// Initialize world tree view.
 			treeViewWorld.EditorControl = editorControl;
-
-			// Initialize property grid.
-			propertyGrid.Initialize(editorControl);
+			propertyGrid.EditorControl = editorControl;
 
 			ScriptEditor.Initialize();
 
-			// Create the level display.
+			// Setup window event handlers
+			//Loaded += OnWindowLoaded;
+			//PreviewKeyDown += OnPreviewKeyDown;
+			//PreviewMouseDown += OnPreviewMouseDown;
+			//SizeChanged += OnWindowSizeChanged;
+			//Closing += OnWindowClosing;
+
+			// Create the level display
 			levelDisplay					= new LevelDisplay();
 			levelDisplay.EditorControl		= editorControl;
 			levelDisplay.Name				= "levelDisplay";
@@ -82,14 +74,13 @@ namespace ZeldaEditor {
 			levelDisplay.EditorWindow		= this;
 			hostLevelDisplay.Child			= levelDisplay;
 
-			// Create the tileset display.
-			tilesetDisplay					= new TilesetDisplay();
-			tilesetDisplay.EditorControl	= editorControl;
-			tilesetDisplay.Name				= "tilesetDisplay";
-			tilesetDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;
-			tilesetDisplay.EditorWindow		= this;
-			tilesetDisplay.HoverChanged		+= OnTilesetDisplayHoverChanged;
-			hostTilesetDisplay.Child		= tilesetDisplay;
+			// Create the tileset palette
+			tilesetPalette = new TilesetPalette(this);
+			tilesetPalette.Name				= "tilesetPalette";
+			panelTilesetPalette.Children.Add(tilesetPalette);
+			tilesetPalette.SelectionChanged += (object sender, EventArgs args) => {
+				editorControl.SelectedTileData = tilesetPalette.SelectedTileData;
+			};
 
 			// Create the tile preview
 			tilePreview						= new TilePreview();
@@ -102,10 +93,10 @@ namespace ZeldaEditor {
 
 			statusTask.Content = "";
 
-			// Setup layer combo-box.
+			// Setup layer combo-box
 			comboBoxLayers.Items.Clear();
 
-			// Create tools.
+			// Create tools
 			toolButtons = new ToggleButton[] {
 				buttonToolPointer,
 				buttonToolPan,
@@ -124,11 +115,6 @@ namespace ZeldaEditor {
 				TimeSpan.FromSeconds(0.4),
 				DispatcherPriority.ApplicationIdle,
 				Update);
-			/*updateTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.4),
-				DispatcherPriority.ApplicationIdle,
-				delegate { Update(); },
-				Dispatcher);*/
 
 			Application.Current.Activated += OnApplicationActivated;
 			Application.Current.Deactivated += OnApplicationDeactivated;
@@ -152,6 +138,10 @@ namespace ZeldaEditor {
 			buttonToolSelection.Tag = editorControl.ToolSelection;
 			buttonToolEyedropper.Tag = editorControl.ToolEyedropper;
 
+			// Populate the tileset palette with the list of tilesets and zones
+			tilesetPalette.Tilesets = ZeldaResources.GetDictionary<Tileset>().Values;
+			tilesetPalette.Zones = ZeldaResources.GetDictionary<Zone>().Values;
+
 			UpdateCurrentTool();
 		}
 
@@ -174,10 +164,18 @@ namespace ZeldaEditor {
 			return result;
 		}
 
+		public void UpdateWindowTitle() {
+			Title = "Oracle Engine Editor - " + editorControl.WorldFileName;
+			if (editorControl.IsModified)
+				Title += "*";
+			if (editorControl.Level != null)
+				Title += " [" + editorControl.Level.ID +  "]";
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
-		
 
 		// Attempt to save the world automatically first, or open a dialogue
 		// if the world isn't from a file.
@@ -185,7 +183,7 @@ namespace ZeldaEditor {
 			if (editorControl.IsUntitled)
 				ShowSaveWorldDialog(); // Open Save as dialogue
 			else
-				editorControl.SaveWorld(); // Save to file.
+				editorControl.SaveWorld(); // Save to file
 		}
 
 		// Open a save file dialogue to save the world.
@@ -215,6 +213,26 @@ namespace ZeldaEditor {
 			}
 		}
 
+		public void OpenLevelEditor(Level level) {
+			throw new NotImplementedException();
+		}
+
+		/// <summary>Open the Object Properties window for the given object.</summary>
+		public void OpenObjectEditor(object obj) {
+			if (objectWindow == null) {
+				objectWindow = new ObjectEditor(editorControl, obj);
+				objectWindow.Owner = this;
+				objectWindow.Closed += delegate(object unused1, EventArgs unused2) {
+					objectWindow = null;
+				};
+				objectWindow.Show();
+			}
+			else {
+				objectWindow.Focus();
+			}
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
@@ -231,6 +249,7 @@ namespace ZeldaEditor {
 		private void OnApplicationDeactivated(object sender, EventArgs e) {
 			editorControl.IsActive = false;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Window Event Handlers
@@ -305,43 +324,11 @@ namespace ZeldaEditor {
 		private void OnToolChanged(object sender, RoutedEventArgs e) {
 			editorControl.CurrentTool = (EditorTool) ((ToggleButton)sender).Tag;
 		}
-		
-		private void OnTilesetChanged(object sender, SelectionChangedEventArgs e) {
-			if (!suppressEvents) return;
-			if (comboBoxTilesets.SelectedIndex != -1) {
-				if (comboBoxTilesets.SelectedIndex == 0) {
-					toolbarTileSearch.Visibility = Visibility.Visible;
-					editorControl.UpdateTileSearch(textBoxTileSearch.Text);
-				}
-				else {
-					toolbarTileSearch.Visibility = Visibility.Collapsed;
-					editorControl.ChangeTileset(comboBoxTilesets.SelectedItem as string);
-				}
-			}
-			levelDisplay.Focus();
-		}
-
-		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			if (!suppressEvents) return;
-			if (comboBoxZones.SelectedIndex != -1) {
-				editorControl.ChangeZone(comboBoxZones.SelectedItem as string);
-			}
-			levelDisplay.Focus();
-		}
-
-		private void OnTileSearchTextChanged(object sender, TextChangedEventArgs e) {
-			editorControl.UpdateTileSearch(textBoxTileSearch.Text);
-		}
-
-		private void OnTilesetDisplayHoverChanged(object sender, EventArgs e) {
-			BaseTileData tileData = tilesetDisplay.HoverTileData;
-			if (tileData == null)
-				textBlockTileName.Text = "";
-			else
-				textBlockTileName.Text = tileData.ResourceName;
-		}
 
 		public void UpdatePropertyPreview(IPropertyObject obj) {
+			if (objectWindow != null)
+				objectWindow.SetObject(obj);
+
 			System.Windows.Controls.Image image =
 				(System.Windows.Controls.Image) propertyPreviewImage.Content;
 			image.Stretch = Stretch.None;
@@ -403,6 +390,10 @@ namespace ZeldaEditor {
 				TilePathEditor.ShowViewer(this, editorControl,
 					editorControl.EditingRoom);
 			}
+		}
+
+		private void OnObjectEditorCommand(object sender, ExecutedRoutedEventArgs e) {
+			OpenObjectEditor(editorControl.EditingTileData);
 		}
 
 		private void CanAlwaysExecute(object sender, CanExecuteRoutedEventArgs e) {
@@ -762,6 +753,7 @@ namespace ZeldaEditor {
 		}
 
 		public void UpdateCurrentTool() {
+			// Only one tool can be selected at once
 			for (int i = 0; i < toolButtons.Length; i++)
 				toolButtons[i].IsChecked = (toolButtons[i].Tag == editorControl.CurrentTool);
 			separatorToolOptions.Visibility = (editorControl.CurrentTool.Options.Any() ?
@@ -805,21 +797,7 @@ namespace ZeldaEditor {
 		}
 		
 		// Combo Boxes ----------------------------------------------------------------
-
-		public void SetTilesetsItemsSource(IEnumerable<string> tilesets, int selectedIndex) {
-			suppressEvents = false;
-			comboBoxTilesets.ItemsSource = tilesets;
-			comboBoxTilesets.SelectedIndex = selectedIndex;
-			suppressEvents = true;
-		}
-
-		public void SetZonesItemsSource(IEnumerable<string> zones, int selectedIndex) {
-			suppressEvents = false;
-			comboBoxZones.ItemsSource = zones;
-			comboBoxZones.SelectedIndex = selectedIndex;
-			suppressEvents = true;
-		}
-
+		
 		public void SetLayersItemsSource(IEnumerable<string> layers, int selectedIndex) {
 			suppressEvents = false;
 			comboBoxLayers.ItemsSource = layers;
@@ -844,8 +822,8 @@ namespace ZeldaEditor {
 			get { return levelDisplay; }
 		}
 
-		public TilesetDisplay TilesetDisplay {
-			get { return tilesetDisplay; }
+		public TilesetPalette TilesetPalette {
+			get { return tilesetPalette; }
 		}
 
 		public WorldTreeView WorldTreeView {

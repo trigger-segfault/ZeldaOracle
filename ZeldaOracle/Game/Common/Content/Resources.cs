@@ -81,7 +81,6 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, ActionTileData> actionTileData;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, Zone> zones;
-		private static Dictionary<string, PropertyAction> propertyActions;
 		private static Dictionary<string, ItemData> items;
 		private static Dictionary<string, AmmoData> ammos;
 		private static Dictionary<string, RewardData> rewards;*/
@@ -250,7 +249,6 @@ namespace ZeldaOracle.Common.Content {
 			items = null;
 			ammos = null;
 			rewards = null;
-			propertyActions = null;
 			paletteDictionaries = null;
 			foreach (var pair in palettes) {
 				pair.Value.Dispose();

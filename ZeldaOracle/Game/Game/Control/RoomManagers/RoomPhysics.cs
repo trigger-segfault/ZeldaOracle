@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 		/// tiles, and room edges).</summary>
 		private void CheckSolidCollisions(Entity entity) {
 
-			// Handle circular tile collisions
+			// Handle circular collisions
 			if (entity.Physics.CollideWithWorld) {
 				if (entity.Physics.CollideWithWorld &&
 					entity.Physics.CheckRadialCollisions)
@@ -116,6 +116,15 @@ namespace ZeldaOracle.Game.Control.RoomManagers {
 						{
 							ResolveCircularCollision(entity, tile,
 								tile.Position, tile.CollisionModel);
+						}
+					}
+					
+					foreach (Entity other in RoomControl.Entities) {
+						if (other != entity &&
+							entity.Physics.CanCollideWithEntity(other))
+						{
+							ResolveCircularCollision(entity,
+								other, other.Physics.CollisionBox);
 						}
 					}
 				}

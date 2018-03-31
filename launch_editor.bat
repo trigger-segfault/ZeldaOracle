@@ -1,8 +1,8 @@
 @echo off
 
 REM # Update the bin folder's content and binaries
-echo GameBuilder.exe -debug -compile-silent -out "ZeldaOracle\GameEditor\bin" -game "ZeldaOracle\Game\bin" -content "ZeldaOracle\GameContent\ZeldaContent.contentproj"
-GameBuilder.exe -debug -compile-silent -out "ZeldaOracle\GameEditor\bin" -game "ZeldaOracle\Game\bin" -content "ZeldaOracle\GameContent\ZeldaContent.contentproj"
+echo ZeldaOracle\GameBuilder\bin\Release\GameBuilder.exe -debug -compile-silent -out "ZeldaOracle\GameEditor\bin" -game "ZeldaOracle\Game\bin" -content "ZeldaOracle\GameContent\ZeldaContent.contentproj"
+ZeldaOracle\GameBuilder\bin\Release\GameBuilder.exe -debug -compile-silent -out "ZeldaOracle\GameEditor\bin" -game "ZeldaOracle\Game\bin" -content "ZeldaOracle\GameContent\ZeldaContent.contentproj"
 
 REM # Check if there was an error
 if %ERRORLEVEL% NEQ 0 (

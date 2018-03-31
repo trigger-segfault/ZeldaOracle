@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -12,7 +13,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 namespace ZeldaOracle.Game.Entities {
 
 	// The main class for entity objects in the room.
-	public class Entity : ZeldaAPI.Entity {
+	public class Entity : ZeldaAPI.Entity, ITriggerObject {
 
 		// Internal state
 
@@ -26,6 +27,7 @@ namespace ZeldaOracle.Game.Entities {
 		private float				previousZPosition;
 		private Properties			properties;
 		private EventCollection		events;
+		private TriggerCollection	triggers;
 
 		// Settings
 
@@ -36,6 +38,7 @@ namespace ZeldaOracle.Game.Entities {
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
 		protected Sound				soundBounce;
 		protected Vector2F          carriedDrawOffset;
+		protected bool				disableOnDestroy;
 
 		// Attachment
 
@@ -72,6 +75,7 @@ namespace ZeldaOracle.Game.Entities {
 			properties					= null;
 			events                      = null;
 			isPersistentBetweenRooms	= false;
+			disableOnDestroy			= false;
 
 			parent				= null;
 			children			= new List<Entity>();
@@ -291,9 +295,8 @@ namespace ZeldaOracle.Game.Entities {
 				isInRoom = false;
 				OnDestroy();
 			}
-			// TODO: Why was this here? This breaks most action and regular tiles
-			//if (properties != null)
-			//	properties.Set("enabled", false);
+			if (properties != null && disableOnDestroy)
+				properties.Set("enabled", false);
 		}
 
 		/// <summary>Mark the entity as having been removed from the current room.
@@ -541,6 +544,16 @@ namespace ZeldaOracle.Game.Entities {
 		public EventCollection Events {
 			get { return events; }
 			set { events = value; }
+		}
+
+		/// <summary>Gets or sets the triggers for the entity.</summary>
+		public TriggerCollection Triggers {
+			get { return triggers; }
+			set { triggers = value; }
+		}
+
+		public Type TriggerObjectType {
+			get { return GetType(); }
 		}
 
 		public Entity Parent {

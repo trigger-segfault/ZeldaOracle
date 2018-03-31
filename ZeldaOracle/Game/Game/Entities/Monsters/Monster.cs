@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Players;
@@ -8,9 +7,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters.States;
-using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
@@ -28,13 +25,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	}
 
 	public partial class Monster : Unit, ZeldaAPI.Monster {
-		
-		/// <summary>The current monster state.</summary>
-		private MonsterState state;
-		/// <summary>The previous monster state.</summary>
-		private MonsterState previousState;
 
-		// Properties
+		// Settings -------------------------------------------------------------------
 
 		private MonsterColor color;
 		private int contactDamage;
@@ -42,27 +34,30 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected bool isBurnable;
 		protected bool isGaleable;
 		protected bool isStunnable;
-		/// <summary>True if the player will always check collisions
-		/// as if the monsters z position was at zero.</summary>
-		protected bool ignoreZPosition;
+		
+		// States ---------------------------------------------------------------------
 
-		// States
-		/*private MonsterBurnState		stateBurn;
-		private MonsterStunState		stateStun;
-		private MonsterFallInHoleState	stateFallInHole;
-		private MonsterGaleState		stateGale;*/
+		/// <summary>The current monster state.</summary>
+		private MonsterState state;
+		/// <summary>The previous monster state.</summary>
+		private MonsterState previousState;
 
-		// Property settings that should not modify the properties
+		//private MonsterBurnState			stateBurn;
+		//private MonsterStunState			stateStun;
+		//private MonsterFallInHoleState	stateFallInHole;
+		//private MonsterGaleState			stateGale;
+
+		// Property settings that should not modify the properties --------------------
+
 		/// <summary>The ID of the monster used for respawn identification.</summary>
 		private int monsterID;
 		/// <summary>True if the monster does not need to be killed in order to
 		/// clear the room.</summary>
 		private bool ignoreMonster;
-		/// <summary>True if the monster if ignored for room respawn but still counts
+		/// <summary>True if the monster is ignored for room respawn but still counts
 		/// towards the room's cleared event.</summary>
 		private bool ignoreRespawn;
-
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -106,7 +101,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isBurnable		= true;
 			isStunnable		= true;
 			softKill		= false;
-			ignoreZPosition	= false;
 		}
 
 		protected void SetDefaultReactions() {
@@ -306,7 +300,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
-
+		
 		public override void Initialize() {
 			base.Initialize();
 
@@ -353,86 +347,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 		}
 
-		private void CollideMonsterAndPlayer() {
-			/*
-			Player player = RoomControl.Player;
-			
-			float tempZPosition = ZPosition;
-			if (ignoreZPosition)
-				ZPosition = 0;
-
-			if (isPassable || player.IsPassable || GMath.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
-				return;
-
-			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(
-				t => t.IsPhysicsEnabled && t.IsSwordOrShield);
-			IEnumerable<UnitTool> playerTools = player.EquippedTools.Where(
-				t => t.IsPhysicsEnabled && t.IsSwordOrShield);
-
-			// 1. (M-M) MonsterTools to PlayerTools
-			// 2. (M-1) MonsterTools to Player
-			// 4. (M-1) PlayerTools to Monster
-			// 2. (1-1) Monster to Player
-
-			// Collide my tools with the player's tools
-			if (!IsStunned) {
-				foreach (UnitTool monsterTool in monsterTools) {
-					foreach (UnitTool playerTool in playerTools) {
-						if (monsterTool.PositionedCollisionBox.Intersects(playerTool.PositionedCollisionBox)) {
-							Vector2F contactPoint = playerTool.PositionedCollisionBox.Center;
-
-							TriggerInteraction(InteractionType.Parry, player, new ParryInteractionArgs() {
-								ContactPoint    = contactPoint,
-								MonsterTool     = monsterTool,
-								SenderTool      = playerTool
-							});
-
-							playerTool.OnParry(this, contactPoint);
-
-							RoomControl.SpawnEntity(new EffectCling(), contactPoint);
-
-							return;
-						}
-					}
-				}
-			}
-
-			// Collide my tools with the player
-			bool parry = false;
-			if (!player.IsInvincible && player.IsDamageable && !IsStunned) {
-				foreach (UnitTool tool in monsterTools) {
-					if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
-						player.Hurt(contactDamage, Center);
-						parry = true;
-						break;
-					}
-				}
-			}
-
-			// Collide with the player's tools
-			foreach (UnitTool tool in playerTools) {
-				if (Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
-					tool.OnHitMonster(this);
-					parry = true;
-					break;
-				}
-			}
-			bool parry = false;
-
-			// Check collisions with player
-			// ...
-
-			if (ignoreZPosition)
-				ZPosition = tempZPosition;
-			*/
-		}
-
 		public override void Update() {
 			// Update the current monster state
 			state.Update();
-
-			// Collide player and monster and their tools
-			CollideMonsterAndPlayer();
 
 			base.Update();
 		}

@@ -1,18 +1,14 @@
-﻿#region File Description
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // GraphicsDeviceControl.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
-#endregion
 
-#region Using Statements
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
-#endregion
 
 namespace ZeldaEditor.WinForms {
 	// System.Drawing and the XNA Framework both define Color and Rectangle
@@ -27,12 +23,15 @@ namespace ZeldaEditor.WinForms {
 	/// methods to add their own drawing code.
 	/// </summary>
 	public class GraphicsDeviceControl : Panel {
-		#region Fields
 
-
-		// However many GraphicsDeviceControl instances you have, they all share
-		// the same underlying GraphicsDevice, managed by this helper service.
+		/// <summary>However many GraphicsDeviceControl instances you have, they all
+		/// share the same underlying GraphicsDevice, managed by this helper service.
+		/// </summary>
 		private GraphicsDeviceService graphicsDeviceService;
+
+		/// <summary>The IServiceProvider containing our IGraphicsDeviceService.
+		/// </summary>
+		private ServiceContainer services = new ServiceContainer();
 
 		/// <summary>True if the mouse is over the control.</summary>
 		private bool isMouseOver;
@@ -42,55 +41,22 @@ namespace ZeldaEditor.WinForms {
 
 		/// <summary>True if an exception occurred while resetting the graphics device.</summary>
 		private bool resetError;
+				
 
-		#endregion
-
-		#region Properties
-
-
-		/// <summary>Gets a GraphicsDevice that can be used to draw onto this control.</summary>
-		public GraphicsDevice GraphicsDevice {
-			get { return graphicsDeviceService.GraphicsDevice; }
-		}
-
-		/// <summary>
-		/// Gets an IServiceProvider containing our IGraphicsDeviceService.
-		/// This can be used with components such as the ContentManager,
-		/// which use this service to look up the GraphicsDevice.
-		/// </summary>
-		public ServiceContainer Services {
-			get { return services; }
-		}
-
-		/// <summary>Returns true if the mouse is over the control.</summary>
-		public bool IsMouseOver {
-			get { return isMouseOver; }
-		}
-
-		/// <summary>True if an exception occurred while resetting the graphics device.</summary>
-		public bool ResetError {
-			get { return resetError; }
-			set { resetError = false; }
-		}
-
-		/// <summary>The IServiceProvider containing our IGraphicsDeviceService.</summary>
-		private ServiceContainer services = new ServiceContainer();
-
-
-		#endregion
-
-		#region Events
+		//-----------------------------------------------------------------------------
+		// Events
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Called just before resetting the graphics device.</summary>
 		public event EventHandler PreviewReset;
 		/// <summary>Called just after resetting the graphics device.</summary>
 		public event EventHandler PostReset;
-
-		#endregion
-
-		#region Initialization
-
-
+		
+				
+		//-----------------------------------------------------------------------------
+		// Initialization
+		//-----------------------------------------------------------------------------
+		
 		/// <summary>Initializes the control.</summary>
 		protected override void OnCreateControl() {
 			// Don't initialize the graphics device if we are running in the designer.
@@ -111,8 +77,7 @@ namespace ZeldaEditor.WinForms {
 
 			base.OnCreateControl();
 		}
-
-
+		
 		/// <summary>Disposes the control.</summary>
 		protected override void Dispose(bool disposing) {
 			if (graphicsDeviceService != null) {
@@ -123,13 +88,13 @@ namespace ZeldaEditor.WinForms {
 			base.Dispose(disposing);
 		}
 
+		
+		//-----------------------------------------------------------------------------
+		// Paint
+		//-----------------------------------------------------------------------------
 
-		#endregion
-
-		#region Paint
-
-
-		/// <summary>Redraws the control in response to a WinForms paint message.</summary>
+		/// <summary>Redraws the control in response to a WinForms paint message.
+		/// </summary>
 		protected override void OnPaint(PaintEventArgs e) {
 			if (ClientSize.Width > 0 && ClientSize.Height > 0) {
 				string beginDrawError = BeginDraw();
@@ -147,8 +112,7 @@ namespace ZeldaEditor.WinForms {
 				}
 			}
 		}
-
-
+		
 		/// <summary>
 		/// Attempts to begin drawing the control. Returns an error message string
 		/// if this was not possible, which can happen if the graphics device is
@@ -187,8 +151,7 @@ namespace ZeldaEditor.WinForms {
 
 			return null;
 		}
-
-
+		
 		/// <summary>
 		/// Ends drawing the control. This is called after derived classes
 		/// have finished their Draw method, and is responsible for presenting
@@ -208,8 +171,7 @@ namespace ZeldaEditor.WinForms {
 				// so we just swallow the exception.
 			}
 		}
-
-
+		
 		/// <summary>
 		/// Helper used by BeginDraw. This checks the graphics device status,
 		/// making sure it is big enough for drawing the current control, and
@@ -256,8 +218,7 @@ namespace ZeldaEditor.WinForms {
 
 			return null;
 		}
-
-
+		
 		/// <summary>
 		/// If we do not have a valid graphics device (for instance if the device
 		/// is lost, or if we are running inside the Form designer), we must use
@@ -275,8 +236,7 @@ namespace ZeldaEditor.WinForms {
 				}
 			}
 		}
-
-
+		
 		/// <summary>
 		/// Ignores WinForms paint-background messages. The default implementation
 		/// would clear the control to the current background color, causing
@@ -285,12 +245,11 @@ namespace ZeldaEditor.WinForms {
 		/// </summary>
 		protected override void OnPaintBackground(PaintEventArgs pevent) { }
 
-
-		#endregion
-
-		#region Is Mouse Over
-
-
+		
+		//-----------------------------------------------------------------------------
+		// Is Mouse Over
+		//-----------------------------------------------------------------------------
+		
 		protected override void OnMouseEnter(EventArgs e) {
 			Application.AddMessageFilter(messageFilter);
 			base.OnMouseEnter(e);
@@ -301,22 +260,50 @@ namespace ZeldaEditor.WinForms {
 			base.OnMouseLeave(e);
 			isMouseOver = false;
 		}
+		
 
-
-		#endregion
-
-		#region Abstract Methods
-
-
-		/// <summary>Derived classes override this to initialize their drawing code.</summary>
+		//-----------------------------------------------------------------------------
+		// Virtual Methods
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Derived classes override this to initialize their drawing code.
+		/// </summary>
 		protected virtual void Initialize() { }
-
 
 		/// <summary>Derived classes override this to draw themselves using
 		/// the GraphicsDevice.</summary>
 		protected virtual void Draw() { }
 
+		
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Gets a GraphicsDevice that can be used to draw onto this control.
+		/// </summary>
+		public GraphicsDevice GraphicsDevice {
+			get { return graphicsDeviceService.GraphicsDevice; }
+		}
 
-		#endregion
+		/// <summary>
+		/// Gets an IServiceProvider containing our IGraphicsDeviceService.
+		/// This can be used with components such as the ContentManager,
+		/// which use this service to look up the GraphicsDevice.
+		/// </summary>
+		public ServiceContainer Services {
+			get { return services; }
+		}
+
+		/// <summary>Returns true if the mouse is over the control.</summary>
+		public bool IsMouseOver {
+			get { return isMouseOver; }
+		}
+
+		/// <summary>True if an exception occurred while resetting the graphics device.
+		/// </summary>
+		public bool ResetError {
+			get { return resetError; }
+			set { resetError = false; }
+		}
 	}
 }

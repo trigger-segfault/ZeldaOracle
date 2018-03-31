@@ -15,11 +15,14 @@ namespace ZeldaOracle.Game.Worlds {
 		Dungeon,
 	}
 
-	public class Area : IEventObject, IIDObject, IVariableObject {
+	public class Area : IEventObject, IIDObject, IVariableObject, ITriggerObject,
+		ZeldaAPI.AreaTODO
+	{
 		private World world;
 		private Properties properties;
 		private Variables variables;
 		private EventCollection events;
+		private TriggerCollection triggers;
 
 
 		//-----------------------------------------------------------------------------
@@ -27,10 +30,11 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public Area() {
-			this.properties = new Properties(this);
-			this.properties.BaseProperties = new Properties();
-			this.variables	= new Variables(this);
-			this.events		= new EventCollection(this);
+			properties = new Properties(this);
+			properties.BaseProperties = new Properties();
+			variables	= new Variables(this);
+			events		= new EventCollection(this);
+			triggers	= new TriggerCollection(this);
 
 			// General
 			properties.BaseProperties.Set("id", "")
@@ -183,6 +187,15 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Gets the events for this area.</summary>
 		public EventCollection Events {
 			get { return events; }
+		}
+
+		/// <summary>Gets the events for this area.</summary>
+		public TriggerCollection Triggers {
+			get { return triggers; }
+		}
+
+		public Type TriggerObjectType {
+			get { return typeof(ZeldaAPI.AreaTODO); }
 		}
 
 		/// <summary>Gets the variables for this area.</summary>

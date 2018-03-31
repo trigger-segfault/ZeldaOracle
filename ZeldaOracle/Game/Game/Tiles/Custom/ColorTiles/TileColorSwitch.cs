@@ -134,6 +134,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public PuzzleColor Color {
 			get { return color; }
+			set { SetSwitchState(color == PuzzleColor.Red); }
 		}
 
 		public bool SyncWithArea {
@@ -145,8 +146,5 @@ namespace ZeldaOracle.Game.Tiles {
 		// API Implementations
 		//-----------------------------------------------------------------------------
 
-		/*ZeldaAPI.Color ZeldaAPI.ColorSwitch.Color {
-			get { return (ZeldaAPI.Color)color; }
-		}*/
 	}
 }

@@ -6,7 +6,7 @@ using System.Text;
 namespace ZeldaAPI {
 
 	/// <summary>Access to a monster.</summary>
-	public interface Monster {
+	public interface Monster : Unit {
 		// Nothing yet...
 	}
 }

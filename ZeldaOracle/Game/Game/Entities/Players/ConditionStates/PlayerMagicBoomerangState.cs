@@ -32,9 +32,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			StateParameters.ProhibitJumping = true;
-			StateParameters.ProhibitMovementControlInAir = true;
-			StateParameters.ProhibitMovementControlOnGround = true;
+			StateParameters.ProhibitMovementControl = true;
 			if (player.WeaponState == null)
 				player.Graphics.PlayAnimation(player.Animations.Throw);
 			

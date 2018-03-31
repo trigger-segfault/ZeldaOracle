@@ -172,10 +172,6 @@ TILE "sign";
 	BREAKANIM	"effect_red_brick_break";
 	BREAKSOUND	"rock_shatter";
 	PROPERTY	(cuttable_sword_level, 1);
-	#PROPERTIES
-	#	(string, text, "Hello World!",
-	#		"Text", "text_message", "Sign",
-	#		"The text to display when the sign is read from the front.");
 END;
 
 # Grave -------------------------------------------------------
@@ -203,11 +199,13 @@ END;
 
 TILE "magnet_stone_north";
 	SAMESPRITE;
-	PROPERTY (polarity, North); # North
+	SOLID block;
+	PROPERTY (polarity, North);
 END;
 TILE "magnet_stone_south";
 	SAMESPRITE;
-	PROPERTY (polarity, South); # South
+	SOLID block;
+	PROPERTY (polarity, South);
 END;
 
 # Soft Soil ---------------------------------------------------

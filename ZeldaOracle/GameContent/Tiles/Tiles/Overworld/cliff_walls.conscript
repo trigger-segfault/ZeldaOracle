@@ -124,7 +124,6 @@ TILE "temp_cliff_bombable";
 	RESETWHEN	Never;
 	BREAKANIM	"effect_rock_break";
 	BREAKSOUND	"rock_shatter";
-	PROPERTY	(disable_on_destroy, true);
 END;
 
 TILE "cliff_bombable_down";

@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Tiles {
 				IsLit = true;
 				Graphics.PlayAnimation(SpriteList[0]);
 				Properties.Set("lit", true);
-				GameControl.FireEvent(this, "light", this);
+				GameControl.FireEvent(this, "light");
 			}
 		}
 
@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Tiles {
 				IsLit = false;
 				Graphics.PlayAnimation(SpriteList[1]);
 				Properties.Set("lit", false);
-				GameControl.FireEvent(this, "put_out", this);
+				GameControl.FireEvent(this, "put_out");
 			}
 		}
 

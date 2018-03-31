@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ZeldaOracle.Game.Control.Scripting;
-using ZeldaOracle.Game.Worlds;
+﻿using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Control;
-//using ZeldaEditor.PropertiesEditor.CustomEditors;
-using System.Windows.Media;
-using ZeldaEditor.Util;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.TreeViews {
-	
+
 	public class WorldTreeViewItem : IWorldTreeViewItem {
+
 		private World world;
+		
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 		
 		public WorldTreeViewItem(World world) {
 			this.world = world;
@@ -25,8 +20,18 @@ namespace ZeldaEditor.TreeViews {
 			IsExpanded          = true;
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
 		public override void Open(EditorControl editorControl) {
+			OpenProperties(editorControl);
+		}
+
+		public override void OpenProperties(EditorControl editorControl) {
 			editorControl.OpenProperties(world);
+			editorControl.EditorWindow.OpenObjectEditor(world);
 		}
 
 		public override void Rename(EditorControl editorControl, string name) {
@@ -34,6 +39,11 @@ namespace ZeldaEditor.TreeViews {
 			Header = name;
 			editorControl.IsModified = true;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
 		public override IIDObject IDObject { get { return world; } }
 	}

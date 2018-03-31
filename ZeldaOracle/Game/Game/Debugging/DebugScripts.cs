@@ -7,6 +7,16 @@ namespace ZeldaOracle.Game.Debugging {
 	public class DebugScripts : ZeldaAPI.CustomScriptBase {
 
 		public void DebugScript1() {
+
+			foreach (var lever in room.GetTilesOfType<Lever>()) {
+				Actions.Tile.FlipSwitch(lever);
+			}
+			foreach (ColorTile tile in room.GetTilesOfType<ColorTile>()) {
+				Actions.Tile.SetColor(tile, PuzzleColor.Blue);
+			}
+			return;
+
+
 			// Get the shopkeeper
 			Unit actor = Functions.Unit.UnitByID("shopkeeper");
 			if (actor == null)
@@ -20,13 +30,15 @@ namespace ZeldaOracle.Game.Debugging {
 			Actions.Unit.MakeUnitFaceDirection(actor, Direction.Down);
 			Actions.Unit.Jump(actor, 1.5f);
 			Actions.General.Wait(50);
-			Actions.Unit.Move(actor, Direction.Down, 32, 2.0f);
+			Actions.Unit.MoveInDirection(actor, Direction.Down, 32, 2.0f).Wait();
 			Actions.Unit.MakeUnitFaceDirection(actor, Direction.Right);
 			Actions.General.Wait(2);
 			Actions.General.Message("I'm sorry, sir!<p>Oh! That's a <red>Member's Card<red>! You're a member? Pardon me.<n>You may continue to the rear.");
 			Actions.General.Wait(2);
-			Actions.Unit.Move(actor, Direction.Up, 32, 2.0f);
+			//Actions.Unit.Move(actor, Direction.Up, 32, 2.0f);
+			Actions.Unit.MoveInDirection(actor, Direction.Up, 32, 0.5f).Wait();
 			Actions.Unit.MakeUnitFaceDirection(actor, Direction.Right);
+
 			Actions.General.EndCutscene();
 
 			//Actions.General.BeginCutscene();
@@ -41,6 +53,12 @@ namespace ZeldaOracle.Game.Debugging {
 			//Actions.General.EndCutscene();
 		}
 
+
+		public void DebugScript2() {
+
+
+			//Actions.Trigger.Run();
+		}
 
 	}
 }

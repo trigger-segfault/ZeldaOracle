@@ -81,7 +81,7 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		public IEnumerable<IEventObject> GetEventObjects() {
+		public IEnumerable<ITriggerObject> GetEventObjects() {
 			if (HasSelection) {
 				if (selectionGrid == null) {
 					selectionGrid = CreateTileGrid(CreateTileGridMode.Twin);

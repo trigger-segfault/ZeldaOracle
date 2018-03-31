@@ -5,9 +5,8 @@ using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
-	/// <summary>
-	/// Player condition state which is active when the payer has the shield equipped.
-	/// ItemShield is responsible for beginning and ending this PlayerState.
+	/// <summary>Player condition state which is active when the payer has the shield
+	/// equipped. ItemShield is responsible for beginning and ending this PlayerState.
 	/// </summary>
 	public class PlayerShieldState : PlayerState {
 
@@ -25,8 +24,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerShieldState() {
-			StateParameters.ProhibitPushing = true;
-
 			subStateMachine = new GenericStateMachine<SubState>();
 			subStateMachine.AddState(SubState.NotBlocking)
 				.OnBegin(OnBeginNotBlockingState)
@@ -42,6 +39,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		private void OnBeginNotBlockingState() {
+			StateParameters.ProhibitPushing = false;
+
 			// Set the player's default animation
 			if (weapon.Level == Item.Level1)
 				PlayerAnimations.Default = GameData.ANIM_PLAYER_SHIELD;
@@ -60,12 +59,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			else
 				PlayerAnimations.Default = GameData.ANIM_PLAYER_SHIELD_LARGE;
 			
-			// Check if the button was pressed
-			if (weapon.IsButtonDown())
+			// Check for beginning shield blocking
+			if (weapon.IsButtonDown() &&
+				!player.PressedActionButtons[(int) weapon.ActionButton] &&
+				(player.WeaponState == null || player.WeaponState == player.PushState))
+			{
 				subStateMachine.BeginState(SubState.Blocking);
+			}
 		}
 
 		private void OnBeginBlockingState() {
+			StateParameters.ProhibitPushing = true;
+			player.StopPushing();
+
 			// Play the shield sound
 			if (Player.WeaponState == null && Player.IsOnGround)
 				AudioSystem.PlaySound(GameData.SOUND_SHIELD);

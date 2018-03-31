@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Called when the area is entered during room begin.</summary>
 		public void BeginArea() {
-			GameControl.FireEvent(area, "start_area");
+			GameControl.FireEvent(area, "area_start");
 		}
 
 		/// <summary>Called when the area is left during room end.</summary>

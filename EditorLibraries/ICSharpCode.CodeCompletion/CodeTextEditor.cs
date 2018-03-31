@@ -89,12 +89,9 @@ namespace ICSharpCode.CodeCompletion {
 
 			if (completionWindow == null) {
 				CodeCompletionResult results = null;
-				try {
-					var offset = 0;
-					var doc = GetCompletionDocument(out offset);
-					results = Completion.GetCompletions(doc, offset, controlSpace);
-				}
-				catch (Exception) { }
+				int offset = 0;
+				IDocument doc = GetCompletionDocument(out offset);
+				results = Completion.GetCompletions(doc, offset, controlSpace);
 				if (results == null)
 					return;
 
@@ -160,9 +157,10 @@ namespace ICSharpCode.CodeCompletion {
 		}
 
 		/// <summary>
-		/// Gets the document used for code completion, can be overridden to provide a custom document
+		/// Gets the document used for code completion, can be overridden to provide a custom document.
 		/// </summary>
-		/// <param name="offset"></param>
+		/// <param name="offset">The caret's offset position in the completion
+		/// document.</param>
 		/// <returns>The document of this text editor.</returns>
 		protected virtual IDocument GetCompletionDocument(out int offset) {
 			offset = CaretOffset;

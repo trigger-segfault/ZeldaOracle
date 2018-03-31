@@ -27,7 +27,7 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class Tile : IEventObject, ZeldaAPI.Tile {
+	public class Tile : ITriggerObject, ZeldaAPI.Tile {
 		
 		//-----------------------------------------------------------------------------
 		// Members
@@ -161,10 +161,22 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Removes the tile from the room. This will also disable the tile so
+		/// that it doens't respawn unless it is reset.</summary>
+		public void Destroy() {
+			IsEnabled = false;
+			roomControl.RemoveTile(this);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Flags
 		//-----------------------------------------------------------------------------
 
-		// Returns true if the tile has the normal flags.
+		/// <summary>Returns true if the tile has the given flags.</summary>
 		public bool HasFlag(TileFlags flags) {
 			return Flags.HasFlag(flags);
 		}
@@ -181,14 +193,14 @@ namespace ZeldaOracle.Game.Tiles {
 		// Movement
 		//-----------------------------------------------------------------------------
 
-		// Begin following a path.
+		/// <summary>Begin following a path.</summary>
 		public void BeginPath(TilePath path) {
 			this.path = path;
 			pathMoveIndex = 0;
 			pathTimer = 0;
 		}
 
-		// Move over a distance.
+		/// <summary>Move over a distance.</summary>
 		protected bool Move(int direction, int distance, float movementSpeed) {
 			if (isMoving)
 				return false;
@@ -246,13 +258,14 @@ namespace ZeldaOracle.Game.Tiles {
 		// Interaction Methods
 		//-----------------------------------------------------------------------------
 		
-		// Called when a seed of the given type hits this tile.
+		/// <summary>Called when a seed of the given type hits this tile.</summary>
 		public virtual void OnSeedHit(SeedType type, SeedEntity seed) { }
 		
-		// Called when a thrown object crashes onto this tile.
+		/// <summary>Called when a thrown object crashes onto this tile.</summary>
 		public virtual void OnHitByThrownObject(CarriedTile thrownObject) {  }
 
-		// Called when the tile is hit by one of the player's projectile.
+		/// <summary>Called when the tile is hit by one of the player's projectile.
+		/// </summary>
 		public virtual void OnHitByProjectile(Projectile projectile) {
 			if (projectile is SeedEntity) {
 				SeedEntity seed = (SeedEntity) projectile;
@@ -260,11 +273,12 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		// Called when the player presses A on this tile, when facing the given direction.
-		// Return true if player controls should be disabled for the rest of the frame.
+		/// <summary>Called when the player presses A on this tile, when facing the
+		/// given direction. Returns true if player controls should be disabled for the
+		/// rest of the frame.</summary>
 		public virtual bool OnAction(Direction direction) { return false; }
 
-		// Called when the player hits this tile with the sword.
+		/// <summary>Called when the player hits this tile with the sword.</summary>
 		public virtual void OnSwordHit(ItemWeapon swordItem) {
 			int minLevel = properties.GetInteger("cuttable_sword_level", Item.Level1);
 			if (!isMoving && flags.HasFlag(TileFlags.Cuttable) &&
@@ -274,23 +288,21 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		// Called when the player hits this tile with the sword.
+		/// <summary>Called when the player hits this tile with the sword.</summary>
 		public virtual void OnBombExplode() {
 			if (!isMoving && flags.HasFlag(TileFlags.Bombable))
 				Break(true);
 		}
 
-		// Called when the tile is burned by a fire.
+		/// <summary>Called when the tile is burned by a fire.</summary>
 		public virtual void OnBurn() {
 			if (!isMoving && flags.HasFlag(TileFlags.Burnable)) {
 				SpawnDrop();
-				roomControl.RemoveTile(this);
-				if (properties.GetBoolean("disable_on_destroy", false))
-					IsEnabled = false; // TODO: this won't exactly work anymore.
+				Destroy();
 			}
 		}
 
-		// Called when the tile is hit by the player's boomerang.
+		/// <summary>Called when the tile is hit by the player's boomerang.</summary>
 		public virtual void OnBoomerang() {
 			if (!isMoving && flags.HasFlag(TileFlags.Boomerangable))
 				Break(true);
@@ -305,7 +317,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 		
-		// Called when the player wants to push the tile.
+		/// <summary>Called when the player wants to push the tile.</summary>
 		public virtual bool OnPush(int direction, float movementSpeed) {
 			if (!HasFlag(TileFlags.Movable))
 				return false;
@@ -324,54 +336,50 @@ namespace ZeldaOracle.Game.Tiles {
 			return false;
 		}
 
-		// Called when the player digs the tile with the shovel.
+		/// <summary>Called when the player digs the tile with the shovel.</summary>
 		public virtual bool OnDig(Direction direction) {
 			if (isMoving || !IsDigable)
 				return false;
 
-			// Remove/dig the tile.
+			// Remove/dig the tile
 			if (layer == 0) {
-				roomControl.RemoveTile(this);
-
-				// Spawn the a "dug" tile or TileBelow in this tile's place.
+				// Spawn the a "dug" tile or TileBelow in this tile's place
 				TileData data = TileBelow ??
 					Resources.Get<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
 
 
-				// Spawn drops.
+				// Spawn drops
 				Entity dropEntity = SpawnDrop();
 				if (dropEntity != null) {
-					if (dropEntity is Collectible)
-						(dropEntity as Collectible).CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-
-					dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
+					if (dropEntity is Collectible) {
+						(dropEntity as Collectible).CollectibleDelay =
+							GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+					}
+					dropEntity.Physics.Velocity =
+						direction.ToVector(GameSettings.DROP_ENTITY_DIG_VELOCITY);
 				}
 			}
-			else {
-				roomControl.RemoveTile(this);
-			}
 
-			if (properties.GetBoolean("disable_on_destroy", false))
-				IsEnabled = false; // TODO: this won't exactly work anymore.
-
+			Destroy();
 			return true;
 		}
 
-		// Called while the player is trying to push the tile but before it's actually moved.
+		/// <summary>Called while the player is trying to push the tile but before it's
+		/// actually moved.</summary>
 		public virtual void OnPushing(Direction direction) { }
 
-		// Called when the player jumps and lands on the tile.
+		/// <summary>Called when the player jumps and lands on the tile.</summary>
 		public virtual void OnLand(Point2I startTile) { }
 			
-		// Called when the tile completes a movement (like after being pushed).
+		/// <summary>Called when the tile completes a movement (like after being
+		/// pushed).</summary>
 		public virtual void OnCompleteMovement() {
 			// Check if we are over a hazard tile (water, lava, hole).
-			
 		}
 
-		// Called when the tile is pushed into a hole.
+		/// <summary>Called when the tile is pushed into a hole.</summary>
 		public virtual void OnFallInHole() {
 			if (fallsInHoles) {
 				RoomControl.SpawnEntity(new EffectFallingObject(), Center);
@@ -380,32 +388,29 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		// Called when the tile is pushed into water.
+		/// <summary>Called when the tile is pushed into water.</summary>
 		public virtual void OnFallInWater() {
 			if (fallsInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true), Center);
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH,
+					DepthLayer.EffectSplash, true), Center);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				RoomControl.RemoveTile(this);
 			}
 		}
 
-		// Called when the tile is pushed into lava.
+		/// <summary>Called when the tile is pushed into lava.</summary>
 		public virtual void OnFallInLava() {
 			if (fallsInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash, true), Center);
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH,
+					DepthLayer.EffectSplash, true), Center);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				RoomControl.RemoveTile(this);
 			}
 		}
 
-		/// <summary>Called when a tile is in mid-air in a side-scrolling room.</summary>
+		/// <summary>Called when a tile is in mid-air in a side-scrolling room.
+		/// </summary>
 		public virtual void OnFloating() { }
-
-		// Called when another tile covers this tile.
-		//public virtual void OnCover(Tile tile) { }
-
-		// Called when this tile is uncovered.
-		//public virtual void OnUncover(Tile tile) { }
 
 		public virtual void OnCoverBegin(Tile tile) { }
 		
@@ -422,23 +427,19 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Break the tile, destroying it.
 		public virtual void Break(bool spawnDrops) {
-			// Spawn the break effect.
+			// Spawn the break effect
 			if (breakAnimation != null && !CancelBreakEffect) {
 				Effect breakEffect = new Effect(breakAnimation, breakLayer, true);
 				RoomControl.SpawnEntity(breakEffect, Center);
 			}
-
 			if (breakSound != null && !CancelBreakSound)
 				AudioSystem.PlaySound(breakSound);
 
-			// Spawn drops.
+			// Spawn any drops
 			if (spawnDrops)
 				SpawnDrop();
 
-			// Destroy the tile.
-			if (properties.GetBoolean("disable_on_destroy", false))
-				IsEnabled = false; // TODO: this won't exactly work anymore.
-			RoomControl.RemoveTile(this);
+			Destroy();
 		}
 
 		// Spawn a drop entity based on the random drop-list.
@@ -628,11 +629,15 @@ namespace ZeldaOracle.Game.Tiles {
 		// Projectiles
 		//-----------------------------------------------------------------------------
 
-		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed) {
+		public Projectile ShootFromDirection(
+			Projectile projectile, Direction direction, float speed)
+		{
 			return ShootFromDirection(projectile, direction, speed, Vector2F.Zero, 0);
 		}
 
-		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed) {
+		public Projectile ShootFromAngle(
+			Projectile projectile, Angle angle, float speed)
+		{
 			return ShootFromAngle(projectile, angle, speed, Vector2F.Zero, 0);
 		}
 
@@ -640,26 +645,36 @@ namespace ZeldaOracle.Game.Tiles {
 			return ShootProjectile(projectile, velocity, Vector2F.Zero, 0);
 		}
 
-		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+		public Projectile ShootFromDirection(Projectile projectile,
+			Direction direction, float speed, Vector2F positionOffset,
+			int zPositionOffset = 0)
+		{
 			projectile.TileOwner	= this;
 			projectile.Direction	= direction;
-			projectile.Physics.Velocity = Directions.ToVector(direction) * speed;
-			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			projectile.Physics.Velocity = direction.ToVector(speed);
+			RoomControl.SpawnEntity(projectile,
+				Center + positionOffset, zPositionOffset);
 			return projectile;
 		}
 
-		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+		public Projectile ShootFromAngle(Projectile projectile, Angle angle,
+			float speed, Vector2F positionOffset, int zPositionOffset = 0)
+		{
 			projectile.TileOwner	= this;
 			projectile.Angle		= angle;
-			projectile.Physics.Velocity = Angles.ToVector(angle, true) * speed;
-			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			projectile.Physics.Velocity = angle.ToVector(speed);
+			RoomControl.SpawnEntity(projectile,
+				Center + positionOffset, zPositionOffset);
 			return projectile;
 		}
 
-		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity, Vector2F positionOffset, int zPositionOffset) {
-			projectile.TileOwner	= this;
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity,
+			Vector2F positionOffset, int zPositionOffset)
+		{
+			projectile.TileOwner = this;
 			projectile.Physics.Velocity = velocity;
-			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			RoomControl.SpawnEntity(projectile,
+				Center + positionOffset, zPositionOffset);
 			return projectile;
 		}
 
@@ -668,12 +683,12 @@ namespace ZeldaOracle.Game.Tiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		// Construct a tile from the given tile-data.
+		/// <summary>Construct a tile from the given tile-data.</summary>
 		public static Tile CreateTile(TileData data) {
 			return CreateTile(new TileDataInstance(data, 0, 0, 0));
 		}
 
-		// Construct a tile from the given tile-data.
+		/// <summary>Construct a tile from the given tile-data.</summary>
 		public static Tile CreateTile(TileDataInstance data) {
 			Tile tile;
 
@@ -704,16 +719,12 @@ namespace ZeldaOracle.Game.Tiles {
 			if (data.SpriteList.Length > 0)
 				tile.graphics.PlayAnimation(data.SpriteList[0]);
 
-			int conveyorAngle = data.ConveyorAngle;
-			if (conveyorAngle >= 0)
-				tile.conveyorVelocity = Angles.ToVector(conveyorAngle, true) * data.ConveyorSpeed;
+			Angle conveyorAngle = data.ConveyorAngle;
+			if (conveyorAngle.IsValid)
+				tile.conveyorVelocity = conveyorAngle.ToVector(data.ConveyorSpeed);
 
-			//tile.properties.SetAll(data.BaseProperties);
-			//tile.properties.SetAll(data.Properties);
-			//data.ResetState();
-			//tile.properties.BaseProperties = data.ModifiedProperties;
-			
-			// NOTE: properties.PropertyObject will refer to the tile's TileDataInstance.
+			// NOTE: properties.PropertyObject will refer to the tile's
+			// TileDataInstance.
 			tile.properties = data.ModifiedProperties;
 			
 			return tile;
@@ -746,8 +757,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
-		public static void DrawTileDataWithOffset(Graphics2D g, TileDataDrawArgs args, Point2I offset) {
-			ISprite sprite = args.Tile.GetSpriteIndex(args.Properties.GetInteger("sprite_index"));
+		public static void DrawTileDataWithOffset(Graphics2D g, TileDataDrawArgs args,
+			Point2I offset)
+		{
+			ISprite sprite = args.Tile.GetSpriteIndex(
+				args.Properties.GetInteger("sprite_index"));
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
@@ -761,8 +775,11 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		/// <summary>Draws the tile data to display in the editor with the specified sprite index.</summary>
-		public static void DrawTileDataIndex(Graphics2D g, TileDataDrawArgs args, int spriteIndex = -1, int substripIndex = -1) {
+		/// <summary>Draws the tile data to display in the editor with the specified
+		/// sprite index.</summary>
+		public static void DrawTileDataIndex(Graphics2D g, TileDataDrawArgs args,
+			int spriteIndex = -1, int substripIndex = -1)
+		{
 			if (spriteIndex == -1)
 				spriteIndex = args.Properties.GetInteger("sprite_index", 0);
 			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
@@ -792,7 +809,9 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
-		public static void DrawTileDataColors(Graphics2D g, TileDataDrawArgs args, ColorDefinitions colorDefinitions) {
+		public static void DrawTileDataColors(Graphics2D g, TileDataDrawArgs args,
+			ColorDefinitions colorDefinitions)
+		{
 			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
 			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
 			if (sprite is Animation) {
@@ -800,8 +819,8 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				SpriteSettings settings = new SpriteSettings(args.Zone.StyleDefinitions,
-					colorDefinitions, args.Time);
+				SpriteSettings settings = new SpriteSettings(
+					args.Zone.StyleDefinitions, colorDefinitions, args.Time);
 				g.DrawSprite(
 					sprite,
 					settings,
@@ -843,11 +862,17 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Vector2F PreviousPosition {
-			get { return (previousLocation * GameSettings.TILE_SIZE) + previousOffset; }
+			get {
+				return (previousLocation * GameSettings.TILE_SIZE) +
+					previousOffset;
+			}
 		}
 
 		public Vector2F Center {
-			get { return Position + ((Vector2F) size * (0.5f * GameSettings.TILE_SIZE)); }
+			get {
+				return Position + ((Vector2F) size *
+					(0.5f * GameSettings.TILE_SIZE));
+			}
 		}
 
 		public Vector2F Offset {
@@ -956,13 +981,24 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Events; }
 		}
 
-		// Get the original tile data from which this was created.
+		public TriggerCollection Triggers {
+			get { return tileData.Triggers; }
+		}
+
+		public Type TriggerObjectType {
+			get { return GetType(); }
+		}
+
+		/// <summary>Get the original tile data from which this was created.</summary>
 		public TileDataInstance TileData {
 			get { return tileData; }
 		}
 
 		public bool IsCoverableByBlock {
-			get { return (!IsNotCoverable && !IsSolid && !IsStairs && (!IsLadder || RoomControl.IsSideScrolling)); }
+			get {
+				return (!IsNotCoverable && !IsSolid && !IsStairs &&
+					(!IsLadder || RoomControl.IsSideScrolling));
+			}
 		}
 
 		public DropList DropList {
@@ -989,8 +1025,8 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return TileData.DrawAsEntity; }
 		}
 
-		/// <summary>Gets the tile data to appear when
-		/// this one is removed while on layer 1.</summary>
+		/// <summary>Gets the tile data to appear when this one is removed while on the
+		/// first layer.</summary>
 		public TileData TileBelow {
 			get { return TileData.TileBelow; }
 		}
@@ -1202,13 +1238,15 @@ namespace ZeldaOracle.Game.Tiles {
 			set { collisionStyle = value; }
 		}
 
-		/// <summary>Determines if the block is floating in air
-		/// in a side-scrolling environment.</summary>
+		/// <summary>Determines if the block is floating in air in a side-scrolling
+		/// environment.</summary>
 		public bool IsFloating {
 			get {
 				if (roomControl.IsSideScrolling) {
-					Tile ssSurfaceTile = roomControl.TileManager.GetTopTile(Location + Directions.ToPoint(Direction.Down));
-					return (ssSurfaceTile == null || !ssSurfaceTile.IsSolid || ssSurfaceTile.IsInMotion);
+					Tile ssSurfaceTile = roomControl.TileManager.GetTopTile(
+						Location + Directions.ToPoint(Direction.Down));
+					return (ssSurfaceTile == null || !ssSurfaceTile.IsSolid ||
+						ssSurfaceTile.IsInMotion);
 					// TODO: Check if collision box does not have a flat surface on top?
 				}
 				return false;

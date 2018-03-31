@@ -15,7 +15,7 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
-	public class ActionTile : IEventObject {
+	public class ActionTile : ITriggerObject, ZeldaAPI.ActionTile {
 		
 		private RoomControl				roomControl;
 		private	ActionTileDataInstance	actionData;
@@ -251,6 +251,14 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		public EventCollection Events {
 			get { return actionData.Events; }
+		}
+
+		public TriggerCollection Triggers {
+			get { return actionData.Triggers; }
+		}
+
+		public Type TriggerObjectType {
+			get { return GetType(); }
 		}
 
 		/// <summary>Gets the type of entity this action spawns.</summary>

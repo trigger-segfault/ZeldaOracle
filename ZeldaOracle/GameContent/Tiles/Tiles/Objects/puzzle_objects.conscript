@@ -10,8 +10,6 @@ TILE "temp_door";
 	SPRITEINDEX	0,	"tile_door_closed";
 	SPRITEINDEX	1,	"tile_door_open";
 	SPRITEINDEX	2,	"tile_door_close";
-	#PROPERTIES		(boolean, open, false, "Open", "", "Door", "True if the door open."),
-	#				(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false);
 END;
 TILE "temp_small_key_door";
 	#CLONE			"temp_door";
@@ -54,32 +52,26 @@ TILE "temp_color_jump_pad";
 	SPRITEINDEX	0, "tile_color_jump_pad_red";
 	SPRITEINDEX 1, "tile_color_jump_pad_yellow";
 	SPRITEINDEX 2, "tile_color_jump_pad_blue";
-	#PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the jump pad.");
-	#EVENT		color_change, "Color Change", "Color", "Occurs when the pad's color changes.", (ColorJumpPad, tile, PuzzleColor, color);
 END;
 TILE "temp_color_tile";
 	TYPE		TileColorTile;
 	SPRITEINDEX	0, "tile_color_tile_red";
 	SPRITEINDEX 1, "tile_color_tile_yellow";
 	SPRITEINDEX 2, "tile_color_tile_blue";
-	#PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the tile.");
 END;
 TILE "temp_color_barrier";
 	TYPE		TileColorBarrier;
 	HALFSOLID	block;
 	SPRITE		tile_color_barrier_red_raised;
-	#PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the barrier (red or blue).");
 END;
 TILE "temp_color_statue";
 	TYPE		TileColorStatue;
 	SOLID		block;
 	#FLAGS		Movable;
-	#PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the statue.");
 END;
 TILE "temp_color_block";
 	TYPE		TileColorBlock;
 	SOLID		block;
-	#PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the block.");
 END;
 
 # Minecart Tracks ---------------------------------------------
@@ -94,9 +86,6 @@ TILE "temp_minecart_track";
 	SPRITEINDEX	3, "tile_minecart_track_up_left";		# Up/Left
 	SPRITEINDEX	4, "tile_minecart_track_down_left";	# Left/Down
 	SPRITEINDEX	5, "tile_minecart_track_down_right";	# Down/Right
-	#PROPERTIES	(boolean, minecart, false, "Has Minecart", "", "Minecart", "Does this track currently have a minecart on it?"),
-	#			(integer, switched_track_orientation, 0, "Switched Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", ""),
-	#			(integer, track_orientation, 0, "Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", "");
 END;
 
 # Lava Mouth --------------------------------------------------
@@ -112,9 +101,6 @@ END;
 TILE "temp_arrow_shooter";
 	Type		TileArrowShooter;
 	SOLID		block;
-	#PROPERTIES
-	#	(integer, direction, 0, "Direction", "direction",
-	#		"Arrow Shooter", "The direction arrows are shot in.", false);
 END;
 
 # Fire Shooter ------------------------------------------------
@@ -122,10 +108,6 @@ END;
 TILE "temp_fire_shooter";
 	Type		TileFireShooter;
 	SOLID		block;
-	#PROPERTIES
-	#	(integer, direction, 0, "Direction", "direction",
-	#		"Fire Shooter", "The direction fire is shot in.", false);
-		
 END;
 
 # Tablet Slot -------------------------------------------------
@@ -143,7 +125,6 @@ TILE "temp_wall_webbed";
 	FLAGS		Burnable;
 	SOLID		block;
 	RESETWHEN	Never;
-	PROPERTY	(disable_on_destroy, true);
 END;
 
 # Bridge ------------------------------------------------------
@@ -151,8 +132,6 @@ END;
 TILE "temp_bridge";
 	TYPE		TileBridge;
 	SPRITE		"tile_bridge_horizontal";
-	#PROPERTIES	(boolean, vertical, false, "Vertical", "", "Bridge", "True if the bridge is vertical."),
-	#			(integer, bridge_direction, -1, "Bridge Direction", "direction", "Bridge", "Direction the bridge is in.");
 END;
 
 #==============================================================
@@ -213,23 +192,14 @@ TILE "plaque";
 	TYPE		TileSign;
 	SOLID		block;
 	SAMESPRITE;
-	#PROPERTIES
-	#	(string, text, "Hello World!",
-	#		"Text", "text_message", "Sign",
-	#		"The text to display when the plaque is read from the front.");
 END;
 
 # Button ------------------------------------------------------
 
 TILE "button";
-
 	TYPE		TileButton;
 	SPRITEINDEX	0, "tile_button_up";
 	SPRITEINDEX	1, "tile_button_down";
-	#PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
-	#			(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed");
-	#EVENT		press, "Press", "Switch", "Occurs when the button is pressed.", (Button button);
-	#EVENT		release, "Release", "Switch", "Occurs when the button is released.", (Button button);
 END;
 
 # Lever -------------------------------------------------------
@@ -240,9 +210,6 @@ TILE "lever";
 	FLAGS		AbsorbSeeds;
 	SPRITEINDEX	0, "tile_lever_left";
 	SPRITEINDEX	1, "tile_lever_right";
-	#PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
-	#			(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left.");
-	#EVENT		toggle, "Toggle", "Switch", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
 # Lantern -----------------------------------------------------
@@ -252,9 +219,6 @@ TILE "lantern";
 	SOLID		block;
 	SPRITEINDEX	0, "tile_lantern_lit";
 	SPRITEINDEX	1, "tile_lantern_unlit";
-	#PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.");
-	#EVENT		light, "Light", "Lanturn", "Occurs when the lantern is lighted.", (Lantern, lantern);
-	#EVENT		put_out, "Put Out", "Lanturn", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
 
 # Color Jump Pad ----------------------------------------------
@@ -348,8 +312,6 @@ TILE "color_lantern";
 	TYPE		TileColorLantern;
 	SOLID		block;
 	SAMESPRITE;
-	#PROPERTIES	(integer, color, -1, "Color", ("enum", "PuzzleColor"), "Color", "The color of the lantern flames.");
-	#EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, PuzzleColor, color);
 END;
 
 # Color Cube Slot ---------------------------------------------
@@ -357,7 +319,6 @@ END;
 TILE "color_cube_slot";
 	TYPE		TileColorCubeSlot;
 	SAMESPRITE;
-	#EVENT		color_change, "Color Change", "Color", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, PuzzleColor, color);
 END;
 
 # Minecart Tracks ---------------------------------------------
@@ -552,8 +513,6 @@ TILE "cracked_floor";
 	TYPE		TileCrackedFloor;
 	TILEBELOW	"hole";
 	SAMESPRITE;
-	#PROPERTIES	(boolean, silent, false, "Silent", "",
-	#	"Cracked Floor", "True if the floor does not make a noise or animation upon crumbling.", false);
 END;
 
 # Hardened Lava -----------------------------------------------
@@ -598,7 +557,6 @@ TILE "turnstile";
 	PREVIEW		"preview_turnstile_counterclockwise";
 	#RESETWHEN	LeaveArea;
 	#SIZE		(3, 3);
-	#PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
 END;
 
 # Chest -------------------------------------------------------
@@ -609,14 +567,6 @@ TILE "chest";
 	#RESETWHEN	Never;
 	SPRITEINDEX	0, "tile_chest";
 	SPRITEINDEX	1, "tile_chest_opened";
-	#PROPERTY	(spawn_delay_after_poof, 16);
-	#PROPERTIES
-	#	(string, reward, "rupees_1",
-	#		"Reward", "reward", "Chest",
-	#		 "The reward contained inside the chest."),
-	#	(boolean, looted, "false",
-	#		"Looted", "", "Chest",
-	#		"True if the item has been taken from the chest.");
 END;
 
 # Reward ------------------------------------------------------
@@ -625,14 +575,6 @@ TILE "reward";
 	TYPE		TileReward;
 	FLAGS		NotCoverable;
 	MODEL		center;
-	#RESETWHEN	Never;
-	#PROPERTIES
-	#	(string, reward, "heart_piece",
-	#		"Reward", "reward", "Reward",
-	#		 "The reward to spawn."),
-	#	(boolean, looted, "false",
-	#		"Looted", "", "Reward",
-	#		"True if the item has been taken.");
 END;
 
 # Digable Reward ----------------------------------------------
@@ -643,13 +585,6 @@ TILE "digable_reward";
 	MODEL		center;
 	#RESETWHEN	Never;
 	PREVIEW		"preview_digable_reward";
-	#PROPERTIES
-	#	(string, reward, "heart_piece",
-	#		"Reward", "reward", "Reward",
-	#		 "The reward to spawn."),
-	#	(boolean, looted, "false",
-	#		"Looted", "", "Reward",
-	#		"True if the item has been taken.");
 END;
 
 # Divable Reward ----------------------------------------------
@@ -659,11 +594,4 @@ TILE "divable_reward";
 	MODEL		center;
 	#RESETWHEN	Never;
 	PREVIEW		"preview_divable_reward";
-	#PROPERTIES
-	#	(string, reward, "heart_piece",
-	#		"Reward", "reward", "Reward",
-	#		 "The reward to spawn."),
-	#	(boolean, looted, "false",
-	#		"Looted", "", "Reward",
-	#		"True if the item has been taken.");
 END;

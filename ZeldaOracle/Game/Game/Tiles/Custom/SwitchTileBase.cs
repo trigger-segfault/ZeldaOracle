@@ -31,6 +31,10 @@ namespace ZeldaOracle.Game.Tiles {
 			this.switchState = switchState;
 		}
 
+		public void Flip() {
+			Toggle();
+		}
+
 		public bool Toggle() {
 			if (toggleDelayTimer > 0)
 				return false;
@@ -44,7 +48,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				SetSwitchState(switchState);
 				OnToggle(switchState);
-				GameControl.FireEvent(this, "toggle", this);
+				GameControl.FireEvent(this, "toggle");
 				
 				Properties.Set("switch_state", switchState);
 				Properties.Set("has_switched", true);

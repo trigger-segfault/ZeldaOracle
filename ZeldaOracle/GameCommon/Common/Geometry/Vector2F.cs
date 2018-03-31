@@ -399,6 +399,10 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Point2I((int)v.X, (int)v.Y);
 		}
 
+		public static implicit operator Vector2F(Angle v) {
+			throw new NotImplementedException();
+		}
+
 		/// <summary>Convert from a Vector2F to a Microsfot.Xna.Framework.Vector2.</summary>
 		/*public static explicit operator Vector2(Vector2F v) {
 			return new Vector2(v.X, v.Y);
@@ -423,7 +427,7 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 
 		/// <summary>Gets or sets the direction of the vector.</summary>
 		public float Direction {

@@ -96,7 +96,7 @@ namespace ICSharpCode.CodeCompletion {
 
 			var completionChar = completionContext.Document.GetCharAt(completionContext.Offset - 1);
 			var docText = completionContext.Document.Text;
-			Debug.Print("Update Completion char: '{0}'", completionChar);
+			//Debug.Print("Update Completion char: '{0}'", completionChar);
 			int parameterIndex = pce.GetCurrentParameterIndex(startOffset, completionContext.Offset);
 			if (parameterIndex < 0) {
 				RequestClose = true;

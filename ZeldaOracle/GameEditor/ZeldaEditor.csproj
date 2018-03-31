@@ -108,11 +108,15 @@
     <Compile Include="Controls\TilePathCommandItem.xaml.cs">
       <DependentUpon>TilePathCommandItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TilesetPalette.xaml.cs">
+      <DependentUpon>TilesetPalette.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
+    <Compile Include="Control\ScriptCompileService.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
     <Compile Include="EditorCommands.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\AnglePropertyEditor.cs" />
@@ -182,6 +186,9 @@
     </Compile>
     <Compile Include="Windows\ResizeLevelWindow.xaml.cs">
       <DependentUpon>ResizeLevelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ObjectEditor.xaml.cs">
+      <DependentUpon>ObjectEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ScriptEditor.xaml.cs">
       <DependentUpon>ScriptEditor.xaml</DependentUpon>
@@ -255,6 +262,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TilesetPalette.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -294,6 +305,10 @@
     <Page Include="Windows\ResizeLevelWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ObjectEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ScriptEditor.xaml">
       <SubType>Designer</SubType>

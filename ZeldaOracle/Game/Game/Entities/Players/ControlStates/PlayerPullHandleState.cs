@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Input;
+using ZeldaOracle.Game.Entities.Objects;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
@@ -15,7 +16,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerPullHandleState : PlayerState {
 		
 		private ItemBracelet bracelet;
-		private TilePullHandle tileHandle;
+		private PullHandle handle;
 		private int pullDuration;
 		private int puaseDuration;
 		private bool isPulling;
@@ -48,17 +49,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.StopMotion();
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_PICKUP);
 			
-			player.SetPositionByCenter(tileHandle.GetPlayerPullPosition());
+			player.SetPositionByCenter(handle.GetPlayerPullPosition());
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			tileHandle.EndPull();
+			handle.OnReleaseHandle();
 		}
 
 		public override void Update() {
-			base.Update();
-			
-			InputControl pullButton = Controls.GetArrowControl(player.Direction.Reverse());
+			InputControl pullButton =
+				Controls.GetArrowControl(player.Direction.Reverse());
 			
 			timer--;
 
@@ -67,9 +67,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else if (isPulling) {
 				// Extend the handle.
-				if (!tileHandle.IsFullyExtended) {
-					tileHandle.Extend(tileHandle.ExtendSpeed);
-					if (tileHandle.IsFullyExtended)
+				if (!handle.IsFullyExtended) {
+					handle.Extend(handle.ExtendSpeed);
+					if (handle.IsFullyExtended)
 						AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
 				}
 
@@ -91,11 +91,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				timer		= pullDuration;
 				isPulling	= true;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
-				if (!tileHandle.IsFullyExtended)
+				if (!handle.IsFullyExtended)
 					AudioSystem.PlaySound(GameData.SOUND_BLOCK_PUSH);
 			}
 
-			player.SetPositionByCenter(tileHandle.GetPlayerPullPosition());
+			player.SetPositionByCenter(handle.GetPlayerPullPosition());
 		}
 
 		
@@ -108,9 +108,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			set { bracelet = value; }
 		}
 
-		public TilePullHandle PullHandleTile {
-			get { return tileHandle; }
-			set { tileHandle = value; }
+		public PullHandle PullHandle {
+			get { return handle; }
+			set { handle = value; }
 		}
 	}
 }

@@ -1,12 +1,22 @@
 ﻿
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game;
 
 namespace ZeldaAPI {
 	/// <summary>Returns true if a condition is met.</summary>
 	public delegate bool WaitCondition();
 	public delegate bool UpdateCondition();
 	public delegate bool TimedUpdateCondition(int elapsedTime);
+
+	public interface Trigger {
+		void TurnOn();
+		void TurnOff();
+	}
+
+	public interface ScriptAction {
+		void Wait(bool wait = true);
+	}
 
 	/// <summary>Provides the actions to perform from within a script.</summary>
 	public interface ScriptActions {
@@ -15,6 +25,8 @@ namespace ZeldaAPI {
 		ScriptActionsUnit Unit { get; }
 		ScriptActionsSound Sound { get; }
 		ScriptActionsItem Item { get; }
+		ScriptActionsTile Tile { get; }
+		ScriptActionsTrigger Trigger { get; }
 	}
 
 	public interface ScriptFunctions {
@@ -54,8 +66,8 @@ namespace ZeldaAPI {
 	}
 	
 	public interface ScriptActionsUnit {
-		void Move(Unit unit, Direction direction, Distance distance, float speed);
-		void MoveToPoint(Unit unit, Vector2F point, float speed);
+		ScriptAction MoveInDirection(Unit unit, Direction direction, Distance distance, float speed);
+		ScriptAction MoveToPoint(Unit unit, Vector2F point, float speed);
 		void MakeUnitFaceDirection(Unit unit, Direction direction);
 		//void MakeUnitFacePoint(Unit unit, Vector2F point);
 		void Destroy(Unit unit);
@@ -65,6 +77,22 @@ namespace ZeldaAPI {
 	
 	public interface ScriptActionsItem {
 		void GiveReward(Reward reward);
+	}
+	
+	public interface ScriptActionsTile {
+		void LightLantern(Lantern lantern);
+		void PutOutLantern(Lantern lantern);
+		void FlipSwitch(Lever lever);
+		void SetColor(ColorTile tile, PuzzleColor color);
+		//void Rotate(ColorTile tile, PuzzleColor color);
+		void BuildBridge(Bridge bridge);
+		void DestroyBridge(Bridge bridge);
+	}
+
+	public interface ScriptActionsTrigger {
+		void Run(Trigger trigger);
+		void TurnOn(Trigger trigger);
+		void TurnOff(Trigger trigger);
 	}
 
 
@@ -90,6 +118,25 @@ namespace ZeldaAPI {
 
 	public interface ScriptFunctionsReward {
 		Reward RewardByID(string id);
+	}
+
+	public enum UnitEvent {
+		Dies,
+		Spawns,
+		IsDestroyed,
+		IsDamaged,
+		IsKnockedBack,
+	}
+
+	public enum EntityEvent {
+		IsSpawned,
+		IsDestroyed,
+	}
+	
+	public interface ScriptEvents {
+		//void RoomTransition(Room room, Direction direction);
+		//void UnitEvent(Unit unit, UnitEvent unitEvent);
+		//void EntityEvent(Entity entity, EntityEvent entityEvent)
 	}
 
 }

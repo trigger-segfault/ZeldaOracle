@@ -165,6 +165,9 @@
     <Compile Include="Common\Ini\IniReflectionSettings.cs" />
     <Compile Include="Common\Scripting\EventDocumentation.cs" />
     <Compile Include="Common\Scripting\EventDocumentationCollection.cs" />
+    <Compile Include="Common\Scripting\Trigger.cs" />
+    <Compile Include="Common\Scripting\TriggerCollection.cs" />
+    <Compile Include="Common\Scripting\ITriggerObject.cs" />
     <Compile Include="Common\Scripting\IEventObject.cs" />
     <Compile Include="Common\Scripting\IEventObjectContainer.cs" />
     <Compile Include="Common\Scripting\IIDObject.cs" />
@@ -274,6 +277,9 @@
     <Compile Include="Game\Control\VisualEffects\RoomVisualEffect.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Sound.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Item.cs" />
+    <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Trigger.cs" />
+    <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Tile.cs" />
+    <Compile Include="Game\Control\Scripting\Interface\Events\ScriptEvents.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Functions\ScriptFunctions.cs" />
     <Compile Include="Game\Control\Scripting\Interface\ScriptInterface.cs" />
     <Compile Include="Game\Control\Scripting\Interface\ScriptInterfaceSection.cs" />
@@ -282,6 +288,8 @@
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.Camera.cs" />
     <Compile Include="Game\Control\Scripting\Interface\Actions\ScriptActions.General.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptCompiler.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptCodeGenerator.cs" />
     <Compile Include="Game\Control\Scripting\ScriptInstance.cs" />
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
@@ -313,6 +321,7 @@
     <Compile Include="Game\Entities\EntityComponent.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterIronMask.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolShield.cs" />
+    <Compile Include="Game\Entities\Objects\PullHandle.cs" />
     <Compile Include="Game\Entities\ReactionCallbacks.cs" />
     <Compile Include="Game\Entities\InteractionInstance.cs" />
     <Compile Include="Game\Entities\InteractionComponent.cs" />
@@ -336,6 +345,8 @@
     <Compile Include="Game\ResourceData\ResourceDataDrawing.cs" />
     <Compile Include="Game\ResourceData\ResourceDataInitializing.cs" />
     <None Include="Game\Tiles\TileDataInitializing.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\PullHandleAction.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\EntityActionTile.cs" />
     <Compile Include="Game\Tiles\ActionTiles\TriggerAction.cs" />
     <Compile Include="Game\Tiles\TileDatas\ActionTileInstancePosition.cs" />
     <Compile Include="Game\Tiles\TileDatas\TileInstanceDictionary.cs" />
@@ -592,7 +603,6 @@
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorSwitch.cs" />
     <Compile Include="Game\Tiles\Custom\SwitchTileBase.cs" />
     <Compile Include="Game\Tiles\Custom\TileSeedBouncer.cs" />
-    <Compile Include="Game\Tiles\Custom\TilePullHandle.cs" />
     <Compile Include="Game\Tiles\Custom\TileLever.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorLantern.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCubeSlot.cs" />

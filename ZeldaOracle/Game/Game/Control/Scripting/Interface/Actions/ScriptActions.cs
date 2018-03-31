@@ -8,6 +8,8 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 		public ZeldaAPI.ScriptActionsCamera		Camera { get; set; }
 		public ZeldaAPI.ScriptActionsSound		Sound { get; set; }
 		public ZeldaAPI.ScriptActionsItem		Item { get; set; }
+		public ZeldaAPI.ScriptActionsTile		Tile { get; set; }
+		public ZeldaAPI.ScriptActionsTrigger	Trigger { get; set; }
 
 		public ScriptActions(ScriptInstance script) : base(script) {
 			General		= CreateSection(new ScriptActionsGeneral());
@@ -15,6 +17,8 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 			Camera		= CreateSection(new ScriptActionsCamera());
 			Sound		= CreateSection(new ScriptActionsSound());
 			Item		= CreateSection(new ScriptActionsItem());
+			Tile		= CreateSection(new ScriptActionsTile());
+			Trigger		= CreateSection(new ScriptActionsTrigger());
 		}
 	}
 }

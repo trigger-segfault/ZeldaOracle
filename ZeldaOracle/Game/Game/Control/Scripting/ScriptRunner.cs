@@ -4,31 +4,21 @@ using System.Reflection;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Worlds;
 
-
 namespace ZeldaOracle.Game.Control.Scripting {
 
-	//public class ScriptRunInfo {
-	//	private string name;
-	//	private ZeldaAPI.CustomScriptBase context;
-	//	private MethodInfo method;
-	//	private Action execute;
-	//	private object[] parameters;
-
-	//	public ScriptRunInfo(string name, MethodInfo method, params object[] parameters) {
-	//		this.name = name;
-	//		this.parameters = parameters;
-	//		this.execute = new delegate() {
-	//			execute.GetMethodInfo
-	//		}
-	//	}
-	//}
-
+	/// <summary>Used to execute scripts during runtime. Scripts are run in their own
+	/// threads so that they can perform blocking actions such as sleeping or
+	/// displaying a text message. There is no need for thread safety, however, because
+	/// script threads are run in lock-step with the main thread.</summary>
 	public class ScriptRunner {
 
 		private GameControl gameControl;
+		/// <summary>The loaded script assembly.</summary>
 		private Assembly compiledAssembly;
+		/// <summary>The script context class from the script assembly, which contains
+		/// methods for all user scripts and trigger scripts.</summary>
 		private ZeldaAPI.CustomScriptBase context;
-		private Dictionary<Script, MethodInfo> scriptMethods;
+		/// <summary>The list of scripts which are currently running.</summary>
 		private List<ScriptInstance> runningScripts;
 
 
@@ -40,7 +30,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			this.gameControl	= gameControl;
 			context				= null;
 			compiledAssembly	= null;
-			scriptMethods		= new Dictionary<Script, MethodInfo>();
 			runningScripts		= new List<ScriptInstance>();
 		}
 
@@ -49,6 +38,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// World Initialization
 		//-----------------------------------------------------------------------------
 		
+		/// <summary>Terminate all scripts, aborting their threads.</summary>
 		public void TerminateAllScripts() {
 			for (int i = 0; i < runningScripts.Count; i++) {
 				Logs.Scripts.LogNotice("Terminating script: {0}",
@@ -58,6 +48,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			runningScripts.Clear();
 		}
 
+		/// <summary>Terminate all scripts which are tied to the given room control.</summary>
 		public void TerminateRoomScripts(RoomControl roomControl) {
 			// Terminate all script which are tied to the given room control
 			for (int i = 0; i < runningScripts.Count; i++) {
@@ -70,9 +61,9 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			}
 		}
 
+		/// <summary>Called upon loading a world, in order to load the script assembly
+		/// and construct the script context class.</summary>
 		public bool OnLoadWorld(World world) {
-			scriptMethods.Clear();
-
 			// Load the assembly
 			byte[] rawAssembly = world.ScriptManager.RawAssembly;
 			if (rawAssembly == null || rawAssembly.Length == 0)
@@ -80,25 +71,20 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			compiledAssembly = Assembly.Load(rawAssembly);
 			if (compiledAssembly == null)
 				return false;
-
-			// Find the type (class) of the custom script method
-			Type type = compiledAssembly.GetType("ZeldaAPI.CustomScripts.CustomScript");
-			if (type == null)
+			
+			// Construct the script context class
+			Type contextType = compiledAssembly.GetType(
+				ScriptCodeGenerator.ScriptContextFullPath);
+			if (contextType == null)
 				return false;
-
-			// Find the default constructor for the type
-			ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
-			if (constructor == null)
-				return false;
-
-			// Construct the script object
-			context = (ZeldaAPI.CustomScriptBase) constructor.Invoke(null);
+			context = ReflectionHelper.Construct
+				<ZeldaAPI.CustomScriptBase>(contextType);
 			if (context == null)
 				return false;
 
-			// Create a mapping of scripts to method infos
-			foreach (KeyValuePair<string, Script> script in world.Scripts)
-				scriptMethods[script.Value] = type.GetMethod(script.Key);
+			// Find the MethodInfo for each user script
+			foreach (Script script in world.Scripts.Values)
+				script.MethodInfo = contextType.GetMethod(script.MethodName);
 
 			return true;
 		}
@@ -109,15 +95,16 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Run a script with the given parameters.</summary>
-		public void RunScript(string scriptId, object[] parameters) {
-			Script script = gameControl.World.Scripts[scriptId];
-			RunScript(script, parameters);
-		}
-
-		/// <summary>Run a script with the given parameters.</summary>
 		public void RunScript(Script script, object[] parameters) {
-			MethodInfo method = scriptMethods[script];
-			RunScript(context, script.ID, method, parameters);
+			// Get the script's MethodInfo from the scripting assembly
+			if (script.MethodInfo == null)
+				script.MethodInfo = context.GetType().GetMethod(script.MethodName);
+
+			if (script.MethodInfo != null)
+				RunScript(context, script.ID, script.MethodInfo, parameters);
+			else
+				Logs.Scripts.LogError("No MethodInfo found for trigger script '" +
+					script.MethodName + "'");
 		}
 
 		/// <summary>Run a method as a script with the given parameters.</summary>
@@ -147,13 +134,14 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				runningScripts.Add(instance);
 		}
 
-		/// <summary>Update execution for any running scripts.</summary>
+		/// <summary>Update execution for any running scripts. This is intended to be
+		/// called by GameControl.</summary>
 		public void UpdateScriptExecution() {
 			for (int i = 0; i < runningScripts.Count; i++) {
 				ScriptInstance script = runningScripts[i];
 
-				// Resume script execution
-				script.AutoResume();
+				// Update script actions and attempt to resume execution
+				script.Update();
 				
 				// Check if the script had an exception
 				if (script.Exception != null) {
