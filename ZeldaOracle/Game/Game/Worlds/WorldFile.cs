@@ -478,43 +478,6 @@ namespace ZeldaOracle.Game.Worlds {
 					});
 				}
 			}
-			//int count = reader.ReadInt32();
-			//for (int i = 0; i < count; i++) {
-			//	string eventName = ReadString(reader);
-			//	string eventScriptID = ReadString(reader);
-			//	if (editorMode) {
-			//		if (!string.IsNullOrWhiteSpace(eventScriptID)) {
-			//			Script script = world.GetScript(eventScriptID);
-			//			Event evnt = events.GetEvent(eventName);
-						
-			//			if (evnt != null) {
-			//				((ITriggerObject) events).Triggers.AddTrigger(new Trigger(triggerObject.Triggers) {
-			//					Name = evnt.Name,
-			//					Script = script,
-			//					InitiallyOn = true,
-			//					IsEnabled = true,
-			//					FireOnce = false,
-			//					EventType = new TriggerEvent(evnt),
-			//				});
-			//			}
-
-			//			if (evnt == null)
-			//				evnt = new Event(eventName, script.Parameters.ToArray());
-			//			if (script != null) {
-			//				events.GetEvent(eventName).Script = script;
-			//				// Assign the correct parameters
-			//				script.Parameters = evnt.Parameters;
-			//				world.RemoveScript(eventScriptID);
-			//			}
-			//			else {
-			//				events.GetEvent(eventName).DefineScript(eventScriptID + "();");
-			//			}
-			//		}
-			//	}
-			//	else {
-			//		events.GetEvent(eventName).InternalScriptID = eventScriptID;
-			//	}
-			//}
 		}
 
 		private Properties ReadProperties(BinaryReader reader, Properties properties) {
@@ -729,29 +692,6 @@ namespace ZeldaOracle.Game.Worlds {
 			else
 				writer.Write((int) 0);
 
-			//List<KeyValuePair<Script, Event>> internalScripts =
-			//new List<KeyValuePair<Script, Event>>();
-			//if (editorMode) {
-			//int internalID = 0;
-			//foreach (ITriggerObject triggerObject in world.GetEventObjects()) {
-			//foreach (Event evnt in eventObject.Events.GetDefinedEvents()) {
-			//	string existingScript =
-			//		evnt.GetExistingScript(world.ScriptManager.Scripts);
-			//	if (existingScript == null) {
-			//		evnt.Script.ID = ScriptManager.
-			//			CreateInternalScriptName(internalID);
-			//		evnt.InternalScriptID = evnt.Script.ID;
-			//		internalScripts.Add(
-			//			new KeyValuePair<Script, Event>(evnt.Script, evnt));
-			//		internalID++;
-			//	}
-			//	else {
-			//		evnt.InternalScriptID = existingScript;
-			//	}
-			//}
-			//}
-			//}
-
 			// Write the individual scripts
 			writer.Write(world.ScriptManager.Scripts.Count);
 			foreach (Script script in world.ScriptManager.Scripts.Values)
@@ -771,15 +711,9 @@ namespace ZeldaOracle.Game.Worlds {
 			if (version <= 3)
 				writer.Write(script.IsHidden);
 
-			// Write the parameters.
-			// Force writing event's correct parameters for refactoring purposes.
+			// Write the script parameters
 			if (evnt != null) {
 				writer.Write(0);
-				//writer.Write(evnt.ParameterCount);
-				//for (int i = 0; i < evnt.ParameterCount; i++) {
-				//	WriteString(writer, evnt.Parameters[i].Type);
-				//	WriteString(writer, evnt.Parameters[i].Name);
-				//}
 			}
 			else {
 				writer.Write(script.Parameters.Count);
@@ -945,22 +879,6 @@ namespace ZeldaOracle.Game.Worlds {
 						writer.Write(NULL_TILE); // -11 signifies a null tile.
 				}
 			}
-			
-			// Count non-null tile data for higher layers.
-			/*int tileDataCount = 0;
-			for (int i = 1; i < room.LayerCount; i++) {
-				tileDataCount += room.GetTileLayer(i).Count();
-				foreach (TileDataInstance tile in room.GetTileLayer(i)) {
-
-				}
-				for (int y = 0; y < room.Height; y++) {
-					for (int x = 0; x < room.Width; x++) {
-						TileDataInstance tile = room.GetTile(x, y, i);
-						if (tile != null && tile.IsAtLocation(x, y))
-							tileDataCount++;
-					}
-				}
-			}*/
 
 			// Write non-null tile data for higher layers.
 			var counter = BinaryCounter.Start(writer);
@@ -972,17 +890,6 @@ namespace ZeldaOracle.Game.Worlds {
 					WriteTileData(writer, tile);
 					counter.Count++;
 				}
-				/*for (int y = 0; y < room.Height; y++) {
-					for (int x = 0; x < room.Width; x++) {
-						TileDataInstance tile = room.GetTile(x, y, i);
-						if (tile != null && tile.IsAtLocation(x, y)) {
-							writer.Write(x);
-							writer.Write(y);
-							writer.Write(i);
-							WriteTileData(writer, tile);
-						}
-					}
-				}*/
 			}
 			counter.WriteCountAndReturn();
 
@@ -995,33 +902,13 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void WriteTileData(BinaryWriter writer, TileDataInstance tile) {
-			//if (tile.Tileset != null) {
-			//	//WriteTileset(writer, tileData.Tileset);
-			//	WriteResource(writer, tile.Tileset, tilesets);
-			//	writer.Write(tile.SheetLocation);
-			//	WriteProperties(writer, tile.Properties);
-			//	if (version <= 3)
-			//		WriteEvents(writer, tile.Events);
-			//	else
-			//		WriteTriggers(writer, tile.Triggers);
-			//}
-			//else {
-				writer.Write((int) -1);
-				WriteResource(writer, tile.TileData, tileData);
-				WriteProperties(writer, tile.Properties);
-				if (version <= 3)
-					WriteEvents(writer, tile.Events);
-				else
-					WriteTriggers(writer, tile.Triggers);
-				//writer.Write((long) tileData.Flags);
-				//WriteTileType(writer, tileData.Type);
-				//WriteResource(writer, tileData.CollisionModel, collisionModels);
-				//WriteResource(writer, tileData.Sprite, sprites);
-				//WriteResource(writer, tileData.SpriteAsObject, sprites);
-				//WriteResource(writer, tileData.Animation, animations);
-				//WriteResource(writer, tileData.BreakAnimation, animations);
-				//WriteProperties(writer, tile.ModifiedProperties);
-			//}
+			writer.Write((int) -1);
+			WriteResource(writer, tile.TileData, tileData);
+			WriteProperties(writer, tile.Properties);
+			if (version <= 3)
+				WriteEvents(writer, tile.Events);
+			else
+				WriteTriggers(writer, tile.Triggers);
 		}
 
 		private void WriteActionTileData(BinaryWriter writer,
