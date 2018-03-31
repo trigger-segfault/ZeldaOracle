@@ -8,12 +8,25 @@ using ZeldaOracle.Game.Control.Scripting.Interface.Functions;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 
+	/// <summary>An instance of a running script action.</summary>
 	public class ScriptAction : ZeldaAPI.ScriptAction {
+
+		/// <summary>The script instance this action is running for.</summary>
 		public ScriptInstance ScriptInstance { get; set; }
+		
+		/// <summary>The update function called after every game tick. This function
+		/// should return true if the action has completed.</summary>
 		public ZeldaAPI.UpdateCondition UpdateFunction { get; set; }
+
+		/// <summary>True if this action has completed.</summary>
 		public bool IsComplete { get; set; }
+
+		/// <summary>True if the script instance is waiting for this action to
+		/// complete.</summary>
 		public bool WaitForCompletion { get; set; }
 
+		/// <summary>Update the action, calling its update function and
+		/// checking if it has completed.</summary>
 		public void Update() {
 			if (!IsComplete && UpdateFunction != null) {
 				if (UpdateFunction.Invoke())
@@ -21,6 +34,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			}
 		}
 
+		/// <summary>Wait for the action to complete.</summary>
 		public void Wait(bool wait = true) {
 			Logs.Scripts.LogInfo("Waiting for action to complete");
 			ScriptInstance.WaitForCondition(delegate() {

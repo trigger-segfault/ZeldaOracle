@@ -1,94 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.CodeDom.Compiler;
 using ZeldaOracle.Common.Scripting;
-using System.Collections;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 	
-	/// <summary>Result information from compiling a script, including the 
-	/// encountered errors/warnings and also the raw assembly data.</summary>
-	public class ScriptCompileResult {
-
-		public ScriptCompileResult() {
-			Errors		= new List<ScriptCompileError>();
-			Warnings	= new List<ScriptCompileError>();
-			RawAssembly	= null;
-		}
-		
-		/// <summary>Errors encountered during compilation.</summary>
-		public List<ScriptCompileError> Errors { get; set; }
-
-		/// <summary>Warnings encountered during compilation.</summary>
-		public List<ScriptCompileError> Warnings { get; set; }
-		
-		/// <summary>True if there where no errors.</summary>
-		public bool Succeeded {
-			get { return (Errors.Count == 0); }
-		}
-
-		/// <summary>True if there where errors.</summary>
-		public bool Failed {
-			get { return (Errors.Count > 0); }
-		}
-
-		/// <summary>Raw assembly output from the compiler. If there where compiler
-		/// errors, then this will be null.</summary>
-		public byte[] RawAssembly { get; set; }
-	}
-
-	/// <summary>Represents a compiler error or warning.</summary>
-	[Serializable]
-	public class ScriptCompileError {
-		
-		public ScriptCompileError() {
-			Line		= 0;
-			Column		= 0;
-			ErrorNumber	= "";
-			ErrorText	= "";
-			IsWarning	= false;
-		}
-
-		public ScriptCompileError(int line, int column, string errorNumber, string errorText, bool isWarning) {
-			Line		= line;
-			Column		= column;
-			ErrorNumber	= errorNumber;
-			ErrorText	= errorText;
-			IsWarning	= isWarning;
-		}
-		
-		public ScriptCompileError(ScriptCompileError copy) {
-			Line		= copy.Line;
-			Column		= copy.Column;
-			ErrorNumber	= copy.ErrorNumber;
-			ErrorText	= copy.ErrorText;
-			IsWarning	= copy.IsWarning;
-		}
-
-		public int Line { get; set; }
-		public int Column { get; set; }
-		public string ErrorText { get; set; }
-		public string ErrorNumber { get; set; }
-		public bool IsWarning { get; set; }
-
-		public override string ToString() {
-			return "ERROR" + " at line " + Line + " pos " + Column + ": " + ErrorText;
-		}
-	}
-
-	public struct ScriptStart {
-		public int Index { get; }
-		public string ID { get; }
-
-		public ScriptStart(int index, string id) {
-			Index = index;
-			ID = id;
-		}
-	}
-
 	[Serializable]
 	public class Script : IIDObject {
 
@@ -106,7 +22,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		private string description;
 		
-		// Code Generation-------------------------------------------------------------
+		// Code Generation ------------------------------------------------------------
 
 		/// <summary>Character offset for the beginning of this script's code within
 		/// the entire comiled code.</summary>
