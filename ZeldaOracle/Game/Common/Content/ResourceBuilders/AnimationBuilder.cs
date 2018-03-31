@@ -124,7 +124,7 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 				SpriteSheet spriteSheet = (SpriteSheet) source;
 				paletteArgs.Image = spriteSheet.Image;
 				paletteArgs.SourceRect = spriteSheet.GetSourceRect(index);
-				ISprite sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
+				ISprite sprite = Resources.SpriteDatabase.AddSprite(paletteArgs);
 				return InsertFrame(time, duration, sprite, drawOffset, clipping, flip, rotation, depth);
 			}
 			else {

@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 		ScriptInterfaceSection, ZeldaAPI.ScriptFunctionsSound
 	{
 		public ZeldaAPI.Sound SoundByID(string id) {
-			return Resources.GetSound(id);
+			return Resources.Get<Sound>(id);
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 		ScriptInterfaceSection, ZeldaAPI.ScriptFunctionsMusic
 	{
 		public ZeldaAPI.Music MusicByID(string id) {
-			return Resources.GetSong(id);
+			return Resources.Get<Music>(id);
 		}
 	}
 

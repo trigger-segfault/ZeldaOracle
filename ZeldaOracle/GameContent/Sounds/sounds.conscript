@@ -1,4 +1,6 @@
-
+#==============================================================
+# Sounds
+#==============================================================
 
 # Effects ---------------------------------------------------------------------
 
@@ -101,3 +103,4 @@ SOUND menu_select,				"UI/menu_select";			# Oracle_Menu_Select
 SOUND text_continue,			"UI/text_continue";			# Oracle_Text_Done
 SOUND text_letter,				"UI/text_letter";			# Oracle_Text_Letter
 
+#==============================================================

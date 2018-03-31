@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
 
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Audio {
-	
 	/// <summary>A structure for storing a sound effect.</summary>
-	public class Sound : ZeldaAPI.Sound {
+	public class Sound : ZeldaAPI.Sound, ISound {
 		// Containment
 		/// <summary>The sound effect class contained by this sound.</summary>
 		private SoundEffect soundEffect;

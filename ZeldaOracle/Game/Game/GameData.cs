@@ -1,23 +1,16 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using ZeldaOracle.Common.Conscripts;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Shaders;
+using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Common.Scripts.CustomReaders;
-using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.Items.Rewards;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Tiles.ActionTiles;
-using System.Diagnostics;
-using ZeldaOracle.Common.Scripts;
-using ZeldaOracle.Common.Util;
-using ZeldaOracle.Common.Graphics.Shaders;
 
 namespace ZeldaOracle.Game {
 	
@@ -49,8 +42,8 @@ namespace ZeldaOracle.Game {
 			ScriptReader.Watch.Restart();
 
 			if (preloadSprites &&
-				Resources.PalettedSpriteDatabase.DatabaseFileExists())
-				Resources.PalettedSpriteDatabase.Load();
+				Resources.SpriteDatabase.DatabaseFileExists())
+				Resources.SpriteDatabase.Load();
 
 			Logs.Initialization.LogNotice("Loading Palette Dictionaries");
 			LoadPaletteDictionaries();
@@ -117,9 +110,9 @@ namespace ZeldaOracle.Game {
 			Logs.Initialization.LogInfo("Took {0} ms to load game data.",
 				watch.ElapsedMilliseconds);
 
-			if (!Resources.PalettedSpriteDatabase.IsPreloaded) {
+			if (!Resources.SpriteDatabase.IsPreloaded) {
 				watch.Restart();
-				Resources.PalettedSpriteDatabase.Save();
+				Resources.SpriteDatabase.Save();
 				
 				Logs.Initialization.LogInfo(
 					"Took {0} ms to save sprite database.",
@@ -194,7 +187,7 @@ namespace ZeldaOracle.Game {
 
 		// Loads the images.
 		private static void LoadImages() {
-			Resources.LoadImagesFromScript("Images/images.conscript");
+			Resources.LoadImages("Images/images.conscript");
 		}
 
 
