@@ -47,15 +47,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSwimmingSkills	swimmingSkills;
 		private PlayerTunics			tunic;
 
+		// Action buttons -------------------------------------------------------------
+
 		public delegate bool ActionButtonCallback(ActionButtons button);
 		private List<ActionButtonCallback>[] buttonCallbacks;
+		private bool[] pressedActionButtons;
 
-		// Player Tools
+		// Player Tools ---------------------------------------------------------------
+
 		private PlayerToolShield	toolShield;
 		private PlayerToolSword		toolSword;
 		private PlayerToolVisual	toolVisual;
 
-		// Weapon States
+		// Weapon States --------------------------------------------------------------
+
 		private PlayerPushState				statePush;
 		private PlayerSwingSwordState		stateSwingSword;
 		private PlayerSwingBigSwordState	stateSwingBigSword;
@@ -73,14 +78,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerPullHandleState		statePullHandle;
 		private PlayerMagnetGlovesState		stateMagnetGloves;
 
-		// Control States
+		// Control States -------------------------------------------------------------
+
 		private PlayerLedgeJumpState		stateLedgeJump;
 		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
 		private PlayerRespawnDeathState		stateRespawnDeath;
 		private PlayerMinecartState			stateMinecart;
 		private PlayerJumpToState			stateJumpTo;
 
-		// Environment States
+		// Environment States ---------------------------------------------------------
+
 		private PlayerGrassEnvironmentState					environmentStateGrass;
 		private PlayerStairsEnvironmentState				environmentStateStairs;
 		private PlayerJumpEnvironmentState					environmentStateJump;
@@ -91,7 +98,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerUnderwaterEnvironmentState			environmentStateUnderwater;
 		private PlayerSideScrollSwimEnvironmentState		environmentStateSideScrollSwim;
 
-		// Condition States
+		// Condition States -----------------------------------------------------------
+
 		private PlayerShieldState stateShield;
 
 
@@ -112,6 +120,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Player() {
 			IsPersistentBetweenRooms = true;
 
+			pressedActionButtons = new bool[(int) ActionButtons.Count];
 			buttonCallbacks = new List<ActionButtonCallback>[
 				(int) ActionButtons.Count];
 			for (int i = 0; i < (int) ActionButtons.Count; i++)
@@ -959,11 +968,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 				RequestNaturalState();
 				movement.Update();
 				UpdateUseDirections();
-				if (Controls.A.IsPressed())
-					CheckPressInteractions(ActionButtons.A);
+				pressedActionButtons[(int) ActionButtons.A] = false;
+				pressedActionButtons[(int) ActionButtons.B] = false;
+				if (Controls.A.IsPressed()) {
+					pressedActionButtons[(int) ActionButtons.A] =
+						CheckPressInteractions(ActionButtons.A);
+				}
 				IntegrateStateParameters();
-				if (Controls.B.IsPressed())
-					CheckPressInteractions(ActionButtons.B);
+				if (Controls.B.IsPressed()) {
+					pressedActionButtons[(int) ActionButtons.B] =
+						CheckPressInteractions(ActionButtons.B);
+				}
 				IntegrateStateParameters();
 				RequestNaturalState();
 			
@@ -1282,6 +1297,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 				return (EnvironmentState == environmentStateSwim &&
 					environmentStateSwim.IsSubmerged);
 			}
+		}
+
+		public bool[] PressedActionButtons {
+			get { return pressedActionButtons; }
 		}
 	}
 }

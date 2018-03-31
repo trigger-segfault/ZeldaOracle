@@ -61,7 +61,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				PlayerAnimations.Default = GameData.ANIM_PLAYER_SHIELD_LARGE;
 			
 			// Check if the button was pressed
-			if (weapon.IsButtonDown())
+			if (weapon.IsButtonDown() &&
+				!player.PressedActionButtons[(int) weapon.ActionButton])
 				subStateMachine.BeginState(SubState.Blocking);
 		}
 

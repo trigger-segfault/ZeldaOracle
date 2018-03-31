@@ -221,6 +221,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 			GameControl.Inventory.EquippedWeapons[0] = 
 				GameControl.Inventory.EquippedWeapons[1];
 			GameControl.Inventory.EquippedWeapons[1] = placeHolder;
+			GameControl.Inventory.EquippedWeapons[0].CurrentEquipSlot = 0;
+			GameControl.Inventory.EquippedWeapons[1].CurrentEquipSlot = 1;
 		}
 
 		/// <summary>Equip the weapon in the currently selected inventory slot.

@@ -161,7 +161,8 @@ namespace ZeldaOracle.Game.Items {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Initializes the item after it's added to the inventory list.</summary>
+		/// <summary>Initializes the item after it's added to the inventory list.
+		/// </summary>
 		protected override void OnInitialize() {
 			base.OnInitialize();
 			if (UsesAmmo && ammoIndex == -1)
@@ -175,7 +176,7 @@ namespace ZeldaOracle.Game.Items {
 				EntityColors.Black);
 		}
 		
-		// Draws the item inside the inventory.
+		/// <summary>Draws the item inside the inventory.</summary>
 		public override void DrawSlot(Graphics2D g, Point2I position) {
 			DrawSprite(g, position);
 			if (UsesAmmo)
@@ -195,15 +196,30 @@ namespace ZeldaOracle.Game.Items {
 			set { flags = value; }
 		}
 
+		/// <summary>The current slot (A or B) in which this weapon is equipped.
+		/// </summary>
 		public int CurrentEquipSlot {
 			get { return equipSlot; }
 			set { equipSlot = value; }
+		}
+
+		/// <summary>The action button (A or B) which triggers this weapon when
+		/// pressed.</summary>
+		public ActionButtons ActionButton {
+			get {
+				if (equipSlot == Inventory.SLOT_B)
+					return ActionButtons.B;
+				else
+					return ActionButtons.A;
+			}
 		}
 
 		public InputControl CurrentControl {
 			get { return Inventory.GetSlotButton(equipSlot); }
 		}
 
+		/// <summary>True if the weapon is two handed, taking up both equip slots.
+		/// </summary>
 		public bool IsTwoHanded {
 			get { return flags.HasFlag(WeaponFlags.TwoHanded); }
 		}
