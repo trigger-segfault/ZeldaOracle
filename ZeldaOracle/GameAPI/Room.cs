@@ -9,10 +9,12 @@ using ZeldaOracle.Game.API;
 
 namespace ZeldaAPI {
 	
-	public interface AreaTODO : ApiObject {
+	// TODO: Rename this. This is because there exists a AreaControl
+	public interface DormantArea : ApiObject {
 	}
 	
-	public interface RoomTODO : ApiObject {
+	// TODO: Rename this. This is because there exists a RoomControl
+	public interface DormantRoom : ApiObject {
 	}
 
 	public interface World : ApiObject {

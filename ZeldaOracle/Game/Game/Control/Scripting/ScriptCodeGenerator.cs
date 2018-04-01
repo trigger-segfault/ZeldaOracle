@@ -136,20 +136,18 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 			// Generate script methods
 			foreach (Script script in world.Scripts.Values) {
-				if (!script.IsHidden) {
-					result.Code += CreateScriptMethodOpening(script);
+				result.Code += CreateScriptMethodOpening(script);
 
-					string scriptCode = "";
-					if (!script.HasErrors || includeErrors)
-						scriptCode = script.Code;
+				string scriptCode = "";
+				if (!script.HasErrors || includeErrors)
+					scriptCode = script.Code;
 
-					result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
-						script.ID, result.Code.Length, scriptCode.Length);
+				result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
+					script.ID, result.Code.Length, scriptCode.Length);
 
-					if (!script.HasErrors || includeErrors)
-						result.Code += scriptCode;
-					result.Code += CreateScriptMethodClosing(script) + "\n";
-				}
+				if (!script.HasErrors || includeErrors)
+					result.Code += scriptCode;
+				result.Code += CreateScriptMethodClosing(script) + "\n";
 			}
 
 			// Generate trigger script methods
@@ -199,15 +197,13 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 			// Generate empty script methods
 			foreach (Script script in world.Scripts.Values) {
-				if (!script.IsHidden) {
-					result.Code += CreateScriptMethodOpening(script);
-					if (script == testScript) {
-						result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
-							script.ID, result.Code.Length, code.Length);
-						result.Code += code;
-					}
-					result.Code += CreateScriptMethodClosing(script) + "\n";
+				result.Code += CreateScriptMethodOpening(script);
+				if (script == testScript) {
+					result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
+						script.ID, result.Code.Length, code.Length);
+					result.Code += code;
 				}
+				result.Code += CreateScriptMethodClosing(script) + "\n";
 			}
 
 			// Generate function for the trigger script to test

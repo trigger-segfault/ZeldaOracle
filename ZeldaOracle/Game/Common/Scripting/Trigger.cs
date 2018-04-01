@@ -92,7 +92,6 @@ namespace ZeldaOracle.Common.Scripting {
 		public Script CreateScript() {
 			script = new Script() {
 				ID = name,
-				IsHidden = true,
 			};
 			
 			return script;

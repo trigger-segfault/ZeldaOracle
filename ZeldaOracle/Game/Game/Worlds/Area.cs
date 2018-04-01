@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Worlds {
 	}
 
 	public class Area : IEventObject, IIDObject, IVariableObject, ITriggerObject,
-		ZeldaAPI.AreaTODO
+		ZeldaAPI.DormantArea
 	{
 		private World world;
 		private Properties properties;
@@ -195,7 +195,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Type TriggerObjectType {
-			get { return typeof(ZeldaAPI.AreaTODO); }
+			get { return typeof(Area); }
 		}
 
 		/// <summary>Gets the variables for this area.</summary>

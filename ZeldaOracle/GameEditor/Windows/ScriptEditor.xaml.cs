@@ -158,8 +158,7 @@ namespace ZeldaEditor.Windows {
 
 			if (DialogResult.HasValue && DialogResult.Value) {
 				timer.Stop();
-				editorControl.EditorWindow.WorldTreeView.RefreshScripts(
-					!script.IsHidden, script.IsHidden);
+				editorControl.EditorWindow.WorldTreeView.RefreshScripts(true, false);
 				editorControl.NeedsRecompiling = true;
 			}
 		}
