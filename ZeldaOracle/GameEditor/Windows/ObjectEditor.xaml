@@ -38,34 +38,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Triggers">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="180"/>
-                        <ColumnDefinition Width="*" MinWidth="100"/>
-                    </Grid.ColumnDefinitions>
-                    <DockPanel x:Name="panelEvents"  Grid.Column="0">
-                        <ToolBar DockPanel.Dock="Top">
-                            <local:ImageButton x:Name="buttonAddTrigger" ToolTip="Create a new trigger" Source="/Resources/Icons/Plus.png" Click="OnAddTrigger"/>
-                            <local:ImageButton x:Name="buttonDeleteTrigger" ToolTip="Delete trigger" Source="/Resources/Icons/Delete.png" Click="OnDeleteTrigger"/>
-                            <Separator/>
-                            <local:ImageButton x:Name="buttonCut" ToolTip="Cut trigger" Source="/Resources/Icons/Cut.png" Click="OnCutTrigger"/>
-                            <local:ImageButton x:Name="buttonCopy" ToolTip="Copy trigger" Source="/Resources/Icons/Copy.png" Click="OnCopyTrigger"/>
-                            <local:ImageButton x:Name="buttonPaste" ToolTip="Paste trigger" Source="/Resources/Icons/Paste.png" Click="OnPasteTrigger"/>
-                        </ToolBar>
-                        <ListBox x:Name="listBoxTriggers" SelectionChanged="OnSelectTrigger"/>
-                    </DockPanel>
-                    <Grid Grid.Column="1" x:Name="panelEditTrigger">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="*" MinHeight="100"/>
-                        </Grid.RowDefinitions>
-                        <ComboBox x:Name="comboBoxEventType" Grid.Row="0" Margin="10,10,0,15" HorizontalAlignment="Left" Width="150" SelectionChanged="OnSelectEvent"/>
-                        <xctk:WatermarkTextBox x:Name="textBoxTriggerName" BorderBrush="#FFC8C8C8" Margin="165,10,0,15" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Grid.Row="0" TextChanged="OnRenameEvent" Width="244"/>
-                        <CheckBox x:Name="checkBoxInitiallyOn" Content="Initially On" Margin="394,13,82,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickInitiallyOn"/>
-                        <CheckBox x:Name="checkBoxFireOnce" Content="Fire Once" Margin="473,13,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickFireOnce"/>
-                        <!--<local:ScriptTextEditor x:Name="scriptEditor" Grid.Row="1"/>-->
-                    </Grid>
-                </Grid>
+                <local:TriggerEditor x:Name="triggerEditor"/>
             </TabItem>
             <TabItem Header="Variables">
                 <Label Content="Content goes here..." />

@@ -330,8 +330,8 @@
       <DependentUpon>TilesetPalette.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeViewLineConverter.cs" />
-    <Compile Include="Controls\TriggerEditorControl.xaml.cs">
-      <DependentUpon>TriggerEditorControl.xaml</DependentUpon>
+    <Compile Include="Controls\TriggerEditor.xaml.cs">
+      <DependentUpon>TriggerEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorImages.cs" />
@@ -493,7 +493,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TriggerEditorControl.xaml">
+    <Page Include="Controls\TriggerEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
