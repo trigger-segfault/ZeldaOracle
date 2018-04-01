@@ -70,8 +70,9 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Code Generation
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Creates script code for use with RoslynPad's script editor.</summary>
-		public static string CreateRoslynScriptCode(Script script, Trigger trigger,
+		/// <summary>Creates script code for use with RoslynPad's script editor.
+		/// </summary>
+		public static string CreateRoslynScriptCode(Script script,
 			out int scriptStart, out int lineStart)
 		{
 			string code = "";

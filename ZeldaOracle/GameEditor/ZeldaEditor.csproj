@@ -320,6 +320,9 @@
     <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
     <Compile Include="Controls\PropertyGridEditorPointUpDown.cs" />
+    <Compile Include="Controls\ScriptTextEditor.xaml.cs">
+      <DependentUpon>ScriptTextEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TilePathCommandItem.xaml.cs">
       <DependentUpon>TilePathCommandItem.xaml</DependentUpon>
     </Compile>
@@ -327,6 +330,9 @@
       <DependentUpon>TilesetPalette.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeViewLineConverter.cs" />
+    <Compile Include="Controls\TriggerEditorControl.xaml.cs">
+      <DependentUpon>TriggerEditorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
@@ -475,11 +481,19 @@
     <Compile Include="WinForms\ServiceContainer.cs" />
     <EmbeddedResource Include="Themes\TextMessageHighlighting.xshd" />
     <EmbeddedResource Include="Themes\CSharpMultilineHighlighting.xshd" />
+    <Page Include="Controls\ScriptTextEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\TilePathCommandItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TilesetPalette.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TriggerEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -571,6 +585,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

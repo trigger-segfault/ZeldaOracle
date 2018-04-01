@@ -37,7 +37,7 @@
                 <Grid x:Name="tabGeneral">
                 </Grid>
             </TabItem>
-            <TabItem Header="Events">
+            <TabItem Header="Triggers">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="180"/>
@@ -63,12 +63,7 @@
                         <xctk:WatermarkTextBox x:Name="textBoxTriggerName" BorderBrush="#FFC8C8C8" Margin="165,10,0,15" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Grid.Row="0" TextChanged="OnRenameEvent" Width="244"/>
                         <CheckBox x:Name="checkBoxInitiallyOn" Content="Initially On" Margin="394,13,82,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickInitiallyOn"/>
                         <CheckBox x:Name="checkBoxFireOnce" Content="Fire Once" Margin="473,13,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickFireOnce"/>
-
-                        <roslyn:RoslynCodeEditor x:Name="scriptEditor" Grid.Row="1">
-                            <roslyn:RoslynCodeEditor.Resources>
-                                <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
-                            </roslyn:RoslynCodeEditor.Resources>
-                        </roslyn:RoslynCodeEditor>
+                        <!--<local:ScriptTextEditor x:Name="scriptEditor" Grid.Row="1"/>-->
                     </Grid>
                 </Grid>
             </TabItem>

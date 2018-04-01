@@ -25,7 +25,6 @@
         <ToolBar DockPanel.Dock="Top">
             <local:ImageButton x:Name="buttonFinish" ToolTip="Finish editing and save changes" Source="/Resources/Icons/Checkmark.png" Click="OnFinished"/>
             <local:ImageButton x:Name="buttonSave" ToolTip="Save changes" Source="/Resources/Icons/Save.png" Command="Save"/>
-            <local:ImageButton x:Name="buttonDelete" ToolTip="Delete script" Source="/Resources/Icons/Delete.png" Click="OnDeleteScript" />
             <Separator/>
             <local:ImageButton x:Name="buttonUndo" ToolTip="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
             <local:ImageButton x:Name="buttonRedo" ToolTip="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
@@ -50,11 +49,7 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
-        <roslyn:RoslynCodeEditor x:Name="editor">
-            <roslyn:RoslynCodeEditor.Resources>
-                <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
-            </roslyn:RoslynCodeEditor.Resources>
-        </roslyn:RoslynCodeEditor>
+        <!--<local:ScriptTextEditor x:Name="editor"/>-->
     </DockPanel>
 
 </Window>

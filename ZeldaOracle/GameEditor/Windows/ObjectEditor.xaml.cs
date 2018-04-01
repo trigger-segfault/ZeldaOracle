@@ -15,32 +15,12 @@ using ZeldaOracle.Game.Worlds;
 using System.Drawing;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Indentation.CSharp;
+using System.Windows.Controls;
 
 namespace ZeldaEditor.Windows {
 
+	/*
 	public class ObjectEditorModel {
-
-		private object obj;
-		private ObservableCollection<Trigger> triggers;
-		private ObservableCollection<TriggerEvent> eventTypes;
-		private ITriggerObject triggerObject;
-		
-
-		//-----------------------------------------------------------------------------
-		// Constructors
-		//-----------------------------------------------------------------------------
-
-		public ObjectEditorModel() {
-			obj = null;
-			triggerObject = null;
-			triggers = new ObservableCollection<Trigger>();
-			eventTypes = new ObservableCollection<TriggerEvent>();
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Object Management
-		//-----------------------------------------------------------------------------
 
 		public void SetObject(object obj) {
 			this.obj = obj;
@@ -66,25 +46,24 @@ namespace ZeldaEditor.Windows {
 		// Trigger Management
 		//-----------------------------------------------------------------------------
 
-		public Trigger AddNewTrigger() {
-			Trigger trigger = new Trigger();
-
+		public Trigger AddNewTrigger() {			
 			// Find an unused untitled trigger name
 			bool nameIsTaken = true;
+			string name = "";
 			for (int index = 1; nameIsTaken; index++) {
-				trigger.Name = string.Format("trigger_{0}", index);
+				name = string.Format("trigger_{0}", index);
 				nameIsTaken = false;
 				foreach (Trigger other in triggers) {
-					if (trigger.Name == other.Name) {
+					if (name == other.Name) {
 						nameIsTaken = true;
 						break;
 					}
 				}
 			}
-
+			
+			// Create the trigger
+			Trigger trigger = triggerObject.Triggers.CreateNewTrigger(name);
 			triggers.Add(trigger);
-			if (triggerObject != null)
-				triggerObject.Triggers.AddTrigger(trigger);
 			return trigger;
 		}
 
@@ -137,15 +116,25 @@ namespace ZeldaEditor.Windows {
 			}
 		}
 	}
+	*/
 
 	/// <summary>
 	/// Interaction logic for ObjectEditor.xaml
 	/// </summary>
 	public partial class ObjectEditor : Window {
 
+		private ScriptTextEditor scriptEditor;
 		private EditorControl editorControl;
-		private ObjectEditorModel model;
+		//private ObjectEditorModel model;
+		// private ScriptEditorControl scriptEditor;
 		private TilePreview tilePreview;
+		
+
+		private object obj;
+		private ObservableCollection<Trigger> triggers;
+		private ObservableCollection<TriggerEvent> eventTypes;
+		private ITriggerObject triggerObject;
+
 
 
 		//-----------------------------------------------------------------------------
@@ -154,17 +143,21 @@ namespace ZeldaEditor.Windows {
 
 		public ObjectEditor(EditorControl editorControl, object obj) {
 			InitializeComponent();
+
+
 			this.editorControl = editorControl;
-			model = new ObjectEditorModel();
-			listBoxTriggers.ItemsSource = model.Triggers;
-			comboBoxEventType.ItemsSource = model.EventTypes;
 			
 			panelEditTrigger.IsEnabled = false;
-			model.SelectedTrigger = null;
 			textBoxTriggerName.Text = "";
 			//comboBoxEventType.Text = model.SelectedEvent.EventType;
 			checkBoxInitiallyOn.IsChecked = false;
 			checkBoxFireOnce.IsChecked = false;
+			
+			// Create the script text editor
+			scriptEditor = new ScriptTextEditor();
+			Grid.SetRow(scriptEditor, 1);
+			panelEditTrigger.Children.Add(scriptEditor);
+			scriptEditor.ScriptCodeChanged += OnScriptTextChanged;
 
 			// Create the tile preview
 			tilePreview						= new TilePreview();
@@ -173,43 +166,23 @@ namespace ZeldaEditor.Windows {
 			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
 			hostTilePreview.Child			= tilePreview;
 			
+			obj = null;
+			triggerObject = null;
+			triggers = new ObservableCollection<Trigger>();
+			eventTypes = new ObservableCollection<TriggerEvent>();
+			
+			listBoxTriggers.ItemsSource = triggers;
+			comboBoxEventType.ItemsSource = eventTypes;
+
 			// Setup the script text editor
-			scriptEditor.TextChanged += OnScriptTextChanged;
-			//scriptEditor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
+			//scriptEditor.ScriptCodeChanged += OnScriptTextChanged;
+			//scriptEditor.CaretPositionChanged += OnCaretPositionChanged;
 			
-			RoslynPad.Editor.RoslynCodeEditor editor = scriptEditor;
-			
-			//editor.Loaded += OnEditorLoaded;
-			//editor.TextArea.TextEntering += OnTextEntering;
-			editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
-			editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
-
-			// Selection Style
-			editor.TextArea.SelectionCornerRadius = 0;
-			editor.TextArea.SelectionBorder = null;
-			//editor.FontFamily = new FontFamily("Lucida Console");
-			editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
-			editor.FontSize = 12.667;
-			//editor.TextChanged += OnTextChanged;
-			//editor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
-
 			//timer = StoppableTimer.StartNew(
 			//	TimeSpan.FromMilliseconds(500),
 			//	DispatcherPriority.ApplicationIdle,
 			//	TimerUpdate);
-			TextOptions.SetTextFormattingMode(editor, TextFormattingMode.Display);
-			editor.IsModified = false;
-			editor.Focus();
-			editor.TextArea.IndentationStrategy = new CSharpIndentationStrategy();
-			editor.Options.ConvertTabsToSpaces = false;
-			editor.TextArea.TextView.LineSpacing = 17.0 / 15.0;
 
-
-			//scriptEditor.Completion = completion;
-			//scriptEditor.Document.FileName = "dummyFileName.cs";
-			//scriptEditor.Script = null;
-			//scriptEditor.EditorControl = editorControl;
-			
 			SetObject(obj);
 		}
 
@@ -224,11 +197,25 @@ namespace ZeldaEditor.Windows {
 
 		/// <summary>Set the object to show properties for.</summary>
 		public void SetObject(object obj) {
-			// Update the model
-			model.SetObject(obj);
+			this.obj = obj;
+			triggerObject = obj as ITriggerObject;
 
-			if (model.Triggers.Count >= 0)
-				listBoxTriggers.SelectedIndex = 0;
+			// Re-populate the trigger and event lists
+			triggers.Clear();
+			eventTypes.Clear();
+			eventTypes.Add(TriggerEvent.None);
+			if (triggerObject != null) {
+				// First populate the list of event types
+				foreach (Event e in triggerObject.Events.GetEvents())
+					eventTypes.Add(new TriggerEvent(e));
+
+				// Then populate the trigger list
+				foreach (Trigger trigger in triggerObject.Triggers)
+					triggers.Add(trigger);
+
+				if (triggers.Count > 0)
+					listBoxTriggers.SelectedIndex = 0;
+			}
 
 			// Set the object preview image and name
 			objectPreviewName.Text = "(none)";
@@ -261,6 +248,32 @@ namespace ZeldaEditor.Windows {
 			tilePreview.UpdateTile(obj as BaseTileDataInstance);
 		}
 
+		public Trigger AddNewTrigger() {			
+			// Find an unused untitled trigger name
+			bool nameIsTaken = true;
+			string name = "";
+			for (int index = 1; nameIsTaken; index++) {
+				name = string.Format("trigger_{0}", index);
+				nameIsTaken = false;
+				foreach (Trigger other in triggers) {
+					if (name == other.Name) {
+						nameIsTaken = true;
+						break;
+					}
+				}
+			}
+			
+			// Create the trigger
+			Trigger trigger = triggerObject.Triggers.CreateNewTrigger(name);
+			triggers.Add(trigger);
+			return trigger;
+		}
+
+		public void DeleteTrigger(Trigger trigger) {
+			triggers.Remove(trigger);
+			if (triggerObject != null)
+				triggerObject.Triggers.RemoveTrigger(trigger);
+		}
 
 		//-----------------------------------------------------------------------------
 		// UI Callbacks
@@ -268,48 +281,45 @@ namespace ZeldaEditor.Windows {
 
 		private void OnSelectTrigger(object sender, RoutedEventArgs e) {
 			if (listBoxTriggers.SelectedIndex < 0) {
-				if (model.SelectedTrigger != null) {
-					panelEditTrigger.IsEnabled = false;
-					model.SelectedTrigger = null;
-					textBoxTriggerName.Text = "";
-					comboBoxEventType.SelectedIndex = 0;
-					checkBoxInitiallyOn.IsChecked = false;
-					checkBoxFireOnce.IsChecked = false;
-					scriptEditor.Text = "";
-					//scriptEditor.Trigger = null;
-				}
+				panelEditTrigger.IsEnabled = false;
+				textBoxTriggerName.Text = "";
+				comboBoxEventType.SelectedIndex = 0;
+				checkBoxInitiallyOn.IsChecked = false;
+				checkBoxFireOnce.IsChecked = false;
+				scriptEditor.Script = null;
 			}
 			else {
-				if (listBoxTriggers.SelectedIndex != model.SelectedTriggerIndex) {
-					panelEditTrigger.IsEnabled = true;
-					model.SelectedTrigger = model.Triggers[listBoxTriggers.SelectedIndex];
-					textBoxTriggerName.Text = model.SelectedTrigger.Name;
-					comboBoxEventType.SelectedIndex =
-						model.EventTypes.IndexOf(model.SelectedTrigger.EventType);
-					checkBoxInitiallyOn.IsChecked = model.SelectedTrigger.InitiallyOn;
-					checkBoxFireOnce.IsChecked = model.SelectedTrigger.FireOnce;
-					if (model.SelectedTrigger.Script != null)
-						scriptEditor.Text = model.SelectedTrigger.Script.Code;
-					else
-						scriptEditor.Text = "";
-					//scriptEditor.Trigger = model.SelectedTrigger;
-				}
+				panelEditTrigger.IsEnabled = true;
+				Trigger selectedTrigger = triggers[listBoxTriggers.SelectedIndex];
+
+				textBoxTriggerName.Text = selectedTrigger.Name;
+				comboBoxEventType.SelectedIndex =
+					eventTypes.IndexOf(selectedTrigger.EventType);
+				checkBoxInitiallyOn.IsChecked = selectedTrigger.InitiallyOn;
+				checkBoxFireOnce.IsChecked = selectedTrigger.FireOnce;
+
+				if (selectedTrigger.Script != null)
+					scriptEditor.Script = selectedTrigger.Script;
+				else
+					scriptEditor.Script = null;
 			}
 		}
 		
 		private void OnAddTrigger(object sender, RoutedEventArgs e) {
-			Trigger trigger = model.AddNewTrigger();
-			listBoxTriggers.SelectedIndex = model.Triggers.IndexOf(trigger);
+			Trigger trigger = AddNewTrigger();
+			listBoxTriggers.SelectedIndex = triggers.IndexOf(trigger);
 		}
 
 		private void OnDeleteTrigger(object sender, RoutedEventArgs e) {
-			if (model.SelectedTrigger != null) {
+			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
+
+			if (selectedTrigger != null) {
 				int nextSelectedIndex = -1;
-				if (listBoxTriggers.SelectedIndex < model.Triggers.Count - 1)
+				if (listBoxTriggers.SelectedIndex < triggers.Count - 1)
 					nextSelectedIndex = listBoxTriggers.SelectedIndex;
-				else if (model.Triggers.Count > 1)
+				else if (triggers.Count > 1)
 					nextSelectedIndex = 0;
-				model.DeleteTrigger(model.SelectedTrigger);
+				DeleteTrigger(selectedTrigger);
 				listBoxTriggers.SelectedIndex = nextSelectedIndex;
 			}
 		}
@@ -327,40 +337,47 @@ namespace ZeldaEditor.Windows {
 		}
 		
 		private void OnSelectEvent(object sender, RoutedEventArgs e) {
-			if (model.SelectedTrigger != null) {
+			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
+
+			if (selectedTrigger != null) {
 				if (comboBoxEventType.SelectedIndex >= 0)
-					model.SelectedTrigger.EventType =
-						model.EventTypes[comboBoxEventType.SelectedIndex];
+					selectedTrigger.EventType =
+						eventTypes[comboBoxEventType.SelectedIndex];
 				else
-					model.SelectedTrigger.EventType = TriggerEvent.None;
+					selectedTrigger.EventType = TriggerEvent.None;
 			}
 		}
 		
 		private void OnRenameEvent(object sender, RoutedEventArgs e) {
-			if (model.SelectedTrigger != null &&
-				model.SelectedTrigger.Name != textBoxTriggerName.Text)
+			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
+
+			if (selectedTrigger != null &&
+				selectedTrigger.Name != textBoxTriggerName.Text)
 			{
-				model.SelectedTrigger.Name = textBoxTriggerName.Text;
+				selectedTrigger.Name = textBoxTriggerName.Text;
 				listBoxTriggers.Items.Refresh();
 			}
 		}
 
 		private void OnClickInitiallyOn(object sender, RoutedEventArgs e) {
-			if (model.SelectedTrigger != null)
-				model.SelectedTrigger.InitiallyOn =
+			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
+			if (selectedTrigger != null)
+				selectedTrigger.InitiallyOn =
 					checkBoxInitiallyOn.IsChecked.Value;
 		}
 
 		private void OnClickFireOnce(object sender, RoutedEventArgs e) {
-			if (model.SelectedTrigger != null)
-				model.SelectedTrigger.FireOnce = checkBoxFireOnce.IsChecked.Value;
+			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
+			if (selectedTrigger != null)
+				selectedTrigger.FireOnce = checkBoxFireOnce.IsChecked.Value;
 		}
 
 		private void OnScriptTextChanged(object sender, EventArgs e) {
-			if (model.SelectedTrigger != null) {
-				if (model.SelectedTrigger.Script == null)
-					model.SelectedTrigger.CreateScript();
-				model.SelectedTrigger.Script.Code = scriptEditor.Text;
+			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
+			if (selectedTrigger != null) {
+				if (selectedTrigger.Script == null)
+					selectedTrigger.CreateScript();
+				selectedTrigger.Script.Code = scriptEditor.ScriptCode;
 				//needsRecompiling = true;
 				//UpdateStatusBar();
 				//CommandManager.InvalidateRequerySuggested();

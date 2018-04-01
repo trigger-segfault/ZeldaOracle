@@ -36,6 +36,12 @@ namespace ZeldaOracle.Common.Scripting {
 			return triggers.FirstOrDefault(t => t.Name == name);
 		}
 
+		public Trigger CreateNewTrigger(string name) {
+			Trigger trigger = new Trigger(this, name);
+			triggers.Add(trigger);
+			return trigger;
+		}
+
 		public Trigger AddTrigger(Trigger trigger) {
 			triggers.Add(trigger);
 			trigger.Collection = this;

@@ -1,4 +1,6 @@
 ﻿
+using System;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Common.Scripting {
@@ -50,15 +52,22 @@ namespace ZeldaOracle.Common.Scripting {
 		public Trigger() : this(null) {
 		}
 
-		public Trigger(TriggerCollection collection) {
+		public Trigger(TriggerCollection collection, string name = "") {
 			this.collection = collection;
+			this.name = name;
+
 			initiallyOn	= true;
-			fireOnce	= false;
-			name		= "";
+			fireOnce = false;
 			description	= "";
-			eventType	= new TriggerEvent(null);
-			script		= null;
-			enabled		= true;
+			eventType = new TriggerEvent(null);
+
+			// Create the script
+			script = new Script();
+			Type thisType = ReflectionHelper.GetApiObjectType(
+				collection.TriggerObject.TriggerObjectType);
+			script.Parameters.Add(new ScriptParameter(thisType, "This"));
+			
+			enabled = true;
 		}
 
 		public Trigger(Trigger copy, TriggerCollection collection) {
