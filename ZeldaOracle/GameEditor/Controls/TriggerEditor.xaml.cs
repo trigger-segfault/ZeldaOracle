@@ -1,11 +1,31 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Collections.ObjectModel;
 using ZeldaOracle.Common.Scripting;
-using System.Windows.Controls;
 using Trigger = ZeldaOracle.Common.Scripting.Trigger;
 
 namespace ZeldaEditor.Controls {
+	
+	/// <summary>Commands used by the TriggerEditor.</summary>
+	public static class TriggerEditorCommands {
+		public static readonly RoutedUICommand CreateTrigger = new RoutedUICommand(
+			"CreateTrigger", "Create Trigger", typeof(TriggerEditorCommands));
+
+		public static readonly RoutedUICommand DeleteTrigger = new RoutedUICommand(
+			"DeleteTrigger", "Delete Trigger", typeof(TriggerEditorCommands));
+
+		public static readonly RoutedUICommand DuplicateTrigger = new RoutedUICommand(
+			"DuplicateTrigger", "Duplicate Trigger", typeof(TriggerEditorCommands));
+
+		public static readonly RoutedUICommand MoveTriggerDown = new RoutedUICommand(
+			"MoveTriggerDown", "Move Down", typeof(TriggerEditorCommands));
+
+		public static readonly RoutedUICommand MoveTriggerUp = new RoutedUICommand(
+			"MoveTriggerUp", "Move Up", typeof(TriggerEditorCommands));
+	}
+
 	/// <summary>
 	/// Interaction logic for TriggerEditor.xaml
 	/// </summary>
@@ -25,13 +45,9 @@ namespace ZeldaEditor.Controls {
 			InitializeComponent();
 
 			triggers = new ObservableCollection<Trigger>();
-			eventTypes = new ObservableCollection<TriggerEvent>();
-			
-			panelEditTrigger.IsEnabled = false;
-			textBoxTriggerName.Text = "";
-			checkBoxInitiallyOn.IsChecked = false;
-			checkBoxFireOnce.IsChecked = false;
 			listBoxTriggers.ItemsSource = triggers;
+
+			eventTypes = new ObservableCollection<TriggerEvent>();
 			comboBoxEventType.ItemsSource = eventTypes;
 			
 			// Create the script text editor
@@ -99,113 +115,137 @@ namespace ZeldaEditor.Controls {
 
 
 		//-----------------------------------------------------------------------------
-		// UI Event Callbacks
+		// Command Can Execute
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Called when a new trigger is selected.</summary>
-		private void OnSelectTrigger(object sender, RoutedEventArgs e) {
-			if (listBoxTriggers.SelectedIndex < 0) {
-				panelEditTrigger.IsEnabled = false;
-				textBoxTriggerName.Text = "";
-				comboBoxEventType.SelectedIndex = 0;
-				checkBoxInitiallyOn.IsChecked = false;
-				checkBoxFireOnce.IsChecked = false;
-				scriptEditor.Script = null;
-			}
-			else {
-				panelEditTrigger.IsEnabled = true;
-				Trigger selectedTrigger = triggers[listBoxTriggers.SelectedIndex];
+		private void CanExecuteTriggerAction(
+			object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = IsTriggerSelected;
+		}
 
+
+		//-----------------------------------------------------------------------------
+		// UI Event Callbacks
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Called when a new trigger is selected.</summary>
+		private void OnSelectedTriggerChanged(object sender, RoutedEventArgs e) {
+			if (IsTriggerSelected) {
+				Trigger selectedTrigger = SelectedTrigger;
+
+				// Update the trigger property fields
 				textBoxTriggerName.Text = selectedTrigger.Name;
 				comboBoxEventType.SelectedIndex =
 					eventTypes.IndexOf(selectedTrigger.EventType);
 				checkBoxInitiallyOn.IsChecked = selectedTrigger.InitiallyOn;
 				checkBoxFireOnce.IsChecked = selectedTrigger.FireOnce;
 
+				// Load the trigger's script into the script editor
 				if (selectedTrigger.Script != null)
 					scriptEditor.Script = selectedTrigger.Script;
 				else
 					scriptEditor.Script = null;
 			}
+			else {
+				textBoxTriggerName.Text = "";
+				comboBoxEventType.SelectedIndex = 0;
+				checkBoxInitiallyOn.IsChecked = false;
+				checkBoxFireOnce.IsChecked = false;
+				scriptEditor.Script = null;
+			}
 		}
 		
-		private void OnAddTrigger(object sender, RoutedEventArgs e) {
+		private void OnCreateTrigger(object sender, ExecutedRoutedEventArgs e) {
 			Trigger trigger = AddNewTrigger();
 			listBoxTriggers.SelectedIndex = triggers.IndexOf(trigger);
 		}
 
-		private void OnDeleteTrigger(object sender, RoutedEventArgs e) {
-			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
-
-			if (selectedTrigger != null) {
+		private void OnDeleteTrigger(object sender, ExecutedRoutedEventArgs e) {
+			if (IsTriggerSelected) {
 				int nextSelectedIndex = -1;
 				if (listBoxTriggers.SelectedIndex < triggers.Count - 1)
 					nextSelectedIndex = listBoxTriggers.SelectedIndex;
 				else if (triggers.Count > 1)
 					nextSelectedIndex = 0;
-				DeleteTrigger(selectedTrigger);
+				DeleteTrigger(SelectedTrigger);
 				listBoxTriggers.SelectedIndex = nextSelectedIndex;
 			}
 		}
-
-		private void OnCutTrigger(object sender, RoutedEventArgs e) {
-			Console.WriteLine("OnCutEvent");
-		}
-
-		private void OnCopyTrigger(object sender, RoutedEventArgs e) {
-			Console.WriteLine("OnCopyEvent");
-		}
-
-		private void OnPasteTrigger(object sender, RoutedEventArgs e) {
-			Console.WriteLine("OnPasteEvent");
-		}
 		
-		private void OnSelectEvent(object sender, RoutedEventArgs e) {
-			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
-
-			if (selectedTrigger != null) {
-				if (comboBoxEventType.SelectedIndex >= 0)
-					selectedTrigger.EventType =
-						eventTypes[comboBoxEventType.SelectedIndex];
-				else
-					selectedTrigger.EventType = TriggerEvent.None;
+		private void OnDuplicateTrigger(object sender, ExecutedRoutedEventArgs e) {
+			if (IsTriggerSelected) {
+				Trigger duplicate = new Trigger(SelectedTrigger);
+				triggerObject.Triggers.AddTrigger(duplicate);
+				triggers.Add(duplicate);
+				listBoxTriggers.SelectedIndex = triggers.IndexOf(duplicate);
 			}
 		}
 		
-		private void OnRenameEvent(object sender, RoutedEventArgs e) {
-			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
+		private void OnMoveTriggerUp(object sender, ExecutedRoutedEventArgs e) {
+			// TODO: Implement
+		}
 
-			if (selectedTrigger != null &&
-				selectedTrigger.Name != textBoxTriggerName.Text)
+		private void OnMoveTriggerDown(object sender, ExecutedRoutedEventArgs e) {
+			// TODO: Implement
+		}
+		
+		private void OnSelectEvent(object sender, RoutedEventArgs e) {
+			if (IsTriggerSelected) {
+				if (comboBoxEventType.SelectedIndex >= 0)
+					SelectedTrigger.EventType =
+						eventTypes[comboBoxEventType.SelectedIndex];
+				else
+					SelectedTrigger.EventType = TriggerEvent.None;
+			}
+		}
+		
+		private void OnRenameTrigger(object sender, RoutedEventArgs e) {
+			if (IsTriggerSelected &&
+				SelectedTrigger.Name != textBoxTriggerName.Text)
 			{
-				selectedTrigger.Name = textBoxTriggerName.Text;
+				SelectedTrigger.Name = textBoxTriggerName.Text;
 				listBoxTriggers.Items.Refresh();
 			}
 		}
 
 		private void OnClickInitiallyOn(object sender, RoutedEventArgs e) {
-			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
-			if (selectedTrigger != null)
-				selectedTrigger.InitiallyOn =
+			if (IsTriggerSelected)
+				SelectedTrigger.InitiallyOn =
 					checkBoxInitiallyOn.IsChecked.Value;
 		}
 
 		private void OnClickFireOnce(object sender, RoutedEventArgs e) {
-			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
-			if (selectedTrigger != null)
-				selectedTrigger.FireOnce = checkBoxFireOnce.IsChecked.Value;
+			if (IsTriggerSelected)
+				SelectedTrigger.FireOnce = checkBoxFireOnce.IsChecked.Value;
 		}
 
 		/// <summary>Called when the text in the script editor changed.</summary>
 		private void OnScriptTextChanged(object sender, EventArgs e) {
-			Trigger selectedTrigger = (Trigger) listBoxTriggers.SelectedItem;
-			if (selectedTrigger != null) {
-				if (selectedTrigger.Script == null)
-					selectedTrigger.CreateScript();
-				selectedTrigger.Script.Code = scriptEditor.ScriptCode;
+			if (IsTriggerSelected) {
+				if (SelectedTrigger.Script == null)
+					SelectedTrigger.CreateScript();
+				SelectedTrigger.Script.Code = scriptEditor.ScriptCode;
 				//needsRecompiling = true;
 				//CommandManager.InvalidateRequerySuggested();
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public Trigger SelectedTrigger {
+			get {
+				if (!IsLoaded)
+					return null;
+				return (Trigger) listBoxTriggers.SelectedItem;
+			}
+		}
+
+		public bool IsTriggerSelected {
+			get { return SelectedTrigger != null; }
 		}
 	}
 }

@@ -35,6 +35,7 @@
         <TabControl DockPanel.Dock="Bottom">
             <TabItem Header="General">
                 <Grid x:Name="tabGeneral">
+                    <!--<local:ObjectTileEditor x:Name="objectTileEditor"/>-->
                 </Grid>
             </TabItem>
             <TabItem Header="Triggers">

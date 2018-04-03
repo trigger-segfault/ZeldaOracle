@@ -70,6 +70,11 @@ namespace ZeldaOracle.Common.Scripting {
 			enabled = true;
 		}
 
+		public Trigger(Trigger copy) :
+			this(copy, copy.Collection)
+		{
+		}
+
 		public Trigger(Trigger copy, TriggerCollection collection) {
 			this.collection = collection;
 			initiallyOn	= copy.initiallyOn;
@@ -79,7 +84,7 @@ namespace ZeldaOracle.Common.Scripting {
 			eventType	= copy.eventType;
 			script		= new Script(copy.script);
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Trigger Action Management

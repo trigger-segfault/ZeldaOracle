@@ -316,6 +316,9 @@
     <Compile Include="Controls\HoverImageButton.cs" />
     <Compile Include="Controls\ImageMenuItem.cs" />
     <Compile Include="Controls\ImageTreeViewItem.cs" />
+    <Compile Include="Controls\ObjectTileEditor.xaml.cs">
+      <DependentUpon>ObjectTileEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PointUpDown.cs" />
     <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
@@ -481,6 +484,10 @@
     <Compile Include="WinForms\ServiceContainer.cs" />
     <EmbeddedResource Include="Themes\TextMessageHighlighting.xshd" />
     <EmbeddedResource Include="Themes\CSharpMultilineHighlighting.xshd" />
+    <Page Include="Controls\ObjectTileEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ScriptTextEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

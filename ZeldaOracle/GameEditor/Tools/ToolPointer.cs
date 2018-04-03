@@ -17,10 +17,7 @@ namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
 		private const ModifierKeys RoomModeModifier = ModifierKeys.Shift;
 
-
-		private TileDataInstance selectedTile;
-		private ActionTileDataInstance selectedActionTile;
-		private Room selectedRoom;
+		private object selectedObject;
 
 
 		//-----------------------------------------------------------------------------
@@ -51,24 +48,25 @@ namespace ZeldaEditor.Tools {
 		}
 		
 		public override void Delete() {
-			if (selectedTile != null && selectedTile.Room.ContainsTile(selectedTile)) {
-				ActionPlace action = ActionPlace.CreatePlaceAction(selectedTile.Room.Level, selectedTile.Layer, null);
-				Point2I location = selectedTile.LevelCoord;
-				action.AddOverwrittenTile(selectedTile);
+			if (SelectedTile != null && SelectedTile.Room.ContainsTile(SelectedTile)) {
+				ActionPlace action = ActionPlace.CreatePlaceAction(SelectedTile.Room.Level, SelectedTile.Layer, null);
+				Point2I location = SelectedTile.LevelCoord;
+				action.AddOverwrittenTile(SelectedTile);
 				action.AddPlacedTile(location);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
-			else if (selectedActionTile != null && selectedActionTile.Room.ContainsActionTile(selectedActionTile)) {
-				ActionPlaceAction action = new ActionPlaceAction(selectedActionTile.Room.Level);
-				action.AddOverwrittenActionTile(selectedActionTile);
+			else if (SelectedActionTile != null && SelectedActionTile.Room.ContainsActionTile(SelectedActionTile)) {
+				ActionPlaceAction action = new ActionPlaceAction(SelectedActionTile.Room.Level);
+				action.AddOverwrittenActionTile(SelectedActionTile);
 				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
-			LevelDisplay.ClearSelectionBox();
-			EditorControl.EditingTileData = null;
-			selectedActionTile	= null;
-			selectedTile		= null;
-			selectedRoom		= null;
-			UpdateCommands();
+
+			if (SelectedRoom == null) {
+				LevelDisplay.ClearSelectionBox();
+				EditorControl.EditingTileData = null;
+				selectedObject = null;
+				UpdateCommands();
+			}
 		}
 
 		public override void SelectAll() {
@@ -78,9 +76,7 @@ namespace ZeldaEditor.Tools {
 		public override void Deselect() {
 			LevelDisplay.ClearSelectionBox();
 			EditorControl.EditingTileData = null;
-			selectedActionTile	= null;
-			selectedTile		= null;
-			selectedRoom        = null;
+			selectedObject = null;
 			UpdateCommands();
 		}
 
@@ -90,9 +86,7 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		protected override void OnBegin(ToolEventArgs e) {
-			selectedTile		= null;
-			selectedActionTile	= null;
-			selectedRoom        = null;
+			selectedObject = null;
 			ShowCursor = false;
 			CursorPosition = e.SnappedPosition;
 		}
@@ -104,27 +98,22 @@ namespace ZeldaEditor.Tools {
 		}
 
 		protected override void OnUpdate(ToolEventArgs e) {
-			if (selectedTile != null) {
-				if (selectedTile.Room.ContainsTile(selectedTile))
-					LevelDisplay.SetSelectionBox(selectedTile);
-				else {
-					selectedTile = null;
-					LevelDisplay.ClearSelectionBox();
-				}
+			if (SelectedTile != null) {
+				if (SelectedTile.Room.ContainsTile(SelectedTile))
+					LevelDisplay.SetSelectionBox(SelectedTile);
+				else
+					Deselect();
 			}
-			else if (selectedActionTile != null) {
-				if (selectedActionTile.Room.ContainsActionTile(selectedActionTile))
-					LevelDisplay.SetSelectionBox(selectedActionTile);
-				else {
-					selectedActionTile = null;
-					LevelDisplay.ClearSelectionBox();
-				}
+			else if (SelectedActionTile != null) {
+				if (SelectedActionTile.Room.ContainsActionTile(SelectedActionTile))
+					LevelDisplay.SetSelectionBox(SelectedActionTile);
+				else
+					Deselect();
 			}
-			else if (selectedRoom != null) {
-				if (!(selectedRoom.Location < Level.Dimensions)) {
-					selectedRoom = null;
-					LevelDisplay.ClearSelectionBox();
-				}
+			else if (SelectedRoom != null) {
+				if (SelectedRoom.Location <= Point2I.Zero ||
+					SelectedRoom.Location >= Level.Dimensions)
+					Deselect();
 			}
 		}
 
@@ -141,12 +130,10 @@ namespace ZeldaEditor.Tools {
 			else
 				baseTile = e.SampleTile;
 
-			// Select or deselect the tile.
+			// Select or deselect the tile
 			if (e.Button == MouseButton.Left) {
 				// Set to null by default
-				selectedTile = null;
-				selectedActionTile = null;
-				selectedRoom = null;
+				selectedObject = null;
 
 				Room room = null;
 				bool roomSelect = false;
@@ -157,9 +144,9 @@ namespace ZeldaEditor.Tools {
 				}
 				
 				if (roomSelect) {
-					selectedRoom = room;
+					selectedObject = room;
+
 					if (room != null) {
-						selectedRoom = room;
 						LevelDisplay.SetSelectionBox(room);
 						EditorControl.PropertyGrid.OpenProperties(room);
 						EditorControl.EditingRoom = room;
@@ -171,11 +158,8 @@ namespace ZeldaEditor.Tools {
 					ShowCursor = true;
 				}
 				else if (baseTile != null) {
-					if (baseTile is TileDataInstance)
-						selectedTile = baseTile as TileDataInstance;
-					else if (baseTile is ActionTileDataInstance)
-						selectedActionTile = baseTile as ActionTileDataInstance;
-
+					selectedObject = baseTile;
+					
 					CursorPosition = baseTile.LevelPosition;
 					CursorSize = baseTile.PixelSize;
 					ShowCursor = true;
@@ -216,13 +200,29 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
+		protected override void OnMouseDoubleClick(ToolEventArgs e) {
+			EditorControl.EditorWindow.OpenObjectEditor(selectedObject);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden Properties
 		//-----------------------------------------------------------------------------
 
+		public TileDataInstance SelectedTile {
+			get { return selectedObject as TileDataInstance; }
+		}
+
+		public ActionTileDataInstance SelectedActionTile {
+			get { return selectedObject as ActionTileDataInstance; }
+		}
+
+		public Room SelectedRoom {
+			get { return selectedObject as Room; }
+		}
+
 		public override bool CanDeleteDeselect {
-			get { return selectedTile != null || selectedActionTile != null || selectedRoom != null; }
+			get { return (selectedObject != null); }
 		}
 
 		public override int Snapping {
@@ -236,12 +236,12 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public void GotoTile(BaseTileDataInstance baseTile) {
-			selectedTile = null;
-			selectedActionTile = null;
-			selectedRoom = null;
+			selectedObject = baseTile;
+
 			Point2I pixelPosition = Point2I.Zero;
 			pixelPosition = LevelDisplay.GetLevelPixelDrawPosition(
 				baseTile.LevelPosition + baseTile.PixelSize / 2);
+
 			/*if (baseTile is TileDataInstance) {
 				selectedTile = baseTile as TileDataInstance;
 				pixelPosition = LevelDisplay.GetRoomDrawPosition(selectedTile.Room) +
@@ -258,9 +258,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public void GotoRoom(Room room) {
-			selectedTile = null;
-			selectedActionTile = null;
-			selectedRoom = room;
+			selectedObject = room;
 
 			Point2I pixelPosition = LevelDisplay.GetRoomDrawPosition(room) + room.PixelSize / 2;
 

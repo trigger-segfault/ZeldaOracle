@@ -7,29 +7,36 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="760">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:TriggerEditorCommands.CreateTrigger" Executed="OnCreateTrigger"/>
+        <CommandBinding Command="local:TriggerEditorCommands.DeleteTrigger" CanExecute="CanExecuteTriggerAction" Executed="OnDeleteTrigger"/>
+        <CommandBinding Command="local:TriggerEditorCommands.DuplicateTrigger" CanExecute="CanExecuteTriggerAction" Executed="OnDuplicateTrigger"/>
+        <CommandBinding Command="local:TriggerEditorCommands.MoveTriggerUp" CanExecute="CanExecuteTriggerAction" Executed="OnMoveTriggerUp"/>
+        <CommandBinding Command="local:TriggerEditorCommands.MoveTriggerDown" CanExecute="CanExecuteTriggerAction" Executed="OnMoveTriggerDown"/>
+    </UserControl.CommandBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
-        <DockPanel x:Name="panelEvents"  Grid.Column="0">
-            <ToolBar DockPanel.Dock="Top">
-                <local:ImageButton x:Name="buttonAddTrigger" ToolTip="Create a new trigger" Source="/Resources/Icons/Plus.png" Click="OnAddTrigger"/>
-                <local:ImageButton x:Name="buttonDeleteTrigger" ToolTip="Delete trigger" Source="/Resources/Icons/Delete.png" Click="OnDeleteTrigger"/>
+        <DockPanel x:Name="panelTriggerList"  Grid.Column="0">
+            <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
+                <local:ImageButton x:Name="buttonAddTrigger" ToolTip="Create a new trigger" Source="/Resources/Icons/Plus.png" Command="local:TriggerEditorCommands.CreateTrigger"/>
+                <local:ImageButton x:Name="buttonDeleteTrigger" ToolTip="Delete trigger" Source="/Resources/Icons/Delete.png" Command="local:TriggerEditorCommands.DeleteTrigger"/>
+                <local:ImageButton x:Name="buttonDuplicateTrigger" ToolTip="Duplicate trigger" Source="/Resources/Icons/Copy.png" Command="local:TriggerEditorCommands.DuplicateTrigger"/>
                 <Separator/>
-                <local:ImageButton x:Name="buttonCut" ToolTip="Cut trigger" Source="/Resources/Icons/Cut.png" Click="OnCutTrigger"/>
-                <local:ImageButton x:Name="buttonCopy" ToolTip="Copy trigger" Source="/Resources/Icons/Copy.png" Click="OnCopyTrigger"/>
-                <local:ImageButton x:Name="buttonPaste" ToolTip="Paste trigger" Source="/Resources/Icons/Paste.png" Click="OnPasteTrigger"/>
+                <local:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Command="local:TriggerEditorCommands.MoveTriggerUp"/>
+                <local:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Command="local:TriggerEditorCommands.MoveTriggerDown"/>
             </ToolBar>
-            <ListBox x:Name="listBoxTriggers" SelectionChanged="OnSelectTrigger"/>
+            <ListBox x:Name="listBoxTriggers" SelectionChanged="OnSelectedTriggerChanged"/>
         </DockPanel>
-        <Grid Grid.Column="1" x:Name="panelEditTrigger">
+        <Grid Grid.Column="1" x:Name="panelEditTrigger" IsEnabled="{Binding ElementName=listBoxTriggers, Path=SelectedItems.Count}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*" MinHeight="100"/>
             </Grid.RowDefinitions>
             <ComboBox x:Name="comboBoxEventType" Grid.Row="0" Margin="10,10,0,15" HorizontalAlignment="Left" Width="150" SelectionChanged="OnSelectEvent"/>
-            <xctk:WatermarkTextBox x:Name="textBoxTriggerName" BorderBrush="#FFC8C8C8" Margin="165,10,0,15" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Grid.Row="0" TextChanged="OnRenameEvent" Width="180"/>
+            <xctk:WatermarkTextBox x:Name="textBoxTriggerName" BorderBrush="#FFC8C8C8" Margin="165,10,0,15" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Grid.Row="0" Width="180" TextChanged="OnRenameTrigger"/>
             <CheckBox x:Name="checkBoxInitiallyOn" Content="Initially On" Margin="394,13,82,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickInitiallyOn"/>
             <CheckBox x:Name="checkBoxFireOnce" Content="Fire Once" Margin="473,13,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.566,-0.188" Grid.Row="0" Click="OnClickFireOnce"/>
             <!--<local:ScriptTextEditor x:Name="scriptEditor" Grid.Row="1"/>-->
