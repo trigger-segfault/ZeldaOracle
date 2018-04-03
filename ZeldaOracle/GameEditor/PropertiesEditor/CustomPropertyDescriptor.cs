@@ -15,6 +15,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 using ZeldaEditor.Control;
 using Xceed.Wpf.Toolkit.PropertyGrid;
+using ZeldaOracle.Common;
 
 namespace ZeldaEditor.PropertiesEditor {
 	
@@ -64,10 +65,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			
 		// Get the displayed value of the property.
 		public override object GetValue(object component) {
-			Property property = Property;
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.List)
-				return null;
-			return property.ObjectValue;
+			return Property.ObjectValue;
 		}
 
 		// Reset the value to the default.

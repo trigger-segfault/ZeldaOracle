@@ -1289,5 +1289,15 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return HasFlag(TileFlags.Movable); }
 			set { SetFlags(TileFlags.Movable, value); }
 		}
+
+		/// <summary>Gets the variables for the tile.</summary>
+		public Variables Vars {
+			get { return tileData.Vars; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return tileData.Vars; }
+		}
 	}
 }

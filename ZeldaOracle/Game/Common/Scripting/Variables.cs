@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZeldaOracle.Common;
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Game.API {
+namespace ZeldaOracle.Common.Scripting {
 	/// <summary>A collection of variables accessible in scripting.</summary>
-	public class Variables {
+	public class Variables : ZeldaAPI.Variables {
 		/// <summary>The object that holds these variables.</summary>
 		[NonSerialized]
 		private IVariableObject variableObject;
@@ -22,25 +21,25 @@ namespace ZeldaOracle.Game.API {
 
 		/// <summary>Construct an empty variables list.</summary>
 		public Variables() {
-			this.map			= new Dictionary<string, Variable>();
-			this.variableObject	= null;
+			map = new Dictionary<string, Variable>();
+			variableObject = null;
 		}
 
 		/// <summary>Construct an empty variables list with the given variable object.</summary>
 		public Variables(IVariableObject variableObject) {
-			this.map			= new Dictionary<string, Variable>();
-			this.variableObject	= variableObject;
+			map = new Dictionary<string, Variable>();
+			this.variableObject = variableObject;
 		}
 
 		/// <summary>Constructs a copy of the variables collection.</summary>
 		public Variables(Variables copy) {
-			this.map = new Dictionary<string, Variable>();
+			map = new Dictionary<string, Variable>();
 			Clone(copy);
 		}
 
 		/// <summary>Constructs a copy of the variables collection.</summary>
 		public Variables(Variables copy, IVariableObject variableObject) {
-			this.map = new Dictionary<string, Variable>();
+			map = new Dictionary<string, Variable>();
 			Clone(copy);
 			this.variableObject = variableObject;
 		}
@@ -52,9 +51,9 @@ namespace ZeldaOracle.Game.API {
 			// Copy the variable map
 			map.Clear();
 			foreach (Variable variable in copy.map.Values) {
-				Variable v		= new Variable(variable);
-				v.Variables		= this;
-				map[v.Name]		= v;
+				Variable v      = new Variable(variable);
+				v.Variables     = this;
+				map[v.Name]     = v;
 			}
 		}
 
@@ -121,7 +120,7 @@ namespace ZeldaOracle.Game.API {
 			Variable v = GetVariable(name);
 			return (v != null && v.EqualsValue(value));
 		}
-		
+
 		/// <summary>Return true if there exists a variable with the given name that
 		/// does not equate to the given value.</summary>
 		public bool ContainsNotEquals(string name, object value) {
@@ -133,7 +132,7 @@ namespace ZeldaOracle.Game.API {
 		//-----------------------------------------------------------------------------
 		// Variable Value Accessors
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Get an enum variable value.</summary>
 		public E GetEnum<E>(string name) where E : struct {
 			Variable v = GetVariable(name);
@@ -196,7 +195,7 @@ namespace ZeldaOracle.Game.API {
 		//-----------------------------------------------------------------------------
 		// Property value access (with defaults)
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Get an enum variable value with a default value fallback.</summary>
 		public E GetEnum<E>(string name, E defaultValue) where E : struct {
 			Variable v = GetVariable(name);
@@ -374,6 +373,45 @@ namespace ZeldaOracle.Game.API {
 		/// <summary>Sets the variable's object value.</summary>
 		public Variable SetGeneric(string name, object value) {
 			return SetVariable(name, value);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Property API Setters
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Sets the variable's value as an enum.</summary>
+		void ZeldaAPI.Variables.SetEnum<E>(string name, E value,
+			VarType defaultType)
+		{
+			Variable v = GetVariable(name);
+			VarType type = defaultType;
+			if (v != null)
+				type = v.Type;
+			if (type == VarType.Integer)
+				SetVariable(name, (int) (object) value);
+			else if (type == VarType.String)
+				SetVariable(name, value.ToString());
+			else
+				throw new InvalidOperationException("Variable type does not support enums.");
+		}
+
+		/// <summary>Sets the variable's value as an integer enum.</summary>
+		void ZeldaAPI.Variables.SetEnumInt<E>(string name, E value) {
+			Variable v = GetVariable(name);
+			if (v == null || v.Type == VarType.Integer)
+				SetVariable(name, (int) (object) value);
+			else
+				throw new InvalidOperationException("Variable type is not an integer.");
+		}
+
+		/// <summary>Sets the variable's value as a string enum.</summary>
+		void ZeldaAPI.Variables.SetEnumStr<E>(string name, E value) {
+			Variable v = GetVariable(name);
+			if (v == null || v.Type == VarType.String)
+				SetVariable(name, value.ToString());
+			else
+				throw new InvalidOperationException("Variable type is not a string.");
 		}
 
 

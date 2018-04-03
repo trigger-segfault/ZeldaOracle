@@ -134,11 +134,20 @@ namespace ZeldaOracle.Common.Util {
 		// Readers
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Reads the generic integral type.</summary>
+		/// <summary>Reads the generic type value.</summary>
 		public static T ReadGeneric<T>(this BinaryReader reader) {
 			GenericBinaryReader readerFunc;
 			if (readers.TryGetValue(typeof(T), out readerFunc))
 				return (T) readerFunc(reader);
+			throw new ArithmeticException("Unsupported type for " +
+				"BinaryReader.ReadGeneric!");
+		}
+
+		/// <summary>Reads the generic type value.</summary>
+		public static object ReadGeneric(this BinaryReader reader, Type type) {
+			GenericBinaryReader readerFunc;
+			if (readers.TryGetValue(type, out readerFunc))
+				return readerFunc(reader);
 			throw new ArithmeticException("Unsupported type for " +
 				"BinaryReader.ReadGeneric!");
 		}
@@ -197,6 +206,16 @@ namespace ZeldaOracle.Common.Util {
 		public static void WriteGeneric<T>(this BinaryWriter writer, T value) {
 			GenericBinaryWriter writerFunc;
 			if (writers.TryGetValue(typeof(T), out writerFunc))
+				writerFunc(writer, value);
+			else
+				throw new ArithmeticException("Unsupported type for " +
+					"BinaryWriter.WriteGeneric!");
+		}
+
+		/// <summary>Writes the generic integral type.</summary>
+		public static void WriteGeneric(this BinaryWriter writer, Type type, object value) {
+			GenericBinaryWriter writerFunc;
+			if (writers.TryGetValue(type, out writerFunc))
 				writerFunc(writer, value);
 			else
 				throw new ArithmeticException("Unsupported type for " +

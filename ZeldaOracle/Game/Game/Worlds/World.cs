@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
@@ -512,6 +511,11 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets the variables for the world.</summary>
 		public Variables Vars {
+			get { return variables; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
 			get { return variables; }
 		}
 

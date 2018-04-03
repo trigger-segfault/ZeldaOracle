@@ -50,6 +50,7 @@
     <Compile Include="Area.cs" />
     <Compile Include="CustomScriptBase.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Variables.cs" />
     <None Include="TileEnums.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Monster.cs" />

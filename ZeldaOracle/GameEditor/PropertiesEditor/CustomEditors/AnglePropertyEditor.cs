@@ -28,7 +28,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 
 		Type enumType;
-		PropertyType baseType;
+		VarType baseType;
 
 		protected override IEnumerable CreateItemsSource(PropertyItem propertyItem) {
 			CustomPropertyDescriptor propertyDescriptor = (CustomPropertyDescriptor)propertyItem.PropertyDescriptor;

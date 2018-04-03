@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Worlds {
@@ -203,8 +202,13 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return variables; }
 		}
 
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return variables; }
+		}
+
 		// Settings -------------------------------------------------------------------
-		
+
 		/// <summary>Gets or sets the method for monster respawning in this area.</summary>
 		public RoomRespawnMode RespawnMode {
 			get { return properties.GetEnum("respawn_mode", RoomRespawnMode.Overworld); }

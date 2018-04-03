@@ -9,8 +9,8 @@ using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Common;
 
 namespace ZeldaOracle.Game.Worlds {
 
@@ -490,41 +490,23 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private Property ReadProperty(BinaryReader reader) {
-			PropertyType type = (PropertyType) reader.ReadInt32();
+			VarType type = (VarType) reader.ReadInt32();
 			string name = ReadString(reader);
 			
-			if (type == PropertyType.Integer) {
+			if (type == VarType.Integer) {
 				return Property.CreateInt(name, reader.ReadInt32());
 			}
-			else if (type == PropertyType.Float) {
+			else if (type == VarType.Float) {
 				return Property.CreateFloat(name, reader.ReadSingle());
 			}
-			else if (type == PropertyType.Boolean) {
+			else if (type == VarType.Boolean) {
 				return Property.CreateBool(name, reader.ReadBoolean());
 			}
-			else if (type == PropertyType.String) {
+			else if (type == VarType.String) {
 				return Property.CreateString(name, ReadString(reader));
 			}
-			if (type == PropertyType.Point) {
+			if (type == VarType.Point) {
 				return Property.Create(name, reader.ReadPoint2I());
-			}
-			else if (type == PropertyType.List) {
-				int count = reader.ReadInt32();
-				Property list = Property.CreateList(name);
-				Property child = null;
-
-				for (int i = 0; i < count; i++) {
-					Property newChild = ReadProperty(reader);
-
-					if (child != null)
-						child.Next = newChild;
-					else
-						list.FirstChild = newChild;
-					child = newChild;
-				}
-
-				list.Count = count;
-				return list;
 			}
 			return null;
 		}
@@ -539,22 +521,22 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private Variable ReadVariable(BinaryReader reader) {
-			VariableType type = (VariableType) reader.ReadInt32();
+			VarType type = (VarType) reader.ReadInt32();
 			string name = ReadString(reader);
 
-			if (type == VariableType.Integer) {
+			if (type == VarType.Integer) {
 				return Variable.Create(name, reader.ReadInt32());
 			}
-			else if (type == VariableType.Float) {
+			else if (type == VarType.Float) {
 				return Variable.Create(name, reader.ReadSingle());
 			}
-			else if (type == VariableType.Boolean) {
+			else if (type == VarType.Boolean) {
 				return Variable.Create(name, reader.ReadBoolean());
 			}
-			else if (type == VariableType.String) {
+			else if (type == VarType.String) {
 				return Variable.Create(name, ReadString(reader));
 			}
-			if (type == VariableType.Point) {
+			if (type == VarType.Point) {
 				return Variable.Create(name, reader.ReadPoint2I());
 			}
 			return null;
@@ -957,28 +939,20 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write((int) property.Type);
 			WriteString(writer, property.Name);
 
-			if (property.Type == PropertyType.Integer) {
+			if (property.Type == VarType.Integer) {
 				writer.Write(property.IntValue);
 			}
-			else if (property.Type == PropertyType.Float) {
+			else if (property.Type == VarType.Float) {
 				writer.Write(property.FloatValue);
 			}
-			else if (property.Type == PropertyType.Boolean) {
+			else if (property.Type == VarType.Boolean) {
 				writer.Write(property.BoolValue);
 			}
-			else if (property.Type == PropertyType.String) {
+			else if (property.Type == VarType.String) {
 				WriteString(writer, property.StringValue);
 			}
-			else if (property.Type == PropertyType.Point) {
+			else if (property.Type == VarType.Point) {
 				writer.Write(property.PointValue);
-			}
-			else if (property.Type == PropertyType.List) {
-				writer.Write((int) property.Count);
-				property = property.FirstChild;
-				while (property != null) {
-					WriteProperty(writer, property);
-					property = property.Next;
-				}
 			}
 		}
 
@@ -994,19 +968,19 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write((int) variable.Type);
 			WriteString(writer, variable.Name);
 
-			if (variable.Type == VariableType.Integer) {
+			if (variable.Type == VarType.Integer) {
 				writer.Write(variable.IntValue);
 			}
-			else if (variable.Type == VariableType.Float) {
+			else if (variable.Type == VarType.Float) {
 				writer.Write(variable.FloatValue);
 			}
-			else if (variable.Type == VariableType.Boolean) {
+			else if (variable.Type == VarType.Boolean) {
 				writer.Write(variable.BoolValue);
 			}
-			else if (variable.Type == VariableType.String) {
+			else if (variable.Type == VarType.String) {
 				WriteString(writer, variable.StringValue);
 			}
-			else if (variable.Type == VariableType.Point) {
+			else if (variable.Type == VarType.Point) {
 				writer.Write(variable.PointValue);
 			}
 		}

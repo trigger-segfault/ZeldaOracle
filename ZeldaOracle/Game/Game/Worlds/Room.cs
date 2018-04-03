@@ -10,7 +10,6 @@ using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Tiles.Custom.Monsters;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Common.Util;
@@ -976,6 +975,11 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets the variables for the room.</summary>
 		public Variables Vars {
+			get { return variables; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
 			get { return variables; }
 		}
 

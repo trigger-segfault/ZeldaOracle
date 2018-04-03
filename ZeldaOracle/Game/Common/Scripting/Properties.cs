@@ -105,10 +105,10 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Get the root property with the given name.</summary>
 		public Property GetRootProperty(string name) {
-			Property property = GetProperty(name, true);
-			if (property != null)
-				return property.GetRootProperty();
-			return null;
+			if (baseProperties != null)
+				return baseProperties.GetRootProperty(name);
+			else
+				return GetProperty(name, false);
 		}
 
 
@@ -123,7 +123,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Returns true if there exists a property with the given name
 		/// and type.</summary>
-		public bool Contains(string name, PropertyType type, bool acceptBaseProperties = true) {
+		public bool Contains(string name, VarType type, bool acceptBaseProperties = true) {
 			Property p = GetProperty(name, acceptBaseProperties);
 			return (p != null && p.Type == type);
 		}
@@ -194,9 +194,9 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Get an enum property value.</summary>
 		public E GetEnum<E>(string name) where E : struct {
 			Property p = GetProperty(name, true);
-			if (p.Type == PropertyType.Integer)
+			if (p.Type == VarType.Integer)
 				return (E) Enum.ToObject(typeof(E), p.IntValue);
-			else if (p.Type == PropertyType.String)
+			else if (p.Type == VarType.String)
 				return (E) Enum.Parse(typeof(E), p.StringValue);
 			else
 				throw new InvalidOperationException("Property type does not support enums.");
@@ -207,9 +207,9 @@ namespace ZeldaOracle.Common.Scripting {
 			Property p = GetProperty(name, true);
 			if (p != null) {
 				try {
-					if (p.Type == PropertyType.Integer)
+					if (p.Type == VarType.Integer)
 						return (E) Enum.ToObject(typeof(E), p.IntValue);
-					else if (p.Type == PropertyType.String)
+					else if (p.Type == VarType.String)
 						return (E) Enum.Parse(typeof(E), p.StringValue, true);
 					else
 						throw new InvalidOperationException("Property type does not support enums.");
@@ -267,9 +267,9 @@ namespace ZeldaOracle.Common.Scripting {
 		public E GetEnum<E>(string name, E defaultValue) where E : struct {
 			Property p = GetProperty(name, true);
 			if (p != null) {
-				if (p.Type == PropertyType.Integer)
+				if (p.Type == VarType.Integer)
 					return (E) Enum.ToObject(typeof(E), p.IntValue);
-				else if (p.Type == PropertyType.String)
+				else if (p.Type == VarType.String)
 					return (E) Enum.Parse(typeof(E), p.StringValue, true);
 				else
 					throw new InvalidOperationException("Property type does not support enums.");
@@ -283,9 +283,9 @@ namespace ZeldaOracle.Common.Scripting {
 			Property p = GetProperty(name, true);
 			if (p != null) {
 				try {
-					if (p.Type == PropertyType.Integer)
+					if (p.Type == VarType.Integer)
 						return (E) Enum.ToObject(typeof(E), p.IntValue);
-					else if (p.Type == PropertyType.String)
+					else if (p.Type == VarType.String)
 						return (E) Enum.Parse(typeof(E), p.StringValue, true);
 					else
 						throw new InvalidOperationException(
@@ -301,7 +301,7 @@ namespace ZeldaOracle.Common.Scripting {
 		public E GetEnumFlags<E>(string name, E defaultValue) where E : struct {
 			Property p = GetProperty(name, true);
 			if (p != null) {
-				if (p.Type == PropertyType.Integer)
+				if (p.Type == VarType.Integer)
 					return (E) Enum.ToObject(typeof(E), p.IntValue);
 				else
 					throw new InvalidOperationException(
@@ -422,14 +422,14 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Sets the property's value as an enum.</summary>
 		public Property SetEnum<E>(string name, E value,
-			PropertyType defaultType = PropertyType.String) where E : struct {
+			VarType defaultType = VarType.String) where E : struct {
 			Property p = GetProperty(name, true);
-			PropertyType type = defaultType;
+			VarType type = defaultType;
 			if (p != null)
 				type = p.Type;
-			if (type == PropertyType.Integer)
+			if (type == VarType.Integer)
 				return SetProperty(name, (int) (object) value, false);
-			else if (type == PropertyType.String)
+			else if (type == VarType.String)
 				return SetProperty(name, value.ToString(), false);
 			else
 				throw new InvalidOperationException("Property type does not support enums.");
@@ -438,7 +438,7 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Sets the property's value as an integer enum.</summary>
 		public Property SetEnumInt<E>(string name, E value) where E : struct {
 			Property p = GetProperty(name, true);
-			if (p == null || p.Type == PropertyType.Integer)
+			if (p == null || p.Type == VarType.Integer)
 				return SetProperty(name, (int) (object) value, false);
 			else
 				throw new InvalidOperationException("Property type is not an integer.");
@@ -447,7 +447,7 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Sets the property's value as a string enum.</summary>
 		public Property SetEnumStr<E>(string name, E value) where E : struct {
 			Property p = GetProperty(name, true);
-			if (p == null || p.Type == PropertyType.String)
+			if (p == null || p.Type == VarType.String)
 				return SetProperty(name, value.ToString(), false);
 			else
 				throw new InvalidOperationException("Property type is not a string.");

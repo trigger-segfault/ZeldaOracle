@@ -165,6 +165,11 @@
     <Compile Include="Common\Ini\IniReflectionSettings.cs" />
     <Compile Include="Common\Scripting\EventDocumentation.cs" />
     <Compile Include="Common\Scripting\EventDocumentationCollection.cs" />
+    <Compile Include="Common\Scripting\Properties2.cs" />
+    <Compile Include="Common\Scripting\Property2.cs" />
+    <Compile Include="Common\Scripting\VarBase.cs" />
+    <Compile Include="Common\Scripting\IVariableObject.cs" />
+    <Compile Include="Common\Scripting\IVariableObjectContainer.cs" />
     <Compile Include="Common\Scripting\Trigger.cs" />
     <Compile Include="Common\Scripting\TriggerCollection.cs" />
     <Compile Include="Common\Scripting\ITriggerObject.cs" />
@@ -229,6 +234,12 @@
     <Compile Include="Common\Conscripts\CustomReaders\SoundSR.cs" />
     <Compile Include="Common\Conscripts\CustomReaders\TilesetSR.cs" />
     <Compile Include="Common\Conscripts\ConscriptReaderException.cs" />
+    <Compile Include="Common\Scripting\VarBaseCollection.cs" />
+    <Compile Include="Common\Scripting\Variable.cs" />
+    <Compile Include="Common\Scripting\Variable2.cs" />
+    <Compile Include="Common\Scripting\Variables.cs" />
+    <Compile Include="Common\Scripting\Variables2.cs" />
+    <Compile Include="Common\Scripting\VarType.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />

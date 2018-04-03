@@ -229,7 +229,9 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("PROPERTY", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"(string name, var value)",
-				CommandProperty);
+			delegate (CommandParam parameters) {
+				SetProperty(baseTileData, parameters);
+			});
 			//=====================================================================================
 			/*AddCommand("LOCKPROP", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
 				"string name",
@@ -540,7 +542,7 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 		// Script Commands
 		//-----------------------------------------------------------------------------
 
-		private void CommandProperties(CommandParam param) {
+		/*private void CommandProperties(CommandParam param) {
 			foreach (CommandParam child in param.GetChildren())
 				ParseProperty(child);
 		}
@@ -583,8 +585,8 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 			string name = param.GetString(1);
 
 			// Parse the property type and value.
-			PropertyType type;
-			if (!Enum.TryParse<PropertyType>(param.GetString(0), true, out type))
+			VarType type;
+			if (!Enum.TryParse<VarType>(param.GetString(0), true, out type))
 				ThrowParseError("Unknown property type '" + param.GetString(0) + "'");
 			object value = ParsePropertyValue(param[2], type);
 
@@ -593,7 +595,7 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 
 			// Set the property's documentation.
 			if (param.ChildCount > 3 && property != null) {
-				ParsePropertyDocumentation(param, property, 3);
+				ParsePropertyDocumentation(param, property, 3);*/
 				/*string editorType = "";
 				string editorSubType = "";
 				if (param[4].Type == CommandParamType.Array) {
@@ -613,7 +615,7 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 					isReadOnly: false,
 					isBrowsable: param.GetBool(7, true)
 				);*/
-			}
+			/*}
 		}
 
 		private void ParsePropertyDocumentation(CommandParam param, Property property, int index) {
@@ -638,28 +640,26 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 			);
 		}
 
-		private object ParsePropertyValue(CommandParam param, PropertyType type) {
-			if (type == PropertyType.String) {
+		private object ParsePropertyValue(CommandParam param, VarType type) {
+			if (type == VarType.String) {
 				if (param.IsValidType(CommandParamType.String))
 					return param.StringValue;
 			}
-			else if (type == PropertyType.Integer) {
+			else if (type == VarType.Integer) {
 				if (param.IsValidType(CommandParamType.Integer))
 					return param.IntValue;
 			}
-			else if (type == PropertyType.Float) {
+			else if (type == VarType.Float) {
 				if (param.IsValidType(CommandParamType.Float))
 					return param.FloatValue;
 			}
-			else if (type == PropertyType.Boolean) {
+			else if (type == VarType.Boolean) {
 				if (param.IsValidType(CommandParamType.Boolean))
 					return param.BoolValue;
 			}
-			else if (type == PropertyType.List)
-				ThrowParseError("Lists are unsupported as a property type");
 			ThrowParseError("The property value '" + param.StringValue + "' is not of type " + type.ToString());
 			return null;
-		}
+		}*/
 
 
 		/// <summary>Gets a sprite.</summary>

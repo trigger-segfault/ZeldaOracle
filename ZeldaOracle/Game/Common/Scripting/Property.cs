@@ -9,15 +9,14 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Common.Scripting {
 	
 	/// <summary>The possible raw data types for a property.</summary>
-	[Serializable]
-	public enum PropertyType {
-		List,
+	/*[Serializable]
+	public enum VarType {
 		String,
 		Integer,
 		Float,
 		Boolean,
 		Point,
-	}
+	}*/
 
 	
 	//public class PropertyValue {
@@ -43,13 +42,12 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>The name of the property.</summary>
 		private string name;
 		/// <summary>The data type of the property.</summary>
-		private PropertyType type;
+		private VarType type;
 		/// <summary>The object value for the property. For lists, this is used to store the child count as an integer.</summary>
 		private object objectValue;
 		/// <summary>If this property is part of a list of properties, then 'next' points to the next property in the list.</summary>
 		private Property nextSibling;
 		/// <summary>If this property is a list of properties, then 'firstChild' points to the first property in the list.</summary>
-		[NonSerialized]
 		private Property firstChild;
 		/// <summary>The documentation for this property, if it is a base-property.</summary>
 		[NonSerialized]
@@ -67,7 +65,7 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Construct a property with the given name and type.</summary>
-		public Property(string name, PropertyType type = PropertyType.String) {
+		public Property(string name, VarType type = VarType.String) {
 			this.name			= name;
 			this.type			= type;
 			this.objectValue	= 0;
@@ -102,8 +100,6 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Return true of this and another property have the equivilent values.</summary>
 		public bool EqualsValue(Property other) {
-			if (type != other.type || type == PropertyType.List)
-				return false;
 			return objectValue.Equals(other.objectValue);
 		}
 
@@ -112,23 +108,6 @@ namespace ZeldaOracle.Common.Scripting {
 			if (type != TypeToPropertyType(other.GetType()))
 				return false;
 			return objectValue.Equals(other);
-		}
-
-		/// <summary>Get the child at the given index (if this is a list).</summary>
-		public Property GetChild(int index) {
-			if (type != PropertyType.List)
-				return null;
-
-			Property p = firstChild;
-			int i = 0;
-			while (p != null) {
-				if (i == index)
-					return p;
-				p = p.nextSibling;
-				i++;
-			}
-
-			return null; // ERROR: Index out of bounds!
 		}
 
 		/// <summary>Find the root that this property is a modification of.</summary>
@@ -189,47 +168,31 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		// Static Factory Methods
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Create a list of properties.</summary>
-		public static Property CreateList(string name, params Property[] properties) {
-			Property parent = new Property(name, PropertyType.List);
-			parent.Count = properties.Length;
-
-			if (properties.Length > 0) {
-				Property p = new Property(properties[0]);
-				parent.firstChild = p;
-				for (int i = 0; i < properties.Length - 1; i++) {
-					p.nextSibling = new Property(properties[i + 1]);
-					p = p.nextSibling;
-				}
-			}
-			return parent;
-		}
-
+		
 		/// <summary>Create a string property with the given value.</summary>
 		public static Property CreateString(string name, string value) {
-			Property p = new Property(name, PropertyType.String);
+			Property p = new Property(name, VarType.String);
 			p.objectValue = value;
 			return p;
 		}
 
 		/// <summary>Create an integer property with the given value.</summary>
 		public static Property CreateInt(string name, int value) {
-			Property p = new Property(name, PropertyType.Integer);
+			Property p = new Property(name, VarType.Integer);
 			p.objectValue = value;
 			return p;
 		}
 
 		/// <summary>Create a float property with the given value.</summary>
 		public static Property CreateFloat(string name, float value) {
-			Property p = new Property(name, PropertyType.Float);
+			Property p = new Property(name, VarType.Float);
 			p.objectValue = value;
 			return p;
 		}
 
 		/// <summary>Create a boolean property with the given value.</summary>
 		public static Property CreateBool(string name, bool value) {
-			Property p = new Property(name, PropertyType.Boolean);
+			Property p = new Property(name, VarType.Boolean);
 			p.objectValue = value;
 			return p;
 		}
@@ -242,33 +205,33 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 
 		/// <summary>Convert a PropertyType to a System.Type.</summary>
-		public static Type PropertyTypeToType(PropertyType propertyType) {
-			if (propertyType == PropertyType.String)
+		public static Type PropertyTypeToType(VarType propertyType) {
+			if (propertyType == VarType.String)
 				return typeof(string);
-			if (propertyType == PropertyType.Integer)
+			if (propertyType == VarType.Integer)
 				return typeof(int);
-			if (propertyType == PropertyType.Float)
+			if (propertyType == VarType.Float)
 				return typeof(float);
-			if (propertyType == PropertyType.Boolean)
+			if (propertyType == VarType.Boolean)
 				return typeof(bool);
-			if (propertyType == PropertyType.Point)
+			if (propertyType == VarType.Point)
 				return typeof(Point2I);
 			return null;
 		}
 
 		/// <summary>Convert a System.Type to a PropertyType.</summary>
-		public static PropertyType TypeToPropertyType(Type type) {
+		public static VarType TypeToPropertyType(Type type) {
 			if (type == typeof(string))
-				return PropertyType.String;
+				return VarType.String;
 			if (type == typeof(int))
-				return PropertyType.Integer;
+				return VarType.Integer;
 			if (type == typeof(float))
-				return PropertyType.Float;
+				return VarType.Float;
 			if (type == typeof(bool))
-				return PropertyType.Boolean;
+				return VarType.Boolean;
 			if (type == typeof(Point2I))
-				return PropertyType.Point;
-			return PropertyType.Integer;
+				return VarType.Point;
+			return VarType.Integer;
 		}
 
 
@@ -307,7 +270,7 @@ namespace ZeldaOracle.Common.Scripting {
 		// Property Value ------------------------------------------------------------
 
 		/// <summary>The data type of the property.</summary>
-		public PropertyType Type {
+		public VarType Type {
 			get { return type; }
 		}
 
@@ -359,11 +322,6 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property FirstChild {
 			get { return firstChild; }
 			set { firstChild = value; }
-		}
-
-		/// <summary>Return the child at the given index.</summary>
-		public Property this[int index] {
-			get { return GetChild(index); }
 		}
 
 		/// <summary>Return the number of children.</summary>

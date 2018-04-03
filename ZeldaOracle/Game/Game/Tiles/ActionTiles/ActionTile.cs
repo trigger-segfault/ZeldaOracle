@@ -265,5 +265,15 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public Type EntityType {
 			get { return actionData.EntityType; }
 		}
+
+		/// <summary>Gets the variables for the action tile.</summary>
+		public Variables Vars {
+			get { return actionData.Vars; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return actionData.Vars; }
+		}
 	}
 }

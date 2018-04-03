@@ -498,6 +498,39 @@ namespace ZeldaOracle.Common.Conscripts.Commands {
 			}
 		}
 
+		public RangeI RangeIValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new RangeI(GetInt(0), GetInt(1));
+				return RangeI.Zero;
+			}
+		}
+
+		public RangeF RangeFValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new RangeF(GetFloat(0), GetFloat(1));
+				return RangeF.Zero;
+			}
+		}
+
+		public Rectangle2I RectangleIValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new Rectangle2I(GetInt(0), GetInt(1), GetInt(2), GetInt(3));
+				return Rectangle2I.Zero;
+			}
+		}
+
+		public Rectangle2F RectangleFValue {
+			get {
+				if (type == CommandParamType.Array)
+					return new Rectangle2F(
+						GetFloat(0), GetFloat(1), GetFloat(2), GetFloat(3));
+				return Rectangle2F.Zero;
+			}
+		}
+
 		// Script Reader Info ----------------------------------------------------------------
 
 		public int CharIndex {

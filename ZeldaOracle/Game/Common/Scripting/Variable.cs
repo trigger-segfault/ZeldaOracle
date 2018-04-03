@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZeldaOracle.Common;
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Game.API {
+namespace ZeldaOracle.Common.Scripting {
 	/// <summary>A variable represents a piece of data that can be represented
 	/// multiple types including lists of other variables.</summary>
 	[Serializable]
@@ -51,20 +50,20 @@ namespace ZeldaOracle.Game.API {
 
 		/// <summary>Construct a variable with the given name and type.</summary>
 		public Variable(string name, VarType type = VarType.String, bool builtIn = false) {
-			this.builtIn		= builtIn;
-			this.name			= name;
-			this.type			= type;
-			this.objectValue	= 0;
-			this.variables		= null;
+			this.builtIn        = builtIn;
+			this.name           = name;
+			this.type           = type;
+			this.objectValue    = 0;
+			this.variables      = null;
 		}
 
 		/// <summary>Construct a variable as a copy of another.</summary>
 		public Variable(Variable copy) {
-			builtIn			= copy.builtIn;
-			name			= copy.name;
-			type			= copy.type;
-			objectValue		= copy.objectValue;
-			variables		= null;
+			builtIn         = copy.builtIn;
+			name            = copy.name;
+			type            = copy.type;
+			objectValue     = copy.objectValue;
+			variables       = null;
 		}
 
 
@@ -97,7 +96,7 @@ namespace ZeldaOracle.Game.API {
 				case VarType.Point:
 					if (format.ToLower() == "x")
 						return PointValue.X.ToString();
-					else if(format.ToLower() == "y")
+					else if (format.ToLower() == "y")
 						return PointValue.Y.ToString();
 					break;
 				}

@@ -5,7 +5,6 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles.Puzzles {

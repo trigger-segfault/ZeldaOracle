@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Translation;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.RoomManagers;
 using ZeldaOracle.Game.Worlds;
 
@@ -115,6 +115,11 @@ namespace ZeldaOracle.Game.Control {
 
 		/// <summary>Gets the variables for the area.</summary>
 		public Variables Vars {
+			get { return area.Vars; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
 			get { return area.Vars; }
 		}
 	}

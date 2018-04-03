@@ -23,7 +23,6 @@ using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.GameStates.RoomStates;

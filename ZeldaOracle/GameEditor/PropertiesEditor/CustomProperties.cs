@@ -22,6 +22,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Tiles;
 using System.Diagnostics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace ZeldaEditor.PropertiesEditor {
@@ -173,7 +174,7 @@ namespace ZeldaEditor.PropertiesEditor {
 						editorAttr = new EditorAttribute(editorType, editorType);
 					}
 				}
-				if (editorAttr == null && property.Type == PropertyType.Point) {
+				if (editorAttr == null && property.Type == VarType.Point) {
 					Type editorType = typeof(Point2IPropertyEditor);
 					editorAttr = new EditorAttribute(editorType, editorType);
 				}

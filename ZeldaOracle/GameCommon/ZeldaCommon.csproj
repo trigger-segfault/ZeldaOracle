@@ -65,12 +65,12 @@
     <Compile Include="Common\Graphics\Rotating.cs" />
     <Compile Include="Common\Geometry\Vector2F.cs" />
     <Compile Include="Common\Graphics\Color.cs" />
-    <Compile Include="Game\API\IVariableObject.cs" />
-    <Compile Include="Game\API\IVariableObjectContainer.cs" />
-    <Compile Include="Game\API\Variable.cs" />
-    <Compile Include="Game\API\Variables.cs" />
+    <None Include="Game\API\IVariableObject.cs" />
+    <None Include="Game\API\IVariableObjectContainer.cs" />
+    <None Include="Game\API\Variable.cs" />
+    <None Include="Game\API\Variables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Game\CommonTypes.cs" />
+    <Compile Include="Game\CommonGameTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Geometry\GMath.Rounding.cs" />

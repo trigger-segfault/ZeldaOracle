@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -339,30 +340,64 @@ namespace ZeldaOracle.Common.Conscripts {
 		}
 
 		/// <summary>Parses the value of the property from the command param.</summary>
-		private object ParsePropertyValue(CommandParam param, PropertyType type) {
-			if (type == PropertyType.String) {
+		private object ParsePropertyValue(CommandParam param, VarType varType,
+			ListType listType)
+		{
+			int count = param.ChildCount;
+			Type elementType = VarBase.VarTypeToType(varType);
+			switch (listType) {
+			case ListType.Single: return ParsePropertyValue(param, varType);
+			case ListType.Array:
+				Array array = Array.CreateInstance(elementType, count);
+				for (int i = 0; i < count; i++)
+					array.SetValue(ParsePropertyValue(param.GetParam(i), varType), i);
+				return array;
+			case ListType.List:
+				Type newType = typeof(List<>).MakeGenericType(elementType);
+				IList list = (IList) Activator.CreateInstance(newType);
+				for (int i = 0; i < count; i++)
+					list.Add(ParsePropertyValue(param.GetParam(i), varType));
+				return list;
+			default:
+				return null;
+			}
+		}
+
+		/// <summary>Parses the value of the property from the command param.</summary>
+		private object ParsePropertyValue(CommandParam param, VarType varType) {
+			switch (varType) {
+			case VarType.String:
 				if (param.IsValidType(CommandParamType.String))
-					return param.StringValue;
-			}
-			else if (type == PropertyType.Integer) {
-				if (param.IsValidType(CommandParamType.Integer))
-					return param.IntValue;
-			}
-			else if (type == PropertyType.Float) {
+					return param.StringValue; break;
+			case VarType.Integer:
+				if (param.IsValidType(CommandParamType.String))
+					return param.StringValue; break;
+			case VarType.Float:
 				if (param.IsValidType(CommandParamType.Float))
-					return param.FloatValue;
-			}
-			else if (type == PropertyType.Boolean) {
+					return param.FloatValue; break;
+			case VarType.Boolean:
 				if (param.IsValidType(CommandParamType.Boolean))
-					return param.BoolValue;
-			}
-			else if (type == PropertyType.Point) {
+					return param.BoolValue; break;
+			case VarType.Point:
 				if (param.IsValidType(CommandParamType.Array))
-					return param.PointValue;
+					return param.PointValue; break;
+			case VarType.Vector:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.VectorValue; break;
+			case VarType.RangeI:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RangeIValue; break;
+			case VarType.RangeF:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RangeFValue; break;
+			case VarType.RectangleI:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RectangleIValue; break;
+			case VarType.RectangleF:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RectangleFValue; break;
 			}
-			else if (type == PropertyType.List)
-				ThrowParseError("Lists are unsupported as a property type");
-			ThrowParseError("The property value '" + param.StringValue + "' is not of type " + type.ToString());
+			ThrowParseError("The property value '" + param.StringValue + "' is not of type " + varType.ToString());
 			return null;
 		}
 

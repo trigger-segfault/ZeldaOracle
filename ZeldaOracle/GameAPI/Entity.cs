@@ -6,7 +6,10 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaAPI {
 
+	/// <summary>The base interface for all objects in the API.</summary>
 	public interface ApiObject {
+		/// <summary>Gets the variables for the API Object.</summary>
+		Variables Vars { get; }
 	}
 
 
