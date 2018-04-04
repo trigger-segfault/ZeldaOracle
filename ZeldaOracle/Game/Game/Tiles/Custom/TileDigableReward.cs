@@ -33,7 +33,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				RoomControl.RemoveTile(this);
 			}
 			else {
-				string rewardName = Properties.GetString("reward", "rupees_1");
+				string rewardName = Properties.Get<string>("reward", "rupees_1");
 				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 				DropList = new DropList();
 				if (reward != null)
@@ -78,7 +78,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Reward reward = args.RewardManager.GetReward(args.Properties.GetString("reward"));
+			Reward reward = args.RewardManager.GetReward(args.Properties.Get<string>("reward"));
 			if (reward != null) {
 				g.DrawSprite(
 					reward.Sprite,
@@ -122,7 +122,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		//-----------------------------------------------------------------------------
 
 		public bool IsLooted {
-			get { return Properties.GetBoolean("looted", false); }
+			get { return Properties.Get<bool>("looted", false); }
 		}
 	}
 }

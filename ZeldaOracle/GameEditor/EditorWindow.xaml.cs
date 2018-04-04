@@ -379,7 +379,7 @@ namespace ZeldaEditor {
 		private void OnViewPathsCommands(object sender, ExecutedRoutedEventArgs e) {
 			if (editorControl.EditingTileData is TileDataInstance) {
 				var tile = (TileDataInstance) editorControl.EditingTileData;
-				string oldPath = tile.Properties.GetString("path", "");
+				string oldPath = tile.Properties.Get<string>("path", "");
 				string newPath = TilePathEditor.ShowEditor(this,
 					editorControl, tile.Properties, "path");
 

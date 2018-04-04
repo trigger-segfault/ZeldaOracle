@@ -196,7 +196,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public string ID {
-			get { return properties.GetString("id", ""); }
+			get { return properties.Get<string>("id", ""); }
 		}
 		
 		public TileResetCondition ResetCondition {
@@ -248,7 +248,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		/// <summary>Gets the variables for this tile data.</summary>
-		public Variables Vars {
+		public Variables Variables {
 			get { return variables; }
 		}
 

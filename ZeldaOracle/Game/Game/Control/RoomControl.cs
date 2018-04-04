@@ -1113,13 +1113,13 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		/// <summary>Gets the variables for the room.</summary>
-		public Variables Vars {
-			get { return room.Vars; }
+		public Variables Variables {
+			get { return room.Variables; }
 		}
 
 		/// <summary>Gets the variables for the API Object.</summary>
 		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
-			get { return room.Vars; }
+			get { return room.Variables; }
 		}
 	}
 }

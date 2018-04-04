@@ -63,7 +63,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Point2I size = args.Properties.GetPoint("size", Point2I.One);
+			Point2I size = args.Properties.Get<Point2I>("size", Point2I.One);
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					Tile.DrawTileDataWithOffset(g, args, new Point2I(x, y) * GameSettings.TILE_SIZE);

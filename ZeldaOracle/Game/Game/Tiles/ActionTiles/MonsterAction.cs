@@ -61,6 +61,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				monster.SetPositionByCenter(Center);
 				monster.Properties = properties;
 				monster.Events = Events;
+				monster.Vars = Variables;
 				RoomControl.SpawnEntity(monster);
 			}
 		}
@@ -73,7 +74,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		/// <summary>Draws the action tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			ColorDefinitions colorDefinitions = new ColorDefinitions();
-			MonsterColor color = (MonsterColor) args.Properties.GetInteger("color", 0);
+			MonsterColor color = args.Properties.GetEnum("color", MonsterColor.Red);
 			switch (color) {
 			case MonsterColor.Red:
 				colorDefinitions.SetAll("red");

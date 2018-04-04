@@ -30,14 +30,14 @@ namespace ZeldaEditor.Undo {
 		}
 
 		public override void Undo(EditorControl editorControl) {
-			propertyObject.Properties.SetGeneric(propertyName, oldValue);
+			propertyObject.Properties.SetObject(propertyName, oldValue);
 			if (editorControl.PropertyGrid.PropertyObject == propertyObject) {
 				editorControl.PropertyGrid.Update();
 			}
 		}
 
 		public override void Redo(EditorControl editorControl) {
-			propertyObject.Properties.SetGeneric(propertyName, newValue);
+			propertyObject.Properties.SetObject(propertyName, newValue);
 			if (editorControl.PropertyGrid.PropertyObject == propertyObject) {
 				editorControl.PropertyGrid.Update();
 			}

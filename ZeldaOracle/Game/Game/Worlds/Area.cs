@@ -164,13 +164,13 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets or sets the ID for the area.</summary>
 		public string ID {
-			get { return properties.GetString("id", ""); }
+			get { return properties.Get<string>("id", ""); }
 			set { properties.Set("id", value); }
 		}
 
 		/// <summary>Gets or sets the readable name for the area.</summary>
 		public string Name {
-			get { return properties.GetString("name", ""); }
+			get { return properties.Get<string>("name", ""); }
 			set { properties.Set("name", value); }
 		}
 
@@ -198,7 +198,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		/// <summary>Gets the variables for this area.</summary>
-		public Variables Vars {
+		public Variables Variables {
 			get { return variables; }
 		}
 
@@ -245,37 +245,37 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		/// <summary>Gets or sets the level number of this dungeon. (Not zero-indexed).</summary>
 		public int DungeonLevel {
-			get { return properties.Get("dungeon_level", 0); }
+			get { return properties.Get<int>("dungeon_level", 0); }
 			set { properties.Set("dungeon_level", value); }
 		}
 
 		/// <summary>Gets or sets the number of small keys currently held.</summary>
 		public int SmallKeyCount {
-			get { return properties.GetInteger("small_keys", 0); }
+			get { return properties.Get<int>("small_keys", 0); }
 			set { properties.Set("small_keys", value); }
 		}
 
 		/// <summary>Gets or sets if the boss key has been obtained.</summary>
 		public bool HasBossKey {
-			get { return properties.GetBoolean("boss_key_obtained", false); }
+			get { return properties.Get<bool>("boss_key_obtained", false); }
 			set { properties.Set("boss_key_obtained", value); }
 		}
 
 		/// <summary>Gets or sets if the dungeon map has been obtained.</summary>
 		public bool HasMap {
-			get { return properties.GetBoolean("map_obtained", false); }
+			get { return properties.Get<bool>("map_obtained", false); }
 			set { properties.Set("map_obtained", value); }
 		}
 
 		/// <summary>Gets or sets if the compass has been obtained.</summary>
 		public bool HasCompass {
-			get { return properties.GetBoolean("compass_obtained", false); }
+			get { return properties.Get<bool>("compass_obtained", false); }
 			set { properties.Set("compass_obtained", value); }
 		}
 
 		/// <summary>Gets or sets if the area has been completed.</summary>
 		public bool IsCompleted {
-			get { return properties.GetBoolean("completed", false); }
+			get { return properties.Get<bool>("completed", false); }
 			set { properties.Set("completed", value); }
 		}
 

@@ -174,7 +174,7 @@ namespace ZeldaEditor.PropertiesEditor {
 						editorAttr = new EditorAttribute(editorType, editorType);
 					}
 				}
-				if (editorAttr == null && property.Type == VarType.Point) {
+				if (editorAttr == null && property.VarType == VarType.Point) {
 					Type editorType = typeof(Point2IPropertyEditor);
 					editorAttr = new EditorAttribute(editorType, editorType);
 				}

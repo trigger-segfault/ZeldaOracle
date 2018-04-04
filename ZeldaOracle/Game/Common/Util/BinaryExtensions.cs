@@ -34,6 +34,7 @@ namespace ZeldaOracle.Common.Util {
 		static BinaryExtensions() {
 			// Initialize the built-in generic readers
 			readers = new Dictionary<Type, GenericBinaryReader>();
+			AddReader<bool>(	(reader) => reader.ReadBoolean());
 			AddReader<byte>(	(reader) => reader.ReadByte());
 			AddReader<sbyte>(	(reader) => reader.ReadSByte());
 			AddReader<short>(	(reader) => reader.ReadInt16());
@@ -46,6 +47,7 @@ namespace ZeldaOracle.Common.Util {
 			AddReader<double>(	(reader) => reader.ReadDouble());
 			AddReader<decimal>(	(reader) => reader.ReadDecimal());
 			AddReader<char>(	(reader) => reader.ReadChar());
+			AddReader<string>(	(reader) => reader.ReadString());
 
 			AddReader<Point2I>(		(reader) => reader.ReadPoint2I());
 			AddReader<Vector2F>(	(reader) => reader.ReadVector2F());
@@ -57,6 +59,7 @@ namespace ZeldaOracle.Common.Util {
 
 			// Initialize the built-in generic writers
 			writers = new Dictionary<Type, GenericBinaryWriter>();
+			AddWriter<bool>(	(writer, x) => writer.Write((bool) x));
 			AddWriter<byte>(	(writer, x) => writer.Write((byte) x));
 			AddWriter<sbyte>(	(writer, x) => writer.Write((sbyte) x));
 			AddWriter<short>(	(writer, x) => writer.Write((short) x));
@@ -69,6 +72,7 @@ namespace ZeldaOracle.Common.Util {
 			AddWriter<double>(	(writer, x) => writer.Write((double) x));
 			AddWriter<decimal>(	(writer, x) => writer.Write((decimal) x));
 			AddWriter<char>(	(writer, x) => writer.Write((char) x));
+			AddWriter<string>(	(writer, x) => writer.Write((string) x));
 
 			AddWriter<Point2I>(		(writer, x) => writer.Write((Point2I) x));
 			AddWriter<Vector2F>(	(writer, x) => writer.Write((Vector2F) x));
@@ -139,7 +143,7 @@ namespace ZeldaOracle.Common.Util {
 			GenericBinaryReader readerFunc;
 			if (readers.TryGetValue(typeof(T), out readerFunc))
 				return (T) readerFunc(reader);
-			throw new ArithmeticException("Unsupported type for " +
+			throw new ArgumentException("Unsupported type for " +
 				"BinaryReader.ReadGeneric!");
 		}
 
@@ -148,7 +152,7 @@ namespace ZeldaOracle.Common.Util {
 			GenericBinaryReader readerFunc;
 			if (readers.TryGetValue(type, out readerFunc))
 				return readerFunc(reader);
-			throw new ArithmeticException("Unsupported type for " +
+			throw new ArgumentException("Unsupported type for " +
 				"BinaryReader.ReadGeneric!");
 		}
 
@@ -208,7 +212,7 @@ namespace ZeldaOracle.Common.Util {
 			if (writers.TryGetValue(typeof(T), out writerFunc))
 				writerFunc(writer, value);
 			else
-				throw new ArithmeticException("Unsupported type for " +
+				throw new ArgumentException("Unsupported type for " +
 					"BinaryWriter.WriteGeneric!");
 		}
 
@@ -218,7 +222,7 @@ namespace ZeldaOracle.Common.Util {
 			if (writers.TryGetValue(type, out writerFunc))
 				writerFunc(writer, value);
 			else
-				throw new ArithmeticException("Unsupported type for " +
+				throw new ArgumentException("Unsupported type for " +
 					"BinaryWriter.WriteGeneric!");
 		}
 

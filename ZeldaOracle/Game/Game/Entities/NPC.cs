@@ -122,7 +122,8 @@ namespace ZeldaOracle.Game.Entities {
 			Graphics.PlayAnimation(animationDefault);
 
 			sightDistance	= 2;
-			direction = Properties.Get<int>("direction", defaultDirection);
+			direction = Properties.Get<int>("direction", Direction.Down);
+			defaultDirection = direction;
 
 			Graphics.IsAnimatedWhenPaused	= flags.HasFlag(NPCFlags.AnimateOnTalk);
 			Graphics.SubStripIndex			= direction;
@@ -185,6 +186,13 @@ namespace ZeldaOracle.Game.Entities {
 		//	get { return defaultDirection; }
 		//	set { defaultDirection = value; }
 		//}
+
+		/// <summary>Gets or sets radius of the diamond shape of tiles where the NPC
+		/// will face  the player (excluding the center tile).</summary>
+		public int SightDistance {
+			get { return sightDistance; }
+			set { sightDistance = value; }
+		}
 
 		/// <summary>The message to display when talking.</summary>
 		public Message Message {

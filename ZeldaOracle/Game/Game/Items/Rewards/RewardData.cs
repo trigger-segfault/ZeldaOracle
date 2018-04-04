@@ -8,8 +8,10 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Items.Rewards {
+	/// <summary>A data structure for creating rewards in-game.</summary>
 	public class RewardData : BaseResourceData {
 
+		/// <summary>The sprite representing the reward.</summary>
 		private ISprite		sprite;
 
 

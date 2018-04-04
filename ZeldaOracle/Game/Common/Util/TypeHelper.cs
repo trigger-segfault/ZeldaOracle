@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -179,6 +180,25 @@ namespace ZeldaOracle.Common.Util {
 			if (type.IsValueType)
 				return Activator.CreateInstance(type);
 			return null;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Converting
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Converts the value to the specified type using the type's
+		/// type converter.</summary>
+		public static object ConvertFrom(Type type, object value) {
+			var converter = TypeDescriptor.GetConverter(type);
+			return converter.ConvertFrom(value);
+		}
+
+		/// <summary>Converts the value to the specified type using the value's
+		/// type converter.</summary>
+		public static object ConvertTo(Type type, object value) {
+			var converter = TypeDescriptor.GetConverter(value.GetType());
+			return converter.ConvertTo(value, type);
 		}
 	}
 }

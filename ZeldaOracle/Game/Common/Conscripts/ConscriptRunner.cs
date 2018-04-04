@@ -335,8 +335,9 @@ namespace ZeldaOracle.Common.Conscripts {
 				ThrowCommandParseError("Property with the name '" + name +
 					"' does not exist!");
 
-			object value = ParsePropertyValue(parameters.GetParam(1), property.Type);
-			properties.SetGeneric(name, value);
+			object value = ParsePropertyValue(parameters.GetParam(1), property.VarType,
+				property.ListType);
+			properties.SetObject(name, value);
 		}
 
 		/// <summary>Parses the value of the property from the command param.</summary>
@@ -344,7 +345,7 @@ namespace ZeldaOracle.Common.Conscripts {
 			ListType listType)
 		{
 			int count = param.ChildCount;
-			Type elementType = VarBase.VarTypeToType(varType);
+			Type elementType = Property.VarTypeToType(varType);
 			switch (listType) {
 			case ListType.Single: return ParsePropertyValue(param, varType);
 			case ListType.Array:
@@ -370,8 +371,8 @@ namespace ZeldaOracle.Common.Conscripts {
 				if (param.IsValidType(CommandParamType.String))
 					return param.StringValue; break;
 			case VarType.Integer:
-				if (param.IsValidType(CommandParamType.String))
-					return param.StringValue; break;
+				if (param.IsValidType(CommandParamType.Integer))
+					return param.IntValue; break;
 			case VarType.Float:
 				if (param.IsValidType(CommandParamType.Float))
 					return param.FloatValue; break;

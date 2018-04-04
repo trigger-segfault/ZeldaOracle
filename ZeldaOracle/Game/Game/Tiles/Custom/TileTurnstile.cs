@@ -114,7 +114,7 @@ namespace ZeldaOracle.Game.Tiles {
 			turnDirection	= -1;
 
 			// Setup based on the winding order.
-			windingOrder = (Properties.GetBoolean("clockwise", false) ?
+			windingOrder = (Properties.Get<bool>("clockwise", false) ?
 					WindingOrder.Clockwise : WindingOrder.CounterClockwise);
 
 			if (windingOrder == WindingOrder.Clockwise) {
@@ -194,8 +194,8 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			Tile.DrawTileData(g, args);
-			int substripIndex = args.Properties.GetInteger("substrip_index");
-			bool clockwise = args.Properties.GetBoolean("clockwise", false);
+			int substripIndex = args.Properties.Get<int>("substrip_index");
+			bool clockwise = args.Properties.Get<bool>("clockwise", false);
 			Animation arrowAnimation, turnstileAnimation;
 			if (clockwise) {
 				arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE;

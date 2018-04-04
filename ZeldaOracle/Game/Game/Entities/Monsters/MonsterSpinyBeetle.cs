@@ -90,7 +90,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			int swordLevel = -1;
 			if (GameControl.Inventory.ContainsItem("sword"))
 				swordLevel = GameControl.Inventory.GetItem("sword").Level;
-			int cuttableLevel = CoverProperties.GetInteger("cuttable_sword_level");
+			int cuttableLevel = CoverProperties.Get<int>("cuttable_sword_level");
 			if (CoverFlags.HasFlag(TileFlags.Cuttable) && swordLevel >= cuttableLevel) {
 				Interactions.SetReaction(InteractionType.Sword,			SenderReactions.Intercept,	MonsterReactions.DamageByLevel(1, 2, 3), BreakCover);
 				Interactions.SetReaction(InteractionType.SwordSpin,		MonsterReactions.Damage2,			BreakCover);

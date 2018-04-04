@@ -23,7 +23,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		/// <summary>Draws the action tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			Direction direction =
-				args.Properties.GetInteger("direction", Direction.Down);
+				args.Properties.Get<int>("direction", Direction.Down);
 			g.DrawSprite(
 				GameData.ANIM_TILE_PULL_HANDLE.GetSubstrip(direction.Index),
 				args.SpriteSettings,

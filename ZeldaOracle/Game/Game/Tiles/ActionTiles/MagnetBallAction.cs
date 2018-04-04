@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		protected override void Initialize() {
 			// Spawn the magnet ball entity
 			magnetBall = new MagnetBall();
-			magnetBall.Position = properties.GetPoint("position", (Point2I) Position);
+			magnetBall.Position = properties.Get<Point2I>("position", (Point2I) Position);
 			magnetBall.Properties = properties;
 			RoomControl.SpawnEntity(magnetBall);
 		}

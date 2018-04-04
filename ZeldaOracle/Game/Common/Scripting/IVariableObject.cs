@@ -9,12 +9,6 @@ namespace ZeldaOracle.Common.Scripting {
 	public interface IVariableObject {
 
 		/// <summary>Gets the collection of Zelda variables.</summary>
-		Variables Vars { get; }
-	}
-	/// <summary>An object contianing a collection of ZeldaAPI variables.</summary>
-	public interface IVariableObject2 {
-
-		/// <summary>Gets the collection of Zelda variables.</summary>
-		Variables2 Vars { get; }
+		Variables Variables { get; }
 	}
 }

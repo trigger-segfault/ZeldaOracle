@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting.Internal;
 
 namespace ZeldaOracle.Common.Scripting {
 	/// <summary>A collection of variables accessible in scripting.</summary>
-	public class Variables : ZeldaAPI.Variables {
+	[Serializable]
+	public class Variables : VarBaseCollection<Variable>, IEnumerable,
+		ZeldaAPI.Variables
+	{
+		/// <summary>The map of variables in the collection.</summary>
+		private Dictionary<string, Variable> map;
 		/// <summary>The object that holds these variables.</summary>
 		[NonSerialized]
 		private IVariableObject variableObject;
-		/// <summary>The variable map.</summary>
-		private Dictionary<string, Variable> map;
 
 
 		//-----------------------------------------------------------------------------
@@ -51,15 +55,27 @@ namespace ZeldaOracle.Common.Scripting {
 			// Copy the variable map
 			map.Clear();
 			foreach (Variable variable in copy.map.Values) {
-				Variable v      = new Variable(variable);
-				v.Variables     = this;
-				map[v.Name]     = v;
+				Variable v		= new Variable(variable);
+				v.Variables		= this;
+				map[v.Name]		= v;
 			}
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Basic accessors
+		// IEnumerable
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns an enumerator that iterates through a collection.</summary>
+		IEnumerator IEnumerable.GetEnumerator() {
+			foreach (Variable variable in map.Values) {
+				yield return variable;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Basic Accessors
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Get an enumerable list of all the variables.</summary>
@@ -99,14 +115,16 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Returns true if there exists a variable with the given name.</summary>
 		public bool Contains(string name) {
-			return (GetVariable(name) != null);
+			return map.ContainsKey(name);
 		}
 
 		/// <summary>Returns true if there exists a variable with the given name
 		/// and type.</summary>
-		public bool Contains(string name, VarType type) {
-			Variable v = GetVariable(name);
-			return (v != null && v.Type == type);
+		public bool Contains<T>(string name) {
+			Variable v;
+			if (map.TryGetValue(name, out v))
+				return v.FullType == typeof(T);
+			return false;
 		}
 
 
@@ -118,146 +136,14 @@ namespace ZeldaOracle.Common.Scripting {
 		/// equates to the given value.</summary>
 		public bool ContainsEquals(string name, object value) {
 			Variable v = GetVariable(name);
-			return (v != null && v.EqualsValue(value));
+			return (v?.EqualsValue(value) ?? false);
 		}
 
 		/// <summary>Return true if there exists a variable with the given name that
 		/// does not equate to the given value.</summary>
 		public bool ContainsNotEquals(string name, object value) {
 			Variable v = GetVariable(name);
-			return (v != null && !v.EqualsValue(value));
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Variable Value Accessors
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Get an enum variable value.</summary>
-		public E GetEnum<E>(string name) where E : struct {
-			Variable v = GetVariable(name);
-			if (v.Type == VarType.Integer)
-				return (E) Enum.ToObject(typeof(E), v.IntValue);
-			else if (v.Type == VarType.String)
-				return (E) Enum.Parse(typeof(E), v.StringValue);
-			else
-				throw new InvalidOperationException("Variable type does not support enums.");
-		}
-
-		/// <summary>Tries to get an enum variable value.</summary>
-		public E TryGetEnum<E>(string name) where E : struct {
-			Variable v = GetVariable(name);
-			if (v != null) {
-				try {
-					if (v.Type == VarType.Integer)
-						return (E) Enum.ToObject(typeof(E), v.IntValue);
-					else if (v.Type == VarType.String)
-						return (E) Enum.Parse(typeof(E), v.StringValue, true);
-					else
-						throw new InvalidOperationException("Variable type does not support enums.");
-				}
-				catch { }
-			}
-			return default(E);
-		}
-
-		/// <summary>Get a string variable value.</summary>
-		public string GetString(string name) {
-			return Get<string>(name);
-		}
-
-		/// <summary>Get an integer variable value.</summary>
-		public int GetInteger(string name) {
-			return Get<int>(name);
-		}
-
-		/// <summary>Get a float variable value.</summary>
-		public float GetFloat(string name) {
-			return Get<float>(name);
-		}
-
-		/// <summary>Get a boolean variable value.</summary>
-		public bool GetBoolean(string name) {
-			return Get<bool>(name);
-		}
-
-		/// <summary>Get a boolean variable value.</summary>
-		public Point2I GetPoint(string name) {
-			return Get<Point2I>(name);
-		}
-
-		/// <summary>Get a generic variable value.</summary>
-		public T Get<T>(string name) {
-			return (T) GetVariable(name).ObjectValue;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Property value access (with defaults)
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Get an enum variable value with a default value fallback.</summary>
-		public E GetEnum<E>(string name, E defaultValue) where E : struct {
-			Variable v = GetVariable(name);
-			if (v != null) {
-				if (v.Type == VarType.Integer)
-					return (E) Enum.ToObject(typeof(E), v.IntValue);
-				else if (v.Type == VarType.String)
-					return (E) Enum.Parse(typeof(E), v.StringValue, true);
-				else
-					throw new InvalidOperationException("Variable type does not support enums.");
-			}
-			return defaultValue;
-		}
-
-		/// <summary>Tries to get an enum variable value with a default value fallback.</summary>
-		public E TryGetEnum<E>(string name, E defaultValue) where E : struct {
-			Variable v = GetVariable(name);
-			if (v != null) {
-				try {
-					if (v.Type == VarType.Integer)
-						return (E) Enum.ToObject(typeof(E), v.IntValue);
-					else if (v.Type == VarType.String)
-						return (E) Enum.Parse(typeof(E), v.StringValue, true);
-					else
-						throw new InvalidOperationException("Variable type does not support enums.");
-				}
-				catch { }
-			}
-			return defaultValue;
-		}
-
-		/// <summary>Get a string variable value with a default value fallback.</summary>
-		public string GetString(string name, string defaultValue) {
-			return Get<string>(name, defaultValue);
-		}
-
-		/// <summary>Get an integer variable value with a default value fallback.</summary>
-		public int GetInteger(string name, int defaultValue) {
-			return Get<int>(name, defaultValue);
-		}
-
-		/// <summary>Get a float variable value with a default value fallback.</summary>
-		public float GetFloat(string name, float defaultValue) {
-			return Get<float>(name, defaultValue);
-		}
-
-		/// <summary>Get a boolean variable value with a default value fallback.</summary>
-		public bool GetBoolean(string name, bool defaultValue) {
-			return Get<bool>(name, defaultValue);
-		}
-
-		/// <summary>Get a point variable value with a default value fallback.</summary>
-		public Point2I GetPoint(string name, Point2I defaultValue) {
-			return Get<Point2I>(name, defaultValue);
-		}
-
-		/// <summary>Get a generic variable value with a default value fallback.</summary>
-		public T Get<T>(string name, T defaultValue) {
-			Variable v = GetVariable(name);
-			if (v != null)
-				return (T) v.ObjectValue;
-			return defaultValue;
+			return (!v?.EqualsValue(value) ?? false);
 		}
 
 
@@ -301,163 +187,164 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 
 		/// <summary>Merge these variables with another.</summary>
-		public void SetAll(Variables other) {
-			foreach (Variable otherVariable in other.map.Values)
-				SetVariable(otherVariable.Name, otherVariable.ObjectValue);
+		public void SetAll(Variables others) {
+			foreach (Variable other in others.map.Values)
+				SetVariable(other.Name, other.ObjectValue);
+		}
+
+		/// <summary>Used to restore variables that were aquired from the clipboard.</summary>
+		public void RestoreFromClipboard(IVariableObject variableObject) {
+			this.variableObject = variableObject;
+			foreach (Variable variable in map.Values)
+				variable.Variables = this;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Property Setters
+		// Variable Mutators (API)
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Sets the variable's value as an enum.</summary>
-		public Variable SetEnum<E>(string name, E value,
-			VarType defaultType = VarType.String) where E : struct
-		{
-			Variable v = GetVariable(name);
-			VarType type = defaultType;
-			if (v != null)
-				type = v.Type;
-			if (type == VarType.Integer)
-				return SetVariable(name, (int) (object) value);
-			else if (type == VarType.String)
-				return SetVariable(name, value.ToString());
-			else
-				throw new InvalidOperationException("Variable type does not support enums.");
-		}
-		
-		/// <summary>Sets the variable's value as an integer enum.</summary>
-		public Variable SetEnumInt<E>(string name, E value) where E : struct {
-			Variable v = GetVariable(name);
-			if (v == null || v.Type == VarType.Integer)
-				return SetVariable(name, (int) (object) value);
-			else
-				throw new InvalidOperationException("Variable type is not an integer.");
-		}
-		
-		/// <summary>Sets the variable's value as a string enum.</summary>
-		public Variable SetEnumStr<E>(string name, E value) where E : struct {
-			Variable v = GetVariable(name);
-			if (v == null || v.Type == VarType.String)
-				return SetVariable(name, value.ToString());
-			else
-				throw new InvalidOperationException("Variable type is not a string.");
-		}
-
-		/// <summary>Sets the variable's string value.</summary>
-		public Variable Set(string name, string value) {
-			return SetVariable(name, value);
-		}
-
-		/// <summary>Sets the variable's integer value.</summary>
-		public Variable Set(string name, int value) {
-			return SetVariable(name, value);
-		}
-
-		/// <summary>Sets the variable's float value.</summary>
-		public Variable Set(string name, float value) {
-			return SetVariable(name, value);
-		}
-
-		/// <summary>Sets the variable's boolean value.</summary>
-		public Variable Set(string name, bool value) {
-			return SetVariable(name, value);
-		}
-
-		/// <summary>Sets the variable's point value.</summary>
-		public Variable Set(string name, Point2I value) {
-			return SetVariable(name, value);
-		}
+		// Single ---------------------------------------------------------------------
 
 		/// <summary>Sets the variable's object value.</summary>
-		public Variable SetGeneric(string name, object value) {
-			return SetVariable(name, value);
+		void ZeldaAPI.Variables.SetObject(string name, object value) {
+			SetObject(name, value);
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Property API Setters
-		//-----------------------------------------------------------------------------
+		/// <summary>Sets the variable's generic value.</summary>
+		void ZeldaAPI.Variables.Set<T>(string name, T value) {
+			Set<T>(name, value);
+		}
 
 		/// <summary>Sets the variable's value as an enum.</summary>
-		void ZeldaAPI.Variables.SetEnum<E>(string name, E value,
-			VarType defaultType)
-		{
-			Variable v = GetVariable(name);
-			VarType type = defaultType;
-			if (v != null)
-				type = v.Type;
-			if (type == VarType.Integer)
-				SetVariable(name, (int) (object) value);
-			else if (type == VarType.String)
-				SetVariable(name, value.ToString());
-			else
-				throw new InvalidOperationException("Variable type does not support enums.");
+		void ZeldaAPI.Variables.SetEnum<E>(string name, E value) {
+			SetEnum<E>(name, value);
 		}
 
 		/// <summary>Sets the variable's value as an integer enum.</summary>
 		void ZeldaAPI.Variables.SetEnumInt<E>(string name, E value) {
-			Variable v = GetVariable(name);
-			if (v == null || v.Type == VarType.Integer)
-				SetVariable(name, (int) (object) value);
-			else
-				throw new InvalidOperationException("Variable type is not an integer.");
+			SetEnumInt<E>(name, value);
 		}
 
 		/// <summary>Sets the variable's value as a string enum.</summary>
 		void ZeldaAPI.Variables.SetEnumStr<E>(string name, E value) {
-			Variable v = GetVariable(name);
-			if (v == null || v.Type == VarType.String)
-				SetVariable(name, value.ToString());
-			else
-				throw new InvalidOperationException("Variable type is not a string.");
+			SetEnumStr<E>(name, value);
+		}
+
+		// Indexers -------------------------------------------------------------------
+
+		/// <summary>Sets the variable's object value at the specified index.</summary>
+		void ZeldaAPI.Variables.SetObjectAt(string name, int index, object value) {
+			SetObjectAt(name, index, value);
+		}
+
+		/// <summary>Sets the variable's generic value at the specified index.</summary>
+		void ZeldaAPI.Variables.SetAt<T>(string name, int index, T value) {
+			SetAt<T>(name, index, value);
+		}
+
+		/// <summary>Sets the variable's value at the specified index as an enum.</summary>
+		void ZeldaAPI.Variables.SetEnumAt<E>(string name, int index, E value) {
+			SetEnumAt<E>(name, index, value);
+		}
+
+		// Adding ---------------------------------------------------------------------
+
+		/// <summary>Adds an object value to the variable list</summary>
+		void ZeldaAPI.Variables.AddObjectAt(string name, object value) {
+			AddObjectAt(name, value);
+		}
+
+		/// <summary>Adds a generic value to the variable list.</summary>
+		void ZeldaAPI.Variables.AddAt<T>(string name, T value) {
+			AddAt<T>(name, value);
+		}
+
+		/// <summary>Adds a value to the variable list as an enum.</summary>
+		void ZeldaAPI.Variables.AddEnumAt<E>(string name, E value) {
+			AddEnumAt<E>(name, value);
+		}
+
+		// Insertion ------------------------------------------------------------------
+
+		/// <summary>Inserts an object value into the variable list.</summary>
+		void ZeldaAPI.Variables.InsertObjectAt(string name, int index, object value) {
+			InsertObjectAt(name, index, value);
+		}
+
+		/// <summary>Inserts a generic value into the variable list.</summary>
+		void ZeldaAPI.Variables.InsertAt<T>(string name, int index, T value) {
+			InsertAt<T>(name, index, value);
+		}
+
+		/// <summary>Inserts a value into the variable list as an enum.</summary>
+		void ZeldaAPI.Variables.InsertEnumAt<E>(string name, int index, E value) {
+			InsertEnumAt<E>(name, index, value);
+		}
+
+		// Removing -------------------------------------------------------------------
+
+		/// <summary>Removes the element from the variable list.</summary>
+		void ZeldaAPI.Variables.RemoveAt(string name, int index) {
+			RemoveAt(name, index);
+		}
+
+		/// <summary>Clears all elements from the variable list.</summary>
+		void ZeldaAPI.Variables.ClearList(string name) {
+			ClearList(name);
+		}
+
+		// Enumerables ----------------------------------------------------------------
+
+		/// <summary>Sets the variable as a basic array.</summary>
+		void ZeldaAPI.Variables.SetObjectArray(string name, Array array) {
+			SetObjectArray(name, array);
+		}
+
+		/// <summary>Sets the variable as a generic array.</summary>
+		void ZeldaAPI.Variables.SetArray<T>(string name, T[] array) {
+			SetArray<T>(name, array);
+		}
+
+		/// <summary>Sets the variable as a generic array length.</summary>
+		void ZeldaAPI.Variables.SetArray<T>(string name, int length) {
+			SetArray<T>(name, length);
+		}
+
+		/// <summary>Sets the variable as a basic list.</summary>
+		void ZeldaAPI.Variables.SetObjectList(string name, IList list) {
+			SetObjectList(name, list);
+		}
+
+		/// <summary>Sets the variable as a generic list.</summary>
+		void ZeldaAPI.Variables.SetList<T>(string name, List<T> list) {
+			SetList<T>(name, list);
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Property Adders (Built-In)
+		// Variable Mutators (Built-In)
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Adds a built-in variable as an enum.</summary>
-		public Variable AddBuiltInEnum<E>(string name, E value,
-			VarType type = VarType.String) where E : struct
-		{
-			if (type == VarType.Integer)
-				return AddBuiltInVariable(name, (int) (object) value);
-			else if (type == VarType.String)
-				return AddBuiltInVariable(name, value.ToString());
-			else
-				throw new InvalidOperationException("Variable type does not support enums.");
+		/// <summary>Sets the specified var as an string-based enum.</summary>
+		public Variable AddBuiltInEnumStr<E>(string name, E value) where E : struct {
+			return AddBuiltInVariable(name,
+				Variable.FromEnum<E>(VarType.String, value));
 		}
 
-		/// <summary>Adds a built-in variable as a string.</summary>
-		public Variable AddBuiltIn(string name, string value) {
-			return AddBuiltInVariable(name, value);
-		}
-
-		/// <summary>Adds a built-in variable as an integer.</summary>
-		public Variable AddBuiltIn(string name, int value) {
-			return AddBuiltInVariable(name, value);
-		}
-
-		/// <summary>Adds a built-in variable as a float.</summary>
-		public Variable AddBuiltIn(string name, float value) {
-			return AddBuiltInVariable(name, value);
-		}
-
-		/// <summary>Adds a built-in variable as a boolean.</summary>
-		public Variable AddBuiltIn(string name, bool value) {
-			return AddBuiltInVariable(name, value);
-		}
-
-		/// <summary>Adds a built-in variable as a point.</summary>
-		public Variable AddBuiltIn(string name, Point2I value) {
-			return AddBuiltInVariable(name, value);
+		/// <summary>Sets the specified var as an integer-based enum.</summary>
+		public Variable AddBuiltInEnumInt<E>(string name, E value) where E : struct {
+			return AddBuiltInVariable(name,
+				Variable.FromEnum<E>(VarType.Integer, value));
 		}
 
 		/// <summary>Adds a built-in variable as a generic value.</summary>
-		public Variable AddBuiltInGeneric(string name, object value) {
+		public Variable AddBuiltIn<T>(string name, T value) {
+			return AddBuiltInVariable(name, value);
+		}
+
+		/// <summary>Adds a built-in variable as an object value.</summary>
+		public Variable AddBuiltInObject(string name, object value) {
 			return AddBuiltInVariable(name, value);
 		}
 
@@ -468,17 +355,19 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Sets a variable's value, creating it if it doesn't already exist.
 		/// This can modify an existing variable or create a new variable.</summary>
+		/// <param name="builtIn">This value is only true during the creation of
+		/// a built-in variable. This value is false when setting the variable.</param>
 		private Variable SetVariable(string name, object value, bool builtIn = false) {
-			// Set the variable value.
+			// Set the variable value
 			if (map.ContainsKey(name) && !builtIn) {
-				// Set an existing variable's value.
+				// Set an existing variable's value
 				Variable v = map[name];
 				v.ObjectValue = value;
 				return v;
 			}
 			else {
-				// Create a new variable and set the value.
-				Variable v = Variable.Create(name, value, builtIn);
+				// Create a new variable and set the value
+				Variable v = new Variable(name, value, builtIn);
 				v.Variables = this;
 				map[name] = v;
 				return v;
@@ -487,8 +376,8 @@ namespace ZeldaOracle.Common.Scripting {
 
 		/// <summary>Adds a new built-in variable.</summary>
 		private Variable AddBuiltInVariable(string name, object value) {
-			// Create a new variable and set the value.
-			Variable v = Variable.Create(name, value, true);
+			// Create a new variable and set the value
+			Variable v = new Variable(name, value, true);
 			v.Variables = this;
 			map.Add(name, v);
 			return v;
@@ -499,12 +388,44 @@ namespace ZeldaOracle.Common.Scripting {
 		// Debug Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Writes all variables and their values to the console.</summary>
+		/// <summary>Prints only the variables contained within this collection.</summary>
 		public void Print() {
-			foreach (Variable variable in map.Values) {
-				Console.WriteLine(variable);
+			foreach (Variable variable in GetVariables()) {
+				Console.WriteLine(variable.ToString());
 			}
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the var.</summary>
+		protected override Variable GetVar(string name) {
+			Variable v;
+			map.TryGetValue(name, out v);
+			return v;
+		}
+
+		/// <summary>Sets the var.</summary>
+		protected override Variable SetVar(string name, object value) {
+			Variable v;
+			if (!map.TryGetValue(name, out v)) {
+				v = new Variable(name, value);
+				v.Variables = this;
+				map.Add(name, v);
+			}
+			return v;
+		}
+
+		/*protected override Variable SetVarAt(string name, int index, object value) {
+			Variable v;
+			if (map.TryGetValue(name, out v)) {
+				v[index] = value;
+				return v;
+			}
+			throw new Exception("Var '" + name + "' does not exist!");
+		}*/
 
 
 		//-----------------------------------------------------------------------------

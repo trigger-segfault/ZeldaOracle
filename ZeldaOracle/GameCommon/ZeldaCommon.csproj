@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Converters\AngleConverter.cs" />
+    <Compile Include="Common\Converters\DirectionConverter.cs" />
     <Compile Include="Common\Converters\Point2IConverter.cs" />
     <Compile Include="Common\Converters\Vector2FConverter.cs" />
     <Compile Include="Common\Geometry\Align.cs" />

@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			bool switchState = args.Properties.GetBoolean("switch_state", false);
+			bool switchState = args.Properties.Get<bool>("switch_state", false);
 			Tile.DrawTileDataIndex(g, args, switchState ? 1 : 0);
 		}
 

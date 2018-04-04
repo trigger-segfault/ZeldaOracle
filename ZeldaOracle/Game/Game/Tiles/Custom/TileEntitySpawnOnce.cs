@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public virtual bool CanSpawn {
-			get { return RoomControl.RoomNumber != Properties.GetInteger("last_room_number", -1); }
+			get { return RoomControl.RoomNumber != Properties.Get<int>("last_room_number", -1); }
 			private set { Properties.Set("last_room_number", RoomControl.RoomNumber); }
 		}
 

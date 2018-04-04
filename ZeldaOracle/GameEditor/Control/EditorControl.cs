@@ -108,7 +108,6 @@ namespace ZeldaEditor.Control {
 		private int             roomSpacing;
 		private int             currentLayer;
 		private int             currentToolIndex;
-		private bool            highlightMouseTile;
 		private Tileset         selectedTileset;
 		private Point2I         selectedTilesetLocation;
 		private BaseTileData    selectedTileData;
@@ -155,7 +154,6 @@ namespace ZeldaEditor.Control {
 			showModified			= false;
 			showActions				= false;
 			showShared				= true;
-			highlightMouseTile		= true;
 			playerPlaceMode			= false;
 			startLocationMode		= false;
 			showStartLocation		= true;

@@ -143,12 +143,12 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			int spriteIndex = args.Properties.Get<int>("sprite_index", 0);
 			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
 			if (sprite is Animation) {
 				int substripIndex = ((int)args.Time / 15) % 8;
 				if (substripIndex == -1)
-					substripIndex = args.Properties.GetInteger("substrip_index", 0);
+					substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {

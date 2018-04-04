@@ -124,6 +124,7 @@ namespace ZeldaOracle.Game.Worlds {
 		// Property/Event objects
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the collection of property objects in the container.</summary>
 		public IEnumerable<IPropertyObject> GetPropertyObjects() {
 			yield return this;
 			foreach (Room room in rooms) {
@@ -133,6 +134,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets the collection of event objects in the container.</summary>
 		public IEnumerable<ITriggerObject> GetEventObjects() {
 			yield return this;
 			for (int x = 0; x < Width; x++) {
@@ -145,13 +147,13 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Gets the collection of variable objects in the container.</summary>
 		public IEnumerable<IVariableObject> GetVariableObjects() {
 			yield return this;
 			foreach (Room room in rooms) {
-				yield return room;
-				/*foreach (IVariableObject variableObject in room.GetVariableObjects()) {
+				foreach (IVariableObject variableObject in room.GetVariableObjects()) {
 					yield return variableObject;
-				}*/
+				}
 			}
 		}
 
@@ -608,7 +610,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		/// <summary>Gets the variables for the level.</summary>
-		public Variables Vars {
+		public Variables Variables {
 			get { return variables; }
 		}
 
@@ -630,14 +632,14 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets or sets the ID of the level.</summary>
 		public string ID {
-			get { return properties.GetString("id"); }
+			get { return properties.Get<string>("id"); }
 			set { properties.Set("id", value); }
 		}
 
 		/// <summary>Gets or sets the area for the level.</summary>
 		public Area Area {
 			get {
-				Area area = world.GetArea(properties.GetString("area", ""));
+				Area area = world.GetArea(properties.Get<string>("area", ""));
 				return area ?? world.DefaultArea;
 			}
 			set {
@@ -650,14 +652,14 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets or sets the area ID for the level.</summary>
 		public string AreaID {
-			get { return properties.GetString("area", ""); }
+			get { return properties.Get<string>("area", ""); }
 			set { properties.Set("area", value); }
 		}
 
 		/// <summary>Gets or sets the parent level that this level shares
 		/// certain settings with like room clearing.</summary>
 		public Level ParentLevel {
-			get { return world.GetLevel(properties.GetString("parent_level", "")); }
+			get { return world.GetLevel(properties.Get<string>("parent_level", "")); }
 			set {
 				if (value == null)
 					properties.Set("parent_level", "");
@@ -679,7 +681,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets or sets the level connected above this level.</summary>
 		public Level ConnectedLevelAbove {
-			get { return world.GetLevel(properties.GetString("connected_level_above", "")); }
+			get { return world.GetLevel(properties.Get<string>("connected_level_above", "")); }
 			set {
 				if (value == null)
 					properties.Set("connected_level_above", "");
@@ -690,7 +692,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets or sets the level connected below this level.</summary>
 		public Level ConnectedLevelBelow {
-			get { return world.GetLevel(properties.GetString("connected_level_below", "")); }
+			get { return world.GetLevel(properties.Get<string>("connected_level_below", "")); }
 			set {
 				if (value == null)
 					properties.Set("connected_level_below", "");
@@ -702,13 +704,13 @@ namespace ZeldaOracle.Game.Worlds {
 		/// <summary>Gets or sets the floor number of this level.
 		/// Used for dungeon maps.</summary>
 		public int FloorNumber {
-			get { return properties.GetInteger("floor_number", 0); }
+			get { return properties.Get<int>("floor_number", 0); }
 			set { properties.Set("floor_number", value); }
 		}
 		
 		/// <summary>Gets or sets if the level has been discovered.</summary>
 		public bool IsDiscovered {
-			get { return properties.GetBoolean("discovered", false); }
+			get { return properties.Get<bool>("discovered", false); }
 			set { properties.Set("discovered", value); }
 		}
 

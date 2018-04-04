@@ -224,6 +224,8 @@ namespace ZeldaOracle.Game.Items {
 			item.holdType		= data.HoldType;
 			item.levelUpAmmo	= data.LevelUpAmmo;
 
+			data.Properties.Print();
+
 			return item;
 		}
 

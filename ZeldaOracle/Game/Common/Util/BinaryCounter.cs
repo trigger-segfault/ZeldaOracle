@@ -312,7 +312,10 @@ namespace ZeldaOracle.Common.Util {
 
 		/// <summary>Gets the size as the numeric type T.</summary>
 		public T Size {
-			get { return (T) Convert.ChangeType(endPosition - ValueSize - startPosition, typeof(T)); }
+			get {
+				return (T) Convert.ChangeType(
+					endPosition - ValueSize - startPosition, typeof(T));
+			}
 		}
 
 		/// <summary>Gets or sets the stored count value.</summary>

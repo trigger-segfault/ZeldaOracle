@@ -80,7 +80,7 @@ namespace ZeldaOracle.Game.Tiles {
 			base.OnInitialize();
 			
 			// Sync color with area
-			syncWithArea = Properties.GetBoolean("sync_with_area", false);
+			syncWithArea = Properties.Get<bool>("sync_with_area", false);
 			if (syncWithArea && RoomControl.Area != null) {
 				SetSwitchState(RoomControl.Area.ColorSwitchColor == PuzzleColor.Red);
 			}
@@ -93,8 +93,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			bool syncWithArea = args.Properties.GetBoolean("sync_with_area", false);
-			bool switchState = args.Properties.GetBoolean("switch_state", false);
+			bool syncWithArea = args.Properties.Get<bool>("sync_with_area", false);
+			bool switchState = args.Properties.Get<bool>("switch_state", false);
 			if (syncWithArea && args.Level != null) {
 				Area area = args.Level.Area;
 				if (area != null)

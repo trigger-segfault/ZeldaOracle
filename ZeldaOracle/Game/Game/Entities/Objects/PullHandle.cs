@@ -128,7 +128,7 @@ namespace ZeldaOracle.Game.Entities.Objects {
 
 			startPosition = position;
 
-			direction		= Properties.GetInteger("direction", Direction.Down);
+			direction		= Properties.Get<int>("direction", Direction.Down);
 			extendDistance	= 0.0f;
 			isBeingPulled	= false;
 

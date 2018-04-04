@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		//-----------------------------------------------------------------------------
 
 		public Direction Direction {
-			get { return Properties.GetInteger("direction", Direction.Down); }
+			get { return Properties.Get<int>("direction", Direction.Down); }
 		}
 
 

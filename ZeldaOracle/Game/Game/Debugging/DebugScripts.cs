@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Debugging {
 
 
 			// Get the shopkeeper
-			Unit actor = Functions.Unit.UnitByID("shopkeeper");
+			/*Unit actor = Functions.Unit.UnitByID("shopkeeper");
 			if (actor == null)
 				return;
 
@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Debugging {
 			Actions.Unit.MoveInDirection(actor, Direction.Up, 32, 0.5f).Wait();
 			Actions.Unit.MakeUnitFaceDirection(actor, Direction.Right);
 
-			Actions.General.EndCutscene();
+			Actions.General.EndCutscene();*/
 
 			//Actions.General.BeginCutscene();
 			//Actions.General.Wait(30);

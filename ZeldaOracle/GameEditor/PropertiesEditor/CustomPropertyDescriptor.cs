@@ -80,7 +80,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		public override void SetValue(object component, object value) {
 			// Set the appropriate value.
 			Property property = Property;
-			modifiedProperties.SetGeneric(propertyName, value);
+			modifiedProperties.SetObject(propertyName, value);
 		}
 
 
@@ -118,7 +118,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		public override Type PropertyType {
-			get { return Property.PropertyTypeToType(Property.Type); }
+			get { return Property.FullType; }
 		}
 
 

@@ -404,7 +404,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			pauseTimer		= 0;
 			isShooting		= false;
 			
-			Color = (MonsterColor) Properties.GetInteger("color", (int) Color);
+			Color = (MonsterColor) Properties.Get<int>("color", (int) Color);
 
 			FaceRandomDirection();
 		}

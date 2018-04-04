@@ -104,7 +104,7 @@ namespace ZeldaOracle.Common.Conscripts {
 							throw ex;
 						}
 						catch (Exception ex) {
-							throw new ScriptReaderException(ex.Message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, true, ex.StackTrace);
+							throw new ScriptReaderException(ex.Message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, true, ex.StackTrace, ex);
 						}
 						return true;
 					}

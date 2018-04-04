@@ -140,7 +140,7 @@ namespace ZeldaOracle.Game.Tiles {
 					args.Color);
 			}*/
 			DrawTileDataIndex(g, args, (int) orientation);
-			if (args.Properties.GetBoolean("minecart", false)) {
+			if (args.Properties.Get<bool>("minecart", false)) {
 				if (orientation.HasDirection(Direction.Left) || orientation.HasDirection(Direction.Right))
 					g.DrawSprite(GameData.SPR_MINECART_HORIZONTAL, args.SpriteSettings, args.Position, args.Color);
 				else
@@ -175,7 +175,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool SpawnsMinecart {
-			get { return Properties.GetBoolean("minecart", false); }
+			get { return Properties.Get<bool>("minecart", false); }
 			set { Properties.Set("minecart", value); }
 		}
 

@@ -146,7 +146,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Gets or sets the size of the tile in tiles.</summary>
 		public override Point2I TileSize {
 			get {
-				return GMath.Max(Point2I.One, properties.GetPoint("size",
+				return GMath.Max(Point2I.One, properties.Get<Point2I>("size",
 					Point2I.One));
 			}
 			set { properties.Set("size", value); }
@@ -224,8 +224,8 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileSpawnOptions SpawnOptions {
 			get {
 				return new TileSpawnOptions() {
-					PoofEffect = properties.GetBoolean("spawn_poof_effect", false),
-					SpawnDelayAfterPoof = properties.GetInteger("spawn_delay_after_poof", 31),
+					PoofEffect = properties.Get<bool>("spawn_poof_effect", false),
+					SpawnDelayAfterPoof = properties.Get<int>("spawn_delay_after_poof", 31),
 				};
 			}
 		}
@@ -240,12 +240,12 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Angle ConveyorAngle {
-			get { return properties.GetInteger("conveyor_angle", -1); }
+			get { return properties.Get<int>("conveyor_angle", -1); }
 			set { properties.Set("conveyor_angle", value); }
 		}
 
 		public float ConveyorSpeed {
-			get { return properties.GetFloat("conveyor_speed", 0.0f); }
+			get { return properties.Get<float>("conveyor_speed", 0.0f); }
 			set { properties.Set("conveyor_speed", value); }
 		}
 
@@ -256,8 +256,8 @@ namespace ZeldaOracle.Game.Tiles {
 		public Rectangle2I HurtArea {
 			get {
 				return new Rectangle2I(
-					properties.GetPoint("hurt_area_point", new Point2I(-1, -1)),
-					properties.GetPoint("hurt_area_size", new Point2I(18, 18)));
+					properties.Get<Point2I>("hurt_area_point", new Point2I(-1, -1)),
+					properties.Get<Point2I>("hurt_area_size", new Point2I(18, 18)));
 			}
 			set {
 				properties.Set("hurt_area_point", value.Point);
@@ -266,7 +266,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public int HurtDamage {
-			get { return properties.GetInteger("hurt_damage", 0); }
+			get { return properties.Get<int>("hurt_damage", 0); }
 			set { properties.Set("hurt_damage", value); }
 		}
 

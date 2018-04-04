@@ -23,8 +23,9 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Constructs the script reader exception.</summary>
 		public ScriptReaderException(string message, string fileName, string line,
-			int lineNumber, int columnNumber, bool showCaret, string scriptStackTrace = "") :
-			base(message)
+			int lineNumber, int columnNumber, bool showCaret, string scriptStackTrace = "",
+			Exception innerException = null) :
+			base(message, innerException)
 		{
 			this.fileName			= fileName;
 			this.line				= line;

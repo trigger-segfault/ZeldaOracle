@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public override void OnSeedHit(SeedType seedType, SeedEntity seed) {
-			if (seedType == SeedType.Ember && !Properties.GetBoolean("lit", false)) {
+			if (seedType == SeedType.Ember && !Properties.Get<bool>("lit", false)) {
 				Light();
 				// TODO: Should this sound be played in TileLantern.Light() instead?
 				AudioSystem.PlaySound(GameData.SOUND_FIRE);
@@ -70,7 +70,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			bool lit = args.Properties.GetBoolean("lit", false);
+			bool lit = args.Properties.Get<bool>("lit", false);
 			Tile.DrawTileDataIndex(g, args, lit ? 0 : 1);
 		}
 
@@ -93,7 +93,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public bool IsLit {
-			get { return Properties.GetBoolean("lit"); }
+			get { return Properties.Get<bool>("lit"); }
 			set { Properties.Set("lit", value); }
 		}
 	}

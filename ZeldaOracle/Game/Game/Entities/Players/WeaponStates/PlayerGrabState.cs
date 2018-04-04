@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		/// <summary>Attempt to pickup a tile.</summary>
 		private bool AttemptPickup(Tile tile) {
-			int minLevel = tile.Properties.GetInteger(
+			int minLevel = tile.Properties.Get<int>(
 				"pickupable_bracelet_level", Item.Level1);
 			Item item = player.Inventory.GetItem("bracelet");
 

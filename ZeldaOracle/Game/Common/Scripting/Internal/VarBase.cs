@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Util;
 
-namespace ZeldaOracle.Common.Scripting {
+namespace ZeldaOracle.Common.Scripting.Internal {
 
 	public class UnsupportedVarTypeException : Exception {
 
@@ -15,7 +16,7 @@ namespace ZeldaOracle.Common.Scripting {
 	}
 
 	[Serializable]
-	public abstract class VarBase {
+	public abstract class VarBase : IEnumerable {
 
 		/// <summary>The name of the var.</summary>
 		private string name;
@@ -25,7 +26,6 @@ namespace ZeldaOracle.Common.Scripting {
 		private ListType listType;
 		/// <summary>The object value of the var.</summary>
 		private object objectValue;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -38,12 +38,18 @@ namespace ZeldaOracle.Common.Scripting {
 			this.name		= name;
 			this.varType	= varType;
 			this.listType	= listType;
+			if (varType == VarType.Custom)
+				throw new UnsupportedVarTypeException("Var type 'Custom'" +
+					"' is not supported!");
 			objectValue		= CreateInstance(varType, listType, length);
 		}
 		
 		/// <summary>Constructs a var base of the specified type.</summary>
 		protected VarBase(string name, Type type, int length = 0) {
 			this.name		= name;
+			if (!IsSupportedType(type))
+				throw new UnsupportedVarTypeException("Var type '" + type.Name +
+					"' is not supported!");
 			varType			= TypeToVarType(type, out listType);
 			objectValue		= CreateInstance(varType, listType, length);
 		}
@@ -51,8 +57,17 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Constructs a var base with the specified value.</summary>
 		protected VarBase(string name, object value) {
 			this.name		= name;
-			varType			= TypeToVarType(value.GetType(), out listType);
-			objectValue		= value;
+			Type type		= value.GetType();
+			if (!IsSupportedType(type))
+				throw new UnsupportedVarTypeException("Var type '" + type.Name +
+					"' is not supported!");
+			varType			= TypeToVarType(type, out listType);
+			if (NeedsIntCasting(type))
+				objectValue = Convert.ToInt32(value);
+			else if (NeedsFloatCasting(type))
+				objectValue = Convert.ToSingle(value);
+			else
+				objectValue = value;
 		}
 
 		/// <summary>Constructs a copy of the var base.</summary>
@@ -62,7 +77,50 @@ namespace ZeldaOracle.Common.Scripting {
 			listType		= copy.listType;
 			objectValue		= copy.objectValue;
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// IEnumerable
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns an enumerator that iterates through a collection.</summary>
+		IEnumerator IEnumerable.GetEnumerator() {
+			foreach (object value in EnumerableValue) {
+				yield return value;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Creates a string representation of the var.</summary>
+		public override string ToString() {
+			string str = name + " = ";
+			if (IsEnumerable) {
+				str += "{";
+				bool first = true;
+				foreach (object obj in EnumerableValue) {
+					if (!first)	str += ", ";
+					else		first = false;
+
+					if (varType == VarType.String)
+						str += "\"" + ((string) obj) + "\"";
+					else
+						str += obj.ToString();
+				}
+				str += "}";
+			}
+			else {
+				if (varType == VarType.String)
+					str += "\"" + ((string) objectValue) + "\"";
+				else
+					str += objectValue.ToString();
+			}
+			return str;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Indexers
@@ -73,10 +131,8 @@ namespace ZeldaOracle.Common.Scripting {
 			get {
 				switch (listType) {
 				case ListType.Single:
-					if (index != 0)
-						throw new IndexOutOfRangeException("Index must be 0 for a " +
-							"singular var type!");
-					return objectValue;
+					throw new InvalidOperationException("Cannot use indexer for a non-" +
+						"enumerable var type!");
 				case ListType.Array:
 					return ((Array) objectValue).GetValue(index);
 				case ListType.List:
@@ -85,12 +141,16 @@ namespace ZeldaOracle.Common.Scripting {
 				}
 			}
 			set {
+				Type type = value.GetType();
+				if (NeedsIntCasting(type))
+					value = Convert.ToInt32(value);
+				else if (NeedsFloatCasting(type))
+					value = Convert.ToSingle(value);
+
 				switch (listType) {
 				case ListType.Single:
-					if (index != 0)
-						throw new IndexOutOfRangeException("Index must be 0 for a " +
-							"singular var type!");
-					objectValue = value; break;
+					throw new InvalidOperationException("Cannot use indexer for a non-" +
+						"enumerable var type!");
 				case ListType.Array:
 					((Array) objectValue).SetValue(value, index); break;
 				case ListType.List:
@@ -103,9 +163,18 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
-		
+
+		// Single ---------------------------------------------------------------------
+
+		/// <summary>Gets the value as the specified type.</summary>
+		public object GetObject() {
+			return objectValue;
+		}
+
 		/// <summary>Gets the value as the specified type.</summary>
 		public T Get<T>() {
+			if (NeedsAnyCasting(typeof(T)))
+				return (T) TypeHelper.ConvertFrom(typeof(T), objectValue);
 			return (T) objectValue;
 		}
 
@@ -119,31 +188,26 @@ namespace ZeldaOracle.Common.Scripting {
 			return TryToEnum<E>(varType, objectValue);
 		}
 
+		// Indexers -------------------------------------------------------------------
+
+		/// <summary>Gets the element at the specified index.</summary>
+		public object GetObjectAt(int index) {
+			return this[index];
+		}
+
 		/// <summary>Gets the element at the specified index.</summary>
 		public T GetAt<T>(int index) {
-			switch (listType) {
-			case ListType.Single:
-				if (index != 0)
-					throw new IndexOutOfRangeException("Index must be 0 for a " +
-						"singular var type!");
-				return (T) objectValue;
-			case ListType.Array:
-				return ((T[]) objectValue)[index];
-			case ListType.List:
-				return ((List<T>) objectValue)[index];
-			default:
-				return default(T);
-			}
+			if (NeedsAnyCasting(typeof(T)))
+				return (T) TypeHelper.ConvertFrom(typeof(T), this[index]);
+			return (T) this[index];
 		}
 
 		/// <summary>Gets the element at the specified index as an enum.</summary>
 		public E GetEnumAt<E>(int index) where E : struct {
 			switch (listType) {
 			case ListType.Single:
-				if (index != 0)
-					throw new IndexOutOfRangeException("Index must be 0 for a " +
-						"singular var type!");
-				return ToEnum<E>(varType, objectValue);
+				throw new InvalidOperationException("Cannot use indexer for a non-" +
+					"enumerable var type!");
 			case ListType.Array:
 				return ToEnum<E>(varType, ((Array) objectValue).GetValue(index));
 			case ListType.List:
@@ -157,10 +221,8 @@ namespace ZeldaOracle.Common.Scripting {
 		public E TryGetEnumAt<E>(int index) where E : struct {
 			switch (listType) {
 			case ListType.Single:
-				if (index != 0)
-					throw new IndexOutOfRangeException("Index must be 0 for a " +
-						"singular var type!");
-				return TryToEnum<E>(varType, objectValue);
+				throw new InvalidOperationException("Cannot use indexer for a non-" +
+					"enumerable var type!");
 			case ListType.Array:
 				return TryToEnum<E>(varType, ((Array) objectValue).GetValue(index));
 			case ListType.List:
@@ -170,14 +232,33 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 		}
 
+		// Enumerables ----------------------------------------------------------------
+
+		/// <summary>Gets the value as a basic array.</summary>
+		public Array GetObjectArray() {
+			return (Array) objectValue;
+		}
+
 		/// <summary>Gets the value as an array.</summary>
 		public T[] GetArray<T>() {
 			return (T[]) objectValue;
 		}
 
+		/// <summary>Gets the value as a basic list.</summary>
+		public IList GetObjectList() {
+			return (IList) objectValue;
+		}
+
 		/// <summary>Gets the value as a list.</summary>
 		public List<T> GetList<T>() {
 			return (List<T>) objectValue;
+		}
+
+		/// <summary>Gets the value as a basic enumerable.</summary>
+		public IEnumerable GetObjectEnumerable() {
+			if (IsEnumerable)
+				return (IEnumerable) objectValue;
+			return new object[1] { objectValue };
 		}
 
 		/// <summary>Gets the value as an enumerable.</summary>
@@ -192,6 +273,13 @@ namespace ZeldaOracle.Common.Scripting {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
+		// Single ---------------------------------------------------------------------
+
+		/// <summary>Sets the value as an object.</summary>
+		public void SetObject(object value) {
+			ObjectValue = value;
+		}
+
 		/// <summary>Sets the value as the specified type.</summary>
 		public void Set<T>(T value) {
 			ObjectValue = value;
@@ -202,29 +290,24 @@ namespace ZeldaOracle.Common.Scripting {
 			objectValue = FromEnum<E>(varType, value);
 		}
 
+		// Indexers -------------------------------------------------------------------
+
+		/// <summary>Sets the element at the specified index.</summary>
+		public void SetObjectAt(int index, object value) {
+			this[index] = value;
+		}
+
 		/// <summary>Sets the element at the specified index.</summary>
 		public void SetAt<T>(int index, T value) {
-			switch (listType) {
-			case ListType.Single:
-				if (index != 0)
-					throw new IndexOutOfRangeException("Index must be 0 for a " +
-						"singular var type!");
-				ObjectValue = value; break;
-			case ListType.Array:
-				((T[]) objectValue)[index] = value; break;
-			case ListType.List:
-				((List<T>) objectValue)[index] = value; break;
-			}
+			this[index] = value;
 		}
 
 		/// <summary>Sets the element at the specified index as an enum.</summary>
 		public void SetEnumAt<E>(int index, E value) where E : struct {
 			switch (listType) {
 			case ListType.Single:
-				if (index != 0)
-					throw new IndexOutOfRangeException("Index must be 0 for a " +
-						"singular var type!");
-				objectValue = FromEnum<E>(varType, value); break;
+				throw new InvalidOperationException("Cannot use indexer for a non-" +
+					"enumerable var type!");
 			case ListType.Array:
 				((Array) objectValue).SetValue(FromEnum<E>(varType, value), index);
 				break;
@@ -232,6 +315,62 @@ namespace ZeldaOracle.Common.Scripting {
 				((IList) objectValue)[index] = FromEnum<E>(varType, value);
 				break;
 			}
+		}
+
+		// Adding ---------------------------------------------------------------------
+
+		/// <summary>Adds the element to the end of the list.</summary>
+		public void AddObjectAt(object value) {
+			Type type = value.GetType();
+			if (NeedsIntCasting(type))
+				value = Convert.ToInt32(value);
+			else if (NeedsFloatCasting(type))
+				value = Convert.ToSingle(value);
+			((IList) objectValue).Add(value);
+		}
+
+		/// <summary>Adds the element to the end of the list.</summary>
+		public void AddAt<T>(T value) {
+			AddObjectAt(value);
+		}
+
+		/// <summary>Adds the element to the end of the list as an enum.</summary>
+		public void AddEnumAt<E>(E value) where E : struct {
+			((IList) objectValue).Add(FromEnum<E>(varType, value));
+		}
+
+		// Insertion ------------------------------------------------------------------
+
+		/// <summary>Inserts the element into the list.</summary>
+		public void InsertObjectAt(int index, object value) {
+			Type type = value.GetType();
+			if (NeedsIntCasting(type))
+				value = Convert.ToInt32(value);
+			else if (NeedsFloatCasting(type))
+				value = Convert.ToSingle(value);
+			((IList) objectValue).Insert(index, value);
+		}
+
+		/// <summary>Inserts the element into the list.</summary>
+		public void InsertAt<T>(int index, T value) {
+			InsertObjectAt(index, value);
+		}
+
+		/// <summary>Inserts the element into the list as an enum.</summary>
+		public void InsertEnumAt<E>(int index, E value) where E : struct {
+			((IList) objectValue).Insert(index, FromEnum<E>(varType, value));
+		}
+
+		// Removing -------------------------------------------------------------------
+
+		/// <summary>Removes the element from the list.</summary>
+		public void RemoveAt(int index) {
+			((IList) objectValue).RemoveAt(index);
+		}
+
+		/// <summary>Clears the list of all elements.</summary>
+		public void ClearList() {
+			((IList) objectValue).Clear();
 		}
 
 
@@ -334,8 +473,8 @@ namespace ZeldaOracle.Common.Scripting {
 			throw new UnsupportedVarTypeException("Var Type does not support enums!");
 		}
 
-		
-		/// <summary>Convert a VariableType to a System.Type.</summary>
+
+		/// <summary>Convert a VarType to a System.Type.</summary>
 		public static Type VarTypeToType(VarType varType) {
 			switch (varType) {
 			case VarType.String:	return typeof(string);
@@ -344,28 +483,21 @@ namespace ZeldaOracle.Common.Scripting {
 			case VarType.Boolean:	return typeof(bool);
 			case VarType.Point:		return typeof(Point2I);
 			case VarType.Vector:	return typeof(Vector2F);
+			case VarType.RangeI:	return typeof(RangeI);
+			case VarType.RangeF:	return typeof(RangeF);
+			case VarType.RectangleI:return typeof(Rectangle2I);
+			case VarType.RectangleF:return typeof(Rectangle2F);
+			case VarType.Color:		return typeof(Color);
 			default: return null;
 			}
 		}
 
 
-		/// <summary>Convert a VariableType to a System.Type.</summary>
+		/// <summary>Convert a VarType to a System.Type.</summary>
 		public static Type VarTypeToType(VarType varType, ListType listType) {
 			switch (listType) {
 			case ListType.Single:
-				switch (varType) {
-				case VarType.String:	return typeof(string);
-				case VarType.Integer:	return typeof(int);
-				case VarType.Float:		return typeof(float);
-				case VarType.Boolean:	return typeof(bool);
-				case VarType.Point:		return typeof(Point2I);
-				case VarType.Vector:	return typeof(Vector2F);
-				case VarType.RangeI:	return typeof(RangeI);
-				case VarType.RangeF:	return typeof(RangeF);
-				case VarType.RectangleI:return typeof(Rectangle2I);
-				case VarType.RectangleF:return typeof(Rectangle2F);
-				default: return null;
-				}
+				return VarTypeToType(varType);
 			case ListType.Array:
 				switch (varType) {
 				case VarType.String:	return typeof(string[]);
@@ -378,6 +510,7 @@ namespace ZeldaOracle.Common.Scripting {
 				case VarType.RangeF:	return typeof(RangeF[]);
 				case VarType.RectangleI:return typeof(Rectangle2I[]);
 				case VarType.RectangleF:return typeof(Rectangle2F[]);
+				case VarType.Color:		return typeof(Color[]);
 				default: return null;
 				}
 			case ListType.List:
@@ -392,6 +525,7 @@ namespace ZeldaOracle.Common.Scripting {
 				case VarType.RangeF:	return typeof(List<RangeF>);
 				case VarType.RectangleI:return typeof(List<Rectangle2I>);
 				case VarType.RectangleF:return typeof(List<Rectangle2F>);
+				case VarType.Color:		return typeof(List<Color>);
 				default: return null;
 				}
 			default:
@@ -399,7 +533,7 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 		}
 
-		/// <summary>Convert a System.Type to a VariableType.</summary>
+		/// <summary>Convert a System.Type to a VarType.</summary>
 		public static VarType TypeToVarType(Type type) {
 			if (type == typeof(string))
 				return VarType.String;
@@ -413,17 +547,35 @@ namespace ZeldaOracle.Common.Scripting {
 				return VarType.Point;
 			if (type == typeof(Vector2F))
 				return VarType.Vector;
-			return VarType.Integer;
+			if (type == typeof(RangeI))
+				return VarType.RangeI;
+			if (type == typeof(RangeF))
+				return VarType.RangeF;
+			if (type == typeof(Rectangle2I))
+				return VarType.RectangleI;
+			if (type == typeof(Rectangle2F))
+				return VarType.RectangleF;
+			if (type == typeof(Color))
+				return VarType.Color;
+
+			// Special casting
+			if (type == typeof(Direction))
+				return VarType.Integer;
+			if (type == typeof(Angle))
+				return VarType.Integer;
+
+			return VarType.Custom;
 		}
 
-
-		/// <summary>Convert a System.Type to a VariableType.</summary>
+		/// <summary>Convert a System.Type to a VarType.</summary>
 		public static VarType TypeToVarType(Type type, out ListType listType) {
 			if (type.IsArray) {
 				listType = ListType.Array;
 				return TypeToVarType(type.GetElementType());
 			}
-			else if (type.GetGenericTypeDefinition() == typeof(List<>)) {
+			else if (type.IsGenericTypeDefinition &&
+				type.GetGenericTypeDefinition() == typeof(List<>))
+			{
 				listType = ListType.List;
 				return TypeToVarType(type.GetGenericArguments()[0]);
 			}
@@ -433,9 +585,44 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 		}
 
-		/*public static bool TypeMatchesVarType(Type type, VarType varType, ListType listType) {
-			return (type == VarTypeToType(varType, listType));
-		}*/
+		/// <summary>Returns true if the type needs to be casted from an integer.</summary>
+		public static bool NeedsIntCasting(Type type) {
+			return
+				type == typeof(Direction) ||
+				type == typeof(Angle) ||
+				type == typeof(sbyte) ||
+				type == typeof(byte) ||
+				type == typeof(short) ||
+				type == typeof(ushort) ||
+				type == typeof(uint) ||
+				type == typeof(long) ||
+				type == typeof(ulong);
+		}
+
+		/// <summary>Returns true if the type needs to be casted from a float.</summary>
+		public static bool NeedsFloatCasting(Type type) {
+			return
+				type == typeof(double) ||
+				type == typeof(decimal);
+		}
+
+		/// <summary>Returns true if the type needs to be casted from any base type.</summary>
+		public static bool NeedsAnyCasting(Type type) {
+			return NeedsIntCasting(type) || NeedsFloatCasting(type);
+		}
+
+		/// <summary>Returns true if this type is supported with vars.</summary>
+		public static bool IsSupportedType(Type type) {
+			if (type.IsArray) {
+				type = type.GetElementType();
+			}
+			else if (type.IsGenericTypeDefinition &&
+				type.GetGenericTypeDefinition() == typeof(List<>))
+			{
+				type = type.GetGenericArguments()[0];
+			}
+			return (TypeToVarType(type) != VarType.Custom);
+		}
 
 		/// <summary>Constructs the initial object for the var and list type.</summary>
 		public static object CreateInstance(VarType varType, ListType listType, int length = 0) {
@@ -452,8 +639,7 @@ namespace ZeldaOracle.Common.Scripting {
 				return null;
 			}
 		}
-
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -493,6 +679,11 @@ namespace ZeldaOracle.Common.Scripting {
 		public object ObjectValue {
 			get { return objectValue; }
 			set {
+				Type type = value.GetType();
+				if (NeedsIntCasting(type))
+					value = Convert.ToInt32(value);
+				else if (NeedsFloatCasting(type))
+					value = Convert.ToSingle(value);
 				if (FullType != value.GetType())
 					throw new UnsupportedVarTypeException("Object type does not " +
 						"match var type!");

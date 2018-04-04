@@ -38,6 +38,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			monster.Position = SpawnPosition;
 			monster.Properties = Properties;
 			monster.Events = Events;
+			monster.Vars = Variables;
 			RoomControl.SpawnEntity(monster);
 		}
 
@@ -101,7 +102,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 		/// <summary>Gets or sets if this monster is dead.</summary>
 		public bool IsDead {
-			get { return Properties.GetBoolean("dead", false); }
+			get { return Properties.Get<bool>("dead", false); }
 			set { Properties.Set("dead", value); }
 		}
 

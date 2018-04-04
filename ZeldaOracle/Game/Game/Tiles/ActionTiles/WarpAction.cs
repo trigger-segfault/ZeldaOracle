@@ -46,8 +46,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		// Find the action tile for the this warp point's destination.
 		public ActionTileDataInstance FindDestinationPoint() {
-			string warpID = properties.GetString("destination_warp_point", "?");
-			string warpLevelID = Properties.GetString("destination_level",
+			string warpID = properties.Get<string>("destination_warp_point", "?");
+			string warpLevelID = Properties.Get<string>("destination_level",
 				RoomControl.Level.ID);
 			if (warpID.Length == 0 || warpLevelID.Length == 0)
 				return null;
@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				player.Direction = Directions.Reverse(edgeDirection);
 			}
 			else {
-				int faceDirection = Properties.GetInteger("face_direction", Direction.Down);
+				int faceDirection = Properties.Get<int>("face_direction", Direction.Down);
 				player.Direction = faceDirection;
 			}
 
@@ -112,7 +112,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		// Create the room transition state for this warp point.
 		public RoomTransition CreateTransition(ActionTileDataInstance destination) {
-			int dir = destination.Properties.GetInteger("face_direction", Direction.Down);
+			int dir = destination.Properties.Get<int>("face_direction", Direction.Down);
 			if (warpType == WarpType.Stairs)
 				return new RoomTransitionFade();
 			return new RoomTransitionSplit();
@@ -142,7 +142,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 			properties.Print();
 
-			string typeName = Properties.GetString("warp_type", "Tunnel");
+			string typeName = Properties.Get<string>("warp_type", "Tunnel");
 			warpType		= (WarpType) Enum.Parse(typeof(WarpType), typeName, true);
 			collisionBox	= new Rectangle2I(2, 6, 12, 12);
 			warpEnabled		= !IsTouchingPlayer();

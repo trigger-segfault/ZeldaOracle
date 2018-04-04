@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public override void OnInitialize() {
 			isPressed		= Properties.Get("pressed", false);
-			isReleasable	= Properties.GetBoolean("releasable", true);
+			isReleasable	= Properties.Get<bool>("releasable", true);
 			isCovered		= false;
 			uncoverTimer	= 0;
 			Graphics.PlayAnimation(SpriteList[isPressed ? 1 : 0]);
@@ -106,7 +106,7 @@ namespace ZeldaOracle.Game.Tiles {
 					// covering this button
 					foreach (Tile tile in tilesCovering) {
 						if (tile.Bounds.Contains(Center) &&
-							tile.Properties.GetBoolean("raised_on_buttons", false))
+							tile.Properties.Get<bool>("raised_on_buttons", false))
 						{
 							tile.Graphics.RaisedDrawOffset = new Point2I(
 								0, -GameSettings.TILE_BUTTON_TILE_RAISE_AMOUNT);

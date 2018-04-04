@@ -150,8 +150,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			bool vertical = args.Properties.GetBoolean("vertical", false);
-			int length = GMath.Max(1, args.Properties.GetPoint("size", Point2I.One)[!vertical]);
+			bool vertical = args.Properties.Get<bool>("vertical", false);
+			int length = GMath.Max(1, args.Properties.Get<Point2I>("size", Point2I.One)[!vertical]);
 			for (int i = 0; i < length; i++) {
 				ISprite sprite = args.Tile.Sprite;
 				g.DrawSprite(
@@ -179,7 +179,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		//-----------------------------------------------------------------------------
 
 		private bool IsVertical {
-			get { return Properties.GetBoolean("vertical", false); }
+			get { return Properties.Get<bool>("vertical", false); }
 		}
 
 		private Direction ReturnDirection {

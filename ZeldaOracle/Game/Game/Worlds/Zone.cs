@@ -74,12 +74,12 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public string ID {
-			get { return properties.GetString("id"); }
+			get { return properties.Get<string>("id"); }
 			set { properties.Set("id", value); }
 		}
 		
 		public string Name {
-			get { return properties.GetString("name"); }
+			get { return properties.Get<string>("name"); }
 			set { properties.Set("name", value); }
 		}
 		
@@ -89,12 +89,12 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 		
 		public bool IsSideScrolling {
-			get { return properties.GetBoolean("side_scrolling"); }
+			get { return properties.Get<bool>("side_scrolling"); }
 			set { properties.Set("side_scrolling", value); }
 		}
 		
 		public bool IsUnderwater {
-			get { return properties.GetBoolean("underwater"); }
+			get { return properties.Get<bool>("underwater"); }
 			set { properties.Set("underwater", value); }
 		}
 
@@ -108,7 +108,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public string PaletteID {
-			get { return properties.GetString("palette"); }
+			get { return properties.Get<string>("palette"); }
 			set { properties.Set("palette", value); }
 		}
 

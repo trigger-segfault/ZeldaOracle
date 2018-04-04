@@ -38,7 +38,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		private IEnumerable CreateItemsSource() {
 			Property property = PropertyDescriptor.Property;
 			World world = EditorControl.World;
-			string levelID = PropertyDescriptor.PropertyObject.Properties.GetString(property.Documentation.EditorSubType, "");
+			string levelID = PropertyDescriptor.PropertyObject.Properties.Get<string>(property.Documentation.EditorSubType, "");
 			Level level = world.GetLevel(levelID);
 			List<string> warps = new List<string>();
 			warps.Add("(none)");

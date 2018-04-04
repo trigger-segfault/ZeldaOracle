@@ -205,12 +205,12 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		/// <summary>Creates the default usings.</summary>
 		public static string CreateUsingsString() {
-			return	"using System.Collections.Generic;\n" +
-					"using Console = System.Console;\n" +
+			return	"using Console = System.Console;\n" +
+					"using System.Collections;\n" +
+					"using System.Collections.Generic;\n" +
 					"using ZeldaAPI;\n" +
-					"using ZeldaOracle.Game;\n" +
-					"using ZeldaOracle.Game.API;\n" +
-					"using ZeldaOracle.Common.Geometry;\n";
+					"using ZeldaOracle.Common.Geometry;\n" +
+					"using ZeldaOracle.Game;\n";
 		}
 		
 		/// <summary>Creates the opening namespace and class.</summary>

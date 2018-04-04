@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Items {
 	/// <summary>A data structure for creating items in-game.</summary>
 	public class ItemData : BaseResourceData {
 
+		/// <summary>The array of leveled sprites for the item.</summary>
 		private ISprite[]	sprites;
 
 
@@ -49,24 +50,26 @@ namespace ZeldaOracle.Game.Items {
 
 		/// <summary>Sets a property list from the base name and values.</summary>
 		public void SetPropertyList<T>(string name, T[] values) {
-			for (int i = 0; i < values.Length; i++) {
-				properties.SetGeneric(ListName(name, i), values[i]);
+			properties.SetArray<T>(name, values);
+			/*for (int i = 0; i < values.Length; i++) {
+				properties.SetObject(ListName(name, i), values[i]);
 			}
 			// Remove lingering list properties
 			for (int i = values.Length; properties.Contains(ListName(name, i)); i++) {
 				properties.RemoveProperty(ListName(name, i), false);
-			}
+			}*/
 		}
 
 		/// <summary>Gets a property list from the base name.</summary>
 		public T[] GetPropertyList<T>(string name) {
-			int length = 0;
+			return properties.GetArray<T>(name, new T[0]);
+			/*int length = 0;
 			for (; properties.Contains(ListName(name, length)); length++) ;
 			T[] values = new T[length];
 			for (int i = 0; i < length; i++) {
 				values[i] = properties.Get<T>(ListName(name, i));
 			}
-			return values;
+			return values;*/
 		}
 
 		/// <summary>Sets the leveled names of the item.</summary>

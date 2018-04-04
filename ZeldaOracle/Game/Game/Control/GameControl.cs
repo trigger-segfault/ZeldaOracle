@@ -187,7 +187,7 @@ namespace ZeldaOracle.Game.Control {
 				LoadWorld(worldPath, recompile);
 
 				// DEBUG: Until enter name screen exists
-				Vars.Set("player", "Link");
+				Variables.Set("player", "Link");
 
 				// Begin the starting room.
 				if (test) {
@@ -601,13 +601,13 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		/// <summary>Gets the variables for the game.</summary>
-		public Variables Vars {
-			get { return world.Vars; }
+		public Variables Variables {
+			get { return world.Variables; }
 		}
 
 		/// <summary>Gets the variables for the game.</summary>
 		ZeldaAPI.Variables ZeldaAPI.Game.Vars {
-			get { return world.Vars; }
+			get { return world.Variables; }
 		}
 	}
 }

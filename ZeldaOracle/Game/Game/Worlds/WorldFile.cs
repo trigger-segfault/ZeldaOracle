@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Common;
+using System.Diagnostics;
 
 namespace ZeldaOracle.Game.Worlds {
 
@@ -66,6 +67,8 @@ namespace ZeldaOracle.Game.Worlds {
 	public class WorldFile {
 		
 		private static char[] MAGIC = { 'Z', 'w', 'd', '2' };
+		// v3: Events are saved differently
+		// v4: Implemented Event Triggers
 		private const int WORLDFILE_VERSION = 4;
 
 		private const int NULL_TILE = -11;
@@ -148,9 +151,49 @@ namespace ZeldaOracle.Game.Worlds {
 		public World Load(string fileName, bool editorMode) {
 			this.fileName = fileName;
 			this.editorMode = editorMode;
-			BinaryReader reader = new BinaryReader(File.OpenRead(fileName));
-			World world = Load(reader);
-			reader.Close();
+			World world;
+			using (Stream stream = File.OpenRead(fileName)) {
+				BinaryReader reader = new BinaryReader(stream);
+				world = Load(reader);
+			}
+			try {
+				using (Stream stream = File.OpenRead("testfile.dat")) {
+					Stopwatch watch = Stopwatch.StartNew();
+					BinaryReader reader = new BinaryReader(stream);
+					int count = reader.ReadInt32(), pCount = 0;
+					for (int i = 0; i < count; i++) {
+						Properties props = new Properties();
+						int propCount = reader.ReadInt32();
+						pCount += propCount;
+						for (int j = 0; j < propCount; j++) {
+							VarType varType = (VarType) reader.ReadInt16();
+							ListType listType = (ListType) reader.ReadInt16();
+							string name = reader.ReadString();
+
+							Property p;
+
+							if (listType != ListType.Single) {
+								int listCount = reader.ReadInt32();
+								p = new Property(name, varType, listType, listCount);
+								for (int k = 0; k < listCount; k++) {
+									if (listType == ListType.Array)
+										p[k] = reader.ReadGeneric(varType.ToType());
+									else
+										p.ListValue.Add(reader.ReadGeneric(varType.ToType()));
+								}
+							}
+							else {
+								p = new Property(name, reader.ReadGeneric(varType.ToType()));
+							}
+
+							props.SetObject(p.Name, p.ObjectValue);
+						}
+					}
+					Console.WriteLine("Took {0} ms to read {1} tile data's {2} properties.",
+						watch.ElapsedMilliseconds, count, pCount);
+				}
+			}
+			catch { }
 			return world;
 		}
 
@@ -262,8 +305,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 					if (property != null) {
 						eventObject.Properties.RemoveProperty(property.Name, false);
-						if (!string.IsNullOrWhiteSpace(property.StringValue))
-							ReadLegacyEvent(evnt, property.StringValue, world);
+						if (!string.IsNullOrWhiteSpace(property.Get<string>()))
+							ReadLegacyEvent(evnt, property.Get<string>(), world);
 					}
 				}
 			}
@@ -484,7 +527,7 @@ namespace ZeldaOracle.Game.Worlds {
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++) {
 				Property property = ReadProperty(reader);
-				property = properties.Set(property.Name, property);
+				properties.SetObject(property.Name, property.ObjectValue);
 			}
 			return properties;
 		}
@@ -492,54 +535,29 @@ namespace ZeldaOracle.Game.Worlds {
 		private Property ReadProperty(BinaryReader reader) {
 			VarType type = (VarType) reader.ReadInt32();
 			string name = ReadString(reader);
-			
-			if (type == VarType.Integer) {
-				return Property.CreateInt(name, reader.ReadInt32());
-			}
-			else if (type == VarType.Float) {
-				return Property.CreateFloat(name, reader.ReadSingle());
-			}
-			else if (type == VarType.Boolean) {
-				return Property.CreateBool(name, reader.ReadBoolean());
-			}
-			else if (type == VarType.String) {
-				return Property.CreateString(name, ReadString(reader));
-			}
-			if (type == VarType.Point) {
-				return Property.Create(name, reader.ReadPoint2I());
-			}
-			return null;
+
+			if (type == VarType.String)
+				return new Property(name, ReadString(reader));
+			return new Property(name, reader.ReadGeneric(type.ToType()));
 		}
 
 		private Variables ReadVariables(BinaryReader reader, Variables variables) {
-			int count = reader.ReadInt32();
+			return null; // TODO: Implement in v5
+			/*int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++) {
 				Variable variable = ReadVariable(reader);
-				variable = variables.SetGeneric(variable.Name, variable.ObjectValue);
+				variables.SetGeneric(variable.Name, variable.ObjectValue);
 			}
-			return variables;
+			return variables;*/
 		}
 
 		private Variable ReadVariable(BinaryReader reader) {
 			VarType type = (VarType) reader.ReadInt32();
 			string name = ReadString(reader);
 
-			if (type == VarType.Integer) {
-				return Variable.Create(name, reader.ReadInt32());
-			}
-			else if (type == VarType.Float) {
-				return Variable.Create(name, reader.ReadSingle());
-			}
-			else if (type == VarType.Boolean) {
-				return Variable.Create(name, reader.ReadBoolean());
-			}
-			else if (type == VarType.String) {
-				return Variable.Create(name, ReadString(reader));
-			}
-			if (type == VarType.Point) {
-				return Variable.Create(name, reader.ReadPoint2I());
-			}
-			return null;
+			if (type == VarType.String)
+				return new Variable(name, ReadString(reader));
+			return new Variable(name, reader.ReadGeneric(type.ToType()));
 		}
 
 		private string ReadString(BinaryReader reader) {
@@ -616,10 +634,37 @@ namespace ZeldaOracle.Game.Worlds {
 		public void Save(string fileName, World world, bool editorMode) {
 			this.fileName = fileName;
 			this.editorMode = editorMode;
-			FileStream fileStream = new FileStream(fileName, FileMode.Create);
-			BinaryWriter writer = new BinaryWriter(fileStream);
-			Save(writer, world);
-			writer.Close();
+			using (Stream fileStream = new FileStream(fileName, FileMode.Create)) {
+				BinaryWriter writer = new BinaryWriter(fileStream);
+				Save(writer, world);
+			}
+			using (Stream fileStream = new FileStream("testfile.dat", FileMode.Create)) {
+				BinaryWriter writer = new BinaryWriter(fileStream);
+				Stopwatch watch = Stopwatch.StartNew();
+				int pCount = 0;
+				var values = Resources.GetDictionary<BaseTileData>().Values;
+				writer.Write(values.Count);
+				foreach (var data in values) {
+					pCount += data.Properties.Count;
+					writer.Write(data.Properties.Count);
+					foreach (Property p in data.Properties.GetProperties()) {
+						writer.Write((short) p.VarType);
+						writer.Write((short) p.ListType);
+						writer.Write(p.Name);
+						if (p.IsEnumerable) {
+							writer.Write(p.Count);
+							foreach (object obj in p.EnumerableValue) {
+								writer.WriteGeneric(obj.GetType(), obj);
+							}
+						}
+						else {
+							writer.WriteGeneric(p.ObjectValue.GetType(), p.ObjectValue);
+						}
+					}
+				}
+				Console.WriteLine("Took {0} ms to save {1} tile data's {2} properties",
+					watch.ElapsedMilliseconds, values.Count, pCount);
+			}
 		}
 
 		private void Save(BinaryWriter writer, World world) {
@@ -628,29 +673,30 @@ namespace ZeldaOracle.Game.Worlds {
 			version = WORLDFILE_VERSION;
 
 			// Write the level data to memory.
-			MemoryStream worldDataStream = new MemoryStream();
-			BinaryWriter worldDataWriter = new BinaryWriter(worldDataStream);
-			WriteWorld(worldDataWriter, world);
-			byte[] worldData = worldDataStream.GetBuffer();
-			int levelDataSize = (int) worldDataStream.Length;
-			worldDataWriter.Close();
-			
-			// Write the header.
-			WriteHeader(writer, world);
-			// Write the strings list.
-			WriteStrings(writer);
-			// Write the tileset list.
-			WriteResourceList(writer, tileTypes);
-			WriteResourceList(writer, zones);
-			WriteResourceList(writer, tilesets);
-			WriteResourceList(writer, collisionModels);
-			WriteResourceList(writer, sprites);
-			WriteResourceList(writer, animations);
-			WriteResourceList(writer, tileData);
-			WriteResourceList(writer, actionTileData);
+			using (MemoryStream worldDataStream = new MemoryStream()) {
+				BinaryWriter worldDataWriter = new BinaryWriter(worldDataStream);
+				WriteWorld(worldDataWriter, world);
+				byte[] worldData = worldDataStream.GetBuffer();
+				int levelDataSize = (int) worldDataStream.Length;
+				worldDataWriter.Close();
 
-			// Write the world data.
-			writer.Write(worldData, 0, levelDataSize);
+				// Write the header.
+				WriteHeader(writer, world);
+				// Write the strings list.
+				WriteStrings(writer);
+				// Write the tileset list.
+				WriteResourceList(writer, tileTypes);
+				WriteResourceList(writer, zones);
+				WriteResourceList(writer, tilesets);
+				WriteResourceList(writer, collisionModels);
+				WriteResourceList(writer, sprites);
+				WriteResourceList(writer, animations);
+				WriteResourceList(writer, tileData);
+				WriteResourceList(writer, actionTileData);
+
+				// Write the world data.
+				writer.Write(worldData, 0, levelDataSize);
+			}
 		}
 
 		private void WriteHeader(BinaryWriter writer, World world) {
@@ -797,7 +843,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Write the world's properties
 			WriteProperties(writer, world.Properties);
-			//WriteVariables(writer, world.Variables);
+			WriteVariables(writer, world.Variables);
 			if (version <= 3)
 				WriteEvents(writer, world.Events);
 			else
@@ -936,53 +982,32 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void WriteProperty(BinaryWriter writer, Property property) {
-			writer.Write((int) property.Type);
+			writer.Write((int) property.VarType);
 			WriteString(writer, property.Name);
 
-			if (property.Type == VarType.Integer) {
-				writer.Write(property.IntValue);
-			}
-			else if (property.Type == VarType.Float) {
-				writer.Write(property.FloatValue);
-			}
-			else if (property.Type == VarType.Boolean) {
-				writer.Write(property.BoolValue);
-			}
-			else if (property.Type == VarType.String) {
-				WriteString(writer, property.StringValue);
-			}
-			else if (property.Type == VarType.Point) {
-				writer.Write(property.PointValue);
-			}
+			if (property.VarType == VarType.String)
+				WriteString(writer, property.Get<string>());
+			else
+				writer.WriteGeneric(property.FullType, property.ObjectValue);
 		}
 
 
 		private void WriteVariables(BinaryWriter writer, Variables variables) {
-			writer.Write(variables.CustomCount);
+			return; // TODO: Implement in v5
+			/*writer.Write(variables.CustomCount);
 			foreach (Variable variable in variables.GetCustomVariables()) {
 				WriteVariable(writer, variable);
-			}
+			}*/
 		}
 
 		private void WriteVariable(BinaryWriter writer, Variable variable) {
-			writer.Write((int) variable.Type);
+			writer.Write((int) variable.VarType);
 			WriteString(writer, variable.Name);
 
-			if (variable.Type == VarType.Integer) {
-				writer.Write(variable.IntValue);
-			}
-			else if (variable.Type == VarType.Float) {
-				writer.Write(variable.FloatValue);
-			}
-			else if (variable.Type == VarType.Boolean) {
-				writer.Write(variable.BoolValue);
-			}
-			else if (variable.Type == VarType.String) {
-				WriteString(writer, variable.StringValue);
-			}
-			else if (variable.Type == VarType.Point) {
-				writer.Write(variable.PointValue);
-			}
+			if (variable.VarType == VarType.String)
+				WriteString(writer, variable.Get<string>());
+			else
+				writer.WriteGeneric(variable.FullType, variable.ObjectValue);
 		}
 
 		private void WriteStrings(BinaryWriter writer) {

@@ -88,7 +88,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles.Puzzles {
 
 			// Check if solved.
 			bool checkSolve = CheckSolved();
-			bool solveOnce = Properties.GetBoolean("solve_once", false);
+			bool solveOnce = Properties.Get<bool>("solve_once", false);
 
 			if (checkSolve != isSolved && (!solveOnce || !hasBeenSolvedAlready)) {
 				isSolved = checkSolve;

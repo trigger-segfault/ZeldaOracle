@@ -26,7 +26,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			bool vertical;
 			if (!bool.TryParse(parts[0], out vertical)) {
 				// We should check for an associated property
-				vertical = PropertyDescriptor.PropertyObject.Properties.GetBoolean(parts[0], false);
+				vertical = PropertyDescriptor.PropertyObject.Properties.Get<bool>(parts[0], false);
 			}
 			if (not)
 				vertical = !vertical;

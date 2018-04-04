@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public void SpawnReward() {
 			if (!IsLooted) {
-				string rewardName = Properties.GetString("reward", "rupees_1");
+				string rewardName = Properties.Get<string>("reward", "rupees_1");
 				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 				
 				CollectibleReward collectible = new CollectibleReward(reward);
@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				RoomControl.SpawnEntity(collectible);
 				collectible.SetPositionByCenter(Center);
 				
-				if (Properties.GetBoolean("spawn_from_ceiling", false)) {
+				if (Properties.Get<bool>("spawn_from_ceiling", false)) {
 					collectible.ZPosition						= Center.Y + 8;
 					collectible.Physics.HasGravity				= true;
 					collectible.Physics.CollideWithWorld		= RoomControl.IsSideScrolling;
@@ -72,7 +72,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Reward reward = args.RewardManager.GetReward(args.Properties.GetString("reward"));
+			Reward reward = args.RewardManager.GetReward(args.Properties.Get<string>("reward"));
 			if (reward != null) {
 				g.DrawSprite(
 					reward.Sprite,
@@ -111,7 +111,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		//-----------------------------------------------------------------------------
 
 		public bool IsLooted {
-			get { return Properties.GetBoolean("looted", false); }
+			get { return Properties.Get<bool>("looted", false); }
 		}
 	}
 }

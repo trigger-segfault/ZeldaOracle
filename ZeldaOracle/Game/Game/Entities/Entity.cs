@@ -598,7 +598,7 @@ namespace ZeldaOracle.Game.Entities {
 		public string ID {
 			get {
 				if (properties != null)
-					return properties.GetString("id", "");
+					return properties.Get<string>("id", "");
 				else
 					return "";
 			}
@@ -607,6 +607,7 @@ namespace ZeldaOracle.Game.Entities {
 		/// <summary>Gets the variables for the entity.</summary>
 		public Variables Vars {
 			get { return variables; }
+			set { variables = value; }
 		}
 
 		/// <summary>Gets the variables for the API Object.</summary>

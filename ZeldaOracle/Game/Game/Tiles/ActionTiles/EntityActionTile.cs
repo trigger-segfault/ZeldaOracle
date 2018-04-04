@@ -28,6 +28,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			entity.Position = Center;
 			entity.Properties = properties;
 			entity.Events = Events;
+			entity.Vars = Variables;
 			entity.Triggers = Triggers;
 			RoomControl.SpawnEntity(entity);
 		}

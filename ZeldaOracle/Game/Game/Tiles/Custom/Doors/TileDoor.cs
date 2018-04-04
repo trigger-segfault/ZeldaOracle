@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Find a door that's connected to this one in an adjacent room.
 		public TileDataInstance GetConnectedDoor() {
 			// Find the location of the adjacent room.
-			int dir = Directions.Reverse(Properties.GetInteger("direction", 0));
+			int dir = Directions.Reverse(Properties.Get<int>("direction", 0));
 			Point2I roomLocation = RoomControl.RoomLocation + Directions.ToPoint(dir);
 
 			if (RoomControl.Level.ContainsRoom(roomLocation)) {
@@ -130,7 +130,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public override void OnInitialize() {
-			isOpen = Properties.GetBoolean("open", false);
+			isOpen = Properties.Get<bool>("open", false);
 			isPlayerBlockingClose = false;
 
 			hasUpdated = false;
@@ -158,7 +158,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// Fast-forward the animation to the end.
 			Graphics.AnimationPlayer.SkipToEnd();
-			Graphics.SubStripIndex = Properties.GetInteger("direction", 0);
+			Graphics.SubStripIndex = Properties.Get<int>("direction", 0);
 		}
 
 		public override void Update() {
@@ -181,7 +181,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int direction = args.Properties.GetInteger("direction", 0);
+			int direction = args.Properties.Get<int>("direction", 0);
 			Tile.DrawTileDataIndex(g, args, substripIndex: direction);
 		}
 
@@ -203,7 +203,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Direction Direction {
-			 get { return Properties.GetInteger("direction", 0); }
+			 get { return Properties.Get<int>("direction", 0); }
 		}
 	}
 }

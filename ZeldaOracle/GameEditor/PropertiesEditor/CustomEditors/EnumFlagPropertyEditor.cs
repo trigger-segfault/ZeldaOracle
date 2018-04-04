@@ -59,7 +59,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 
 		protected IEnumerable CreateItemsSource(PropertyItem propertyItem) {
-			baseType = PropertyDescriptor.Property.Type;
+			baseType = PropertyDescriptor.Property.VarType;
 			string typeName = PropertyDescriptor.Documentation.EditorSubType;
 			enumType = GameUtil.FindType(typeName, false);
 			return GetValues(enumType);
