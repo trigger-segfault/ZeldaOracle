@@ -27,9 +27,8 @@ namespace ZeldaOracle.Game.Tiles.Clipboard {
 		/// <summary>Constructs a reference to the tile or action tile instance.</summary>
 		public BaseTileInstanceReference(BaseTileDataInstance baseTile) {
 			name		= baseTile.BaseData.ResourceName;
-			properties	= new Properties(baseTile);
+			properties	= new Properties(baseTile.Properties, baseTile);
 			events		= new EventCollection(baseTile.Events, baseTile);
-			properties.Clone(baseTile.Properties);
 		}
 		
 

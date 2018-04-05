@@ -38,10 +38,10 @@ namespace ConscriptDesigner.Control {
 
 		private static MainWindow mainWindow;
 		private static ContentRoot project;
-		private static Task<ScriptReaderException> busyTask;
+		private static Task<ConscriptReaderException> busyTask;
 		private static Thread busyThread;
 		private static bool busyTaskIsConscripts;
-		private static ScriptReaderException lastScriptError;
+		private static ConscriptReaderException lastScriptError;
 		private static StoppableTimer updateTimer;
 		private static StoppableTimer modifiedTimer;
 		private static List<IRequestCloseAnchorable> openAnchorables;
@@ -369,7 +369,7 @@ namespace ConscriptDesigner.Control {
 		// Internal
 		//-----------------------------------------------------------------------------
 
-		private static ScriptReaderException CompileContentTask() {
+		private static ConscriptReaderException CompileContentTask() {
 			busyThread = Thread.CurrentThread;
 			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
 			Clear();
@@ -397,7 +397,7 @@ namespace ConscriptDesigner.Control {
 			return null;
 		}
 
-		private static ScriptReaderException RunConscriptsTask() {
+		private static ConscriptReaderException RunConscriptsTask() {
 			//if (mainWindow.OutputConsole != null)
 			//	mainWindow.OutputConsole.SetOut();
 			busyThread = Thread.CurrentThread;
@@ -427,7 +427,7 @@ namespace ConscriptDesigner.Control {
 				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
 			}
 			catch (ThreadAbortException) { }
-			catch (ScriptReaderException ex) {
+			catch (ConscriptReaderException ex) {
 				ex.PrintMessage();
 				Console.WriteLine("Stack Trace:\n" + ex.StackTrace);
 				return ex;

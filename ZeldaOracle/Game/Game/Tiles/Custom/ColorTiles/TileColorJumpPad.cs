@@ -7,7 +7,6 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
 
@@ -34,7 +33,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private void CycleColor() {
 			// Cycle the color (red -> yellow -> blue)
-			PuzzleColor color = (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red);
+			PuzzleColor color = Properties.GetEnum("color", PuzzleColor.Red);
 			if (color == PuzzleColor.Red)
 				color = PuzzleColor.Yellow;
 			else if (color == PuzzleColor.Yellow)
@@ -65,7 +64,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			// Set the sprite.
-			PuzzleColor color = (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red);
+			PuzzleColor color = Properties.GetEnum("color", PuzzleColor.Red);
 			if (color == PuzzleColor.Red)
 				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 			else if (color == PuzzleColor.Yellow)

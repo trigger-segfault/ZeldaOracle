@@ -1,6 +1,7 @@
 ﻿
 using System;
 using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Common.Scripting {
@@ -63,7 +64,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 			// Create the script
 			script = new Script();
-			Type thisType = ReflectionHelper.GetApiObjectType(
+			Type thisType = GameUtil.GetApiObjectInterface(
 				collection.TriggerObject.TriggerObjectType);
 			script.Parameters.Add(new ScriptParameter(thisType, "This"));
 			

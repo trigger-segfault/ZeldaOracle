@@ -304,7 +304,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
-			color = (MonsterColor) Properties.GetInteger("color", (int) color);
+			color = Properties.GetEnum<MonsterColor>("color", color);
 
 			health = healthMax;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);

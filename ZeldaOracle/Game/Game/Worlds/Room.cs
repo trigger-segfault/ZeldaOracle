@@ -10,14 +10,13 @@ using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Tiles.Custom.Monsters;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Room : IEventObjectContainer, IEventObject, IVariableObject,
-		ITriggerObject, ZeldaAPI.DormantRoom
+		IVariableObjectContainer, ITriggerObject, ZeldaAPI.DormantRoom
 	{
 
 		private Level							level;		// The level this room is in.
@@ -41,7 +40,7 @@ namespace ZeldaOracle.Game.Worlds {
 			actionData	= new List<ActionTileDataInstance>();
 
 			properties	= new Properties(this);
-			properties.BaseProperties = new Properties();
+			properties.BaseProperties = new Properties(this);
 			variables	= new Variables(this);
 			events		= new EventCollection(this);
 			triggers	= new TriggerCollection(this);
@@ -134,32 +133,33 @@ namespace ZeldaOracle.Game.Worlds {
 		// Property objects
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the collection of property objects in the container.</summary>
 		public IEnumerable<IPropertyObject> GetPropertyObjects() {
 			yield return this;
-			for (int layer = 0; layer < LayerCount; layer++) {
-				for (int x = 0; x < Width; x++) {
-					for (int y = 0; y < Height; y++) {
-						TileDataInstance tile = tileData[x, y, layer];
-						if (tile != null && tile.IsAtLocation(x, y))
-							yield return tile;
-					}
-				}
+			foreach (TileDataInstance tile in GetTiles()) {
+				yield return tile;
 			}
 			foreach (ActionTileDataInstance actionTile in actionData) {
 				yield return actionTile;
 			}
 		}
 
+		/// <summary>Gets the collection of event objects in the container.</summary>
 		public IEnumerable<ITriggerObject> GetEventObjects() {
 			yield return this;
-			for (int layer = 0; layer < LayerCount; layer++) {
-				for (int x = 0; x < Width; x++) {
-					for (int y = 0; y < Height; y++) {
-						TileDataInstance tile = tileData[x, y, layer];
-						if (tile != null && tile.IsAtLocation(x, y))
-							yield return tile;
-					}
-				}
+			foreach (TileDataInstance tile in GetTiles()) {
+				yield return tile;
+			}
+			foreach (ActionTileDataInstance actionTile in actionData) {
+				yield return actionTile;
+			}
+		}
+
+		/// <summary>Gets the collection of variable objects in the container.</summary>
+		public IEnumerable<IVariableObject> GetVariableObjects() {
+			yield return this;
+			foreach (TileDataInstance tile in GetTiles()) {
+				yield return tile;
 			}
 			foreach (ActionTileDataInstance actionTile in actionData) {
 				yield return actionTile;
@@ -825,7 +825,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets or sets the ID of this room.</summary>
 		public string ID {
-			get { return properties.GetString("id"); }
+			get { return properties.Get<string>("id", ""); }
 			set { properties.Set("id", value); }
 		}
 
@@ -904,7 +904,7 @@ namespace ZeldaOracle.Game.Worlds {
 				if (DisableParenting)
 					return null;
 				Level parentLevel = level.World.GetLevel(
-					properties.GetString("parent_level", ""));
+					properties.Get<string>("parent_level", ""));
 				return parentLevel ?? level.ParentLevel;
 			}
 			set {
@@ -921,7 +921,7 @@ namespace ZeldaOracle.Game.Worlds {
 			get {
 				if (DisableParenting)
 					return -Point2I.One;
-				return properties.GetPoint("parent_location", -Point2I.One);
+				return properties.Get<Point2I>("parent_location", -Point2I.One);
 			}
 			set { properties.Set("parent_location", value); }
 		}
@@ -975,7 +975,12 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		/// <summary>Gets the variables for the room.</summary>
-		public Variables Vars {
+		public Variables Variables {
+			get { return variables; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
 			get { return variables; }
 		}
 
@@ -996,26 +1001,26 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets or sets if the root room has been discovered.</summary>
 		public bool IsDiscovered {
-			get { return RootRoom.properties.GetBoolean("discovered", false); }
+			get { return RootRoom.properties.Get<bool>("discovered", false); }
 			set { RootRoom.properties.Set("discovered", value); }
 		}
 
 		/// <summary>Gets or sets if the root room is hidden from the map.</summary>
 		public bool IsHiddenFromMap {
-			get { return RootRoom.properties.GetBoolean("hidden_from_map", false); }
+			get { return RootRoom.properties.Get<bool>("hidden_from_map", false); }
 			set { RootRoom.properties.Set("hidden_from_map", value); }
 		}
 
 		/// <summary>Gets or sets if the root room is a boss room.</summary>
 		public bool IsBossRoom {
-			get { return RootRoom.properties.GetBoolean("boss_room", false); }
+			get { return RootRoom.properties.Get<bool>("boss_room", false); }
 			set { RootRoom.properties.Set("boss_room", value); }
 		}
 
 		/// <summary>Gets or sets if the player dies when falling out of bounds
 		/// while in side-scrolling mode.</summary>
 		public bool DeathOutOfBounds {
-			get { return properties.GetBoolean("death_out_of_bounds", false); }
+			get { return properties.Get<bool>("death_out_of_bounds", false); }
 			set { properties.Set("death_out_of_bounds", value); }
 		}
 

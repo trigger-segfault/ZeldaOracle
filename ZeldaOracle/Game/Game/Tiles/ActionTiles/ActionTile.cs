@@ -15,7 +15,7 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
-	public class ActionTile : ITriggerObject, ZeldaAPI.ActionTile {
+	public class ActionTile : ITriggerObject, IVariableObject, ZeldaAPI.ActionTile {
 		
 		private RoomControl				roomControl;
 		private	ActionTileDataInstance	actionData;
@@ -113,7 +113,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
 			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
-				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				int substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -134,7 +134,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public static void DrawTileDataColors(Graphics2D g, ActionDataDrawArgs args, ColorDefinitions colorDefinitions) {
 			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
-				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				int substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -156,7 +156,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public static void DrawTileDataWithOffset(Graphics2D g, ActionDataDrawArgs args, Point2I offset) {
 			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
-				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				int substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -177,7 +177,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			ISprite sprite = args.Action.Sprite;
 			if (sprite is Animation) {
 				if (substripIndex == -1)
-					substripIndex = args.Properties.GetInteger("substrip_index", 0);
+					substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -264,6 +264,16 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		/// <summary>Gets the type of entity this action spawns.</summary>
 		public Type EntityType {
 			get { return actionData.EntityType; }
+		}
+
+		/// <summary>Gets the variables for the action tile.</summary>
+		public Variables Variables {
+			get { return actionData.Variables; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return actionData.Variables; }
 		}
 	}
 }

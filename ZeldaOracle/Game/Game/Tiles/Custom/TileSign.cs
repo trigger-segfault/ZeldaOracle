@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Tiles {
 			string text = "";
 
 			if (direction == Direction.Up)
-				text = Properties.GetString("text", GameSettings.TEXT_UNDEFINED);
+				text = Properties.Get<string>("text", GameSettings.TEXT_UNDEFINED);
 			else
 				text = "You can't read it from there!";
 

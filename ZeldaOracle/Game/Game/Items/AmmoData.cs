@@ -8,8 +8,11 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Items {
+	/// <summary>A data structure for creating ammo in-game.</summary>
 	public class AmmoData : BaseResourceData {
 
+		/// <summary>The sprite to use for the ammo in the selection window
+		/// and next to the weapon.</summary>
 		private ISprite sprite;
 
 

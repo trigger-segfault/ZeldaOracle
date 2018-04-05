@@ -6,13 +6,14 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 	public abstract class BaseTileDataInstance :
-		IEventObject, ITriggerObject, IIDObject
+		IEventObject, IVariableObject, ITriggerObject, IIDObject
 	{
 
 		protected Room				room;
 		protected BaseTileData		tileData;
 		protected Properties		properties;			// The default properties for the tile.
 		protected Properties		modifiedProperties; // The properties that tiles are spawned with.
+		protected Variables			variables;
 		protected EventCollection   events;
 		protected TriggerCollection	triggers;
 
@@ -24,32 +25,38 @@ namespace ZeldaOracle.Game.Tiles {
 		public BaseTileDataInstance() {
 			room				= null;
 			tileData			= null;
+
 			properties			= new Properties(this);
 			modifiedProperties	= new Properties(this);
+			variables			= new Variables(this);
 			events				= new EventCollection(this);
 			triggers			= new TriggerCollection(this);
+			modifiedProperties.BaseProperties	= properties;
 		}
 
 		public BaseTileDataInstance(BaseTileData tileData) {
-			this.room		= null;
-			this.tileData	= tileData;
-			this.properties							= new Properties(this);
-			this.properties.BaseProperties			= tileData.Properties;
-			this.modifiedProperties					= new Properties(this);
-			this.modifiedProperties.BaseProperties	= this.properties;
-			this.events								= new EventCollection(tileData.Events, this);
-			this.triggers							= new TriggerCollection(this);
+			room				= null;
+			this.tileData		= tileData;
+
+			properties			= new Properties(this);
+			modifiedProperties	= new Properties(this);
+			variables			= new Variables(this);
+			events				= new EventCollection(tileData.Events, this);
+			triggers			= new TriggerCollection(this);
+			properties.BaseProperties			= tileData.Properties;
+			modifiedProperties.BaseProperties	= properties;
 		}
 
 		public virtual void Clone(BaseTileDataInstance copy) {
-			this.room		= copy.Room;
-			this.tileData	= copy.tileData;
-			this.properties							= new Properties(copy.properties, this);
-			this.properties.BaseProperties			= tileData.Properties;
-			this.modifiedProperties					= new Properties(this);
-			this.modifiedProperties.BaseProperties	= this.properties;
-			this.events								= new EventCollection(copy.events, this);
-			this.triggers							= new TriggerCollection(copy.triggers, this);
+			room				= copy.Room;
+			tileData			= copy.tileData;
+			properties			= new Properties(copy.properties, this);
+			modifiedProperties	= new Properties(this);
+			variables			= new Variables(copy.variables, this);
+			events				= new EventCollection(copy.events, this);
+			triggers			= new TriggerCollection(copy.triggers, this);
+			properties.BaseProperties			= tileData.Properties;
+			modifiedProperties.BaseProperties	= properties;
 		}
 
 
@@ -189,7 +196,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public string ID {
-			get { return properties.GetString("id", ""); }
+			get { return properties.Get<string>("id", ""); }
 		}
 		
 		public TileResetCondition ResetCondition {
@@ -239,5 +246,15 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return modifiedProperties.Get("looted", false); }
 			set { modifiedProperties.Set("looted", value); }
 		}
+
+		/// <summary>Gets the variables for this tile data.</summary>
+		public Variables Variables {
+			get { return variables; }
+		}
+
+		/// <summary>Gets the variables for the API object.</summary>
+		/*ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return variables; }
+		}*/
 	}
 }

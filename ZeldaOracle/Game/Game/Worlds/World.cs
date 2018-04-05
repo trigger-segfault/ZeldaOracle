@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
@@ -153,7 +152,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets the area with the specified ID.</summary>
 		public Area GetArea(string areaID) {
-			return areas.Find(area => area.Properties.GetString("id") == areaID);
+			return areas.Find(area => area.Properties.Get<string>("id") == areaID);
 		}
 
 		/// <summary>Gets the area at the specified index.</summary>
@@ -484,7 +483,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		/// <summary>Gets the save identifier for the world.</summary>
 		public string ID {
-			get { return properties.GetString("id"); }
+			get { return properties.Get<string>("id"); }
 			set { properties.Set("id", value); }
 		}
 
@@ -511,7 +510,12 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		/// <summary>Gets the variables for the world.</summary>
-		public Variables Vars {
+		public Variables Variables {
+			get { return variables; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
 			get { return variables; }
 		}
 

@@ -5,7 +5,6 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
@@ -77,7 +76,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnInitialize() {
 			base.OnInitialize();
 
-			int orientationIndex = Properties.GetInteger("orientation", 0);
+			int orientationIndex = Properties.Get<int>("orientation", 0);
 			orientation = (ColorCubeOrientation) orientationIndex;
 			Graphics.PlayAnimation(SpriteList[orientationIndex]);
 		}
@@ -89,7 +88,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int orientationIndex = args.Properties.GetInteger("orientation", 0);
+			int orientationIndex = args.Properties.Get<int>("orientation", 0);
 			Tile.DrawTileDataIndex(g, args, orientationIndex);
 		}
 

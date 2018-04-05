@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 

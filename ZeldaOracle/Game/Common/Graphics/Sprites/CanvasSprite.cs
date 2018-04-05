@@ -15,6 +15,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public RenderTarget RenderTarget { get; }
 		/// <summary>The draw offset for the sprite.</summary>
 		public Point2I DrawOffset { get; }
+		/// <summary>The render target to return to after ending drawing.</summary>
+		private RenderTarget previousTarget;
 
 
 		//-----------------------------------------------------------------------------
@@ -26,6 +28,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			RenderTarget	= new RenderTarget(size, SurfaceFormat.Color,
 				RenderTargetUsage.PreserveContents);
 			DrawOffset		= Point2I.Zero;
+			previousTarget	= null;
 		}
 
 		/// <summary>Constructs a canvas sprite and render target with a draw offset.</summary>
@@ -33,24 +36,28 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			RenderTarget	= new RenderTarget(size, SurfaceFormat.Color,
 				RenderTargetUsage.PreserveContents);
 			DrawOffset		= drawOffset;
+			previousTarget	= null;
 		}
 
 		/// <summary>Constructs a canvas sprite from a render target.</summary>
 		public CanvasSprite(RenderTarget renderTarget) {
 			RenderTarget	= renderTarget;
 			DrawOffset		= Point2I.Zero;
+			previousTarget	= null;
 		}
 
 		/// <summary>Constructs a canvas sprite from a render target and draw offset.</summary>
 		public CanvasSprite(RenderTarget renderTarget, Point2I drawOffset) {
 			RenderTarget	= renderTarget;
 			DrawOffset		= drawOffset;
+			previousTarget	= null;
 		}
 
 		/// <summary>Constructs a copy of the canvas sprite.</summary>
 		public CanvasSprite(CanvasSprite copy) {
 			RenderTarget	= copy.RenderTarget;
 			DrawOffset		= copy.DrawOffset;
+			previousTarget	= null;
 		}
 
 
@@ -98,6 +105,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// called instead of Graphics2D.End().</summary>
 		public Graphics2D Begin(DrawMode drawMode) {
 			Graphics2D g = new Graphics2D();
+			previousTarget = g.GetRenderTarget();
 			g.SetRenderTarget(RenderTarget);
 			g.Begin(drawMode);
 			return g;
@@ -107,7 +115,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// of Graphics2D.End().</summary>
 		public void End(Graphics2D g) {
 			g.End();
-			g.SetRenderTarget(null);
+			g.SetRenderTarget(previousTarget);
 		}
 
 

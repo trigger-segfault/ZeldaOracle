@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.API;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Common.Translation {
 

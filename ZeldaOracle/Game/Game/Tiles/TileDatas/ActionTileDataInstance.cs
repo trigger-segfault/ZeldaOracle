@@ -120,7 +120,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		}
 
 		public int SubStripIndex {
-			get { return properties.GetInteger("substrip_index"); }
+			get { return properties.Get<int>("substrip_index"); }
 			set { properties.Set("substrip_index", value); }
 		}
 	}

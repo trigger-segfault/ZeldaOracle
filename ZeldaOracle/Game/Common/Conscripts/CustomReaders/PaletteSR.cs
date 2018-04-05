@@ -109,21 +109,21 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 				if (combinePalette.PaletteType != palette.PaletteType)
 					ThrowCommandParseError("Palette type combine mismatch!");
 				foreach (var pair in palette.GetDefinedConsts()) {
-					for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+					for (int i = 0; i < Palette.ColorGroupSize; i++) {
 						if (pair.Value[i].IsUndefined)
 							continue;
 						palette.SetColor(pair.Key, (LookupSubtypes) i, pair.Value[i].Color);
 					}
 				}
 				foreach (var pair in palette.GetDefinedColors()) {
-					for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+					for (int i = 0; i < Palette.ColorGroupSize; i++) {
 						if (pair.Value[i].IsUndefined)
 							continue;
 						palette.SetColor(pair.Key, (LookupSubtypes) i, pair.Value[i].Color);
 					}
 				}
 				foreach (var pair in palette.GetDefinedLookups()) {
-					for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+					for (int i = 0; i < Palette.ColorGroupSize; i++) {
 						if (pair.Value[i].IsUndefined)
 							continue;
 						palette.SetLookup(pair.Key, (LookupSubtypes) i, pair.Value[i].Name, pair.Value[i].Subtype);

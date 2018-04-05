@@ -7,7 +7,6 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.Maps;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Control.Scripting;
@@ -188,7 +187,7 @@ namespace ZeldaOracle.Game.Control {
 				LoadWorld(worldPath, recompile);
 
 				// DEBUG: Until enter name screen exists
-				Vars.Set("player", "Link");
+				Variables.Set("player", "Link");
 
 				// Begin the starting room.
 				if (test) {
@@ -597,12 +596,18 @@ namespace ZeldaOracle.Game.Control {
 			get { return roomStateStack.CurrentRoomState; }
 		}
 
-		public Variables Vars {
-			get { return world.Vars; }
-		}
-
 		public ScriptRunner ScriptRunner {
 			get { return scriptRunner; }
+		}
+
+		/// <summary>Gets the variables for the game.</summary>
+		public Variables Variables {
+			get { return world.Variables; }
+		}
+
+		/// <summary>Gets the variables for the game.</summary>
+		ZeldaAPI.Variables ZeldaAPI.Game.Vars {
+			get { return world.Variables; }
 		}
 	}
 }

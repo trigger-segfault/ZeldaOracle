@@ -53,7 +53,7 @@ namespace ZeldaEditor.Windows {
 			modified = false;
 			this.properties = properties;
 			this.propertyName = propertyName;
-			savedPath = properties.GetString(propertyName, "");
+			savedPath = properties.Get<string>(propertyName, "");
 
 
 			TileDataInstance tile =
@@ -289,7 +289,7 @@ namespace ZeldaEditor.Windows {
 		{
 			TilePathEditor editor = new TilePathEditor(editorControl,
 				properties, propertyName);
-			string oldPath = properties.GetString(propertyName, "");
+			string oldPath = properties.Get<string>(propertyName, "");
 			editor.Owner = owner;
 			editor.ShowDialog();
 			properties.Set(propertyName, oldPath);

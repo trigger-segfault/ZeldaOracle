@@ -5,6 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ZeldaOracle.Common.Content {
+	/// <summary>An exception thrown when a resource cannot be located.
+	/// Possibly due to game content inconsistencies.</summary>
+	public class ResourceReferenceException : Exception {
+		/// <summary>Constructs the resource reference exception.</summary>
+		public ResourceReferenceException(Type type, string name)
+			: base("Could not find resource of type '" + type.Name +
+				  "' with the name '" + name + "'!") { }
+	}
+
 	/// <summary>A non-generic reference to a resource type and name.</summary>
 	[Serializable]
 	public class ResourceReference {

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Units;
@@ -82,6 +83,7 @@ namespace ZeldaOracle.Game.Entities {
 			flags = NPCFlags.FacePlayerOnTalk |
 				NPCFlags.FacePlayerWhenNear;
 			animationTalk = null;
+			defaultDirection = Direction.Right;
 
 			// Bounding box for talking is 4 pixels beyond the hard collision box (inclusive).
 			// Alignment limit is a max 5 pixels in either direction (inclusive).
@@ -118,16 +120,15 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
-			Graphics.PlayAnimation(animationDefault);
-
 			sightDistance = 2;
 			
 			animationDefault = Properties.GetResource<Animation>("animation");
 			animationTalk = Properties.GetResource<Animation>("animation_talk");
-			Physics.Flags = Properties.GetEnumFlags("physics_flags", Physics.Flags);
-			flags = (NPCFlags) Properties.GetInteger("npc_flags");
+			Physics.Flags = Properties.GetEnum("physics_flags", Physics.Flags);
+			flags = Properties.GetEnum("npc_flags", NPCFlags.Default);
 			direction = Properties.Get<int>("direction", defaultDirection);
 
+			Graphics.PlayAnimation(animationDefault);
 			Graphics.IsAnimatedWhenPaused	= flags.HasFlag(NPCFlags.AnimateOnTalk);
 			Graphics.SubStripIndex			= direction;
 		}
@@ -190,6 +191,13 @@ namespace ZeldaOracle.Game.Entities {
 		//	set { defaultDirection = value; }
 		//}
 
+		/// <summary>Gets or sets radius of the diamond shape of tiles where the NPC
+		/// will face  the player (excluding the center tile).</summary>
+		public int SightDistance {
+			get { return sightDistance; }
+			set { sightDistance = value; }
+		}
+
 		/// <summary>The default animation to play.</summary>
 		public ISprite DefaultAnimation {
 			get { return animationDefault; }
@@ -204,7 +212,7 @@ namespace ZeldaOracle.Game.Entities {
 		
 		/// <summary>The text to display when talked to.</summary>
 		public string Text {
-			get { return Properties.GetString("text", ""); }
+			get { return Properties.Get<string>("text", ""); }
 			set { Properties.Set("text", value); }
 		}
 	}

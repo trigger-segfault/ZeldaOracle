@@ -158,7 +158,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 		public override void OnBegin() {
 			wrappedString	= GameData.FONT_LARGE.WrapString(
-				message.Text, MaxWidth - spacing * 16, GameControl.Vars);
+				message.Text, MaxWidth - spacing * 16, GameControl.Variables);
 			timer = 1;
 			state = TextReaderState.WritingLine;
 			windowLinesLeft	= linesPerWindow;

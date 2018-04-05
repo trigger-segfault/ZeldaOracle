@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int width = GMath.Max(1, args.Properties.GetPoint("size", Point2I.One).X);
+			int width = GMath.Max(1, args.Properties.Get<Point2I>("size", Point2I.One).X);
 			for (int x = 0; x < width; x++) {
 				int spriteIndex = 0;
 				if (x == 0) {

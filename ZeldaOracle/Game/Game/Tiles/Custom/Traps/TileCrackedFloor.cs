@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public bool IsSilent {
-			get { return Properties.GetBoolean("silent", false); }
+			get { return Properties.Get<bool>("silent", false); }
 		}
 
 

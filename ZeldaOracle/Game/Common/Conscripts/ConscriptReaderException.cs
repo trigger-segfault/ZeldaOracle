@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Conscripts {
-	/// <summary>A helpful exception class for throwing script reader errors.</summary>
-	public class ScriptReaderException : LoadContentException {
+	/// <summary>A helpful exception class for throwing conscript reader errors.</summary>
+	public class ConscriptReaderException : LoadContentException {
 
 		private string	fileName;
 		private int		lineNumber;
@@ -22,9 +19,10 @@ namespace ZeldaOracle.Common.Conscripts {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs the script reader exception.</summary>
-		public ScriptReaderException(string message, string fileName, string line,
-			int lineNumber, int columnNumber, bool showCaret, string scriptStackTrace = "") :
-			base(message)
+		public ConscriptReaderException(string message, string fileName, string line,
+			int lineNumber, int columnNumber, bool showCaret,
+			string scriptStackTrace = "", Exception innerException = null) :
+			base(message, innerException)
 		{
 			this.fileName			= fileName;
 			this.line				= line;
@@ -85,7 +83,8 @@ namespace ZeldaOracle.Common.Conscripts {
 			get { return lineNumber; }
 		}
 
-		/// <summary>Gets the column number in the file's line where the exception occurred.</summary>
+		/// <summary>Gets the column number in the file's line where the exception
+		/// occurred.</summary>
 		public int ColumnNumber {
 			get { return columnNumber; }
 		}

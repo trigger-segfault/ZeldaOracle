@@ -269,7 +269,7 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 						if (!paletteArgs.Dictionary.Contains(colorGroup)) {
 							ThrowCommandParseError("Color group '" + colorGroup + "' does not exist in palette dictionary!");
 						}
-						for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
+						for (int j = 0; j < Palette.ColorGroupSize; j++) {
 							LookupSubtypes subtype = (LookupSubtypes) j;
 							Color color = palette.LookupColor(colorGroup, subtype);
 

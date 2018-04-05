@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game;
-using ZeldaOracle.Game.API;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>A monospaced sprite font.</summary>

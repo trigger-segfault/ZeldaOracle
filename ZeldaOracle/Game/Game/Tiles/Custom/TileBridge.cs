@@ -169,8 +169,8 @@ namespace ZeldaOracle.Game.Tiles {
 			base.OnInitialize();
 
 			fallsInHoles	= false;
-			isVertical		= Properties.GetBoolean("vertical", false);
-			bridgeDirection	= Properties.GetInteger("bridge_direction", -1);
+			isVertical		= Properties.Get<bool>("vertical", false);
+			bridgeDirection	= Properties.Get<int>("bridge_direction", -1);
 
 			timer = 0;
 			pieceLocation = new Point2I(-1, -1);
@@ -185,7 +185,7 @@ namespace ZeldaOracle.Game.Tiles {
 			else
 				state = TileBridgeState.Destroyed;
 			
-			if (Properties.GetBoolean("built", false))
+			if (Properties.Get<bool>("built", false))
 				CreateBridge(true);
 			else
 				DestroyBridge(true);

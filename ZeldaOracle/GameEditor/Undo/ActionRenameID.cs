@@ -39,7 +39,7 @@ namespace ZeldaEditor.Undo {
 					editorControl.World.GetModifiedProperties())
 				{
 					if (property.EditorType == editorType &&
-						property.StringValue == oldID)
+						property.Get<string>() == oldID)
 						idProperties.Add(property);
 				}
 			}
@@ -67,7 +67,7 @@ namespace ZeldaEditor.Undo {
 			bool propertyGridNeedsUpdating = false;
 			IPropertyObject current = editorControl.PropertyGrid.PropertyObject;
 			foreach (Property property in idProperties) {
-				property.StringValue = oldID;
+				property.Set(oldID);
 				if (!propertyGridNeedsUpdating &&
 					current == property.Properties.PropertyObject)
 				{
@@ -99,7 +99,7 @@ namespace ZeldaEditor.Undo {
 			bool propertyGridNeedsUpdating = false;
 			IPropertyObject current = editorControl.PropertyGrid.PropertyObject;
 			foreach (Property property in idProperties) {
-				property.StringValue = newID;
+				property.Set(newID);
 				if (!propertyGridNeedsUpdating &&
 					current == property.Properties.PropertyObject) {
 					propertyGridNeedsUpdating = true;

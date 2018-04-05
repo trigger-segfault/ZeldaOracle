@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
-			angle = Properties.GetInteger("angle", 0);
+			angle = Properties.Get<int>("angle", 0);
 
 			Graphics.PlayAnimation(GameData.ANIM_TILE_SEED_BOUNCER);
 			Graphics.SubStripIndex = angle;
@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int angle = args.Properties.GetInteger("angle", 0);
+			int angle = args.Properties.Get<int>("angle", 0);
 			g.DrawSprite(
 				GameData.ANIM_TILE_SEED_BOUNCER.GetSubstrip(angle),
 				args.SpriteSettings,

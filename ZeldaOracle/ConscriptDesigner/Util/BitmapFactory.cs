@@ -57,7 +57,7 @@ namespace ConscriptDesigner.Util {
 			return bitmapImage;
 		}
 		public static BitmapSource LoadSourceFromFile(string path) {
-			using (FileStream stream = File.Open(path, FileMode.Open)) {
+			using (Stream stream = File.OpenRead(path)) {
 				return LoadSourceFromStream(stream);
 			}
 		}

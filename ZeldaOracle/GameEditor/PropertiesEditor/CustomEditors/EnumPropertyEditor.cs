@@ -25,11 +25,11 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class EnumPropertyEditor : EnumComboBoxEditor {
 
 		Type enumType;
-		PropertyType baseType;
+		VarType baseType;
 
 		protected override IEnumerable CreateItemsSource(PropertyItem propertyItem) {
 			CustomPropertyDescriptor propertyDescriptor = (CustomPropertyDescriptor)propertyItem.PropertyDescriptor;
-			baseType = propertyDescriptor.Property.Type;
+			baseType = propertyDescriptor.Property.VarType;
 			string typeName = propertyDescriptor.Documentation.EditorSubType;
 			enumType = GameUtil.FindType(typeName, false);
 			return GetValues(enumType);
@@ -49,9 +49,9 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 	public class EnumValueConverter : IValueConverter {
 		Type enumType;
-		PropertyType baseType;
+		VarType baseType;
 
-		public EnumValueConverter(Type enumType, PropertyType baseType) {
+		public EnumValueConverter(Type enumType, VarType baseType) {
 			this.enumType = enumType;
 			this.baseType = baseType;
 		}
@@ -65,8 +65,8 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			}
 			else if (value.GetType() == enumType) {
 				switch (baseType) {
-				case PropertyType.Integer: return (int)value;
-				case PropertyType.String: return value.ToString();
+				case VarType.Integer: return (int)value;
+				case VarType.String: return value.ToString();
 				}
 			}
 			return null;
@@ -80,8 +80,8 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			}
 			else if (value.GetType() == enumType) {
 				switch (baseType) {
-				case PropertyType.Integer: return (int)value;
-				case PropertyType.String: return value.ToString();
+				case VarType.Integer: return (int)value;
+				case VarType.String: return value.ToString();
 				}
 			}
 			return null;

@@ -17,11 +17,11 @@ namespace ZeldaOracle.Common.Graphics {
 		Clockwise180 = 2,
 		/// <summary>Rotate clockwise by 3 rotations.</summary>
 		Clockwise270 = 3,
-		/// <summary>Rotate counter-clockwise by 1 rotation.</summary
+		/// <summary>Rotate counter-clockwise by 1 rotation.</summary>
 		Counter90 = 3,
-		/// <summary>Rotate counter-clockwise by 2 rotations.</summary
+		/// <summary>Rotate counter-clockwise by 2 rotations.</summary>
 		Counter180 = 2,
-		/// <summary>Rotate counter-clockwise by 3 rotations.</summary
+		/// <summary>Rotate counter-clockwise by 3 rotations.</summary>
 		Counter270 = 1,
 	}
 

@@ -25,7 +25,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class EnumFlagPropertyEditor : TypeEditor<CheckComboBox>, ITypeEditor {
 
 		Type enumType;
-		PropertyType baseType;
+		VarType baseType;
 
 		protected EditorControl EditorControl {
 			get { return PropertyDescriptor.EditorControl; }
@@ -59,7 +59,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 
 		protected IEnumerable CreateItemsSource(PropertyItem propertyItem) {
-			baseType = PropertyDescriptor.Property.Type;
+			baseType = PropertyDescriptor.Property.VarType;
 			string typeName = PropertyDescriptor.Documentation.EditorSubType;
 			enumType = GameUtil.FindType(typeName, false);
 			return GetValues(enumType);
@@ -79,9 +79,9 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 	public class EnumFlagValueConverter : IValueConverter {
 		Type enumType;
-		PropertyType baseType;
+		VarType baseType;
 
-		public EnumFlagValueConverter(Type enumType, PropertyType baseType) {
+		public EnumFlagValueConverter(Type enumType, VarType baseType) {
 			this.enumType = enumType;
 			this.baseType = baseType;
 		}

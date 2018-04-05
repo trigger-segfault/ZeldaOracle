@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,14 +13,15 @@ namespace ZeldaOracle.Common.Conscripts {
 	public abstract class ConscriptRunner {
 
 		/// <summary>The current reader for this script.</summary>
-		private ScriptReader reader;
+		private ConscriptReader reader;
 		/// <summary>The script readers reading the scripts lower in the call stack.</summary>
-		private Stack<ScriptReader> readerStack;
+		private Stack<ConscriptReader> readerStack;
 		
 		/// <summary>The list of custom parameter types for the script commands.</summary>
 		private CommandParamDefinitions typeDefinitions;
 		/// <summary>The list of available commands for the script.</summary>
-		private List<ScriptCommand> commands;
+		//private List<ConscriptCommand> commands;
+		private ConscriptCommandCollection commands;
 
 		/// <summary>The temporary resource library.</summary>
 		private TemporaryResources tempResources;
@@ -38,9 +40,10 @@ namespace ZeldaOracle.Common.Conscripts {
 		/// <summary>Constructs the base script runner.</summary>
 		protected ConscriptRunner() {
 			reader = null;
-			readerStack = new Stack<ScriptReader>();
+			readerStack = new Stack<ConscriptReader>();
 			typeDefinitions = new CommandParamDefinitions();
-			commands = new List<ScriptCommand>();
+			//commands = new List<ConscriptCommand>();
+			commands = new ConscriptCommandCollection();
 			tempResources = new TemporaryResources();
 			tempResourcesStack = new Stack<TemporaryResources>();
 			calledScripts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -142,7 +145,7 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, null, parameterOverloads, action, typeDefinitions));
+			AddCommand(new ConscriptCommand(name, null, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -187,7 +190,7 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int mode, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, new int[] { mode }, parameterOverloads, action, typeDefinitions));
+			AddCommand(new ConscriptCommand(name, new int[] { mode }, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -232,7 +235,7 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, modes, parameterOverloads, action, typeDefinitions));
+			AddCommand(new ConscriptCommand(name, modes, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -241,7 +244,7 @@ namespace ZeldaOracle.Common.Conscripts {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Add a script command.</summary>
-		protected void AddCommand(ScriptCommand command) {
+		protected void AddCommand(ConscriptCommand command) {
 			commands.Add(command);
 		}
 
@@ -334,35 +337,70 @@ namespace ZeldaOracle.Common.Conscripts {
 				ThrowCommandParseError("Property with the name '" + name +
 					"' does not exist!");
 
-			object value = ParsePropertyValue(parameters.GetParam(1), property.Type);
-			properties.SetGeneric(name, value);
+			object value = ParsePropertyValue(parameters.GetParam(1), property.VarType,
+				property.ListType);
+			properties.SetObject(name, value);
 		}
 
 		/// <summary>Parses the value of the property from the command param.</summary>
-		private object ParsePropertyValue(CommandParam param, PropertyType type) {
-			if (type == PropertyType.String) {
+		private object ParsePropertyValue(CommandParam param, VarType varType,
+			ListType listType)
+		{
+			int count = param.ChildCount;
+			Type elementType = Property.VarTypeToType(varType);
+			switch (listType) {
+			case ListType.Single: return ParsePropertyValue(param, varType);
+			case ListType.Array:
+				Array array = Array.CreateInstance(elementType, count);
+				for (int i = 0; i < count; i++)
+					array.SetValue(ParsePropertyValue(param.GetParam(i), varType), i);
+				return array;
+			case ListType.List:
+				Type newType = typeof(List<>).MakeGenericType(elementType);
+				IList list = (IList) Activator.CreateInstance(newType);
+				for (int i = 0; i < count; i++)
+					list.Add(ParsePropertyValue(param.GetParam(i), varType));
+				return list;
+			default:
+				return null;
+			}
+		}
+
+		/// <summary>Parses the value of the property from the command param.</summary>
+		private object ParsePropertyValue(CommandParam param, VarType varType) {
+			switch (varType) {
+			case VarType.String:
 				if (param.IsValidType(CommandParamType.String))
-					return param.StringValue;
-			}
-			else if (type == PropertyType.Integer) {
+					return param.StringValue; break;
+			case VarType.Integer:
 				if (param.IsValidType(CommandParamType.Integer))
-					return param.IntValue;
-			}
-			else if (type == PropertyType.Float) {
+					return param.IntValue; break;
+			case VarType.Float:
 				if (param.IsValidType(CommandParamType.Float))
-					return param.FloatValue;
-			}
-			else if (type == PropertyType.Boolean) {
+					return param.FloatValue; break;
+			case VarType.Boolean:
 				if (param.IsValidType(CommandParamType.Boolean))
-					return param.BoolValue;
-			}
-			else if (type == PropertyType.Point) {
+					return param.BoolValue; break;
+			case VarType.Point:
 				if (param.IsValidType(CommandParamType.Array))
-					return param.PointValue;
+					return param.PointValue; break;
+			case VarType.Vector:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.VectorValue; break;
+			case VarType.RangeI:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RangeIValue; break;
+			case VarType.RangeF:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RangeFValue; break;
+			case VarType.RectangleI:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RectangleIValue; break;
+			case VarType.RectangleF:
+				if (param.IsValidType(CommandParamType.Array))
+					return param.RectangleFValue; break;
 			}
-			else if (type == PropertyType.List)
-				ThrowParseError("Lists are unsupported as a property type");
-			ThrowParseError("The property value '" + param.StringValue + "' is not of type " + type.ToString());
+			ThrowParseError("The property value '" + param.StringValue + "' is not of type " + varType.ToString());
 			return null;
 		}
 
@@ -392,7 +430,7 @@ namespace ZeldaOracle.Common.Conscripts {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>Begins reading the script.</summary>
-		public void BeginReading(ScriptReader reader) {
+		public void BeginReading(ConscriptReader reader) {
 			this.reader = reader;
 			readerStack.Push(reader);
 			OnBeginReading();
@@ -433,12 +471,13 @@ namespace ZeldaOracle.Common.Conscripts {
 		}
 
 		/// <summary>Gets or sets the script reader parsing the script.</summary>
-		public ScriptReader Reader {
+		public ConscriptReader Reader {
 			get { return reader; }
 		}
 
 		/// <summary>Gets the list of commands for the script.</summary>
-		public IReadOnlyList<ScriptCommand> Commands {
+		//public IReadOnlyList<ConscriptCommand> Commands {
+		public ConscriptCommandCollection Commands {
 			get { return commands; }
 		}
 

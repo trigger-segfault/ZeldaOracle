@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Tiles {
 					//Graphics.PlaySprite(GameData.SPR_TILE_OWL_ACTIVATED);
 				}
 				if (timer == 58) {
-					string text = Properties.GetString("text", GameSettings.TEXT_UNDEFINED);
+					string text = Properties.Get<string>("text", GameSettings.TEXT_UNDEFINED);
 					RoomControl.GameControl.DisplayMessage(text);
 				}
 				if (timer > 80) {

@@ -132,7 +132,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public bool IsBlue {
-			get { return Properties.GetBoolean("blue", false); }
+			get { return Properties.Get<bool>("blue", false); }
 		}
 	}
 }

@@ -5,7 +5,6 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles.Puzzles {
@@ -89,7 +88,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles.Puzzles {
 
 			// Check if solved.
 			bool checkSolve = CheckSolved();
-			bool solveOnce = Properties.GetBoolean("solve_once", false);
+			bool solveOnce = Properties.Get<bool>("solve_once", false);
 
 			if (checkSolve != isSolved && (!solveOnce || !hasBeenSolvedAlready)) {
 				isSolved = checkSolve;

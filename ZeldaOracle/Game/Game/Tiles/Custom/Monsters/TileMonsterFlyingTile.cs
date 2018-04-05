@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 
 		public override void OnInitialize() {
 			base.OnInitialize();
-			order = Properties.GetInteger("order", 0);
+			order = Properties.Get<int>("order", 0);
 		}
 
 		public override void Update() {

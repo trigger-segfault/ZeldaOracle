@@ -41,7 +41,7 @@ namespace ZeldaEditor.WinForms {
 
 			public TilePathInfo(TileDataInstance tile) {
 				Tile = tile;
-				Path = TilePath.Parse(Tile.Properties.GetString("path", ""));
+				Path = TilePath.Parse(Tile.Properties.Get<string>("path", ""));
 				Index = 0;
 				Timer = 0;
 				Position = Tile.Location * GameSettings.TILE_SIZE;
@@ -73,7 +73,7 @@ namespace ZeldaEditor.WinForms {
 			}
 
 			public void Restart() {
-				Path = TilePath.Parse(Tile.Properties.GetString("path", ""));
+				Path = TilePath.Parse(Tile.Properties.Get<string>("path", ""));
 				Index = 0;
 				Position = Tile.Location * GameSettings.TILE_SIZE;
 				Destination = Position;
@@ -127,7 +127,7 @@ namespace ZeldaEditor.WinForms {
 
 			foreach (var tileData in room.GetTiles()) {
 				if (tileData == tile || !string.IsNullOrWhiteSpace(
-					tileData.Properties.GetString("path", "")))
+					tileData.Properties.Get<string>("path", "")))
 				{
 					if (tileData == tile)
 						paths.Add(currentPath);

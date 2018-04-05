@@ -8,7 +8,7 @@ using XnaColor = Microsoft.Xna.Framework.Color;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.API;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Common.Content;
 

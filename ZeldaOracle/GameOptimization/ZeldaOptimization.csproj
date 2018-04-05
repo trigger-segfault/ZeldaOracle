@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FD1E47E1-EC0A-4F93-9D85-D151285BD134}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZeldaOracle</RootNamespace>
+    <AssemblyName>ZeldaOptimization</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Conscripts\Commands\CommandParam.cs" />
+    <Compile Include="Common\Conscripts\Commands\CommandParamDefinition.cs" />
+    <Compile Include="Common\Conscripts\Commands\CommandParamParser.cs" />
+    <Compile Include="Common\Conscripts\Commands\CommandReferenceParam.cs" />
+    <Compile Include="Common\Conscripts\Commands\ConscriptCommand.cs" />
+    <Compile Include="Common\Conscripts\Commands\ConscriptCommandCollection.cs" />
+    <Compile Include="Common\Content\ContentContainer.cs" />
+    <None Include="Common\Content\ImageLoader.cs" />
+    <Compile Include="Common\Content\Exceptions.cs" />
+    <Compile Include="Common\Graphics\Image.cs" />
+    <Compile Include="Common\Graphics\Palette.cs" />
+    <Compile Include="Common\Graphics\PaletteDictionary.cs" />
+    <Compile Include="Common\Graphics\PaletteMisc.cs" />
+    <Compile Include="Common\Graphics\RenderTarget.cs" />
+    <Compile Include="Common\Graphics\Sprites\Animation.cs" />
+    <Compile Include="Common\Graphics\Sprites\AnimationFrame.cs" />
+    <Compile Include="Common\Graphics\Sprites\BasicSprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\CompositeSprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\DefinitionSprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\EmptySprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
+    <Compile Include="Common\Graphics\Sprites\ISprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\ISpriteSource.cs" />
+    <Compile Include="Common\Graphics\Sprites\OffsetSprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.cs" />
+    <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Misc.cs" />
+    <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.Size.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpritePart.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpriteSet.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpriteSettings.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpriteSheet.cs" />
+    <Compile Include="Common\Graphics\Sprites\UnmappedSprite.cs" />
+    <Compile Include="Common\Scripting\Internal\VarBase.cs" />
+    <Compile Include="Common\Scripting\Internal\VarBaseCollection.cs" />
+    <Compile Include="Common\Scripting\IPropertyObject.cs" />
+    <Compile Include="Common\Scripting\IPropertyObjectContainer.cs" />
+    <Compile Include="Common\Scripting\IVariableObject.cs" />
+    <Compile Include="Common\Scripting\IVariableObjectContainer.cs" />
+    <Compile Include="Common\Scripting\Properties.cs" />
+    <Compile Include="Common\Scripting\Property.cs" />
+    <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
+    <Compile Include="Common\Scripting\Variable.cs" />
+    <Compile Include="Common\Scripting\Variables.cs" />
+    <Compile Include="Common\Scripting\VarType.cs" />
+    <Compile Include="Common\Util\BinaryCounter.cs" />
+    <Compile Include="Common\Util\BinaryExtensions.cs" />
+    <Compile Include="Common\Util\Embedding.cs" />
+    <Compile Include="Common\Util\EnumHelper.cs" />
+    <Compile Include="Common\Util\GdiCasting.cs" />
+    <Compile Include="Common\Util\GenericHelper.cs" />
+    <Compile Include="Common\Util\NativeMethods.cs" />
+    <Compile Include="Common\Util\PathHelper.cs" />
+    <Compile Include="Common\Util\ReflectionHelper.cs" />
+    <Compile Include="Common\Util\StringExtensions.cs" />
+    <Compile Include="Common\Util\Texture2DHelper.cs" />
+    <Compile Include="Common\Util\TypeHelper.cs" />
+    <Compile Include="Common\Util\XnaCasting.cs" />
+    <Compile Include="Common\Util\XnaExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameAPI\ZeldaAPI.csproj">
+      <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
+      <Name>ZeldaAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameCommon\ZeldaCommon.csproj">
+      <Project>{0f262418-7e4b-4005-b35e-18a180ac1239}</Project>
+      <Name>ZeldaCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

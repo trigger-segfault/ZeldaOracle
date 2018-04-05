@@ -38,6 +38,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Loaded Assembly ------------------------------------------------------------
 
 		/// <summary>The script's MethodInfo found in the loaded assembly.</summary>
+		[NonSerialized]
 		private MethodInfo methodInfo;
 
 

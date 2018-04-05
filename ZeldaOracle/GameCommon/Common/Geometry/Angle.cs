@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using ZeldaOracle.Common.Converters;
 
 namespace ZeldaOracle.Common.Geometry {
 
 	/// <summary>Struct used to represent an axis-aligned or diagonal angle.</summary>
 	[Serializable]
-	public struct Angle {
+	[TypeConverter(typeof(AngleConverter))]
+	public struct Angle : IConvertible {
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -414,6 +417,68 @@ namespace ZeldaOracle.Common.Geometry {
 		/// <summary>Return true if the angle is axis-aligned.</summary>
 		public bool IsAxisAligned {
 			get { return (index % 2 == 0); }
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// IConvertable
+		//-----------------------------------------------------------------------------
+
+		TypeCode IConvertible.GetTypeCode() {
+			return TypeCode.Object;
+		}
+
+		bool IConvertible.ToBoolean(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		byte IConvertible.ToByte(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		char IConvertible.ToChar(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		DateTime IConvertible.ToDateTime(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		decimal IConvertible.ToDecimal(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		double IConvertible.ToDouble(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		short IConvertible.ToInt16(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		int IConvertible.ToInt32(IFormatProvider provider) {
+			return (int) this;
+		}
+		long IConvertible.ToInt64(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		sbyte IConvertible.ToSByte(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		float IConvertible.ToSingle(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		string IConvertible.ToString(IFormatProvider provider) {
+			return ToString();
+		}
+		object IConvertible.ToType(Type conversionType, IFormatProvider provider) {
+			if (conversionType == typeof(int))
+				return (int) this;
+			if (conversionType == typeof(Angle))
+				return ToDirection();
+			throw new InvalidCastException();
+		}
+		ushort IConvertible.ToUInt16(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		uint IConvertible.ToUInt32(IFormatProvider provider) {
+			throw new InvalidCastException();
+		}
+		ulong IConvertible.ToUInt64(IFormatProvider provider) {
+			throw new InvalidCastException();
 		}
 	}
 

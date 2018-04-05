@@ -23,27 +23,22 @@ namespace ZeldaOracle.Game {
 
 		// Initializes and loads the game content. NOTE: The order here is important.
 		public static void Initialize(bool preloadSprites = true) {
-			/*
-			CommandReferenceParam param = CommandParamParser.ParseReferenceParams(
-				"(any objs...)...");
-				//"any name, (int gridLocationX, int gridLocationY), (int drawOffsetX, any drawOffsetY) = (0, fuck)");
-				//"float x, string y, bool width, (int a, int b) = (1, 2), float height, (int hoop) = (0), bool asd");
-				//"float x, string y, bool width, (int a, int b, (string c)), float height");
-
-			Console.WriteLine(CommandParamParser.ToString(param));
-			throw new LoadContentException("END");
-			*/
-
 			Logs.InitializeLogs();
 
 			Stopwatch watch = Stopwatch.StartNew();
 			Stopwatch audioWatch = new Stopwatch();
 			Stopwatch spriteWatch = new Stopwatch();
-			ScriptReader.Watch.Restart();
+			Stopwatch preloadWatch = new Stopwatch();
+			ConscriptReader.Watch.Restart();
 
-			if (preloadSprites &&
-				Resources.SpriteDatabase.DatabaseFileExists())
-				Resources.SpriteDatabase.Load();
+			if (preloadSprites && Resources.SpriteDatabase.DatabaseFileExists()) {
+				preloadWatch.Start();
+				if (Resources.SpriteDatabase.Load())
+					Logs.Initialization.LogInfo(
+						"Took {0} ms to preload paletted sprite database.",
+						preloadWatch.ElapsedMilliseconds);
+				preloadWatch.Stop();
+			}
 
 			Logs.Initialization.LogNotice("Loading Palette Dictionaries");
 			LoadPaletteDictionaries();
@@ -106,7 +101,7 @@ namespace ZeldaOracle.Game {
 			//Logs.Initialization.LogNotice("Took {0} ms to load audio.",
 			//	audioWatch.ElapsedMilliseconds);
 			Logs.Initialization.LogInfo("Took {0} ms to parse conscripts.",
-				ScriptReader.Watch.ElapsedMilliseconds);
+				ConscriptReader.Watch.ElapsedMilliseconds);
 			Logs.Initialization.LogInfo("Took {0} ms to load game data.",
 				watch.ElapsedMilliseconds);
 
@@ -273,7 +268,7 @@ namespace ZeldaOracle.Game {
 			// Menu palette is made programatically as it's just a 16 unit offset (Maxes at 248)
 			Palette entitiesMenu = new Palette(Resources.Get<Palette>("entities_default"));
 			foreach (var pair in entitiesMenu.GetDefinedConsts()) {
-				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+				for (int i = 0; i < Palette.ColorGroupSize; i++) {
 					if (pair.Value[i].IsUndefined)
 						continue;
 					Color color = pair.Value[i].Color;
@@ -284,7 +279,7 @@ namespace ZeldaOracle.Game {
 				}
 			}
 			foreach (var pair in entitiesMenu.GetDefinedColors()) {
-				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+				for (int i = 0; i < Palette.ColorGroupSize; i++) {
 					if (pair.Value[i].IsUndefined)
 						continue;
 					Color color = pair.Value[i].Color;

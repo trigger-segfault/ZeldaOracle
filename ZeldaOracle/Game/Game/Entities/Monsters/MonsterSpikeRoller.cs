@@ -30,11 +30,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Spike Roller Settings
 			int tileLocation    = tile.Location[vertical];
-			vertical            = tile.Properties.GetBoolean("vertical", false);
+			vertical            = tile.Properties.Get<bool>("vertical", false);
 			length              = tile.Size[!vertical];
 			movePositions       = new int[2];
-			movePositions[0]    = tile.Properties.GetInteger("move_distance_1");
-			movePositions[1]    = tile.Properties.GetInteger("move_distance_2");
+			movePositions[0]    = tile.Properties.Get<int>("move_distance_1");
+			movePositions[1]    = tile.Properties.Get<int>("move_distance_2");
 			destination = 0;
 
 			// Prevent rogue spike roller movement

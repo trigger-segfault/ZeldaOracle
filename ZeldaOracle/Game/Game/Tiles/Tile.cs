@@ -27,7 +27,7 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class Tile : ITriggerObject, ZeldaAPI.Tile {
+	public class Tile : ITriggerObject, IVariableObject, ZeldaAPI.Tile {
 		
 		//-----------------------------------------------------------------------------
 		// Members
@@ -141,7 +141,7 @@ namespace ZeldaOracle.Game.Tiles {
 					collisionModel = GameData.MODEL_LEAP_LEDGES[LedgeDirection];
 
 				// Begin a path if there is one.
-				string pathString = properties.GetString("path", "");
+				string pathString = properties.Get<string>("path", "");
 				TilePath p = TilePath.Parse(pathString);
 				BeginPath(p);
 
@@ -280,7 +280,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Called when the player hits this tile with the sword.</summary>
 		public virtual void OnSwordHit(ItemWeapon swordItem) {
-			int minLevel = properties.GetInteger("cuttable_sword_level", Item.Level1);
+			int minLevel = properties.Get<int>("cuttable_sword_level", Item.Level1);
 			if (!isMoving && flags.HasFlag(TileFlags.Cuttable) &&
 				(!(swordItem is ItemSword) || swordItem.Level >= minLevel))
 			{
@@ -323,9 +323,9 @@ namespace ZeldaOracle.Game.Tiles {
 				return false;
 			if (roomControl.IsSideScrolling && Directions.IsVertical(direction))
 				return false;
-			if (properties.GetBoolean("move_once", false) && hasMoved)
+			if (properties.Get<bool>("move_once", false) && hasMoved)
 				return false;
-			int moveDir = properties.GetInteger("move_direction", -1);
+			int moveDir = properties.Get<int>("move_direction", -1);
 			if (moveDir >= 0 && direction != moveDir)
 				return false;
 			if (Move(direction, 1, movementSpeed)) {
@@ -341,6 +341,8 @@ namespace ZeldaOracle.Game.Tiles {
 			if (isMoving || !IsDigable)
 				return false;
 
+			Destroy();
+
 			// Remove/dig the tile
 			if (layer == 0) {
 				// Spawn the a "dug" tile or TileBelow in this tile's place
@@ -348,8 +350,7 @@ namespace ZeldaOracle.Game.Tiles {
 					Resources.Get<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-
-
+				
 				// Spawn drops
 				Entity dropEntity = SpawnDrop();
 				if (dropEntity != null) {
@@ -361,8 +362,6 @@ namespace ZeldaOracle.Game.Tiles {
 						direction.ToVector(GameSettings.DROP_ENTITY_DIG_VELOCITY);
 				}
 			}
-
-			Destroy();
 			return true;
 		}
 
@@ -741,10 +740,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			int spriteIndex = args.Properties.Get<int>("sprite_index", 0);
 			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
 			if (sprite is Animation) {
-				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				int substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -761,9 +760,9 @@ namespace ZeldaOracle.Game.Tiles {
 			Point2I offset)
 		{
 			ISprite sprite = args.Tile.GetSpriteIndex(
-				args.Properties.GetInteger("sprite_index"));
+				args.Properties.Get<int>("sprite_index"));
 			if (sprite is Animation) {
-				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				int substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -781,11 +780,11 @@ namespace ZeldaOracle.Game.Tiles {
 			int spriteIndex = -1, int substripIndex = -1)
 		{
 			if (spriteIndex == -1)
-				spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+				spriteIndex = args.Properties.Get<int>("sprite_index", 0);
 			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
 			if (sprite is Animation) {
 				if (substripIndex == -1)
-					substripIndex = args.Properties.GetInteger("substrip_index", 0);
+					substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -812,10 +811,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public static void DrawTileDataColors(Graphics2D g, TileDataDrawArgs args,
 			ColorDefinitions colorDefinitions)
 		{
-			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			int spriteIndex = args.Properties.Get<int>("sprite_index", 0);
 			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
 			if (sprite is Animation) {
-				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				int substripIndex = args.Properties.Get<int>("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
@@ -1007,7 +1006,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool IsEnabled {
-			get { return Properties.GetBoolean("enabled"); }
+			get { return Properties.Get<bool>("enabled", true); }
 			set { Properties.Set("enabled", value); }
 		}
 
@@ -1198,7 +1197,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Direction LedgeDirection {
-			get { return properties.GetInteger("ledge_direction", Direction.Down); }
+			get { return properties.Get<int>("ledge_direction", Direction.Down); }
 		}
 
 		public Polarity Polarity {
@@ -1282,12 +1281,22 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		string ZeldaAPI.Tile.ID {
-			get { return properties.GetString("id", ""); }
+			get { return properties.Get<string>("id", ""); }
 		}
 
 		bool ZeldaAPI.Tile.IsMovable {
 			get { return HasFlag(TileFlags.Movable); }
 			set { SetFlags(TileFlags.Movable, value); }
+		}
+
+		/// <summary>Gets the variables for the tile.</summary>
+		public Variables Variables {
+			get { return tileData.Variables; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return tileData.Variables; }
 		}
 	}
 }

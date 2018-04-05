@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Worlds;
@@ -29,12 +30,13 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		protected override void Initialize() {
 			base.Initialize();
 
-			string text = Properties.GetString("text");
+			string text = Properties.Get<string>("text");
 
 			// Spawn NPC entity.
 			NPC npc = new NPC();
 			npc.Properties			= properties;
 			npc.Events				= Events;
+			npc.Vars				= Variables;
 			npc.Triggers			= Triggers;
 			RoomControl.SpawnEntity(npc, position - npc.Graphics.DrawOffset);
 		}
@@ -46,7 +48,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, ActionDataDrawArgs args) {
-			int direction = args.Properties.GetInteger("direction", 0);
+			int direction = args.Properties.Get<int>("direction", 0);
 			ActionTile.DrawTileDataIndex(g, args, substripIndex: direction);
 		}
 

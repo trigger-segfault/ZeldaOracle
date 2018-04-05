@@ -145,8 +145,8 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 				defaultMappings = new Color[colorCount][];
 				for (int i = 0; i < colorCount; i++) {
 					string colorGroup = colorParams.GetString(i);
-					defaultMappings[i] = new Color[PaletteDictionary.ColorGroupSize];
-					for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
+					defaultMappings[i] = new Color[Palette.ColorGroupSize];
+					for (int j = 0; j < Palette.ColorGroupSize; j++) {
 						defaultMappings[i][j] = paletteArgs.Dictionary.GetMappedColor(
 							colorGroup, (LookupSubtypes) j);
 					}

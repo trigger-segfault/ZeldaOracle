@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Tiles {
 				Graphics.PlayAnimation(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
 			Graphics.AnimationPlayer.SkipToEnd();
 			
-			bool isFacingLeft = Properties.GetBoolean("face_left", false);
+			bool isFacingLeft = Properties.Get<bool>("face_left", false);
 
 			Graphics.AnimationPlayer.SkipToEnd();
 			Graphics.SubStripIndex = (isFacingLeft ? 1 : 0);
@@ -91,8 +91,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			bool raised = args.Properties.GetBoolean("raised", false);
-			bool faceLeft = args.Properties.GetBoolean("face_left", false);
+			bool raised = args.Properties.Get<bool>("raised", false);
+			bool faceLeft = args.Properties.Get<bool>("face_left", false);
 			Animation animation = null;
 			if (raised)
 				animation = GameData.ANIM_TILE_CROSSING_GATE_LOWER;
@@ -124,7 +124,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public bool IsRaised {
-			get { return Properties.GetBoolean("raised", false); }
+			get { return Properties.Get<bool>("raised", false); }
 		}
 	}
 }

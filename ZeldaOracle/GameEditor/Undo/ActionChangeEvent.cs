@@ -76,7 +76,6 @@ namespace ZeldaEditor.Undo {
 			case ChangeEventModes.UndefineScript:
 				//Event.DefineScript(oldCode);
 				throw new NotImplementedException();
-				break;
 			}
 			if (editorControl.PropertyGrid.EventObject == eventObject) {
 				editorControl.PropertyGrid.Update();
@@ -93,7 +92,6 @@ namespace ZeldaEditor.Undo {
 			case ChangeEventModes.DefineScript:
 				//Event.DefineScript(newCode);
 				throw new NotImplementedException();
-				break;
 			case ChangeEventModes.UndefineScript:
 				Event.UndefineScript();
 				break;

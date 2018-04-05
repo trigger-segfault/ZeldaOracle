@@ -213,7 +213,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Gets or sets the size of the tile in tiles.</summary>
 		public override Point2I TileSize {
 			get {
-				return GMath.Max(Point2I.One, properties.GetPoint("size",
+				return GMath.Max(Point2I.One, properties.Get<Point2I>("size",
 					Point2I.One));
 			}
 			set { properties.Set("size", value); }
@@ -280,25 +280,25 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public int LedgeDirection {
-			get { return properties.GetInteger("ledge_direction", Direction.Down); }
+			get { return properties.Get<int>("ledge_direction", Direction.Down); }
 			set { properties.Set("ledge_direction", value); }
 		}
 
 		public int ConveyorAngle {
-			get { return properties.GetInteger("conveyor_angle", -1); }
+			get { return properties.Get<int>("conveyor_angle", -1); }
 			set { properties.Set("conveyor_angle", value); }
 		}
 
 		public float ConveyorSpeed {
-			get { return properties.GetFloat("conveyor_speed", 0.0f); }
+			get { return properties.Get<float>("conveyor_speed", 0.0f); }
 			set { properties.Set("conveyor_speed", value); }
 		}
 
 		public Rectangle2I HurtArea {
 			get {
 				return new Rectangle2I(
-					properties.GetPoint("hurt_area_point", new Point2I(-1, -1)),
-					properties.GetPoint("hurt_area_size", new Point2I(18, 18)));
+					properties.Get<Point2I>("hurt_area_point", new Point2I(-1, -1)),
+					properties.Get<Point2I>("hurt_area_size", new Point2I(18, 18)));
 			}
 			set {
 				properties.Set("hurt_area_point", value.Point);
@@ -307,12 +307,12 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public int HurtDamage {
-			get { return properties.GetInteger("hurt_damage", 0); }
+			get { return properties.Get<int>("hurt_damage", 0); }
 			set { properties.Set("hurt_damage", value); }
 		}
 
 		public bool DrawAsEntity {
-			get { return properties.GetBoolean("draw_as_entity", false); }
+			get { return properties.Get<bool>("draw_as_entity", false); }
 			set { properties.Set("draw_as_entity", value); }
 		}
 

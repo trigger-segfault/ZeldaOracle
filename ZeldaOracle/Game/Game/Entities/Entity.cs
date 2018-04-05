@@ -26,6 +26,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
 		private Properties			properties;
+		private Variables			variables;
 		private EventCollection		events;
 		private TriggerCollection	triggers;
 
@@ -72,6 +73,7 @@ namespace ZeldaOracle.Game.Entities {
 			previousZPosition			= 0.0f;
 			centerOffset				= Point2I.Zero;
 			actionAlignDistance			= 5;
+			variables					= new Variables();
 			properties					= null;
 			events                      = null;
 			isPersistentBetweenRooms	= false;
@@ -596,10 +598,21 @@ namespace ZeldaOracle.Game.Entities {
 		public string ID {
 			get {
 				if (properties != null)
-					return properties.GetString("id", "");
+					return properties.Get<string>("id", "");
 				else
 					return "";
 			}
+		}
+
+		/// <summary>Gets the variables for the entity.</summary>
+		public Variables Vars {
+			get { return variables; }
+			set { variables = value; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return variables; }
 		}
 	}
 }

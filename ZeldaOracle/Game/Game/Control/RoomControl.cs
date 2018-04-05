@@ -18,9 +18,9 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles.Internal;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Tiles.Custom.Monsters;
-using ZeldaOracle.Game.API;
 using ZeldaOracle.Game.Control.RoomManagers;
 using ZeldaOracle.Game.Control.VisualEffects;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -1088,10 +1088,6 @@ namespace ZeldaOracle.Game.Control {
 			get { return roomNumber; }
 		}
 
-		public Variables Vars {
-			get { return room.Vars; }
-		}
-
 		/// <summary>Gets if the room is cleared in the respawn manager.</summary>
 		public bool IsCleared {
 			get { return RespawnManager.IsRoomCleared(room); }
@@ -1114,6 +1110,16 @@ namespace ZeldaOracle.Game.Control {
 				else
 					visualEffect = null;
 			}
+		}
+
+		/// <summary>Gets the variables for the room.</summary>
+		public Variables Variables {
+			get { return room.Variables; }
+		}
+
+		/// <summary>Gets the variables for the API Object.</summary>
+		ZeldaAPI.Variables ZeldaAPI.ApiObject.Vars {
+			get { return room.Variables; }
 		}
 	}
 }

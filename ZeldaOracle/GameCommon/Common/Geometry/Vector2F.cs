@@ -349,8 +349,8 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Vector2F(p.X, p.Y);
 		}
 
-		/// <summary>Convert from a Microsfot.Xna.Framework.Vector2 to a Vector2F.</summary>
-		/*public static implicit operator Vector2F(Vector2 v) {
+		/*/// <summary>Convert from a Microsfot.Xna.Framework.Vector2 to a Vector2F.</summary>
+		public static implicit operator Vector2F(Vector2 v) {
 			return new Vector2F(v.X, v.Y);
 		}
 
@@ -403,8 +403,8 @@ namespace ZeldaOracle.Common.Geometry {
 			throw new NotImplementedException();
 		}
 
-		/// <summary>Convert from a Vector2F to a Microsfot.Xna.Framework.Vector2.</summary>
-		/*public static explicit operator Vector2(Vector2F v) {
+		/*/// <summary>Convert from a Vector2F to a Microsfot.Xna.Framework.Vector2.</summary>
+		public static explicit operator Vector2(Vector2F v) {
 			return new Vector2(v.X, v.Y);
 		}
 
