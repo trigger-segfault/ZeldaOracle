@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.ResourceData;
 
 namespace ZeldaOracle.Game.Items.Rewards {

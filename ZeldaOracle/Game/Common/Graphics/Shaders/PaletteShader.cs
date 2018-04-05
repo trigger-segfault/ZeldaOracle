@@ -33,16 +33,16 @@ namespace ZeldaOracle.Common.Graphics.Shaders {
 
 		/// <summary>Applies the parameters to the shader and graphics device.</summary>
 		public override void ApplyParameters() {
-			Textures[1] = tilePalette.PaletteTexture;
-			Textures[2] = entityPalette.PaletteTexture;
+			Textures[1] = tilePalette.PaletteImage;
+			Textures[2] = entityPalette.PaletteImage;
 			if (tilePaletteLerp != null)
-				Textures[3] = tilePaletteLerp?.PaletteTexture;
+				Textures[3] = tilePaletteLerp?.PaletteImage;
 			else
-				Textures[3] = tilePalette.PaletteTexture;
+				Textures[3] = tilePalette.PaletteImage;
 			if (entityPaletteLerp != null)
-				Textures[4] = entityPaletteLerp.PaletteTexture;
+				Textures[4] = entityPaletteLerp.PaletteImage;
 			else
-				Textures[4] = entityPalette.PaletteTexture;
+				Textures[4] = entityPalette.PaletteImage;
 		}
 
 		/// <summary>Resets the shader parameters.</summary>

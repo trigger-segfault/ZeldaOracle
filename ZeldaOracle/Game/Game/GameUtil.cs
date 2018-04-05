@@ -22,14 +22,18 @@ namespace ZeldaOracle.Game {
 
 		/// <summary>Returns the type with the specified name. Throws an exception
 		/// if the type could not be found or did not inherit from the base type.</summary>
-		public static Type FindTypeWithBase<BaseType>(string typeName, bool ignoreCase) {
+		public static Type FindTypeWithBase<BaseType>(string typeName,
+			bool ignoreCase)
+		{
 			return TypeHelper.FindTypeWithBase<BaseType>(
 				typeName, ignoreCase, Assemblies.Game);
 		}
 
 		/// <summary>Returns the type with the specified name. Throws an exception
 		/// if the type could not be found or did not inherit from the base type.</summary>
-		public static Type FindTypeWithBase(Type baseType, string typeName, bool ignoreCase) {
+		public static Type FindTypeWithBase(Type baseType, string typeName,
+			bool ignoreCase)
+		{
 			return TypeHelper.FindTypeWithBase(baseType,
 				typeName, ignoreCase, Assemblies.Game);
 		}
@@ -38,6 +42,12 @@ namespace ZeldaOracle.Game {
 		/// if the type could not be found.</summary>
 		public static Type FindType(string typeName, bool ignoreCase) {
 			return TypeHelper.FindType(typeName, ignoreCase, Assemblies.Game);
+		}
+
+		/// <summary>Gets the type's most-extended interface that inherits from the
+		/// ApiObject.</summary>
+		public static Type GetApiObjectInterface(Type type) {
+			return TypeHelper.GetExtendedInterface<ZeldaAPI.ApiObject>(type);
 		}
 	}
 }

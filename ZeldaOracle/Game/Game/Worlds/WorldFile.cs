@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Worlds {
 	public class WorldFile {
 		
 		private static char[] MAGIC = { 'Z', 'w', 'd', '2' };
-		// v3: Events are saved differently
+		// v3: Events are saved differently with scripts being loaded earlier
 		// v4: Implemented Event Triggers
 		private const int WORLDFILE_VERSION = 4;
 
@@ -144,6 +144,7 @@ namespace ZeldaOracle.Game.Worlds {
 			actionTileData.Clear();
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Loading
 		//-----------------------------------------------------------------------------
@@ -151,50 +152,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public World Load(string fileName, bool editorMode) {
 			this.fileName = fileName;
 			this.editorMode = editorMode;
-			World world;
 			using (Stream stream = File.OpenRead(fileName)) {
 				BinaryReader reader = new BinaryReader(stream);
-				world = Load(reader);
+				World world = Load(reader);
+				return world;
 			}
-			try {
-				using (Stream stream = File.OpenRead("testfile.dat")) {
-					Stopwatch watch = Stopwatch.StartNew();
-					BinaryReader reader = new BinaryReader(stream);
-					int count = reader.ReadInt32(), pCount = 0;
-					for (int i = 0; i < count; i++) {
-						Properties props = new Properties();
-						int propCount = reader.ReadInt32();
-						pCount += propCount;
-						for (int j = 0; j < propCount; j++) {
-							VarType varType = (VarType) reader.ReadInt16();
-							ListType listType = (ListType) reader.ReadInt16();
-							string name = reader.ReadString();
-
-							Property p;
-
-							if (listType != ListType.Single) {
-								int listCount = reader.ReadInt32();
-								p = new Property(name, varType, listType, listCount);
-								for (int k = 0; k < listCount; k++) {
-									if (listType == ListType.Array)
-										p[k] = reader.ReadGeneric(varType.ToType());
-									else
-										p.ListValue.Add(reader.ReadGeneric(varType.ToType()));
-								}
-							}
-							else {
-								p = new Property(name, reader.ReadGeneric(varType.ToType()));
-							}
-
-							props.SetObject(p.Name, p.ObjectValue);
-						}
-					}
-					Console.WriteLine("Took {0} ms to read {1} tile data's {2} properties.",
-						watch.ElapsedMilliseconds, count, pCount);
-				}
-			}
-			catch { }
-			return world;
 		}
 
 		private World Load(BinaryReader reader) {
@@ -637,33 +599,6 @@ namespace ZeldaOracle.Game.Worlds {
 			using (Stream fileStream = new FileStream(fileName, FileMode.Create)) {
 				BinaryWriter writer = new BinaryWriter(fileStream);
 				Save(writer, world);
-			}
-			using (Stream fileStream = new FileStream("testfile.dat", FileMode.Create)) {
-				BinaryWriter writer = new BinaryWriter(fileStream);
-				Stopwatch watch = Stopwatch.StartNew();
-				int pCount = 0;
-				var values = Resources.GetDictionary<BaseTileData>().Values;
-				writer.Write(values.Count);
-				foreach (var data in values) {
-					pCount += data.Properties.Count;
-					writer.Write(data.Properties.Count);
-					foreach (Property p in data.Properties.GetProperties()) {
-						writer.Write((short) p.VarType);
-						writer.Write((short) p.ListType);
-						writer.Write(p.Name);
-						if (p.IsEnumerable) {
-							writer.Write(p.Count);
-							foreach (object obj in p.EnumerableValue) {
-								writer.WriteGeneric(obj.GetType(), obj);
-							}
-						}
-						else {
-							writer.WriteGeneric(p.ObjectValue.GetType(), p.ObjectValue);
-						}
-					}
-				}
-				Console.WriteLine("Took {0} ms to save {1} tile data's {2} properties",
-					watch.ElapsedMilliseconds, values.Count, pCount);
 			}
 		}
 

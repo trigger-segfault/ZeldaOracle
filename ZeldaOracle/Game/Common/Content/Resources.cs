@@ -12,17 +12,10 @@ using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Conscripts;
 using ZeldaOracle.Common.Conscripts.CustomReaders;
-using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Common.Util;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Rewards;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.ActionTiles;
-using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Content {
 	/// <summary>
@@ -30,11 +23,11 @@ namespace ZeldaOracle.Common.Content {
 	/// It has methods to load in resources from the game
 	/// content and stores them in key/value maps.
 	/// </summary>
-	public static class Resources {
+	public class Resources : ContentContainer {
 
 		// CONTAINMENT:
 		/// <summary>True if the resource manager has been fully initialized.</summary>
-		private static bool isInitialized;
+		/*private static bool isInitialized;
 		/// <summary>The game's content manager.</summary>
 		private static ContentManager contentManager;
 		/// <summary>The game's graphics device.</summary>
@@ -47,7 +40,7 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>A collection of content that need to manually be disposed of
 		/// during unload.<para/>
 		/// This is a hashset to prevent resources from being added continuously.</summary>
-		private static HashSet<IDisposable> independentResources;
+		private static HashSet<IDisposable> independentResources;*/
 		/// <summary>A map of the resource dictionaries by resource type.</summary>
 		private static Dictionary<Type, IDictionary> resourceDictionaries;
 
@@ -204,14 +197,14 @@ namespace ZeldaOracle.Common.Content {
 			independentResources.Clear();
 		}
 
-		/// <summary>Adds an indenpendent resource that will be disposed
+		/*/// <summary>Adds an indenpendent resource that will be disposed
 		/// of during Unload().</summary>
 		public static void AddDisposable(IDisposable disposable) {
-			if (!IsInitialized)
+			if (!isInitialized)
 				throw new InvalidOperationException("Cannot add disposable when " +
 					"Resources has not been initialized!");
 			independentResources.Add(disposable);
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -563,7 +556,7 @@ namespace ZeldaOracle.Common.Content {
 			try {
 				string path = Path.Combine(contentManager.RootDirectory, assetName);
 				using (Stream stream = TitleContainer.OpenStream(path)) {
-					ScriptReader scriptReader = new ScriptReader();
+					ConscriptReader scriptReader = new ConscriptReader();
 					scriptReader.ReadScript(runner, stream, assetName);
 				}
 			}
@@ -666,7 +659,7 @@ namespace ZeldaOracle.Common.Content {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Gets the graphics device for the game.</summary>
+		/*/// <summary>Gets the graphics device for the game.</summary>
 		public static GraphicsDevice GraphicsDevice {
 			get { return graphicsDevice; }
 		}
@@ -691,7 +684,7 @@ namespace ZeldaOracle.Common.Content {
 		public static string RootDirectory {
 			get { return ContentManager.RootDirectory; }
 			set { ContentManager.RootDirectory = value; }
-		}
+		}*/
 
 		/// <summary>Gets the sprite database for palettizing images.</summary>
 		public static PalettedSpriteDatabase SpriteDatabase {

@@ -99,21 +99,21 @@ END;
 # Arrow Shooter -----------------------------------------------
 
 TILE "temp_arrow_shooter";
-	Type		TileArrowShooter;
+	TYPE		TileArrowShooter;
 	SOLID		block;
 END;
 
 # Fire Shooter ------------------------------------------------
 
 TILE "temp_fire_shooter";
-	Type		TileFireShooter;
+	TYPE		TileFireShooter;
 	SOLID		block;
 END;
 
 # Tablet Slot -------------------------------------------------
 
 TILE "temp_tablet_slot";
-	#Type		TileTabletSlot;
+	#TYPE		TileTabletSlot;
 	SOLID		block;
 	RESETWHEN	Never;
 END;

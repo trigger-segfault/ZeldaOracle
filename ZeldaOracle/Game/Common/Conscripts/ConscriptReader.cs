@@ -13,7 +13,7 @@ namespace ZeldaOracle.Common.Conscripts {
 	/// is meant to be implemented to be able to
 	/// interpret text files written in a certain syntax.
 	/// <summary>
-	public class ScriptReader {
+	public class ConscriptReader {
 		
 		public static Stopwatch Watch = new Stopwatch();
 
@@ -34,27 +34,20 @@ namespace ZeldaOracle.Common.Conscripts {
 		private string          parameterName;
 		private CommandParam    namedParameter;
 
-		private IReadOnlyList<ScriptCommand> commands;   // List of possible commands.
-
-		private CommandParamDefinitions typeDefinitions;
-
 		/// <summary>The current mode of the reader used to determine valid commands.</summary>
 		private int             mode;
-
-		private TemporaryResources tempResources;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ScriptReader() {
+		/// <summary>Constructs the reader for conscript runners.</summary>
+		public ConscriptReader() {
 			parameter		= null;
 			parameterRoot	= null;
-			lines           = new List<string>();
-			tempResources   = null;
-			parameterName   = null;
-			
+			lines			= new List<string>();
+			parameterName	= null;
 		}
 
 
@@ -64,17 +57,17 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Throw a parse error exception, optionally showing a caret.</summary>
 		public void ThrowParseError(string message, bool showCaret = true) {
-			throw new ScriptReaderException(message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, showCaret);
+			throw new ConscriptReaderException(message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, showCaret);
 		}
 
 		/// <summary>Throw a parse error exception for a specific argument.</summary>
 		public void ThrowParseError(string message, CommandParam param) {
-			throw new ScriptReaderException(message, fileName, lines[param.LineIndex], param.LineIndex + 1, param.CharIndex + 1, true);
+			throw new ConscriptReaderException(message, fileName, lines[param.LineIndex], param.LineIndex + 1, param.CharIndex + 1, true);
 		}
 
 		/// <summary>Throw a parse error exception pointing to the command name.</summary>
 		public void ThrowCommandParseError(string message) {
-			throw new ScriptReaderException(message, fileName, lines[parameterRoot.LineIndex], parameterRoot.LineIndex + 1, parameterRoot.CharIndex + 1, true);
+			throw new ConscriptReaderException(message, fileName, lines[parameterRoot.LineIndex], parameterRoot.LineIndex + 1, parameterRoot.CharIndex + 1, true);
 		}
 
 
@@ -89,22 +82,21 @@ namespace ZeldaOracle.Common.Conscripts {
 			CommandParam newParams = null;
 
 			// Search for the correct command.
-			for (int i = 0; i < script.Commands.Count; i++) {
-				ScriptCommand command = script.Commands[i];
-				if (command.HasName(commandName, parameters) && MatchesMode(mode, command.Modes)) {
+			foreach (var command in script.Commands.Find(commandName, mode)) {
+				if (command.HasName(commandName, parameters)) {
 					if (command.HasParameters(parameters, out newParams, script.TypeDefinitions)) {
 						// Run the command.
 						try {
-							ScriptReader.Watch.Stop();
+						ConscriptReader.Watch.Stop();
 							command.Action(newParams);
-							ScriptReader.Watch.Start();
+							ConscriptReader.Watch.Start();
 						}
 						catch (ThreadAbortException) { }
 						catch (LoadContentException ex) {
 							throw ex;
 						}
 						catch (Exception ex) {
-							throw new ScriptReaderException(ex.Message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, true, ex.StackTrace, ex);
+							throw new ConscriptReaderException(ex.Message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, true, ex.StackTrace, ex);
 						}
 						return true;
 					}
@@ -320,11 +312,8 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Parse and interpret the given text stream as a script, line by line.</summary>
 		public void ReadScript(ConscriptRunner runner, Stream stream, string path) {
-			ScriptReader.Watch.Start();
-			script          = runner;
-			commands        = runner.Commands;
-			typeDefinitions = runner.TypeDefinitions;
-			tempResources	= runner.TempResources;
+			ConscriptReader.Watch.Start();
+			script = runner;
 
 			fileName = path;
 			streamReader = new StreamReader(stream, Encoding.Default);
@@ -347,7 +336,7 @@ namespace ZeldaOracle.Common.Conscripts {
 
 			script.EndReading();
 			
-			ScriptReader.Watch.Stop();
+			ConscriptReader.Watch.Stop();
 		}
 
 
@@ -372,6 +361,7 @@ namespace ZeldaOracle.Common.Conscripts {
 			}
 		}
 
+		/*/// <summary>Returns true if the mode matches one of the modes in the list.</summary>
 		private static bool MatchesMode(int mode, int[] modes) {
 			if (modes != null && modes.Length > 0) {
 				for (int i = 0; i < modes.Length; i++) {
@@ -381,7 +371,7 @@ namespace ZeldaOracle.Common.Conscripts {
 				return false;
 			}
 			return true;
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------

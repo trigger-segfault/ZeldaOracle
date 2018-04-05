@@ -13,6 +13,7 @@ namespace ZeldaOracle.Common.Geometry {
 		Clockwise = 1,
 	}
 
+	[Serializable]
 	public struct Distance {
 
 		private float pixels;

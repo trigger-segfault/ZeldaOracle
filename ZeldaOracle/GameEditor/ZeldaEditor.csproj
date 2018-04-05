@@ -375,6 +375,10 @@
       <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
       <Name>Xceed.Wpf.Toolkit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameOptimization\ZeldaOptimization.csproj">
+      <Project>{fd1e47e1-ec0a-4f93-9d85-d151285bd134}</Project>
+      <Name>ZeldaOptimization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameAPI\ZeldaAPI.csproj">
       <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
       <Name>ZeldaAPI</Name>
@@ -711,6 +715,6 @@
     <ItemGroup>
       <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
     </ItemGroup>
-    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue"/>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" ContinueOnError="WarnAndContinue" />
   </Target>
 </Project>

@@ -16,6 +16,7 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>The internal ID of the script that this event called. This value may change often when used in the editor.</summary>
 		private string internalID;
 		/// <summary>The event collection containing this event.</summary>
+		[NonSerialized]
 		private EventCollection events;
 
 

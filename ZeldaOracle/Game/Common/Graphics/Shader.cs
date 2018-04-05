@@ -26,6 +26,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Constructs the shader with the specified effect.</summary>
 		public Shader(Effect effect) {
+			if (effect == null)
+				throw new ArgumentNullException("Shader effect cannot be null!");
 			this.effect = effect;
 		}
 

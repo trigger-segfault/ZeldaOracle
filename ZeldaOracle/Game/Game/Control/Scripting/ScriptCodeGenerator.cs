@@ -246,7 +246,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		{
 			ITriggerObject owner = trigger.Collection.TriggerObject;
 			methodName = CreateTriggerMethodName(trigger, triggerIndex);
-			Type ownerType = ReflectionHelper.GetApiObjectType(
+			Type ownerType = GameUtil.GetApiObjectInterface(
 				trigger.Collection.TriggerObject.TriggerObjectType);
 			return "        public void " + methodName + "(" +
 				ownerType.Name + " This) {\n";

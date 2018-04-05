@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Graphics {
-
 	/// <summary>A reference to a palette's color.</summary>
 	public struct PaletteReference {
 
@@ -24,10 +23,12 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Constructs a palette reference with the specified
 		/// color group, subtype, and palette type.</summary>
-		public PaletteReference(string colorGroup, LookupSubtypes subtype, PaletteTypes type = PaletteTypes.Entity) {
-			this.ColorGroup     = colorGroup;
-			this.Subtype        = subtype;
-			this.Type           = type;
+		public PaletteReference(string colorGroup, LookupSubtypes subtype,
+			PaletteTypes type = PaletteTypes.Entity)
+		{
+			ColorGroup	= colorGroup;
+			Subtype		= subtype;
+			Type		= type;
 		}
 
 
@@ -37,7 +38,10 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the hash code for the palette reference.</summary>
 		public override int GetHashCode() {
-			return Type.GetHashCode() ^ ColorGroup.GetHashCode() ^ Subtype.GetHashCode();
+			return
+				Type.GetHashCode() ^
+				ColorGroup.GetHashCode() ^
+				Subtype.GetHashCode();
 		}
 
 		/// <summary>Returns true if the palette reference is equal to the object.</summary>
@@ -69,16 +73,20 @@ namespace ZeldaOracle.Common.Graphics {
 		// Accessors
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Gets the final mapped color with the chosen tile and entity palette.</summary>
+		/// <summary>Gets the final mapped color with the chosen tile and entity
+		/// palette.</summary>
 		public Color GetMappedColor(Palette tilePalette, Palette entityPalette) {
 			if (Type == PaletteTypes.Tile)
-				return tilePalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
+				return tilePalette.PaletteDictionary.GetMappedColor(
+					ColorGroup, Subtype);
 			else if (Type == PaletteTypes.Entity)
-				return entityPalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
+				return entityPalette.PaletteDictionary.GetMappedColor(
+					ColorGroup, Subtype);
 			return Color.Black;
 		}
 
-		/// <summary>Gets the final unmapped color with the chosen tile and entity palette.</summary>
+		/// <summary>Gets the final unmapped color with the chosen tile and entity
+		/// palette.</summary>
 		public Color GetUnmappedColor(Palette tilePalette, Palette entityPalette) {
 			if (Type == PaletteTypes.Tile)
 				return tilePalette.LookupColor(ColorGroup, Subtype);
@@ -98,9 +106,11 @@ namespace ZeldaOracle.Common.Graphics {
 		public Color MappedColor {
 			get {
 				if (Type == PaletteTypes.Entity)
-					return GameData.SHADER_PALETTE.EntityPalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
+					return GameData.SHADER_PALETTE.EntityPalette.PaletteDictionary
+						.GetMappedColor(ColorGroup, Subtype);
 				else if (Type == PaletteTypes.Tile)
-					return GameData.SHADER_PALETTE.TilePalette.PaletteDictionary.GetMappedColor(ColorGroup, Subtype);
+					return GameData.SHADER_PALETTE.TilePalette.PaletteDictionary
+						.GetMappedColor(ColorGroup, Subtype);
 				return Color.Black;
 			}
 		}
@@ -201,7 +211,9 @@ namespace ZeldaOracle.Common.Graphics {
 			return new ColorOrPalette(color);
 		}
 
-		public static implicit operator ColorOrPalette(PaletteReference paletteColor) {
+		public static implicit operator ColorOrPalette(
+			PaletteReference paletteColor)
+		{
 			return new ColorOrPalette(paletteColor);
 		}
 
@@ -210,18 +222,22 @@ namespace ZeldaOracle.Common.Graphics {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the final (mapped) color with the chosen tile and entity palette.</summary>
+		/// <summary>Gets the final (mapped) color with the chosen tile and entity
+		/// palette.</summary>
 		public Color GetMappedColor(Palette tilePalette, Palette entityPalette) {
 			if (value is PaletteReference)
-				return ((PaletteReference) value).GetMappedColor(tilePalette, entityPalette);
+				return ((PaletteReference) value).GetMappedColor(
+					tilePalette, entityPalette);
 			else
 				return (Color) value;
 		}
 
-		/// <summary>Gets the final (unmapped) color with the chosen tile and entity palette.</summary>
+		/// <summary>Gets the final (unmapped) color with the chosen tile and entity
+		/// palette.</summary>
 		public Color GetUnmappedColor(Palette tilePalette, Palette entityPalette) {
 			if (value is PaletteReference)
-				return ((PaletteReference) value).GetUnmappedColor(tilePalette, entityPalette);
+				return ((PaletteReference) value).GetUnmappedColor(
+					tilePalette, entityPalette);
 			else
 				return (Color) value;
 		}

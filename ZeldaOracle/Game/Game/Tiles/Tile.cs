@@ -341,6 +341,8 @@ namespace ZeldaOracle.Game.Tiles {
 			if (isMoving || !IsDigable)
 				return false;
 
+			Destroy();
+
 			// Remove/dig the tile
 			if (layer == 0) {
 				// Spawn the a "dug" tile or TileBelow in this tile's place
@@ -348,8 +350,7 @@ namespace ZeldaOracle.Game.Tiles {
 					Resources.Get<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-
-
+				
 				// Spawn drops
 				Entity dropEntity = SpawnDrop();
 				if (dropEntity != null) {
@@ -361,8 +362,6 @@ namespace ZeldaOracle.Game.Tiles {
 						direction.ToVector(GameSettings.DROP_ENTITY_DIG_VELOCITY);
 				}
 			}
-
-			Destroy();
 			return true;
 		}
 

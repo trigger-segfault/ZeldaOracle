@@ -351,12 +351,14 @@ namespace ZeldaOracle.Common.Geometry {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Stretches the corners of the rectangle out by the specified amount.</summary>
+		/// <summary>Stretches the corners of the rectangle out by the specified
+		/// amount.</summary>
 		public void Inflate(Vector2F amount) {
 			Point -= amount;
 			Size += amount * 2.0f;
 		}
-		/// <summary>Stretches the corners of the rectangle out by the specified amount.</summary>
+		/// <summary>Stretches the corners of the rectangle out by the specified
+		/// amount.</summary>
 		public void Inflate(float x, float y) {
 			Point.X -= x;
 			Point.Y -= y;
@@ -381,7 +383,7 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns the intersection between two rectangles.<para/>
-		/// Returns the Empty rect if there is no intersection.<summary>
+		/// Returns the Empty rect if there is no intersection.</summary>
 		public static Rectangle2F Intersect(Rectangle2F r1, Rectangle2F r2) {
 			float x1 = Math.Max(r1.Left,   r2.Left);
 			float y1 = Math.Max(r1.Top,    r2.Top);
@@ -392,7 +394,8 @@ namespace ZeldaOracle.Common.Geometry {
 			return Rectangle2F.Zero;
 		}
 
-		/// <summary>Creates a new rectangle that exactly contains two other rectangles.</summary>
+		/// <summary>Creates a new rectangle that exactly contains two other
+		/// rectangles.</summary>
 		public static Rectangle2F Union(Rectangle2F r1, Rectangle2F r2) {
 			float x1 = Math.Min(r1.Left,   r2.Left);
 			float y1 = Math.Min(r1.Top,    r2.Top);

@@ -13,14 +13,15 @@ namespace ZeldaOracle.Common.Conscripts {
 	public abstract class ConscriptRunner {
 
 		/// <summary>The current reader for this script.</summary>
-		private ScriptReader reader;
+		private ConscriptReader reader;
 		/// <summary>The script readers reading the scripts lower in the call stack.</summary>
-		private Stack<ScriptReader> readerStack;
+		private Stack<ConscriptReader> readerStack;
 		
 		/// <summary>The list of custom parameter types for the script commands.</summary>
 		private CommandParamDefinitions typeDefinitions;
 		/// <summary>The list of available commands for the script.</summary>
-		private List<ScriptCommand> commands;
+		//private List<ConscriptCommand> commands;
+		private ConscriptCommandCollection commands;
 
 		/// <summary>The temporary resource library.</summary>
 		private TemporaryResources tempResources;
@@ -39,9 +40,10 @@ namespace ZeldaOracle.Common.Conscripts {
 		/// <summary>Constructs the base script runner.</summary>
 		protected ConscriptRunner() {
 			reader = null;
-			readerStack = new Stack<ScriptReader>();
+			readerStack = new Stack<ConscriptReader>();
 			typeDefinitions = new CommandParamDefinitions();
-			commands = new List<ScriptCommand>();
+			//commands = new List<ConscriptCommand>();
+			commands = new ConscriptCommandCollection();
 			tempResources = new TemporaryResources();
 			tempResourcesStack = new Stack<TemporaryResources>();
 			calledScripts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -143,7 +145,7 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, null, parameterOverloads, action, typeDefinitions));
+			AddCommand(new ConscriptCommand(name, null, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -188,7 +190,7 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int mode, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, new int[] { mode }, parameterOverloads, action, typeDefinitions));
+			AddCommand(new ConscriptCommand(name, new int[] { mode }, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -233,7 +235,7 @@ namespace ZeldaOracle.Common.Conscripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, modes, parameterOverloads, action, typeDefinitions));
+			AddCommand(new ConscriptCommand(name, modes, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -242,7 +244,7 @@ namespace ZeldaOracle.Common.Conscripts {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Add a script command.</summary>
-		protected void AddCommand(ScriptCommand command) {
+		protected void AddCommand(ConscriptCommand command) {
 			commands.Add(command);
 		}
 
@@ -428,7 +430,7 @@ namespace ZeldaOracle.Common.Conscripts {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>Begins reading the script.</summary>
-		public void BeginReading(ScriptReader reader) {
+		public void BeginReading(ConscriptReader reader) {
 			this.reader = reader;
 			readerStack.Push(reader);
 			OnBeginReading();
@@ -469,12 +471,13 @@ namespace ZeldaOracle.Common.Conscripts {
 		}
 
 		/// <summary>Gets or sets the script reader parsing the script.</summary>
-		public ScriptReader Reader {
+		public ConscriptReader Reader {
 			get { return reader; }
 		}
 
 		/// <summary>Gets the list of commands for the script.</summary>
-		public IReadOnlyList<ScriptCommand> Commands {
+		//public IReadOnlyList<ConscriptCommand> Commands {
+		public ConscriptCommandCollection Commands {
 			get { return commands; }
 		}
 

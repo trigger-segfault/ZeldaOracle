@@ -141,9 +141,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			base.Initialize();
 
 			properties.Print();
-
-			string typeName = Properties.Get<string>("warp_type", "Tunnel");
-			warpType		= (WarpType) Enum.Parse(typeof(WarpType), typeName, true);
+			
+			warpType        = Properties.GetEnum("warp_type", WarpType.Tunnel);
 			collisionBox	= new Rectangle2I(2, 6, 12, 12);
 			warpEnabled		= !IsTouchingPlayer();
 
