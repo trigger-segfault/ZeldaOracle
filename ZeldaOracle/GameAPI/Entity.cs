@@ -6,7 +6,15 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaAPI {
 
+	public interface TriggerCollection {
+	}
+
+	//public interface VariableCollection {
+	//}
+
 	public interface ApiObject {
+		//TriggerCollection Triggers { get; }
+		//VariableCollection Variables { get; }
 	}
 
 
@@ -19,6 +27,10 @@ namespace ZeldaAPI {
 	}
 
 	public interface Unit : Entity {
+	}
+
+	public interface NPC : Unit {
+		string Text { get; set; }
 	}
 
 	/// <summary>The player entity.</summary>

@@ -48,6 +48,7 @@ namespace ZeldaEditor.Tools {
 		}
 		
 		public override void Delete() {
+			// Delete the selected object
 			if (SelectedTile != null && SelectedTile.Room.ContainsTile(SelectedTile)) {
 				ActionPlace action = ActionPlace.CreatePlaceAction(SelectedTile.Room.Level, SelectedTile.Layer, null);
 				Point2I location = SelectedTile.LevelCoord;
@@ -62,6 +63,7 @@ namespace ZeldaEditor.Tools {
 			}
 
 			if (SelectedRoom == null) {
+				// Deselect
 				LevelDisplay.ClearSelectionBox();
 				EditorControl.EditingTileData = null;
 				selectedObject = null;

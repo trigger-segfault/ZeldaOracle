@@ -37,6 +37,7 @@ namespace ZeldaAPI {
 		ScriptFunctionsMusic Music { get; }
 		//ScriptFunctionsItem Item { get; }
 		ScriptFunctionsReward Reward { get; }
+		ScriptFunctionsTrigger Trigger { get; }
 	}
 	
 	public interface ScriptActionsGeneral {
@@ -118,6 +119,10 @@ namespace ZeldaAPI {
 
 	public interface ScriptFunctionsReward {
 		Reward RewardByID(string id);
+	}
+
+	public interface ScriptFunctionsTrigger {
+		Trigger TriggerByName(ApiObject obj, string name);
 	}
 
 	public enum UnitEvent {

@@ -33,7 +33,7 @@ namespace ZeldaOracle.Game.Entities {
 		Default				= FacePlayerOnTalk | FacePlayerWhenNear,
 	}
 
-	public class NPC : Unit {
+	public class NPC : Unit, ZeldaAPI.NPC {
 
 		/// <summary>The direction to face when not near the player.</summary>
 		private Direction defaultDirection;
@@ -44,8 +44,6 @@ namespace ZeldaOracle.Game.Entities {
 		private ISprite animationDefault;
 		/// <summary>The animation to play when talking.</summary>
 		private ISprite animationTalk;
-		/// <summary>The message to display when talked.</summary>
-		private Message message;
 
 		private NPCFlags flags;
 
@@ -83,7 +81,6 @@ namespace ZeldaOracle.Game.Entities {
 			actionAlignDistance	= 5;
 			flags = NPCFlags.FacePlayerOnTalk |
 				NPCFlags.FacePlayerWhenNear;
-			message = null;
 			animationTalk = null;
 
 			// Bounding box for talking is 4 pixels beyond the hard collision box (inclusive).
@@ -98,7 +95,9 @@ namespace ZeldaOracle.Game.Entities {
 		public void Talk(Entity actionEntity, EventArgs args) {
 			GameControl.FireEvent(this, "talk");
 			
-			if (message != null) {
+			string text = Text;
+			if (text.Length > 0) {
+				Message message = new Message(text);
 				if (animationTalk != null) {
 					Graphics.PlayAnimation(animationTalk);
 				}
@@ -121,7 +120,12 @@ namespace ZeldaOracle.Game.Entities {
 		public override void Initialize() {
 			Graphics.PlayAnimation(animationDefault);
 
-			sightDistance	= 2;
+			sightDistance = 2;
+			
+			animationDefault = Properties.GetResource<Animation>("animation");
+			animationTalk = Properties.GetResource<Animation>("animation_talk");
+			Physics.Flags = Properties.GetEnumFlags("physics_flags", Physics.Flags);
+			flags = (NPCFlags) Properties.GetInteger("npc_flags");
 			direction = Properties.Get<int>("direction", defaultDirection);
 
 			Graphics.IsAnimatedWhenPaused	= flags.HasFlag(NPCFlags.AnimateOnTalk);
@@ -186,12 +190,6 @@ namespace ZeldaOracle.Game.Entities {
 		//	set { defaultDirection = value; }
 		//}
 
-		/// <summary>The message to display when talking.</summary>
-		public Message Message {
-			get { return message; }
-			set { message = value; }
-		}
-
 		/// <summary>The default animation to play.</summary>
 		public ISprite DefaultAnimation {
 			get { return animationDefault; }
@@ -202,6 +200,12 @@ namespace ZeldaOracle.Game.Entities {
 		public ISprite TalkAnimation {
 			get { return animationTalk; }
 			set { animationTalk = value; }
+		}
+		
+		/// <summary>The text to display when talked to.</summary>
+		public string Text {
+			get { return Properties.GetString("text", ""); }
+			set { Properties.Set("text", value); }
 		}
 	}
 }

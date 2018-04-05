@@ -16,6 +16,11 @@ namespace ZeldaOracle.Game.Debugging {
 			}
 			return;
 
+			NPC This;
+			
+			Actions.Trigger.TurnOff(Functions.Trigger.TriggerByName(This, "talk"));
+
+			//This.Text = "How charming..."
 
 			// Get the shopkeeper
 			Unit actor = Functions.Unit.UnitByID("shopkeeper");

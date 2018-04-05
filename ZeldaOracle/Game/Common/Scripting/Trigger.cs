@@ -33,7 +33,7 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 	}
 
-	public class Trigger {
+	public class Trigger : ZeldaAPI.Trigger {
 		
 		private TriggerCollection collection;
 		private string name;
@@ -83,6 +83,19 @@ namespace ZeldaOracle.Common.Scripting {
 			description	= copy.description;
 			eventType	= copy.eventType;
 			script		= new Script(copy.script);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Scripting Interface
+		//-----------------------------------------------------------------------------
+
+		public void TurnOn() {
+			enabled = true;
+		}
+
+		public void TurnOff() {
+			enabled = false;
 		}
 
 

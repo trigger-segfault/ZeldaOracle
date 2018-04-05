@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ZeldaOracle.Common.Scripting {
 
-	public class TriggerCollection {
+	public class TriggerCollection : ZeldaAPI.TriggerCollection {
 
 		private List<Trigger> triggers;
 		private ITriggerObject triggerObject;
