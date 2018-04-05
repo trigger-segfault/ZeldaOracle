@@ -56,7 +56,7 @@ namespace ICSharpCode.AvalonEdit.Folding {
 		/// <inheritdoc cref="IWeakEventListener.ReceiveWeakEvent"/>
 		protected virtual bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e) {
 			if (managerType == typeof(TextDocumentWeakEventManager.Changed)) {
-				OnDocumentChanged((DocumentChangeEventArgs)e);
+				OnDocumentChanged((DocumentChangeEventArgs) e);
 				return true;
 			}
 			return false;

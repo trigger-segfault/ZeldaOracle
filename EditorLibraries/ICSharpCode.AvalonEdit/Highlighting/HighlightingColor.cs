@@ -141,11 +141,11 @@ namespace ICSharpCode.AvalonEdit.Highlighting {
 			if (info.GetBoolean("HasWeight"))
 				this.FontWeight = System.Windows.FontWeight.FromOpenTypeWeight(info.GetInt32("Weight"));
 			if (info.GetBoolean("HasStyle"))
-				this.FontStyle = (FontStyle?)new FontStyleConverter().ConvertFromInvariantString(info.GetString("Style"));
+				this.FontStyle = (FontStyle?) new FontStyleConverter().ConvertFromInvariantString(info.GetString("Style"));
 			if (info.GetBoolean("HasUnderline"))
 				this.Underline = info.GetBoolean("Underline");
-			this.Foreground = (HighlightingBrush)info.GetValue("Foreground", typeof(HighlightingBrush));
-			this.Background = (HighlightingBrush)info.GetValue("Background", typeof(HighlightingBrush));
+			this.Foreground = (HighlightingBrush) info.GetValue("Foreground", typeof(HighlightingBrush));
+			this.Background = (HighlightingBrush) info.GetValue("Background", typeof(HighlightingBrush));
 		}
 
 		/// <summary>

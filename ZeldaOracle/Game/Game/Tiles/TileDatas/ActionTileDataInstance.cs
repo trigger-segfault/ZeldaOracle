@@ -103,6 +103,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			set { PixelSize = value * GameSettings.TILE_SIZE; }
 		}
 
+		public override Type TriggerObjectType {
+			get { return tileData.EntityType ?? base.TriggerObjectType; }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

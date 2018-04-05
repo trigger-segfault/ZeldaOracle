@@ -59,9 +59,13 @@ SPRITESET "tiles_general_objects" (14, 5);
 	
 	# Dirt Pile ---------------------------------------------------
 	
-	MAPPEDCOLORS	"tiles_default", ("dirt");
-	SINGLE BASIC	(1, 4); END;
+	MAPPEDCOLORS	"tiles_default", ("dirt_pile");
 	
+	SINGLE COLORSTYLE "dirt_pile", "", ("dirt_pile", "snow_pile"), (1, 4);
+		ADD "dirt_pile"		(1, 4);
+		ADD "snow_pile"		(1, 5);
+		END;
+
 	# Burnable Trees ----------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_trunk_leaves");

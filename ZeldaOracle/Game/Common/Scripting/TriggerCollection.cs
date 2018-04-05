@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ZeldaOracle.Common.Scripting {
 
-	public class TriggerCollection {
+	public class TriggerCollection : ZeldaAPI.TriggerCollection {
 
 		private List<Trigger> triggers;
 		private ITriggerObject triggerObject;
@@ -34,6 +34,12 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Find a trigger by name.</summary>
 		public Trigger GetTrigger(string name) {
 			return triggers.FirstOrDefault(t => t.Name == name);
+		}
+
+		public Trigger CreateNewTrigger(string name) {
+			Trigger trigger = new Trigger(this, name);
+			triggers.Add(trigger);
+			return trigger;
 		}
 
 		public Trigger AddTrigger(Trigger trigger) {

@@ -1,4 +1,5 @@
-﻿using ZeldaOracle.Game.Control;
+﻿using System;
+using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles.ActionTiles {
@@ -49,6 +50,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		public T Entity {
 			get { return entity; }
+		}
+
+		public override Type TriggerObjectType {
+			get { return typeof(T); }
 		}
 	}
 }

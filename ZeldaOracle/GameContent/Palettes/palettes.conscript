@@ -4,6 +4,7 @@ LOAD "tiles_default.conscript", false;
 LOAD "Overworld/present.conscript", false;
 LOAD "Overworld/underwater_present.conscript", false;
 LOAD "Overworld/summer.conscript", false;
+LOAD "Overworld/winter.conscript", false;
 LOAD "Overworld/summer_forest.conscript", false;
 LOAD "Overworld/Special/summer_onoxs_castle.conscript", false;
 LOAD "Overworld/Special/summer_temple_of_seasons.conscript", false;

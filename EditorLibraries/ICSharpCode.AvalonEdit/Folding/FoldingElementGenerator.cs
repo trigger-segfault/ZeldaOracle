@@ -175,8 +175,9 @@ namespace ICSharpCode.AvalonEdit.Folding {
 
 			public override void Draw(DrawingContext drawingContext, Point origin, bool rightToLeft, bool sideways) {
 				var metrics = Format(double.PositiveInfinity);
-				Rect r = new Rect(origin.X, origin.Y - metrics.Baseline, metrics.Width, metrics.Height);
-				drawingContext.DrawRectangle(null, new Pen(textBrush, 1), r);
+				Rect r = new Rect(origin.X + 0.5, origin.Y - metrics.Baseline + 0.5, metrics.Width, metrics.Height + 1);
+				drawingContext.DrawRoundedRectangle(null, new Pen(textBrush, 1), r, 2, 2);
+				origin.Y += 1;
 				base.Draw(drawingContext, origin, rightToLeft, sideways);
 			}
 		}

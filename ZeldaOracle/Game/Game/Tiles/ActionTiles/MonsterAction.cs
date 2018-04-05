@@ -130,9 +130,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Gets the class type of the monster.</summary>
-		public Type MonsterType {
-			get { return typeof(MonsterOctorok); }
+		public override Type TriggerObjectType {
+			get { return EntityType; }
 		}
 
 		/// <summary>Gets or sets if this monster is dead.</summary>

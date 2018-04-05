@@ -724,7 +724,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Type TriggerObjectType {
-			get { return typeof(ZeldaAPI.Level); }
+			get { return typeof(Level); }
 		}
 	}
 }

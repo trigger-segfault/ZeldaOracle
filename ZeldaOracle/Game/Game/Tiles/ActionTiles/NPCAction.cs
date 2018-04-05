@@ -38,12 +38,6 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			npc.Events				= Events;
 			npc.Vars				= Variables;
 			npc.Triggers			= Triggers;
-			npc.Flags				= Properties.GetEnum("npc_flags", NPCFlags.Default);
-			npc.Direction			= Properties.Get<int>("direction");
-			npc.Message				= (text.Length > 0 ? new Message(text) : null);
-			npc.DefaultAnimation	= Properties.GetResource<Animation>("animation");
-			npc.TalkAnimation		= Properties.GetResource<Animation>("animation_talk");
-			npc.Physics.Flags		= properties.GetEnum("physics_flags", npc.Physics.Flags);
 			RoomControl.SpawnEntity(npc, position - npc.Graphics.DrawOffset);
 		}
 
@@ -74,14 +68,17 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				.SetDocumentation("Physics Flags", "enum_flags", typeof(PhysicsFlags), "Physics", "Physics properties of the entity.");
 
 			data.Events.AddEvent("talk", "Talk", "NPC", "Triggered upon talking to the NPC.");
+
+			data.EntityType = typeof(NPC);
 		}
 
-		public enum EventTypes {
-			Talk
-		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		public override Type TriggerObjectType {
+			get { return typeof(NPC); }
+		}
 	}
 }

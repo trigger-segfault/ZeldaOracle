@@ -59,7 +59,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets/sets whether the search pattern should be interpreted as regular expression.
 		/// </summary>
 		public bool UseRegex {
-			get { return (bool)GetValue(UseRegexProperty); }
+			get { return (bool) GetValue(UseRegexProperty); }
 			set { SetValue(UseRegexProperty, value); }
 		}
 
@@ -74,7 +74,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets/sets whether the search pattern should be interpreted case-sensitive.
 		/// </summary>
 		public bool MatchCase {
-			get { return (bool)GetValue(MatchCaseProperty); }
+			get { return (bool) GetValue(MatchCaseProperty); }
 			set { SetValue(MatchCaseProperty, value); }
 		}
 
@@ -89,7 +89,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets/sets whether the search pattern should only match whole words.
 		/// </summary>
 		public bool WholeWords {
-			get { return (bool)GetValue(WholeWordsProperty); }
+			get { return (bool) GetValue(WholeWordsProperty); }
 			set { SetValue(WholeWordsProperty, value); }
 		}
 
@@ -104,7 +104,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets/sets the search pattern.
 		/// </summary>
 		public string SearchPattern {
-			get { return (string)GetValue(SearchPatternProperty); }
+			get { return (string) GetValue(SearchPatternProperty); }
 			set { SetValue(SearchPatternProperty, value); }
 		}
 
@@ -119,7 +119,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets/sets the Brush used for marking search results in the TextView.
 		/// </summary>
 		public Brush MarkerBrush {
-			get { return (Brush)GetValue(MarkerBrushProperty); }
+			get { return (Brush) GetValue(MarkerBrushProperty); }
 			set { SetValue(MarkerBrushProperty, value); }
 		}
 
@@ -134,7 +134,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		/// Gets/sets the localization for the SearchPanel.
 		/// </summary>
 		public Localization Localization {
-			get { return (Localization)GetValue(LocalizationProperty); }
+			get { return (Localization) GetValue(LocalizationProperty); }
 			set { SetValue(LocalizationProperty, value); }
 		}
 		#endregion
@@ -142,7 +142,7 @@ namespace ICSharpCode.AvalonEdit.Search {
 		static void MarkerBrushChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			SearchPanel panel = d as SearchPanel;
 			if (panel != null) {
-				panel.renderer.MarkerBrush = (Brush)e.NewValue;
+				panel.renderer.MarkerBrush = (Brush) e.NewValue;
 			}
 		}
 

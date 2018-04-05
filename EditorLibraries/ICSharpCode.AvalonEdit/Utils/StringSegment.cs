@@ -79,7 +79,7 @@ namespace ICSharpCode.AvalonEdit.Utils {
 		/// <inheritdoc/>
 		public override bool Equals(object obj) {
 			if (obj is StringSegment)
-				return Equals((StringSegment)obj); // use Equals method below
+				return Equals((StringSegment) obj); // use Equals method below
 			else
 				return false;
 		}

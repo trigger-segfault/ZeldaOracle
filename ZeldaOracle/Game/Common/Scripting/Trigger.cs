@@ -1,4 +1,7 @@
 ﻿
+using System;
+using ZeldaOracle.Common.Util;
+using ZeldaOracle.Game;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Common.Scripting {
@@ -31,7 +34,7 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 	}
 
-	public class Trigger {
+	public class Trigger : ZeldaAPI.Trigger {
 		
 		private TriggerCollection collection;
 		private string name;
@@ -50,15 +53,27 @@ namespace ZeldaOracle.Common.Scripting {
 		public Trigger() : this(null) {
 		}
 
-		public Trigger(TriggerCollection collection) {
+		public Trigger(TriggerCollection collection, string name = "") {
 			this.collection = collection;
+			this.name = name;
+
 			initiallyOn	= true;
-			fireOnce	= false;
-			name		= "";
+			fireOnce = false;
 			description	= "";
-			eventType	= new TriggerEvent(null);
-			script		= null;
-			enabled		= true;
+			eventType = new TriggerEvent(null);
+
+			// Create the script
+			script = new Script();
+			Type thisType = GameUtil.GetApiObjectInterface(
+				collection.TriggerObject.TriggerObjectType);
+			script.Parameters.Add(new ScriptParameter(thisType, "This"));
+			
+			enabled = true;
+		}
+
+		public Trigger(Trigger copy) :
+			this(copy, copy.Collection)
+		{
 		}
 
 		public Trigger(Trigger copy, TriggerCollection collection) {
@@ -70,7 +85,20 @@ namespace ZeldaOracle.Common.Scripting {
 			eventType	= copy.eventType;
 			script		= new Script(copy.script);
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Scripting Interface
+		//-----------------------------------------------------------------------------
+
+		public void TurnOn() {
+			enabled = true;
+		}
+
+		public void TurnOff() {
+			enabled = false;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Trigger Action Management
@@ -83,7 +111,6 @@ namespace ZeldaOracle.Common.Scripting {
 		public Script CreateScript() {
 			script = new Script() {
 				ID = name,
-				IsHidden = true,
 			};
 			
 			return script;

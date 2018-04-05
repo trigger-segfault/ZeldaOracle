@@ -22,7 +22,6 @@ using System.Windows.Documents;
 using ICSharpCode.AvalonEdit.Document;
 using System.Windows.Automation.Text;
 using System.Diagnostics;
-using ICSharpCode.NRefactory.Editor;
 
 namespace ICSharpCode.AvalonEdit.Editing {
 	class TextRangeProvider : ITextRangeProvider {

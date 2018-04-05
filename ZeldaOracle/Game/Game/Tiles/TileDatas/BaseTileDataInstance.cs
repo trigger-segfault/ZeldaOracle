@@ -149,7 +149,7 @@ namespace ZeldaOracle.Game.Tiles {
 			set { triggers = value; }
 		}
 
-		public Type TriggerObjectType {
+		public virtual Type TriggerObjectType {
 			get { return Type; }
 		}
 

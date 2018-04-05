@@ -1,5 +1,6 @@
 ﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 
@@ -11,6 +12,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 		public ZeldaAPI.ScriptFunctionsSound	Sound { get; set; }
 		public ZeldaAPI.ScriptFunctionsMusic	Music { get; set; }
 		public ZeldaAPI.ScriptFunctionsReward	Reward { get; set; }
+		public ZeldaAPI.ScriptFunctionsTrigger	Trigger { get; set; }
 
 		public ScriptFunctions(ScriptInstance script) : base(script) {
 			Unit	= CreateSection(new ScriptFunctionsUnit());
@@ -19,6 +21,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 			Sound	= CreateSection(new ScriptFunctionsSound());
 			Music	= CreateSection(new ScriptFunctionsMusic());
 			Reward	= CreateSection(new ScriptFunctionsReward());
+			Trigger	= CreateSection(new ScriptFunctionsTrigger());
 		}
 	}
 
@@ -64,6 +67,15 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 	{
 		public ZeldaAPI.Reward RewardByID(string id) {
 			return GameControl.RewardManager.GetReward(id);
+		}
+	}
+
+	public class ScriptFunctionsTrigger :
+		ScriptInterfaceSection, ZeldaAPI.ScriptFunctionsTrigger
+	{
+		public ZeldaAPI.Trigger TriggerByName(ZeldaAPI.ApiObject obj, string name) {
+			ITriggerObject triggerObject = (ITriggerObject) obj;
+			return triggerObject.Triggers.GetTrigger(name);
 		}
 	}
 }

@@ -6,6 +6,7 @@ ZONE "present";
 	NAME "Present";
 	DEFAULTTILE "ground";
 	PALETTE "present";
+	SETSTYLE "dirt_pile", "dirt_pile";
 	SETSTYLE "cliff", "present";
 	SETSTYLE "cliff_railing", "present";
 	SETSTYLE "fancy_tile_1", "overworld_diamond";
@@ -69,6 +70,35 @@ ZONE "summer";
 	SETSTYLE "grass_green", "groomed";
 	SETSTYLE "tree", "seasons";
 	
+	SETSTYLE "roof_tiled", "past";
+	SETSTYLE "fence_post", "wooden";
+	SETSTYLE "bridge", "past";
+	SETSTYLE "fountain_jet", "continuous";
+	SETSTYLE "vines", "seasons";
+	SETSTYLE "vine_cliff", "seasons";
+	SETSTYLE "water_rocks", "seasons";
+	SETSTYLE "dirt_rough", "seasons";
+	SETSTYLE "flying_tile", "normal";
+	SETSTYLE "hardened_lava", "seasons";
+	SETSTYLE "house_wall", "seasons";
+	SETSTYLE "vertical_wall_top", "seasons";
+END;
+
+ZONE "winter";
+	CLONE "summer";
+	NAME "winter";
+	DEFAULTTILE "ground";
+	PALETTE "winter";
+	
+	SETSTYLE "cliff", "seasons";
+	SETSTYLE "cliff_railing", "seasons";
+	SETSTYLE "grass", "seasons";
+	SETSTYLE "grass_ground", "groomed";
+	SETSTYLE "grass_green", "groomed";
+	SETSTYLE "tree", "snow_topped";
+	SETSTYLE "tree_alt", "snow_covered";
+	
+	SETSTYLE "dirt_pile", "snow_pile";
 	SETSTYLE "roof_tiled", "past";
 	SETSTYLE "fence_post", "wooden";
 	SETSTYLE "bridge", "past";

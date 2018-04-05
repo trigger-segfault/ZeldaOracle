@@ -42,6 +42,11 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		TextArea textArea;
 
 		/// <summary>
+		/// Gets or sets the starting line to show line numbers on.
+		/// </summary>
+		public int StartingLine { get; set; } = 0;
+
+		/// <summary>
 		/// The typeface used for rendering the line number margin.
 		/// This field is calculated in MeasureOverride() based on the FontFamily etc. properties.
 		/// </summary>
@@ -56,7 +61,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		/// <inheritdoc/>
 		protected override Size MeasureOverride(Size availableSize) {
 			typeface = this.CreateTypeface();
-			emSize = (double)GetValue(TextBlock.FontSizeProperty);
+			emSize = (double) GetValue(TextBlock.FontSizeProperty);
 
 			FormattedText text = TextFormatterFactory.CreateFormattedText(
 				this,
@@ -73,9 +78,13 @@ namespace ICSharpCode.AvalonEdit.Editing {
 			TextView textView = this.TextView;
 			Size renderSize = this.RenderSize;
 			if (textView != null && textView.VisualLinesValid) {
+				base.OnRender(drawingContext);
+
 				var foreground = (Brush)GetValue(Control.ForegroundProperty);
 				foreach (VisualLine line in textView.VisualLines) {
-					int lineNumber = line.FirstDocumentLine.LineNumber;
+					int lineNumber = line.FirstDocumentLine.LineNumber - StartingLine;
+					if (lineNumber <= 0)
+						continue;
 					FormattedText text = TextFormatterFactory.CreateFormattedText(
 						this,
 						lineNumber.ToString(CultureInfo.CurrentCulture),

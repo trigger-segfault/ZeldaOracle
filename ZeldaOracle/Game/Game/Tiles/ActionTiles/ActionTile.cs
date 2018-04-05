@@ -257,7 +257,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			get { return actionData.Triggers; }
 		}
 
-		public Type TriggerObjectType {
+		public virtual Type TriggerObjectType {
 			get { return GetType(); }
 		}
 

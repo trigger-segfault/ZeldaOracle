@@ -23,9 +23,11 @@ namespace ZeldaEditor.Control {
 
 		public Task<ScriptCompileResult> Task { get; set; }
 		public Thread Thread { get; set; }
-		public ScriptCompileResult Result { get; set; }
 		public GeneratedScriptCode Code { get; set; }
+		public ScriptCompileResult Result { get; set; }
 		public bool IsCancelled { get; set; }
+		public bool IsCompleted { get; set; }
+
 		private event CompileCompletedCallback completed;
 		private event Action cancelled;
 		
@@ -34,6 +36,8 @@ namespace ZeldaEditor.Control {
 			Result = null;
 			Thread = null;
 			Task = null;
+			IsCancelled = false;
+			IsCompleted = false;
 			completed = null;
 			cancelled = null;
 		}
@@ -44,6 +48,7 @@ namespace ZeldaEditor.Control {
 			Task = null;
 			Thread = null;
 			Result = null;
+			IsCancelled = true;
 			cancelled?.Invoke();
 		}
 
@@ -51,6 +56,7 @@ namespace ZeldaEditor.Control {
 			Result = Task.Result;
 			Task = null;
 			Thread = null;
+			IsCompleted = true;
 			completed?.Invoke(Result, Code);
 		}
 
@@ -142,7 +148,7 @@ namespace ZeldaEditor.Control {
 		/// <summary>Compile a single script in order to check for errors/warnings.
 		/// </summary>
 		public CompileTask CompileSingleScript(Script script, World world) {
-			Logs.Scripts.LogInfo("Compiling script {0}...", script.ID);
+			//Logs.Scripts.LogInfo("Compiling script {0}...", script.ID);
 			ScriptCodeGenerator codeGenerator = new ScriptCodeGenerator(world);
 			GeneratedScriptCode code =
 				codeGenerator.GenerateTestCode(script, script.Code);
@@ -171,16 +177,23 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
-
+		
+		/// <summary>Begin a compile task which compiles given code in a separate
+		/// thread. Returns the CompileTask instance that was created.</summary>
 		private CompileTask BeginCompileTask(GeneratedScriptCode code) {
 			return BeginCompileTask(new CompileTask(code));
 		}
 
+		/// <summary>Begin a compile task which compiles code in a separate thread.
+		/// </summary>
 		private CompileTask BeginCompileTask(CompileTask task) {
+			task.IsCancelled = false;
+			task.IsCompleted = false;
 			task.Result = null;
 			task.Thread = null;
 			compileTasks.Add(task);
 
+			// Begin the task thread
 			task.Task = Task.Run(() => {
 				task.Thread = Thread.CurrentThread;
 				ScriptCompiler compiler = new ScriptCompiler();

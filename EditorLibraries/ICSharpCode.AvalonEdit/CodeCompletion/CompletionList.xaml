@@ -38,17 +38,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type cc:CompletionList}">
-                    <cc:CompletionListBox x:Name="PART_ListBox"
-						ItemContainerStyle="{StaticResource CompletionListBoxItem}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="{Binding Image}" Width="16" Height="16" Margin="0,0,2,0"/>
-                                    <ContentPresenter Content="{Binding Content}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </cc:CompletionListBox>
+                    <Border CornerRadius="3,3,3,3" BorderBrush="Gray" BorderThickness="1" Padding="1">
+                        <cc:CompletionListBox x:Name="PART_ListBox"
+						    ItemContainerStyle="{StaticResource CompletionListBoxItem}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{Binding Image}" Width="16" Height="16" Margin="0,0,2,0"/>
+                                        <ContentPresenter Content="{Binding Content}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </cc:CompletionListBox>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -35,7 +35,7 @@ namespace ICSharpCode.AvalonEdit.Editing {
 			RaiseAutomationEvent(AutomationEvents.TextPatternOnTextSelectionChanged);
 		}
 
-		private TextArea TextArea { get { return (TextArea)base.Owner; } }
+		private TextArea TextArea { get { return (TextArea) base.Owner; } }
 
 		protected override AutomationControlType GetAutomationControlTypeCore() {
 			return AutomationControlType.Document;

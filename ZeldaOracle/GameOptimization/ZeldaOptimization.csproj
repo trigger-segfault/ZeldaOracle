@@ -121,6 +121,7 @@
     <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Common\Util\PathHelper.cs" />
     <Compile Include="Common\Util\ReflectionHelper.cs" />
+    <Compile Include="Common\Util\StringExtensions.cs" />
     <Compile Include="Common\Util\Texture2DHelper.cs" />
     <Compile Include="Common\Util\TypeHelper.cs" />
     <Compile Include="Common\Util\XnaCasting.cs" />

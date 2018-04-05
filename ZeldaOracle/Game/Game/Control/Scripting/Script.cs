@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ZeldaOracle.Common.Scripting;
 
@@ -14,9 +15,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private string id;
 		/// <summary>User-entered code for the script.</summary>
 		private string code;
-		/// <summary>True if this script is visible in the editor. Hidden scripts are
-		/// used in object events.</summary>
-		private bool isHidden;
 		/// <summary>Parameters that are passed into the script.</summary>
 		private List<ScriptParameter> parameters;
 
@@ -52,7 +50,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			id   		= "";
 			code		= "";
 			description	= "";
-			isHidden	= false;
 			parameters	= new List<ScriptParameter>();
 
 			errors		= new List<ScriptCompileError>();
@@ -66,14 +63,13 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		/// <summary>Copy constructor.</summary>
 		public Script(Script copy) {
-			id	    	= copy.id;
-			code		= copy.code;
-			description	= copy.description;
-			isHidden	= copy.isHidden;
-
+			id = copy.id;
+			code = copy.code;
+			description = copy.description;
+			
 			// Parameters are never modified so they can be referenced in multiple
 			// places
-			parameters	= copy.parameters;
+			parameters = copy.parameters;
 
 			// Copy errors and warnings
 			errors = new List<ScriptCompileError>();
@@ -113,13 +109,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			set { description = value; }
 		}
 		
-		/// <summary>Is this script visible in the editor? Hidden scripts are used in
-		/// object events.</summary>
-		public bool IsHidden {
-			get { return isHidden; }
-			set { isHidden = value; }
-		}
-
 		/// <summary>Parameters that are passed into the script.</summary>
 		public List<ScriptParameter> Parameters {
 			get { return parameters; }
@@ -146,6 +135,17 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		// Compile Result -------------------------------------------------------------
 
+		/// <summary>Errors and warnings encountered when compiling this script.
+		/// </summary>
+		public IEnumerable<ScriptCompileError> ErrorsAndWarnings {
+			get {
+				foreach (ScriptCompileError error in errors)
+					yield return error;
+				foreach (ScriptCompileError warning in warnings)
+					yield return warning;
+			}
+		}
+
 		/// <summary>Errors encountered when compiling this script.</summary>
 		public List<ScriptCompileError> Errors {
 			get { return errors; }
@@ -166,6 +166,11 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		/// <summary>True if the script has compiler warnings.</summary>
 		public bool HasWarnings {
 			get { return (warnings.Count > 0); }
+		}
+
+		/// <summary>Gets if the script has any parameters.</summary>
+		public bool HasParameteres {
+			get { return parameters.Any(); }
 		}
 
 		// Loaded Assembly ------------------------------------------------------------

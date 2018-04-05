@@ -27,21 +27,21 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Constructs the event with no existing documentation.</summary>
 		public Event(string name, params ScriptParameter[] parameters) {
 			this.documentation  = new EventDocumentation(name, parameters);
-			this.script         = null;
+			this.script = null;
 			this.internalID     = "";
 		}
 
 		/// <summary>Constructs the event with the existing documentation.</summary>
 		public Event(EventDocumentation documentation) {
 			this.documentation  = documentation;
-			this.script			= null;
+			this.script = null;
 			this.internalID		= "";
 		}
 
 		/// <summary>Constructs a copy of the event.</summary>
 		public Event(Event copy) {
 			this.documentation  = copy.documentation;
-			this.script			= (copy.Script != null ? new Script(copy.Script) : null);
+			this.script = (copy.Script != null ? new Script(copy.Script) : null);
 			this.internalID		= "";
 		}
 
@@ -54,21 +54,10 @@ namespace ZeldaOracle.Common.Scripting {
 		public void DefineScript(string code = null) {
 			script = new Script();
 			script.ID = "__internal_script__";
-			script.IsHidden = true;
+			//script.IsHidden = true;
 			script.Parameters = Parameters;
-			if (code != null) {
+			if (code != null)
 				script.Code = code;
-			}
-			else if (Parameters.Any()) {
-				script.Code = "// Parameters = (";
-				for (int i = 0; i < Parameters.Count; i++) {
-					ScriptParameter parameter = Parameters[i];
-					if (i > 0)
-						script.Code += ", ";
-					script.Code += parameter.Type + " " + parameter.Name;
-				}
-				script.Code += ")\r\n\r\n";
-			}
 		}
 
 		/// <summary>Undefines the script and sets it back to null.</summary>
@@ -143,7 +132,7 @@ namespace ZeldaOracle.Common.Scripting {
 		public int ParameterCount {
 			get { return documentation.ParameterCount; }
 		}
-		
+
 		// Scripting ------------------------------------------------------------------
 
 		/// <summary>Returns true if the script is defined and non-null.</summary>

@@ -55,14 +55,14 @@ namespace ICSharpCode.AvalonEdit.Utils {
 		protected sealed override void StartListening(object source) {
 			if (source == null)
 				throw new ArgumentNullException("source");
-			StartListening((TEventSource)source);
+			StartListening((TEventSource) source);
 		}
 
 		/// <inheritdoc/>
 		protected sealed override void StopListening(object source) {
 			if (source == null)
 				throw new ArgumentNullException("source");
-			StopListening((TEventSource)source);
+			StopListening((TEventSource) source);
 		}
 
 		/// <summary>

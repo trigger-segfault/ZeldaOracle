@@ -70,6 +70,36 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Code Generation
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Creates script code for use with RoslynPad's script editor.
+		/// </summary>
+		public static string CreateRoslynScriptCode(Script script,
+			out int scriptStart, out int lineStart)
+		{
+			string code = "";
+			lineStart = 0;
+			code += "// Members:" + Environment.NewLine;
+			lineStart++;
+			foreach (FieldInfo fieldInfo in typeof(ZeldaAPI.CustomScriptBase).GetFields()) {
+				code += fieldInfo.FieldType.Name + " " + fieldInfo.Name + ";" + Environment.NewLine;
+				lineStart++;
+			}
+			if (script.ParameterCount > 0) {
+				code += Environment.NewLine;
+				code += "// Parameters:" + Environment.NewLine;
+				lineStart += 2;
+				foreach (ScriptParameter parameter in script.Parameters) {
+					code += parameter.Type + " " + parameter.Name + ";" +  Environment.NewLine;
+					lineStart++;
+				}
+			}
+			lineStart += 0;
+			scriptStart = code.Length;
+			code += script.Code;
+			return code;
+		}
+
+
+
 		/// <summary>Returns true if the script has a valid function name.</summary>
 		public static bool IsValidScriptName(string name) {
 			if (name.Length == 0)
@@ -106,20 +136,18 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 			// Generate script methods
 			foreach (Script script in world.Scripts.Values) {
-				if (!script.IsHidden) {
-					result.Code += CreateScriptMethodOpening(script);
+				result.Code += CreateScriptMethodOpening(script);
 
-					string scriptCode = "";
-					if (!script.HasErrors || includeErrors)
-						scriptCode = script.Code;
+				string scriptCode = "";
+				if (!script.HasErrors || includeErrors)
+					scriptCode = script.Code;
 
-					result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
-						script.ID, result.Code.Length, scriptCode.Length);
+				result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
+					script.ID, result.Code.Length, scriptCode.Length);
 
-					if (!script.HasErrors || includeErrors)
-						result.Code += scriptCode;
-					result.Code += CreateScriptMethodClosing(script) + "\n";
-				}
+				if (!script.HasErrors || includeErrors)
+					result.Code += scriptCode;
+				result.Code += CreateScriptMethodClosing(script) + "\n";
 			}
 
 			// Generate trigger script methods
@@ -169,15 +197,13 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 			// Generate empty script methods
 			foreach (Script script in world.Scripts.Values) {
-				if (!script.IsHidden) {
-					result.Code += CreateScriptMethodOpening(script);
-					if (script == testScript) {
-						result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
-							script.ID, result.Code.Length, code.Length);
-						result.Code += code;
-					}
-					result.Code += CreateScriptMethodClosing(script) + "\n";
+				result.Code += CreateScriptMethodOpening(script);
+				if (script == testScript) {
+					result.ScriptInfo[script] = new ScriptCodeGenerationInfo(
+						script.ID, result.Code.Length, code.Length);
+					result.Code += code;
 				}
+				result.Code += CreateScriptMethodClosing(script) + "\n";
 			}
 
 			// Generate function for the trigger script to test
@@ -205,12 +231,11 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		/// <summary>Creates the default usings.</summary>
 		public static string CreateUsingsString() {
-			return	"using Console = System.Console;\n" +
-					"using System.Collections;\n" +
-					"using System.Collections.Generic;\n" +
-					"using ZeldaAPI;\n" +
-					"using ZeldaOracle.Common.Geometry;\n" +
-					"using ZeldaOracle.Game;\n";
+			string usings = "";
+			foreach (string use in Assemblies.ScriptUsings) {
+				usings += "using " + use + "; ";
+			}
+			return usings;
 		}
 		
 		/// <summary>Creates the opening namespace and class.</summary>
@@ -278,18 +303,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 					scriptParameters[i].Name;
 			}
 			return parametersString;
-		}
-
-		// Misc -----------------------------------------------------------------------
-
-		/// <summary>Get the assembly for the Zelda Common.</summary>
-		private static Assembly GetZeldaCommonAssembly() {
-			return Assembly.GetAssembly(typeof(ZeldaOracle.Common.Geometry.Point2I));
-		}
-
-		/// <summary>Get the assembly for the Zelda API.</summary>
-		private static Assembly GetZeldaAPIAssembly() {
-			return Assembly.GetAssembly(typeof(ZeldaAPI.Game));
 		}
 
 

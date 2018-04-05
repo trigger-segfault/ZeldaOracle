@@ -1,4 +1,5 @@
-﻿using ZeldaOracle.Common.Geometry;
+﻿using System;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
@@ -73,6 +74,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				.SetDocumentation("Polarity", "enum", typeof(Polarity), "Magnet Ball", "The magnetic polarity (north or south) for interaction with the magnetic gloves.");
 			data.EntityType = typeof(MagnetBall);
 			data.ResetCondition = TileResetCondition.LeaveArea;
+
+			data.EntityType = typeof(MagnetBall);
 		}
 
 
@@ -83,6 +86,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		public Polarity Polarity {
 			get { return properties.GetEnum("polarity", Polarity.North); }
 			set { properties.SetEnum("polarity", value); }
+		}
+
+		public override Type TriggerObjectType {
+			get { return typeof(MagnetBall); }
 		}
 	}
 }

@@ -168,7 +168,7 @@ namespace ZeldaOracle.Game.Main {
 				isContentLoaded = true;
 			}
 			catch (LoadContentException e) {
-				Logs.Initialization.LogError(e.Message);
+				e.PrintMessage();
 			}
 		}
 

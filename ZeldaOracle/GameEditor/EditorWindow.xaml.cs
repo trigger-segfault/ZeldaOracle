@@ -57,7 +57,7 @@ namespace ZeldaEditor {
 			treeViewWorld.EditorControl = editorControl;
 			propertyGrid.EditorControl = editorControl;
 
-			ScriptEditor.Initialize();
+			ScriptTextEditor.Initialize();
 
 			// Setup window event handlers
 			//Loaded += OnWindowLoaded;

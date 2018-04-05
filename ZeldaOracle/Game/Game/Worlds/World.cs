@@ -506,7 +506,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Type TriggerObjectType {
-			get { return typeof(ZeldaAPI.World); }
+			get { return typeof(World); }
 		}
 
 		/// <summary>Gets the variables for the world.</summary>
