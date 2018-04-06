@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Items.Rewards.Health {
 						new RoomStateAction(() => {
 							IncrementPiecesOfHeart();
 						}),
-						new RoomStateTextReader(GameSettings.HEART_CONTAINER_TEXT, null));
+						new RoomStateTextReader(GameSettings.HEART_CONTAINER_TEXT));
 				});
 			}
 			else {

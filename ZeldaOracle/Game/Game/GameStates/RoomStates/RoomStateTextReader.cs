@@ -24,14 +24,16 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 	/// <summary>Arguments for the room state text reader.</summary>
 	public class TextReaderArgs {
-		/// <summary>The spacing between the window vertical window edges and the text.</summary>
-		public int Spacing { get; set; } = 1;
+		/// <summary>The spacing between the window vertical window edges and the text.
+		/// </summary>
+		public int Spacing { get; set; }
 		/// <summary>The position of the text reader on the screen.</summary>
-		public TextReaderPosition ReaderPosition { get; set; } =
-			TextReaderPosition.Automatic;
+		public TextReaderPosition ReaderPosition { get; set; }
 		/// <summary>The number of lines to use for this window.</summary>
-		public int LinesPerWindow { get; set; } = 2;
+		public int LinesPerWindow { get; set; }
 
+		/// <summary>Default text reader arguments, with 1 character spacing, 2 lines
+		/// per window, and an automatic reader positio.</summary>
 		public static readonly TextReaderArgs Default = new TextReaderArgs() {
 			ReaderPosition = TextReaderPosition.Automatic,
 			Spacing = 1,
@@ -89,13 +91,15 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		// Members
 		//-----------------------------------------------------------------------------
 
-		// Message
+		// Message --------------------------------------------------------------------
+
 		/// <summary>The game message with text and questions.</summary>
-		private Message message;
+		private string message;
 		/// <summary>The wrapped and formatted lines.</summary>
 		private WrappedLetterString wrappedString;
 
-		// Settings
+		// Settings -------------------------------------------------------------------
+
 		/// <summary>The number of lines to use for this window.</summary>
 		private int linesPerWindow;
 		/// <summary>The position of the text reader on the screen.</summary>
@@ -106,7 +110,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		/// <summary>Callback function invoked when the message is done.</summary>
 		private TextReaderCallback callback;
 
-		// Updating
+		// Updating -------------------------------------------------------------------
+
 		/// <summary>Manages text reader state and state transtions.</summary>
 		private GenericStateMachine<TextReaderState> stateMachine;
 		/// <summary>Used to prevent control presses from activating on the first step.
@@ -129,15 +134,17 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		/// </summary>
 		private int soundCounter;
 		
-		// Menu Options
+		// Menu Options ---------------------------------------------------------------
+
 		/// <summary>The currently selected menu option.</summary>
-		private MenuOption menuOption;
+		private MenuOption selectedMenuOption;
 		/// <summary>The menu option that is selected when pressing B.</summary>
 		private MenuOption defaultMenuOption;
 		/// <summary>The list of selectable menu option.</summary>
 		private List<MenuOption> menuOptions;
 
-		// Piece of Heart
+		// Piece of Heart -------------------------------------------------------------
+
 		/// <summary>True if the heart piece UI is being displayed.</summary>
 		private bool heartPieceDisplay;
 		/// <summary>The internal counter used to display the pieces of heart before
@@ -150,60 +157,36 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs a text reader with the specified message.</summary>
+		public RoomStateTextReader(string message) :
+			this(message, TextReaderArgs.Default)
+		{
+		}
+
+		/// <summary>Constructs a text reader with the specified message.</summary>
 		public RoomStateTextReader(string message, TextReaderArgs args,
 			Action callback, int piecesOfHeart = 0) :
-			this(new Message(message), args,
-				(int option) => { callback?.Invoke(); }, piecesOfHeart)
+			this(message, args, (int option) => { callback?.Invoke(); },
+				piecesOfHeart)
 		{
 		}
 
 		/// <summary>Constructs a text reader with the specified message.</summary>
-		public RoomStateTextReader(Message message, TextReaderArgs args,
-			Action callback, int piecesOfHeart = 0) :
-			this(message, args, (int option) => { callback?.Invoke(); }, piecesOfHeart)
-		{
-		}
-
-		/// <summary>Constructs a text reader with the specified message text.
-		/// </summary>
-		public RoomStateTextReader(string text, TextReaderArgs args,
-			TextReaderCallback callback = null,  int piecesOfHeart = 0) :
-			this(new Message(text), args, callback, piecesOfHeart)
-		{
-		}
-
-		/// <summary>Constructs a text reader with the specified message.</summary>
-		public RoomStateTextReader(Message message, TextReaderArgs args,
+		public RoomStateTextReader(string message, TextReaderArgs args,
 			TextReaderCallback callback = null, int piecesOfHeart = 0)
 		{
+			menuOptions = new List<MenuOption>();
+
+			// RoomState properties
+			UpdateRoom	= false;
+			AnimateRoom	= true;
+			
+			// TextReader Settings
 			this.message		= message;
 			this.piecesOfHeart	= piecesOfHeart;
 			this.callback		= callback;
-
-			if (args == null)
-				args = new TextReaderArgs();
-
-			updateRoom			= false;
-			animateRoom		= true;
-
-			wrappedString		= null;
-
 			linesPerWindow		= args.LinesPerWindow;
 			readerPosition		= args.ReaderPosition;
-			spacing			= args.Spacing;
-
-			firstUpdate		= true;
-			timer				= 0;
-			arrowTimer			= 0;
-			windowLinesLeft	= this.linesPerWindow;
-			currentLine		= 0;
-			currentChar        = 0;
-			
-			heartPieceDisplay	= false;
-
-			menuOptions = new List<MenuOption>();
-			menuOption = null;
-			defaultMenuOption = null;
+			spacing				= args.Spacing;
 
 			// Setup the state machine
 			stateMachine = new GenericStateMachine<TextReaderState>();
@@ -361,13 +344,13 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			else if (Controls.B.IsPressed())
 				SelectOption(defaultMenuOption);
 			else if (Controls.Right.IsPressed())
-				SelectOption(menuOption.Right);
+				SelectOption(selectedMenuOption.Right);
 			else if (Controls.Left.IsPressed())
-				SelectOption(menuOption.Left);
+				SelectOption(selectedMenuOption.Left);
 			else if (Controls.Up.IsPressed())
-				SelectOption(menuOption.Up);
+				SelectOption(selectedMenuOption.Up);
 			else if (Controls.Down.IsPressed())
-				SelectOption(menuOption.Down);
+				SelectOption(selectedMenuOption.Down);
 		}
 
 		private void UpdateFinishedState() {
@@ -386,19 +369,21 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			wrappedString	= GameData.FONT_LARGE.WrapString(
-				message.Text, MaxWidth - spacing * 16, GameControl.Variables);
-			timer = 1;
-			windowLinesLeft	= linesPerWindow;
-			windowLineIndex	= 0;
-			currentLine		= 0;
-			currentChar		= 0;
-			soundCounter	= 0;
-			firstUpdate		= true;
+			wrappedString = GameData.FONT_LARGE.WrapString(
+				message, MaxWidth - spacing * 16, GameControl.Variables);
+			timer				= 1;
+			arrowTimer			= 0;
+			windowLinesLeft		= linesPerWindow;
+			windowLineIndex		= 0;
+			currentLine			= 0;
+			currentChar			= 0;
+			soundCounter		= 0;
+			firstUpdate			= true;
+			heartPieceDisplay	= false;
 
 			menuOptions.Clear();
-			menuOption = null;
-			defaultMenuOption = null;
+			selectedMenuOption	= null;
+			defaultMenuOption	= null;
 
 			if (readerPosition == TextReaderPosition.Automatic) {
 				if (GameControl.Player.DrawPosition.Y <
@@ -438,11 +423,13 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				option.Left = menuOptions[
 					(i + menuOptions.Count - 1) % menuOptions.Count];
 
-				option.Down = null;
+				// Find the closest menu option on the opposite line
+				option.Up = option;
+				option.Down = option;
 				for (int j = 0; j < menuOptions.Count; j++) {
 					MenuOption other = menuOptions[j];
 					if (other != option && other.LineIndex != option.LineIndex) {
-						if (option.Down == null ||
+						if (option.Down == option ||
 							GMath.Abs(other.CharacterIndex - option.CharacterIndex) <
 							GMath.Abs(option.Down.CharacterIndex - option.CharacterIndex))
 						{
@@ -451,10 +438,6 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 						}
 					}
 				}
-				if (option.Down == null)
-					option.Down = option;
-				if (option.Up == null)
-					option.Up = option;
 			}
 
 			// Prevent any crashes whith empty wrapped strings
@@ -463,12 +446,14 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		}
 
 		public override void OnEnd() {
-			callback?.Invoke(menuOption != null ? menuOption.OptionNumber : -1);
+			callback?.Invoke(selectedMenuOption != null ? selectedMenuOption.OptionNumber : -1);
 		}
 
 		public override void Update() {
-			if (timer > 0 && (stateMachine.CurrentState != TextReaderState.WritingLine || firstUpdate ||
-				(!heartPieceDisplay && !Controls.A.IsPressed() && !Controls.B.IsPressed())))
+			if (timer > 0 &&
+				(stateMachine.CurrentState != TextReaderState.WritingLine ||
+				firstUpdate || (!heartPieceDisplay && !Controls.A.IsPressed() &&
+				!Controls.B.IsPressed())))
 			{
 				timer -= 1;
 			}
@@ -552,14 +537,16 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		/// <summary>Select the given menu option. This will move the cursor character
 		/// in the message text.</summary>
 		private void SelectOption(MenuOption option) {
-			if (menuOption != null) {
+			if (selectedMenuOption != null) {
 				AudioSystem.PlaySound(GameData.SOUND_MENU_CURSOR_MOVE);
-				SetCharacter(menuOption.LineIndex, menuOption.CharacterIndex, ' ');
+				SetCharacter(selectedMenuOption.LineIndex,
+					selectedMenuOption.CharacterIndex, ' ');
 			}
-			menuOption = option;
+			selectedMenuOption = option;
 			char c = (char) (FormatCodes.MenuOptionCharactersBegin +
 				option.OptionNumber);
-			SetCharacter(menuOption.LineIndex, menuOption.CharacterIndex, c);
+			SetCharacter(selectedMenuOption.LineIndex,
+				selectedMenuOption.CharacterIndex, c);
 		}
 
 		/// <summary>Set a character in the message by line and column.</summary>

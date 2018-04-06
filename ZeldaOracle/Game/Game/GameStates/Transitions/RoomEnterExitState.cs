@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 	public class RoomEnterExitState : GameState {
 
-		private Message enterMessage; // Message to display after entering.
+		private string enterMessage; // Message to display after entering.
 		private float walkDistance; // Distance the player should walk.
 		private int walkDirection;
 		private float walkSpeed;
@@ -29,12 +29,12 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Constructor
 		//-----------------------------------------------------------------------------
 		
-		private RoomEnterExitState(EnterExitType type, int walkDirection, float walkDistance, Message enterMessage = null) :
+		private RoomEnterExitState(EnterExitType type, int walkDirection, float walkDistance, string enterMessage = null) :
 			this(type, walkDirection, walkDistance, 0, enterMessage)
 		{
 		}
 
-		private RoomEnterExitState(EnterExitType type, int walkDirection, float walkDistance, float walkSpeed, Message enterMessage = null) {
+		private RoomEnterExitState(EnterExitType type, int walkDirection, float walkDistance, float walkSpeed, string enterMessage = null) {
 			this.type			= type;
 			this.enterMessage	= enterMessage;
 			this.walkDirection	= walkDirection;
@@ -91,7 +91,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				End();
 				//GameManager.PopGameState();
 				if (enterMessage != null && type == EnterExitType.Enter)
-					GameControl.DisplayMessage(enterMessage.Text);
+					GameControl.DisplayMessage(enterMessage);
 				if (type == EnterExitType.Enter)
 					player.MarkRespawn();
 			}
@@ -106,7 +106,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Static Factory Methods
 		//-----------------------------------------------------------------------------
 
-		public static RoomEnterExitState CreateEnter(int walkDirection, float walkDistance, Message enterMessage = null) {
+		public static RoomEnterExitState CreateEnter(int walkDirection, float walkDistance, string enterMessage = null) {
 			return new RoomEnterExitState(EnterExitType.Enter, walkDirection, walkDistance, enterMessage);
 		}
 

@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 
 		public void Message(string text) {
 			LogMessage("Displaying message: {0}", text);
-			RoomControl.GameControl.DisplayMessage(text, null, ScriptInstance.Resume);
+			RoomControl.GameControl.DisplayMessage(text, ScriptInstance.Resume);
 			ScriptInstance.WaitForResume();
 		}
 
