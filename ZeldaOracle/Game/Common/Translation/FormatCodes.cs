@@ -38,16 +38,13 @@ namespace ZeldaOracle.Common.Translation {
 		public const char AlignCenterCharacter = (char) 251;
 		/// <summary>The character to align the current line to the right.</summary>
 		public const char AlignRightCharacter = (char) 250;
-		public const char MenuOptionCharactersBegin = (char) 140;
-		public const char MenuOptionCharactersEnd = (char) 150;
+		/// <summary>The start of the character range which defines message options.
+		/// </summary>
+		public const char MessageOptionCharactersBegin = (char) 140;
+		/// <summary>The end of the character range which defines message options.
+		/// </summary>
+		public const char MessageOptionCharactersEnd = (char) 150;
 
-		public static bool IsMenuOption(char c) {
-			return (c >= MenuOptionCharactersBegin && c < MenuOptionCharactersEnd);
-		}
-		
-		public static int GetMenuOptionIndex(char c) {
-			return (int) (c - MenuOptionCharactersBegin);
-		}
 
 		//-----------------------------------------------------------------------------
 		// Members
@@ -120,24 +117,42 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("align-center", "" + AlignCenterCharacter);
 			FormatCodes.stringCodes.Add("align-right", "" + AlignRightCharacter);
 			
-			FormatCodes.noColorStringCodes.Add("dpad", "" + (char) 136);
+			FormatCodes.stringCodes.Add("0", "" + GetMessageOptionCharacter(0));
+			FormatCodes.stringCodes.Add("1", "" + GetMessageOptionCharacter(1));
+			FormatCodes.stringCodes.Add("2", "" + GetMessageOptionCharacter(2));
+			FormatCodes.stringCodes.Add("3", "" + GetMessageOptionCharacter(3));
+			FormatCodes.stringCodes.Add("4", "" + GetMessageOptionCharacter(4));
+			FormatCodes.stringCodes.Add("5", "" + GetMessageOptionCharacter(5));
+			FormatCodes.stringCodes.Add("6", "" + GetMessageOptionCharacter(6));
+			FormatCodes.stringCodes.Add("7", "" + GetMessageOptionCharacter(7));
+			FormatCodes.stringCodes.Add("8", "" + GetMessageOptionCharacter(8));
+			FormatCodes.stringCodes.Add("9", "" + GetMessageOptionCharacter(9));
 			
-			FormatCodes.noColorStringCodes.Add("0", "" + (char) (MenuOptionCharactersBegin + 0));
-			FormatCodes.noColorStringCodes.Add("1", "" + (char) (MenuOptionCharactersBegin + 1));
-			FormatCodes.noColorStringCodes.Add("2", "" + (char) (MenuOptionCharactersBegin + 2));
-			FormatCodes.noColorStringCodes.Add("3", "" + (char) (MenuOptionCharactersBegin + 3));
-			FormatCodes.noColorStringCodes.Add("4", "" + (char) (MenuOptionCharactersBegin + 4));
-			FormatCodes.noColorStringCodes.Add("5", "" + (char) (MenuOptionCharactersBegin + 5));
-			FormatCodes.noColorStringCodes.Add("6", "" + (char) (MenuOptionCharactersBegin + 6));
-			FormatCodes.noColorStringCodes.Add("7", "" + (char) (MenuOptionCharactersBegin + 7));
-			FormatCodes.noColorStringCodes.Add("8", "" + (char) (MenuOptionCharactersBegin + 8));
-			FormatCodes.noColorStringCodes.Add("9", "" + (char) (MenuOptionCharactersBegin + 9));
+			FormatCodes.noColorStringCodes.Add("dpad", "" + (char) 136);
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Codes
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the given character is a format code for a message
+		/// option.</summary>
+		public static bool IsMessageOption(char c) {
+			return (c >= MessageOptionCharactersBegin && c < MessageOptionCharactersEnd);
+		}
+		
+		/// <summary>Returns the message option index that a message option format code
+		/// represents.</summary>
+		public static int GetMessageOptionIndex(char c) {
+			return (int) (c - MessageOptionCharactersBegin);
+		}
+		
+		/// <summary>Returns the format code character that represents the given
+		/// message option index.</summary>
+		public static char GetMessageOptionCharacter(int optionIndex) {
+			return (char) ((int) MessageOptionCharactersBegin + optionIndex);
+		}
 
 		/// <summary>Gets the string code type.</summary>
 		public static FormatCodeType GetFormatCodeType(string code) {

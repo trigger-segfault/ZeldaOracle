@@ -175,7 +175,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 			// Close class and namespace
 			result.Code += CreateClassAndNamespaceClosing();
-
 			return result;
 		}
 		

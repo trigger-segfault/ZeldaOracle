@@ -402,11 +402,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				LetterString line = wrappedString.Lines[lineIndex];
 				for (int charIndex = 0; charIndex < line.String.Length; charIndex++) {
 					Letter letter = line[charIndex];
-					if (FormatCodes.IsMenuOption(letter.Char)) {
+					if (FormatCodes.IsMessageOption(letter.Char)) {
 						MenuOption option = new MenuOption() {
 							LineIndex = lineIndex,
 							CharacterIndex = charIndex,
-							OptionNumber = FormatCodes.GetMenuOptionIndex(letter.Char),
+							OptionNumber = FormatCodes.GetMessageOptionIndex(letter.Char),
 						};
 						menuOptions.Add(option);
 						if (defaultMenuOption == null || option.OptionNumber == 0)
@@ -543,10 +543,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					selectedMenuOption.CharacterIndex, ' ');
 			}
 			selectedMenuOption = option;
-			char c = (char) (FormatCodes.MenuOptionCharactersBegin +
-				option.OptionNumber);
 			SetCharacter(selectedMenuOption.LineIndex,
-				selectedMenuOption.CharacterIndex, c);
+				selectedMenuOption.CharacterIndex,
+				FormatCodes.GetMessageOptionCharacter(option.OptionNumber));
 		}
 
 		/// <summary>Set a character in the message by line and column.</summary>

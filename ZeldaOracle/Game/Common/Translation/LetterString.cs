@@ -669,8 +669,8 @@ namespace ZeldaOracle.Common.Translation {
 		public bool HasMenuOptions {
 			get {
 				return letters.Any(l =>
-					(l.Char >= FormatCodes.MenuOptionCharactersBegin &&
-					l.Char < FormatCodes.MenuOptionCharactersEnd));
+					(l.Char >= FormatCodes.MessageOptionCharactersBegin &&
+					l.Char < FormatCodes.MessageOptionCharactersEnd));
 			}
 		}
 	}
