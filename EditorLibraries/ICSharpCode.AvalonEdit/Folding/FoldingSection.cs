@@ -50,6 +50,11 @@ namespace ICSharpCode.AvalonEdit.Folding {
 			}
 		}
 
+		/// <summary>
+		/// Gets/Sets if the folding is completely hidden and cannot be uncollapsed.
+		/// </summary>
+		public bool IsHidden { get; set; } = false;
+
 		internal void ValidateCollapsedLineSections() {
 			if (!isFolded) {
 				RemoveCollapsedLineSection();

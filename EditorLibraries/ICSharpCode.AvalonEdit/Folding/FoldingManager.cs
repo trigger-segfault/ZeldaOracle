@@ -261,12 +261,13 @@ namespace ICSharpCode.AvalonEdit.Folding {
 					// no matching current folding; create a new one:
 					section = this.CreateFolding(newFolding.StartOffset, newFolding.EndOffset);
 					// auto-close #regions only when opening the document
-					if (isFirstUpdate) {
-						section.IsFolded = newFolding.DefaultClosed;
+					if (isFirstUpdate || newFolding.IsHidden) {
+						section.IsFolded = newFolding.DefaultClosed || newFolding.IsHidden;
 					}
 					section.Tag = newFolding;
 				}
 				section.Title = newFolding.Name;
+				section.IsHidden = newFolding.IsHidden;
 			}
 			isFirstUpdate = false;
 			// remove all outstanding old foldings:
@@ -372,5 +373,11 @@ namespace ICSharpCode.AvalonEdit.Folding {
 			}
 		}
 		#endregion
+
+		/// <summary>Resets the folding manager so it will use default foldings again.</summary>
+		public void Reset() {
+			Clear();
+			isFirstUpdate = true;
+		}
 	}
 }

@@ -55,6 +55,11 @@ namespace ICSharpCode.AvalonEdit.Folding {
 		public bool IsDefinition { get; set; }
 
 		/// <summary>
+		/// Gets/Sets if the folding is completely hidden and cannot be uncollapsed.
+		/// </summary>
+		public bool IsHidden { get; set; } = false;
+
+		/// <summary>
 		/// Creates a new NewFolding instance.
 		/// </summary>
 		public NewFolding() {

@@ -72,7 +72,6 @@ namespace ZeldaOracle.Game {
 					"System.Collections.Generic",
 					"ZeldaAPI",
 					"ZeldaOracle.Game",
-					"ZeldaOracle.Game.API",
 					"ZeldaOracle.Common.Geometry",
 				};
 			}

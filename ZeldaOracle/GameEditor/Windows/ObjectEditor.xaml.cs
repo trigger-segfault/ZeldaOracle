@@ -35,8 +35,6 @@ namespace ZeldaEditor.Windows {
 			tilePreview.Name				= "tilePreview";
 			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
 			hostTilePreview.Child			= tilePreview;
-			
-			SetObject(obj);
 		}
 		
 		public static ObjectEditor Show(Window owner, EditorControl editorControl,
@@ -94,6 +92,17 @@ namespace ZeldaEditor.Windows {
 		// UI Callbacks
 		//-----------------------------------------------------------------------------
 
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		private void OnLoaded(object sender, RoutedEventArgs e) {
+			editorControl.ScheduleEvent(0.01, delegate {
+				// Don't fire if the window has been closed
+				if (IsLoaded)
+					SetObject(obj);
+			});
+		}
 
 	}
 }

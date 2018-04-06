@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,8 +12,8 @@ namespace ZeldaEditor.Scripting {
 	public class ScriptRoslynHost : RoslynHost {
 
 		/// <summary>The default supplied preprocessor symbols.</summary>
-		//internal static readonly ImmutableArray<string> PreprocessorSymbols =
-		//	ImmutableArray.CreateRange(new[] { "__DEMO__", "__DEMO_EXPERIMENTAL__", "TRACE", "DEBUG" });
+		internal static readonly ImmutableArray<string> PreprocessorSymbols =
+			ImmutableArray.CreateRange(new[] { "__DEMO__", "__DEMO_EXPERIMENTAL__", "TRACE", "DEBUG" });
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -30,17 +31,18 @@ namespace ZeldaEditor.Scripting {
 		/// <summary>Overrides the compilation options to change the using imports.</summary>
 		protected override CompilationOptions CreateCompilationOptions(DocumentCreationArgs args, bool addDefaultImports) {
 			var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
-				usings: Assemblies.ScriptUsings,
+				usings: Enumerable.Empty<string>(), //Assemblies.ScriptUsings,
 				allowUnsafe: true,
-				sourceReferenceResolver: new SourceFileResolver(ImmutableArray<string>.Empty, args.WorkingDirectory));
+				sourceReferenceResolver: new SourceFileResolver(ImmutableArray<string>.Empty, args.WorkingDirectory),
+				generalDiagnosticOption: ReportDiagnostic.Suppress);
 			return compilationOptions;
 		}
 		
 		/// <summary>Overrides the parse options.</summary>
-		/*protected override ParseOptions CreateDefaultParseOptions() {
-			return new CSharpParseOptions(kind: SourceCodeKind.Script,
+		protected override ParseOptions CreateDefaultParseOptions() {
+			return new CSharpParseOptions(kind: SourceCodeKind.Regular,
 				preprocessorSymbols: PreprocessorSymbols, languageVersion: LanguageVersion.Latest);
-		}*/
+		}
 
 
 		//-----------------------------------------------------------------------------

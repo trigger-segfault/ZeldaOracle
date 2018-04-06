@@ -55,7 +55,7 @@ namespace ZeldaEditor.Windows {
 			previousCode = script.Code;
 			//autoCompile = true;
 			//compileOnClose = true;
-			needsRecompiling = true;
+			needsRecompiling = false;
 			compileTask = null;
 		}
 
@@ -79,8 +79,14 @@ namespace ZeldaEditor.Windows {
 				TimeSpan.FromMilliseconds(500),
 				DispatcherPriority.ApplicationIdle,
 				OnTimerUpdate);
-			
-			editor.Script = script;
+
+			editorControl.ScheduleEvent(0.01, delegate {
+				// Don't fire if the window has been closed
+				if (IsLoaded) {
+					editor.Script = script;
+					needsRecompiling = true;
+				}
+			});
 			editor.ScriptCodeChanged += OnTextChanged;
 			
 			UpdateStatusBar();
@@ -162,12 +168,16 @@ namespace ZeldaEditor.Windows {
 				editorControl.NeedsRecompiling = true;
 			}
 		}
-		
-		
+
+		private void OnNameTextChanged(object sender, TextChangedEventArgs e) {
+			editor.UpdateMethodName(textBoxName.Text);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
-		
+
 		public static bool ShowRegularEditor(Window owner, Script script,
 			EditorControl editorControl, bool newScript)
 		{

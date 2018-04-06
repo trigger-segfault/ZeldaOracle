@@ -10,7 +10,7 @@
         xmlns:cmd="clr-namespace:ZeldaEditor"
         xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         mc:Ignorable="d"
-        Title="Object Editor" Height="494" Width="768" Icon="/Resources/Icons/Script.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        Title="Object Editor" Height="494" Width="768" Icon="/Resources/Icons/Script.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Loaded="OnLoaded">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
