@@ -38,7 +38,16 @@ namespace ZeldaOracle.Common.Translation {
 		public const char AlignCenterCharacter = (char) 251;
 		/// <summary>The character to align the current line to the right.</summary>
 		public const char AlignRightCharacter = (char) 250;
+		public const char MenuOptionCharactersBegin = (char) 140;
+		public const char MenuOptionCharactersEnd = (char) 150;
 
+		public static bool IsMenuOption(char c) {
+			return (c >= MenuOptionCharactersBegin && c < MenuOptionCharactersEnd);
+		}
+		
+		public static int GetMenuOptionIndex(char c) {
+			return (int) (c - MenuOptionCharactersBegin);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Members
@@ -87,13 +96,13 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("pilcrow",		"" + (char) 20);
 			FormatCodes.stringCodes.Add("section",		"" + (char) 21);
 			FormatCodes.stringCodes.Add("cursor",		"" + (char) 22);
-			FormatCodes.stringCodes.Add("1",			"" + (char) 23);
+			FormatCodes.stringCodes.Add("slot1",		"" + (char) 23);
 			FormatCodes.stringCodes.Add("up",			"" + (char) 24);
 			FormatCodes.stringCodes.Add("down",			"" + (char) 25);
 			FormatCodes.stringCodes.Add("right",		"" + (char) 26);
 			FormatCodes.stringCodes.Add("left",			"" + (char) 27);
-			FormatCodes.stringCodes.Add("2",			"" + (char) 28);
-			FormatCodes.stringCodes.Add("3",			"" + (char) 29);
+			FormatCodes.stringCodes.Add("slot2",		"" + (char) 28);
+			FormatCodes.stringCodes.Add("slot3",		"" + (char) 29);
 			FormatCodes.stringCodes.Add("up-tri",		"" + (char) 30);
 			FormatCodes.stringCodes.Add("down-tri",		"" + (char) 31);
 			FormatCodes.stringCodes.Add("house",		"" + (char) 127);
@@ -110,8 +119,19 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("align-left", "" + AlignLeftCharacter);
 			FormatCodes.stringCodes.Add("align-center", "" + AlignCenterCharacter);
 			FormatCodes.stringCodes.Add("align-right", "" + AlignRightCharacter);
-
+			
 			FormatCodes.noColorStringCodes.Add("dpad", "" + (char) 136);
+			
+			FormatCodes.noColorStringCodes.Add("0", "" + (char) (MenuOptionCharactersBegin + 0));
+			FormatCodes.noColorStringCodes.Add("1", "" + (char) (MenuOptionCharactersBegin + 1));
+			FormatCodes.noColorStringCodes.Add("2", "" + (char) (MenuOptionCharactersBegin + 2));
+			FormatCodes.noColorStringCodes.Add("3", "" + (char) (MenuOptionCharactersBegin + 3));
+			FormatCodes.noColorStringCodes.Add("4", "" + (char) (MenuOptionCharactersBegin + 4));
+			FormatCodes.noColorStringCodes.Add("5", "" + (char) (MenuOptionCharactersBegin + 5));
+			FormatCodes.noColorStringCodes.Add("6", "" + (char) (MenuOptionCharactersBegin + 6));
+			FormatCodes.noColorStringCodes.Add("7", "" + (char) (MenuOptionCharactersBegin + 7));
+			FormatCodes.noColorStringCodes.Add("8", "" + (char) (MenuOptionCharactersBegin + 8));
+			FormatCodes.noColorStringCodes.Add("9", "" + (char) (MenuOptionCharactersBegin + 9));
 		}
 
 

@@ -99,7 +99,6 @@ namespace ZeldaOracle.Game.Entities {
 			
 			string text = Text;
 			if (text.Length > 0) {
-				Message message = new Message(text);
 				if (animationTalk != null) {
 					Graphics.PlayAnimation(animationTalk);
 				}
@@ -108,7 +107,7 @@ namespace ZeldaOracle.Game.Entities {
 						direction = ((Player) actionEntity).Direction.Reverse();
 					Graphics.SubStripIndex = direction;
 				}
-				GameControl.DisplayMessage(message, null, delegate() {
+				GameControl.DisplayMessage(text, null, () => {
 					if (animationTalk != null)
 						Graphics.PlayAnimation(animationDefault);
 				});

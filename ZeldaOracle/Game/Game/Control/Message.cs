@@ -8,7 +8,6 @@ namespace ZeldaOracle.Game.Control {
 
 		// The text for the message.
 		private string text;
-		// The list of options for the message.
 		private string[] options;
 
 

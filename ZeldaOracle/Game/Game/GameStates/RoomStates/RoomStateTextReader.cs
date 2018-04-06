@@ -7,15 +7,15 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Control;
-using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 	/// <summary>The positions the text reader window can be in.</summary>
 	public enum TextReaderPosition {
-		Unset = -1,
+		Automatic = -1,
 		Top,
 		TopMiddle,
 		BottomMiddle,
@@ -28,16 +28,24 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		public int Spacing { get; set; } = 1;
 		/// <summary>The position of the text reader on the screen.</summary>
 		public TextReaderPosition ReaderPosition { get; set; } =
-			TextReaderPosition.Unset;
+			TextReaderPosition.Automatic;
 		/// <summary>The number of lines to use for this window.</summary>
 		public int LinesPerWindow { get; set; } = 2;
+
+		public static readonly TextReaderArgs Default = new TextReaderArgs() {
+			ReaderPosition = TextReaderPosition.Automatic,
+			Spacing = 1,
+			LinesPerWindow = 2,
+		};
 	}
+
+	public delegate void TextReaderCallback(int menuOptionIndex);
 
 	/// <summary>A game state for displaying a message box.</summary>
 	public class RoomStateTextReader : RoomState {
 
 		//-----------------------------------------------------------------------------
-		// Enumerations
+		// Internal Types
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The states the text reader can be in.</summary>
@@ -46,8 +54,20 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			PushingLine,
 			PressToContinue,
 			PressToEndParagraph,
+			ChoosingOption,
 			HeartPieceDelay,
 			Finished,
+		}
+
+		/// <summary>A selectable menu option.</summary>
+		private class MenuOption {
+			public int OptionNumber { get; set; }
+			public int CharacterIndex { get; set; }
+			public int LineIndex { get; set; }
+			public MenuOption Left { get; set; }
+			public MenuOption Right { get; set; }
+			public MenuOption Up { get; set; }
+			public MenuOption Down { get; set; }
 		}
 
 
@@ -80,34 +100,48 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private int linesPerWindow;
 		/// <summary>The position of the text reader on the screen.</summary>
 		private TextReaderPosition readerPosition;
-		/// <summary>The spacing between the window vertical window edges and the text.</summary>
+		/// <summary>The spacing between the window vertical window edges and the text.
+		/// </summary>
 		private int spacing;
+		/// <summary>Callback function invoked when the message is done.</summary>
+		private TextReaderCallback callback;
 
 		// Updating
-		/// <summary>The current state of the text reader.</summary>
-		private TextReaderState state;
-		/// <summary>Used to prevent control presses from activating on the first step.</summary>
+		/// <summary>Manages text reader state and state transtions.</summary>
+		private GenericStateMachine<TextReaderState> stateMachine;
+		/// <summary>Used to prevent control presses from activating on the first step.
+		/// </summary>
 		private bool firstUpdate;
 		/// <summary>The timer for the transitions.</summary>
 		private int timer;
 		/// <summary>The timer used to update the arrow sprite.</summary>
 		private int arrowTimer;
-		/// <summary>The lines left before the next set of lines is in the message box.</summary>
+		/// <summary>The lines left before the next set of lines is in the message box.
+		/// </summary>
 		private int windowLinesLeft;
 		/// <summary>The current window line of the line being written.</summary>
-		private int windowLine;
+		private int windowLineIndex;
 		/// <summary>The current line in the wrapped string.</summary>
 		private int currentLine;
 		/// <summary>The current character of the current line.</summary>
 		private int currentChar;
-		/// <summary>Used to play the letter sound every other letter in a word.</summary>
-		private int wordIndex;
+		/// <summary>Used to play the letter sound every other letter in a word.
+		/// </summary>
+		private int soundCounter;
+		
+		// Menu Options
+		/// <summary>The currently selected menu option.</summary>
+		private MenuOption menuOption;
+		/// <summary>The menu option that is selected when pressing B.</summary>
+		private MenuOption defaultMenuOption;
+		/// <summary>The list of selectable menu option.</summary>
+		private List<MenuOption> menuOptions;
 
 		// Piece of Heart
 		/// <summary>True if the heart piece UI is being displayed.</summary>
 		private bool heartPieceDisplay;
-		/// <summary>The internal counter used to display
-		/// the pieces of heart before and after.</summary>
+		/// <summary>The internal counter used to display the pieces of heart before
+		/// and after.</summary>
 		private int piecesOfHeart;
 
 
@@ -116,40 +150,235 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs a text reader with the specified message.</summary>
-		public RoomStateTextReader(Message message, TextReaderArgs args,
-			int piecesOfHeart = 0)
+		public RoomStateTextReader(string message, TextReaderArgs args,
+			Action callback, int piecesOfHeart = 0) :
+			this(new Message(message), args,
+				(int option) => { callback?.Invoke(); }, piecesOfHeart)
 		{
+		}
+
+		/// <summary>Constructs a text reader with the specified message.</summary>
+		public RoomStateTextReader(Message message, TextReaderArgs args,
+			Action callback, int piecesOfHeart = 0) :
+			this(message, args, (int option) => { callback?.Invoke(); }, piecesOfHeart)
+		{
+		}
+
+		/// <summary>Constructs a text reader with the specified message text.
+		/// </summary>
+		public RoomStateTextReader(string text, TextReaderArgs args,
+			TextReaderCallback callback = null,  int piecesOfHeart = 0) :
+			this(new Message(text), args, callback, piecesOfHeart)
+		{
+		}
+
+		/// <summary>Constructs a text reader with the specified message.</summary>
+		public RoomStateTextReader(Message message, TextReaderArgs args,
+			TextReaderCallback callback = null, int piecesOfHeart = 0)
+		{
+			this.message		= message;
+			this.piecesOfHeart	= piecesOfHeart;
+			this.callback		= callback;
+
 			if (args == null)
 				args = new TextReaderArgs();
 
-			this.updateRoom			= false;
-			this.animateRoom		= true;
+			updateRoom			= false;
+			animateRoom		= true;
 
-			this.message			= message;
-			this.wrappedString		= null;
+			wrappedString		= null;
 
-			this.linesPerWindow		= args.LinesPerWindow;
-			this.readerPosition		= args.ReaderPosition;
-			this.spacing			= args.Spacing;
+			linesPerWindow		= args.LinesPerWindow;
+			readerPosition		= args.ReaderPosition;
+			spacing			= args.Spacing;
 
-			this.state				= TextReaderState.WritingLine;
-			this.firstUpdate		= true;
-			this.timer				= 0;
-			this.arrowTimer			= 0;
-			this.windowLinesLeft	= this.linesPerWindow;
-			this.windowLine			= 0;
-			this.currentLine		= 0;
-			this.currentChar        = 0;
-			this.wordIndex			= 0;
+			firstUpdate		= true;
+			timer				= 0;
+			arrowTimer			= 0;
+			windowLinesLeft	= this.linesPerWindow;
+			currentLine		= 0;
+			currentChar        = 0;
 			
-			this.heartPieceDisplay	= false;
-			this.piecesOfHeart		= piecesOfHeart;
+			heartPieceDisplay	= false;
+
+			menuOptions = new List<MenuOption>();
+			menuOption = null;
+			defaultMenuOption = null;
+
+			// Setup the state machine
+			stateMachine = new GenericStateMachine<TextReaderState>();
+			stateMachine.AddState(TextReaderState.WritingLine)
+				.OnUpdate(UpdateWritingLineState);
+			stateMachine.AddState(TextReaderState.PushingLine)
+				.OnBegin(BeginPushingLineState)
+				.OnUpdate(UpdatePushingLineState);
+			stateMachine.AddState(TextReaderState.PressToContinue)
+				.OnBegin(BeginPressToContinueState)
+				.OnUpdate(UpdatePressToContinueState);
+			stateMachine.AddState(TextReaderState.PressToEndParagraph)
+				.OnBegin(BeginPressToEndParagraphState)
+				.OnUpdate(UpdatePressToEndParagraphState);
+			stateMachine.AddState(TextReaderState.ChoosingOption)
+				.OnBegin(BeginChoosingOptionState)
+				.OnUpdate(UpdateChoosingOptionState);
+			stateMachine.AddState(TextReaderState.HeartPieceDelay)
+				.OnBegin(BeginHeartPieceDelayState)
+				.OnUpdate(UpdateHeartPieceDelayState);
+			stateMachine.AddState(TextReaderState.Finished)
+				.OnUpdate(UpdateFinishedState);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// State Methods
+		//-----------------------------------------------------------------------------
+
+		private void UpdateWritingLineState() {
+			char character = wrappedString.Lines[currentLine][currentChar].Char;
+			currentChar++;
+
+			// Update the text sound, which plays every other non-whitespace character
+			if (AudioSystem.IsSoundPlaying(GameData.SOUND_TEXT_CONTINUE))
+				soundCounter = 0;
+			else if (character != ' ') {
+				if (soundCounter % 2 == 0)
+					AudioSystem.PlaySound(GameData.SOUND_TEXT_LETTER);
+				soundCounter++;
+			}
+
+			// Pressing A or B will skip to the end of th eline
+			if (Controls.A.IsPressed() || Controls.B.IsPressed())
+				currentChar = wrappedString.Lines[currentLine].Length;
+
+			// Check if we reached the end of the line
+			if (currentChar >= wrappedString.Lines[currentLine].Length) {
+				windowLinesLeft--;
+				if (currentLine + 1 == wrappedString.LineCount) {
+					//if (currentLine
+					if (menuOptions.Count > 0)
+						stateMachine.BeginState(TextReaderState.ChoosingOption);
+					else
+						stateMachine.BeginState(TextReaderState.Finished);
+				}
+				else if (wrappedString.Lines[currentLine].EndsWith(
+					FormatCodes.ParagraphCharacter))
+				{
+					stateMachine.BeginState(TextReaderState.PressToEndParagraph);
+				}
+				else if (wrappedString.Lines[currentLine].EndsWith(
+					FormatCodes.HeartPieceCharacter))
+				{
+					stateMachine.BeginState(TextReaderState.HeartPieceDelay);
+				}
+				else if (windowLinesLeft == 0) {
+					stateMachine.BeginState(TextReaderState.PressToContinue);
+				}
+				else if (windowLineIndex + 1 < linesPerWindow) {
+					// Begin displaying the next line in the window
+					windowLineIndex++;
+					currentLine++;
+					currentChar = 0;
+				}
+				else {
+					stateMachine.BeginState(TextReaderState.PushingLine);
+				}
+			}
+			else {
+				timer = 1;
+			}
 		}
 
-		/// <summary>Constructs a text reader with the specified message text.</summary>
-		public RoomStateTextReader(string text, TextReaderArgs args,
-			int piecesOfHeart = 0)
-			: this(new Message(text), args, piecesOfHeart) { }
+		private void BeginHeartPieceDelayState() {
+			heartPieceDisplay = true;
+			timer = HeartPieceDelay;
+		}
+
+		private void UpdateHeartPieceDelayState() {
+			AudioSystem.PlaySound(GameData.SOUND_TEXT_CONTINUE);
+			piecesOfHeart++;
+			timer = 2;
+			if (currentLine + 1 == wrappedString.LineCount)
+				stateMachine.BeginState(TextReaderState.Finished);
+			else
+				stateMachine.BeginState(TextReaderState.PressToEndParagraph);
+		}
+
+		private void BeginPushingLineState() {
+			timer = 4;
+			currentChar = 0;
+			currentLine++;
+		}
+
+		private void UpdatePushingLineState() {
+			// 1 frame between lines
+			stateMachine.BeginState(TextReaderState.WritingLine);
+		}
+
+		private void BeginPressToContinueState() {
+			arrowTimer = 0;
+		}
+
+		private void UpdatePressToContinueState() {
+			arrowTimer++;
+			if (arrowTimer == 32)
+				arrowTimer = 0;
+			if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
+				stateMachine.BeginState(TextReaderState.PushingLine);
+				windowLinesLeft = linesPerWindow;
+				heartPieceDisplay = false;
+				AudioSystem.PlaySound(GameData.SOUND_TEXT_CONTINUE);
+			}
+		}
+
+		private void BeginPressToEndParagraphState() {
+			arrowTimer = 0;
+		}
+
+		private void UpdatePressToEndParagraphState() {
+			arrowTimer++;
+			if (arrowTimer == 32)
+				arrowTimer = 0;
+			if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
+				stateMachine.BeginState(TextReaderState.WritingLine);
+				windowLinesLeft = linesPerWindow;
+				currentChar = 0;
+				windowLineIndex = 0;
+				currentLine++;
+				heartPieceDisplay = false;
+			}
+		}
+
+		private void BeginChoosingOptionState() {
+			SelectOption(menuOptions[0]);
+			timer = 0;
+		}
+
+		private void UpdateChoosingOptionState() {
+			if (Controls.A.IsPressed()) {
+				AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
+				End();
+			}
+			else if (Controls.B.IsPressed())
+				SelectOption(defaultMenuOption);
+			else if (Controls.Right.IsPressed())
+				SelectOption(menuOption.Right);
+			else if (Controls.Left.IsPressed())
+				SelectOption(menuOption.Left);
+			else if (Controls.Up.IsPressed())
+				SelectOption(menuOption.Up);
+			else if (Controls.Down.IsPressed())
+				SelectOption(menuOption.Down);
+		}
+
+		private void UpdateFinishedState() {
+			// TODO: Switch to any key
+			if (Controls.A.IsPressed() || Controls.B.IsPressed() ||
+				Controls.Start.IsPressed() || Controls.Select.IsPressed())
+			{
+				heartPieceDisplay = false;
+				End();
+			}
+		}
 		
 
 		//-----------------------------------------------------------------------------
@@ -160,14 +389,18 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			wrappedString	= GameData.FONT_LARGE.WrapString(
 				message.Text, MaxWidth - spacing * 16, GameControl.Variables);
 			timer = 1;
-			state = TextReaderState.WritingLine;
 			windowLinesLeft	= linesPerWindow;
-			windowLine		= 0;
+			windowLineIndex	= 0;
 			currentLine		= 0;
 			currentChar		= 0;
-			wordIndex		= 0;
+			soundCounter	= 0;
+			firstUpdate		= true;
 
-			if (readerPosition == TextReaderPosition.Unset) {
+			menuOptions.Clear();
+			menuOption = null;
+			defaultMenuOption = null;
+
+			if (readerPosition == TextReaderPosition.Automatic) {
 				if (GameControl.Player.DrawPosition.Y <
 					RoomControl.Camera.RoomBounds.Center.Y + 8)
 					readerPosition = TextReaderPosition.Bottom;
@@ -175,133 +408,81 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					readerPosition = TextReaderPosition.Top;
 			}
 
+			stateMachine.InitializeOnState(TextReaderState.WritingLine);
+
+			// Create a list of menu options
+			for (int lineIndex = 0;
+				lineIndex < wrappedString.Lines.Length; lineIndex++)
+			{
+				LetterString line = wrappedString.Lines[lineIndex];
+				for (int charIndex = 0; charIndex < line.String.Length; charIndex++) {
+					Letter letter = line[charIndex];
+					if (FormatCodes.IsMenuOption(letter.Char)) {
+						MenuOption option = new MenuOption() {
+							LineIndex = lineIndex,
+							CharacterIndex = charIndex,
+							OptionNumber = FormatCodes.GetMenuOptionIndex(letter.Char),
+						};
+						menuOptions.Add(option);
+						if (defaultMenuOption == null || option.OptionNumber == 0)
+							defaultMenuOption = option;
+						line[charIndex] = new Letter(' ', letter.Color);
+					}
+				}
+			}
+
+			// Link up menu options
+			for (int i = 0; i < menuOptions.Count; i++) {
+				MenuOption option = menuOptions[i];
+				option.Right = menuOptions[(i + 1) % menuOptions.Count];
+				option.Left = menuOptions[
+					(i + menuOptions.Count - 1) % menuOptions.Count];
+
+				option.Down = null;
+				for (int j = 0; j < menuOptions.Count; j++) {
+					MenuOption other = menuOptions[j];
+					if (other != option && other.LineIndex != option.LineIndex) {
+						if (option.Down == null ||
+							GMath.Abs(other.CharacterIndex - option.CharacterIndex) <
+							GMath.Abs(option.Down.CharacterIndex - option.CharacterIndex))
+						{
+							option.Down = other;
+							option.Up = other;
+						}
+					}
+				}
+				if (option.Down == null)
+					option.Down = option;
+				if (option.Up == null)
+					option.Up = option;
+			}
+
 			// Prevent any crashes whith empty wrapped strings
 			if (wrappedString.LineCount == 0)
-				state = TextReaderState.Finished;
+				stateMachine.BeginState(TextReaderState.Finished);
+		}
+
+		public override void OnEnd() {
+			callback?.Invoke(menuOption != null ? menuOption.OptionNumber : -1);
 		}
 
 		public override void Update() {
-			if (timer > 0 && (state != TextReaderState.WritingLine || firstUpdate ||
+			if (timer > 0 && (stateMachine.CurrentState != TextReaderState.WritingLine || firstUpdate ||
 				(!heartPieceDisplay && !Controls.A.IsPressed() && !Controls.B.IsPressed())))
 			{
 				timer -= 1;
 			}
-			else {
-				switch (state) {
-				case TextReaderState.WritingLine:
-
-					char c = wrappedString.Lines[currentLine][currentChar].Char;
-					bool isLetter = (c != ' ');
-					if (AudioSystem.IsSoundPlaying(GameData.SOUND_TEXT_CONTINUE))
-						wordIndex = 0;
-					else {
-						if (isLetter && (wordIndex % 2) == 0)
-							AudioSystem.PlaySound(GameData.SOUND_TEXT_LETTER);
-						if (isLetter)
-							wordIndex++;
-					}
-
-					currentChar++;
-					if (Controls.A.IsPressed() || Controls.B.IsPressed())
-						currentChar = wrappedString.Lines[currentLine].Length;
-
-					if (currentChar >= wrappedString.Lines[currentLine].Length) {
-						windowLinesLeft--;
-						if (currentLine + 1 == wrappedString.LineCount) {
-							state = TextReaderState.Finished;
-						}
-						else if (wrappedString.Lines[currentLine].EndsWith(FormatCodes.ParagraphCharacter)) {
-							state = TextReaderState.PressToEndParagraph;
-							arrowTimer = 0;
-						}
-						else if (wrappedString.Lines[currentLine].EndsWith(FormatCodes.HeartPieceCharacter)) {
-							state = TextReaderState.HeartPieceDelay;
-							heartPieceDisplay = true;
-							timer = HeartPieceDelay;
-						}
-						else if (windowLinesLeft == 0) {
-							state = TextReaderState.PressToContinue;
-							arrowTimer = 0;
-						}
-						else if (windowLine + 1 < linesPerWindow) {
-							windowLine++;
-							currentLine++;
-							currentChar = 0;
-						}
-						else {
-							currentLine++;
-							currentChar = 0;
-							state = TextReaderState.PushingLine;
-							timer = 4;
-						}
-					}
-					else {
-						timer = 1;
-					}
-					break;
-
-				case TextReaderState.HeartPieceDelay:
-					AudioSystem.PlaySound(GameData.SOUND_TEXT_CONTINUE);
-					piecesOfHeart++;
-					timer = 2;
-					if (currentLine + 1 == wrappedString.LineCount) {
-						state = TextReaderState.Finished;
-					}
-					else {
-						state = TextReaderState.PressToEndParagraph;
-					}
-					break;
-
-				case TextReaderState.PushingLine:
-					state = TextReaderState.WritingLine;
-					break;
-
-				case TextReaderState.PressToContinue:
-					arrowTimer++;
-					if (arrowTimer == 32)
-						arrowTimer = 0;
-					if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
-						state = TextReaderState.PushingLine;
-						timer = 4;
-						windowLinesLeft = linesPerWindow;
-						currentChar = 0;
-						currentLine++;
-						heartPieceDisplay = false;
-						AudioSystem.PlaySound(GameData.SOUND_TEXT_CONTINUE);
-					}
-					break;
-				case TextReaderState.PressToEndParagraph:
-					arrowTimer++;
-					if (arrowTimer == 32)
-						arrowTimer = 0;
-					if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
-						state = TextReaderState.WritingLine;
-						windowLinesLeft = linesPerWindow;
-						currentChar = 0;
-						windowLine = 0;
-						currentLine++;
-						heartPieceDisplay = false;
-					}
-					break;
-				case TextReaderState.Finished:
-					// TODO: Switch to any key
-					if (Controls.A.IsPressed() || Controls.B.IsPressed() ||
-						Controls.Start.IsPressed() || Controls.Select.IsPressed())
-					{
-						heartPieceDisplay = false;
-						End();
-					}
-					break;
-				}
-			}
+			else
+				stateMachine.Update();
 
 			firstUpdate = false;
 		}
 
 		public override void Draw(Graphics2D g) {
 			g.PushTranslation(0, GameSettings.HUD_HEIGHT);
-
 			Point2I pos = new Point2I(8, 0);
+
+			// Set the message box Y-posiiton
 			switch (readerPosition) {
 			case TextReaderPosition.Top:
 				pos.Y = 8;
@@ -317,6 +498,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				break;
 			}
 
+			// Fill the message box background
 			g.FillRectangle(new Rectangle2I(pos,
 				new Point2I(MaxWidth, 8 + 16 * linesPerWindow)), EntityColors.Black);
 
@@ -326,28 +508,29 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				return;
 			}
 
-			int x = spacing * 8;
-
-			// Draw the finished writting lines.
-			for (int i = 0; i < windowLine; i++) {
-				g.DrawLetterString(GameData.FONT_LARGE,
-					wrappedString.Lines[currentLine - windowLine + i],
-					pos + GetLineOffset(currentLine - windowLine + i), TextColor);
+			// Draw the finished writing lines
+			for (int i = 0; i < windowLineIndex; i++) {
+				int lineIndex = currentLine - windowLineIndex + i;
+				LetterString line = wrappedString.Lines[lineIndex];
+				g.DrawLetterString(GameData.FONT_LARGE, line,
+					pos + GetLineOffset(lineIndex), TextColor);
 			}
-			// Draw the currently writting line.
+
+			// Draw the currently writing line
 			g.DrawLetterString(GameData.FONT_LARGE,
 				wrappedString.Lines[currentLine].Substring(0, currentChar),
 				pos + GetLineOffset(currentLine), TextColor);
-
-			// Draw the next line arrow.
-			if ((state == TextReaderState.PressToContinue ||
-				state ==  TextReaderState.PressToEndParagraph) &&
+			
+			// Draw the next line arrow
+			if ((stateMachine.CurrentState == TextReaderState.PressToContinue ||
+				stateMachine.CurrentState == TextReaderState.PressToEndParagraph) &&
 				arrowTimer >= 16 && timer == 0)
 			{
 				g.DrawSprite(GameData.SPR_HUD_TEXT_NEXT_ARROW,
 					pos + new Point2I(136, 16 * linesPerWindow));
 			}
 
+			// Draw the heart piece
 			if (heartPieceDisplay) {
 				Point2I heartPiecePos = pos + new Point2I(MaxWidth - 24, 8);
 				for (int i = 0; i < 4; i++) {
@@ -361,12 +544,38 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			g.PopTranslation();
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Select the given menu option. This will move the cursor character
+		/// in the message text.</summary>
+		private void SelectOption(MenuOption option) {
+			if (menuOption != null) {
+				AudioSystem.PlaySound(GameData.SOUND_MENU_CURSOR_MOVE);
+				SetCharacter(menuOption.LineIndex, menuOption.CharacterIndex, ' ');
+			}
+			menuOption = option;
+			char c = (char) (FormatCodes.MenuOptionCharactersBegin +
+				option.OptionNumber);
+			SetCharacter(menuOption.LineIndex, menuOption.CharacterIndex, c);
+		}
+
+		/// <summary>Set a character in the message by line and column.</summary>
+		private void SetCharacter(int line, int column, char c) {
+			Letter letter = wrappedString.Lines[line][column];
+			wrappedString.Lines[line][column] = new Letter(c, letter.Color);
+		}
+
+		/// <summary>Calculate the draw offset of a line based on its alignment.
+		/// </summary>
 		private Point2I GetLineOffset(int lineIndex) {
 			int width = (MaxWidth - spacing * 16) / 8;
 			int length = wrappedString.LineLengths[lineIndex] / 8;
-			int winLine = lineIndex - currentLine + windowLine;
+			int winLine = lineIndex - currentLine + windowLineIndex;
 			Point2I offset = new Point2I(spacing * 8, 6 + 16 * winLine);
-			if (state == TextReaderState.PushingLine && timer >= 2)
+			if (stateMachine.CurrentState == TextReaderState.PushingLine && timer >= 2)
 				offset.Y += 8;
 			switch (wrappedString.Lines[lineIndex].MessageAlignment) {
 			case Align.Center:	offset.X += ((width - length) / 2) * 8;	break;

@@ -26,23 +26,21 @@ namespace ZeldaOracle.Game.Items.Rewards.Health {
 
 		public override void OnDisplayMessage() {
 			if (GameControl.Inventory.PiecesOfHeart == 3) {
-				GameControl.DisplayMessage(
-					Message,
-					null,
-					new RoomStateAction(() => {
-						IncrementPiecesOfHeart();
-					}),
-					new RoomStateTextReader(GameSettings.HEART_CONTAINER_TEXT, null)
-				);
+				GameControl.DisplayMessage(Message, () => {
+					GameControl.QueueRoomStates(
+						new RoomStateAction(() => {
+							IncrementPiecesOfHeart();
+						}),
+						new RoomStateTextReader(GameSettings.HEART_CONTAINER_TEXT, null));
+				});
 			}
 			else {
-				GameControl.DisplayMessage(
-					Message,
-					null,
-					new RoomStateAction(() => {
-						IncrementPiecesOfHeart();
-					})
-				);
+				GameControl.DisplayMessage(Message, () => {
+					GameControl.QueueRoomStates(
+						new RoomStateAction(() => {
+							IncrementPiecesOfHeart();
+						}));
+				});
 			}
 		}
 

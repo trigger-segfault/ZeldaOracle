@@ -81,7 +81,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void Update() {
 			Player player = GameControl.Player;
 
-			// Move the player.
+			// Move the player
 			distance += walkSpeed;
 			player.Position += Directions.ToVector(walkDirection) * walkSpeed;
 			player.UpdateGraphics();
@@ -91,7 +91,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				End();
 				//GameManager.PopGameState();
 				if (enterMessage != null && type == EnterExitType.Enter)
-					GameControl.DisplayMessage(enterMessage);
+					GameControl.DisplayMessage(enterMessage.Text);
 				if (type == EnterExitType.Enter)
 					player.MarkRespawn();
 			}

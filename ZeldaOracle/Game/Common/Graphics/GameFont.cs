@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
@@ -137,8 +134,8 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		/// <summary>Returns the wrapped and formatted string of the text.</summary>
-		public WrappedLetterString WrapString(string text, int width, int caretPosition,
-			out int caretLine, Variables vars = null)
+		public WrappedLetterString WrapString(string text, int width,
+			int caretPosition, out int caretLine, Variables vars = null)
 		{
 			try {
 				caretLine = -1;
@@ -169,16 +166,6 @@ namespace ZeldaOracle.Common.Graphics {
 					lines[currentLine].MessageAlignment = align;
 					lineLengths.Add(0);
 
-					// Remove starting spaces in the line.
-					while (currentCharacter < letterString.Length && letterString[currentCharacter].Char == ' ') {
-						if (currentCharacter == caretPosition)
-							caretLine = currentLine;
-						currentCharacter++;
-					}
-					if (currentCharacter >= letterString.Length) {
-						break;
-					}
-
 					wordStart = currentCharacter;
 					word.Clear();
 					wordLength = 0;
@@ -198,7 +185,10 @@ namespace ZeldaOracle.Common.Graphics {
 							if (wordLineCount > 0)
 								lines[currentLine].Add(' ');
 							lines[currentLine].AddRange(word);
-							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + CharacterWidth) : 0) + wordLength;
+							
+							lineLengths[currentLine] += wordLength;
+							if (wordLineCount > 0)
+								lineLengths[currentLine] += characterSpacing + CharacterWidth;
 
 							wordLineCount++;
 							wordLength = 0;
@@ -239,17 +229,28 @@ namespace ZeldaOracle.Common.Graphics {
 						if (currentCharacter == caretPosition)
 							caretLine = currentLine;
 						currentCharacter++;
-					} while (lineLengths[currentLine] + wordLength + characterSpacing + CharacterWidth <= width || width < CharacterWidth);
+					}
+					while (lineLengths[currentLine] + wordLength +
+						characterSpacing + CharacterWidth <= width ||
+						width < CharacterWidth);
 
-					if (lineLengths[currentLine] + wordLength + characterSpacing + CharacterWidth > width && width >= CharacterWidth && wordLineCount == 0) {
+					if (lineLengths[currentLine] + wordLength +
+						characterSpacing + CharacterWidth > width &&
+						width >= CharacterWidth && wordLineCount == 0)
+					{
 						// Finish the word if it lasted the length if the line
-						if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
-							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n' ||
-							letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter) {
+						if (currentCharacter >= letterString.Length ||
+							letterString[currentCharacter].Char == ' ' ||
+							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter ||
+							letterString[currentCharacter].Char == '\n' ||
+							letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter)
+						{
 							if (wordLineCount > 0)
 								lines[currentLine].Add(' ');
 							lines[currentLine].AddRange(word);
-							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + CharacterWidth) : 0) + wordLength;
+							lineLengths[currentLine] += wordLength;
+							if (wordLineCount > 0)
+								lineLengths[currentLine] += characterSpacing + CharacterWidth;
 
 							wordLineCount++;
 							wordLength = 0;

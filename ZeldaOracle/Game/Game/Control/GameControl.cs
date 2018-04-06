@@ -290,45 +290,38 @@ namespace ZeldaOracle.Game.Control {
 		// Text Messages
 		//-----------------------------------------------------------------------------
 
-		public void DisplayMessage(Message message, TextReaderArgs args = null) {
+		public void DisplayMessage(string message) {
+			DisplayMessage(message, TextReaderArgs.Default);
+		}
+
+		public void DisplayMessage(string message, TextReaderCallback callback) {
+			DisplayMessage(message, TextReaderArgs.Default, callback);
+		}
+
+		public void DisplayMessage(string message, Action callback) {
+			DisplayMessage(message, TextReaderArgs.Default, callback);
+		}
+
+		public void DisplayMessage(string message, TextReaderArgs args) {
 			PushRoomState(new RoomStateTextReader(message, args,
+				(TextReaderCallback) null, inventory.PiecesOfHeart));
+		}
+
+		public void DisplayMessage(string message, TextReaderArgs args,
+			TextReaderCallback callback)
+		{
+			PushRoomState(new RoomStateTextReader(message, args, callback,
 				 inventory.PiecesOfHeart));
 		}
 
-		public void DisplayMessage(string text, TextReaderArgs args = null) {
-			DisplayMessage(new Message(text), args);
+		public void DisplayMessage(string message, TextReaderArgs args,
+			Action callback)
+		{
+			PushRoomState(new RoomStateTextReader(message, args, callback,
+				 inventory.PiecesOfHeart));
 		}
+
 		
-		public void DisplayMessage(Message message, TextReaderArgs args,
-			Action completeAction)
-		{
-			PushRoomState(new RoomStateQueue(
-				new RoomStateTextReader(message, args, inventory.PiecesOfHeart),
-				new RoomStateAction(completeAction)));
-		}
-
-		public void DisplayMessage(string text, TextReaderArgs args,
-			Action completeAction)
-		{
-			DisplayMessage(new Message(text), args, completeAction);
-		}
-
-		public void DisplayMessage(Message message, TextReaderArgs args,
-			params RoomState[] completeStates)
-		{
-			var queue = new RoomStateQueue(new RoomStateTextReader(message, args,
-				inventory.PiecesOfHeart));
-			queue.AddRange(completeStates);
-			PushRoomState(queue);
-		}
-
-		public void DisplayMessage(string text, TextReaderArgs args,
-			params RoomState[] completeStates)
-		{
-			DisplayMessage(new Message(text), args, completeStates);
-		}
-
-
 		//-----------------------------------------------------------------------------
 		// Menu
 		//-----------------------------------------------------------------------------
