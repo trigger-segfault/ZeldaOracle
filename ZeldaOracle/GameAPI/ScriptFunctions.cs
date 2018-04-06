@@ -40,6 +40,8 @@ namespace ZeldaAPI {
 
 	public interface ScriptFunctionsTrigger {
 		Trigger TriggerByName(ApiObject obj, string name);
+		/// <summary>The trigger that is currently executing.</summary>
+		Trigger ThisTrigger { get; }
 	}
 
 	// Some brainstorming below...

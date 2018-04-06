@@ -21,7 +21,7 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 			Sound	= CreateSection(new ScriptFunctionsSound());
 			Music	= CreateSection(new ScriptFunctionsMusic());
 			Reward	= CreateSection(new ScriptFunctionsReward());
-			Trigger	= CreateSection(new ScriptFunctionsTrigger());
+			Trigger	= CreateSection(new ScriptFunctionsTrigger(script.Trigger));
 		}
 	}
 
@@ -73,9 +73,15 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Functions {
 	public class ScriptFunctionsTrigger :
 		ScriptInterfaceSection, ZeldaAPI.ScriptFunctionsTrigger
 	{
+		public ScriptFunctionsTrigger(Trigger trigger) {
+			ThisTrigger = trigger;
+		}
+
 		public ZeldaAPI.Trigger TriggerByName(ZeldaAPI.ApiObject obj, string name) {
 			ITriggerObject triggerObject = (ITriggerObject) obj;
 			return triggerObject.Triggers.GetTrigger(name);
 		}
+
+		public ZeldaAPI.Trigger ThisTrigger { get; private set; }
 	}
 }

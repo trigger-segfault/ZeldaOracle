@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Worlds;
 
@@ -94,14 +95,17 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Script Execution
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Run a script with the given parameters.</summary>
-		public void RunScript(Script script, object[] parameters) {
-			// Get the script's MethodInfo from the scripting assembly
+		/// <summary>Get the script's MethodInfo from the scripting assembly.</summary>
+		private MethodInfo GetMethodInfo(Script script) {
 			if (script.MethodInfo == null)
 				script.MethodInfo = context.GetType().GetMethod(script.MethodName);
+			return script.MethodInfo;
+		}
 
+		/// <summary>Run a script with the given parameters.</summary>
+		public void RunScript(Script script, object[] parameters) {
 			if (script.MethodInfo != null)
-				RunScript(context, script.ID, script.MethodInfo, parameters);
+				RunScript(context, script.ID, GetMethodInfo(script), null, parameters);
 			else
 				Logs.Scripts.LogError("No MethodInfo found for trigger script '" +
 					script.MethodName + "'");
@@ -109,26 +113,33 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		/// <summary>Run a method as a script with the given parameters.</summary>
 		public void RunScript(MethodInfo method, object[] parameters) {
-			RunScript(context, method.Name, method, parameters);
+			RunScript(context, method.Name, method, null, parameters);
 		}
 
 		public void RunScript(ZeldaAPI.CustomScriptBase context, Action function) {
 			MethodInfo method = function.GetMethodInfo();
-			RunScript(context, method.Name, method, new object[] {});
+			RunScript(context, method.Name, method, null, new object[] {});
 		}
 
-		public void RunScript(ZeldaAPI.CustomScriptBase context, string name, Action function) {
+		public void RunScript(ZeldaAPI.CustomScriptBase context,
+			string name, Action function)
+		{
 			MethodInfo method = function.GetMethodInfo();
-			RunScript(context, name, method, new object[] {});
+			RunScript(context, name, method, null, new object[] {});
+		}
+
+		public void RunTrigger(Trigger trigger, object caller) {
+			RunScript(context, trigger.Script.MethodName,
+				GetMethodInfo(trigger.Script), trigger, new object[] { caller });
 		}
 
 		/// <summary>Run a method as a script with the given parameters.</summary>
 		public void RunScript(ZeldaAPI.CustomScriptBase context,
-			string name, MethodInfo method, object[] parameters)
+			string name, MethodInfo method, Trigger trigger, object[] parameters)
 		{
 			Logs.Scripts.LogNotice("Running script: {0}", name);
 			ScriptInstance instance = new ScriptInstance(
-				gameControl.RoomControl, name, method, parameters);
+				gameControl.RoomControl, name, method, trigger, parameters);
 			instance.Start(context);
 			if (!instance.IsComplete)
 				runningScripts.Add(instance);

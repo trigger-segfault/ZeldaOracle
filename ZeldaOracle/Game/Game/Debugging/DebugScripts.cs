@@ -8,11 +8,51 @@ namespace ZeldaOracle.Game.Debugging {
 
 		public void DebugScript1() {
 
-			int option = Actions.General.Message("Do you like trains?<n>   <1>Yes <0>No");
-			if (option == 1)
-				Actions.General.Message("Yeaaaaaahhhh");
-			else
+			int option = Actions.General.Message(
+				"Do you like trains?<p>   <1>Yes <0>No<n>  <2>Maybe <3>...");
+			if (option == 0)
 				Actions.General.Message("Fuck you trains are dope");
+			else if (option == 1)
+				Actions.General.Message("Yeaaaaaahhhh");
+			else if (option == 2)
+				Actions.General.Message("What?");
+			else if (option == 3)
+				Actions.General.Message("...");
+
+
+			/*
+			NPC self = (NPC) Functions.Unit.UnitByID("bear");
+
+			if (self.Vars.Get<bool>("talked_to_bird") &&
+				self.Vars.Get<bool>("talked_to_bunny"))
+			{
+				// Cutscene: Bear crawls up 1 tile
+				Actions.General.BeginCutscene();
+	
+				// Face up
+				Actions.Unit.MakeUnitFaceDirection(self, Direction.Up);
+	
+				// Move up
+				Actions.General.Wait(24);
+				Actions.Unit.MoveInDirection(self,
+					Direction.Up, 16, 0.5f).Wait();
+		
+				// Face right
+				Actions.General.Wait(22);
+				Actions.Unit.MakeUnitFaceDirection(self, Direction.Right);
+	
+				Actions.General.Wait(34);
+				Actions.General.EndCutscene();
+	
+				self.Text = "Sit here and listen. How charming...";
+				Actions.General.Message(self.Text);
+				
+				Actions.Trigger.TurnOff(Functions.Trigger.ThisTrigger);
+			}
+			else {
+				Actions.General.Message("How charming...");
+			}
+			*/
 
 			//foreach (var lever in room.GetTilesOfType<Lever>()) {
 			//	Actions.Tile.FlipSwitch(lever);

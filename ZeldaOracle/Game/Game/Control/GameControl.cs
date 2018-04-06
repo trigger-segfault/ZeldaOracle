@@ -259,7 +259,7 @@ namespace ZeldaOracle.Game.Control {
 				trigger.IsEnabled = false;
 
 			if (trigger.Script != null) {
-				ScriptRunner.RunScript(trigger.Script, new object[] { caller });
+				ScriptRunner.RunTrigger(trigger, new object[] { caller });
 			}
 		}
 
