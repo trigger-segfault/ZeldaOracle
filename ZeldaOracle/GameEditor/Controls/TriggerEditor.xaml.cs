@@ -143,16 +143,16 @@ namespace ZeldaEditor.Controls {
 
 				// Load the trigger's script into the script editor
 				if (selectedTrigger.Script != null)
-					scriptEditor.Script = selectedTrigger.Script;
+					scriptEditor.Trigger = selectedTrigger;
 				else
-					scriptEditor.Script = null;
+					scriptEditor.Trigger = null;
 			}
 			else {
 				textBoxTriggerName.Text = "";
 				comboBoxEventType.SelectedIndex = 0;
 				checkBoxInitiallyOn.IsChecked = false;
 				checkBoxFireOnce.IsChecked = false;
-				scriptEditor.Script = null;
+				scriptEditor.Trigger = null;
 			}
 		}
 		
@@ -205,6 +205,8 @@ namespace ZeldaEditor.Controls {
 				SelectedTrigger.Name != textBoxTriggerName.Text)
 			{
 				SelectedTrigger.Name = textBoxTriggerName.Text;
+				if (scriptEditor.Trigger == SelectedTrigger)
+					scriptEditor.UpdateMethodName(SelectedTrigger.Name);
 				listBoxTriggers.Items.Refresh();
 			}
 		}

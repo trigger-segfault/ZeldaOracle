@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -51,6 +52,10 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 
 		public EditorWindow() {
+			// Prevent System.Windows.Data Error: 4
+			PresentationTraceSources.DataBindingSource.Switch.Level =
+				SourceLevels.Critical;
+
 			InitializeComponent();
 			// Create the editor control instance.
 			editorControl = new EditorControl(this);

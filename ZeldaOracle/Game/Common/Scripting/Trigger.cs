@@ -66,7 +66,7 @@ namespace ZeldaOracle.Common.Scripting {
 			script = new Script();
 			Type thisType = GameUtil.GetApiObjectInterface(
 				collection.TriggerObject.TriggerObjectType);
-			script.Parameters.Add(new ScriptParameter(thisType, "This"));
+			script.Parameters.Add(new ScriptParameter(thisType, "self"));
 			
 			enabled = true;
 		}

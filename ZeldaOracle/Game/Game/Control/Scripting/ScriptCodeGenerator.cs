@@ -26,6 +26,26 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 	}
 
+	public struct ScriptRoslynInfo {
+		public int MethodStart { get; set; }
+		public int MethodEnd { get; set; }
+		public int MethodNameStart { get; set; }
+		public int MethodNameEnd { get; set; }
+		public int MethodNameLength {
+			get { return MethodNameEnd - MethodNameStart; }
+		}
+		public int ScriptStart { get; set; }
+		public int ScriptStartLine { get; set; }
+		public int EndLength { get; set; }
+
+		public void ResizeMethodName(int newLength) {
+			int dif = newLength - MethodNameLength;
+			MethodNameEnd += dif;
+			MethodEnd += dif;
+			ScriptStart += dif;
+		}
+	}
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -69,37 +89,42 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		//-----------------------------------------------------------------------------
 		// Code Generation
 		//-----------------------------------------------------------------------------
-
-		/// <summary>Creates script code for use with RoslynPad's script editor.
-		/// </summary>
-		public static string CreateRoslynScriptCode(Script script,
-			out int scriptStart, out int lineStart)
+		
+		/// <summary>Creates script code for use with RoslynPad's script editor.</summary>
+		public static string CreateRoslynScriptCode(Script script, string name,
+			out ScriptRoslynInfo info)
 		{
+			info = new ScriptRoslynInfo();
 			string code = "";
-			lineStart = 0;
-			code += "// Members:" + Environment.NewLine;
-			lineStart++;
-			foreach (FieldInfo fieldInfo in typeof(ZeldaAPI.CustomScriptBase).GetFields()) {
-				code += fieldInfo.FieldType.Name + " " + fieldInfo.Name + ";" + Environment.NewLine;
-				lineStart++;
-			}
-			if (script.ParameterCount > 0) {
-				code += Environment.NewLine;
-				code += "// Parameters:" + Environment.NewLine;
-				lineStart += 2;
-				foreach (ScriptParameter parameter in script.Parameters) {
-					code += parameter.Type + " " + parameter.Name + ";" +  Environment.NewLine;
-					lineStart++;
-				}
-			}
-			lineStart += 0;
-			scriptStart = code.Length;
+
+			code += CreateUsingsString();
+			code += CreateNamespaceAndClassOpening();
+			code += "/// <summary>" +
+				script.Description.Replace('\n', ' ') +
+				"</summary>\n";
+
+			info.MethodStart = code.Length;
+			name = name ?? script.ID;
+			if (name.Length == 0)
+				name = "trigger";
+			code += "public void ";
+			info.MethodNameStart = code.Length;
+			code += name;
+			info.MethodNameEnd = code.Length;
+			code += "(" + CreateParametersString(script.Parameters) + ") {\n";
+			info.MethodEnd = code.Length - 3;
+
+			info.ScriptStart = code.Length;
+			info.ScriptStartLine = code.Split('\n').Length - 1;
 			code += script.Code;
+
+			int endStart = code.Length;
+			code += CreateScriptMethodClosing(script);
+			code += CreateClassAndNamespaceClosing();
+			info.EndLength = code.Length - endStart;
 			return code;
 		}
-
-
-
+		
 		/// <summary>Returns true if the script has a valid function name.</summary>
 		public static bool IsValidScriptName(string name) {
 			if (name.Length == 0)
@@ -232,7 +257,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public static string CreateUsingsString() {
 			string usings = "";
 			foreach (string use in Assemblies.ScriptUsings) {
-				usings += "using " + use + "; ";
+				usings += "using " + use + ";\n";
 			}
 			return usings;
 		}
@@ -273,7 +298,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			Type ownerType = GameUtil.GetApiObjectInterface(
 				trigger.Collection.TriggerObject.TriggerObjectType);
 			return "        public void " + methodName + "(" +
-				ownerType.Name + " This) {\n";
+				ownerType.Name + " self) {\n";
 		}
 
 		/// <summary>Create a new method name for a trigger, by simply using the

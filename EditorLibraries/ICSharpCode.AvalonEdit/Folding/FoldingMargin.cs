@@ -163,6 +163,9 @@ namespace ICSharpCode.AvalonEdit.Folding {
 			if (TextView != null && FoldingManager != null && TextView.VisualLinesValid) {
 				foreach (VisualLine line in TextView.VisualLines) {
 					FoldingSection fs = FoldingManager.GetNextFolding(line.FirstDocumentLine.Offset);
+					while (fs != null && fs.IsHidden) {
+						fs = FoldingManager.GetNextFolding(fs.StartOffset + 1);
+					}
 					if (fs == null)
 						continue;
 					if (fs.StartOffset <= line.LastDocumentLine.Offset + line.LastDocumentLine.Length) {
