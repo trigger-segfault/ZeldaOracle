@@ -8,17 +8,23 @@ namespace ZeldaOracle.Game.Debugging {
 
 		public void DebugScript1() {
 
-			foreach (var lever in room.GetTilesOfType<Lever>()) {
-				Actions.Tile.FlipSwitch(lever);
-			}
-			foreach (ColorTile tile in room.GetTilesOfType<ColorTile>()) {
-				Actions.Tile.SetColor(tile, PuzzleColor.Blue);
-			}
-			return;
+			int option = Actions.General.Message("Do you like trains?<n>   <1>Yes <0>No");
+			if (option == 1)
+				Actions.General.Message("Yeaaaaaahhhh");
+			else
+				Actions.General.Message("Fuck you trains are dope");
 
-			NPC This;
+			//foreach (var lever in room.GetTilesOfType<Lever>()) {
+			//	Actions.Tile.FlipSwitch(lever);
+			//}
+			//foreach (ColorTile tile in room.GetTilesOfType<ColorTile>()) {
+			//	Actions.Tile.SetColor(tile, PuzzleColor.Blue);
+			//}
+			//return;
+
+			//NPC This;
 			
-			Actions.Trigger.TurnOff(Functions.Trigger.TriggerByName(This, "talk"));
+			//Actions.Trigger.TurnOff(Functions.Trigger.TriggerByName(This, "talk"));
 
 			//This.Text = "How charming..."
 
