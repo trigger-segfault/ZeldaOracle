@@ -122,6 +122,8 @@ namespace ICSharpCode.AvalonEdit.Folding {
 					foundOverlappingFolding = false;
 					foreach (FoldingSection fs in FoldingManager.GetFoldingsContaining(foldedUntil)) {
 						if (fs.IsFolded && fs.EndOffset > foldedUntil) {
+							if (foldingSection.IsHidden && foldingSection.Title.Length == 0)
+								foldingSection = fs;
 							foldedUntil = fs.EndOffset;
 							foundOverlappingFolding = true;
 						}
@@ -129,8 +131,12 @@ namespace ICSharpCode.AvalonEdit.Folding {
 				} while (foundOverlappingFolding);
 
 				string title = foldingSection.Title;
-				if (string.IsNullOrEmpty(title))
-					title = "...";
+				if (string.IsNullOrEmpty(title)) {
+					if (foldingSection.IsHidden)
+						title = "";
+					else
+						title = "...";
+				}
 				var p = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties);
 				p.SetForegroundBrush(textBrush);
 				var textFormatter = TextFormatterFactory.Create(CurrentContext.TextView);
@@ -152,7 +158,10 @@ namespace ICSharpCode.AvalonEdit.Folding {
 			}
 
 			public override TextRun CreateTextRun(int startVisualColumn, ITextRunConstructionContext context) {
-				return new FoldingLineTextRun(this, this.TextRunProperties) { textBrush = textBrush };
+				return new FoldingLineTextRun(this, this.TextRunProperties) {
+					textBrush = textBrush,
+					hidden = fs.IsHidden
+				};
 			}
 
 			protected internal override void OnMouseDown(MouseButtonEventArgs e) {
@@ -168,12 +177,15 @@ namespace ICSharpCode.AvalonEdit.Folding {
 
 		sealed class FoldingLineTextRun : FormattedTextRun {
 			internal Brush textBrush;
+			internal bool hidden;
 
 			public FoldingLineTextRun(FormattedTextElement element, TextRunProperties properties)
 				: base(element, properties) {
 			}
 
 			public override void Draw(DrawingContext drawingContext, Point origin, bool rightToLeft, bool sideways) {
+				if (hidden)
+					return;
 				var metrics = Format(double.PositiveInfinity);
 				Rect r = new Rect(origin.X + 0.5, origin.Y - metrics.Baseline + 0.5, metrics.Width, metrics.Height + 1);
 				drawingContext.DrawRoundedRectangle(null, new Pen(textBrush, 1), r, 2, 2);

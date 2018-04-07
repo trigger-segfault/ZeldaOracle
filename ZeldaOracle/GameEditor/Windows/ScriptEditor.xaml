@@ -34,7 +34,7 @@
             <local:ImageButton x:Name="buttonPaste" ToolTip="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
             <Separator/>
             <Label Content="Name:" Padding="5,0" VerticalContentAlignment="Center"/>
-            <xctk:WatermarkTextBox x:Name="textBoxName" Width="180" BorderBrush="#FFC8C8C8" Margin="0,1" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center"/>
+            <xctk:WatermarkTextBox x:Name="textBoxName" Width="180" BorderBrush="#FFC8C8C8" Margin="0,1" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center" TextChanged="OnNameTextChanged"/>
         </ToolBar>
         <StatusBar x:Name="statusBarLocation" DockPanel.Dock="Bottom" Height="20" Background="#FFF0F0F0">
             <StatusBarItem x:Name="statusLine" Content="Line 4" Padding="3,0"/>

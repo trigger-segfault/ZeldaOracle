@@ -21,6 +21,8 @@ using RoslynPad.Editor;
 using ZeldaEditor.Scripting;
 using ZeldaEditor.Util;
 using ZeldaOracle.Game.Control.Scripting;
+using ZeldaEditor.Themes;
+using Trigger = ZeldaOracle.Common.Scripting.Trigger;
 
 namespace ZeldaEditor.Controls {
 	/// <summary>
@@ -29,14 +31,14 @@ namespace ZeldaEditor.Controls {
 	public partial class ScriptTextEditor : UserControl {
 
 		private static ScriptRoslynHost host;
+		private Trigger trigger;
 		private Script script;
-		private int scriptStart;
-		private int lineStart;
+		private ScriptRoslynInfo scriptInfo;
 		private FoldingManager foldingManager;
 		private ScriptFoldingStrategy foldingStrategy;
-		static IHighlightingDefinition highlightingDefinition;
 		private DocumentId documentID;
 		private StoppableTimer timer;
+		private bool needsFoldingUpdate;
 		private bool suppressEvents;
 
 
@@ -47,7 +49,7 @@ namespace ZeldaEditor.Controls {
 		public ScriptTextEditor() {
 			InitializeComponent();
 			suppressEvents = false;
-					
+			
 			// Display settings
 			editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
 			editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
@@ -63,6 +65,7 @@ namespace ZeldaEditor.Controls {
 			// Setup the text folding manager
 			foldingManager = FoldingManager.Install(editor.TextArea);
 			foldingStrategy = new ScriptFoldingStrategy();
+			needsFoldingUpdate = false;
 
 			// Editor options
 			editor.TextArea.IndentationStrategy = new CSharpIndentationStrategy();
@@ -73,6 +76,8 @@ namespace ZeldaEditor.Controls {
 			Unloaded += OnUnloaded;
 			editor.TextArea.TextEntering += OnTextEntering;
 			editor.TextChanged += OnTextChanged;
+			editor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
+			DataObject.AddPastingHandler(editor, OnPasting);
 			documentID = null;
 
 			timer = StoppableTimer.StartNew(
@@ -85,11 +90,11 @@ namespace ZeldaEditor.Controls {
 			Focus();
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Text Control
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Redoes the most recent undone command.</summary>
 		/// <returns>True is the redo operation was successful, false is the redo stack is empty.</returns>
 		public bool Redo() {
@@ -104,6 +109,14 @@ namespace ZeldaEditor.Controls {
 			if (!suppressEvents)
 				ScriptCodeChanged?.Invoke(this, e);
 		}
+
+		/// <summary>Call this to update the name of the script method.</summary>
+		public void UpdateMethodName(string newName) {
+			int oldLength = scriptInfo.MethodNameLength;
+			scriptInfo.ResizeMethodName(newName.Length);
+			editor.Document.Replace(scriptInfo.MethodNameStart, oldLength, newName);
+			needsFoldingUpdate = true;
+		}
 		
 
 		//-----------------------------------------------------------------------------
@@ -117,7 +130,7 @@ namespace ZeldaEditor.Controls {
 			suppressEvents = true;
 			{
 				// Create the document for the Roslyn host
-				string workingDirectory = System.IO.Path.GetDirectoryName(
+				string workingDirectory = Path.GetDirectoryName(
 					Assembly.GetEntryAssembly().Location);
 				documentID = editor.Initialize(host, new ClassificationHighlightColors(),
 					workingDirectory, "");
@@ -130,7 +143,7 @@ namespace ZeldaEditor.Controls {
 
 				// Setup the syntax highlighter
 				editor.TextArea.TextView.LineTransformers.Add(
-					new HighlightingColorizer(highlightingDefinition));
+					Highlighting.Script.ToColorizer());
 			}
 			suppressEvents = false;
 			
@@ -147,10 +160,19 @@ namespace ZeldaEditor.Controls {
 			timer.Stop();
 		}
 
+		private void OnPasting(object sender, DataObjectPastingEventArgs e) {
+			// Prevent pasting at the first index because we want it to be readonly.
+			// Readonly segments don't allow preventing insertion at the first index.
+			if (documentID != null &&
+				editor.CaretOffset == 0 || editor.SelectionStart == 0)
+				e.CancelCommand();
+		}
+
 		private void OnTextEntering(object sender, TextCompositionEventArgs e) {
 			// Prevent typing at the first index because we want it to be readonly.
 			// Readonly segments don't allow preventing insertion at the first index.
-			if (documentID != null && editor.CaretOffset == 0)
+			if (documentID != null &&
+				editor.CaretOffset == 0 || editor.SelectionStart == 0)
 				e.Handled = true;
 		}
 
@@ -158,18 +180,28 @@ namespace ZeldaEditor.Controls {
 		/// </summary>
 		private void OnTextChanged(object sender, EventArgs e) {
 			if (!suppressEvents) {
+				needsFoldingUpdate = true;
 				OnScriptCodeChanged(e);
 				CommandManager.InvalidateRequerySuggested();
 			}
 		}
 
 		private void OnTimerUpdate() {
-			if (documentID != null && script != null) {
+			if (documentID != null && script != null && needsFoldingUpdate) {
+				needsFoldingUpdate = false;
 				foldingStrategy.UpdateFoldings(
-					foldingManager, editor.Document, scriptStart);
+					foldingManager, editor.Document, scriptInfo);
 			}
 		}
-		
+
+		private void OnCaretPositionChanged(object sender, EventArgs e) {
+			int length = editor.Text.Length;
+			if (editor.CaretOffset == 0 && scriptInfo.MethodStart != 0)
+				editor.CaretOffset = scriptInfo.MethodStart;
+			else if (editor.CaretOffset == length && scriptInfo.EndLength != 0)
+				editor.CaretOffset -= scriptInfo.EndLength;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Static Methods
@@ -180,12 +212,6 @@ namespace ZeldaEditor.Controls {
 			// Don't waste anytime waiting on this to finish
 			Task.Run(() => new ScriptRoslynHost())
 				.ContinueWith((result) => { host = result.Result; });
-
-			// Load the CSharp extra highlighting
-			string fullName = "ZeldaEditor.Themes.CSharpMultilineHighlighting.xshd";
-			using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(fullName))
-			using (XmlTextReader reader = new XmlTextReader(stream))
-				highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
 		}
 
 
@@ -196,29 +222,21 @@ namespace ZeldaEditor.Controls {
 		/// <summary>Create the code that's shown in the editor. This code will have
 		/// to include members and parameters for intellisense to work properly.
 		/// </summary>
-		private string CreateScriptCode(out int scriptStart, out int lineStart) {
-			//ScriptCodeGenerator codeGenerator =
-			//	new ScriptCodeGenerator(editorControl.World);
-
-			//GeneratedScriptCode generatedCode =
-			//	codeGenerator.GenerateTestCode(script, script.Code);
-			//scriptStart = 
-			//lineStart = 1;
-			//string code = script.Code;
-
-			//scriptStart = 0;
-			//editor.Text = "";
-
+		private string CreateScriptCode(out ScriptRoslynInfo scriptInfo) {
 			// Create the editable code from the script's code
 			string code;
 			if (script == null) {
 				code = "";
-				scriptStart = 0;
-				lineStart = 0;
+				scriptInfo = new ScriptRoslynInfo();
 			}
 			else {
-				code = ScriptCodeGenerator.CreateRoslynScriptCode(script,
-					out scriptStart, out lineStart);
+				string name = "script";
+				if (trigger != null)
+					name = trigger.Name;
+				else if (script != null)
+					name = script.ID;
+				code = ScriptCodeGenerator.CreateRoslynScriptCode(script, name,
+					out scriptInfo);
 			}
 			return code;
 		}
@@ -227,36 +245,43 @@ namespace ZeldaEditor.Controls {
 		private void ChangeScript() {
 			suppressEvents = true;
 
+			// Reset so foldings stay closed
+			foldingManager.Reset();
+
 			// Update the code
-			string code = CreateScriptCode(out scriptStart, out lineStart);
+			string code = CreateScriptCode(out scriptInfo);
 			editor.Text = code;
 
 			// Add a readonly section for members and parameters
 			var sectionProvider = new TextSegmentReadOnlySectionProvider<TextSegment>(
 				editor.TextArea.Document);
 			if (script != null) {
-				sectionProvider.Segments.Add(new TextSegment() {
-					StartOffset = 0,
-					Length = scriptStart,
-				});
+				if (scriptInfo.ScriptStart != 0) {
+					sectionProvider.Segments.Add(new TextSegment() {
+						StartOffset = 0,
+						Length = scriptInfo.ScriptStart,
+					});
+				}
+				if (scriptInfo.EndLength != 0) {
+					sectionProvider.Segments.Add(new TextSegment() {
+						StartOffset = editor.Text.Length - scriptInfo.EndLength,
+						Length = scriptInfo.EndLength,
+					});
+				}
 			}
 			editor.TextArea.ReadOnlySectionProvider = sectionProvider;
 			
-			//Line line = null;
 			foreach (UIElement margin in editor.TextArea.LeftMargins) {
 				if (margin is LineNumberMargin) {
 					LineNumberMargin lineNumbers = (LineNumberMargin) margin;
-					lineNumbers.StartingLine = lineStart;
+					lineNumbers.StartingLine = scriptInfo.ScriptStartLine;
 				}
 			}
-			// TODO: What does this do? --david
-			//if (line != null)
-				//editor.TextArea.LeftMargins.Remove(line);
 
 			if (script != null)
-				foldingStrategy.UpdateFoldings(foldingManager, editor.Document, scriptStart);
+				foldingStrategy.UpdateFoldings(foldingManager, editor.Document, scriptInfo);
 
-			editor.CaretOffset = scriptStart;
+			editor.CaretOffset = scriptInfo.ScriptStart;
 			editor.IsModified = false;
 			suppressEvents = false;
 		}
@@ -283,6 +308,18 @@ namespace ZeldaEditor.Controls {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public Trigger Trigger {
+			get { return trigger; }
+			set {
+				if (trigger != value) {
+					trigger = value;
+					script = trigger?.Script;
+					if (documentID != null)
+						ChangeScript();
+				}
+			}
+		}
+
 		public Script Script {
 			get { return script; }
 			set {
@@ -296,10 +333,10 @@ namespace ZeldaEditor.Controls {
 
 		public TextViewPosition CaretPosition {
 			get {
-				if (editor.TextArea.Caret.Position.Line <= lineStart)
+				if (editor.TextArea.Caret.Position.Line <= scriptInfo.ScriptStartLine)
 					return new TextViewPosition(-1, -1, -1);
 				return new TextViewPosition(
-					editor.TextArea.Caret.Line - lineStart,
+					editor.TextArea.Caret.Line - scriptInfo.ScriptStartLine,
 					editor.TextArea.Caret.Column,
 					CalculateVisualColumn());
 			}
@@ -307,7 +344,11 @@ namespace ZeldaEditor.Controls {
 		
 		/// <summary>Gets actual script code of the current document.</summary>
 		public string ScriptCode {
-			get { return editor.Text.Substring(scriptStart); }
+			get {
+				return editor.Text.Substring(scriptInfo.ScriptStart,
+					editor.Text.Length - scriptInfo.ScriptStart -
+					scriptInfo.EndLength);
+			}
 		}
 		
 		/// <summary>Gets/Sets the 'modified' flag.</summary>

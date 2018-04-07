@@ -61,6 +61,10 @@ namespace ConscriptDesigner {
 		//-----------------------------------------------------------------------------
 
 		public MainWindow() {
+			// Prevent System.Windows.Data Error: 4
+			PresentationTraceSources.DataBindingSource.Switch.Level =
+				SourceLevels.Critical;
+
 			suppressEvents = true;
 			InitializeComponent();
 

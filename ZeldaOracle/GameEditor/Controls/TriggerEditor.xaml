@@ -21,12 +21,12 @@
         </Grid.ColumnDefinitions>
         <DockPanel x:Name="panelTriggerList"  Grid.Column="0">
             <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
-                <local:ImageButton x:Name="buttonAddTrigger" ToolTip="Create a new trigger" Source="/Resources/Icons/Plus.png" Command="local:TriggerEditorCommands.CreateTrigger"/>
-                <local:ImageButton x:Name="buttonDeleteTrigger" ToolTip="Delete trigger" Source="/Resources/Icons/Delete.png" Command="local:TriggerEditorCommands.DeleteTrigger"/>
-                <local:ImageButton x:Name="buttonDuplicateTrigger" ToolTip="Duplicate trigger" Source="/Resources/Icons/Copy.png" Command="local:TriggerEditorCommands.DuplicateTrigger"/>
+                <local:ImageButton x:Name="buttonAddTrigger" ToolTip="Create a new trigger" Source="/Resources/Icons/Plus.png" Command="local:TriggerEditorCommands.CreateTrigger" Focusable="False" IsTabStop="False"/>
+                <local:ImageButton x:Name="buttonDeleteTrigger" ToolTip="Delete trigger" Source="/Resources/Icons/Delete.png" Command="local:TriggerEditorCommands.DeleteTrigger" Focusable="False" IsTabStop="False"/>
+                <local:ImageButton x:Name="buttonDuplicateTrigger" ToolTip="Duplicate trigger" Source="/Resources/Icons/Copy.png" Command="local:TriggerEditorCommands.DuplicateTrigger" Focusable="False" IsTabStop="False"/>
                 <Separator/>
-                <local:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Command="local:TriggerEditorCommands.MoveTriggerUp"/>
-                <local:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Command="local:TriggerEditorCommands.MoveTriggerDown"/>
+                <local:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Command="local:TriggerEditorCommands.MoveTriggerUp" Focusable="False" IsTabStop="False"/>
+                <local:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Command="local:TriggerEditorCommands.MoveTriggerDown" Focusable="False" IsTabStop="False"/>
             </ToolBar>
             <ListBox x:Name="listBoxTriggers" SelectionChanged="OnSelectedTriggerChanged"/>
         </DockPanel>
