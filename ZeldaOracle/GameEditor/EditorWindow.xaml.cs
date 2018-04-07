@@ -677,7 +677,8 @@ namespace ZeldaEditor {
 
 		private void OnHistoryCommand(object sender, ExecutedRoutedEventArgs e) {
 			if (historyWindow == null) {
-				historyWindow = HistoryWindow.Show(this, editorControl, OnHistoryWindowClosed);
+				historyWindow = HistoryWindow.Show(this,
+					editorControl.UndoHistory, OnHistoryWindowClosed);
 				buttonShowHistory.IsChecked = true;
 			}
 			else {

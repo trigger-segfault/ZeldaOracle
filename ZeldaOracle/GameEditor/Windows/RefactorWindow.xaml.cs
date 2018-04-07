@@ -194,7 +194,7 @@ namespace ZeldaEditor.Windows {
 				"Refactor " + GetPluralName(2));
 
 			if (count > 0) {
-				editorControl.PopToOriginalAction();
+				editorControl.UndoHistory.PopToOriginalAction();
 				editorControl.PropertyGrid.RefreshProperties();
 				editorControl.IsModified = true;
 				needsToSearch = true;
