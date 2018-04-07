@@ -319,6 +319,9 @@
     <Compile Include="Controls\ObjectTileEditor.xaml.cs">
       <DependentUpon>ObjectTileEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ObjectVariableEditor.xaml.cs">
+      <DependentUpon>ObjectVariableEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PointUpDown.cs" />
     <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
@@ -401,6 +404,9 @@
     </Compile>
     <Compile Include="Windows\AddNewLevelWindow.xaml.cs">
       <DependentUpon>AddNewLevelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditVariableWindow.xaml.cs">
+      <DependentUpon>EditVariableWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
@@ -488,6 +494,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ObjectVariableEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ScriptTextEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -525,6 +535,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddNewLevelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditVariableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

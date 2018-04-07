@@ -47,7 +47,7 @@ namespace ZeldaOracle.Common.Scripting {
 		{
 			if (!IsValidName(name))
 				throw new ArgumentException("Invalid variable name!");
-			this.builtIn	= builtIn;
+			this.builtIn = builtIn;
 		}
 
 		/// <summary>Constructs a variable of the specified type.</summary>
@@ -56,7 +56,7 @@ namespace ZeldaOracle.Common.Scripting {
 		{
 			if (!IsValidName(name))
 				throw new ArgumentException("Invalid variable name!");
-			this.builtIn	= builtIn;
+			this.builtIn = builtIn;
 		}
 
 		/// <summary>Constructs a variable with the specified value.</summary>

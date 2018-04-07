@@ -96,7 +96,12 @@ namespace ZeldaOracle.Common.Scripting.Internal {
 
 		/// <summary>Creates a string representation of the var.</summary>
 		public override string ToString() {
-			string str = name + " = ";
+			return (name + " = " + GetValueString());
+		}
+
+		/// <summary>Creates a string representation of the value.</summary>
+		public string GetValueString() {
+			string str = "";
 			if (IsEnumerable) {
 				str += "{";
 				bool first = true;
@@ -623,19 +628,34 @@ namespace ZeldaOracle.Common.Scripting.Internal {
 			return (TypeToVarType(type) != VarType.Custom);
 		}
 
-		/// <summary>Constructs the initial object for the var and list type.</summary>
-		public static object CreateInstance(VarType varType, ListType listType, int length = 0) {
+		/// <summary>Constructs the initial object for the var and list type.
+		/// </summary>
+		public static object CreateInstance(VarType varType,
+			ListType listType, int length = 0)
+		{
 			Type elementType = VarTypeToType(varType);
 			switch (listType) {
-			case ListType.Single:
-				return Activator.CreateInstance(elementType);
-			case ListType.Array:
-				return Array.CreateInstance(elementType, length);
-			case ListType.List:
-				Type newType = typeof(List<>).MakeGenericType(elementType);
-				return Activator.CreateInstance(newType);
-			default:
-				return null;
+				case ListType.Single:
+					return GetDefaultValue(varType);
+				case ListType.Array:
+					return Array.CreateInstance(elementType, length);
+				case ListType.List:
+					Type newType = typeof(List<>).MakeGenericType(elementType);
+					return Activator.CreateInstance(newType);
+				default:
+					return null;
+			}
+		}
+
+		/// <summary>Gets the default value for the given var type.</summary>
+		private static object GetDefaultValue(VarType varType) {
+			switch (varType) {
+				case VarType.String:
+					// Special case because string is a class not a struct
+					return string.Empty;
+				default:
+					Type elementType = VarTypeToType(varType);
+					return Activator.CreateInstance(elementType);
 			}
 		}
 		

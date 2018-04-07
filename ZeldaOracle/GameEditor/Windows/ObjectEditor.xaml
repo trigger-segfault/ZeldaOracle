@@ -33,6 +33,9 @@
             <Separator/>
         </ToolBar>
         <TabControl DockPanel.Dock="Bottom">
+            <TabItem Header="Variables" x:Name="tabVariables">
+                <local:ObjectVariableEditor x:Name="objectVariableEditor"/>
+            </TabItem>
             <TabItem Header="Triggers">
                 <local:TriggerEditor x:Name="triggerEditor"/>
             </TabItem>
@@ -40,9 +43,6 @@
                 <Grid x:Name="tabGeneral">
                     <!--<local:ObjectTileEditor x:Name="objectTileEditor"/>-->
                 </Grid>
-            </TabItem>
-            <TabItem Header="Variables">
-                <Label Content="Content goes here..." />
             </TabItem>
             <TabItem Header="Paths">
                 <Label Content="Content goes here..." />

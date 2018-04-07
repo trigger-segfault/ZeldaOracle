@@ -58,6 +58,11 @@ namespace ZeldaEditor.Windows {
 			this.obj = obj;
 			triggerEditor.SetObject(obj as ITriggerObject);
 
+			if (obj is IVariableObject)
+				objectVariableEditor.Variables = ((IVariableObject) obj).Variables;
+			else
+				objectVariableEditor.Variables = null;
+
 			// Set the object preview image and name
 			objectPreviewName.Text = "(none)";
 			if (obj is BaseTileDataInstance) {
