@@ -651,7 +651,8 @@ namespace ZeldaEditor.Control {
 		/// performs the specified execution.</summary>
 		public void PushPropertyAction(IPropertyObject propertyObject,
 			string propertyName, object oldValue, object newValue,
-			ActionExecution execution = ActionExecution.None) {
+			ActionExecution execution = ActionExecution.None)
+		{
 			Property property = propertyObject.Properties.
 				GetProperty(propertyName, true);
 			ActionChangeProperty action = new ActionChangeProperty(
@@ -668,6 +669,7 @@ namespace ZeldaEditor.Control {
 				return;
 			}
 
+			// Combine contiguous proprety-change actions of the same property
 			if (LastAction is ActionChangeProperty) {
 				ActionChangeProperty lastAction =
 						(ActionChangeProperty) LastAction;

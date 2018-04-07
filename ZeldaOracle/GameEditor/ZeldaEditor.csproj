@@ -393,9 +393,11 @@
     <Compile Include="Undo\ActionSquare.cs" />
     <Compile Include="Undo\ActionCreateArea.cs" />
     <Compile Include="Undo\ActionChangeScript.cs" />
+    <Compile Include="Undo\UndoAction.cs" />
     <Compile Include="Undo\EditorAction.cs" />
     <Compile Include="Undo\ActionPlace.cs" />
     <Compile Include="Undo\ActionRenameID.cs" />
+    <Compile Include="Undo\UndoHistory.cs" />
     <Compile Include="Util\AlphanumComparatorFast.cs" />
     <Compile Include="Util\WpfHelper.cs" />
     <Compile Include="Util\StoppableTimer.cs" />
