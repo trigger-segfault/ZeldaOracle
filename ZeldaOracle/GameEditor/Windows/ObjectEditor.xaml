@@ -33,11 +33,11 @@
             <Separator/>
         </ToolBar>
         <TabControl DockPanel.Dock="Bottom">
-            <TabItem Header="Variables" x:Name="tabVariables">
-                <local:ObjectVariableEditor x:Name="objectVariableEditor"/>
-            </TabItem>
             <TabItem Header="Triggers">
                 <local:TriggerEditor x:Name="triggerEditor"/>
+            </TabItem>
+            <TabItem Header="Variables" x:Name="tabVariables">
+                <local:ObjectVariableEditor x:Name="objectVariableEditor"/>
             </TabItem>
             <TabItem Header="General">
                 <Grid x:Name="tabGeneral">
