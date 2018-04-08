@@ -17,13 +17,35 @@ namespace ZeldaEditor.Controls {
 
 		/// <summary>Used to provide the displayed text for a variable.</summary>
 		private class VariableItem {
+
 			public VariableItem(Variable variable) {
 				Variable = variable;
 			}
+
 			public Variable Variable { get; }
-			public string Name { get { return Variable.Name; } }
-			public string Type { get { return Variable.VarType.ToString(); } }
-			public string Value { get { return Variable.GetValueString(); } }
+
+			/// <summary>Gets the variable's name.</summary>
+			public string Name {
+				get { return Variable.Name; }
+			}
+
+			/// <summary>Gets the string describing the variable's type.</summary>
+			public string Type {
+				get {
+					// Example: "Integer List [3]"
+					string text = Variable.VarType.ToString();
+					if (Variable.ListType == ListType.Array)
+						text += string.Format(" Array [{0}]", Variable.Count);
+					else if (Variable.ListType == ListType.List)
+						text += string.Format(" List [{0}]", Variable.Count);
+					return text;
+				}
+			}
+
+			/// <summary>Gets the string describing the variable's value.</summary>
+			public string Value {
+				get { return Variable.GetValueString(); }
+			}
 		}
 		
 		/// <summary>The variable collection that is being edited.</summary>

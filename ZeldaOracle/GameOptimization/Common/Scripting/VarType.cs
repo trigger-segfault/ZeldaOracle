@@ -40,5 +40,13 @@ namespace ZeldaOracle.Common.Scripting {
 		public static Type ToType(this VarType varType, ListType listType) {
 			return VarBase.VarTypeToType(varType, listType);
 		}
+
+		/// <summary>Gets the default value of a VarType.</summary>
+		public static object GetDefaultValue(this VarType varType) {
+			Type type = varType.ToType();
+			if (type.IsValueType)
+				return Activator.CreateInstance(type);
+			return null;
+		}
 	}
 }

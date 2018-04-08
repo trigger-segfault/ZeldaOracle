@@ -1027,4 +1027,23 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- Grid ComboBox Editors --><!--
+    <Style TargetType="{x:Type ComboBox}"
+           BasedOn="{StaticResource {x:Type ComboBox}}"
+           x:Key="GridComboBox">
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                    <Condition Property="IsMouseOver" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="Transparent" />
+            </MultiTrigger>
+            --><!--<Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                </Trigger>--><!--
+        </Style.Triggers>
+    </Style>-->
 </ResourceDictionary>
