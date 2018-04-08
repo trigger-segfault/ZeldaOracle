@@ -96,8 +96,6 @@ namespace ZeldaEditor.Control {
 		private ToolFill            toolFill;
 		private ToolSelection       toolSelection;
 		private ToolEyedrop         toolEyedropper;
-		private ObservableCollection<EditorAction> undoActions;
-		private int                 undoPosition;
 
 		// Editing
 		private World			world;
@@ -114,6 +112,7 @@ namespace ZeldaEditor.Control {
 		private bool            startLocationMode;
 		private Room editingRoom;
 		private BaseTileDataInstance editingTileData;
+		private UndoHistory<EditorControl> history;
 		
 		// Scripts
 		private ScriptCompileService		scriptCompileService;
@@ -194,8 +193,8 @@ namespace ZeldaEditor.Control {
 			currentToolIndex = 0;
 			tools[currentToolIndex].Begin();
 
-			undoActions = new ObservableCollection<EditorAction>();
-			undoPosition = -1;
+			history = new UndoHistory<EditorControl>(this, MaxUndos);
+			history.PositionChanged += OnHistoryChanged;
 
 			try {
 				GameData.Initialize();
@@ -346,9 +345,8 @@ namespace ZeldaEditor.Control {
 					OpenLevel(0);
 				eventCache.Clear();
 				RefreshWorldTreeView();
-
-				undoActions.Clear();
-				undoPosition = -1;
+				
+				history.Clear();
 				PushAction(new ActionOpenWorld(), ActionExecution.None);
 				IsModified = worldFileLocatedResource;
 			}
@@ -534,116 +532,39 @@ namespace ZeldaEditor.Control {
 		// Undo Actions
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Pushes the action to the list and performs the specified execution.</summary>
+		/// <summary>Pushes the action to the list and performs the specified
+		/// execution.</summary>
 		public void PushAction(EditorAction action, ActionExecution execution) {
-			// Ignore if nothing occurred during this action
-			if (action.IgnoreAction)
-				return;
-
-			IsModified = true;
-
-			// Execute the action if requested
-			if (execution == ActionExecution.Execute)
-				action.Execute(this);
-			else if (execution == ActionExecution.PostExecute)
-				action.PostExecute(this);
-
-			if (undoPosition >= 0)
-				undoActions[undoPosition].IsSelected = false;
-
-			while (undoPosition + 1 < undoActions.Count) {
-				undoActions.RemoveAt(undoPosition + 1);
-			}
-			undoActions.Add(action);
-			while (undoActions.Count > MaxUndos) {
-				undoActions.RemoveAt(0);
-			}
-			undoPosition = undoActions.Count - 1;
-
-			editorWindow.SelectHistoryItem(action);
-		}
-
-		/// <summary>Pops the last action from the list.</summary>
-		public void PopAction() {
-			while (undoPosition < undoActions.Count) {
-				undoActions.RemoveAt(undoPosition);
-			}
-			undoPosition = undoActions.Count - 1;
-
-			editorWindow.SelectHistoryItem(LastAction);
+			history.PushAction(action, execution);
 		}
 
 		/// <summary>Undos the last executed action.</summary>
 		public void Undo() {
-			if (CurrentTool.CancelCountsAsUndo) {
+			if (CurrentTool.CancelCountsAsUndo)
 				CurrentTool.Cancel();
-			}
-			else if (undoPosition > 0) {
-				undoActions[undoPosition].Undo(this);
-				undoActions[undoPosition].IsUndone = true;
-				undoActions[undoPosition].IsSelected = false;
-				undoPosition--;
-				editorWindow.SelectHistoryItem(undoActions[undoPosition]);
-				IsModified = true;
-			}
+			else
+				history.Undo();
 		}
 
 		/// <summary>Redos the next undone action.</summary>
 		public void Redo() {
-			if (undoPosition + 1 < undoActions.Count) {
-				CurrentTool.Cancel();
-				undoActions[undoPosition].IsSelected = false;
-				undoPosition++;
-				undoActions[undoPosition].IsUndone = false;
-				undoActions[undoPosition].Redo(this);
-				editorWindow.SelectHistoryItem(undoActions[undoPosition]);
-				IsModified = true;
-			}
+			CurrentTool.Cancel();
+			history.Redo();
 		}
 
-		/// <summary>Navigates to the action at the specified position in the list.</summary>
-		public void GotoAction(int position) {
-			if (position == -1)
-				return;
-			// Undo
-			while (position < undoPosition) {
-				if (CurrentTool.CancelCountsAsUndo) {
-					CurrentTool.Cancel();
-				}
-				else {
-					undoActions[undoPosition].IsSelected = false;
-					undoActions[undoPosition].Undo(this);
-					undoActions[undoPosition].IsUndone = true;
-					undoPosition--;
-					IsModified = true;
-				}
-			}
-			// Redo
-			while (position > undoPosition) {
-				CurrentTool.Cancel();
-				undoActions[undoPosition].IsSelected = false;
-				undoPosition++;
-				undoActions[undoPosition].IsUndone = false;
-				undoActions[undoPosition].Redo(this);
-				IsModified = true;
-			}
-		}
-
-		/// <summary>Clears all undo actions except the original action.
-		/// AKA: Open World or New World.</summary>
-		public void PopToOriginalAction() {
-			while (undoActions.Count > 1) {
-				undoActions.RemoveAt(1);
-			}
-			undoPosition = 0;
-			editorWindow.SelectHistoryItem(undoActions[undoPosition]);
+		/// <summary>Navigates to the action at the specified position in the list.
+		/// </summary>
+		public void GoToAction(int position) {
+			CurrentTool.Cancel();
+			history.GoToAction(position);
 		}
 
 		/// <summary>Pushes the property change action to the list and
 		/// performs the specified execution.</summary>
 		public void PushPropertyAction(IPropertyObject propertyObject,
 			string propertyName, object oldValue, object newValue,
-			ActionExecution execution = ActionExecution.None) {
+			ActionExecution execution = ActionExecution.None)
+		{
 			Property property = propertyObject.Properties.
 				GetProperty(propertyName, true);
 			ActionChangeProperty action = new ActionChangeProperty(
@@ -656,21 +577,31 @@ namespace ZeldaEditor.Control {
 				action = new ActionChangeTileSizeProperty(
 					(TileDataInstance) propertyObject, property,
 					(Point2I) oldValue, (Point2I) newValue);
-				PushAction(action, ActionExecution.Execute);
+				history.PushAction(action, ActionExecution.Execute);
 				return;
 			}
 
-			if (LastAction is ActionChangeProperty) {
+			// Combine contiguous proprety-change actions of the same property
+			if (history.LastAction is ActionChangeProperty) {
 				ActionChangeProperty lastAction =
-						(ActionChangeProperty) LastAction;
+						(ActionChangeProperty) history.LastAction;
 				if (action.PropertyObject == lastAction.PropertyObject &&
 					action.PropertyName == lastAction.PropertyName) {
 					action.OldValue = lastAction.OldValue;
-					PopAction();
+					history.PopAction();
 				}
 			}
 
-			PushAction(action, execution);
+			history.PushAction(action, execution);
+		}
+
+		/// <summary>Called when the position in the undo history has changed.
+		/// </summary>
+		private void OnHistoryChanged(object sender, EventArgs e) {
+			if (history.LastAction != null) {
+				editorWindow.SelectHistoryItem(history.LastAction);
+				IsModified = true;
+			}
 		}
 
 
@@ -1156,24 +1087,28 @@ namespace ZeldaEditor.Control {
 
 		// Undo Actions ---------------------------------------------------------------
 
-		public ObservableCollection<EditorAction> UndoActions {
-			get { return undoActions; }
+		public UndoHistory<EditorControl> UndoHistory {
+			get { return history; }
 		}
 
-		public EditorAction LastAction {
-			get { return undoActions[undoPosition]; }
+		public ObservableCollection<UndoAction<EditorControl>> UndoActions {
+			get { return history.UndoActions; }
 		}
+
+		//public EditorAction LastAction {
+		//	get { return history.LastAction as EditorAction; }
+		//}
 
 		public int UndoPosition {
-			get { return undoPosition; }
+			get { return history.UndoPosition; }
 		}
 
 		public bool CanUndo {
-			get { return undoPosition > 0 || CurrentTool.CancelCountsAsUndo; }
+			get { return (history.CanUndo || CurrentTool.CancelCountsAsUndo); }
 		}
 
 		public bool CanRedo {
-			get { return undoPosition + 1 < undoActions.Count; }
+			get { return history.CanRedo; }
 		}
 
 		// Scripting ------------------------------------------------------------------

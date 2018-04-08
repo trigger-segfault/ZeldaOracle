@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="ZeldaEditor.Controls.ObjectVariableEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZeldaEditor.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="325" d:DesignWidth="460" KeyDown="OnKeyDown">
+    <UserControl.Resources>
+        <Style x:Key="listViewStyle" TargetType="{x:Type ListViewItem}">
+            <EventSetter Event="MouseDoubleClick" Handler="OnDoubleClickVariable" />
+        </Style>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Cut" CanExecute="CanExecuteVariableCommand" Executed="OnCut"/>
+        <CommandBinding Command="Copy" CanExecute="CanExecuteVariableCommand" Executed="OnCopy"/>
+        <CommandBinding Command="Paste" CanExecute="CanExecuteAnyCommand" Executed="OnPaste"/>
+        <CommandBinding Command="Undo" CanExecute="CanExecuteAnyCommand" Executed="OnUndo"/>
+        <CommandBinding Command="Redo" CanExecute="CanExecuteAnyCommand" Executed="OnRedo"/>
+        <CommandBinding Command="New" CanExecute="CanExecuteAnyCommand" Executed="OnNewVariable"/>
+        <CommandBinding Command="Open" CanExecute="CanExecuteVariableCommand" Executed="OnEditVariable"/>
+        <CommandBinding Command="Delete" CanExecute="CanExecuteVariableCommand" Executed="OnDeleteVariable"/>
+    </UserControl.CommandBindings>
+    <DockPanel x:Name="panel" >
+        <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
+            <local:ImageButton x:Name="buttonToolCut" Source="/Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>
+            <local:ImageButton x:Name="buttonToolCopy" Source="/Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
+            <local:ImageButton x:Name="buttonToolPaste" Source="/Resources/Icons/Paste.png" ToolTip="Cut (Ctrl+V)" Command="Paste"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonUndo" Source="/Resources/Icons/Undo.png" ToolTip="Cut (Ctrl+V)" Command="Undo"/>
+            <local:ImageButton x:Name="buttonRedo" Source="/Resources/Icons/Redo.png" ToolTip="Cut (Ctrl+V)" Command="Redo"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonAdd" ToolTip="New Variable..." Source="/Resources/Icons/Plus.png" Command="New"/>
+            <local:ImageButton x:Name="buttonEdit" ToolTip="Edit Variable..." Source="/Resources/Icons/Plus.png" Command="Open"/>
+            <local:ImageButton x:Name="buttonDelete" ToolTip="Delete Variable" Source="/Resources/Icons/Delete.png" Command="Delete"/>
+        </ToolBar>
+        <ListView x:Name="listView" ItemContainerStyle="{StaticResource listViewStyle}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Name" Click="OnClickColumnHeader">Variable Name</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Type}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Type" Click="OnClickColumnHeader">Variable Type</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Value}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Value" Click="OnClickColumnHeader">Initial Value</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Cut" Command="Cut"/>
+                    <MenuItem Header="Copy" Command="Copy"/>
+                    <MenuItem Header="Paste" Command="Paste"/>
+                    <Separator />
+                    <MenuItem Header="New Variable..." Command="New"/>
+                    <MenuItem Header="Edit Variable..." Command="Open"/>
+                    <MenuItem Header="Delete" Command="Delete"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+    </DockPanel>
+</UserControl>

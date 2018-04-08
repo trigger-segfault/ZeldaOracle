@@ -39,11 +39,18 @@ namespace ZeldaOracle.Game.Control.Scripting.Interface.Actions {
 			int ticks = (int) ((seconds * 60.0f) + 0.5f);
 			Wait(ticks);
 		}
-
-		public void Message(string text) {
+		
+		public int Message(string text) {
 			LogMessage("Displaying message: {0}", text);
-			RoomControl.GameControl.DisplayMessage(text, null, ScriptInstance.Resume);
+			int selectedOption = -1;
+			RoomControl.GameControl.DisplayMessage(text, (int option) => {
+				selectedOption = option;
+				ScriptInstance.Resume();
+			});
 			ScriptInstance.WaitForResume();
+			if (selectedOption >= 0)
+				LogMessage("Selected message option: {0}", selectedOption);
+			return selectedOption;
 		}
 
 		public void BeginCutscene() {

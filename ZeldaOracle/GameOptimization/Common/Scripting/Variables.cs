@@ -8,7 +8,7 @@ namespace ZeldaOracle.Common.Scripting {
 	/// <summary>A collection of variables accessible in scripting.</summary>
 	[Serializable]
 	public class Variables : VarBaseCollection<Variable>, IEnumerable,
-		ZeldaAPI.Variables
+		IEnumerable<Variable>, ZeldaAPI.Variables
 	{
 		/// <summary>The map of variables in the collection.</summary>
 		private Dictionary<string, Variable> map;
@@ -65,10 +65,15 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns an enumerator that iterates through a collection.</summary>
-		IEnumerator IEnumerable.GetEnumerator() {
-			foreach (Variable variable in map.Values) {
+		public IEnumerator<Variable> GetEnumerator() {
+			foreach (Variable variable in map.Values)
 				yield return variable;
-			}
+		}
+
+		/// <summary>Returns an enumerator that iterates through a collection.</summary>
+		IEnumerator IEnumerable.GetEnumerator() {
+			foreach (Variable variable in map.Values)
+				yield return variable;
 		}
 
 
@@ -195,6 +200,11 @@ namespace ZeldaOracle.Common.Scripting {
 			this.variableObject = variableObject;
 			foreach (Variable variable in map.Values)
 				variable.Variables = this;
+		}
+
+		public void AddVariable(Variable variable) {
+			map[variable.Name] = variable;
+			variable.Variables = this;
 		}
 
 
@@ -412,6 +422,9 @@ namespace ZeldaOracle.Common.Scripting {
 				v = new Variable(name, value);
 				v.Variables = this;
 				map.Add(name, v);
+			}
+			else {
+				v.Set(value);
 			}
 			return v;
 		}

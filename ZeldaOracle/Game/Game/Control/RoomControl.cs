@@ -554,7 +554,9 @@ namespace ZeldaOracle.Game.Control {
 					queue.Add(new GameStateAction(delegate {
 						string message = newControl.areaControl.EnterMessage;
 						TextReaderArgs args = new TextReaderArgs() {
-							Spacing = 2
+							Spacing = 2,
+							LinesPerWindow = 2,
+							ReaderPosition = TextReaderPosition.Automatic,
 						};
 						GameControl.DisplayMessage(message, args);
 					}));

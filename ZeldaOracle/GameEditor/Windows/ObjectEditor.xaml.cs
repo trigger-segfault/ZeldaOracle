@@ -49,6 +49,12 @@ namespace ZeldaEditor.Windows {
 		public void SetObject(object obj) {
 			this.obj = obj;
 			triggerEditor.SetObject(obj as ITriggerObject);
+
+			if (obj is IVariableObject)
+				objectVariableEditor.Variables = ((IVariableObject) obj).Variables;
+			else
+				objectVariableEditor.Variables = null;
+
 			objectPreview.PreviewObject = obj;
 		}
 

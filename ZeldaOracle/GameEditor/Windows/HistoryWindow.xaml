@@ -61,11 +61,11 @@
                 <local:ImageButton Source="/ZeldaEditor;component/Resources/Icons/Redo.png" Margin="31,2,0,1" Command="Redo" HorizontalAlignment="Left"/>
             </Grid>
         </Border>
-        <ListView x:Name="listView"  SelectionChanged="OnSelectionChanged" SelectionMode="Single" Style="{DynamicResource NoBorderListViewStyle}">
+        <ListView x:Name="listView" SelectionChanged="OnSelectionChanged" SelectionMode="Single" Style="{DynamicResource NoBorderListViewStyle}">
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnListViewItemPreviewMouseLeftButtonDown" />
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnSelectListItem" />
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>

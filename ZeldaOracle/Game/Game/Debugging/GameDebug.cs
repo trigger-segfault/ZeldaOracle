@@ -382,7 +382,13 @@ namespace ZeldaOracle.Game.Debugging {
 
 			// G: Display a test message.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.G)) {
-				gameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
+				//gameControl.DisplayMessage("Is your refridgerator running?<n>  <1>Yes <0>No", (int option) => {
+				//	if (option == 1)
+				//		gameControl.DisplayMessage("Then you better go catch it!!");
+				//	else
+				//		gameControl.DisplayMessage("Then enjoy your spoiled food!!");
+				//});
+				//gameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
 			}
 			// INSERT: Fill all ammo.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.Insert)) {

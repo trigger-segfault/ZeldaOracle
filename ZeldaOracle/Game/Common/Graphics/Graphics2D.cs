@@ -439,23 +439,28 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawLetter(GameFont font, Letter letter,
+			Vector2F position, ColorOrPalette color)
+		{
+			spriteBatch.Draw(
+				font.SpriteSheet.Image,
+				NewRect(new Rectangle2F(position, font.CharacterSize)),
+				font.GetCharacterCell(letter.Char).ToXnaRectangle(),
+				(letter.Color == Letter.DefaultColor ? color.MappedColor :
+					letter.MappedColor).ToXnaColor(),
+				0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
+		}
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
 		public void DrawLetterString(GameFont font, LetterString letterString,
 			Vector2F position, ColorOrPalette color, Align alignment, Vector2F area)
 		{
 			Vector2F size = font.MeasureString(letterString);
 			position = Alignment.AlignVector(position, area, size, alignment);
 			for (int i = 0; i < letterString.Length; i++) {
-				spriteBatch.Draw(
-					font.SpriteSheet.Image,
-					NewRect(new Rectangle2F(
-						position.X + i * (font.CharacterWidth + font.CharacterSpacing),
-						position.Y,
-						font.CharacterSize
-					)),
-					font.GetCharacterCell(letterString[i].Char).ToXnaRectangle(),
-					(letterString[i].Color == Letter.DefaultColor ? color.MappedColor :
-						letterString[i].MappedColor).ToXnaColor(),
-					0f, Vector2.Zero, SpriteEffects.None, 0f);
+				DrawLetter(font, letterString[i], new Vector2F(
+					position.X + (i * (font.CharacterWidth + font.CharacterSpacing)),
+					position.Y), color);
 			}
 		}
 		

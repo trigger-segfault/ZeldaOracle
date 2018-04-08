@@ -38,6 +38,12 @@ namespace ZeldaOracle.Common.Translation {
 		public const char AlignCenterCharacter = (char) 251;
 		/// <summary>The character to align the current line to the right.</summary>
 		public const char AlignRightCharacter = (char) 250;
+		/// <summary>The start of the character range which defines message options.
+		/// </summary>
+		public const char MessageOptionCharactersBegin = (char) 140;
+		/// <summary>The end of the character range which defines message options.
+		/// </summary>
+		public const char MessageOptionCharactersEnd = (char) 150;
 
 
 		//-----------------------------------------------------------------------------
@@ -87,13 +93,13 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("pilcrow",		"" + (char) 20);
 			FormatCodes.stringCodes.Add("section",		"" + (char) 21);
 			FormatCodes.stringCodes.Add("cursor",		"" + (char) 22);
-			FormatCodes.stringCodes.Add("1",			"" + (char) 23);
+			FormatCodes.stringCodes.Add("slot1",		"" + (char) 23);
 			FormatCodes.stringCodes.Add("up",			"" + (char) 24);
 			FormatCodes.stringCodes.Add("down",			"" + (char) 25);
 			FormatCodes.stringCodes.Add("right",		"" + (char) 26);
 			FormatCodes.stringCodes.Add("left",			"" + (char) 27);
-			FormatCodes.stringCodes.Add("2",			"" + (char) 28);
-			FormatCodes.stringCodes.Add("3",			"" + (char) 29);
+			FormatCodes.stringCodes.Add("slot2",		"" + (char) 28);
+			FormatCodes.stringCodes.Add("slot3",		"" + (char) 29);
 			FormatCodes.stringCodes.Add("up-tri",		"" + (char) 30);
 			FormatCodes.stringCodes.Add("down-tri",		"" + (char) 31);
 			FormatCodes.stringCodes.Add("house",		"" + (char) 127);
@@ -110,7 +116,18 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("align-left", "" + AlignLeftCharacter);
 			FormatCodes.stringCodes.Add("align-center", "" + AlignCenterCharacter);
 			FormatCodes.stringCodes.Add("align-right", "" + AlignRightCharacter);
-
+			
+			FormatCodes.stringCodes.Add("0", "" + GetMessageOptionCharacter(0));
+			FormatCodes.stringCodes.Add("1", "" + GetMessageOptionCharacter(1));
+			FormatCodes.stringCodes.Add("2", "" + GetMessageOptionCharacter(2));
+			FormatCodes.stringCodes.Add("3", "" + GetMessageOptionCharacter(3));
+			FormatCodes.stringCodes.Add("4", "" + GetMessageOptionCharacter(4));
+			FormatCodes.stringCodes.Add("5", "" + GetMessageOptionCharacter(5));
+			FormatCodes.stringCodes.Add("6", "" + GetMessageOptionCharacter(6));
+			FormatCodes.stringCodes.Add("7", "" + GetMessageOptionCharacter(7));
+			FormatCodes.stringCodes.Add("8", "" + GetMessageOptionCharacter(8));
+			FormatCodes.stringCodes.Add("9", "" + GetMessageOptionCharacter(9));
+			
 			FormatCodes.noColorStringCodes.Add("dpad", "" + (char) 136);
 		}
 
@@ -118,6 +135,24 @@ namespace ZeldaOracle.Common.Translation {
 		//-----------------------------------------------------------------------------
 		// Codes
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the given character is a format code for a message
+		/// option.</summary>
+		public static bool IsMessageOption(char c) {
+			return (c >= MessageOptionCharactersBegin && c < MessageOptionCharactersEnd);
+		}
+		
+		/// <summary>Returns the message option index that a message option format code
+		/// represents.</summary>
+		public static int GetMessageOptionIndex(char c) {
+			return (int) (c - MessageOptionCharactersBegin);
+		}
+		
+		/// <summary>Returns the format code character that represents the given
+		/// message option index.</summary>
+		public static char GetMessageOptionCharacter(int optionIndex) {
+			return (char) ((int) MessageOptionCharactersBegin + optionIndex);
+		}
 
 		/// <summary>Gets the string code type.</summary>
 		public static FormatCodeType GetFormatCodeType(string code) {

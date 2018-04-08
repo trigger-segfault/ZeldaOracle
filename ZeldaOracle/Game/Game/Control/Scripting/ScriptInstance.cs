@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Control.Scripting.Interface.Actions;
 using ZeldaOracle.Game.Control.Scripting.Interface.Functions;
@@ -61,20 +62,21 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private Exception exception;
 		private int startTime;
 		private List<ScriptAction> actions;
-
+		private Trigger trigger;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public ScriptInstance(RoomControl roomControl, string name,
-			MethodInfo method, object[] parameters)
+			MethodInfo method, Trigger trigger, object[] parameters)
 		{
 			this.name				= name;
 			this.roomControl		= roomControl;
 			this.method				= method;
 			this.parameters			= parameters;
-			this.actions			= new List<ScriptAction>();
+			this.trigger			= trigger;
+			actions					= new List<ScriptAction>();
 			thread					= new Thread(ThreadFunction);
 			isComplete				= false;
 			exception				= null;
@@ -288,6 +290,10 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		public RoomControl RoomControl {
 			get { return roomControl; }
+		}
+
+		public Trigger Trigger {
+			get { return trigger; }
 		}
 
 		public int StartTime {

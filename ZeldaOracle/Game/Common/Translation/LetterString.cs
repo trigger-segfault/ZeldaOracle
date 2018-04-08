@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -149,7 +150,7 @@ namespace ZeldaOracle.Common.Translation {
 		}
 	}
 
-	/// <summary>A formatted game letter with a color and character</summary>
+	/// <summary>A formatted game letter with a color and character.</summary>
 	public struct Letter {
 
 		//-----------------------------------------------------------------------------
@@ -269,7 +270,7 @@ namespace ZeldaOracle.Common.Translation {
 	}
 
 	/// <summary>A string of game letters with colors and characters.</summary>
-	public class LetterString {
+	public class LetterString : IEnumerable<Letter> {
 		
 		/// <summary>The list of letters in the game string.</summary>
 		private List<Letter> letters;
@@ -600,6 +601,20 @@ namespace ZeldaOracle.Common.Translation {
 			}
 			return true;
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
+		public IEnumerator<Letter> GetEnumerator() {
+			foreach (Letter letter in letters)
+				yield return letter;
+		}
+
+		IEnumerator IEnumerable.GetEnumerator() {
+			return GetEnumerator();
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -649,6 +664,14 @@ namespace ZeldaOracle.Common.Translation {
 		public Align MessageAlignment {
 			get { return messageAlign; }
 			set { messageAlign = value; }
+		}
+
+		public bool HasMenuOptions {
+			get {
+				return letters.Any(l =>
+					(l.Char >= FormatCodes.MessageOptionCharactersBegin &&
+					l.Char < FormatCodes.MessageOptionCharactersEnd));
+			}
 		}
 	}
 }

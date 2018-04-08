@@ -95,11 +95,9 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public void Talk(Entity actionEntity, EventArgs args) {
-			GameControl.FireEvent(this, "talk");
-			
+			// Display the talk message
 			string text = Text;
 			if (text.Length > 0) {
-				Message message = new Message(text);
 				if (animationTalk != null) {
 					Graphics.PlayAnimation(animationTalk);
 				}
@@ -108,11 +106,14 @@ namespace ZeldaOracle.Game.Entities {
 						direction = ((Player) actionEntity).Direction.Reverse();
 					Graphics.SubStripIndex = direction;
 				}
-				GameControl.DisplayMessage(message, null, delegate() {
+				GameControl.DisplayMessage(text, () => {
 					if (animationTalk != null)
 						Graphics.PlayAnimation(animationDefault);
 				});
 			}
+			
+			// Fire the talk event
+			GameControl.FireEvent(this, "talk");
 		}
 		
 		//-----------------------------------------------------------------------------
