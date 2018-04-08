@@ -11,6 +11,7 @@ using ZeldaEditor.Control;
 using System.Windows.Threading;
 using ZeldaEditor.Util;
 using ZeldaOracle.Common.Util;
+using FrameworkElement = System.Windows.FrameworkElement;
 
 namespace ZeldaEditor.WinForms {
 
@@ -44,10 +45,9 @@ namespace ZeldaEditor.WinForms {
 	}
 
 	/// <summary>A display of tiles where a tile can be selected.</summary>
-	public class TilesetDisplay : GraphicsDeviceControl {
+	public class TilesetDisplay : TimersGraphicsDeviceControl {
 		
 		private EditorControl editorControl;
-		private StoppableTimer dispatcherTimer;
 		private TileDisplaySource source;
 		private Zone zone;
 		private int spacing;
@@ -60,6 +60,8 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+
+		public TilesetDisplay(FrameworkElement element) : base(element) { }
 
 		protected override void Initialize() {
 			zone = null;
@@ -78,10 +80,8 @@ namespace ZeldaEditor.WinForms {
 			ResizeRedraw = true;
 
 			// Start the timer to refresh the panel
-			dispatcherTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate {
+			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+				() => {
 					if (editorControl.IsActive)
 						TimerUpdate();
 				});
@@ -240,7 +240,6 @@ namespace ZeldaEditor.WinForms {
 			//g.SetRenderTarget(GameData.RenderTargetGame);
 			GameData.SHADER_PALETTE.TilePalette = Zone.Palette;
 			GameData.SHADER_PALETTE.ApplyParameters();
-			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.Level = editorControl.Level;
 			TileDataDrawing.Room = null;
 			TileDataDrawing.Extras = false;

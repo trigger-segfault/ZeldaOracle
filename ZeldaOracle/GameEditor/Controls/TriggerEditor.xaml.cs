@@ -30,8 +30,7 @@ namespace ZeldaEditor.Controls {
 	/// Interaction logic for TriggerEditor.xaml
 	/// </summary>
 	public partial class TriggerEditor : UserControl {
-
-		private ScriptTextEditor scriptEditor;
+		
 		private ObservableCollection<Trigger> triggers;
 		private ObservableCollection<TriggerEvent> eventTypes;
 		private ITriggerObject triggerObject;
@@ -50,20 +49,18 @@ namespace ZeldaEditor.Controls {
 			eventTypes = new ObservableCollection<TriggerEvent>();
 			comboBoxEventType.ItemsSource = eventTypes;
 			
-			// Create the script text editor
-			scriptEditor = new ScriptTextEditor();
-			Grid.SetRow(scriptEditor, 1);
-			panelEditTrigger.Children.Add(scriptEditor);
+			// Setup the script text editor
 			scriptEditor.ScriptCodeChanged += OnScriptTextChanged;
+			scriptEditor.CaretPositionChanged += OnCaretPositionChanged;
 
 			SetObject(null);
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Trigger Management
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Set the object to show properties for.</summary>
 		public void SetObject(ITriggerObject triggerObject) {
 			this.triggerObject = triggerObject;
@@ -230,6 +227,20 @@ namespace ZeldaEditor.Controls {
 				SelectedTrigger.Script.Code = scriptEditor.ScriptCode;
 				//needsRecompiling = true;
 				//CommandManager.InvalidateRequerySuggested();
+			}
+		}
+
+		private void OnCaretPositionChanged(object sender, EventArgs e) {
+			var caret = scriptEditor.CaretPosition;
+			if (caret.Line == -1 || !IsTriggerSelected) {
+				statusLine.Content = "Line -";
+				statusColumn.Content = "Col -";
+				statusChar.Content = "Char -";
+			}
+			else {
+				statusLine.Content = "Line " + caret.Line;
+				statusColumn.Content = "Col " + caret.VisualColumn;
+				statusChar.Content = "Char " + caret.Column;
 			}
 		}
 

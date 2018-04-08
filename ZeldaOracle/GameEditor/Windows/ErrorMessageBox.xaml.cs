@@ -8,10 +8,12 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ZeldaEditor.Controls;
+using ZeldaEditor.Util;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>Shows an error that occured in the program.</summary>
-	public partial class ErrorMessageBox : Window {
+	public partial class ErrorMessageBox : TimersWindow {
 
 		//-----------------------------------------------------------------------------
 		// Members
@@ -24,7 +26,7 @@ namespace ZeldaEditor.Windows {
 		/// <summary>True if viewing the full exception.</summary>
 		private bool viewingFull = false;
 		/// <summary>The timer for changing the copy button back to its original text.</summary>
-		private DispatcherTimer copyTimer;
+		private ScheduledEvent copyTimer;
 		/// <summary>The text of the copy to clipboard button.</summary>
 		private readonly string copyText;
 
@@ -52,13 +54,6 @@ namespace ZeldaEditor.Windows {
 				this.buttonExit.Visibility = Visibility.Collapsed;
 				this.buttonContinue.IsDefault = true;
 			}
-
-			this.copyTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(1),
-				DispatcherPriority.ApplicationIdle,
-				OnCopyTimer,
-				Dispatcher);
-			this.copyTimer.Stop();
 		}
 
 
@@ -74,25 +69,18 @@ namespace ZeldaEditor.Windows {
 			}
 		}
 
-		private void OnWindowClosing(object sender, CancelEventArgs e) {
-			copyTimer.Stop();
-		}
-
 		private void OnExit(object sender, RoutedEventArgs e) {
 			DialogResult = true;
 			Close();
 		}
 
-		private void OnCopyTimer(object sender, EventArgs e) {
-			buttonCopy.Content = copyText;
-			copyTimer.Stop();
-		}
-
 		private void OnCopyToClipboard(object sender, RoutedEventArgs e) {
 			Clipboard.SetText(exception != null ? exception.ToString() : exceptionObject.ToString());
 			buttonCopy.Content = "Exception Copied!";
-			copyTimer.Stop();
-			copyTimer.Start();
+			copyTimer?.Cancel();
+			copyTimer = ScheduledEvents.Start(1, TimerPriority.Low, () => {
+				buttonCopy.Content = copyText;
+			});
 		}
 
 		private void OnSeeFullException(object sender, RoutedEventArgs e) {

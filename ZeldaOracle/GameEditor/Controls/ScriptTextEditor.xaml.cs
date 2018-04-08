@@ -23,12 +23,13 @@ using ZeldaEditor.Util;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaEditor.Themes;
 using Trigger = ZeldaOracle.Common.Scripting.Trigger;
+using System.ComponentModel;
 
 namespace ZeldaEditor.Controls {
 	/// <summary>
 	/// Interaction logic for ScriptTextEditor.xaml
 	/// </summary>
-	public partial class ScriptTextEditor : UserControl {
+	public partial class ScriptTextEditor : TimersUserControl {
 
 		private static ScriptRoslynHost host;
 		private Trigger trigger;
@@ -37,7 +38,6 @@ namespace ZeldaEditor.Controls {
 		private FoldingManager foldingManager;
 		private ScriptFoldingStrategy foldingStrategy;
 		private DocumentId documentID;
-		private StoppableTimer timer;
 		private bool needsFoldingUpdate;
 		private bool suppressEvents;
 
@@ -61,7 +61,10 @@ namespace ZeldaEditor.Controls {
 			editor.TextArea.SelectionBorder = null;
 			editor.FontFamily = new FontFamily("Consolas");
 			editor.FontSize = 12.667;
-			
+
+			if (DesignerProperties.GetIsInDesignMode(this))
+				return;
+
 			// Setup the text folding manager
 			foldingManager = FoldingManager.Install(editor.TextArea);
 			foldingStrategy = new ScriptFoldingStrategy();
@@ -80,10 +83,7 @@ namespace ZeldaEditor.Controls {
 			DataObject.AddPastingHandler(editor, OnPasting);
 			documentID = null;
 
-			timer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(500),
-				DispatcherPriority.ApplicationIdle,
-				OnTimerUpdate);
+			ContinuousEvents.Start(0.5, TimerPriority.Low, OnTimerUpdate);
 			
 			editor.IsModified = false;
 			
@@ -104,10 +104,19 @@ namespace ZeldaEditor.Controls {
 		/// <summary>Occurs when the ScriptCode property changes.</summary>
 		public event EventHandler ScriptCodeChanged;
 
+		/// <summary>Occurs when the caret position changes.</summary>
+		public event EventHandler CaretPositionChanged;
+
 		/// <summary>Raises the <see cref="ScriptCodeChanged"/> event.</summary>
 		protected virtual void OnScriptCodeChanged(EventArgs e) {
 			if (!suppressEvents)
 				ScriptCodeChanged?.Invoke(this, e);
+		}
+
+		/// <summary>Raises the <see cref="ScriptCodeChanged"/> event.</summary>
+		protected virtual void OnCaretPositionChanged(EventArgs e) {
+			if (!suppressEvents)
+				CaretPositionChanged?.Invoke(this, e);
 		}
 
 		/// <summary>Call this to update the name of the script method.</summary>
@@ -157,7 +166,6 @@ namespace ZeldaEditor.Controls {
 				host.CloseDocument(documentID);
 				documentID = null;
 			}
-			timer.Stop();
 		}
 
 		private void OnPasting(object sender, DataObjectPastingEventArgs e) {
@@ -196,10 +204,13 @@ namespace ZeldaEditor.Controls {
 
 		private void OnCaretPositionChanged(object sender, EventArgs e) {
 			int length = editor.Text.Length;
+			suppressEvents = true;
 			if (editor.CaretOffset == 0 && scriptInfo.MethodStart != 0)
 				editor.CaretOffset = scriptInfo.MethodStart;
 			else if (editor.CaretOffset == length && scriptInfo.EndLength != 0)
 				editor.CaretOffset -= scriptInfo.EndLength;
+			suppressEvents = false;
+			OnCaretPositionChanged(e);
 		}
 
 
@@ -284,6 +295,7 @@ namespace ZeldaEditor.Controls {
 			editor.CaretOffset = scriptInfo.ScriptStart;
 			editor.IsModified = false;
 			suppressEvents = false;
+			OnCaretPositionChanged(EventArgs.Empty);
 		}
 		
 		/// <summary>Calculates the line, column, and character of the caret position.

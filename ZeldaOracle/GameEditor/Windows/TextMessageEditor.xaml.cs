@@ -54,7 +54,7 @@ namespace ZeldaEditor.Windows {
 
 			// Create the text display
 			string displayMessage = FormatCodes.EscapeMessage(message);
-			textDisplay                = new TextMessageDisplay(displayMessage);
+			textDisplay                = new TextMessageDisplay(this, displayMessage);
 			textDisplay.EditorControl  = editorControl;
 			textDisplay.Name           = "textDisplay";
 			textDisplay.Dock           = System.Windows.Forms.DockStyle.Fill;

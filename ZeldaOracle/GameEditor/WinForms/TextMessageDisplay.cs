@@ -15,9 +15,10 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Tiles;
+using FrameworkElement = System.Windows.FrameworkElement;
 
 namespace ZeldaEditor.WinForms {
-	public class TextMessageDisplay : GraphicsDeviceControl {
+	public class TextMessageDisplay : TimersGraphicsDeviceControl {
 
 		// The states the text reader can be in.
 		private enum TextReaderState {
@@ -29,8 +30,6 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		private const int MaxWidth = 144;
-		
-		private StoppableTimer dispatcherTimer;
 		
 		// The wrapped and formatted lines.
 		private WrappedLetterString wrappedString;
@@ -72,7 +71,9 @@ namespace ZeldaEditor.WinForms {
 			}
 		}
 
-		public TextMessageDisplay(string message) {
+		public TextMessageDisplay(FrameworkElement element, string message)
+			: base(element)
+		{
 			this.wrappedString      = GameData.FONT_LARGE.WrapString(message, 128);
 			this.enterPressed       = false;
 
@@ -144,33 +145,17 @@ namespace ZeldaEditor.WinForms {
 			this.ResizeRedraw = true;
 
 			// Start the timer to refresh the panel.
-			dispatcherTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate {
+			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+				() => {
 					if (editorControl.IsActive)
 						Invalidate();
 				});
-			/*dispatcherTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate {
-					if (editorControl.IsActive)
-						Invalidate();
-				},
-				System.Windows.Application.Current.Dispatcher);*/
 			watch.Start();
 		}
 
 		public void EnterPressed() {
 			enterPressed = true;
 		}
-
-		/*private void OnKeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-			if (e.KeyCode == Keys.Enter && Focused) {
-				enterPressed = true;
-			}
-		}*/
 
 
 		//-----------------------------------------------------------------------------

@@ -316,6 +316,9 @@
     <Compile Include="Controls\HoverImageButton.cs" />
     <Compile Include="Controls\ImageMenuItem.cs" />
     <Compile Include="Controls\ImageTreeViewItem.cs" />
+    <Compile Include="Controls\ObjectPreview.xaml.cs">
+      <DependentUpon>ObjectPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ObjectTileEditor.xaml.cs">
       <DependentUpon>ObjectTileEditor.xaml</DependentUpon>
     </Compile>
@@ -329,6 +332,8 @@
     <Compile Include="Controls\ScriptTextEditor.xaml.cs">
       <DependentUpon>ScriptTextEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TimersUserControl.cs" />
+    <Compile Include="Controls\TimersWindow.cs" />
     <Compile Include="Controls\TilePathCommandItem.xaml.cs">
       <DependentUpon>TilePathCommandItem.xaml</DependentUpon>
     </Compile>
@@ -399,8 +404,11 @@
     <Compile Include="Undo\ActionRenameID.cs" />
     <Compile Include="Undo\UndoHistory.cs" />
     <Compile Include="Util\AlphanumComparatorFast.cs" />
+    <Compile Include="Util\ContinuousEvent.cs" />
+    <Compile Include="Util\ScheduledEvent.cs" />
+    <Compile Include="Util\TimerEvents.cs" />
     <Compile Include="Util\WpfHelper.cs" />
-    <Compile Include="Util\StoppableTimer.cs" />
+    <None Include="Util\StoppableTimer.cs" />
     <Compile Include="Windows\AddNewAreaWindow.xaml.cs">
       <DependentUpon>AddNewAreaWindow.xaml</DependentUpon>
     </Compile>
@@ -490,8 +498,15 @@
     </Compile>
     <Compile Include="WinForms\GraphicsDeviceService.cs" />
     <Compile Include="WinForms\ServiceContainer.cs" />
+    <Compile Include="WinForms\TimersGraphicsDeviceControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Themes\TextMessageHighlighting.xshd" />
     <EmbeddedResource Include="Themes\CSharpMultilineHighlighting.xshd" />
+    <Page Include="Controls\ObjectPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ObjectTileEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -608,7 +623,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

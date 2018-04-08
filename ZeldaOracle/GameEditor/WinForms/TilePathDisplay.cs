@@ -16,9 +16,10 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
+using FrameworkElement = System.Windows.FrameworkElement;
 
 namespace ZeldaEditor.WinForms {
-	public class TilePathDisplay : GraphicsDeviceControl {
+	public class TilePathDisplay : TimersGraphicsDeviceControl {
 
 		//-----------------------------------------------------------------------------
 		// Classes
@@ -91,8 +92,6 @@ namespace ZeldaEditor.WinForms {
 
 		public readonly Color FadeAboveColor = new Color(200, 200, 200, 100);
 		public readonly Color FadeBelowColor = new Color(200, 200, 200, 150);
-		
-		private StoppableTimer      dispatcherTimer;
 
 		private EditorControl    editorControl;
 
@@ -115,7 +114,9 @@ namespace ZeldaEditor.WinForms {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public TilePathDisplay(Room room, TileDataInstance tile) {
+		public TilePathDisplay(FrameworkElement element, Room room,
+			TileDataInstance tile) : base(element)
+		{
 			this.room = room;
 			this.tile = tile;
 			if (tile != null)
@@ -141,11 +142,9 @@ namespace ZeldaEditor.WinForms {
 		protected override void Initialize() {
 			
 			this.ResizeRedraw = true;
-			
-			dispatcherTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate {
+
+			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+				() => {
 					if (editorControl.IsActive)
 						Invalidate();
 				});
@@ -223,7 +222,6 @@ namespace ZeldaEditor.WinForms {
 			Update(Math.Min(60, currentTicks - lastTicks));
 			lastTicks = currentTicks;
 			
-			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.PlaybackTime = currentTicks;
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.Level = room.Level;

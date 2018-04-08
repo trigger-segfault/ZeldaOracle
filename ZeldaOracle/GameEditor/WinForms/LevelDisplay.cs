@@ -32,10 +32,11 @@ using SurfaceFormat = Microsoft.Xna.Framework.Graphics.SurfaceFormat;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaEditor.Util;
 using ZeldaOracle.Common.Util;
+using FrameworkElement = System.Windows.FrameworkElement;
 
 namespace ZeldaEditor.WinForms {
 
-	public class LevelDisplay : GraphicsDeviceControl {
+	public class LevelDisplay : TimersGraphicsDeviceControl {
 
 		public readonly Color NormalColor = Color.White;
 		public readonly Color FadeAboveColor = new Color(200, 200, 200, 100);
@@ -49,8 +50,6 @@ namespace ZeldaEditor.WinForms {
 		private Point2I			highlightedTile;
 		private bool			showCursor;
 		private Rectangle2I		selectionBox;
-		
-		private StoppableTimer	dispatcherTimer;
 
 		// Frame Rate:
 		/// <summary>The total number of frames passed since the last frame rate check.</summary>
@@ -61,11 +60,13 @@ namespace ZeldaEditor.WinForms {
 		private double fps;
 
 		private Stopwatch fpsWatch;
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+
+		public LevelDisplay(FrameworkElement element) : base(element) { }
 
 		protected override void Initialize() {
 				
@@ -92,10 +93,8 @@ namespace ZeldaEditor.WinForms {
 			highlightedRoom = -Point2I.One;
 			highlightedTile = -Point2I.One;
 
-			dispatcherTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate {
+			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+				() => {
 					if (editorControl.IsActive) {
 						if (editorControl.IsLevelOpen)
 							editorControl.CurrentTool.Update();
@@ -598,7 +597,6 @@ namespace ZeldaEditor.WinForms {
 			watch.Start();
 			editorControl.UpdateTicks();
 			UpdateFrameRate();
-			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.PlaybackTime = editorControl.Ticks;
 			TileDataDrawing.Extras = editorControl.ShowRewards;
 			TileDataDrawing.Level = Level;

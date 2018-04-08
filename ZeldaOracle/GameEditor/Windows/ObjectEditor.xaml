@@ -10,7 +10,7 @@
         xmlns:cmd="clr-namespace:ZeldaEditor"
         xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         mc:Ignorable="d"
-        Title="Object Editor" Height="494" Width="768" Icon="/Resources/Icons/Script.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Loaded="OnLoaded">
+        Title="Object Editor" Height="494" Width="768" Icon="/Resources/Icons/Script.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Loaded="OnLoaded" Closing="OnClosing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -21,18 +21,10 @@
     <DockPanel x:Name="dockPanel">
         <local:AirspaceGridSplitter x:Name="airspaceGridSplitter"/>
         <ToolBar DockPanel.Dock="Top">
-            <Grid Width="16" Height="16">
-                <WindowsFormsHost x:Name="hostTilePreview">
-
-                </WindowsFormsHost>
-                <ContentControl x:Name="objectPreviewImage"  ClipToBounds="True">
-                    <Image Stretch="None" Source="/Resources/Icons/Level.png" />
-                </ContentControl>
-            </Grid>
-            <TextBlock Text="Object" Name="objectPreviewName"/>
+            <local:ObjectPreview x:Name="objectPreview" VerticalAlignment="Center" PreviewBackground="#FFFFFBFF"/>
             <Separator/>
         </ToolBar>
-        <TabControl DockPanel.Dock="Bottom">
+        <TabControl DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" Padding="0,4,0,0">
             <TabItem Header="Triggers">
                 <local:TriggerEditor x:Name="triggerEditor"/>
             </TabItem>

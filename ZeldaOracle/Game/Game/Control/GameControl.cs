@@ -92,10 +92,18 @@ namespace ZeldaOracle.Game.Control {
 			this.world = world;
 
 			if (recompile) {
-				//throw new NotImplementedException();
-				//ScriptCompiler compiler = new ScriptCompiler();
-				//compiler.Compile(
-				//world.ScriptManager.CompileAndWriteAssembly(null);
+				ScriptCodeGenerator generator = new ScriptCodeGenerator(world);
+				ScriptCompiler compiler = new ScriptCompiler();
+				var code = generator.GenerateCode(false);
+				var result = compiler.Compile(code.Code);
+				if (result.Succeeded) {
+					// Update info about scripts from the generated code
+					foreach (var info in code.ScriptInfo) {
+						info.Key.MethodName = info.Value.MethodName;
+						info.Key.OffsetInCode = info.Value.Offset;
+					}
+				}
+				world.ScriptManager.RawAssembly = result.RawAssembly;
 			}
 			scriptRunner.OnLoadWorld(world);
 			world.AssignMonsterIDs();
