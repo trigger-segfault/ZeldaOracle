@@ -34,10 +34,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 			// Spawn NPC entity.
 			NPC npc = new NPC();
-			npc.Properties			= properties;
-			npc.Events				= Events;
-			npc.Vars				= Variables;
-			npc.Triggers			= Triggers;
+			npc.Properties	= properties;
+			npc.Events		= Events;
+			npc.Vars		= Variables;
+			npc.Triggers	= Triggers;
 			RoomControl.SpawnEntity(npc, position - npc.Graphics.DrawOffset);
 		}
 

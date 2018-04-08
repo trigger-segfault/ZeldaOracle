@@ -102,7 +102,8 @@ namespace ZeldaEditor.Controls {
 		private void RefreshVariableList() {
 			if (variables != null) {
 				List<VariableItem> items = new List<VariableItem>();
-				foreach (Variable variable in variables)
+				// TODO: Show built-in variables as read-only list items
+				foreach (Variable variable in variables.GetCustomVariables())
 					items.Add(new VariableItem(variable));
 				listView.ItemsSource = items;
 			}
