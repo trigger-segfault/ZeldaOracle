@@ -1,4 +1,4 @@
-﻿<Window x:Class="ZeldaEditor.EditorWindow"
+﻿<local:TimersWindow x:Class="ZeldaEditor.EditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -221,20 +221,9 @@
                     </Border>
                     <local:AirspaceGridSplitter Grid.Row="1" HorizontalAlignment="Stretch" ResizeDirection="Rows" ShowsPreview="True"/>
                     <props:ZeldaPropertyGrid x:Name="propertyGrid" IsVirtualizing="True" Grid.Row="2" BorderThickness="1,1,0,1" BorderBrush="#FF828790" ShowTitle="False" ShowSearchBox="False" VirtualizingPanel.IsVirtualizing="True" UseDummyInstances="True"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" Margin="116,9,0,0">
-                        <Label Content="Editing:" Padding="0,0,5,0" FontWeight="Bold" Visibility="Collapsed"/>
-                        <Grid Width="16" Height="16">
-                            <WindowsFormsHost x:Name="hostTilePreview">
-                                
-                            </WindowsFormsHost>
-                            <ContentControl x:Name="propertyPreviewImage"  ClipToBounds="True">
-                                <Image Stretch="None" Source="Resources/Icons/Level.png" />
-                            </ContentControl>
-                        </Grid>
-                        <TextBlock x:Name="propertyPreviewName" Text="Level" Padding="5,0"/>
-                    </StackPanel>
+                    <local:ObjectPreview x:Name="objectPreview" VerticalAlignment="Top" Grid.Row="2" Margin="116,9,0,0" PreviewBackground="#FFBCC7D8"/>
                 </Grid>
             </Grid>
         </Grid>
     </DockPanel>
-</Window>
+</local:TimersWindow>

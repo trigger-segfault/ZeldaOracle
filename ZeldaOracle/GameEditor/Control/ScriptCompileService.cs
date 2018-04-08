@@ -122,14 +122,16 @@ namespace ZeldaEditor.Control {
 
 		public void UpdateScriptCompiling() {
 			// Check if any compile task have completed
-			int taskCount = compileTasks.Count;
-			for (int i = 0; i < taskCount; i++) {
+			//int taskCount = compileTasks.Count;
+			for (int i = 0; i < compileTasks.Count; i++) {
 				CompileTask task = compileTasks[i];
 				if (task.IsCancelled) {
 					compileTasks.RemoveAt(i);
+					i--;
 				}
 				else if (task.Task != null &&  task.Task.IsCompleted) {
 					compileTasks.RemoveAt(i);
+					i--;
 					task.Complete();
 				}
 			}

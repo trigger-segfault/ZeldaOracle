@@ -29,11 +29,10 @@ namespace ZeldaEditor {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class EditorWindow : Window {
+	public partial class EditorWindow : TimersWindow {
 
 		private LevelDisplay		levelDisplay;
 		private TilesetPalette		tilesetPalette;
-		private TilePreview         tilePreview;
 		private EditorControl		editorControl;
 
 		private ToggleButton[]      toolButtons;
@@ -43,8 +42,6 @@ namespace ZeldaEditor {
 		private ObjectEditor		objectWindow;
 
 		private bool suppressEvents = false;
-
-		private StoppableTimer updateTimer;
 
 
 		//-----------------------------------------------------------------------------
@@ -72,7 +69,7 @@ namespace ZeldaEditor {
 			//Closing += OnWindowClosing;
 
 			// Create the level display
-			levelDisplay					= new LevelDisplay();
+			levelDisplay					= new LevelDisplay(this);
 			levelDisplay.EditorControl		= editorControl;
 			levelDisplay.Name				= "levelDisplay";
 			levelDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;
@@ -86,13 +83,6 @@ namespace ZeldaEditor {
 			tilesetPalette.SelectionChanged += (object sender, EventArgs args) => {
 				editorControl.SelectedTileData = tilesetPalette.SelectedTileData;
 			};
-
-			// Create the tile preview
-			tilePreview						= new TilePreview();
-			tilePreview.EditorControl		= editorControl;
-			tilePreview.Name				= "tilePreview";
-			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
-			hostTilePreview.Child			= tilePreview;
 
 			dummyHost.Child = new DummyGraphicsDeviceControl();
 
@@ -116,10 +106,7 @@ namespace ZeldaEditor {
 
 			suppressEvents = true;
 
-			updateTimer = StoppableTimer.StartNew(
-				TimeSpan.FromSeconds(0.4),
-				DispatcherPriority.ApplicationIdle,
-				Update);
+			ContinuousEvents.Start(0.4, TimerPriority.Low, Update);
 
 			Application.Current.Activated += OnApplicationActivated;
 			Application.Current.Deactivated += OnApplicationDeactivated;
@@ -225,12 +212,10 @@ namespace ZeldaEditor {
 		/// <summary>Open the Object Properties window for the given object.</summary>
 		public void OpenObjectEditor(object obj) {
 			if (objectWindow == null) {
-				objectWindow = new ObjectEditor(editorControl, obj);
-				objectWindow.Owner = this;
-				objectWindow.Closed += delegate(object unused1, EventArgs unused2) {
+				objectWindow = ObjectEditor.Show(this, editorControl, obj);
+				objectWindow.Closed += (o,e) => {
 					objectWindow = null;
 				};
-				objectWindow.Show();
 			}
 			else {
 				objectWindow.Focus();
@@ -334,51 +319,7 @@ namespace ZeldaEditor {
 			if (objectWindow != null)
 				objectWindow.SetObject(obj);
 
-			System.Windows.Controls.Image image =
-				(System.Windows.Controls.Image) propertyPreviewImage.Content;
-			image.Stretch = Stretch.None;
-			image.HorizontalAlignment = HorizontalAlignment.Left;
-			image.VerticalAlignment = VerticalAlignment.Top;
-			// The scheduled events below prevent white flickering
-			// when transitioning from WinForms to Wpf images.
-			if (obj is Room) {
-				Room room = obj as Room;
-				image.Source = EditorImages.Room;
-				propertyPreviewName.Text = "Room[" + room.Location.X + ", " + room.Location.Y + "]";
-				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
-			}
-			else if (obj is Level) {
-				image.Source = EditorImages.Level;
-				propertyPreviewName.Text = (obj as Level).ID;
-				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
-			}
-			else if (obj is Area) {
-				image.Source = EditorImages.Area;
-				propertyPreviewName.Text = (obj as Area).ID;
-				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
-			}
-			else if (obj is World) {
-				image.Source = EditorImages.World;
-				propertyPreviewName.Text = (obj as World).ID;
-				EditorControl.ScheduleEvent(0.02, true, HideTilePreview);
-			}
-			else if (obj is BaseTileDataInstance) {
-				hostTilePreview.Visibility = Visibility.Visible;
-				BaseTileDataInstance tile = obj as BaseTileDataInstance;
-				tilePreview.UpdateTile(tile);
-				image.Source = null;
-				propertyPreviewName.Text = tile.BaseData.ResourceName;
-			}
-			else {
-				image.Source = null;
-				propertyPreviewName.Text = "";
-				HideTilePreview();
-			}
-		}
-
-		private void HideTilePreview() {
-			hostTilePreview.Visibility = Visibility.Hidden;
-			tilePreview.UpdateTile(null);
+			objectPreview.PreviewObject = obj;
 		}
 
 		private void OnViewPathsCommands(object sender, ExecutedRoutedEventArgs e) {
@@ -594,6 +535,7 @@ namespace ZeldaEditor {
 				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
+
 		private void OnShiftLevelCommand(object sender, ExecutedRoutedEventArgs e) {
 			Level level = (e.Parameter as Level ?? editorControl.Level);
 			Point2I distance;
@@ -670,7 +612,6 @@ namespace ZeldaEditor {
 			editorControl.Redo();
 		}
 		
-
 		private void OnDebugConsole(object sender, RoutedEventArgs e) {
 			editorControl.DebugConsole = menuItemDebugConsole.IsChecked;
 		}

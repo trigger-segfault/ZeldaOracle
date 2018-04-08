@@ -58,7 +58,7 @@ namespace ZeldaEditor.Windows {
 
 			TileDataInstance tile =
 				(TileDataInstance) properties.PropertyObject;
-			pathDisplay = new TilePathDisplay(tile.Room, tile);
+			pathDisplay = new TilePathDisplay(this, tile.Room, tile);
 			pathDisplay.EditorControl = editorControl;
 			host.Width = pathDisplay.Width;
 			host.Height = pathDisplay.Height;
@@ -89,7 +89,7 @@ namespace ZeldaEditor.Windows {
 			// Remove excess window height
 			SizeToContent = SizeToContent.WidthAndHeight;
 
-			pathDisplay = new TilePathDisplay(room, null);
+			pathDisplay = new TilePathDisplay(this, room, null);
 			pathDisplay.EditorControl = editorControl;
 			host.Width = pathDisplay.Width;
 			host.Height = pathDisplay.Height;

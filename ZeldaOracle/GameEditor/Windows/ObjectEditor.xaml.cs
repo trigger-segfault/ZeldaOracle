@@ -14,7 +14,6 @@ namespace ZeldaEditor.Windows {
 
 		// TriggerEditor triggerEditor
 		private EditorControl editorControl;
-		private TilePreview tilePreview;
 		/// <summary>The object to edit properties for.</summary>
 		private object obj;
 		
@@ -23,18 +22,13 @@ namespace ZeldaEditor.Windows {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public ObjectEditor(EditorControl editorControl, object obj) {
+		private ObjectEditor(EditorControl editorControl, object obj) {
 			InitializeComponent();
 			
 			this.editorControl = editorControl;
 			this.obj = obj;
-			
-			// Create the tile preview
-			tilePreview						= new TilePreview();
-			tilePreview.EditorControl		= editorControl;
-			tilePreview.Name				= "tilePreview";
-			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
-			hostTilePreview.Child			= tilePreview;
+			// Set this before loading
+			objectPreview.PreviewObject = obj;
 		}
 		
 		public static ObjectEditor Show(Window owner, EditorControl editorControl,
@@ -55,36 +49,7 @@ namespace ZeldaEditor.Windows {
 		public void SetObject(object obj) {
 			this.obj = obj;
 			triggerEditor.SetObject(obj as ITriggerObject);
-
-			// Set the object preview image and name
-			objectPreviewName.Text = "(none)";
-			if (obj is BaseTileDataInstance) {
-				objectPreviewName.Text =
-					((BaseTileDataInstance) obj).BaseData.ResourceName;
-				if (obj is TileDataInstance)
-					Title = "Tile Properties";
-				else
-					Title = "Action Tile Properties";
-			}
-			else if (obj is Area) {
-				Title = "Area Properties";
-				objectPreviewName.Text = ((Area) obj).ID;
-			}
-			else if (obj is Room) {
-				Title = "Room Properties";
-				objectPreviewName.Text = "Room";
-				if (!string.IsNullOrWhiteSpace(((Room) obj).ID))
-					objectPreviewName.Text += " - " + ((Room) obj).ID;
-			}
-			else if (obj is Level) {
-				Title = "Level Properties";
-				objectPreviewName.Text = ((Level) obj).ID;
-			}
-			else if (obj is World) {
-				Title = "World Properties";
-				objectPreviewName.Text = "World";
-			}
-			tilePreview.UpdateTile(obj as BaseTileDataInstance);
+			objectPreview.PreviewObject = obj;
 		}
 
 
@@ -97,12 +62,11 @@ namespace ZeldaEditor.Windows {
 		//-----------------------------------------------------------------------------
 
 		private void OnLoaded(object sender, RoutedEventArgs e) {
-			editorControl.ScheduleEvent(0.01, delegate {
-				// Don't fire if the window has been closed
-				if (IsLoaded)
-					SetObject(obj);
-			});
+			SetObject(obj);
 		}
 
+		private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) {
+			editorControl.NeedsRecompiling = true;
+		}
 	}
 }

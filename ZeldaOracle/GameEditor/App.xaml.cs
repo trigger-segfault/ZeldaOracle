@@ -95,14 +95,17 @@ namespace ZeldaEditor {
 
 		/// <summary>The helper method for showing an error message.</summary>
 		private void ShowErrorMessageBox(object ex) {
+			// Ignore these thrown by the debugger
+			if (ex is TaskCanceledException)
+				return;
 			if (ex != lastException && !exceptionOpen) {
-				StoppableTimer.StopAll();
+				TimerEvents.PauseAll();
 				lastException = ex;
 				exceptionOpen = true;
 				if (ErrorMessageBox.Show(ex))
 					Environment.Exit(0);
 				exceptionOpen = false;
-				StoppableTimer.ResumeAll();
+				TimerEvents.ResumeAll();
 			}
 		}
 	}

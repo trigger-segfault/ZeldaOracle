@@ -14,7 +14,7 @@ namespace ZeldaEditor.Windows {
 	/// <summary>
 	/// Interaction logic for ScriptEditor.xaml
 	/// </summary>
-	public partial class ScriptEditor : Window {
+	public partial class ScriptEditor : TimersWindow {
 
 		private EditorControl               editorControl;
 		private ScriptTextEditor			editor;
@@ -26,7 +26,6 @@ namespace ZeldaEditor.Windows {
 		private ScriptCompileError          displayedError;
 		private string                      previousName;       // The name of the script when the editor was opened.
 		private string                      previousCode;       // The code of the script when the editor was opened.
-		private StoppableTimer				timer;
 
 
 		//-----------------------------------------------------------------------------
@@ -44,7 +43,6 @@ namespace ZeldaEditor.Windows {
 			dockPanel.Children.Add(editor);
 
 			Loaded += OnLoaded;
-			Unloaded += OnUnloaded;
 
 			this.script = script;
 			this.editorControl = editorControl;
@@ -53,8 +51,6 @@ namespace ZeldaEditor.Windows {
 
 			previousName = script.ID;
 			previousCode = script.Code;
-			//autoCompile = true;
-			//compileOnClose = true;
 			needsRecompiling = false;
 			compileTask = null;
 		}
@@ -75,28 +71,16 @@ namespace ZeldaEditor.Windows {
 				textBoxName.Text = script.ID;
 			}
 
-			timer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(500),
-				DispatcherPriority.ApplicationIdle,
-				OnTimerUpdate);
-
-			editorControl.ScheduleEvent(0.01, delegate {
-				// Don't fire if the window has been closed
-				if (IsLoaded) {
-					editor.Script = script;
-					needsRecompiling = true;
-				}
-			});
-			editor.ScriptCodeChanged += OnTextChanged;
+			ContinuousEvents.Start(0.5, TimerPriority.Low, OnTimerUpdate);
 			
+			editor.Script = script;
+			editor.ScriptCodeChanged += OnTextChanged;
+			needsRecompiling = true;
+
 			UpdateStatusBar();
 			UpdateDisplayedError();
 
 			editor.Focus();
-		}
-
-		private void OnUnloaded(object sender, RoutedEventArgs e) {
-			timer.Stop();
 		}
 
 		/// <summary>Checks periodically if we need to recompile.</summary>
@@ -163,7 +147,6 @@ namespace ZeldaEditor.Windows {
 			}
 
 			if (DialogResult.HasValue && DialogResult.Value) {
-				timer.Stop();
 				editorControl.EditorWindow.WorldTreeView.RefreshScripts(true, false);
 				editorControl.NeedsRecompiling = true;
 			}

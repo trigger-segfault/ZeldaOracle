@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using ZeldaEditor.Control;
+using ZeldaEditor.Controls;
 using ZeldaEditor.Util;
 using ZeldaOracle.Common.Scripting;
 
@@ -27,7 +28,7 @@ namespace ZeldaEditor.Windows {
 
 	/// <summary>A window for renaming properties or events in the world that have
 	/// been modified as the game engine develops.</summary>
-	public partial class RefactorWindow : Window {
+	public partial class RefactorWindow : TimersWindow {
 
 		//-----------------------------------------------------------------------------
 		// Internal Classes
@@ -57,7 +58,6 @@ namespace ZeldaEditor.Windows {
 		private EditorControl editorControl;
 		private Task<int> searchTask;
 		private CancellationTokenSource cancellationToken;
-		private StoppableTimer updateTimer;
 		private bool needsToSearch;
 
 
@@ -73,13 +73,7 @@ namespace ZeldaEditor.Windows {
 			this.editorControl = editorControl;
 			this.needsToSearch = true;
 			this.refactorType = refactorType;
-			this.updateTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(100),
-				DispatcherPriority.ApplicationIdle,
-				UpdateSearch);
-			/*this.updateTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(100),
-				DispatcherPriority.ApplicationIdle, delegate { UpdateSearch(); },
-				Application.Current.Dispatcher);*/
+			ContinuousEvents.Start(0.1, TimerPriority.Low, UpdateSearch);
 
 			textBoxFind.Focus();
 

@@ -22,50 +22,42 @@ namespace ZeldaEditor.WinForms {
 
 	public class TilePreview : GraphicsDeviceControl {
 		
-		private EditorControl editorControl;
-
 		private BaseTileDataInstance tile;
+		private Color background;
+		private bool initialized;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		protected override void Initialize() {
-			this.ResizeRedraw = true;
+		public TilePreview() {
+			initialized = false;
 			tile = null;
+			background = Color.White;
+		}
 
+		protected override void Initialize() {
+			initialized = true;
+			ResizeRedraw = true;
 			ClientSize = new Size(16, 16);
 		}
-		
-
-		//-----------------------------------------------------------------------------
-		// Updating
-		//-----------------------------------------------------------------------------
-		
-		public void UpdateTile(BaseTileDataInstance tile) {
-			if (this.tile != tile) {
-				this.tile = tile;
-				Invalidate();
-			}
-		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overriden methods
+		// Override Methods
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
 			if (!Resources.IsInitialized) return;
-			if (!editorControl.IsInitialized)
-				return;
+
 			Graphics2D g = new Graphics2D();
-			g.Clear(Color.White);
+			g.Clear(background);
 			if (tile == null)
 				return;
 
 			GameData.SHADER_PALETTE.TilePalette = tile.Room.Zone.Palette;
 			GameData.SHADER_PALETTE.ApplyParameters();
-			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.Level = tile.Room.Level;
 			TileDataDrawing.Room = tile.Room;
 			TileDataDrawing.Extras = false;
@@ -82,10 +74,29 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Gets or sets the background color of the preview.</summary>
+		public Color Background {
+			get { return background; }
+			set {
+				if (value != background) {
+					background = value;
+					if (initialized)
+						Invalidate();
+				}
+			}
+		}
 
-		public EditorControl EditorControl {
-			get { return editorControl; }
-			set { editorControl = value; }
+		/// <summary>Gets or sets the tile being drawn.</summary>
+		public BaseTileDataInstance Tile {
+			get { return tile; }
+			set {
+				if (value != tile) {
+					tile = value;
+					if (initialized)
+						Invalidate();
+				}
+			}
 		}
 	}
 }

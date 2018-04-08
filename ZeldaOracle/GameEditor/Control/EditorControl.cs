@@ -67,7 +67,6 @@ namespace ZeldaEditor.Control {
 
 		private Stopwatch           timer;
 		private int                 ticks;
-		private StoppableTimer		updateTimer;
 
 		// Settings
 		private bool                playAnimations;
@@ -213,23 +212,16 @@ namespace ZeldaEditor.Control {
 
 				inventory.Initialize();
 				rewardManager.Initialize();
+				TileDataDrawing.RewardManager = rewardManager;
 			}
 			catch (Exception ex) {
-				StoppableTimer.StopAll();
+				TimerEvents.CancelAll();
 				ShowExceptionMessage(ex, "load", "resources");
 				Environment.Exit(-1);
 			}
 			EditorResources.Initialize(this);
 
-			this.updateTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(100),
-				DispatcherPriority.ApplicationIdle,
-				Update);
-			/*this.updateTimer		= new DispatcherTimer(
-				TimeSpan.FromMilliseconds(100),
-				DispatcherPriority.ApplicationIdle,
-				delegate { Update(); },
-				Application.Current.Dispatcher);*/
+			ContinuousEvents.Start(0.1, TimerPriority.Low, Update);
 
 			isInitialized = true;
 
@@ -1231,6 +1223,16 @@ namespace ZeldaEditor.Control {
 		public ScriptCompileService ScriptCompileService {
 			get { return scriptCompileService; }
 			set { scriptCompileService = value; }
+		}
+
+		/// <summary>Gets the continuous events for the main window.</summary>
+		public ContinuousEvents ContinuousEvents {
+			get { return editorWindow.ContinuousEvents; }
+		}
+
+		/// <summary>Gets the scheduled events for the main window.</summary>
+		public ScheduledEvents ScheduledEvents {
+			get { return editorWindow.ScheduledEvents; }
 		}
 	}
 }

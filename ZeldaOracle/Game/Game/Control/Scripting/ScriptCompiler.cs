@@ -133,8 +133,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 					Assembly.GetEntryAssembly().Location) + "Scripts.dll";
 
 			// Add the assembly references
-			options.ReferencedAssemblies.Add(Assemblies.ZeldaCommon.Location);
-			options.ReferencedAssemblies.Add(Assemblies.ZeldaAPI.Location);
+			foreach (Assembly assembly in Assemblies.Scripting)
+				options.ReferencedAssemblies.Add(assembly.Location);
 
 			// Create a C# code provider and compile the code.
 			// The 'using' statement is necessary so the created DLL file isn't

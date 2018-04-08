@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game {
 	/// <summary>A collection of all assemblies needed for the game.</summary>
@@ -14,6 +15,8 @@ namespace ZeldaOracle.Game {
 		/// <summary>The assembly for the base Zelda classes that are used within
 		/// the game and scripting.</summary>
 		public static readonly Assembly ZeldaCommon = typeof(Point2I).Assembly;
+		/// <summary>The assembly for the optimized Zelda classes.</summary>
+		public static readonly Assembly ZeldaOptimization = typeof(Property).Assembly;
 		/// <summary>The assembly for the base Zelda scripting classes.</summary>
 		public static readonly Assembly ZeldaAPI = typeof(ZeldaAPI.Tile).Assembly;
 		/// <summary>The assembly for all Zelda game classes.</summary>
@@ -23,7 +26,7 @@ namespace ZeldaOracle.Game {
 		public static readonly Assembly Mscorlib = typeof(object).Assembly;
 		/// <summary>The assembly for System.</summary>
 		public static readonly Assembly System = typeof(Uri).Assembly;
-		/// <summary>The assembly for System.Core.</summary>
+		/// <summary>The assembly for System.Core used for Linq Extensions.</summary>
 		public static readonly Assembly SystemCore = typeof(Enumerable).Assembly;
 
 
@@ -36,7 +39,8 @@ namespace ZeldaOracle.Game {
 			get {
 				return new Assembly[] {
 					ZeldaCommon,
-					ZeldaOracle
+					ZeldaOptimization,
+					ZeldaOracle,
 				};
 			}
 		}
@@ -49,7 +53,7 @@ namespace ZeldaOracle.Game {
 					System,
 					SystemCore,
 					ZeldaCommon,
-					ZeldaAPI
+					ZeldaAPI,
 				};
 			}
 		}
@@ -59,7 +63,7 @@ namespace ZeldaOracle.Game {
 			get {
 				return new Assembly[] {
 					ZeldaCommon,
-					ZeldaAPI
+					ZeldaAPI,
 				};
 			}
 		}
@@ -70,6 +74,7 @@ namespace ZeldaOracle.Game {
 				return new string[] {
 					"System.Collections",
 					"System.Collections.Generic",
+					"System.Linq",
 					"ZeldaAPI",
 					"ZeldaOracle.Game",
 					"ZeldaOracle.Common.Geometry",
