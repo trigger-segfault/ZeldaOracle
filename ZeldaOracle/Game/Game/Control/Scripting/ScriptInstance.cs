@@ -235,6 +235,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private void ThreadFunction() {
 			try {
 				// Invoke the script function
+				var methodParams = method.GetParameters();
+				var type = parameters[0].GetType();
 				method.Invoke(context, parameters);
 			}
 			catch (ThreadAbortException) {

@@ -288,6 +288,8 @@ namespace ZeldaEditor.Windows {
 				CreateValueEditor(variable.ObjectValue);
 
 			Loaded += OnLoaded;
+
+			textBoxVariableName.Focus();
 		}
 
 
