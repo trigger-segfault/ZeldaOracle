@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ZeldaEditor.Control {
 	public enum TileDrawModes {
-
 		Hide,
 		Fade,
-		Show
+		Show,
 	}
 }

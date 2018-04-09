@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ZeldaCommon")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A library for common Zelda Oracle classes for use with the scripting API and the game.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ZeldaCommon")]

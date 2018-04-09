@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ZeldaOptimization")]
-[assembly: AssemblyDescription("A project purely for debug optimization")]
+[assembly: AssemblyDescription("A project purely for debug optimization.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ZeldaOptimization")]

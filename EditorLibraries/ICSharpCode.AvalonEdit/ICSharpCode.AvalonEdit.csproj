@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{6C55B776-26D4-4DB3-A6AB-87E783B2F3D1}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">Net40</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <RootNamespace>ICSharpCode.AvalonEdit</RootNamespace>
     <AssemblyName>ICSharpCode.AvalonEdit</AssemblyName>
@@ -29,18 +29,18 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'Net35' ">
+  <!--<PropertyGroup Condition=" '$(Platform)' == 'Net35' ">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'Net40' ">
+  </PropertyGroup>-->
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DefineConstants>DOTNET4</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'WithNRefactory' ">
+  <!--<PropertyGroup Condition=" '$(Platform)' == 'WithNRefactory' ">
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DefineConstants>DOTNET4;NREFACTORY</DefineConstants>
     <AssemblyOriginatorKeyFile>..\..\NRefactory\ICSharpCode.NRefactory.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+  </PropertyGroup>-->
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DefineConstants>DEBUG;$(DefineConstants)</DefineConstants>
     <OutputPath>bin\Debug\</OutputPath>
@@ -62,7 +62,7 @@
     <DebugType>Full</DebugType>
     <DefineTrace>True</DefineTrace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Net40'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DefineConstants>DOTNET4</DefineConstants>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
