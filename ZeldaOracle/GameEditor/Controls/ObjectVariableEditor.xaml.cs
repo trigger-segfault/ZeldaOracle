@@ -1,52 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using ZeldaEditor.Control;
 using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.Controls {
+	
+	/// <summary>A one-way IValueConverter meant to format a value for being displayed
+	/// as text.</summary>
+	public abstract class ValueFormatter<T> : IValueConverter {
+		public object Convert(object value, Type targetType,
+			object parameter, CultureInfo culture)
+		{
+			return FormatValue((T) value);
+		}
+		public object ConvertBack(object value, Type targetType,
+			object parameter, CultureInfo culture)
+		{
+			throw new NotSupportedException();
+		}
+		public abstract string FormatValue(T value);
+	}
+		
+	/// <summary>Formats a Variable's VarType/ListType into a readable string.
+	/// </summary>
+	public class VariableTypeFormatter : ValueFormatter<Variable> {
+		public override string FormatValue(Variable variable) {
+			// Example: "Integer List [3]"
+			string text = variable.VarType.ToString();
+			if (variable.ListType == ListType.Array)
+				text += string.Format(" Array [{0}]", variable.Count);
+			else if (variable.ListType == ListType.List)
+				text += string.Format(" List [{0}]", variable.Count);
+			return text;
+		}
+	}
+		
+	/// <summary>Formats a Variable's value into a readable string.</summary>
+	public class VariableValueFormatter : ValueFormatter<Variable> {
+		public override string FormatValue(Variable variable) {
+			return variable.GetValueString();
+		}
+	}
 
 	/// <summary>
 	/// Interaction logic for ObjectVariableEditor.xaml
 	/// </summary>
-	public partial class ObjectVariableEditor : UserControl {
-
-		/// <summary>Used to provide the displayed text for a variable.</summary>
-		private class VariableItem {
-
-			public VariableItem(Variable variable) {
-				Variable = variable;
-			}
-
-			public Variable Variable { get; }
-
-			/// <summary>Gets the variable's name.</summary>
-			public string Name {
-				get { return Variable.Name; }
-			}
-
-			/// <summary>Gets the string describing the variable's type.</summary>
-			public string Type {
-				get {
-					// Example: "Integer List [3]"
-					string text = Variable.VarType.ToString();
-					if (Variable.ListType == ListType.Array)
-						text += string.Format(" Array [{0}]", Variable.Count);
-					else if (Variable.ListType == ListType.List)
-						text += string.Format(" List [{0}]", Variable.Count);
-					return text;
-				}
-			}
-
-			/// <summary>Gets the string describing the variable's value.</summary>
-			public string Value {
-				get { return Variable.GetValueString(); }
-			}
-		}
+	public partial class ObjectVariableEditor : UserControl, INotifyPropertyChanged {
 		
 		/// <summary>The variable collection that is being edited.</summary>
 		private Variables variables;
@@ -55,6 +62,12 @@ namespace ZeldaEditor.Controls {
 		private string sortedPropertyName;
 		/// <summary>The sort direction of the variable list.</summary>
 		private ListSortDirection sortDirection;
+		/// <summary>A duplicate of the variable that was copied or cut.</summary>
+		public Variable Clipboard { get; set; }
+
+		private UndoHistory<ObjectEditor> history;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
 		
 		//-----------------------------------------------------------------------------
@@ -62,7 +75,15 @@ namespace ZeldaEditor.Controls {
 		//-----------------------------------------------------------------------------
 
 		public ObjectVariableEditor() {
+			history = new UndoHistory<ObjectEditor>(null, 50);
+
+			history.PositionChanged += OnHistoryChanged;
+
+			DataContext = this;
+
 			InitializeComponent();
+
+			history.Context = Window.GetWindow(this) as ObjectEditor;
 
 			// Initially sort by name in ascending order
 			sortedPropertyName = "Name";
@@ -70,6 +91,7 @@ namespace ZeldaEditor.Controls {
 			listView.Items.SortDescriptions.Add(
 				new SortDescription(sortedPropertyName, sortDirection));
 
+			Clipboard = null;
 			variables = null;
 			RefreshVariableList();
 		}
@@ -79,37 +101,44 @@ namespace ZeldaEditor.Controls {
 		// Variable Manipulation
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Delete a variable from its collection.</summary>
-		private EditorAction DeleteVariable(Variable variable) {
-			EditorAction action = new ActionDeleteVariable(variable);
-			action.Execute(null);
+		private void PasteVariable(Variable variable) {
+			history.PushAction(new ActionPasteVariable(variable, variables),
+				ActionExecution.Execute);
 			RefreshVariableList();
-			return action;
+		}
+
+		/// <summary>Delete a variable from its collection.</summary>
+		private void DeleteVariable(Variable variable) {
+			history.PushAction(new ActionDeleteVariable(variable),
+				ActionExecution.Execute);
+			RefreshVariableList();
 		}
 
 		/// <summary>Open the edit variable window for the given variable.</summary>
-		private EditorAction EditVariable(Variable variable) {
-			EditorAction action = EditVariableWindow.ShowEditVariable(
+		private void EditVariable(Variable variable) {
+			UndoAction<ObjectEditor> action = EditVariableWindow.ShowEditVariable(
 				Window.GetWindow(this), SelectedVariable);
 			if (action != null)
-				action.Execute(null);
-			//editorControl.PushAction(action, ActionExecution.Execute);
+				history.PushAction(action, ActionExecution.Execute);
 			RefreshVariableList();
-			return action;
 		}
 
 		/// <summary>Refresh the list view of variables.</summary>
 		private void RefreshVariableList() {
 			if (variables != null) {
-				List<VariableItem> items = new List<VariableItem>();
+				List<Variable> items = new List<Variable>();
 				// TODO: Show built-in variables as read-only list items
 				foreach (Variable variable in variables.GetCustomVariables())
-					items.Add(new VariableItem(variable));
+					items.Add(variable);
 				listView.ItemsSource = items;
 			}
 			else {
 				listView.ItemsSource = null;
 			}
+		}
+
+		private void NotifyPropertyChanged(string propertyName = "") {
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 
@@ -124,6 +153,14 @@ namespace ZeldaEditor.Controls {
 			e.CanExecute = (listView != null && variables != null);
 		}
 		
+		/// <summary>Returns true if a variable was copied or cut.</summary>
+		private void CanExecutePasteCommand(
+			object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = (listView != null &&
+				variables != null && Clipboard != null);
+		}
+		
 		/// <summary>Returns true if a variable is selected.</summary>
 		private void CanExecuteVariableCommand(
 			object sender, CanExecuteRoutedEventArgs e)
@@ -132,37 +169,49 @@ namespace ZeldaEditor.Controls {
 				listView.SelectedItem != null);
 		}
 		
+		private void CanExecuteUndoCommand(
+			object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = history.CanUndo;
+		}
+		
+		private void CanExecuteRedoCommand(
+			object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = history.CanRedo;
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Command Callbacks
 		//-----------------------------------------------------------------------------
 
 		private void OnCut(object sender, ExecutedRoutedEventArgs e) {
-
+			Clipboard = new Variable(SelectedVariable);
+			DeleteVariable(SelectedVariable);
 		}
 
 		private void OnCopy(object sender, ExecutedRoutedEventArgs e) {
-
+			Clipboard = new Variable(SelectedVariable);
 		}
 
 		private void OnPaste(object sender, ExecutedRoutedEventArgs e) {
-
+			PasteVariable(Clipboard);
 		}
 
 		private void OnUndo(object sender, ExecutedRoutedEventArgs e) {
-
+			history.Undo();
 		}
 
 		private void OnRedo(object sender, ExecutedRoutedEventArgs e) {
-
+			history.Redo();
 		}
 
 		private void OnNewVariable(object sender, ExecutedRoutedEventArgs e) {
-			EditorAction action = EditVariableWindow.ShowAddVariable(
+			UndoAction<ObjectEditor> action = EditVariableWindow.ShowAddVariable(
 				Window.GetWindow(this), variables);
 			if (action != null)
-				action.Execute(null);
-			//editorControl.PushAction(action, ActionExecution.Execute);
+				history.PushAction(action, ActionExecution.Execute);
 			RefreshVariableList();
 			// TODO: Select the new variable
 		}
@@ -177,7 +226,7 @@ namespace ZeldaEditor.Controls {
 		
 
 		//-----------------------------------------------------------------------------
-		// UI Event Callbacks
+		// Event Callbacks
 		//-----------------------------------------------------------------------------
 
 		private void OnDoubleClickVariable(object sender, MouseButtonEventArgs e) {
@@ -210,6 +259,14 @@ namespace ZeldaEditor.Controls {
 			listView.Items.SortDescriptions.Add(
 				new SortDescription(sortedPropertyName, sortDirection));
 		}
+
+		private void OnHistoryChanged(object sender, EventArgs e) {
+			NotifyPropertyChanged();
+			RefreshVariableList();
+			ObjectEditor editor = Window.GetWindow(this) as ObjectEditor;
+			if (editor != null)
+				editor.EditorControl.IsModified = true;
+		}
 		
 		
 		//-----------------------------------------------------------------------------
@@ -221,7 +278,7 @@ namespace ZeldaEditor.Controls {
 		public Variable SelectedVariable {
 			get {
 				if (listView != null)
-					return ((VariableItem) listView.SelectedItem).Variable;
+					return (Variable) listView.SelectedItem;
 				return null;
 			}
 		}
@@ -235,6 +292,26 @@ namespace ZeldaEditor.Controls {
 					variables = value;
 					RefreshVariableList();
 				}
+			}
+		}
+
+		public string UndoTooltip {
+			get {
+				string text = "Undo";
+				if (history.CanUndo)
+					text += " " + history.UndoAction.ActionName;
+				text += " (Ctrl+Z)";
+				return text;
+			}
+		}
+
+		public string RedoTooltip {
+			get {
+				string text = "Redo";
+				if (history.CanRedo)
+					text += " " + history.RedoAction.ActionName;
+				text += " (Ctrl+Y)";
+				return text;
 			}
 		}
 	}

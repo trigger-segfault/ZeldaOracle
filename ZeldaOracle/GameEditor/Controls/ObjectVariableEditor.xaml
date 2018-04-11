@@ -6,65 +6,78 @@
              xmlns:local="clr-namespace:ZeldaEditor.Controls"
              mc:Ignorable="d" 
              d:DesignWidth="500" d:DesignHeight="325" KeyDown="OnKeyDown">
-    <UserControl.Resources>
-        <Style x:Key="listViewStyle" TargetType="{x:Type ListViewItem}">
-            <EventSetter Event="MouseDoubleClick" Handler="OnDoubleClickVariable" />
-        </Style>
-    </UserControl.Resources>
-    <UserControl.CommandBindings>
-        <CommandBinding Command="Cut" CanExecute="CanExecuteVariableCommand" Executed="OnCut"/>
-        <CommandBinding Command="Copy" CanExecute="CanExecuteVariableCommand" Executed="OnCopy"/>
-        <CommandBinding Command="Paste" CanExecute="CanExecuteAnyCommand" Executed="OnPaste"/>
-        <CommandBinding Command="Undo" CanExecute="CanExecuteAnyCommand" Executed="OnUndo"/>
-        <CommandBinding Command="Redo" CanExecute="CanExecuteAnyCommand" Executed="OnRedo"/>
-        <CommandBinding Command="New" CanExecute="CanExecuteAnyCommand" Executed="OnNewVariable"/>
-        <CommandBinding Command="Open" CanExecute="CanExecuteVariableCommand" Executed="OnEditVariable"/>
-        <CommandBinding Command="Delete" CanExecute="CanExecuteVariableCommand" Executed="OnDeleteVariable"/>
-    </UserControl.CommandBindings>
-    <DockPanel x:Name="panel" >
-        <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
-            <local:ImageButton x:Name="buttonToolCut" Source="/Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>
-            <local:ImageButton x:Name="buttonToolCopy" Source="/Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
-            <local:ImageButton x:Name="buttonToolPaste" Source="/Resources/Icons/Paste.png" ToolTip="Paste (Ctrl+V)" Command="Paste"/>
-            <Separator/>
-            <local:ImageButton x:Name="buttonUndo" Source="/Resources/Icons/Undo.png" ToolTip="Undo (Ctrl+Z)" Command="Undo"/>
-            <local:ImageButton x:Name="buttonRedo" Source="/Resources/Icons/Redo.png" ToolTip="Redo (Ctrl+Y)" Command="Redo"/>
-            <Separator/>
-            <local:ImageButton x:Name="buttonAdd" ToolTip="New Variable... (Ctrl+N)" Source="/Resources/Icons/Plus.png" Command="New"/>
-            <local:ImageButton x:Name="buttonEdit" ToolTip="Edit Variable... (Enter)" Source="/Resources/Icons/Edit.png" Command="Open"/>
-            <local:ImageButton x:Name="buttonDelete" ToolTip="Delete Variable (Del)" Source="/Resources/Icons/Delete.png" Command="Delete"/>
-        </ToolBar>
-        <ListView x:Name="listView" ItemContainerStyle="{StaticResource listViewStyle}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="140">
-                        <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="Name" Click="OnClickColumnHeader">Variable Name</GridViewColumnHeader>
-                        </GridViewColumn.Header>
-                    </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Type}" Width="140">
-                        <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="Type" Click="OnClickColumnHeader">Variable Type</GridViewColumnHeader>
-                        </GridViewColumn.Header>
-                    </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Value}" Width="180">
-                        <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="Value" Click="OnClickColumnHeader">Initial Value</GridViewColumnHeader>
-                        </GridViewColumn.Header>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-            <ListView.ContextMenu>
-                <ContextMenu>
-                    <local:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut" />
-                    <local:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy" />
-                    <local:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste" />
-                    <Separator />
-                    <local:ImageMenuItem Header="New Variable..." Source="/Resources/Icons/Plus.png" Command="New" />
-                    <local:ImageMenuItem Header="Edit Variable..." Source="/Resources/Icons/Edit.png" Command="Open" />
-                    <local:ImageMenuItem Header="Delete Variable" Source="/Resources/Icons/Delete.png" Command="Delete" />
-                </ContextMenu>
-            </ListView.ContextMenu>
-        </ListView>
-    </DockPanel>
+  <UserControl.Resources>
+    <local:VariableTypeFormatter x:Key="VariableTypeFormatter" />
+    <local:VariableValueFormatter x:Key="VariableValueFormatter" />
+    <Style x:Key="listViewStyle"
+           TargetType="{x:Type ListViewItem}">
+      <EventSetter Event="MouseDoubleClick" Handler="OnDoubleClickVariable" />
+    </Style>
+  </UserControl.Resources>
+  
+  <UserControl.CommandBindings>
+    <CommandBinding Command="Cut" CanExecute="CanExecuteVariableCommand" Executed="OnCut"/>
+    <CommandBinding Command="Copy" CanExecute="CanExecuteVariableCommand" Executed="OnCopy"/>
+    <CommandBinding Command="Paste" CanExecute="CanExecutePasteCommand" Executed="OnPaste"/>
+    <CommandBinding Command="Undo" CanExecute="CanExecuteUndoCommand" Executed="OnUndo"/>
+    <CommandBinding Command="Redo" CanExecute="CanExecuteRedoCommand" Executed="OnRedo"/>
+    <CommandBinding Command="New" CanExecute="CanExecuteAnyCommand" Executed="OnNewVariable"/>
+    <CommandBinding Command="Open" CanExecute="CanExecuteVariableCommand" Executed="OnEditVariable"/>
+    <CommandBinding Command="Delete" CanExecute="CanExecuteVariableCommand" Executed="OnDeleteVariable"/>
+  </UserControl.CommandBindings>
+  
+  <DockPanel x:Name="panel" >
+    
+    <!-- Button bar -->
+    <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
+      <local:ImageButton x:Name="buttonToolCut" Source="/Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>
+      <local:ImageButton x:Name="buttonToolCopy" Source="/Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
+      <local:ImageButton x:Name="buttonToolPaste" Source="/Resources/Icons/Paste.png" ToolTip="Paste (Ctrl+V)" Command="Paste"/>
+      <Separator/>
+      <local:ImageButton x:Name="buttonUndo" Source="/Resources/Icons/Undo.png" ToolTip="{Binding UndoTooltip}" Command="Undo"/>
+      <local:ImageButton x:Name="buttonRedo" Source="/Resources/Icons/Redo.png" ToolTip="{Binding RedoTooltip}" Command="Redo"/>
+      <Separator/>
+      <local:ImageButton x:Name="buttonAdd" ToolTip="New Variable... (Ctrl+N)" Source="/Resources/Icons/Plus.png" Command="New"/>
+      <local:ImageButton x:Name="buttonEdit" ToolTip="Edit Variable... (Enter)" Source="/Resources/Icons/Edit.png" Command="Open"/>
+      <local:ImageButton x:Name="buttonDelete" ToolTip="Delete Variable (Del)" Source="/Resources/Icons/Delete.png" Command="Delete"/>
+    </ToolBar>
+        
+    <ListView x:Name="listView" ItemContainerStyle="{StaticResource listViewStyle}">
+    
+      <!-- Create the three columns-->
+      <ListView.View>
+        <GridView>
+          <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Width="140">
+            <GridViewColumn.Header>
+              <GridViewColumnHeader Tag="Name" Click="OnClickColumnHeader">Variable Name</GridViewColumnHeader>
+            </GridViewColumn.Header>
+          </GridViewColumn>
+          <GridViewColumn DisplayMemberBinding="{Binding Converter={StaticResource VariableTypeFormatter}}" Width="140">
+            <GridViewColumn.Header>
+              <GridViewColumnHeader Tag="VarType" Click="OnClickColumnHeader">Variable Type</GridViewColumnHeader>
+            </GridViewColumn.Header>
+          </GridViewColumn>
+          <GridViewColumn DisplayMemberBinding="{Binding Converter={StaticResource VariableValueFormatter}}" Width="180">
+            <GridViewColumn.Header>
+              <GridViewColumnHeader Tag="ObjectValue" Click="OnClickColumnHeader">Initial Value</GridViewColumnHeader>
+            </GridViewColumn.Header>
+          </GridViewColumn>
+        </GridView>
+      </ListView.View>
+      
+      <!-- Context menu for variables -->
+      <ListView.ContextMenu>
+        <ContextMenu>
+          <local:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut" />
+          <local:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy" />
+          <local:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste" />
+          <Separator />
+          <local:ImageMenuItem Header="New Variable..." Source="/Resources/Icons/Plus.png" Command="New" />
+          <local:ImageMenuItem Header="Edit Variable..." Source="/Resources/Icons/Edit.png" Command="Open" />
+          <local:ImageMenuItem Header="Delete Variable" Source="/Resources/Icons/Delete.png" Command="Delete" />
+        </ContextMenu>
+      </ListView.ContextMenu>
+    </ListView>
+    
+  </DockPanel>
 </UserControl>

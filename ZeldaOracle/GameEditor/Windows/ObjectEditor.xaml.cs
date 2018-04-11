@@ -74,5 +74,14 @@ namespace ZeldaEditor.Windows {
 		private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e) {
 			editorControl.NeedsRecompiling = true;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Propreties
+		//-----------------------------------------------------------------------------
+
+		public EditorControl EditorControl {
+			get { return editorControl; }
+		}
 	}
 }

@@ -15,7 +15,16 @@ namespace ZeldaEditor.Undo {
 	/// <typeparam name="Context">Type of the context which is passed into Undo/Redo
 	/// functions</typeparam>
 	public abstract class UndoAction<Context> : HistoryListViewItem {
-		
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		public UndoAction() {
+			IsUndoable = true;
+			IsRedoable = true;
+		}
+
 		//-----------------------------------------------------------------------------
 		// Virtual Execution
 		//-----------------------------------------------------------------------------
@@ -46,5 +55,11 @@ namespace ZeldaEditor.Undo {
 		/// <summary>Returns true if the action should not be pushed onto the stack
 		/// because nothing happened.</summary>
 		public virtual bool IgnoreAction { get { return false; } }
+
+		/// <summary>Returns true if the action can be undone.</summary>
+		public virtual bool IsUndoable { get; protected set; }
+
+		/// <summary>Returns true if the action can be redone.</summary>
+		public virtual bool IsRedoable { get; protected set; }
 	}
 }

@@ -14,74 +14,11 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.Windows {
-
-	public class ActionDeleteVariable : EditorAction {
-		private Variables variables;
-		private Variable variable;
-
-		public ActionDeleteVariable(Variable variable) {
-			this.variable = variable;
-			this.variables = variable.Variables;
-			ActionName = "Delete Variable";
-			ActionIcon = EditorImages.LevelAdd;
-		}
-		public override void Redo(EditorControl editorControl) {
-			variables.RemoveVariable(variable.Name);
-		}
-		public override void Undo(EditorControl editorControl) {
-			variables.AddVariable(variable);
-		}
-	}
-
 	/// <summary>
 	/// Dialog window used to edit a variable or add a new variable.
 	/// Interaction logic for EditVariableWindow.xaml
 	/// </summary>
 	public partial class EditVariableWindow : Window {
-
-		public class ActionNewVariable : EditorAction {
-			private Variables variables;
-			private Variable variable;
-
-			public ActionNewVariable(Variable variable, Variables variables) {
-				this.variables = variables;
-				this.variable = variable;
-				ActionName = "New Variable";
-				ActionIcon = EditorImages.LevelAdd;
-			}
-			public override void Redo(EditorControl editorControl) {
-				variables.AddVariable(variable);
-			}
-			public override void Undo(EditorControl editorControl) {
-				variables.RemoveVariable(variable.Name);
-			}
-		}
-
-		public class ActionEditVariable : EditorAction {
-			private Variables variables;
-			private Variable originalValue;
-			private Variable updatedValue;
-
-			public ActionEditVariable(Variable originalValue,
-				Variable updatedValue, Variables variables)
-			{
-				this.variables = variables;
-				this.originalValue = originalValue;
-				this.updatedValue = updatedValue;
-				ActionName = "Edit Variable";
-				ActionIcon = EditorImages.LevelAdd;
-			}
-			public override void Redo(EditorControl editorControl) {
-				// Remove the original variable and add the updated variable
-				variables.RemoveVariable(originalValue.Name);
-				variables.AddVariable(updatedValue);
-			}
-			public override void Undo(EditorControl editorControl) {
-				// Remove the updated variable and re-add the original variable
-				variables.RemoveVariable(updatedValue.Name);
-				variables.AddVariable(originalValue);
-			}
-		}
 		
 		/// <summary>Information about a FrameworkElement used to edit a specific Type.
 		/// </summary>
@@ -183,6 +120,7 @@ namespace ZeldaEditor.Windows {
 			}
 		}
 
+		/// <summary>PointUpDown to edit points.</summary>
 		private class PointValueEditor : ValueEditor<PointUpDown, Point2I> {
 			public override DependencyProperty ValueProperty {
 				get { return PointUpDown.ValueProperty; }
@@ -222,7 +160,7 @@ namespace ZeldaEditor.Windows {
 		public int ListCount { get; set; }
 		/// <summary>The resulting UndoAction representing adding or editing a
 		/// variable.</summary>
-		private EditorAction action;
+		private UndoAction<ObjectEditor> action;
 
 		private bool suppressEvents;
 
@@ -439,7 +377,7 @@ namespace ZeldaEditor.Windows {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		public static EditorAction ShowAddVariable(Window owner, Variables variables) {
+		public static UndoAction<ObjectEditor> ShowAddVariable(Window owner, Variables variables) {
 			EditVariableWindow window = new EditVariableWindow(
 				null, variables, true);
 			window.Owner = owner;
@@ -449,7 +387,7 @@ namespace ZeldaEditor.Windows {
 			return null;
 		}
 
-		public static EditorAction ShowEditVariable(Window owner, Variable variable) {
+		public static UndoAction<ObjectEditor> ShowEditVariable(Window owner, Variable variable) {
 			EditVariableWindow window = new EditVariableWindow(
 				variable, variable.Variables, false);
 			window.Owner = owner;
