@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 using ZeldaImage = ZeldaOracle.Common.Graphics.Image;
 using System.Windows.Media.Imaging;
-using ZeldaEditor.Util;
+using ZeldaWpf.Util;
 using System.Windows;
 using System.Windows.Controls;
 using ZeldaOracle.Common.Graphics.Sprites;
@@ -71,7 +71,7 @@ namespace ZeldaEditor.Control {
 				MemoryStream memoryStream = new MemoryStream();
 				ZeldaImage image = zeldaUnmappedSprite.Image;
 				image.Texture2D.SaveAsPng(memoryStream, image.Texture2D.Width, image.Texture2D.Height);
-				BitmapSource bitmap = BitmapFactory.LoadSourceFromStream(memoryStream);
+				BitmapSource bitmap = BitmapFactory.FromStream(memoryStream);
 				bitmap.Freeze();
 				unmappedSprite = new UnmappedWpfSprite(bitmap, zeldaUnmappedSprite.DrawOffset);
 				unmappedSprites.Add(lookup, unmappedSprite);

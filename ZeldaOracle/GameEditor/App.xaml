@@ -1,11 +1,12 @@
-﻿<Application x:Class="ZeldaEditor.App"
+﻿<common:ZeldaWpfApp x:Class="ZeldaEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ZeldaEditor"
-             DispatcherUnhandledException="OnDispatcherUnhandledException"
-             Startup="OnAppStartup"
+             xmlns:common="clr-namespace:ZeldaWpf;assembly=ZeldaWpf"
              StartupUri="EditorWindow.xaml">
-    <Application.Resources>
+    <!--DispatcherUnhandledException="OnDispatcherUnhandledException"
+             Startup="OnAppStartup"-->
+    <common:ZeldaWpfApp.Resources>
          
-    </Application.Resources>
-</Application>
+    </common:ZeldaWpfApp.Resources>
+</common:ZeldaWpfApp>

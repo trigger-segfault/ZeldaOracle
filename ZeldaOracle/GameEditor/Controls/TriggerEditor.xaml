@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeldaEditor.Controls"
+             xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="760">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -29,12 +30,12 @@
         <Border BorderThickness="0" Grid.Column="0" BorderBrush="#FF828790">
             <DockPanel x:Name="panelTriggerList">
                 <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
-                    <local:ImageButton x:Name="buttonAddTrigger" ToolTip="Create a new trigger" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Plus.png" Command="local:TriggerEditorCommands.CreateTrigger" Focusable="False" IsTabStop="False"/>
-                    <local:ImageButton x:Name="buttonDeleteTrigger" ToolTip="Delete trigger" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Delete.png" Command="local:TriggerEditorCommands.DeleteTrigger" Focusable="False" IsTabStop="False"/>
-                    <local:ImageButton x:Name="buttonDuplicateTrigger" ToolTip="Duplicate trigger" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Copy.png" Command="local:TriggerEditorCommands.DuplicateTrigger" Focusable="False" IsTabStop="False"/>
+                    <common:ImageButton x:Name="buttonAddTrigger" ToolTip="Create a new trigger" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Plus.png" Command="local:TriggerEditorCommands.CreateTrigger" Focusable="False" IsTabStop="False"/>
+                    <common:ImageButton x:Name="buttonDeleteTrigger" ToolTip="Delete trigger" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Delete.png" Command="local:TriggerEditorCommands.DeleteTrigger" Focusable="False" IsTabStop="False"/>
+                    <common:ImageButton x:Name="buttonDuplicateTrigger" ToolTip="Duplicate trigger" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Copy.png" Command="local:TriggerEditorCommands.DuplicateTrigger" Focusable="False" IsTabStop="False"/>
                     <Separator/>
-                    <local:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Command="local:TriggerEditorCommands.MoveTriggerUp" Focusable="False" IsTabStop="False"/>
-                    <local:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Command="local:TriggerEditorCommands.MoveTriggerDown" Focusable="False" IsTabStop="False"/>
+                    <common:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Command="local:TriggerEditorCommands.MoveTriggerUp" Focusable="False" IsTabStop="False"/>
+                    <common:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Command="local:TriggerEditorCommands.MoveTriggerDown" Focusable="False" IsTabStop="False"/>
                 </ToolBar>
                 <ListBox x:Name="listBoxTriggers" SelectionChanged="OnSelectedTriggerChanged" BorderThickness="0,1,1,0"/>
             </DockPanel>

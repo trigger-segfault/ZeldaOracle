@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using ZeldaEditor.Control;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

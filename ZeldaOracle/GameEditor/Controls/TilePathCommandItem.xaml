@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeldaEditor.Controls"
+             xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="ZeldaEditor.Controls.TilePathCommandItem"
              mc:Ignorable="d" 
@@ -87,8 +88,8 @@
                 <xctk:IntegerUpDown x:Name="spinnerIntParam" Value="1" Minimum="1" Width="70" ValueChanged="OnIntParamChanged"/>
                 <xctk:SingleUpDown x:Name="spinnerFloatParam" Value="0" Minimum="0" Increment="0.25" Width="70" ValueChanged="OnFloatParamChanged" Visibility="Collapsed" />
             </StackPanel>
-            <local:HoverImageButton x:Name="buttonRemove" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathRemove.png" Click="OnRemove" ToolTip="Remove Command" SourceHover="/Resources/Icons/TilePathRemoveHover.png" IsTabStop="False" Focusable="False" />
-            <local:HoverImageButton x:Name="buttonInsert" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathInsert.png" Click="OnInsert" ToolTip="Insert Command" SourceHover="/Resources/Icons/TilePathInsertHover.png" Focusable="False" IsTabStop="False" />
+            <common:HoverImageButton x:Name="buttonRemove" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathRemove.png" Click="OnRemove" ToolTip="Remove Command" SourceHover="/Resources/Icons/TilePathRemoveHover.png" IsTabStop="False" Focusable="False" />
+            <common:HoverImageButton x:Name="buttonInsert" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathInsert.png" Click="OnInsert" ToolTip="Insert Command" SourceHover="/Resources/Icons/TilePathInsertHover.png" Focusable="False" IsTabStop="False" />
         </DockPanel>
         <Border.Style>
             <Style TargetType="{x:Type Border}">

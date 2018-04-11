@@ -17,6 +17,7 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Content;
 using ZeldaEditor.Undo;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

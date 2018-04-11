@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Graphics;
+﻿using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game {
-	public partial class GameData {
+	/// <summary>A static class for storing links to all game content.</summary>
+	public static partial class GameData {
 		
 		//-----------------------------------------------------------------------------
 		// Sprites
@@ -15,10 +11,6 @@ namespace ZeldaOracle.Game {
 
 		// Effects
 		public static ISprite SPR_SHADOW;
-
-		// Special Background tiles
-		public static ISprite SPR_TILE_DEFAULT;	// The default ground background tile.
-		public static ISprite SPR_TILE_DUG;		// A hole in the ground created by a shovel.
 	
 		// Player sprites
 		public static ISprite SPR_PLAYER_FORWARD;
@@ -36,77 +28,17 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_MONSTER_PINCER_BODY_SEGMENT;
 
 		// Object tiles
-		public static ISprite SPR_TILE_BUSH;
-		public static ISprite SPR_TILE_BUSH_ASOBJECT;
-		public static ISprite SPR_TILE_CRYSTAL;
-		public static ISprite SPR_TILE_CRYSTAL_ASOBJECT;
-		public static ISprite SPR_TILE_POT;
-		public static ISprite SPR_TILE_POT_ASOBJECT;
-		public static ISprite SPR_TILE_ROCK;
-		public static ISprite SPR_TILE_ROCK_ASOBJECT;
-		public static ISprite SPR_TILE_DIAMOND_ROCK;
-		public static ISprite SPR_TILE_DIAMOND_ROCK_ASOBJECT;
-		public static ISprite SPR_TILE_SIGN;
-		public static ISprite SPR_TILE_SIGN_ASOBJECT;
-		public static ISprite SPR_TILE_GRASS;
-		public static ISprite SPR_TILE_MOVABLE_BLOCK;
-		public static ISprite SPR_TILE_MOVABLE_BLOCK_ASOBJECT;
-		public static ISprite SPR_TILE_BOMBABLE_BLOCK;
-		public static ISprite SPR_TILE_LOCKED_BLOCK;
-		public static ISprite SPR_TILE_CHEST;
-		public static ISprite SPR_TILE_CHEST_OPEN;
-		public static ISprite SPR_TILE_DIRT_PILE;
-		public static ISprite SPR_TILE_BURNABLE_TREE;
-		public static ISprite SPR_TILE_CACTUS;
-		public static ISprite SPR_TILE_BUTTON_UP;
-		public static ISprite SPR_TILE_BUTTON_DOWN;
-		public static ISprite SPR_TILE_LEVER_LEFT;
-		public static ISprite SPR_TILE_LEVER_RIGHT;
-		public static ISprite SPR_TILE_LANTERN_UNLIT;
-		public static ISprite SPR_TILE_EYE_STATUE;
-		public static ISprite SPR_TILE_BRIDGE_H;
-		public static ISprite SPR_TILE_BRIDGE_V;
-		public static ISprite SPR_TILE_COLOR_CUBE_SLOT;
-		public static ISprite SPR_TILE_CRACKED_FLOOR;
-		public static ISprite SPR_TILE_PIT;
-		public static ISprite SPR_TILE_ARMOS_STATUE;
-		public static ISprite SPR_TILE_MOVING_PLATFORM;
-		public static ISprite SPR_TILE_OWL;
-		public static ISprite SPR_TILE_OWL_ACTIVATED;
 		public static ISprite SPR_TILE_STATUE_EYE;
 		public static ISprite SPR_TILE_SOMARIA_BLOCK;
 		public static ISprite SPR_TILE_REGROWABLE_BUSH_CUT;
 		public static ISprite SPR_TILE_BUSH_REGROW_GROWING;
 		public static ISprite SPR_TILE_REGROWABLE_BUSH;
-		public static ISprite SPR_TILE_COLOR_SWITCH_RED;
-		public static ISprite SPR_TILE_COLOR_SWITCH_BLUE;
-		public static ISprite SPR_TILE_COLOR_TILE_RED;
-		public static ISprite SPR_TILE_COLOR_TILE_BLUE;
-		public static ISprite SPR_TILE_COLOR_TILE_YELLOW;
-		public static ISprite SPR_TILE_COLOR_JUMP_PAD_RED;
-		public static ISprite SPR_TILE_COLOR_JUMP_PAD_YELLOW;
-		public static ISprite SPR_TILE_COLOR_JUMP_PAD_BLUE;
-		public static ISprite SPR_TILE_COLOR_STATUE_RED;
-		public static ISprite SPR_TILE_COLOR_STATUE_YELLOW;
-		public static ISprite SPR_TILE_COLOR_STATUE_BLUE;
-		public static ISprite SPR_TILE_COLOR_BARRIER_RED_RAISED;
-		public static ISprite SPR_TILE_COLOR_BARRIER_RED_LOWERED;
-		public static ISprite SPR_TILE_COLOR_BARRIER_RED_HALFWAY;
-		public static ISprite SPR_TILE_COLOR_BARRIER_BLUE_RAISED;
-		public static ISprite SPR_TILE_COLOR_BARRIER_BLUE_LOWERED;
-		public static ISprite SPR_TILE_COLOR_BARRIER_BLUE_HALFWAY;
 		public static ISprite SPR_TILE_PULL_HANDLE_BAR_HORIZONTAL;
 		public static ISprite SPR_TILE_PULL_HANDLE_UP;
 		public static ISprite SPR_TILE_PULL_HANDLE_LEFT;
 		public static ISprite SPR_TILE_PULL_HANDLE_BAR_VERTICAL;
 		public static ISprite SPR_TILE_PULL_HANDLE_DOWN;
 		public static ISprite SPR_TILE_PULL_HANDLE_RIGHT;
-		public static ISprite SPR_TILE_MINECART_TRACK_HORIZONTAL;
-		public static ISprite SPR_TILE_MINECART_TRACK_VERTICAL;
-		public static ISprite SPR_TILE_MINECART_TRACK_UP_RIGHT;
-		public static ISprite SPR_TILE_MINECART_TRACK_UP_LEFT;
-		public static ISprite SPR_TILE_MINECART_TRACK_DOWN_LEFT;
-		public static ISprite SPR_TILE_MINECART_TRACK_DOWN_RIGHT;
 		public static ISprite SPR_TILE_DIGABLE_REWARD_DIRT;
 		public static ISprite SPR_TILE_DIVABLE_REWARD_WATER;
 
@@ -300,7 +232,7 @@ namespace ZeldaOracle.Game {
 		// Sprite Loading
 		//-----------------------------------------------------------------------------
 
-		// Loads the sprites and sprite-sheets.
+		/// <summary>Loads "Sprites/sprites.conscript"</summary>
 		private static void LoadSprites() {
 			Resources.LoadSprites("Sprites/sprites.conscript");
 			IntegrateResources<ISprite>("SPR_");

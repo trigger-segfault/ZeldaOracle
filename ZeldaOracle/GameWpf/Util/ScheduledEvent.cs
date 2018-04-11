@@ -183,11 +183,11 @@ namespace ZeldaWpf.Util {
 		}
 
 		/// <summary>Constructs scheduled events that cancel on element unloading and
-		/// window closing.</summary>
+		/// window closed.</summary>
 		public ScheduledEvents(FrameworkElement element) : this() {
 			if (element is Window) {
 				window = (Window) element;
-				window.Closing += OnClosing;
+				window.Closed += OnClosed;
 			}
 			else {
 				this.element = element;
@@ -196,10 +196,10 @@ namespace ZeldaWpf.Util {
 			}
 		}
 
-		/// <summary>Constructs scheduled events that cancel on window closing.</summary>
+		/// <summary>Constructs scheduled events that cancel on window closed.</summary>
 		public ScheduledEvents(Window window) : this() {
 			this.window = window;
-			window.Closing += OnClosing;
+			window.Closed += OnClosed;
 		}
 
 
@@ -384,32 +384,32 @@ namespace ZeldaWpf.Util {
 		// Event Handlers
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Sets up the window closing event.</summary>
+		/// <summary>Sets up the window closed event.</summary>
 		private void OnLoaded(object sender, RoutedEventArgs e) {
 			if (element != null) {
 				Window newWindow = Window.GetWindow(element);
 				if (newWindow != window) {
 					if (window != null)
-						window.Closing -= OnClosing;
+						window.Closed -= OnClosed;
 					window = newWindow;
-					window.Closing += OnClosing;
+					window.Closed += OnClosed;
 				}
 			}
 		}
 
 		/// <summary>Cancels all events when the element is unloaded.
-		/// And removes the closing event from the window.</summary>
+		/// And removes the closed event from the window.</summary>
 		private void OnUnloaded(object sender, RoutedEventArgs e) {
 			if (window != null) {
-				window.Closing -= OnClosing;
+				window.Closed -= OnClosed;
 				window = null;
 			}
 			CancelAll();
 		}
 
-		/// <summary>Cancels all events when the window is closing.</summary>
-		private void OnClosing(object sender, CancelEventArgs e) {
-			window.Closing -= OnClosing;
+		/// <summary>Cancels all events when the window is closed.</summary>
+		private void OnClosed(object sender, EventArgs e) {
+			window.Closed -= OnClosed;
 			window = null;
 			CancelAll();
 		}

@@ -11,7 +11,6 @@ using ZeldaOracle.Game.Worlds;
 using System.IO;
 using System.Reflection;
 using System.Resources;
-using ZeldaEditor.Util;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
@@ -22,6 +21,7 @@ using FormsControl = System.Windows.Forms.Control;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaOracle.Common.Util;
+using ZeldaWpf.Util;
 
 namespace ZeldaEditor.Tools {
 	public abstract class EditorTool {
@@ -66,7 +66,9 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		protected static Cursor LoadCursor(string name) {
-			ResourceManager rm = new ResourceManager("ZeldaEditor.g", Assembly.GetExecutingAssembly());
+			return CursorLoader.FromEmbeddedResource(nameof(ZeldaEditor),
+				typeof(EditorTool), "Resources/Cursors/" + name + "Cursor.cur");
+			/*ResourceManager rm = new ResourceManager("ZeldaEditor.g", Assembly.GetExecutingAssembly());
 			var input = (Stream)rm.GetObject("resources/cursors/" + name.ToLower() + "cursor.cur");
 			input.Position = 0;
 			string path = "CustomCursor.cur";
@@ -78,9 +80,9 @@ namespace ZeldaEditor.Tools {
 					output.Write(buffer, 0, len);
 				}
 			}
-			Cursor cursor = ZeldaEditor.Util.NativeMethods.LoadCustomCursor(path);
+			Cursor cursor = WpfNativeMethods.LoadCustomCursor(path);
 			File.Delete("CustomCursor.cur");
-			return cursor;
+			return cursor;*/
 		}
 
 		protected void StopDragging() {

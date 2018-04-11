@@ -9,9 +9,10 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaEditor.Control;
 using System.Windows.Threading;
-using ZeldaEditor.Util;
 using ZeldaOracle.Common.Util;
 using FrameworkElement = System.Windows.FrameworkElement;
+using ZeldaWpf.WinForms;
+using ZeldaWpf.Util;
 
 namespace ZeldaEditor.WinForms {
 
@@ -80,7 +81,7 @@ namespace ZeldaEditor.WinForms {
 			ResizeRedraw = true;
 
 			// Start the timer to refresh the panel
-			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+			ContinuousEvents.StartRender(
 				() => {
 					if (editorControl.IsActive)
 						TimerUpdate();

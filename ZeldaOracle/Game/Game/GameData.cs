@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -10,13 +11,21 @@ using ZeldaOracle.Common.Graphics.Shaders;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {
-	
-	// A static class for storing links to all game content.
-	public partial class GameData {
-		
+	/// <summary>A static class for storing links to all game content.</summary>
+	public static partial class GameData {
+
+		/// <summary>Declares that a field is a built-in resource.</summary>
+		[AttributeUsage(AttributeTargets.Field)]
+		private class BuiltProgrammaticallyAttribute : Attribute { }
+
+		/// <summary>Declares that this field's resource needs to be defined.</summary>
+		[AttributeUsage(AttributeTargets.Field)]
+		private class RequiresDefinitionAttribute : Attribute { }
+
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
@@ -50,7 +59,7 @@ namespace ZeldaOracle.Game {
 			LoadShaders();
 
 			Logs.Initialization.LogNotice("Pre-Loading Zones");
-			LoadZonesPreTileData();
+			LoadZones(false);
 
 			Logs.Initialization.LogNotice("Loading Images");
 			LoadImages();
@@ -60,10 +69,10 @@ namespace ZeldaOracle.Game {
 			Logs.Initialization.LogNotice("Loading Sprites");
 			LoadSprites();
 
-			spriteWatch.Stop();
-
 			Logs.Initialization.LogNotice("Loading Animations");
 			LoadAnimations();
+
+			spriteWatch.Stop();
 
 			Logs.Initialization.LogNotice("Loading Collision Models");
 			LoadCollisionModels();
@@ -94,7 +103,7 @@ namespace ZeldaOracle.Game {
 			LoadTilesets();
 
 			Logs.Initialization.LogNotice("Loading Zones");
-			LoadZonesPostTileData();
+			LoadZones(true);
 
 			//Logs.Initialization.LogNotice("Took {0} ms to load sprites.",
 			//	spriteWatch.ElapsedMilliseconds);
@@ -107,11 +116,15 @@ namespace ZeldaOracle.Game {
 
 			if (!Resources.SpriteDatabase.IsPreloaded) {
 				watch.Restart();
-				Resources.SpriteDatabase.Save();
-				
-				Logs.Initialization.LogInfo(
-					"Took {0} ms to save sprite database.",
-					watch.ElapsedMilliseconds);
+				if (!Resources.SpriteDatabase.Save()) {
+					Logs.Initialization.LogWarning(
+						"Failed to save sprite database!");
+				}
+				else {
+					Logs.Initialization.LogInfo(
+						"Took {0} ms to save sprite database.",
+						watch.ElapsedMilliseconds);
+				}
 			}
 		}
 
@@ -141,46 +154,61 @@ namespace ZeldaOracle.Game {
 					(!subtypes || typeof(T).IsAssignableFrom(field.FieldType)) &&
 					field.IsStatic);
 
-			// Set the values of the static fields to their corresponding loaded resources.
+			string typeName = typeof(T).Name;
+
+			// Set the values of the static fields to
+			// their corresponding loaded resources.
 			foreach (FieldInfo field in fields) {
 				string name = field.Name.ToLower().Remove(0, prefix.Length);
-				
-				if (Resources.Contains<T>(name)) {
-					T resource = Resources.Get<T>(name);
-					if (subtypes && !field.FieldType.IsAssignableFrom(resource.GetType()))
+
+				T resource = Resources.Get<T>(name);
+				if (resource != null) {
+					if (subtypes &&
+						!field.FieldType.IsAssignableFrom(resource.GetType()))
+					{
 						throw new LoadContentException("Field of type '" +
 							field.FieldType.Name + " cannot be assigned to resource '" +
 							name + "' of type '" + resource.GetType().Name + "'!");
+					}
+					else if (field.HasAttribute<BuiltProgrammaticallyAttribute>()) {
+						Logs.Initialization.LogError(
+							"{0} '{1}' is built programatically!", typeName, name);
+					}
 					field.SetValue(null, resource);
 				}
-				else if (field.GetValue(null) != null) {
-					//Console.WriteLine("** WARNING: " + name + " is built programatically.");
+				else if (field.HasAttribute<RequiresDefinitionAttribute>()) {
+					Logs.Initialization.LogError(
+						"{0} '{1}' requires a definition!", typeName, name);
 				}
 				else {
-					//Console.WriteLine("** WARNING: " + name + " is never defined.");
+					//Logs.Initialization.LogWarning(
+					//	"{0} '{1}' is never defined!", typeName, name);
 				}
 			}
 			
 			// Loop through resource dictionary.
 			// Find any resources that don't have corresponding fields in GameData.
-			Dictionary<string, T> dictionary = Resources.GetDictionary<T>();
+			/*Dictionary<string, T> dictionary = Resources.GetDictionary<T>();
 			foreach (KeyValuePair<string, T> entry in dictionary) {
 				string name = prefix.ToLower() + entry.Key;
 				FieldInfo matchingField = fields.FirstOrDefault(
 					field => string.Compare(field.Name, name, true) == 0);
-				
+
+				// The horror of every non-integrated resource
+				// lining up to scream into the console.
 				if (matchingField == null) {
-					//Console.WriteLine("** WARNING: Resource \"" + name + "\" does not have a corresponding field.");
+					//Logs.Initialization.LogWarning(
+					//	"Resource '{0}' does not have a corresponding field.", name);
 				}
-			}
+			}*/
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Image Loading
 		//-----------------------------------------------------------------------------
-
-		// Loads the images.
+		
+		/// <summary>Loads "Images/images.conscript"</summary>
 		private static void LoadImages() {
 			Resources.LoadImages("Images/images.conscript");
 		}
@@ -190,6 +218,7 @@ namespace ZeldaOracle.Game {
 		// Collision Model Loading
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Loads "Data/collision_models.conscript"</summary>
 		private static void LoadCollisionModels() {
 			Resources.LoadCollisionModels("Data/collision_models.conscript");
 			IntegrateResources<CollisionModel>("MODEL_");
@@ -212,30 +241,10 @@ namespace ZeldaOracle.Game {
 		// Zone Loading
 		//-----------------------------------------------------------------------------
 
-		private static void LoadZonesPreTileData() {
-			Resources.LoadZones("Zones/zones.conscript", false);
+		/// <summary>Loads "Zones/zones.conscript"</summary>
+		private static void LoadZones(bool postTileData) {
+			Resources.LoadZones("Zones/zones.conscript", postTileData);
 			IntegrateResources<Zone>("ZONE_");
-		}
-
-		private static void LoadZonesPostTileData() {
-			Resources.LoadZones("Zones/zones.conscript", true);
-			IntegrateResources<Zone>("ZONE_");
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Tliesets Loading
-		//-----------------------------------------------------------------------------
-
-		private static void LoadTilesets() {
-			// Load tilesets and tile data.
-			Resources.LoadTilesets("Tilesets/tilesets.conscript");
-
-			IntegrateResources<Tileset>("TILESET_");
-		}
-
-		private static void LoadTiles() {
-			Resources.LoadTiles("Tiles/tiles.conscript");
 		}
 
 
@@ -243,7 +252,7 @@ namespace ZeldaOracle.Game {
 		// Font Loading
 		//-----------------------------------------------------------------------------
 
-		// Loads the fonts.
+		/// <summary>Loads "Fonts/fonts.conscript"</summary>
 		private static void LoadFonts() {
 			Resources.LoadGameFonts("Fonts/fonts.conscript");
 
@@ -254,14 +263,14 @@ namespace ZeldaOracle.Game {
 		// Palette Loading
 		//-----------------------------------------------------------------------------
 
-		// Loads the palette dictionaries.
+		/// <summary>Loads "Palettes/Dictionaries/palette_dictionaries.conscript"</summary>
 		private static void LoadPaletteDictionaries() {
 			Resources.LoadPaletteDictionaries("Palettes/Dictionaries/palette_dictionaries.conscript");
 
 			IntegrateResources<PaletteDictionary>("PAL_");
 		}
 
-		// Loads the palettes.
+		/// <summary>Loads "Palettes/palettes.conscript"</summary>
 		private static void LoadPalettes() {
 			Resources.LoadPalettes("Palettes/palettes.conscript");
 
@@ -311,16 +320,12 @@ namespace ZeldaOracle.Game {
 		// Shader Loading
 		//-----------------------------------------------------------------------------
 
-		// Loads the shaders.
+		/// <summary>Manually loads shaders.</summary>
 		private static void LoadShaders() {
 			Resources.LoadShader<PaletteShader>("Shaders/palette");
 			Resources.LoadShader<SineShiftShader>("Shaders/sine_shift");
 			IntegrateResources<Shader>("SHADER_", true);
-			/*SHADER_PALETTE =
-				Resources.LoadShader<PaletteShader>("Shaders/palette");
-			SHADER_SINE_SHIFT = Resources.LoadShader("Shaders/sine_shift");*/
 
-			//SHADER_PALETTE = new PaletteShader(SHADER_PALETTE_LERP);
 			if (SHADER_PALETTE != null) {
 				SHADER_PALETTE.TilePalette = PAL_TILES_DEFAULT;
 				SHADER_PALETTE.EntityPalette = PAL_ENTITIES_DEFAULT;
@@ -328,8 +333,6 @@ namespace ZeldaOracle.Game {
 
 			GameSettings.DRAW_MODE_PALLETE.Effect = SHADER_PALETTE;
 		}
-		
-		//public static Effect SHADER_PALETTE_LERP;
 
 		public static PaletteShader SHADER_PALETTE;
 
@@ -341,6 +344,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public static CollisionModel MODEL_EMPTY;
+		[RequiresDefinition]
 		public static CollisionModel MODEL_BLOCK;
 		public static CollisionModel MODEL_EDGE_E;
 		public static CollisionModel MODEL_EDGE_N;
@@ -365,9 +369,13 @@ namespace ZeldaOracle.Game {
 		public static CollisionModel MODEL_BRIDGE_V;
 		public static CollisionModel MODEL_CENTER;
 
+		[BuiltProgrammatically]
 		public static CollisionModel MODEL_LEAP_LEDGE_RIGHT;
+		[BuiltProgrammatically]
 		public static CollisionModel MODEL_LEAP_LEDGE_UP;
+		[BuiltProgrammatically]
 		public static CollisionModel MODEL_LEAP_LEDGE_LEFT;
+		[BuiltProgrammatically]
 		public static CollisionModel MODEL_LEAP_LEDGE_DOWN;
 		public static CollisionModel[] MODEL_LEAP_LEDGES;
 
@@ -376,6 +384,7 @@ namespace ZeldaOracle.Game {
 		// Zones
 		//-----------------------------------------------------------------------------
 
+		[RequiresDefinition]
 		public static Zone ZONE_DEFAULT;
 
 
@@ -383,25 +392,35 @@ namespace ZeldaOracle.Game {
 		// Fonts
 		//-----------------------------------------------------------------------------
 
+		[RequiresDefinition]
 		public static GameFont FONT_LARGE;
+		[RequiresDefinition]
 		public static GameFont FONT_SMALL;
 
 
 		//-----------------------------------------------------------------------------
 		// Palettes
 		//-----------------------------------------------------------------------------
-		
+
+		[RequiresDefinition]
 		public static PaletteDictionary PAL_TILE_DICTIONARY;
+		[RequiresDefinition]
 		public static PaletteDictionary PAL_ENTITY_DICTIONARY;
-		
+
+		[RequiresDefinition]
 		public static Palette PAL_ENTITIES_DEFAULT;
 		public static Palette PAL_ENTITIES_MENU;
+		[RequiresDefinition]
 		public static Palette PAL_ENTITIES_ELECTROCUTED;
 
+		[RequiresDefinition]
 		public static Palette PAL_TILES_DEFAULT;
+		[RequiresDefinition]
 		public static Palette PAL_TILES_ELECTROCUTED;
 
+		[RequiresDefinition]
 		public static Palette PAL_DUNGEON_MAP_DEFAULT;
+		[RequiresDefinition]
 		public static Palette PAL_MENU_DEFAULT;
 
 		public static string[] MONSTER_COLOR_DEFINITION_MAP;

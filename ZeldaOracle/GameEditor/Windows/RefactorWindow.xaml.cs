@@ -16,8 +16,10 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using ZeldaEditor.Control;
 using ZeldaEditor.Controls;
-using ZeldaEditor.Util;
 using ZeldaOracle.Common.Scripting;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>The type of information to refactor.</summary>

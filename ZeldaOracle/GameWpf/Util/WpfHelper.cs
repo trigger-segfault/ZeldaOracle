@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -34,6 +30,22 @@ namespace ZeldaWpf.Util {
 			string uriString = "pack://application:,,,/" + assemblyShortName +
 				";component/" + resourcePath;
 			return new Uri(uriString);
+		}
+
+		/// <summary>A shorthand method for creating solid color brushes.</summary>
+		public static SolidColorBrush ColorBrush(byte r, byte g, byte b,
+			byte a = 255)
+		{
+			return new SolidColorBrush(Color.FromArgb(a, r, g, b));
+		}
+
+		/// <summary>A shorthand method for creating solid color pens.</summary>
+		public static Pen ColorPen(byte r, byte g, byte b, byte a = 255,
+			double thickness = 1d)
+		{
+			return new Pen(
+				new SolidColorBrush(Color.FromArgb(a, r, g, b)).AsFrozen(),
+				thickness);
 		}
 	}
 }

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using ZeldaEditor.Util;
 using ZeldaOracle.Common.Geometry;
+using ZeldaWpf.Util;
 
 namespace ZeldaEditor.Control {
 	public static class EditorImages {
@@ -52,11 +52,6 @@ namespace ZeldaEditor.Control {
 		public static readonly BitmapSource LevelGroup		= LoadIcon("LevelGroup");
 		public static readonly BitmapSource LevelResize		= LoadIcon("LevelResize");
 		public static readonly BitmapSource LevelShift		= LoadIcon("LevelShift");
-		//public static readonly BitmapSource Dungeon			= LoadIcon("Dungeon");
-		//public static readonly BitmapSource DungeonAdd		= LoadIcon("DungeonAdd");
-		//public static readonly BitmapSource DungeonDelete	= LoadIcon("DungeonDelete");
-		//public static readonly BitmapSource DungeonDuplicate= LoadIcon("DungeonDuplicate");
-		//public static readonly BitmapSource DungeonGroup	= LoadIcon("DungeonGroup");
 		public static readonly BitmapSource Area			= LoadIcon("Area");
 		public static readonly BitmapSource AreaAdd			= LoadIcon("AreaAdd");
 		public static readonly BitmapSource AreaDelete		= LoadIcon("AreaDelete");
@@ -112,10 +107,12 @@ namespace ZeldaEditor.Control {
 		}
 
 		private static BitmapSource LoadIcon(string name) {
-			return BitmapFactory.LoadSourceFromResource("Resources/Icons/" + name + ".png");
+			return BitmapFactory.FromResource("Resources/Icons/" + name + ".png",
+				typeof(EditorImages));
 		}
 		private static BitmapSource LoadResource(string name) {
-			return BitmapFactory.LoadSourceFromResource("Resources/" + name + ".png");
+			return BitmapFactory.FromResource("Resources/" + name + ".png",
+				typeof(EditorImages));
 		}
 	}
 }

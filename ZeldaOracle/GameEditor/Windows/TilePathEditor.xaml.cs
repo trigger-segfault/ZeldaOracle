@@ -20,6 +20,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

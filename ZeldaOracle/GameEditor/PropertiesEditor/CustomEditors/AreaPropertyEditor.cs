@@ -20,6 +20,7 @@ using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using System.Windows.Data;
 using System.Windows;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class AreaPropertyEditor : ComboBoxEditor {

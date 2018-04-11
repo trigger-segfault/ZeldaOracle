@@ -907,10 +907,7 @@ namespace ConscriptDesigner.Control {
 		//-----------------------------------------------------------------------------
 
 		public static string DesignerContentDirectory {
-			get {
-				return Path.Combine(Path.GetDirectoryName(
-				Assembly.GetExecutingAssembly().Location), Resources.RootDirectory);
-			}
+			get { return PathHelper.CombineExecutable(Resources.RootDirectory); }
 		}
 
 		public static MainWindow MainWindow {

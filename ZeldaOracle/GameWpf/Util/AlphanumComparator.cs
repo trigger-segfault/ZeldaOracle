@@ -6,19 +6,35 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ZeldaWpf.Util {
-	// NOTE: This code is free to use in any program.
-	// ... It was developed by Dot Net Perls.
-	//https://www.dotnetperls.com/alphanumeric-sorting
+	/// <summary>A string comparer that orders full numbers.<para/>
+	/// This code is free to use in any program. It was developed by Dot Net Perls.
+	/// https://www.dotnetperls.com/alphanumeric-sorting </summary>
 	public class AlphanumComparator : IComparer {
 
+		/// <summary>True if case should be ignored.</summary>
 		private bool ignoreCase;
 
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the comparer with ignore case set to false.</summary>
 		public AlphanumComparator() {
 			ignoreCase = false;
 		}
+
+		/// <summary>Constructs the comparer with the specified ignore case.</summary>
 		public AlphanumComparator(bool ignoreCase) {
 			this.ignoreCase = ignoreCase;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Compares the two string objects.</summary>
 		public static int Compare(object x, object y, bool ignoreCase) {
 			string s1 = x as string;
 			if (s1 == null) {
@@ -94,10 +110,23 @@ namespace ZeldaWpf.Util {
 			}
 			return len1 - len2;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// IComparer Overrides
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Compares the two string objects.</summary>
 		public int Compare(object x, object y) {
 			return Compare(x, y, ignoreCase);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets or sets if the comparer should ignore case.</summary>
 		public bool IgnoreCase {
 			get { return ignoreCase; }
 			set { ignoreCase = value; }

@@ -665,7 +665,7 @@ namespace ZeldaWpf.Controls {
 		//Due to a bug in Visual Studio, you cannot create event handlers for generic T args in XAML, so I have to use object instead.
 		public static readonly RoutedEvent ValueChangedEvent =
 			EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Bubble,
-				typeof(RoutedPropertyChangedEventHandler<object> ), typeof(PointUpDown));
+				typeof(RoutedPropertyChangedEventHandler<object> ), typeof(VectorUpDown));
 		public event RoutedPropertyChangedEventHandler<object> ValueChanged {
 			add { AddHandler( ValueChangedEvent, value ); }
 			remove { RemoveHandler( ValueChangedEvent, value ); }

@@ -115,6 +115,7 @@
     <Compile Include="Common\Util\BinaryExtensions.cs" />
     <Compile Include="Common\Util\Embedding.cs" />
     <Compile Include="Common\Util\EnumHelper.cs" />
+    <Compile Include="Common\Util\ExceptionExtensions.cs" />
     <Compile Include="Common\Util\GdiCasting.cs" />
     <Compile Include="Common\Util\GenericHelper.cs" />
     <Compile Include="Common\Util\NativeMethods.cs" />

@@ -20,6 +20,7 @@ using WFClipboard = System.Windows.Clipboard;
 using ZeldaOracle.Common.Content;
 using System.Media;
 using ZeldaEditor.Windows;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Tools {
 

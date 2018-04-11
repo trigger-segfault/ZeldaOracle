@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using Microsoft.Xna.Framework.Content;
 using ZeldaEditor.Control;
-using ZeldaEditor.Util;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -16,6 +15,8 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Util;
+using ZeldaWpf.WinForms;
 using FrameworkElement = System.Windows.FrameworkElement;
 
 namespace ZeldaEditor.WinForms {
@@ -143,7 +144,7 @@ namespace ZeldaEditor.WinForms {
 			
 			this.ResizeRedraw = true;
 
-			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+			ContinuousEvents.StartRender(
 				() => {
 					if (editorControl.IsActive)
 						Invalidate();

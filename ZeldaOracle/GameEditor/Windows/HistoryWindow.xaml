@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
         xmlns:cmd="clr-namespace:ZeldaEditor"
         mc:Ignorable="d"
@@ -10,7 +11,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="NoBorderListViewStyle" TargetType="{x:Type ListView}">
                 <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
@@ -57,8 +58,8 @@
     <DockPanel>
         <Border DockPanel.Dock="Bottom" Height="26" Background="#FFDCE7F5" BorderThickness="0,1,0,0" BorderBrush="#FF365D90">
             <Grid>
-                <local:ImageButton Source="/ZeldaEditor;component/Resources/Icons/Undo.png" Margin="5,2,0,1" Command="Undo" HorizontalAlignment="Left"/>
-                <local:ImageButton Source="/ZeldaEditor;component/Resources/Icons/Redo.png" Margin="31,2,0,1" Command="Redo" HorizontalAlignment="Left"/>
+                <common:ImageButton Source="/ZeldaEditor;component/Resources/Icons/Undo.png" Margin="5,2,0,1" Command="Undo" HorizontalAlignment="Left"/>
+                <common:ImageButton Source="/ZeldaEditor;component/Resources/Icons/Redo.png" Margin="31,2,0,1" Command="Redo" HorizontalAlignment="Left"/>
             </Grid>
         </Border>
         <ListView x:Name="listView" SelectionChanged="OnSelectionChanged" SelectionMode="Single" Style="{DynamicResource NoBorderListViewStyle}">

@@ -1,29 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ZeldaOracle.Common.Geometry;
+using ZeldaWpf.Util;
 
-namespace ZeldaEditor.Controls {
+namespace ZeldaWpf.Controls {
+	/// <summary>A gridsplitter control that draws over WinForms controls.</summary>
 	public class AirspaceGridSplitter : GridSplitter {
 
-		private static readonly SolidColorBrush DragBrush = new SolidColorBrush(Color.FromRgb(64, 64, 64));
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The brush color of the drag preview.</summary>
+		private static readonly SolidColorBrush DragBrush =
+			WpfHelper.ColorBrush(64, 64, 64).AsFrozen();
+		/// <summary>The opacity of the drag preview.</summary>
 		private const double DragOpacity = 0.75;
 
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The window used to preview the dragging result.</summary>
 		private Window airspaceWindow;
+		/// <summary>The relative position of the grip while dragging.</summary>
 		private Point gripPosition;
+		/// <summary>The grid containing this gridsplitter.</summary>
 		private Grid grid;
 
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the airspace gridsplitter.</summary>
 		public AirspaceGridSplitter() {
 			PreviewStyle = new Style();
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Events
+		//-----------------------------------------------------------------------------
 
 		protected override void OnMouseDown(MouseButtonEventArgs e) {
 			base.OnMouseDown(e);
@@ -63,33 +86,46 @@ namespace ZeldaEditor.Controls {
 				}
 			}
 		}
+
 		protected override void OnMouseUp(MouseButtonEventArgs e) {
 			base.OnMouseDown(e);
 			if (e.ChangedButton == MouseButton.Left) {
 				CloseAirspaceWindow();
 			}
 		}
+
 		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
 			if (airspaceWindow != null) {
 				Point mouse = e.GetPosition(this);
-				if (ResizeDirection == GridResizeDirection.Columns || (ResizeDirection == GridResizeDirection.Auto && Grid.GetColumn(this) != 0)) {
+				if (ResizeDirection == GridResizeDirection.Columns ||
+					(ResizeDirection == GridResizeDirection.Auto &&
+					Grid.GetColumn(this) != 0))
+				{
 					mouse.Y = 0;
 					mouse.X -= gripPosition.X;
 
 					mouse = this.PointToScreen(mouse);
 					Point gridPoint = grid.PointToScreen(new Point(0, 0));
 
-					mouse.X = Math.Max(gridPoint.X, Math.Min(gridPoint.X + grid.ActualWidth - airspaceWindow.Width, mouse.X));
+					double maxX = gridPoint.X + grid.ActualWidth -
+						airspaceWindow.Width;
+					mouse.X = GMath.Clamp(mouse.X, gridPoint.X, maxX);
 				}
-				else if (ResizeDirection == GridResizeDirection.Rows || (ResizeDirection == GridResizeDirection.Auto && Grid.GetRow(this) != 0)) {
+				else if (ResizeDirection == GridResizeDirection.Rows ||
+					(ResizeDirection == GridResizeDirection.Auto &&
+					Grid.GetRow(this) != 0))
+				{
 					mouse.X = 0;
 					mouse.Y -= gripPosition.Y;
 
 					mouse = this.PointToScreen(mouse);
 					Point gridPoint = grid.PointToScreen(new Point(0, 0));
 
-					mouse.Y = Math.Max(gridPoint.Y, Math.Min(gridPoint.Y + grid.ActualHeight - airspaceWindow.Height, mouse.Y));
+
+					double maxY = gridPoint.Y + grid.ActualHeight -
+						airspaceWindow.Height;
+					mouse.Y = GMath.Clamp(mouse.Y, gridPoint.Y, maxY);
 				}
 				else {
 					mouse.X = 0;
@@ -99,6 +135,7 @@ namespace ZeldaEditor.Controls {
 				airspaceWindow.Top = mouse.Y;
 			}
 		}
+
 		protected override void OnPreviewMouseUp(MouseButtonEventArgs e) {
 			// Fix gridsplitter sometimes failing to relocate after a drag
 			CancelDrag();
@@ -109,6 +146,7 @@ namespace ZeldaEditor.Controls {
 			base.OnLostFocus(e);
 			CloseAirspaceWindow();
 		}
+
 		protected override void OnLostMouseCapture(MouseEventArgs e) {
 			base.OnLostMouseCapture(e);
 			CloseAirspaceWindow();
@@ -118,6 +156,12 @@ namespace ZeldaEditor.Controls {
 			airspaceWindow = null;
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Attemps to close the airspace window if it's open.</summary>
 		private void CloseAirspaceWindow() {
 			if (airspaceWindow != null) {
 				airspaceWindow.Close();

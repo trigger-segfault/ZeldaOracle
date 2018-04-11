@@ -3,56 +3,24 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ZeldaWpf.Resources;
 
 namespace ZeldaWpf.Controls {
-	/// <summary>A tree view item that also displays an image.</summary>
-	public class ImageTreeViewItem2 : TreeViewItem {
-
-		/// <summary>The default empty context menu.</summary>
-		private static ContextMenu NullContextMenu;
-
-		/// <summary>The dependency property for the tree view item's image.</summary>
-		public static readonly DependencyProperty SourceProperty =
-			DependencyProperty.RegisterAttached(
-			"Source", typeof(ImageSource), typeof(ImageTreeViewItem2));
-
-		/// <summary>Gets or sets the source of the tree view item's image.</summary>
-		[Category("Common")]
-		public ImageSource Source {
-			get { return (ImageSource)GetValue(SourceProperty); }
-			set { SetValue(SourceProperty, value); }
-		}
-
-		/// <summary>Initializes the image tree view item default style.</summary>
-		static ImageTreeViewItem2() {
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(ImageTreeViewItem2),
-					   new FrameworkPropertyMetadata(typeof(ImageTreeViewItem2)));
-
-			NullContextMenu = new ContextMenu();
-			NullContextMenu.Visibility = Visibility.Hidden;
-		}
-
-		/// <summary>Constructs an empty tree view item.</summary>
-		public ImageTreeViewItem2() : this(null, null, false) { }
-
-		/// <summary>Constructs an tree view item with an image and name.</summary>
-		public ImageTreeViewItem2(ImageSource source, string name, bool expanded) {
-			Source = source;
-			Header = name;
-			IsExpanded = expanded;
-			ContextMenu = NullContextMenu;
-		}
-	}
-
+	/// <summary>Wrapper arguments for MouseButtonEventArgs because it doesn't
+	/// support a proper constructor.</summary>
 	public class ItemMouseButtonEventArgs : RoutedEventArgs {
+		/// <summary>The actual MouseButtonEventArgs.</summary>
 		public MouseButtonEventArgs Args { get; set; }
 
+		/// <summary>Constructs the ItemMouseButtonEventArgs.</summary>
 		public ItemMouseButtonEventArgs(RoutedEvent routedEvent, MouseButtonEventArgs e) :
 			base(routedEvent) {
-			this.Args = e;
+			Args = e;
 		}
 	}
 
+	/// <summary>Wrapper arguments for MouseButtonEventArgs handler because it
+	/// doesn't support a proper constructor.</summary>
 	public delegate void ItemMouseButtonEventHandler(object sender, ItemMouseButtonEventArgs e);
 
 	/// <summary>A tree view item that also displays an image.</summary>
@@ -100,6 +68,30 @@ namespace ZeldaWpf.Controls {
 			set { SetValue(SourceProperty, value); }
 		}
 
+		/// <summary>The dependency property for the tree view item's expanded image.</summary>
+		public static readonly DependencyProperty SourceExpandedProperty =
+			DependencyProperty.RegisterAttached("SourceExpanded", typeof(ImageSource),
+				typeof(ImageTreeViewItem));
+
+		/// <summary>Gets or sets the source of the tree view item's expanded image.</summary>
+		[Category("Common")]
+		public ImageSource SourceExpanded {
+			get { return (ImageSource) GetValue(SourceExpandedProperty); }
+			set { SetValue(SourceExpandedProperty, value); }
+		}
+
+		/// <summary>The dependency property for the tree view item's collapsed image.</summary>
+		public static readonly DependencyProperty SourceCollapsedProperty =
+			DependencyProperty.RegisterAttached("SourceCollapsed", typeof(ImageSource),
+				typeof(ImageTreeViewItem));
+
+		/// <summary>Gets or sets the source of the tree view item's collapsed image.</summary>
+		[Category("Common")]
+		public ImageSource SourceCollapsed {
+			get { return (ImageSource) GetValue(SourceCollapsedProperty); }
+			set { SetValue(SourceCollapsedProperty, value); }
+		}
+
 		/// <summary>The dependency property for the opacity of tree view item's image.</summary>
 		public static readonly DependencyProperty ImageOpacityProperty =
 			DependencyProperty.RegisterAttached("ImageOpacity", typeof(double),
@@ -138,14 +130,39 @@ namespace ZeldaWpf.Controls {
 		}
 
 		/// <summary>Constructs an empty tree view item.</summary>
-		public ImageTreeViewItem() : this(null, null, false) { }
-
-		/// <summary>Constructs an tree view item with an image and name.</summary>
-		public ImageTreeViewItem(ImageSource source, string name, bool expanded) {
-			Source = source;
-			Header = name;
-			IsExpanded = expanded;
+		public ImageTreeViewItem() {
 			ContextMenu = NullContextMenu;
+		}
+
+		/// <summary>Constructs an tree view item with an image and header.</summary>
+		public ImageTreeViewItem(ImageSource source, object header, bool expanded)
+			: this()
+		{
+			Source = source;
+			Header = header;
+			IsExpanded = expanded;
+		}
+
+		/// <summary>Constructs an tree view item with an images and header.</summary>
+		public ImageTreeViewItem(ImageSource sourceExpanded,
+			ImageSource sourceCollapsed, object header, bool expanded) : this()
+		{
+			SourceExpanded = sourceExpanded;
+			SourceCollapsed = sourceCollapsed;
+			Header = header;
+			IsExpanded = expanded;
+			UpdateExpandedSource();
+		}
+
+		/// <summary>Constructs a copy of the tree view item's images, header, and
+		/// expanded state.</summary>
+		public ImageTreeViewItem(ImageTreeViewItem copy) : this() {
+			Source = copy.Source;
+			SourceExpanded = copy.SourceExpanded;
+			SourceCollapsed = copy.SourceCollapsed;
+			Header = copy.Header;
+			IsExpanded = copy.IsExpanded;
+			UpdateExpandedSource();
 		}
 
 
@@ -159,6 +176,18 @@ namespace ZeldaWpf.Controls {
 				OnItemPreviewMouseDown;
 		}
 
+		/// <summary>Applies the expended source if one exists.</summary>
+		protected override void OnExpanded(RoutedEventArgs e) {
+			base.OnExpanded(e);
+			UpdateExpandedSource();
+		}
+
+		/// <summary>Applies the collapsed source if one exists.</summary>
+		protected override void OnCollapsed(RoutedEventArgs e) {
+			base.OnCollapsed(e);
+			UpdateExpandedSource();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers
@@ -167,6 +196,19 @@ namespace ZeldaWpf.Controls {
 		/// <summary>Triggers the item mouse down event.</summary>
 		private void OnItemPreviewMouseDown(object sender, MouseButtonEventArgs e) {
 			RaiseEvent(new ItemMouseButtonEventArgs(ItemMouseDownEvent, e));
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Updates the source to refer to the expanded or collapsed source.</summary>
+		protected void UpdateExpandedSource() {
+			if (IsExpanded && SourceExpanded != null)
+				Source = SourceExpanded;
+			else if (!IsExpanded && SourceCollapsed != null)
+				Source = SourceCollapsed;
 		}
 	}
 }

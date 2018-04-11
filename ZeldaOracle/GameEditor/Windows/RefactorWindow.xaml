@@ -1,9 +1,10 @@
-﻿<local:TimersWindow x:Class="ZeldaEditor.Windows.RefactorWindow"
+﻿<common:TimersWindow x:Class="ZeldaEditor.Windows.RefactorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         mc:Ignorable="d"
         Title="Refactor Properties" Width="260" Height="280" Background="#FFF0F0F0" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="/ZeldaEditor;component/Resources/Icons/Property.png" SnapsToDevicePixels="True" UseLayoutRounding="True" PreviewKeyDown="OnPreviewKeyDown" Closing="OnWindowClosing">
     <Grid>
@@ -19,4 +20,4 @@
         <Button Content="Close" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="75" IsCancel="True" Click="OnClose"/>
         <Button x:Name="buttonReplaceAll" Content="Replace All" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,93,10" Width="75" IsDefault="True" Click="OnReplaceAll"/>
     </Grid>
-</local:TimersWindow>
+</common:TimersWindow>

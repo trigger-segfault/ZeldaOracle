@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         xmlns:treeViews="clr-namespace:ZeldaEditor.TreeViews"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:scripting="clr-namespace:ZeldaEditor.Scripting"
@@ -14,12 +15,12 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <DockPanel x:Name="dockPanel">
-        <local:AirspaceGridSplitter x:Name="airspaceGridSplitter"/>
+        <common:AirspaceGridSplitter x:Name="airspaceGridSplitter"/>
         <ToolBar DockPanel.Dock="Top">
             <local:ObjectPreview x:Name="objectPreview" VerticalAlignment="Center" PreviewBackground="#FFFFFBFF"/>
             <Separator/>

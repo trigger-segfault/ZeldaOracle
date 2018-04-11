@@ -11,7 +11,6 @@ namespace ZeldaWpf.WinForms {
 
 		/// <summary>Initializes the resources.</summary>
 		protected override void Initialize() {
-			Resources.Initialize(GraphicsDevice, Services);
 			GraphicsInitialized?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -22,5 +21,17 @@ namespace ZeldaWpf.WinForms {
 
 		/// <summary>Occurs after the dummy graphics control initializes the resources.</summary>
 		public event EventHandler GraphicsInitialized;
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets an IServiceProvider containing our IGraphicsDeviceService.
+		/// This can be used with components such as the ContentManager, which use this
+		/// service to look up the GraphicsDevice.</summary>
+		public new IServiceProvider Services {
+			get { return base.Services; }
+		}
 	}
 }

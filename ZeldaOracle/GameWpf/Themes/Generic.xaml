@@ -895,6 +895,7 @@
                             </MultiTrigger.Conditions>
                             <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
                         </MultiTrigger>
+                        
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="HasHeader" Value="false"/>
@@ -925,6 +926,15 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <!--<Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Property="IsExpanded" Value="True"/>
+                    <Condition Binding="{local:ComparisonBinding SourceExpanded, NEQ, {x:Null}}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Source" Value="{Binding Path=SourceExpanded, RelativeSource={RelativeSource Self}}"/>
+            </MultiDataTrigger>
+        </Style.Triggers>-->
     </Style>
 
     <Style TargetType="{x:Type Image}">
@@ -1824,7 +1834,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type local:PropertyGridEditorPointUpDown}"
+    <Style TargetType="{x:Type local:PropertyGridEditorVectorUpDown}"
          BasedOn="{StaticResource {x:Type local:VectorUpDown}}">
         <Style.Triggers>
             <MultiTrigger>

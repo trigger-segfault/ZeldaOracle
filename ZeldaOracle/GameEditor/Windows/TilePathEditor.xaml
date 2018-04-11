@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         xmlns:cmd="clr-namespace:ZeldaEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
@@ -11,7 +12,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -35,12 +36,12 @@
         <Border x:Name="borderEditor" BorderBrush="#FF828790" BorderThickness="1,0" Background="White" Width="241">
             <DockPanel>
                 <ToolBar DockPanel.Dock="Top">
-                    <local:ImageButton x:Name="buttonFinish" ToolTip="Finish editing and save changes" Source="/Resources/Icons/Checkmark.png" Click="OnFinished"/>
-                    <local:ImageButton x:Name="buttonSave" ToolTip="Save changes" Source="/Resources/Icons/Save.png" Command="Save"/>
-                    <local:ImageButton x:Name="buttonDelete" ToolTip="Delete tile path" Source="/Resources/Icons/Delete.png" Click="OnDeleteTilePath" />
+                    <common:ImageButton x:Name="buttonFinish" ToolTip="Finish editing and save changes" Source="/Resources/Icons/Checkmark.png" Click="OnFinished"/>
+                    <common:ImageButton x:Name="buttonSave" ToolTip="Save changes" Source="/Resources/Icons/Save.png" Command="Save"/>
+                    <common:ImageButton x:Name="buttonDelete" ToolTip="Delete tile path" Source="/Resources/Icons/Delete.png" Click="OnDeleteTilePath" />
                     <Separator/>
-                    <local:ImageButton x:Name="buttonAdd" Content="Add" Source="/Resources/Icons/TilePathAdd.png" Click="OnAddCommand"/>
-                    <local:ImageToggleButton x:Name="buttonRepeats" Content="Repeats" Source="/ZeldaEditor;component/Resources/Icons/TilePathRepeats.png" Click="OnRepeatsChanged" />
+                    <common:ImageButton x:Name="buttonAdd" Content="Add" Source="/Resources/Icons/TilePathAdd.png" Click="OnAddCommand"/>
+                    <common:ImageToggleButton x:Name="buttonRepeats" Content="Repeats" Source="/ZeldaEditor;component/Resources/Icons/TilePathRepeats.png" Click="OnRepeatsChanged" />
                 </ToolBar>
                 <Border BorderThickness="0,1,0,0" BorderBrush="#FF828790">
                     <ScrollViewer x:Name="scrollViewer">

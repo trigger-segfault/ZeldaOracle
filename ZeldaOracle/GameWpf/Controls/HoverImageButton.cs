@@ -14,7 +14,7 @@ namespace ZeldaWpf.Controls {
 		/// <summary>The dependency property for the button's hover image.</summary>
 		public static readonly DependencyProperty SourceHoverProperty =
 			DependencyProperty.RegisterAttached(
-			"SourceHover", typeof(ImageSource), typeof(ImageButton));
+			"SourceHover", typeof(ImageSource), typeof(HoverImageButton));
 
 		/// <summary>Gets or sets the hover source of the button's image.</summary>
 		[Category("Common")]

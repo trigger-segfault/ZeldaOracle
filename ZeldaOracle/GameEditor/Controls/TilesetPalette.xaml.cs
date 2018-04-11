@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using ZeldaEditor.Util;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Game.Tiles;
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Util;
 
 namespace ZeldaEditor.Controls {
 	/// <summary>

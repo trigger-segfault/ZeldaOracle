@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

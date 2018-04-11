@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeldaEditor.Controls"
+             xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
              mc:Ignorable="d" 
              d:DesignHeight="325" d:DesignWidth="460" KeyDown="OnKeyDown">
     <UserControl.Resources>
@@ -23,16 +24,16 @@
     </UserControl.CommandBindings>
     <DockPanel x:Name="panel" >
         <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
-            <local:ImageButton x:Name="buttonToolCut" Source="/Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>
-            <local:ImageButton x:Name="buttonToolCopy" Source="/Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
-            <local:ImageButton x:Name="buttonToolPaste" Source="/Resources/Icons/Paste.png" ToolTip="Cut (Ctrl+V)" Command="Paste"/>
+            <common:ImageButton x:Name="buttonToolCut" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>
+            <common:ImageButton x:Name="buttonToolCopy" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
+            <common:ImageButton x:Name="buttonToolPaste" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Paste.png" ToolTip="Cut (Ctrl+V)" Command="Paste"/>
             <Separator/>
-            <local:ImageButton x:Name="buttonUndo" Source="/Resources/Icons/Undo.png" ToolTip="Cut (Ctrl+V)" Command="Undo"/>
-            <local:ImageButton x:Name="buttonRedo" Source="/Resources/Icons/Redo.png" ToolTip="Cut (Ctrl+V)" Command="Redo"/>
+            <common:ImageButton x:Name="buttonUndo" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Undo.png" ToolTip="Cut (Ctrl+V)" Command="Undo"/>
+            <common:ImageButton x:Name="buttonRedo" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Redo.png" ToolTip="Cut (Ctrl+V)" Command="Redo"/>
             <Separator/>
-            <local:ImageButton x:Name="buttonAdd" ToolTip="New Variable..." Source="/Resources/Icons/Plus.png" Command="New"/>
-            <local:ImageButton x:Name="buttonEdit" ToolTip="Edit Variable..." Source="/Resources/Icons/Plus.png" Command="Open"/>
-            <local:ImageButton x:Name="buttonDelete" ToolTip="Delete Variable" Source="/Resources/Icons/Delete.png" Command="Delete"/>
+            <common:ImageButton x:Name="buttonAdd" ToolTip="New Variable..." Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Plus.png" Command="New"/>
+            <common:ImageButton x:Name="buttonEdit" ToolTip="Edit Variable..." Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Edit.png" Command="Open"/>
+            <common:ImageButton x:Name="buttonDelete" ToolTip="Delete Variable" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Delete.png" Command="Delete"/>
         </ToolBar>
         <ListView x:Name="listView" ItemContainerStyle="{StaticResource listViewStyle}">
             <ListView.View>

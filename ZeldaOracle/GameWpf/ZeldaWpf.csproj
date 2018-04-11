@@ -59,14 +59,18 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\AirspaceGridSplitter.cs" />
+    <Compile Include="Controls\ComparisonBinding.cs" />
     <Compile Include="Controls\DraggableImageTreeView.cs" />
     <Compile Include="Controls\DropDownButton.cs" />
     <Compile Include="Controls\DropDownMenuItem.cs" />
+    <Compile Include="Controls\FolderTreeViewItem.cs" />
     <Compile Include="Controls\HoverImageButton.cs" />
     <Compile Include="Controls\ImageButton.cs" />
     <Compile Include="Controls\ImageMenuItem.cs" />
     <Compile Include="Controls\ImageToggleButton.cs" />
     <Compile Include="Controls\ImageTreeViewItem.cs" />
+    <Compile Include="Controls\IsNullConverter.cs" />
     <Compile Include="Controls\NoneStringConverter.cs" />
     <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
     <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
@@ -79,6 +83,9 @@
     <Compile Include="Controls\TimersWindow.cs" />
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Controls\GraphicsInitializer.cs" />
+    <Compile Include="Resources\WpfImages.cs" />
+    <Compile Include="Util\CursorLoader.cs" />
+    <Compile Include="Util\WpfExtensions.cs" />
     <Compile Include="ZeldaWpfApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -129,12 +136,17 @@
       <Project>{fd1e47e1-ec0a-4f93-9d85-d151285bd134}</Project>
       <Name>ZeldaOptimization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Game\Zelda.csproj">
-      <Project>{899daec0-cf01-4b30-a6e4-a0db613978bd}</Project>
-      <Name>Zelda</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderBlueHClosed.png" />
+    <Resource Include="Resources\Icons\FolderBlueHOpen.png" />
+    <Resource Include="Resources\Icons\FolderBlueVClosed.png" />
+    <Resource Include="Resources\Icons\FolderBlueVOpen.png" />
+    <Resource Include="Resources\Icons\FolderManillaHClosed.png" />
+    <Resource Include="Resources\Icons\FolderManillaHOpen.png" />
+    <Resource Include="Resources\Icons\FolderManillaVClosed.png" />
+    <Resource Include="Resources\Icons\FolderManillaVOpen.png" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\DefaultStyles.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -27,13 +27,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			// Set the sprite.
-			PuzzleColor color = Color;
+			/*PuzzleColor color = Color;
 			if (color == PuzzleColor.Red)
 				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_TILE_RED);
 			else if (color == PuzzleColor.Yellow)
 				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_TILE_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_TILE_BLUE);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_TILE_BLUE);*/
+			Graphics.PlayAnimation(SpriteList[(int) Color]);
 		}
 
 
@@ -44,7 +45,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			PuzzleColor tileColor = args.Properties.GetEnum("color", PuzzleColor.Red);
-			ISprite sprite = null;
+			/*ISprite sprite = null;
 			if (tileColor == PuzzleColor.Red)
 				sprite = GameData.SPR_TILE_COLOR_TILE_RED;
 			else if (tileColor == PuzzleColor.Yellow)
@@ -57,7 +58,8 @@ namespace ZeldaOracle.Game.Tiles {
 					args.SpriteSettings,
 					args.Position,
 					args.Color);
-			}
+			}*/
+			Tile.DrawTileDataIndex(g, args, (int) tileColor);
 		}
 
 		/// <summary>Initializes the properties and events for the tile type.</summary>
@@ -72,10 +74,10 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public PuzzleColor Color {
-			get { return Properties.GetEnum<PuzzleColor>("color", PuzzleColor.Red); }
+			get { return Properties.GetEnum("color", PuzzleColor.Red); }
 			set {
-				bool changed = (value != Color);
-				Properties.Set("color", (int) value);
+				//bool changed = (value != Color);
+				Properties.SetEnum("color", value);
 				//if (changed)
 					//GameControl.FireEvent(this, "color_change", this, ((ZeldaAPI.ColorTile) this).Color);
 			}

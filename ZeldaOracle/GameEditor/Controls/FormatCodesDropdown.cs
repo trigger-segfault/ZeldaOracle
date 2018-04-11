@@ -11,10 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ZeldaEditor.Control;
-using ZeldaEditor.Util;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game;
+using ZeldaWpf.Controls;
 using ZeldaColor = ZeldaOracle.Common.Graphics.Color;
 
 namespace ZeldaEditor.Controls {
@@ -76,9 +76,11 @@ namespace ZeldaEditor.Controls {
 
 		public FormatCodesDropdown() {
 			if (ToolBarButtonStyle == null) {
-				ToolBarButtonStyle = (Style)FindResource(ToolBar.ButtonStyleKey);
+				ToolBarButtonStyle = (Style) FindResource(ToolBar.ButtonStyleKey);
 			}
-			Loaded += OnLoaded;
+			if (!DesignerProperties.GetIsInDesignMode(this)) {
+				Loaded += OnLoaded;
+			}
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e) {

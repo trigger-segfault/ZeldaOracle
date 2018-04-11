@@ -81,10 +81,10 @@ TILE "temp_minecart_track";
 	#FLAGS		NotCoverable;
 	#RESETWHEN	LeaveArea;
 	SPRITEINDEX	0, "tile_minecart_track_horizontal";	# Horizontal
-	SPRITEINDEX	1, "tile_minecart_track_vertical";	# Vertical
-	SPRITEINDEX	2, "tile_minecart_track_up_right";	# Right/Up
+	SPRITEINDEX	1, "tile_minecart_track_vertical";		# Vertical
+	SPRITEINDEX	2, "tile_minecart_track_up_right";		# Right/Up
 	SPRITEINDEX	3, "tile_minecart_track_up_left";		# Up/Left
-	SPRITEINDEX	4, "tile_minecart_track_down_left";	# Left/Down
+	SPRITEINDEX	4, "tile_minecart_track_down_left";		# Left/Down
 	SPRITEINDEX	5, "tile_minecart_track_down_right";	# Down/Right
 END;
 
@@ -261,12 +261,18 @@ END;
 
 TILE "color_barrier_red";
 	CLONE		"temp_color_barrier";
-	SPRITE		tile_color_barrier_red_lowered;
+	SPRITEINDEX	0, tile_color_barrier_red_raised;
+	SPRITEINDEX	1, tile_color_barrier_red_lowered;
+	SPRITEINDEX 2, tile_color_barrier_red_raise;
+	SPRITEINDEX 3, tile_color_barrier_red_lower;
 	PROPERTY	(color, 0);
 END;
 TILE "color_barrier_blue";
 	CLONE		"temp_color_barrier";
-	SPRITE		tile_color_barrier_blue_raised;
+	SPRITEINDEX	0, tile_color_barrier_blue_raised;
+	SPRITEINDEX	1, tile_color_barrier_blue_lowered;
+	SPRITEINDEX 2, tile_color_barrier_blue_raise;
+	SPRITEINDEX 3, tile_color_barrier_blue_lower;
 	PROPERTY	(color, 2);
 END;
 

@@ -30,9 +30,10 @@ using XnaColor = Microsoft.Xna.Framework.Color;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 using SurfaceFormat = Microsoft.Xna.Framework.Graphics.SurfaceFormat;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaEditor.Util;
+using ZeldaWpf.Util;
 using ZeldaOracle.Common.Util;
 using FrameworkElement = System.Windows.FrameworkElement;
+using ZeldaWpf.WinForms;
 
 namespace ZeldaEditor.WinForms {
 
@@ -84,7 +85,7 @@ namespace ZeldaEditor.WinForms {
 			fps = 0.0;
 			fpsWatch = Stopwatch.StartNew();
 
-			this.ResizeRedraw = true;
+			ResizeRedraw = true;
 
 			UpdateLevel();
 
@@ -93,7 +94,7 @@ namespace ZeldaEditor.WinForms {
 			highlightedRoom = -Point2I.One;
 			highlightedTile = -Point2I.One;
 
-			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+			ContinuousEvents.StartRender(
 				() => {
 					if (editorControl.IsActive) {
 						if (editorControl.IsLevelOpen)

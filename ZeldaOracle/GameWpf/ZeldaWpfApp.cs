@@ -130,18 +130,5 @@ namespace ZeldaWpf {
 		public static bool IsExceptionOpen {
 			get { return exceptionOpen; }
 		}
-
-		/// <summary>Gets the path of the entry executable.</summary>
-		public static string ExePath {
-			get { return Assembly.GetEntryAssembly().Location; }
-		}
-
-		/// <summary>Gets the directory of the entry executable.</summary>
-		public static string ExeDirectory {
-			get {
-				return Path.GetDirectoryName(
-					Assembly.GetEntryAssembly().Location);
-			}
-		}
 	}
 }

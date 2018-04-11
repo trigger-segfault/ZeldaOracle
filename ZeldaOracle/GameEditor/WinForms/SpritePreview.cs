@@ -17,6 +17,7 @@ using ZeldaEditor.Control;
 using ZeldaOracle.Common.Graphics.Sprites;
 using System.Windows.Threading;
 using Size = System.Drawing.Size;
+using ZeldaWpf.WinForms;
 
 namespace ZeldaEditor.WinForms {
 

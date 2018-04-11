@@ -182,6 +182,22 @@ namespace ZeldaWpf.Util {
 	/// Best use is to attach it to the FrameworkElement its associated with.</summary>
 	public class ContinuousEvents {
 
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The required timer interval to hit at least 60FPS.</summary>
+		public static readonly TimeSpan RenderInterval =
+			TimeSpan.FromMilliseconds(15);
+
+		/// <summary>The required timer priority to hit at least 60FPS.</summary>
+		public const TimerPriority RenderPriority = TimerPriority.High;
+
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
 		/// <summary>The global collection of cancellable timers.</summary>
 		private static HashSet<ContinuousEvent> globalTimers;
 
@@ -212,11 +228,11 @@ namespace ZeldaWpf.Util {
 		}
 
 		/// <summary>Constructs continuous events that cancel on element unloading and
-		/// window closing.</summary>
+		/// window closed.</summary>
 		public ContinuousEvents(FrameworkElement element) : this() {
 			if (element is Window) {
 				window = (Window) element;
-				window.Closing += OnClosing;
+				window.Closed += OnClosed;
 			}
 			else {
 				this.element = element;
@@ -225,10 +241,10 @@ namespace ZeldaWpf.Util {
 			}
 		}
 
-		/// <summary>Constructs continuous events that cancel on window closing.</summary>
+		/// <summary>Constructs continuous events that cancel on window closed.</summary>
 		public ContinuousEvents(Window window) : this() {
 			this.window = window;
-			window.Closing += OnClosing;
+			window.Closed += OnClosed;
 		}
 
 
@@ -285,22 +301,22 @@ namespace ZeldaWpf.Util {
 
 		// No Callback ----------------------------------------------------------------
 
-		/// <summary>Starts a new continuous event with no action or callback.</summary>
+		/// <summary>Creates a new continuous event with no action or callback.</summary>
 		public ContinuousEvent New(double seconds) {
 			return New(TimeSpan.FromSeconds(seconds), defaultPriority);
 		}
 
-		/// <summary>Starts a new continuous event with no action or callback.</summary>
+		/// <summary>Creates a new continuous event with no action or callback.</summary>
 		public ContinuousEvent New(TimeSpan interval) {
 			return New(interval, defaultPriority);
 		}
 
-		/// <summary>Starts a new continuous event with no action or callback.</summary>
+		/// <summary>Creates a new continuous event with no action or callback.</summary>
 		public ContinuousEvent New(double seconds, TimerPriority priority) {
 			return New(TimeSpan.FromSeconds(seconds), priority);
 		}
 
-		/// <summary>Starts a new continuous event with no action or callback.</summary>
+		/// <summary>Creates a new continuous event with no action or callback.</summary>
 		public ContinuousEvent New(TimeSpan interval, TimerPriority priority) {
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
@@ -312,24 +328,24 @@ namespace ZeldaWpf.Util {
 
 		// Action Callback ------------------------------------------------------------
 
-		/// <summary>Starts a new continuous new event with the specified action.</summary>
+		/// <summary>Creates a new continuous new event with the specified action.</summary>
 		public ContinuousEvent New(double seconds, Action action) {
 			return New(TimeSpan.FromSeconds(seconds), defaultPriority, action);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified action.</summary>
+		/// <summary>Creates a new continuous new event with the specified action.</summary>
 		public ContinuousEvent New(TimeSpan interval, Action action) {
 			return New(interval, defaultPriority, action);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified action.</summary>
+		/// <summary>Creates a new continuous new event with the specified action.</summary>
 		public ContinuousEvent New(double seconds, TimerPriority priority,
 			Action action)
 		{
 			return Start(TimeSpan.FromSeconds(seconds), priority, action);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified action.</summary>
+		/// <summary>Creates a new continuous new event with the specified action.</summary>
 		public ContinuousEvent New(TimeSpan interval, TimerPriority priority,
 			Action callback)
 		{
@@ -345,28 +361,28 @@ namespace ZeldaWpf.Util {
 
 		// Sender Callback ------------------------------------------------------------
 
-		/// <summary>Starts a new continuous new event with the specified callback.</summary>
+		/// <summary>Creates a new continuous new event with the specified callback.</summary>
 		public ContinuousEvent New(double seconds,
 			Action<ContinuousEvent> callback)
 		{
 			return New(TimeSpan.FromSeconds(seconds), defaultPriority, callback);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified callback.</summary>
+		/// <summary>Creates a new continuous new event with the specified callback.</summary>
 		public ContinuousEvent New(TimeSpan interval,
 			Action<ContinuousEvent> callback)
 		{
 			return New(interval, defaultPriority, callback);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified callback.</summary>
+		/// <summary>Creates a new continuous new event with the specified callback.</summary>
 		public ContinuousEvent New(double seconds, TimerPriority priority,
 			Action<ContinuousEvent> callback)
 		{
 			return New(TimeSpan.FromSeconds(seconds), priority, callback);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified callback.</summary>
+		/// <summary>Creates a new continuous new event with the specified callback.</summary>
 		public ContinuousEvent New(TimeSpan interval, TimerPriority priority,
 			Action<ContinuousEvent> callback)
 		{
@@ -382,7 +398,7 @@ namespace ZeldaWpf.Util {
 
 		// Sender Callback (with tag) -------------------------------------------------
 
-		/// <summary>Starts a new continuous new event with the specified callback and
+		/// <summary>Creates a new continuous new event with the specified callback and
 		/// tag.</summary>
 		public ContinuousEvent New(double seconds, object tag,
 			Action<ContinuousEvent> callback)
@@ -390,7 +406,7 @@ namespace ZeldaWpf.Util {
 			return New(TimeSpan.FromSeconds(seconds), defaultPriority, tag, callback);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified callback and
+		/// <summary>Creates a new continuous new event with the specified callback and
 		/// tag.</summary>
 		public ContinuousEvent New(TimeSpan interval, object tag,
 			Action<ContinuousEvent> callback)
@@ -398,7 +414,7 @@ namespace ZeldaWpf.Util {
 			return New(interval, defaultPriority, tag, callback);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified callback and
+		/// <summary>Creates a new continuous new event with the specified callback and
 		/// tag.</summary>
 		public ContinuousEvent New(double seconds, TimerPriority priority,
 			object tag, Action<ContinuousEvent> callback)
@@ -406,7 +422,7 @@ namespace ZeldaWpf.Util {
 			return New(TimeSpan.FromSeconds(seconds), priority, tag, callback);
 		}
 
-		/// <summary>Starts a new continuous new event with the specified callback and
+		/// <summary>Creates a new continuous new event with the specified callback and
 		/// tag.</summary>
 		public ContinuousEvent New(TimeSpan interval, TimerPriority priority,
 			object tag, Action<ContinuousEvent> callback)
@@ -420,6 +436,33 @@ namespace ZeldaWpf.Util {
 			timers.Add(timer);
 			globalTimers.Add(timer);
 			return timer;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// New Render
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Creates a new continuous new event with the specified action.</summary>
+		public ContinuousEvent NewRender(Action callback) {
+			return New(RenderInterval, RenderPriority, callback);
+		}
+
+		// Sender Callback ------------------------------------------------------------
+
+		/// <summary>Creates a new continuous new event with the specified callback.</summary>
+		public ContinuousEvent NewRender(Action<ContinuousEvent> callback) {
+			return New(RenderInterval, RenderPriority, callback);
+		}
+
+		// Sender Callback (with tag) -------------------------------------------------
+
+		/// <summary>Creates a new continuous new event with the specified callback and
+		/// tag.</summary>
+		public ContinuousEvent NewRender(object tag,
+			Action<ContinuousEvent> callback)
+		{
+			return New(RenderInterval, RenderPriority, tag, callback);
 		}
 
 
@@ -467,7 +510,8 @@ namespace ZeldaWpf.Util {
 
 		/// <summary>Starts a new continuous new event with the specified action.</summary>
 		public ContinuousEvent Start(double seconds, TimerPriority priority,
-			Action action) {
+			Action action)
+		{
 			return Start(TimeSpan.FromSeconds(seconds), priority, action);
 		}
 
@@ -564,35 +608,62 @@ namespace ZeldaWpf.Util {
 
 
 		//-----------------------------------------------------------------------------
+		// Starting Render
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Starts a new continuous new event with the specified action.</summary>
+		public ContinuousEvent StartRender(Action callback) {
+			return Start(RenderInterval, RenderPriority, callback);
+		}
+
+		// Sender Callback ------------------------------------------------------------
+
+		/// <summary>Starts a new continuous new event with the specified callback.</summary>
+		public ContinuousEvent StartRender(Action<ContinuousEvent> callback) {
+			return Start(RenderInterval, RenderPriority, callback);
+		}
+
+		// Sender Callback (with tag) -------------------------------------------------
+
+		/// <summary>Starts a new continuous new event with the specified callback and
+		/// tag.</summary>
+		public ContinuousEvent StartRender(object tag,
+			Action<ContinuousEvent> callback)
+		{
+			return Start(RenderInterval, RenderPriority, tag, callback);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Sets up the window closing event.</summary>
+		/// <summary>Sets up the window closed event.</summary>
 		private void OnLoaded(object sender, RoutedEventArgs e) {
 			if (element != null) {
 				Window newWindow = Window.GetWindow(element);
 				if (newWindow != window) {
 					if (window != null)
-						window.Closing -= OnClosing;
+						window.Closed -= OnClosed;
 					window = newWindow;
-					window.Closing += OnClosing;
+					window.Closed += OnClosed;
 				}
 			}
 		}
 
 		/// <summary>Cancels all events when the element is unloaded.
-		/// And removes the closing event from the window.</summary>
+		/// And removes the closed event from the window.</summary>
 		private void OnUnloaded(object sender, RoutedEventArgs e) {
 			if (window != null) {
-				window.Closing -= OnClosing;
+				window.Closed -= OnClosed;
 				window = null;
 			}
 			CancelAll();
 		}
 
-		/// <summary>Cancels all events when the window is closing.</summary>
-		private void OnClosing(object sender, CancelEventArgs e) {
-			window.Closing -= OnClosing;
+		/// <summary>Cancels all events when the window is closed.</summary>
+		private void OnClosed(object sender, EventArgs e) {
+			window.Closed -= OnClosed;
 			window = null;
 			CancelAll();
 		}

@@ -9,6 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Util;
 using ZeldaWpf.Controls;
 using ZeldaWpf.Util;
 
@@ -32,16 +34,12 @@ namespace ZeldaWpf.Windows {
 		// Members
 		//-----------------------------------------------------------------------------
 
-		/// <summary>The exception that was raised.</summary>
-		private Exception exception = null;
-		/// <summary>The non-exception object that was raised.</summary>
-		private object exceptionObject = null;
+		/// <summary>The exception object that was raised.</summary>
+		private object exception;
 		/// <summary>True if viewing the full exception.</summary>
-		private bool viewingFull = false;
+		private bool viewingFull;
 		/// <summary>The timer for changing the copy button back to its original text.</summary>
 		private ScheduledEvent copyTimer;
-		/// <summary>The text of the copy to clipboard button.</summary>
-		private readonly string copyText;
 
 
 		//-----------------------------------------------------------------------------
@@ -52,15 +50,14 @@ namespace ZeldaWpf.Windows {
 		private ErrorMessageBox(object ex, bool alwaysContinue) {
 			InitializeComponent();
 
+			viewingFull = false;
 			textBlockMessage.Text = "Exception:\n";
-			exception = ex as Exception;
-			exceptionObject = (ex is Exception ? null : ex);
-			if (exception != null)
-				textBlockMessage.Text += exception.Message;
-			else if (exceptionObject != null)
-				textBlockMessage.Text += exceptionObject.ToString();
-			copyText = buttonCopy.Content as string;
-			if (exception != null) {
+			exception = ex;
+			if (IsException)
+				textBlockMessage.Text += Exception.MessageWithInner();
+			else
+				textBlockMessage.Text += exception.ToString();
+			if (!IsException) {
 				buttonException.IsEnabled = false;
 			}
 			if (alwaysContinue) {
@@ -91,11 +88,11 @@ namespace ZeldaWpf.Windows {
 		}
 
 		private void OnCopyToClipboard(object sender, RoutedEventArgs e) {
-			Clipboard.SetText(exception != null ? exception.ToString() : exceptionObject.ToString());
+			Clipboard.SetText(exception.ToString());
 			buttonCopy.Content = "Exception Copied!";
 			copyTimer?.Cancel();
 			copyTimer = ScheduledEvents.Start(1, TimerPriority.Low, () => {
-				buttonCopy.Content = copyText;
+				buttonCopy.Content = "Copy to Clipboard";
 			});
 		}
 
@@ -103,24 +100,22 @@ namespace ZeldaWpf.Windows {
 			viewingFull = !viewingFull;
 			if (!viewingFull) {
 				buttonException.Content = "See Full Exception";
-				textBlockMessage.Text = "Exception:\n" + exception.Message;
+				textBlockMessage.Text = "Exception:\n" + Exception.MessageWithInner();
 				clientArea.Height = 230;
 				scrollViewer.ScrollToTop();
 			}
 			else {
 				buttonException.Content = "Hide Full Exception";
-				// Size may not be changed yet so just incase we also have OnMessageSizeChanged
-				textBlockMessage.Text = "Exception:\n" + exception.ToString();
-				clientArea.Height = Math.Min(480, Math.Max(230, textBlockMessage.ActualHeight + 102));
-				scrollViewer.ScrollToTop();
+				// Size may not be changed yet so just
+				// incase we also have OnMessageSizeChanged.
+				textBlockMessage.Text = "Exception:\n" + Exception.ToStringWithInner();
+				UpdateFullMessageSize();
 			}
 		}
 
 		private void OnMessageSizeChanged(object sender, SizeChangedEventArgs e) {
-			if (viewingFull) {
-				clientArea.Height = Math.Min(480, Math.Max(230, textBlockMessage.ActualHeight + 102));
-				scrollViewer.ScrollToTop();
-			}
+			if (viewingFull)
+				UpdateFullMessageSize();
 		}
 
 		private void OnPreviewKeyDown(object sender, KeyEventArgs e) {
@@ -159,6 +154,18 @@ namespace ZeldaWpf.Windows {
 
 
 		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		private void UpdateFullMessageSize() {
+			clientArea.Height = GMath.Clamp(
+				textBlockMessage.ActualHeight + 102,
+				230, 480);
+			scrollViewer.ScrollToTop();
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Showing
 		//-----------------------------------------------------------------------------
 
@@ -167,6 +174,21 @@ namespace ZeldaWpf.Windows {
 			ErrorMessageBox messageBox = new ErrorMessageBox(exception, alwaysContinue);
 			var result = messageBox.ShowDialog();
 			return result.HasValue && result.Value;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets if the exception object is an exception.</summary>
+		public bool IsException {
+			get { return exception is Exception; }
+		}
+
+		/// <summary>Gets the exception object as an exception.</summary>
+		public Exception Exception {
+			get { return exception as Exception; }
 		}
 	}
 }
