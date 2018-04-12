@@ -26,6 +26,8 @@
             <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
+      
+        <!-- Trigger list box -->
         <Border BorderThickness="0" Grid.Column="0" BorderBrush="#FF828790">
             <DockPanel x:Name="panelTriggerList">
                 <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
@@ -39,11 +41,13 @@
                 <ListBox x:Name="listBoxTriggers" SelectionChanged="OnSelectedTriggerChanged" BorderThickness="0,1,1,0"/>
             </DockPanel>
         </Border>
+      
+        <!-- Only enabled when a trigger is selected -->
         <DockPanel Grid.Column="1" x:Name="panelEditTrigger" IsEnabled="{Binding ElementName=listBoxTriggers, Path=SelectedItems.Count}">
             <Border BorderBrush="#FF828790" DockPanel.Dock="Top" BorderThickness="0,0,0,1">
                 <Grid Height="50">
                     <ComboBox x:Name="comboBoxEventType"  Margin="10,10,0,15" HorizontalAlignment="Left" Width="150" SelectionChanged="OnSelectEvent" VerticalContentAlignment="Center" IsHitTestVisible="True" Focusable="False" IsTabStop="False"/>
-                    <xctk:WatermarkTextBox x:Name="textBoxTriggerName" BorderBrush="#FFC8C8C8" Margin="165,10,0,15" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Width="180" TextChanged="OnRenameTrigger"/>
+                    <xctk:WatermarkTextBox x:Name="textBoxTriggerName" BorderBrush="#FFC8C8C8" Margin="165,10,0,15" Watermark="Enter a trigger name" Padding="3,0" VerticalContentAlignment="Center"  HorizontalAlignment="Left" Width="180" TextChanged="OnRenameTrigger"/>
                     <CheckBox x:Name="checkBoxInitiallyOn" Content="Initially On" Margin="394,13,82,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="OnClickInitiallyOn" Focusable="False" IsTabStop="False" Padding="4,-1,0,0"/>
                     <CheckBox x:Name="checkBoxFireOnce" Content="Fire Once" Margin="473,13,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="OnClickFireOnce" Focusable="False" IsTabStop="False" Padding="4,-1,0,0"/>
                 </Grid>

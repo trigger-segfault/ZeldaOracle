@@ -387,6 +387,9 @@
     <Compile Include="Undo\ActionDeleteLevel.cs" />
     <Compile Include="Undo\ActionDuplicateArea.cs" />
     <Compile Include="Undo\ActionDuplicateLevel.cs" />
+    <Compile Include="Undo\Triggers\ActionDeleteTrigger.cs" />
+    <Compile Include="Undo\Triggers\ActionModifyTrigger.cs" />
+    <Compile Include="Undo\Triggers\ActionNewTrigger.cs" />
     <Compile Include="Undo\Variables\ActionEditVariable.cs" />
     <Compile Include="Undo\Variables\ActionPasteVariable.cs" />
     <Compile Include="Undo\Variables\ActionDeleteVariable.cs" />

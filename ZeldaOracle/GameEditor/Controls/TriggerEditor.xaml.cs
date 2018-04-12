@@ -83,7 +83,7 @@ namespace ZeldaEditor.Controls {
 			}
 		}
 
-		public Trigger AddNewTrigger() {			
+		public Trigger AddNewTrigger() {
 			// Find an unused untitled trigger name
 			bool nameIsTaken = true;
 			string name = "";

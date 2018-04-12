@@ -52,6 +52,12 @@ namespace ZeldaOracle.Common.Scripting {
 			triggers.Remove(trigger);
 		}
 
+		public void RemoveTrigger(string name) {
+			Trigger trigger = GetTrigger(name);
+			if (trigger != null)
+				triggers.Remove(trigger);
+		}
+
 		/// <summary>Return an enumerable list of all triggers which would be triggered
 		/// by the given event.</summary>
 		public IEnumerable<Trigger> GetTriggersByEvent(Event e) {
