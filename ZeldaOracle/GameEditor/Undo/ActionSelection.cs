@@ -29,7 +29,9 @@ namespace ZeldaEditor.Undo {
 
 		private ActionSelection() { }
 		
-		public static ActionSelection CreateMoveAction(Level level, Point2I start, Point2I end, TileGrid tileGrid, TileGrid overwrittenTileGrid, bool merge) {
+		public static ActionSelection CreateMoveAction(Level level, Point2I start,
+			Point2I end, TileGrid tileGrid, TileGrid overwrittenTileGrid, bool merge)
+		{
 			ActionSelection action = new ActionSelection();
 			action.ActionName = "Move Selection";
 			action.ActionIcon = EditorImages.SelectAll;
@@ -42,7 +44,10 @@ namespace ZeldaEditor.Undo {
 			action.merge = merge;
 			return action;
 		}
-		public static ActionSelection CreateDeleteAction(Level level, Point2I start, TileGrid tileGrid, bool isCut) {
+
+		public static ActionSelection CreateDeleteAction(Level level, Point2I start,
+			TileGrid tileGrid, bool isCut)
+		{
 			ActionSelection action = new ActionSelection();
 			action.ActionName = (isCut ? "Cut" : "Delete") + " Selection";
 			action.ActionIcon = (isCut ? EditorImages.Cut : EditorImages.Deselect);
@@ -52,7 +57,10 @@ namespace ZeldaEditor.Undo {
 			action.mode = SelectionModes.Delete;
 			return action;
 		}
-		public static ActionSelection CreateDuplicateAction(Level level, Point2I end, TileGrid tileGrid, TileGrid overwrittenTileGrid, bool isPaste, bool merge) {
+
+		public static ActionSelection CreateDuplicateAction(Level level, Point2I end,
+			TileGrid tileGrid, TileGrid overwrittenTileGrid, bool isPaste, bool merge)
+		{
 			ActionSelection action = new ActionSelection();
 			action.ActionName = (isPaste ? "Paste" : "Duplicate") + " Selection";
 			action.ActionIcon = (isPaste ? EditorImages.Paste : EditorImages.Copy);
@@ -84,34 +92,33 @@ namespace ZeldaEditor.Undo {
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
-			switch (mode) {
-			case SelectionModes.Move:
+
+			if (mode == SelectionModes.Move) {
 				level.RemoveArea(new Rectangle2I(start, tileGrid.Size), tileGrid);
 				level.PlaceTileGrid(tileGrid, end, merge);
-				break;
-			case SelectionModes.Delete:
-				level.RemoveArea(new Rectangle2I(start, tileGrid.Size), tileGrid);
-				break;
-			case SelectionModes.Duplicate:
-				level.PlaceTileGrid(tileGrid, end, merge);
-				break;
 			}
+			if (mode == SelectionModes.Delete) {
+				level.RemoveArea(new Rectangle2I(start, tileGrid.Size), tileGrid);
+			}
+			if (mode == SelectionModes.Duplicate) {
+				level.PlaceTileGrid(tileGrid, end, merge);
+			}
+
 			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override bool IgnoreAction {
 			get {
-				switch (mode) {
-				case SelectionModes.Move: {
-						return start == end;
-					}
-				case SelectionModes.Duplicate: {
-						Rectangle2I levelBounds = new Rectangle2I(level.Dimensions * level.RoomSize);
-						Rectangle2I tileGridBounds = new Rectangle2I(end, tileGrid.Size);
-						return !levelBounds.Intersects(tileGridBounds);
-					}
+				if (mode == SelectionModes.Move) {
+					return (start == end);
 				}
-				return false;
+				else if (mode == SelectionModes.Duplicate) {
+					Rectangle2I levelBounds = new Rectangle2I(level.Dimensions * level.RoomSize);
+					Rectangle2I tileGridBounds = new Rectangle2I(end, tileGrid.Size);
+					return !levelBounds.Intersects(tileGridBounds);
+				}
+				else
+					return false;
 			}
 		}
 	}

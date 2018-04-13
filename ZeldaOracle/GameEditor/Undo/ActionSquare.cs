@@ -56,6 +56,7 @@ namespace ZeldaEditor.Undo {
 					level.RemoveTile(levelCoord, layer);
 				}
 			}
+			// Restore the tiles that were overwritten
 			foreach (var pair in overwrittenTiles) {
 				level.PlaceTile(pair.Value, pair.Key, layer);
 			}
