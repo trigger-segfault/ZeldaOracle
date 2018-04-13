@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConscriptDesigner.Controls;
 using ConscriptDesigner.Control;
 using System.IO;
 using IOPath = System.IO.Path;
 using IODirectory = System.IO.Directory;
 using System.Xml;
-using System.Windows.Controls;
 using System.Windows;
-using ConscriptDesigner.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.Windows.Input;
-using ConscriptDesigner.Util;
 using ZeldaOracle.Common.Util;
+using ConscriptDesigner.Windows;
+using ZeldaWpf.Util;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Windows;
 
 namespace ConscriptDesigner.Content {
 	/// <summary>The root content folder that handles the content project and all operations.</summary>

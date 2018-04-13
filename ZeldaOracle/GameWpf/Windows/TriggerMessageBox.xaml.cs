@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using ZeldaWpf.Resources;
 using ZeldaWpf.Util;
 
 namespace ZeldaWpf.Windows {
@@ -21,29 +22,7 @@ namespace ZeldaWpf.Windows {
 
 	/// <summary>A custom message box that doesn't look like shite.</summary>
 	public partial class TriggerMessageBox : Window {
-
-		//-----------------------------------------------------------------------------
-		// Icons
-		//-----------------------------------------------------------------------------
-
-		/// <summary>A blue (i) icon.</summary>
-		private static readonly BitmapImage InfoIcon = BitmapFactory.FromResource(
-			"Resources/Icons/InfoIcon.png", typeof(TriggerMessageBox));
-		/// <summary>A blue (?) icon.</summary>
-		private static readonly BitmapImage QuestionIcon = BitmapFactory.FromResource(
-			"Resources/Icons/QuestionIcon.png", typeof(TriggerMessageBox));
-		/// <summary>A yellow /!\ icon.</summary>
-		private static readonly BitmapImage WarningIcon = BitmapFactory.FromResource(
-			"Resources/Icons/WarningIcon.png", typeof(TriggerMessageBox));
-		/// <summary>A red (!) icon.</summary>
-		private static readonly BitmapImage ErrorIcon = BitmapFactory.FromResource(
-			"Resources/Icons/ErrorIcon.png", typeof(TriggerMessageBox));
-
-
-		//-----------------------------------------------------------------------------
-		// Members
-		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>The result of from pressing one of the message box buttons.</summary>
 		private MessageBoxResult result;
 		/// <summary>The minimum width of the message box.</summary>
@@ -68,10 +47,10 @@ namespace ZeldaWpf.Windows {
 
 			#region Load Message Icons
 			switch (icon) {
-			case MessageIcon.Info: Icon = InfoIcon; break;
-			case MessageIcon.Question: Icon = QuestionIcon; break;
-			case MessageIcon.Warning: Icon = WarningIcon; break;
-			case MessageIcon.Error: Icon = ErrorIcon; break;
+			case MessageIcon.Info: Icon = WpfImages.InfoIcon; break;
+			case MessageIcon.Question: Icon = WpfImages.QuestionIcon; break;
+			case MessageIcon.Warning: Icon = WpfImages.WarningIcon; break;
+			case MessageIcon.Error: Icon = WpfImages.ErrorIcon; break;
 			}
 			#endregion
 

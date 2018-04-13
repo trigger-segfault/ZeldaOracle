@@ -8,12 +8,12 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Go To Line" Height="110" Width="210" Background="#FFF0F0F0" ResizeMode="NoResize" WindowStyle="ToolWindow" Icon="/ConscriptDesigner;component/Resources/Icons/GotoLine.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" SnapsToDevicePixels="True" UseLayoutRounding="True" Closing="OnClosing">
-    <Window.CommandBindings>
-        <CommandBinding Command="cmd:Commands.EscapeClose" CanExecute="CanAlwaysExecute" Executed="OnEscapeCloseCommand"/>
-    </Window.CommandBindings>
-    <Grid>
-        <Label Content="Line:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,12,0,0"/>
-        <xctk:IntegerUpDown x:Name="spinnerLine" Minimum="0" Value="0" VerticalAlignment="Top" Margin="54,15,10,0" ValueChanged="OnLineChanged"/>
-        <Button x:Name="buttonGoto" Content="Goto" IsDefault="True" Margin="0,0,10,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnOK"/>
-    </Grid>
+  <Window.CommandBindings>
+    <CommandBinding Command="cmd:Commands.EscapeClose" CanExecute="CanAlwaysExecute" Executed="OnEscapeCloseCommand"/>
+  </Window.CommandBindings>
+  <Grid>
+    <Label Content="Line:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,12,0,0"/>
+    <xctk:IntegerUpDown x:Name="spinnerLine" Minimum="0" Value="0" VerticalAlignment="Top" Margin="54,15,10,0" ValueChanged="OnLineChanged"/>
+    <Button x:Name="buttonGoto" Content="Goto" IsDefault="True" Margin="0,0,10,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnOK"/>
+  </Grid>
 </Window>

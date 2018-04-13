@@ -7,41 +7,41 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="250">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ConscriptDesigner;component/Themes/DefaultStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <DockPanel>
-        <ToolBar DockPanel.Dock="Top">
-            <ToolBar.Resources>
-                <Style TargetType="{x:Type ToolBarPanel}">
-                    <Setter Property="Orientation" Value="Vertical"/>
-                </Style>
-            </ToolBar.Resources>
-            <ComboBox x:Name="comboBoxTilesets" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnTilesetChanged" VerticalAlignment="Center"/>
-        </ToolBar>
-        <ToolBar x:Name="toolbarSearch" DockPanel.Dock="Top">
-            <ToolBar.Resources>
-                <Style TargetType="{x:Type ToolBarPanel}">
-                    <Setter Property="Orientation" Value="Vertical"/>
-                </Style>
-            </ToolBar.Resources>
-            <xctk:WatermarkTextBox x:Name="textBoxSearch" Height="22" VerticalAlignment="Center" Watermark="Search" VerticalContentAlignment="Center" TextChanged="OnSearchTextChanged" Padding="3,0" Margin="0" KeepWatermarkOnGotFocus="True"/>
-        </ToolBar>
-        <StatusBar x:Name="statusBarHoverIndex" DockPanel.Dock="Bottom" Background="#FFF0F0F0">
-            <StatusBarItem x:Name="statusHoverIndex" Content="(0, 0)"/>
-        </StatusBar>
-        <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
-            <StatusBarItem Height="44" VerticalContentAlignment="Top">
-                <TextBlock x:Name="textBlockTileName" TextWrapping="Wrap" Text="chest_ornate" TextTrimming="CharacterEllipsis"/>
-            </StatusBarItem>
-        </StatusBar>
-        <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
-            <StatusBarItem x:Name="statusTileInfo" Content="Type: TileChest"/>
-        </StatusBar>
-        <WindowsFormsHost x:Name="host"/>
-    </DockPanel>
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <DockPanel>
+    <ToolBar DockPanel.Dock="Top">
+      <ToolBar.Resources>
+        <Style TargetType="{x:Type ToolBarPanel}">
+          <Setter Property="Orientation" Value="Vertical"/>
+        </Style>
+      </ToolBar.Resources>
+      <ComboBox x:Name="comboBoxTilesets" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnTilesetChanged" VerticalAlignment="Center"/>
+    </ToolBar>
+    <ToolBar x:Name="toolbarSearch" DockPanel.Dock="Top">
+      <ToolBar.Resources>
+        <Style TargetType="{x:Type ToolBarPanel}">
+          <Setter Property="Orientation" Value="Vertical"/>
+        </Style>
+      </ToolBar.Resources>
+      <xctk:WatermarkTextBox x:Name="textBoxSearch" Height="22" VerticalAlignment="Center" Watermark="Search" VerticalContentAlignment="Center" TextChanged="OnSearchTextChanged" Padding="3,0" Margin="0" KeepWatermarkOnGotFocus="True"/>
+    </ToolBar>
+    <StatusBar x:Name="statusBarHoverIndex" DockPanel.Dock="Bottom" Background="#FFF0F0F0">
+      <StatusBarItem x:Name="statusHoverIndex" Content="(0, 0)"/>
+    </StatusBar>
+    <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
+      <StatusBarItem Height="44" VerticalContentAlignment="Top">
+        <TextBlock x:Name="textBlockTileName" TextWrapping="Wrap" Text="chest_ornate" TextTrimming="CharacterEllipsis"/>
+      </StatusBarItem>
+    </StatusBar>
+    <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
+      <StatusBarItem x:Name="statusTileInfo" Content="Type: TileChest"/>
+    </StatusBar>
+    <WindowsFormsHost x:Name="host"/>
+  </DockPanel>
 </UserControl>

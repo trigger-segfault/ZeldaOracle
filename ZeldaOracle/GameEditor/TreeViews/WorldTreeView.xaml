@@ -8,50 +8,50 @@
              xmlns:cmd="clr-namespace:ZeldaEditor.TreeViews"
              mc:Ignorable="d" 
              d:DesignHeight="564" d:DesignWidth="200">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <UserControl.CommandBindings>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.CreateLevel" Executed="OnCreateLevel"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.Rename" CanExecute="IsItemSelected" Executed="OnRename"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.Delete" CanExecute="IsItemSelected" Executed="OnDelete"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.Duplicate" CanExecute="IsItemSelected" Executed="OnDuplicate"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.EditProperties" CanExecute="IsItemSelected" Executed="OnEditProperties"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.Edit" CanExecute="IsItemSelected" Executed="OnEdit"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.ResizeLevel" CanExecute="IsItemSelected" Executed="OnResizeLevel"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.ShiftLevel" CanExecute="IsItemSelected" Executed="OnShiftLevel"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.MoveDown" CanExecute="IsItemSelected" Executed="OnMoveDown"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.MoveUp" CanExecute="IsItemSelected" Executed="OnMoveUp"/>
-        <CommandBinding Command="cmd:WorldTreeViewCommands.GoToOwner" CanExecute="IsItemSelected" Executed="OnGoToOwner"/>
-    </UserControl.CommandBindings>
-    <Border Grid.Column="0" BorderThickness="0,1,1,1" BorderBrush="#FF828790">
-        <DockPanel LastChildFill="True" Grid.Column="0">
-            <ToolBar x:Name="toolBarTreeView" DockPanel.Dock="Top">
-                <common:ImageButton x:Name="buttonEdit" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Edit.png" ToolTip="Edit" Command="cmd:WorldTreeViewCommands.Edit"/>
-                <common:ImageButton x:Name="buttonRename" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Rename.png" ToolTip="Rename" Command="cmd:WorldTreeViewCommands.Rename"/>
-                <common:ImageButton x:Name="buttonDuplicate" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Plus.png" ToolTip="Duplicate" Command="cmd:WorldTreeViewCommands.Duplicate"/>
-                <common:ImageButton x:Name="buttonDelete" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Minus.png" ToolTip="Delete" Command="cmd:WorldTreeViewCommands.Delete"/>
-                <common:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Command="cmd:WorldTreeViewCommands.MoveUp"/>
-                <common:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Command="cmd:WorldTreeViewCommands.MoveDown"/>
-            </ToolBar>
-            <TreeView x:Name="treeView" BorderThickness="0,1,0,0" AllowDrop="True" SelectedItemChanged="OnSelectionChanged">
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <!--<Setter Property="KeyboardNavigation.DirectionalNavigation" Value="None"/>-->
-                        <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnTreeViewMouseRightButtonDown"/>
-                        <EventSetter Event="MouseDoubleClick"     Handler="OnTreeViewMouseDoubleClick"/>
-                        <EventSetter Event="MouseDown"            Handler="OnTreeViewMouseDown"/>
-                        <EventSetter Event="RequestBringIntoView" Handler="OnTreeViewRequestBringIntoView"/>
-                        <!--<EventSetter Event="TreeViewItem.MouseMove"        Handler="OnTreeViewMouseMove"/>
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <UserControl.CommandBindings>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.CreateLevel" Executed="OnCreateLevel"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.Rename" CanExecute="IsItemSelected" Executed="OnRename"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.Delete" CanExecute="IsItemSelected" Executed="OnDelete"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.Duplicate" CanExecute="IsItemSelected" Executed="OnDuplicate"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.EditProperties" CanExecute="IsItemSelected" Executed="OnEditProperties"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.Edit" CanExecute="IsItemSelected" Executed="OnEdit"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.ResizeLevel" CanExecute="IsItemSelected" Executed="OnResizeLevel"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.ShiftLevel" CanExecute="IsItemSelected" Executed="OnShiftLevel"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.MoveDown" CanExecute="IsItemSelected" Executed="OnMoveDown"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.MoveUp" CanExecute="IsItemSelected" Executed="OnMoveUp"/>
+    <CommandBinding Command="cmd:WorldTreeViewCommands.GoToOwner" CanExecute="IsItemSelected" Executed="OnGoToOwner"/>
+  </UserControl.CommandBindings>
+  <Border Grid.Column="0" BorderThickness="0,1,1,1" BorderBrush="#FF828790">
+    <DockPanel LastChildFill="True" Grid.Column="0">
+      <ToolBar x:Name="toolBarTreeView" DockPanel.Dock="Top">
+        <common:ImageButton x:Name="buttonEdit" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Edit.png" ToolTip="Edit" Command="cmd:WorldTreeViewCommands.Edit"/>
+        <common:ImageButton x:Name="buttonRename" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Rename.png" ToolTip="Rename" Command="cmd:WorldTreeViewCommands.Rename"/>
+        <common:ImageButton x:Name="buttonDuplicate" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Plus.png" ToolTip="Duplicate" Command="cmd:WorldTreeViewCommands.Duplicate"/>
+        <common:ImageButton x:Name="buttonDelete" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Minus.png" ToolTip="Delete" Command="cmd:WorldTreeViewCommands.Delete"/>
+        <common:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Command="cmd:WorldTreeViewCommands.MoveUp"/>
+        <common:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Command="cmd:WorldTreeViewCommands.MoveDown"/>
+      </ToolBar>
+      <TreeView x:Name="treeView" BorderThickness="0,1,0,0" AllowDrop="True" SelectedItemChanged="OnSelectionChanged">
+        <TreeView.ItemContainerStyle>
+          <Style TargetType="{x:Type TreeViewItem}">
+            <!--<Setter Property="KeyboardNavigation.DirectionalNavigation" Value="None"/>-->
+            <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnTreeViewMouseRightButtonDown"/>
+            <EventSetter Event="MouseDoubleClick"     Handler="OnTreeViewMouseDoubleClick"/>
+            <EventSetter Event="MouseDown"            Handler="OnTreeViewMouseDown"/>
+            <EventSetter Event="RequestBringIntoView" Handler="OnTreeViewRequestBringIntoView"/>
+            <!--<EventSetter Event="TreeViewItem.MouseMove"        Handler="OnTreeViewMouseMove"/>
                         <EventSetter Event="TreeViewItem.DragOver"         Handler="OnTreeViewDragOver"/>
                         <EventSetter Event="TreeViewItem.Drop"             Handler="OnTreeViewDrop"/>-->
-                    </Style>
-                </TreeView.ItemContainerStyle>
-            </TreeView>
-        </DockPanel>
-    </Border>
+          </Style>
+        </TreeView.ItemContainerStyle>
+      </TreeView>
+    </DockPanel>
+  </Border>
 </UserControl>

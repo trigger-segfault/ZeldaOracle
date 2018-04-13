@@ -359,7 +359,6 @@
     <Compile Include="PropertiesEditor\CustomProperties.cs" />
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
     <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs" />
-    <None Include="Controls\FolderTreeViewItem.cs" />
     <Compile Include="Scripting\NoBraceCompletionProvider.cs" />
     <Compile Include="Scripting\ScriptRoslynHost.cs" />
     <Compile Include="Scripting\ScriptFoldingStrategy.cs" />
@@ -782,7 +781,7 @@
     <Resource Include="Resources\Icons\StringCodes.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\FormatCodeCharacters.png" />
+    <Resource Include="Resources\CharacterFormatCodes.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Paragraph.png" />

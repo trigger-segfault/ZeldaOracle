@@ -9,99 +9,99 @@
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="ZeldaEditor.Controls.TilePathCommandItem"
              mc:Ignorable="d" 
              d:DesignHeight="24" d:DesignWidth="222" SnapsToDevicePixels="True" UseLayoutRounding="True">
-    <UserControl.Resources>
-        <LinearGradientBrush x:Key="ToolBarHorizontalBackground" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFFFFF" Offset="0"/>
-            <GradientStop Color="#FFFBFF" Offset="0.5"/>
-            <GradientStop Color="#F7F7F7" Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="ToolBarHorizontalBackgroundDragging" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#B3B3B3" Offset="0"/>
-            <GradientStop Color="#B3B0B3" Offset="0.5"/>
-            <GradientStop Color="#ADADAD" Offset="1"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="ToolBarGripper" Color="#C6C3C6"/>
-        <Style x:Key="ToolBarThumbStyle" TargetType="{x:Type Thumb}">
-            <Setter Property="Cursor" Value="ScrollAll"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border Background="Transparent" Padding="6,4,1,4" SnapsToDevicePixels="True">
-                            <Rectangle x:Name="rect" Width="4">
-                                <Rectangle.Fill>
-                                    <DrawingBrush TileMode="Tile" Viewbox="0,0,4,4" Viewport="0,0,4,4" ViewportUnits="Absolute" ViewboxUnits="Absolute">
-                                        <DrawingBrush.Drawing>
-                                            <DrawingGroup>
-                                                <GeometryDrawing Brush="White" Geometry="M 1 1 L 1 3 L 3 3 L 3 1 z"/>
-                                                <GeometryDrawing Brush="{StaticResource ToolBarGripper}" Geometry="M 0 0 L 0 2 L 2 2 L 2 0 z"/>
-                                            </DrawingGroup>
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Cursor" Value="SizeAll"/>
-                            </Trigger>
-                            <Trigger Property="IsDragging" Value="True">
-                                <Setter TargetName="rect" Property="Fill">
-                                    <Setter.Value>
-                                        <DrawingBrush TileMode="Tile" Viewbox="0,0,4,4" Viewport="0,0,4,4" ViewportUnits="Absolute" ViewboxUnits="Absolute">
-                                            <DrawingBrush.Drawing>
-                                                <DrawingGroup>
-                                                    <GeometryDrawing Brush="#B3B3B3" Geometry="M 1 1 L 1 3 L 3 3 L 3 1 z"/>
-                                                    <GeometryDrawing Brush="#8B898B" Geometry="M 0 0 L 0 2 L 2 2 L 2 0 z"/>
-                                                </DrawingGroup>
-                                            </DrawingBrush.Drawing>
-                                        </DrawingBrush>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ToolBarMainPanelBorderStyle" TargetType="{x:Type Border}">
-            <Setter Property="Margin" Value="0,0,0,0"/>
-            <Setter Property="CornerRadius" Value="3,3,3,3"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="true">
-                    <Setter Property="CornerRadius" Value="0,0,0,0"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    <Border x:Name="MainPanelBorder" Margin="3,1,1,1">
-        <DockPanel KeyboardNavigation.TabIndex="1" KeyboardNavigation.TabNavigation="Local">
-            <Thumb x:Name="thumb" Margin="-3,-1,0,0" Padding="6,4,1,4" Width="20" Style="{StaticResource ToolBarThumbStyle}"/>
-            <StackPanel Margin="0,1,2,1" Orientation="Horizontal">
-                <ComboBox x:Name="comboBoxCommand" SelectedIndex="0" Padding="4,1" VerticalContentAlignment="Center" Width="70" Margin="0,0,10,0" SelectionChanged="OnCommandChanged" IsTabStop="False">
-                    <ComboBoxItem Content="Right  &#10145;" Tag="right"/>
-                    <ComboBoxItem Content="Up       &#11014;" Tag="up"/>
-                    <ComboBoxItem Content="Left     &#11013;" Tag="left"/>
-                    <ComboBoxItem Content="Down  &#11015;" Tag="down"/>
-                    <ComboBoxItem Content="Speed" Tag="speed"/>
-                    <ComboBoxItem Content="Pause" Tag="pause"/>
-                </ComboBox>
-                <xctk:IntegerUpDown x:Name="spinnerIntParam" Value="1" Minimum="1" Width="70" ValueChanged="OnIntParamChanged"/>
-                <xctk:SingleUpDown x:Name="spinnerFloatParam" Value="0" Minimum="0" Increment="0.25" Width="70" ValueChanged="OnFloatParamChanged" Visibility="Collapsed" />
-            </StackPanel>
-            <common:HoverImageButton x:Name="buttonRemove" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathRemove.png" Click="OnRemove" ToolTip="Remove Command" SourceHover="/Resources/Icons/TilePathRemoveHover.png" IsTabStop="False" Focusable="False" />
-            <common:HoverImageButton x:Name="buttonInsert" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathInsert.png" Click="OnInsert" ToolTip="Insert Command" SourceHover="/Resources/Icons/TilePathInsertHover.png" Focusable="False" IsTabStop="False" />
-        </DockPanel>
-        <Border.Style>
-            <Style TargetType="{x:Type Border}">
-                <Setter Property="Margin" Value="0,0,0,0"/>
-                <Setter Property="CornerRadius" Value="2"/>
-                <Setter Property="Background" Value="{StaticResource ToolBarHorizontalBackground}" />
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=IsDragging, ElementName=thumb}" Value="True">
-                        <Setter Property="Background" Value="{StaticResource ToolBarHorizontalBackgroundDragging}"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>
-    </Border>
+  <UserControl.Resources>
+    <LinearGradientBrush x:Key="ToolBarHorizontalBackground" EndPoint="0,1" StartPoint="0,0">
+      <GradientStop Color="#FFFFFF" Offset="0"/>
+      <GradientStop Color="#FFFBFF" Offset="0.5"/>
+      <GradientStop Color="#F7F7F7" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="ToolBarHorizontalBackgroundDragging" EndPoint="0,1" StartPoint="0,0">
+      <GradientStop Color="#B3B3B3" Offset="0"/>
+      <GradientStop Color="#B3B0B3" Offset="0.5"/>
+      <GradientStop Color="#ADADAD" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ToolBarGripper" Color="#C6C3C6"/>
+    <Style x:Key="ToolBarThumbStyle" TargetType="{x:Type Thumb}">
+      <Setter Property="Cursor" Value="ScrollAll"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="{x:Type Thumb}">
+            <Border Background="Transparent" Padding="6,4,1,4" SnapsToDevicePixels="True">
+              <Rectangle x:Name="rect" Width="4">
+                <Rectangle.Fill>
+                  <DrawingBrush TileMode="Tile" Viewbox="0,0,4,4" Viewport="0,0,4,4" ViewportUnits="Absolute" ViewboxUnits="Absolute">
+                    <DrawingBrush.Drawing>
+                      <DrawingGroup>
+                        <GeometryDrawing Brush="White" Geometry="M 1 1 L 1 3 L 3 3 L 3 1 z"/>
+                        <GeometryDrawing Brush="{StaticResource ToolBarGripper}" Geometry="M 0 0 L 0 2 L 2 2 L 2 0 z"/>
+                      </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                  </DrawingBrush>
+                </Rectangle.Fill>
+              </Rectangle>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Cursor" Value="SizeAll"/>
+              </Trigger>
+              <Trigger Property="IsDragging" Value="True">
+                <Setter TargetName="rect" Property="Fill">
+                  <Setter.Value>
+                    <DrawingBrush TileMode="Tile" Viewbox="0,0,4,4" Viewport="0,0,4,4" ViewportUnits="Absolute" ViewboxUnits="Absolute">
+                      <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                          <GeometryDrawing Brush="#B3B3B3" Geometry="M 1 1 L 1 3 L 3 3 L 3 1 z"/>
+                          <GeometryDrawing Brush="#8B898B" Geometry="M 0 0 L 0 2 L 2 2 L 2 0 z"/>
+                        </DrawingGroup>
+                      </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                  </Setter.Value>
+                </Setter>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="ToolBarMainPanelBorderStyle" TargetType="{x:Type Border}">
+      <Setter Property="Margin" Value="0,0,0,0"/>
+      <Setter Property="CornerRadius" Value="3,3,3,3"/>
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="true">
+          <Setter Property="CornerRadius" Value="0,0,0,0"/>
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+  <Border x:Name="MainPanelBorder" Margin="3,1,1,1">
+    <DockPanel KeyboardNavigation.TabIndex="1" KeyboardNavigation.TabNavigation="Local">
+      <Thumb x:Name="thumb" Margin="-3,-1,0,0" Padding="6,4,1,4" Width="20" Style="{StaticResource ToolBarThumbStyle}"/>
+      <StackPanel Margin="0,1,2,1" Orientation="Horizontal">
+        <ComboBox x:Name="comboBoxCommand" SelectedIndex="0" Padding="4,1" VerticalContentAlignment="Center" Width="70" Margin="0,0,10,0" SelectionChanged="OnCommandChanged" IsTabStop="False">
+          <ComboBoxItem Content="Right  &#10145;" Tag="right"/>
+          <ComboBoxItem Content="Up       &#11014;" Tag="up"/>
+          <ComboBoxItem Content="Left     &#11013;" Tag="left"/>
+          <ComboBoxItem Content="Down  &#11015;" Tag="down"/>
+          <ComboBoxItem Content="Speed" Tag="speed"/>
+          <ComboBoxItem Content="Pause" Tag="pause"/>
+        </ComboBox>
+        <xctk:IntegerUpDown x:Name="spinnerIntParam" Value="1" Minimum="1" Width="70" ValueChanged="OnIntParamChanged"/>
+        <xctk:SingleUpDown x:Name="spinnerFloatParam" Value="0" Minimum="0" Increment="0.25" Width="70" ValueChanged="OnFloatParamChanged" Visibility="Collapsed" />
+      </StackPanel>
+      <common:HoverImageButton x:Name="buttonRemove" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathRemove.png" Click="OnRemove" ToolTip="Remove Command" SourceHover="/Resources/Icons/TilePathRemoveHover.png" IsTabStop="False" Focusable="False" />
+      <common:HoverImageButton x:Name="buttonInsert" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="1" Padding="0,0,2,0" Height="20" Source="/Resources/Icons/TilePathInsert.png" Click="OnInsert" ToolTip="Insert Command" SourceHover="/Resources/Icons/TilePathInsertHover.png" Focusable="False" IsTabStop="False" />
+    </DockPanel>
+    <Border.Style>
+      <Style TargetType="{x:Type Border}">
+        <Setter Property="Margin" Value="0,0,0,0"/>
+        <Setter Property="CornerRadius" Value="2"/>
+        <Setter Property="Background" Value="{StaticResource ToolBarHorizontalBackground}" />
+        <Style.Triggers>
+          <DataTrigger Binding="{Binding Path=IsDragging, ElementName=thumb}" Value="True">
+            <Setter Property="Background" Value="{StaticResource ToolBarHorizontalBackgroundDragging}"/>
+          </DataTrigger>
+        </Style.Triggers>
+      </Style>
+    </Border.Style>
+  </Border>
 </UserControl>

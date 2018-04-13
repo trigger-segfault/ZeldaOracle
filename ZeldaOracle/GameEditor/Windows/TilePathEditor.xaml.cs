@@ -1,39 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using ZeldaEditor.Control;
-using ZeldaEditor.Controls;
-using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaWpf.Windows;
+using ZeldaEditor.Control;
+using ZeldaEditor.Controls;
+using ZeldaEditor.WinForms;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>
 	/// Interaction logic for TilePathEditor.xaml
 	/// </summary>
 	public partial class TilePathEditor : Window {
-
-		/*private class TilePathCommand {
-			public int IntParam { get; set; }
-			public float FloatParam { get; set; }
-			public TilePathCommandTypes CommandType { get; set; }
-		}*/
-
+		
 		private ObservableCollection<TilePathCommandItem> commands;
 		private bool repeats;
 		private bool modified;
@@ -59,7 +44,7 @@ namespace ZeldaEditor.Windows {
 
 			TileDataInstance tile =
 				(TileDataInstance) properties.PropertyObject;
-			pathDisplay = new TilePathDisplay(this, tile.Room, tile);
+			pathDisplay = new TilePathDisplay(tile.Room, tile);
 			pathDisplay.EditorControl = editorControl;
 			host.Width = pathDisplay.Width;
 			host.Height = pathDisplay.Height;
@@ -90,7 +75,7 @@ namespace ZeldaEditor.Windows {
 			// Remove excess window height
 			SizeToContent = SizeToContent.WidthAndHeight;
 
-			pathDisplay = new TilePathDisplay(this, room, null);
+			pathDisplay = new TilePathDisplay(room, null);
 			pathDisplay.EditorControl = editorControl;
 			host.Width = pathDisplay.Width;
 			host.Height = pathDisplay.Height;

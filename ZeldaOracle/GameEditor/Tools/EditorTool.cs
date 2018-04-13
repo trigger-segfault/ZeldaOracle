@@ -66,8 +66,9 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		protected static Cursor LoadCursor(string name) {
-			return CursorLoader.FromEmbeddedResource(nameof(ZeldaEditor),
-				typeof(EditorTool), "Resources/Cursors/" + name + "Cursor.cur");
+			return WinFormsCursorLoader.FromResource(
+				"Resources/Cursors/" + name + "Cursor.cur",
+				nameof(ZeldaEditor), typeof(EditorTool));
 			/*ResourceManager rm = new ResourceManager("ZeldaEditor.g", Assembly.GetExecutingAssembly());
 			var input = (Stream)rm.GetObject("resources/cursors/" + name.ToLower() + "cursor.cur");
 			input.Position = 0;

@@ -8,9 +8,9 @@
              xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <roslyn:RoslynCodeEditor x:Name="editor">
-        <roslyn:RoslynCodeEditor.Resources>
-            <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
-        </roslyn:RoslynCodeEditor.Resources>
-    </roslyn:RoslynCodeEditor>
+  <roslyn:RoslynCodeEditor x:Name="editor">
+    <roslyn:RoslynCodeEditor.Resources>
+      <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
+    </roslyn:RoslynCodeEditor.Resources>
+  </roslyn:RoslynCodeEditor>
 </common:TimersUserControl>

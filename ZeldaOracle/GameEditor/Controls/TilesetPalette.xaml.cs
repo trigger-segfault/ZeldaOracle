@@ -27,7 +27,7 @@ namespace ZeldaEditor.Controls {
 			InitializeComponent();
 
 			// Create the tileset display
-			tilesetDisplay					= new TilesetDisplay(this);
+			tilesetDisplay					= new TilesetDisplay();
 			tilesetDisplay.EditorControl	= mainWindow.EditorControl;
 			tilesetDisplay.Name				= "tilesetDisplay";
 			tilesetDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;

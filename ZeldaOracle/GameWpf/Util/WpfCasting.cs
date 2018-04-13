@@ -23,7 +23,7 @@ using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Common.Util {
 	/// <summary>Static Wpf extensions for casting geometry and colors.</summary>
-	public static class WpfCasting {
+	public static partial class WpfCasting {
 
 		//-----------------------------------------------------------------------------
 		// Color

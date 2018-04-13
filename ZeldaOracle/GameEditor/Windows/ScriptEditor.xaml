@@ -11,46 +11,46 @@
         xmlns:cmd="clr-namespace:ZeldaEditor"
         mc:Ignorable="d"
         Title="Script Editor" Height="400" Width="631" Icon="/Resources/Icons/Script.png" Closing="OnWindowClosing" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    <Window.CommandBindings>
-        <CommandBinding Command="Save" CanExecute="CanSaveScript" Executed="SaveScript"/>
-        <CommandBinding Command="cmd:EditorCommands.RedoSecondary" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
-    </Window.CommandBindings>
-    <DockPanel x:Name="dockPanel">
-        <ToolBar DockPanel.Dock="Top">
-            <common:ImageButton x:Name="buttonFinish" ToolTip="Finish editing and save changes" Source="/Resources/Icons/Checkmark.png" Click="OnFinished"/>
-            <common:ImageButton x:Name="buttonSave" ToolTip="Save changes" Source="/Resources/Icons/Save.png" Command="Save"/>
-            <Separator/>
-            <common:ImageButton x:Name="buttonUndo" ToolTip="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
-            <common:ImageButton x:Name="buttonRedo" ToolTip="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
-            <Separator/>
-            <common:ImageButton x:Name="buttonCut" ToolTip="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
-            <common:ImageButton x:Name="buttonCopy" ToolTip="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
-            <common:ImageButton x:Name="buttonPaste" ToolTip="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
-            <Separator/>
-            <Label Content="Name:" Padding="5,0" VerticalContentAlignment="Center"/>
-            <xctk:WatermarkTextBox x:Name="textBoxName" Width="180" BorderBrush="#FFC8C8C8" Margin="0,1" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center" TextChanged="OnNameTextChanged"/>
-        </ToolBar>
-        <StatusBar x:Name="statusBarLocation" DockPanel.Dock="Bottom" Height="20" Background="#FFF0F0F0">
-            <StatusBarItem x:Name="statusLine" Content="Line 4" Padding="3,0"/>
-            <StatusBarItem x:Name="statusColumn" Content="Col 4" Padding="3,0"/>
-            <StatusBarItem x:Name="statusChar" Content="Char 4" Padding="3,0"/>
-        </StatusBar>
-        <StatusBar x:Name="statusBarCompile" DockPanel.Dock="Bottom" Height="20" Background="#FFF0F0F0" BorderThickness="0" BorderBrush="Gray">
-            <StatusBarItem x:Name="statusError" Padding="3,0">
-                <StackPanel Orientation="Horizontal">
-                    <Image Stretch="None" Source="/ZeldaEditor;component/Resources/Icons/WarningIcon.png" Margin="0,0,6,0"/>
-                    <TextBlock x:Name="statusErrorMessage" Text="Error message"/>
-                </StackPanel>
-            </StatusBarItem>
-        </StatusBar>
-        <!--<local:ScriptTextEditor x:Name="editor"/>-->
-    </DockPanel>
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <Window.CommandBindings>
+    <CommandBinding Command="Save" CanExecute="CanSaveScript" Executed="SaveScript"/>
+    <CommandBinding Command="cmd:EditorCommands.RedoSecondary" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
+  </Window.CommandBindings>
+  <DockPanel x:Name="dockPanel">
+    <ToolBar DockPanel.Dock="Top">
+      <common:ImageButton x:Name="buttonFinish" ToolTip="Finish editing and save changes" Source="/Resources/Icons/Checkmark.png" Click="OnFinished"/>
+      <common:ImageButton x:Name="buttonSave" ToolTip="Save changes" Source="/Resources/Icons/Save.png" Command="Save"/>
+      <Separator/>
+      <common:ImageButton x:Name="buttonUndo" ToolTip="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
+      <common:ImageButton x:Name="buttonRedo" ToolTip="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
+      <Separator/>
+      <common:ImageButton x:Name="buttonCut" ToolTip="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
+      <common:ImageButton x:Name="buttonCopy" ToolTip="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
+      <common:ImageButton x:Name="buttonPaste" ToolTip="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
+      <Separator/>
+      <Label Content="Name:" Padding="5,0" VerticalContentAlignment="Center"/>
+      <xctk:WatermarkTextBox x:Name="textBoxName" Width="180" BorderBrush="#FFC8C8C8" Margin="0,1" Watermark="Enter a script name" Padding="3,0" VerticalContentAlignment="Center" TextChanged="OnNameTextChanged"/>
+    </ToolBar>
+    <StatusBar x:Name="statusBarLocation" DockPanel.Dock="Bottom" Height="20" Background="#FFF0F0F0">
+      <StatusBarItem x:Name="statusLine" Content="Line 4" Padding="3,0"/>
+      <StatusBarItem x:Name="statusColumn" Content="Col 4" Padding="3,0"/>
+      <StatusBarItem x:Name="statusChar" Content="Char 4" Padding="3,0"/>
+    </StatusBar>
+    <StatusBar x:Name="statusBarCompile" DockPanel.Dock="Bottom" Height="20" Background="#FFF0F0F0" BorderThickness="0" BorderBrush="Gray">
+      <StatusBarItem x:Name="statusError" Padding="3,0">
+        <StackPanel Orientation="Horizontal">
+          <Image Stretch="None" Source="/ZeldaEditor;component/Resources/Icons/WarningIcon.png" Margin="0,0,6,0"/>
+          <TextBlock x:Name="statusErrorMessage" Text="Error message"/>
+        </StackPanel>
+      </StatusBarItem>
+    </StatusBar>
+    <!--<local:ScriptTextEditor x:Name="editor"/>-->
+  </DockPanel>
 
 </common:TimersWindow>

@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using ZeldaEditor.Control;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Common.Content;
-using ZeldaEditor.Undo;
 using ZeldaWpf.Windows;
+using ZeldaEditor.Control;
+using ZeldaEditor.Undo;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

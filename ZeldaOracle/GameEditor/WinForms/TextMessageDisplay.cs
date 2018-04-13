@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Threading;
-using Microsoft.Xna.Framework.Content;
-using ZeldaEditor.Control;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game;
-using ZeldaOracle.Game.Tiles;
 using ZeldaWpf.Util;
 using ZeldaWpf.WinForms;
-using FrameworkElement = System.Windows.FrameworkElement;
+using ZeldaEditor.Control;
 
 namespace ZeldaEditor.WinForms {
 	public class TextMessageDisplay : TimersGraphicsDeviceControl {
@@ -72,9 +63,7 @@ namespace ZeldaEditor.WinForms {
 			}
 		}
 
-		public TextMessageDisplay(FrameworkElement element, string message)
-			: base(element)
-		{
+		public TextMessageDisplay(string message) {
 			this.wrappedString      = GameData.FONT_LARGE.WrapString(message, 128);
 			this.enterPressed       = false;
 

@@ -10,6 +10,8 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Resources;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 	public class ToolSelection : TilesetEditorTool {
@@ -17,8 +19,8 @@ namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		private static readonly Cursor SelectionCursor = LoadCursor("Selection");
-		private static readonly Cursor DraggingCursor = Cursors.SizeAll;
+		private static readonly Cursor SelectionCursor = WpfCursors.Selection;//LoadCursor("Selection");
+		private static readonly Cursor DraggingCursor = MultiCursors.SizeAll;//Cursors.SizeAll;
 
 		private const Keys DuplicateModifier = Keys.Control;
 		private const Keys RoomModeModifier = Keys.Shift;

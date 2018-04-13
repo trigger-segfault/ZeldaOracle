@@ -11,42 +11,42 @@
         Background="#FFF0F0F0" ShowInTaskbar="False" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
         Icon="/ZeldaEditor;component/Resources/Icons/Level.png"
         SnapsToDevicePixels="True" UseLayoutRounding="True">
-    <Grid>
-        <Button Content="Cancel" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,4,4" Width="80"/>
-        <Button Content="OK" IsDefault="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,89,4" Width="80" Click="OnAdd"/>
+  <Grid>
+    <Button Content="Cancel" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,4,4" Width="80"/>
+    <Button Content="OK" IsDefault="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,89,4" Width="80" Click="OnAdd"/>
 
-        <Grid Margin="0,0,0,31">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="*" MinWidth="74"/>
-                <ColumnDefinition Width="*" MinWidth="100"/>
-            </Grid.ColumnDefinitions>
+    <Grid Margin="0,0,0,31">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="*" MinWidth="74"/>
+        <ColumnDefinition Width="*" MinWidth="100"/>
+      </Grid.ColumnDefinitions>
 
-            <Label Content="Variable Name:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
-            <Label Content="Variable Type:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,36,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
-            <Label Content="List Type:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,66,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
-            <Label Content="Initial Value:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,96,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
+      <Label Content="Variable Name:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
+      <Label Content="Variable Type:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,36,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
+      <Label Content="List Type:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,66,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
+      <Label Content="Initial Value:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,96,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
 
-            <TextBox x:Name="textBoxVariableName" VerticalAlignment="Top" Height="22" Margin="0,6,10,0" Grid.Column="1" Grid.ColumnSpan="2" />
-            <ComboBox x:Name="comboBoxVariableType" VerticalAlignment="Top" Margin="0,36,10,0" Grid.Column="1" Grid.ColumnSpan="2" />
+      <TextBox x:Name="textBoxVariableName" VerticalAlignment="Top" Height="22" Margin="0,6,10,0" Grid.Column="1" Grid.ColumnSpan="2" />
+      <ComboBox x:Name="comboBoxVariableType" VerticalAlignment="Top" Margin="0,36,10,0" Grid.Column="1" Grid.ColumnSpan="2" />
 
-            <ComboBox x:Name="comboBoxListType" VerticalAlignment="Top" Margin="0,66,0,0" Grid.Column="1" />
-            <Label Content="Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,66,0,0" HorizontalContentAlignment="Left" Grid.Column="2"/>
-            <xctk:IntegerUpDown x:Name="spinnerListSize" Minimum="1" Maximum="32" VerticalAlignment="Top" Margin="44,66,10,0" Height="22" Grid.Column="2">
-                <!--IsEnabled == (comboBoxListType.SelectedItem == ListType.Single)-->
-                <xctk:IntegerUpDown.Style>
-                    <Style TargetType="xctk:IntegerUpDown">
-                        <Setter Property="IsEnabled" Value="True"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=comboBoxListType, Path=SelectedItem}" Value="Single">
-                                <Setter Property="IsEnabled" Value="False"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </xctk:IntegerUpDown.Style>
-            </xctk:IntegerUpDown>
+      <ComboBox x:Name="comboBoxListType" VerticalAlignment="Top" Margin="0,66,0,0" Grid.Column="1" />
+      <Label Content="Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,66,0,0" HorizontalContentAlignment="Left" Grid.Column="2"/>
+      <xctk:IntegerUpDown x:Name="spinnerListSize" Minimum="1" Maximum="32" VerticalAlignment="Top" Margin="44,66,10,0" Height="22" Grid.Column="2">
+        <!--IsEnabled == (comboBoxListType.SelectedItem == ListType.Single)-->
+        <xctk:IntegerUpDown.Style>
+          <Style TargetType="xctk:IntegerUpDown">
+            <Setter Property="IsEnabled" Value="True"/>
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding ElementName=comboBoxListType, Path=SelectedItem}" Value="Single">
+                <Setter Property="IsEnabled" Value="False"/>
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </xctk:IntegerUpDown.Style>
+      </xctk:IntegerUpDown>
 
-            <TextBox x:Name="textBoxInitialValue" VerticalAlignment="Top" Height="22" Margin="0,96,10,0" Grid.Column="1" Grid.ColumnSpan="2"/>
-        </Grid>
+      <TextBox x:Name="textBoxInitialValue" VerticalAlignment="Top" Height="22" Margin="0,96,10,0" Grid.Column="1" Grid.ColumnSpan="2"/>
     </Grid>
+  </Grid>
 </Window>

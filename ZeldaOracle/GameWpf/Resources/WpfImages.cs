@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using ZeldaWpf.Util;
@@ -22,42 +21,45 @@ namespace ZeldaWpf.Resources {
 		// Attribute Classes
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Specifies a class that is loaded with custom parameters.</summary>
+		/// <summary>Specifies an image that is loaded with custom parameters.</summary>
 		[AttributeUsage(AttributeTargets.Field)]
-		protected class CustomResourceAttribute : Attribute {
+		protected class CustomImageAttribute : Attribute {
 			/// <summary>The extension to load the image with.</summary>
 			public string Extension { get; set; } = ".png";
 
 			/// <summary>The path to load the image from.</summary>
 			public string Path { get; set; } = "Resources/Icons/";
+
+			/// <summary>True if the image should not be loaded automatically.</summary>
+			public bool Manual { get; set; } = false;
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Images
 		//-----------------------------------------------------------------------------
-		
-		public static BitmapImage Empty;
-		public static BitmapImage InfoIcon;
-		public static BitmapImage QuestionIcon;
-		public static BitmapImage WarningIcon;
-		public static BitmapImage ErrorIcon;
 
-		public static BitmapImage FolderManillaHOpen;
-		public static BitmapImage FolderManillaHClosed;
-		public static BitmapImage FolderManillaVOpen;
-		public static BitmapImage FolderManillaVClosed;
+		public static readonly BitmapImage Empty;
+		public static readonly BitmapImage InfoIcon;
+		public static readonly BitmapImage QuestionIcon;
+		public static readonly BitmapImage WarningIcon;
+		public static readonly BitmapImage ErrorIcon;
 
-		public static BitmapImage FolderBlueHOpen;
-		public static BitmapImage FolderBlueHClosed;
-		public static BitmapImage FolderBlueVOpen;
-		public static BitmapImage FolderBlueVClosed;
+		public static readonly BitmapImage FolderManillaHOpen;
+		public static readonly BitmapImage FolderManillaHClosed;
+		public static readonly BitmapImage FolderManillaVOpen;
+		public static readonly BitmapImage FolderManillaVClosed;
+
+		public static readonly BitmapImage FolderBlueHOpen;
+		public static readonly BitmapImage FolderBlueHClosed;
+		public static readonly BitmapImage FolderBlueVOpen;
+		public static readonly BitmapImage FolderBlueVClosed;
 
 
 		//-----------------------------------------------------------------------------
 		// Internal Members
 		//-----------------------------------------------------------------------------
-
+		
 		/// <summary>The collection of folders for each folder color.</summary>
 		private static Dictionary<FolderColor, BitmapImage[]> folders;
 
@@ -111,22 +113,22 @@ namespace ZeldaWpf.Resources {
 		/// <summary>Loads all images from fields using the names and attributes of
 		/// the field.</summary> 
 		protected static void LoadImages(Type ownerType) {
-			Type returnType = typeof(BitmapImage);
 			Assembly assembly = ownerType.Assembly;
+
+			Type imageType = typeof(BitmapImage);
 
 			// Look for all static fields to assign to
 			foreach (FieldInfo fieldInfo in ownerType.GetFields(
 				BindingFlags.Static | BindingFlags.Public))
 			{
 				// Is this field assignable?
-				if (fieldInfo.FieldType.IsAssignableFrom(returnType)) {
-					CustomResourceAttribute attr =
-						fieldInfo.GetCustomAttribute<CustomResourceAttribute>();
-					BitmapImage image;
-					if (attr != null)
-						image = LoadResource(fieldInfo.Name, assembly, attr);
-					else
-						image = LoadIcon(fieldInfo.Name, assembly);
+				if (fieldInfo.FieldType.IsAssignableFrom(imageType)) {
+					CustomImageAttribute attr =
+						fieldInfo.GetCustomAttribute<CustomImageAttribute>() ??
+						new CustomImageAttribute();
+					if (attr.Manual)
+						continue;
+					BitmapImage image = LoadImage(fieldInfo.Name, assembly, attr);
 					fieldInfo.SetValue(null, image);
 				}
 			}
@@ -144,11 +146,10 @@ namespace ZeldaWpf.Resources {
 				assembly).AsFrozen();
 		}
 
-		/// <summary>Loads a .png resource with the specified name.</summary>
-		protected static BitmapImage LoadResource(string name, Assembly assembly,
-			CustomResourceAttribute info)
+		/// <summary>Loads a .png image with the specified name.</summary>
+		protected static BitmapImage LoadImage(string name, Assembly assembly,
+			CustomImageAttribute info)
 		{
-			assembly = assembly ?? Assembly.GetEntryAssembly();
 			return BitmapFactory.FromResource(info.Path + name + info.Extension,
 				assembly).AsFrozen();
 		}

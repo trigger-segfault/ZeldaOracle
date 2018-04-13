@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:ConscriptDesigner.Windows"
         mc:Ignorable="d"
         Title="Rename" Height="120" Width="308" Background="#FFF0F0F0" ResizeMode="NoResize" WindowStyle="ToolWindow" Icon="/Resources/Icons/Rename.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" SnapsToDevicePixels="True" UseLayoutRounding="True">
-    <Grid>
-        <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,12,0,0"/>
-        <TextBox x:Name="textBox" Margin="67,14,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="221" />
-        <Button x:Name="buttonRename" Content="Rename" IsDefault="True" Margin="0,0,101,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnOK"/>
-        <Button Content="Cancel" IsCancel="True" Margin="0,0,14,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-    </Grid>
+  <Grid>
+    <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,12,0,0"/>
+    <TextBox x:Name="textBox" Margin="67,14,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="221" />
+    <Button x:Name="buttonRename" Content="Rename" IsDefault="True" Margin="0,0,101,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnOK"/>
+    <Button Content="Cancel" IsCancel="True" Margin="0,0,14,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+  </Grid>
 </Window>

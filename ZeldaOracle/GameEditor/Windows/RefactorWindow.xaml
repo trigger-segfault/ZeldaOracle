@@ -7,17 +7,17 @@
         xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         mc:Ignorable="d"
         Title="Refactor Properties" Width="260" Height="280" Background="#FFF0F0F0" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="/ZeldaEditor;component/Resources/Icons/Property.png" SnapsToDevicePixels="True" UseLayoutRounding="True" PreviewKeyDown="OnPreviewKeyDown" Closing="OnWindowClosing">
-    <Grid>
-        <Label x:Name="labelFind" Content="Find properties with name:" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,0,0,0"/>
-        <TextBox x:Name="textBoxFind" Margin="10,24,10,0" VerticalAlignment="Top" TextChanged="OnFindTextChanged" />
-        <Label x:Name="labelReplace" Content="Replace property names with:" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,46,0,0"/>
-        <TextBox x:Name="textBoxReplace" Margin="10,70,10,0" VerticalAlignment="Top" TextChanged="OnReplaceTextChanged" />
-        <Label Content="Look in:" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,92,0,0"/>
-        <ComboBox x:Name="comboBoxScope" VerticalAlignment="Top" Margin="10,116,10,0" SelectionChanged="OnScopeChanged"/>
-        <CheckBox x:Name="checkBoxNoBase" Content="Only if no base property exists" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,154,0,0" Padding="4,-1,0,0" IsChecked="True" Click="OnNoBaseChecked"/>
-        <Label x:Name="labelCount" Content="0 properties found" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,178,0,0"/>
-        
-        <Button Content="Close" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="75" IsCancel="True" Click="OnClose"/>
-        <Button x:Name="buttonReplaceAll" Content="Replace All" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,93,10" Width="75" IsDefault="True" Click="OnReplaceAll"/>
-    </Grid>
+  <Grid>
+    <Label x:Name="labelFind" Content="Find properties with name:" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,0,0,0"/>
+    <TextBox x:Name="textBoxFind" Margin="10,24,10,0" VerticalAlignment="Top" TextChanged="OnFindTextChanged" />
+    <Label x:Name="labelReplace" Content="Replace property names with:" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,46,0,0"/>
+    <TextBox x:Name="textBoxReplace" Margin="10,70,10,0" VerticalAlignment="Top" TextChanged="OnReplaceTextChanged" />
+    <Label Content="Look in:" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,92,0,0"/>
+    <ComboBox x:Name="comboBoxScope" VerticalAlignment="Top" Margin="10,116,10,0" SelectionChanged="OnScopeChanged"/>
+    <CheckBox x:Name="checkBoxNoBase" Content="Only if no base property exists" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,154,0,0" Padding="4,-1,0,0" IsChecked="True" Click="OnNoBaseChecked"/>
+    <Label x:Name="labelCount" Content="0 properties found" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0,5,5,3" Margin="10,178,0,0"/>
+
+    <Button Content="Close" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="75" IsCancel="True" Click="OnClose"/>
+    <Button x:Name="buttonReplaceAll" Content="Replace All" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,93,10" Width="75" IsDefault="True" Click="OnReplaceAll"/>
+  </Grid>
 </common:TimersWindow>

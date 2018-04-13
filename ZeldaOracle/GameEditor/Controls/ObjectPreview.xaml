@@ -7,11 +7,11 @@
              xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
              mc:Ignorable="d" 
              VerticalAlignment="Top" SnapsToDevicePixels="True">
-    <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top">
-        <Grid Width="16" Height="16">
-            <WindowsFormsHost x:Name="host"/>
-            <Image x:Name="image" Stretch="None" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Level.png" ClipToBounds="True" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        </Grid>
-        <TextBlock x:Name="previewName" Text="object_preview" Padding="5,0"/>
-    </StackPanel>
+  <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top">
+    <Grid Width="16" Height="16">
+      <WindowsFormsHost x:Name="host"/>
+      <Image x:Name="image" Stretch="None" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Level.png" ClipToBounds="True" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+    </Grid>
+    <TextBlock x:Name="previewName" Text="object_preview" Padding="5,0"/>
+  </StackPanel>
 </common:TimersUserControl>

@@ -1,29 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
+using NAudio.Wave;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Control;
-using ConscriptDesigner.Util;
-using NAudio.Wave;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Windows {
 	/// <summary>
 	/// Interaction logic for PlaybackWindow.xaml
 	/// </summary>
-	public partial class PlaybackWindow : Window {
+	public partial class PlaybackWindow : TimersWindow {
 
 		//-----------------------------------------------------------------------------
 		// Classes
@@ -103,9 +93,8 @@ namespace ConscriptDesigner.Windows {
 		private bool paused;
 
 		private bool suppressEvents;
-
-		private StoppableTimer updateTimer;
-		private StoppableTimer startTimer;
+		
+		private ScheduledEvent startTimer;
 		private bool soundLoaded;
 
 
@@ -117,40 +106,18 @@ namespace ConscriptDesigner.Windows {
 		public PlaybackWindow(ContentSound sound) {
 			suppressEvents = true;
 			InitializeComponent();
-			this.waveOut = new WaveOut();
-			this.waveOut.PlaybackStopped += OnPlaybackStopped;
+			waveOut = new WaveOut();
+			waveOut.PlaybackStopped += OnPlaybackStopped;
 
-			this.looping = ProjectUserSettings.Playback.Looping;
-			this.toggleButtonLooping.IsChecked = ProjectUserSettings.Playback.Looping;
-			this.soundLoaded = false;
-			this.spinnerVolume.Value = ProjectUserSettings.Playback.Volume;
-			this.waveOut.Volume = (float) ProjectUserSettings.Playback.Volume;
-			this.updateTimer = StoppableTimer.StartNew(
-				TimeSpan.FromSeconds(0.01),
-				DispatcherPriority.ApplicationIdle,
-				Update);
-			this.startTimer = StoppableTimer.Create(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					OnPlay();
-					startTimer.Stop();
-				});
-			/*this.updateTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.01),
-				DispatcherPriority.ApplicationIdle,
-				delegate { Update(); },
-				Dispatcher);
-			this.startTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					OnPlay();
-					startTimer.Stop();
-				},
-				Dispatcher);
-			this.startTimer.Stop();*/
-			this.suppressEvents = false;
+			looping = ProjectUserSettings.Playback.Looping;
+			toggleButtonLooping.IsChecked = ProjectUserSettings.Playback.Looping;
+			soundLoaded = false;
+			spinnerVolume.Value = ProjectUserSettings.Playback.Volume;
+			waveOut.Volume = (float) ProjectUserSettings.Playback.Volume;
+			ContinuousEvents.Start(0.01, TimerPriority.Low, Update);
+			startTimer = ScheduledEvents.New(0.05, TimerPriority.Low,
+				() => { OnPlay(); });
+			suppressEvents = false;
 
 			PlaySound(sound);
 		}
@@ -181,7 +148,7 @@ namespace ConscriptDesigner.Windows {
 				}
 				// HACK: Fix playing directly after stopping causing
 				// the previous sound to continue playing.
-				startTimer.Start();
+				startTimer.Restart();
 			}
 			catch (Exception ex) {
 				soundLoaded = false;
@@ -234,11 +201,6 @@ namespace ConscriptDesigner.Windows {
 		//-----------------------------------------------------------------------------
 
 		private void OnClosing(object sender, CancelEventArgs e) {
-			//if (spinnerVolume.Value.HasValue)
-			//	lastVolume = spinnerVolume.Value.Value;
-			//lastLooping = looping;
-			updateTimer.Stop();
-			startTimer.Stop();
 			waveOut.Stop();
 			waveOut.Dispose();
 			if (looper != null) {

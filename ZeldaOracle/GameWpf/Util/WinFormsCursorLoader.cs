@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Util;
 
 namespace ZeldaWpf.Util {
 	/// <summary>A static class for helper methods for loading WinForms color cursors.</summary>
-	public static class CursorLoader {
+	public static class WinFormsCursorLoader {
 
 		/// <summary>Loads a WinForms color cursor from file.</summary>
 		public static Cursor FromFile(string path) {
@@ -67,9 +67,10 @@ namespace ZeldaWpf.Util {
 
 		/// <summary>Loads a WinForms color cursor from an embedded resource of the
 		/// specified assembly.</summary>
-		public static Cursor FromEmbeddedResource(string rootNamespace,
-			Assembly assembly, string path)
+		public static Cursor FromResource(string path, string rootNamespace,
+			Assembly assembly = null)
 		{
+			assembly = assembly ?? Assembly.GetEntryAssembly();
 			ResourceManager rm = new ResourceManager(rootNamespace + ".g", assembly);
 			Stream stream = (Stream) rm.GetObject(path.ToLower());
 			stream.Position = 0;
@@ -78,17 +79,10 @@ namespace ZeldaWpf.Util {
 
 		/// <summary>Loads a WinForms color cursor from an embedded resource of the
 		/// type's assembly.</summary>
-		public static Cursor FromEmbeddedResource(string rootNamespace,
-			Type type, string path)
+		public static Cursor FromResource(string path, string rootNamespace,
+			Type type)
 		{
-			return FromEmbeddedResource(rootNamespace, type.Assembly, path);
-		}
-
-		/// <summary>Loads a WinForms color cursor from an embedded resource of the
-		/// entry assembly.</summary>
-		public static Cursor FromEmbeddedResource(string rootNamespace, string path) {
-			return FromEmbeddedResource(rootNamespace,
-				Assembly.GetEntryAssembly(), path);
+			return FromResource(path, rootNamespace, type.Assembly);
 		}
 	}
 }

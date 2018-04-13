@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using Xceed.Wpf.AvalonDock.Layout;
+using FormsControl = System.Windows.Forms.Control;
 
 namespace ZeldaWpf.Util {
 	/// <summary>An event that fires continuously on the UI thread.</summary>
@@ -29,7 +30,7 @@ namespace ZeldaWpf.Util {
 		private object tag;
 		/// <summary>True if the event has been paused.</summary>
 		private bool paused;
-		/// <summary>True if the event has been permanently cancelled.</summary>
+		/// <summary>True if the event has been cancelled.</summary>
 		private bool cancelled;
 
 
@@ -91,7 +92,7 @@ namespace ZeldaWpf.Util {
 		public void Start() {
 			if (cancelled)
 				throw new InvalidOperationException("Cannot start a cancelled " +
-					"continuous event!");
+					"continuous event! Use Restart.");
 			if (!timer.IsEnabled) {
 				paused = false;
 				timer.Start();
@@ -105,17 +106,6 @@ namespace ZeldaWpf.Util {
 			}
 		}
 
-		/// <summary>Resumes the paused event.</summary>
-		public void Resume() {
-			if (cancelled)
-				throw new InvalidOperationException("Cannot resume a cancelled " +
-					"continuous event!");
-			if (!timer.IsEnabled && paused) {
-				cancelled = false;
-				timer.Start();
-			}
-		}
-
 		/// <summary>Pauses the event.</summary>
 		public void Pause() {
 			if (timer.IsEnabled) {
@@ -124,12 +114,32 @@ namespace ZeldaWpf.Util {
 			}
 		}
 
-		/// <summary>Permanently cancels the event.</summary>
+		/// <summary>Resumes the paused event.</summary>
+		public void Resume() {
+			if (cancelled)
+				throw new InvalidOperationException("Cannot resume a cancelled " +
+					"continuous event! Use Restart.");
+			if (!timer.IsEnabled && paused) {
+				cancelled = false;
+				timer.Start();
+			}
+		}
+
+		/// <summary>Cancels the event.</summary>
 		public void Cancel() {
 			cancelled = true;
 			paused = false;
 			timer.Stop();
 			Cancelled?.Invoke(this);
+		}
+
+		/// <summary>Restarts the event.</summary>
+		public void Restart() {
+			paused = false;
+			cancelled = false;
+			timer.Stop();
+			timer.Start();
+			Restarted?.Invoke(this);
 		}
 
 
@@ -146,6 +156,9 @@ namespace ZeldaWpf.Util {
 		/// <summary>An event handler thats called when canceled.</summary>
 		public event ContinuousEventHandler Cancelled;
 
+		/// <summary>An event handler thats called when restarted.</summary>
+		public event ContinuousEventHandler Restarted;
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -158,10 +171,10 @@ namespace ZeldaWpf.Util {
 
 		/// <summary>Gets if the timer is paused.</summary>
 		public bool IsPaused {
-			get { return cancelled; }
+			get { return paused; }
 		}
 
-		/// <summary>Gets if the timer is permanently cancelled.</summary>
+		/// <summary>Gets if the timer is cancelled.</summary>
 		public bool IsCancelled {
 			get { return cancelled; }
 		}
@@ -207,6 +220,10 @@ namespace ZeldaWpf.Util {
 		private FrameworkElement element;
 		/// <summary>The window containing this event collection.</summary>
 		private Window window;
+		/// <summary>The anchorable containing this event collection</summary>
+		private LayoutContent anchorable;
+		/// <summary>The WinForms control containing this event collection.</summary>
+		private FormsControl control;
 		/// <summary>The default priority for continuous events.</summary>
 		private TimerPriority defaultPriority;
 
@@ -227,7 +244,33 @@ namespace ZeldaWpf.Util {
 			defaultPriority = TimerPriority.Normal;
 		}
 
-		/// <summary>Constructs continuous events that cancel on element unloading and
+		/// <summary>Constructs continuous events that cancel on unloading and closed.</summary>
+		public ContinuousEvents(object container) : this() {
+			if (container is LayoutContent) {
+				anchorable = (LayoutContent) container;
+				anchorable.Closed += OnClosed;
+			}
+			else if (container is Window) {
+				window = (Window) container;
+				window.Closed += OnClosed;
+			}
+			else if (container is FrameworkElement) {
+				element = (FrameworkElement) container;
+				element.Loaded += OnLoaded;
+				element.Unloaded += OnUnloaded;
+			}
+			else if (container is FormsControl) {
+				control = (FormsControl) container;
+				control.HandleCreated += OnHandleCreated;
+				control.HandleDestroyed += OnHandleDestroyed;
+			}
+			else {
+				throw new ArgumentException("Container must be a LayoutContent, " +
+					"Window, FrameworkElement, or WinForms Control!");
+			}
+		}
+
+		/*/// <summary>Constructs continuous events that cancel on element unloading and
 		/// window closed.</summary>
 		public ContinuousEvents(FrameworkElement element) : this() {
 			if (element is Window) {
@@ -246,6 +289,12 @@ namespace ZeldaWpf.Util {
 			this.window = window;
 			window.Closed += OnClosed;
 		}
+
+		/// <summary>Constructs continuous events that cancel on anchorable closed.</summary>
+		public ContinuousEvents(LayoutContent anchorable) : this() {
+			this.anchorable = anchorable;
+			anchorable.Closed += OnClosed;
+		}*/
 
 
 		//-----------------------------------------------------------------------------
@@ -266,7 +315,7 @@ namespace ZeldaWpf.Util {
 			}
 		}
 
-		/// <summary>Permanently cancels all global timers.</summary>
+		/// <summary>Cancels all global timers.</summary>
 		public static void GlobalCancelAll() {
 			foreach (ContinuousEvent timer in globalTimers.ToArray()) {
 				timer.Cancel();
@@ -287,7 +336,7 @@ namespace ZeldaWpf.Util {
 			}
 		}
 
-		/// <summary>Permanently cancels all timers.</summary>
+		/// <summary>Cancels all timers.</summary>
 		public void CancelAll() {
 			foreach (ContinuousEvent timer in timers.ToArray()) {
 				timer.Cancel();
@@ -320,6 +369,7 @@ namespace ZeldaWpf.Util {
 		public ContinuousEvent New(TimeSpan interval, TimerPriority priority) {
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timer.Stop();
 			timers.Add(timer);
 			globalTimers.Add(timer);
@@ -351,6 +401,7 @@ namespace ZeldaWpf.Util {
 		{
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timer.ActionCallback +=
 				new ContinuousEvent.ContinuousActionHandler(callback);
 			timer.Stop();
@@ -388,6 +439,7 @@ namespace ZeldaWpf.Util {
 		{
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timer.SenderCallback +=
 				new ContinuousEvent.ContinuousEventHandler(callback);
 			timer.Stop();
@@ -429,6 +481,7 @@ namespace ZeldaWpf.Util {
 		{
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timer.Tag = tag;
 			timer.SenderCallback +=
 				new ContinuousEvent.ContinuousEventHandler(callback);
@@ -491,6 +544,7 @@ namespace ZeldaWpf.Util {
 		public ContinuousEvent Start(TimeSpan interval, TimerPriority priority) {
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timers.Add(timer);
 			globalTimers.Add(timer);
 			return timer;
@@ -521,6 +575,7 @@ namespace ZeldaWpf.Util {
 		{
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timer.ActionCallback +=
 				new ContinuousEvent.ContinuousActionHandler(callback);
 			timers.Add(timer);
@@ -557,6 +612,7 @@ namespace ZeldaWpf.Util {
 		{
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timer.SenderCallback +=
 				new ContinuousEvent.ContinuousEventHandler(callback);
 			timers.Add(timer);
@@ -598,6 +654,7 @@ namespace ZeldaWpf.Util {
 		{
 			var timer = new ContinuousEvent(interval, priority);
 			timer.Cancelled += OnRemoveContinuousEvent;
+			timer.Restarted += OnAddContinuousEvent;
 			timer.Tag = tag;
 			timer.SenderCallback +=
 				new ContinuousEvent.ContinuousEventHandler(callback);
@@ -639,7 +696,7 @@ namespace ZeldaWpf.Util {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Sets up the window closed event.</summary>
-		private void OnLoaded(object sender, RoutedEventArgs e) {
+		private void OnLoaded(object sender = null, RoutedEventArgs e = null) {
 			if (element != null) {
 				Window newWindow = Window.GetWindow(element);
 				if (newWindow != window) {
@@ -653,7 +710,7 @@ namespace ZeldaWpf.Util {
 
 		/// <summary>Cancels all events when the element is unloaded.
 		/// And removes the closed event from the window.</summary>
-		private void OnUnloaded(object sender, RoutedEventArgs e) {
+		private void OnUnloaded(object sender = null, RoutedEventArgs e = null) {
 			if (window != null) {
 				window.Closed -= OnClosed;
 				window = null;
@@ -661,10 +718,40 @@ namespace ZeldaWpf.Util {
 			CancelAll();
 		}
 
-		/// <summary>Cancels all events when the window is closed.</summary>
+		/// <summary>Sets up the element loaded and window closed event.</summary>
+		private void OnHandleCreated(object sender, EventArgs e) {
+			if (control != null) {
+				element = WinFormsHelper.GetHost(control);
+				element.Loaded += OnLoaded;
+				element.Unloaded += OnUnloaded;
+				if (element.IsLoaded)
+					OnLoaded();
+			}
+		}
+
+		/// <summary>Cancels all events when the WinForms control is destroyed.
+		/// Also unhooks WindownsFormsHost events.</summary>
+		private void OnHandleDestroyed(object sender, EventArgs e) {
+			if (element != null) {
+				element.Loaded -= OnLoaded;
+				element.Unloaded -= OnUnloaded;
+				if (!element.IsLoaded)
+					OnUnloaded();
+				element = null;
+			}
+			CancelAll();
+		}
+
+		/// <summary>Cancels all events when the window or anchorable is closed.</summary>
 		private void OnClosed(object sender, EventArgs e) {
-			window.Closed -= OnClosed;
-			window = null;
+			if (window != null) {
+				window.Closed -= OnClosed;
+				window = null;
+			}
+			else if (anchorable != null) {
+				anchorable.Closed -= OnClosed;
+				anchorable = null;
+			}
 			CancelAll();
 		}
 
@@ -678,6 +765,12 @@ namespace ZeldaWpf.Util {
 		private void OnRemoveContinuousEvent(ContinuousEvent sender) {
 			timers.Remove(sender);
 			globalTimers.Remove(sender);
+		}
+
+		/// <summary>Called to add the timer to the cancel collection.</summary>
+		private void OnAddContinuousEvent(ContinuousEvent sender) {
+			timers.Add(sender);
+			globalTimers.Add(sender);
 		}
 
 

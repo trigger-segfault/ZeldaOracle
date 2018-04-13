@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Controls.TextEditing {
 	/// <summary>A search result storing a match and text segment.</summary>
@@ -16,14 +14,14 @@ namespace ConscriptDesigner.Controls.TextEditing {
 
 		/// <summary>Constructs the search result from the match.</summary>
 		public SearchResult(Match match) {
-			this.StartOffset = match.Index;
-			this.Length = match.Length;
-			this.Match = match;
+			StartOffset = match.Index;
+			Length = match.Length;
+			Match = match;
 		}
 	}
 
 	/// <summary>Colorizes search results behind the selection.</summary>
-	public class ColorizeSearchResultsBackgroundRenderer : IBackgroundRenderer {
+	public class SearchResultColorizer : IBackgroundRenderer {
 
 		/// <summary>The search results to be modified.</summary>
 		TextSegmentCollection<SearchResult> currentResults = new TextSegmentCollection<SearchResult>();
@@ -33,9 +31,8 @@ namespace ConscriptDesigner.Controls.TextEditing {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs the search result colorizer.</summary>
-		public ColorizeSearchResultsBackgroundRenderer() {
-			Background = new SolidColorBrush(Color.FromRgb(246, 185, 77));
-			Background.Freeze();
+		public SearchResultColorizer() {
+			Background = WpfHelper.ColorBrush(246, 185, 77).AsFrozen();
 		}
 
 

@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
-using System.Xml;
-using ConscriptDesigner.Content;
-using ConscriptDesigner.Controls;
-using ConscriptDesigner.Controls.TextEditing;
-using ConscriptDesigner.Themes;
-using ConscriptDesigner.Util;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Indentation;
+using ConscriptDesigner.Content;
+using ConscriptDesigner.Themes;
+using ZeldaWpf.Controls.TextEditing;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Anchorables {
 	public class ConscriptEditor : ContentFileDocument, ICommandAnchorable {
@@ -28,9 +19,9 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>The timer to update if the file is modified.
 		/// Needed because it doesn't always change right after an action.</summary>
-		private StoppableTimer modifiedTimer;
+		private ScheduledEvent modifiedTimer;
 		/// <summary>Navigate after a short pause to ensure focus.</summary>
-		private StoppableTimer navigateTimer;
+		private ScheduledEvent navigateTimer;
 		/// <summary>True if the title is currently displayed as modified.</summary>
 		private bool isTitleModified;
 
@@ -60,15 +51,13 @@ namespace ConscriptDesigner.Anchorables {
 			editor.SyntaxHighlighting = Highlighting.Conscript;
 			//this.editor.TextArea.TextView.Margin = new Thickness(10, 0, 0, 0);
 			editor.TextArea.TextView.BackgroundRenderers.Add(
-				new HighlightCurrentLineBackgroundRenderer(this.editor));
+				new CurrentLineHighlighter(editor));
 			//this.editor.TextArea.Options.HighlightCurrentLine = true;
 			TextOptions.SetTextFormattingMode(this.editor, TextFormattingMode.Display);
 			border.Child = this.editor;
 
-			modifiedTimer = StoppableTimer.Create(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate { CheckModified(); });
+			modifiedTimer = ScheduledEvents.New(0.05, TimerPriority.Low,
+				CheckModified);
 
 			Content = border;
 		}
@@ -107,7 +96,6 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Called every so often to check if the file is modified.</summary>
 		private void CheckModified() {
-			modifiedTimer.Stop();
 			if ((editor.IsModified || File.IsModifiedOverride) != isTitleModified)
 				UpdateTitle();
 			CommandManager.InvalidateRequerySuggested();
@@ -115,7 +103,7 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Called when the text is changed in order to update the title.</summary>
 		private void OnTextChanged(object sender, EventArgs e) {
-			modifiedTimer.Start();
+			modifiedTimer.Restart();
 		}
 
 		/// <summary>HACK: Fix AvalonDock's broken tab focusing where programmatically
@@ -203,13 +191,13 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>Undoes the last action in the editor.</summary>
 		public void Undo() {
 			editor.Undo();
-			modifiedTimer.Start();
+			modifiedTimer.Restart();
 		}
 
 		/// <summary>Redoes the last action in the editor.</summary>
 		public void Redo() {
 			editor.Redo();
-			modifiedTimer.Start();
+			modifiedTimer.Restart();
 		}
 
 		/// <summary>Focuses on the editor.</summary>
@@ -225,15 +213,8 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>Calls a navigation action after a short pause to ensure focus.</summary>
 		private void StartNavigateTimer(Action action) {
 			if (navigateTimer != null)
-				navigateTimer.Stop();
-			navigateTimer = StoppableTimer.StartNew(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					action();
-					navigateTimer.Stop();
-					navigateTimer = null;
-				});
+				navigateTimer.Cancel();
+			navigateTimer = ScheduledEvents.Start(0.05, TimerPriority.Normal, action);
 		}
 
 		

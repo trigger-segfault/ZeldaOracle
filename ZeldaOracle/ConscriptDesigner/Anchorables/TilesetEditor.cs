@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Xml;
-using ConscriptDesigner.Content;
-using ConscriptDesigner.Control;
 
 namespace ConscriptDesigner.Anchorables {
 	public class TilesetEditor : RequestCloseAnchorable, ICommandAnchorable {

@@ -1,164 +1,164 @@
-﻿<Window x:Class="ConscriptDesigner.MainWindow"
+﻿<common:TimersWindow x:Class="ConscriptDesigner.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cmd="clr-namespace:ConscriptDesigner"
         xmlns:local="clr-namespace:ConscriptDesigner.Controls"
+        xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         xmlns:anchors="clr-namespace:ConscriptDesigner.Anchorables"
         xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
         Title="Zelda Conscript Designer" Height="657" Width="1029" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnLoaded" Closing="OnClosing" Icon="Conscript.ico" Background="#FF293955" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ConscriptDesigner;component/Themes/DefaultStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    <Window.CommandBindings>
-        <CommandBinding Command="Open" CanExecute="CanExecuteIsBuilding" Executed="OnOpenCommand"/>
-        <CommandBinding Command="Save" CanExecute="CanSave" Executed="OnSaveCommand"/>
-        <CommandBinding Command="cmd:Commands.SaveAll" CanExecute="CanExecuteIsProjectOpen" Executed="OnSaveAllCommand"/>
-        <CommandBinding Command="cmd:Commands.Close" CanExecute="CanExecuteIsBusy" Executed="OnCloseCommand"/>
-        <CommandBinding Command="cmd:Commands.Exit" CanExecute="CanAlwaysExecute" Executed="OnExitCommand"/>
-        <CommandBinding Command="cmd:Commands.RedoSecondary" CanExecute="CanRedo" Executed="OnRedoCommand"/>
+  <common:TimersWindow.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </common:TimersWindow.Resources>
+  <common:TimersWindow.CommandBindings>
+    <CommandBinding Command="Open" CanExecute="CanExecuteIsBuilding" Executed="OnOpenCommand"/>
+    <CommandBinding Command="Save" CanExecute="CanSave" Executed="OnSaveCommand"/>
+    <CommandBinding Command="cmd:Commands.SaveAll" CanExecute="CanExecuteIsProjectOpen" Executed="OnSaveAllCommand"/>
+    <CommandBinding Command="cmd:Commands.Close" CanExecute="CanExecuteIsBusy" Executed="OnCloseCommand"/>
+    <CommandBinding Command="cmd:Commands.Exit" CanExecute="CanAlwaysExecute" Executed="OnExitCommand"/>
+    <CommandBinding Command="cmd:Commands.RedoSecondary" CanExecute="CanRedo" Executed="OnRedoCommand"/>
 
-        <CommandBinding Command="Cut" CanExecute="CanCut" Executed="OnCutCommand"/>
-        <CommandBinding Command="Copy" CanExecute="CanCopy" Executed="OnCopyCommand"/>
-        <CommandBinding Command="Paste" CanExecute="CanPaste" Executed="OnPasteCommand"/>
-        <CommandBinding Command="Delete" CanExecute="CanDelete" Executed="OnDeleteCommand"/>
+    <CommandBinding Command="Cut" CanExecute="CanCut" Executed="OnCutCommand"/>
+    <CommandBinding Command="Copy" CanExecute="CanCopy" Executed="OnCopyCommand"/>
+    <CommandBinding Command="Paste" CanExecute="CanPaste" Executed="OnPasteCommand"/>
+    <CommandBinding Command="Delete" CanExecute="CanDelete" Executed="OnDeleteCommand"/>
 
-        <CommandBinding Command="cmd:Commands.LaunchGame" CanExecute="CanExecuteIsBusy" Executed="OnLaunchGameCommand"/>
-        <CommandBinding Command="cmd:Commands.LaunchEditor" CanExecute="CanExecuteIsBusy" Executed="OnLaunchEditorCommand"/>
-        <CommandBinding Command="cmd:Commands.RunConscripts" CanExecute="CanExecuteIsBusy" Executed="OnRunConscriptsCommand"/>
-        <CommandBinding Command="cmd:Commands.CompileContent" CanExecute="CanExecuteIsBusy" Executed="OnCompileContentCommand"/>
-        <CommandBinding Command="cmd:Commands.CancelBuild" CanExecute="CanExecuteIsBuilding" Executed="OnCancelBuildCommand"/>
-        <CommandBinding Command="cmd:Commands.GotoError" CanExecute="CanExecuteHasError" Executed="OnGotoErrorCommand"/>
+    <CommandBinding Command="cmd:Commands.LaunchGame" CanExecute="CanExecuteIsBusy" Executed="OnLaunchGameCommand"/>
+    <CommandBinding Command="cmd:Commands.LaunchEditor" CanExecute="CanExecuteIsBusy" Executed="OnLaunchEditorCommand"/>
+    <CommandBinding Command="cmd:Commands.RunConscripts" CanExecute="CanExecuteIsBusy" Executed="OnRunConscriptsCommand"/>
+    <CommandBinding Command="cmd:Commands.CompileContent" CanExecute="CanExecuteIsBusy" Executed="OnCompileContentCommand"/>
+    <CommandBinding Command="cmd:Commands.CancelBuild" CanExecute="CanExecuteIsBuilding" Executed="OnCancelBuildCommand"/>
+    <CommandBinding Command="cmd:Commands.GotoError" CanExecute="CanExecuteHasError" Executed="OnGotoErrorCommand"/>
 
-        <CommandBinding Command="Find" CanExecute="CanExecuteIsProjectOpen" Executed="OnFindCommand"/>
-        <CommandBinding Command="Replace" CanExecute="CanExecuteIsProjectOpen" Executed="OnReplaceCommand"/>
-        <CommandBinding Command="cmd:Commands.FindNext" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnFindNextCommand"/>
-        <CommandBinding Command="cmd:Commands.ReplaceNext" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnReplaceNextCommand"/>
-        <CommandBinding Command="cmd:Commands.ReplaceAll" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnReplaceAllCommand"/>
-        <CommandBinding Command="cmd:Commands.GotoLine" CanExecute="CanExecuteIsInTextEditor" Executed="OnGotoLineCommand"/>
+    <CommandBinding Command="Find" CanExecute="CanExecuteIsProjectOpen" Executed="OnFindCommand"/>
+    <CommandBinding Command="Replace" CanExecute="CanExecuteIsProjectOpen" Executed="OnReplaceCommand"/>
+    <CommandBinding Command="cmd:Commands.FindNext" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnFindNextCommand"/>
+    <CommandBinding Command="cmd:Commands.ReplaceNext" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnReplaceNextCommand"/>
+    <CommandBinding Command="cmd:Commands.ReplaceAll" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnReplaceAllCommand"/>
+    <CommandBinding Command="cmd:Commands.GotoLine" CanExecute="CanExecuteIsInTextEditor" Executed="OnGotoLineCommand"/>
 
-        <CommandBinding Command="cmd:Commands.ProjectExplorer" CanExecute="CanAlwaysExecute" Executed="OnProjectExplorerCommand"/>
-        <CommandBinding Command="cmd:Commands.OutputConsole" CanExecute="CanAlwaysExecute" Executed="OnOutputConsoleCommand"/>
-        <CommandBinding Command="cmd:Commands.SpriteBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteBrowserCommand"/>
-        <CommandBinding Command="cmd:Commands.SpriteSourceBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteSourceBrowserCommand"/>
-        <CommandBinding Command="cmd:Commands.StyleBrowser" CanExecute="CanAlwaysExecute" Executed="OnStyleBrowserCommand"/>
-        <CommandBinding Command="cmd:Commands.TileDataBrowser" CanExecute="CanAlwaysExecute" Executed="OnTileDataBrowserCommand"/>
-        <CommandBinding Command="cmd:Commands.TilesetBrowser" CanExecute="CanAlwaysExecute" Executed="OnTilesetBrowserCommand"/>
-        <CommandBinding Command="cmd:Commands.TileBrowser" CanExecute="CanAlwaysExecute" Executed="OnTileBrowserCommand"/>
-        <CommandBinding Command="cmd:Commands.TilesetEditor" CanExecute="CanAlwaysExecute" Executed="OnTilesetEditorCommand"/>
-    </Window.CommandBindings>
-    <Grid>
-        <StackPanel VerticalAlignment="Center" x:Name="splash">
-            <Label Content="Loading" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="36" Foreground="White"/>
-            <Label Content="Conscript Designer" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="36" Foreground="White"/>
-        </StackPanel>
-        <DockPanel x:Name="dockPanel">
-            <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0" />
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File">
-                    <local:ImageMenuItem Header="Open Project" Source="/Resources/Icons/Open.png" Command="Open"/>
-                    <local:ImageMenuItem Header="Save" Source="/Resources/Icons/Save.png" Command="Save"/>
-                    <local:ImageMenuItem Header="Save All" Source="/Resources/Icons/SaveAll.png" Command="cmd:Commands.SaveAll"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="Close Project" Source="/Resources/Icons/Close.png" Command="cmd:Commands.Close"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="Exit" Source="/Resources/Icons/Exit.png" Command="cmd:Commands.Exit"/>
-                </MenuItem>
-                <MenuItem Header="_Edit">
-                    <local:ImageMenuItem Header="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
-                    <local:ImageMenuItem Header="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
-                    <local:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
-                    <local:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
-                    <local:ImageMenuItem Header="Delete" Source="/Resources/Icons/Delete.png" Command="Delete"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="SelectAll" Source="/Resources/Icons/SelectAll.png" Command="SelectAll"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="Find" Source="/Resources/Icons/Find.png" Command="Find"/>
-                    <local:ImageMenuItem Header="Replace" Source="/Resources/Icons/Replace.png" Command="Replace"/>
-                    <local:ImageMenuItem Header="Go To Line..." Source="/Resources/Icons/GotoLine.png" Command="cmd:Commands.GotoLine"/>
-                </MenuItem>
-                <MenuItem Header="_View">
-                    <local:ImageMenuItem Header="Project Explorer" Source="/Resources/Icons/ContentProject.png" Command="cmd:Commands.ProjectExplorer"/>
-                    <local:ImageMenuItem Header="Output Console" Source="/Resources/Icons/Console.png" Command="cmd:Commands.OutputConsole"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
-                    <local:ImageMenuItem Header="Sprite Source Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.SpriteSourceBrowser"/>
-                    <local:ImageMenuItem Header="Style Browser" Source="/Resources/Icons/SpriteStyle.png" Command="cmd:Commands.StyleBrowser"/>
-                    <local:ImageMenuItem Header="Tile Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
-                    <local:ImageMenuItem Header="Tileset Editor" Source="/Resources/Icons/Tileset.png" Command="cmd:Commands.TilesetEditor"/>
-                </MenuItem>
-                <MenuItem Header="_Project">
-                    <local:ImageMenuItem Header="Launch Game" Source="/Resources/Icons/LaunchGame.png" Command="cmd:Commands.LaunchGame"/>
-                    <local:ImageMenuItem Header="Launch Editor" Source="/Resources/Icons/LaunchEditor.png" Command="cmd:Commands.LaunchEditor"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>
-                    <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" Command="cmd:Commands.CompileContent"/>
-                    <Separator/>
-                    <local:ImageMenuItem Header="Go To Error" Source="/Resources/Icons/ErrorGoto.png" Command="cmd:Commands.GotoError"/>
-                </MenuItem>
-                <MenuItem Header="_Options">
-            
-                </MenuItem>
-                <MenuItem Header="Help">
-                
-                </MenuItem>
-            </Menu>
-            
-            <ToolBar DockPanel.Dock="Top">
-                <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File (Ctrl+S)" Command="Save"/>
-                <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files (Ctrl+Shift+S)" Command="cmd:Commands.SaveAll"/>
-                <Separator/>
-                <local:ImageButton Source="Resources/Icons/Undo.png" ToolTip="Undo (Ctr+Z)" Command="Undo"/>
-                <local:ImageButton Source="Resources/Icons/Redo.png" ToolTip="Redo (Ctrl+Y/Ctrl+Shift+Z)" Command="Redo"/>
-                <Separator/>
-                <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts" ToolTip="Run Conscripts (F5)"/>
-                <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" ToolTip="Compile Content (Shift+F5)" />
-                <Separator/>
-                <local:ImageButton Source="Resources/Icons/ErrorGoto.png" Content="Go To Error" Command="cmd:Commands.GotoError" ToolTip="Go To Error (F8)" />
-            </ToolBar>
-            <DockPanel DockPanel.Dock="Top">
-                <ToolBar DockPanel.Dock="Right" HorizontalAlignment="Right">
-                    <TextBlock Text="Scale" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
-                    <ComboBox x:Name="comboBoxScales" Width="70" SelectionChanged="OnScaleChanged" Padding="4,0,0,0" />
-                    <Separator/>
-                    <TextBlock Text="Palettes" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
-                    <ComboBox x:Name="comboBoxTilePalettes" Width="120" SelectionChanged="OnTilePaletteChanged" Margin="1,0,6,0"/>
-                    <ComboBox x:Name="comboBoxEntityPalettes" Width="120" SelectionChanged="OnEntityPaletteChanged" />
-                    <Separator/>
-                    <TextBlock Text="Zone" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
-                    <ComboBox x:Name="comboBoxZones" Width="140" SelectionChanged="OnZoneChanged" />
-                    <Separator/>
-                    <TextBlock Text="Animation" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
-                    <local:ImageToggleButton x:Name="buttonPlayAnimations" Source="/Resources/Icons/ShowAnimations.png" Click="OnPlayAnimations" ToolTip="Play Animations" Focusable="False" IsTabStop="False" />
-                    <local:ImageButton x:Name="buttonRestartAnimations" Source="/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" ToolTip="Restart Animations" IsEnabled="False" Focusable="False" IsTabStop="False"/>
-                </ToolBar>
-                <ToolBar/>
-            </DockPanel>
-            <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True" AllowMixedOrientation="True">
-                <avalonDock:DockingManager.Theme>
-                    <avalonDock:VS2010Theme/>
-                </avalonDock:DockingManager.Theme>
-                <avalonDock:LayoutRoot>
-                    <avalonDock:LayoutPanel Orientation="Vertical">
-                        <avalonDock:LayoutPanel Orientation="Horizontal">
-                            <avalonDock:LayoutAnchorablePane DockWidth="250" />
-                            <avalonDock:LayoutPanel Orientation="Vertical">
-                                <avalonDock:LayoutDocumentPane/>
-                                <avalonDock:LayoutAnchorablePane DockHeight="200" />
-                            </avalonDock:LayoutPanel>
-                        </avalonDock:LayoutPanel>
-                    </avalonDock:LayoutPanel>
-                </avalonDock:LayoutRoot>
-            </avalonDock:DockingManager>
-        </DockPanel>
-    </Grid>
-</Window>
+    <CommandBinding Command="cmd:Commands.ProjectExplorer" CanExecute="CanAlwaysExecute" Executed="OnProjectExplorerCommand"/>
+    <CommandBinding Command="cmd:Commands.OutputConsole" CanExecute="CanAlwaysExecute" Executed="OnOutputConsoleCommand"/>
+    <CommandBinding Command="cmd:Commands.SpriteBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteBrowserCommand"/>
+    <CommandBinding Command="cmd:Commands.SpriteSourceBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteSourceBrowserCommand"/>
+    <CommandBinding Command="cmd:Commands.StyleBrowser" CanExecute="CanAlwaysExecute" Executed="OnStyleBrowserCommand"/>
+    <CommandBinding Command="cmd:Commands.TileBrowser" CanExecute="CanAlwaysExecute" Executed="OnTileBrowserCommand"/>
+    <CommandBinding Command="cmd:Commands.TilesetEditor" CanExecute="CanAlwaysExecute" Executed="OnTilesetEditorCommand"/>
+  </common:TimersWindow.CommandBindings>
+  <Grid>
+    <StackPanel VerticalAlignment="Center" x:Name="splash">
+      <Label Content="Loading" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="36" Foreground="White"/>
+      <Label Content="Conscript Designer" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="36" Foreground="White"/>
+    </StackPanel>
+    <DockPanel x:Name="dockPanel">
+      <common:GraphicsInitializer x:Name="graphicsInitializer" GraphicsInitialized="OnGraphicsInitialized" ReadyToInitialize="False" />
+      <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0" />
+      <Menu DockPanel.Dock="Top">
+        <MenuItem Header="_File">
+          <common:ImageMenuItem Header="Open Project" Source="/Resources/Icons/Open.png" Command="Open"/>
+          <common:ImageMenuItem Header="Save" Source="/Resources/Icons/Save.png" Command="Save"/>
+          <common:ImageMenuItem Header="Save All" Source="/Resources/Icons/SaveAll.png" Command="cmd:Commands.SaveAll"/>
+          <Separator/>
+          <common:ImageMenuItem Header="Close Project" Source="/Resources/Icons/Close.png" Command="cmd:Commands.Close"/>
+          <Separator/>
+          <common:ImageMenuItem Header="Exit" Source="/Resources/Icons/Exit.png" Command="cmd:Commands.Exit"/>
+        </MenuItem>
+        <MenuItem Header="_Edit">
+          <common:ImageMenuItem Header="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
+          <common:ImageMenuItem Header="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
+          <Separator/>
+          <common:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
+          <common:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
+          <common:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
+          <common:ImageMenuItem Header="Delete" Source="/Resources/Icons/Delete.png" Command="Delete"/>
+          <Separator/>
+          <common:ImageMenuItem Header="SelectAll" Source="/Resources/Icons/SelectAll.png" Command="SelectAll"/>
+          <Separator/>
+          <common:ImageMenuItem Header="Find" Source="/Resources/Icons/Find.png" Command="Find"/>
+          <common:ImageMenuItem Header="Replace" Source="/Resources/Icons/Replace.png" Command="Replace"/>
+          <common:ImageMenuItem Header="Go To Line..." Source="/Resources/Icons/GotoLine.png" Command="cmd:Commands.GotoLine"/>
+        </MenuItem>
+        <MenuItem Header="_View">
+          <common:ImageMenuItem Header="Project Explorer" Source="/Resources/Icons/ContentProject.png" Command="cmd:Commands.ProjectExplorer"/>
+          <common:ImageMenuItem Header="Output Console" Source="/Resources/Icons/Console.png" Command="cmd:Commands.OutputConsole"/>
+          <Separator/>
+          <common:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
+          <common:ImageMenuItem Header="Sprite Source Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.SpriteSourceBrowser"/>
+          <common:ImageMenuItem Header="Style Browser" Source="/Resources/Icons/SpriteStyle.png" Command="cmd:Commands.StyleBrowser"/>
+          <common:ImageMenuItem Header="Tile Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
+          <common:ImageMenuItem Header="Tileset Editor" Source="/Resources/Icons/Tileset.png" Command="cmd:Commands.TilesetEditor"/>
+        </MenuItem>
+        <MenuItem Header="_Project">
+          <common:ImageMenuItem Header="Launch Game" Source="/Resources/Icons/LaunchGame.png" Command="cmd:Commands.LaunchGame"/>
+          <common:ImageMenuItem Header="Launch Editor" Source="/Resources/Icons/LaunchEditor.png" Command="cmd:Commands.LaunchEditor"/>
+          <Separator/>
+          <common:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>
+          <common:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" Command="cmd:Commands.CompileContent"/>
+          <Separator/>
+          <common:ImageMenuItem Header="Go To Error" Source="/Resources/Icons/ErrorGoto.png" Command="cmd:Commands.GotoError"/>
+        </MenuItem>
+        <MenuItem Header="_Options">
+
+        </MenuItem>
+        <MenuItem Header="Help">
+
+        </MenuItem>
+      </Menu>
+
+      <ToolBar DockPanel.Dock="Top">
+        <common:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File (Ctrl+S)" Command="Save"/>
+        <common:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files (Ctrl+Shift+S)" Command="cmd:Commands.SaveAll"/>
+        <Separator/>
+        <common:ImageButton Source="Resources/Icons/Undo.png" ToolTip="Undo (Ctr+Z)" Command="Undo"/>
+        <common:ImageButton Source="Resources/Icons/Redo.png" ToolTip="Redo (Ctrl+Y/Ctrl+Shift+Z)" Command="Redo"/>
+        <Separator/>
+        <common:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts" ToolTip="Run Conscripts (F5)"/>
+        <common:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" ToolTip="Compile Content (Shift+F5)" />
+        <Separator/>
+        <common:ImageButton Source="Resources/Icons/ErrorGoto.png" Content="Go To Error" Command="cmd:Commands.GotoError" ToolTip="Go To Error (F8)" />
+      </ToolBar>
+      <DockPanel DockPanel.Dock="Top">
+        <ToolBar DockPanel.Dock="Right" HorizontalAlignment="Right">
+          <TextBlock Text="Scale" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+          <ComboBox x:Name="comboBoxScales" Width="70" SelectionChanged="OnScaleChanged" Padding="4,0,0,0" />
+          <Separator/>
+          <TextBlock Text="Palettes" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+          <ComboBox x:Name="comboBoxTilePalettes" Width="120" SelectionChanged="OnTilePaletteChanged" Margin="1,0,6,0"/>
+          <ComboBox x:Name="comboBoxEntityPalettes" Width="120" SelectionChanged="OnEntityPaletteChanged" />
+          <Separator/>
+          <TextBlock Text="Zone" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+          <ComboBox x:Name="comboBoxZones" Width="140" SelectionChanged="OnZoneChanged" />
+          <Separator/>
+          <TextBlock Text="Animation" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+          <common:ImageToggleButton x:Name="buttonPlayAnimations" Source="/Resources/Icons/ShowAnimations.png" Click="OnPlayAnimations" ToolTip="Play Animations" Focusable="False" IsTabStop="False" />
+          <common:ImageButton x:Name="buttonRestartAnimations" Source="/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" ToolTip="Restart Animations" IsEnabled="False" Focusable="False" IsTabStop="False"/>
+        </ToolBar>
+        <ToolBar/>
+      </DockPanel>
+      <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True" AllowMixedOrientation="True">
+        <avalonDock:DockingManager.Theme>
+          <avalonDock:VS2010Theme/>
+        </avalonDock:DockingManager.Theme>
+        <avalonDock:LayoutRoot>
+          <avalonDock:LayoutPanel Orientation="Vertical">
+            <avalonDock:LayoutPanel Orientation="Horizontal">
+              <avalonDock:LayoutAnchorablePane DockWidth="250" />
+              <avalonDock:LayoutPanel Orientation="Vertical">
+                <avalonDock:LayoutDocumentPane/>
+                <avalonDock:LayoutAnchorablePane DockHeight="200" />
+              </avalonDock:LayoutPanel>
+            </avalonDock:LayoutPanel>
+          </avalonDock:LayoutPanel>
+        </avalonDock:LayoutRoot>
+      </avalonDock:DockingManager>
+    </DockPanel>
+  </Grid>
+</common:TimersWindow>

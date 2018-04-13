@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Forms.Integration;
+﻿using System.Windows.Controls;
 using ConscriptDesigner.Anchorables;
 using ConscriptDesigner.Content.Xnb;
 using ConscriptDesigner.Control;
-using ConscriptDesigner.Windows;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace ConscriptDesigner.Content {
 	/// <summary>A content file representing .png, .jpg, and .gif extensions.</summary>

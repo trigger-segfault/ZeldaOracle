@@ -77,15 +77,26 @@
     <Compile Include="Controls\PropertyGridEditorPointUpDown.cs" />
     <Compile Include="Controls\PropertyGridEditorVectorUpDown.cs" />
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
+    <Compile Include="Controls\TextEditing\CurrentLineHighlighter.cs" />
+    <Compile Include="Controls\TextEditing\NoIndentationStrategy.cs" />
+    <Compile Include="Controls\TimersLayoutAnchorable.cs" />
+    <Compile Include="Controls\TimersLayoutDocument.cs" />
     <Compile Include="Controls\VectorUpDown.cs" />
     <Compile Include="Controls\PointUpDown.cs" />
     <Compile Include="Controls\TimersUserControl.cs" />
     <Compile Include="Controls\TimersWindow.cs" />
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Controls\GraphicsInitializer.cs" />
+    <Compile Include="Resources\WpfCursors.cs" />
     <Compile Include="Resources\WpfImages.cs" />
-    <Compile Include="Util\CursorLoader.cs" />
+    <None Include="Tools\WinFormsTool.cs" />
+    <None Include="Tools\WinFormsToolEventArgs.cs" />
+    <Compile Include="Util\MultiCursors.cs" />
+    <Compile Include="Util\WinFormsCursorLoader.cs" />
+    <Compile Include="Util\MultiCursor.cs" />
+    <Compile Include="Util\WinFormsHelper.cs" />
     <Compile Include="Util\WpfExtensions.cs" />
+    <Compile Include="Util\WpfCasting.Input.cs" />
     <Compile Include="ZeldaWpfApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -120,6 +131,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EditorLibraries\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
+      <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
+      <Name>ICSharpCode.AvalonEdit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EditorLibraries\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
+      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
+      <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EditorLibraries\Xceed.Wpf.Toolkit\Xceed.Wpf.Toolkit.csproj">
       <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
       <Name>Xceed.Wpf.Toolkit</Name>
@@ -179,6 +198,30 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\WarningIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\SquareCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\EyedropperCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\FillCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\HandClosedCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\HandOpenCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\PencilCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\SelectionCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\EraserCursor.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ZeldaWpf.WinForms {
+	using ZeldaOracle.Common.Geometry;
+	using ZeldaOracle.Common.Util;
 	// System.Drawing and the XNA Framework both define Color and Rectangle
 	// types. To avoid conflicts, we specify exactly which ones to use.
 	using Color = System.Drawing.Color;
@@ -62,8 +64,7 @@ namespace ZeldaWpf.WinForms {
 			// Don't initialize the graphics device if we are running in the designer.
 			if (!DesignMode) {
 				graphicsDeviceService = GraphicsDeviceService.AddRef(Handle,
-																	 ClientSize.Width,
-																	 ClientSize.Height);
+					base.ClientSize.Width, base.ClientSize.Height);
 
 				// Register the service, so components like ContentManager can find it.
 				services.AddService<IGraphicsDeviceService>(graphicsDeviceService);
@@ -96,12 +97,12 @@ namespace ZeldaWpf.WinForms {
 		/// <summary>Redraws the control in response to a WinForms paint message.
 		/// </summary>
 		protected override void OnPaint(PaintEventArgs e) {
-			if (ClientSize.Width > 0 && ClientSize.Height > 0) {
+			if (base.ClientSize.Width > 0 && base.ClientSize.Height > 0) {
 				string beginDrawError = BeginDraw();
 
 				if (string.IsNullOrEmpty(beginDrawError)) {
 					// Draw the control using the GraphicsDevice.
-					if (ClientSize.Width > 0 && ClientSize.Height > 0) {
+					if (base.ClientSize.Width > 0 && base.ClientSize.Height > 0) {
 						Draw();
 						EndDraw();
 					}
@@ -141,8 +142,8 @@ namespace ZeldaWpf.WinForms {
 			viewport.X = 0;
 			viewport.Y = 0;
 
-			viewport.Width = ClientSize.Width;
-			viewport.Height = ClientSize.Height;
+			viewport.Width = base.ClientSize.Width;
+			viewport.Height = base.ClientSize.Height;
 
 			viewport.MinDepth = 0;
 			viewport.MaxDepth = 1;
@@ -161,7 +162,8 @@ namespace ZeldaWpf.WinForms {
 		private void EndDraw() {
 			try {
 				Rectangle sourceRectangle = new Rectangle(0, 0,
-					Math.Max(0, ClientSize.Width), Math.Max(0, ClientSize.Height));
+					Math.Max(0, base.ClientSize.Width),
+					Math.Max(0, base.ClientSize.Height));
 
 				GraphicsDevice.Present(sourceRectangle, null, this.Handle);
 			}
@@ -195,8 +197,8 @@ namespace ZeldaWpf.WinForms {
 				// If the device state is ok, check whether it is big enough.
 				PresentationParameters pp = GraphicsDevice.PresentationParameters;
 
-				deviceNeedsReset = (ClientSize.Width > pp.BackBufferWidth) ||
-									(ClientSize.Height > pp.BackBufferHeight);
+				deviceNeedsReset = (base.ClientSize.Width > pp.BackBufferWidth) ||
+									(base.ClientSize.Height > pp.BackBufferHeight);
 				break;
 			}
 
@@ -205,8 +207,8 @@ namespace ZeldaWpf.WinForms {
 				try {
 					if (PreviewReset != null)
 						PreviewReset(this, EventArgs.Empty);
-					graphicsDeviceService.ResetDevice(ClientSize.Width,
-													  ClientSize.Height);
+					graphicsDeviceService.ResetDevice(base.ClientSize.Width,
+													  base.ClientSize.Height);
 				}
 				catch (Exception e) {
 					resetError = true;
@@ -301,6 +303,67 @@ namespace ZeldaWpf.WinForms {
 		public bool ResetError {
 			get { return resetError; }
 			set { resetError = false; }
+		}
+
+		/// <summary>Gets the total size of the control.</summary>
+		public Point2I ScrollSize {
+			get { return AutoScrollMinSize.ToPoint2I(); }
+			set { AutoScrollMinSize = value.ToGdiSize(); }
+		}
+
+		/// <summary>Gets the total width of the control.</summary>
+		public int ScrollWidth {
+			get { return AutoScrollMinSize.Width; }
+		}
+
+		/// <summary>Gets the total height of the control.</summary>
+		public int ScrollHeight {
+			get { return AutoScrollMinSize.Height; }
+		}
+
+		/// <summary>Gets the scroll position of the control.</summary>
+		public Point2I ScrollPosition {
+			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
+			set {
+				AutoScrollPosition = GMath.Clamp(value,
+					new Point2I(HorizontalScroll.Minimum, VerticalScroll.Minimum),
+					new Point2I(HorizontalScroll.Maximum, VerticalScroll.Maximum))
+						.ToGdiPoint();
+			}
+		}
+
+		/// <summary>Gets the horizontal scroll position of the control.</summary>
+		public int ScrollX {
+			get { return HorizontalScroll.Value; }
+		}
+
+		/// <summary>Gets the vertical scroll position of the control.</summary>
+		public int ScrollY {
+			get { return VerticalScroll.Value; }
+		}
+
+		/// <summary>Gets the client size of the control.</summary>
+		public new Point2I ClientSize {
+			get { return base.ClientSize.ToPoint2I(); }
+			set { base.ClientSize = value.ToGdiSize(); }
+		}
+
+		/// <summary>Gets the client width of the control.</summary>
+		public int ClientWidth {
+			get { return base.ClientSize.Width; }
+		}
+
+		/// <summary>Gets the client height of the control.</summary>
+		public int ClientHeight {
+			get { return base.ClientSize.Height; }
+		}
+
+		/// <summary>Gets the client view area of the control.</summary>
+		public Rectangle2I ClientView {
+			get {
+				return new Rectangle2I(ScrollPosition,
+					GMath.Min(ScrollSize, ClientSize));
+			}
 		}
 	}
 }

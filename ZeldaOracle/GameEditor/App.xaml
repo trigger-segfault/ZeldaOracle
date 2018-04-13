@@ -4,9 +4,9 @@
              xmlns:local="clr-namespace:ZeldaEditor"
              xmlns:common="clr-namespace:ZeldaWpf;assembly=ZeldaWpf"
              StartupUri="EditorWindow.xaml">
-    <!--DispatcherUnhandledException="OnDispatcherUnhandledException"
+  <!--DispatcherUnhandledException="OnDispatcherUnhandledException"
              Startup="OnAppStartup"-->
-    <common:ZeldaWpfApp.Resources>
-         
-    </common:ZeldaWpfApp.Resources>
+  <common:ZeldaWpfApp.Resources>
+
+  </common:ZeldaWpfApp.Resources>
 </common:ZeldaWpfApp>

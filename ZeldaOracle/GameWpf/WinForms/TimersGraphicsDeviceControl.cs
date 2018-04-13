@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using ZeldaWpf.Util;
+﻿using ZeldaWpf.Util;
 
 namespace ZeldaWpf.WinForms {
 	/// <summary>A graphics device control that employs the containment of timer
@@ -13,9 +12,9 @@ namespace ZeldaWpf.WinForms {
 		public ScheduledEvents ScheduledEvents { get; }
 
 		/// <summary>Constructs the timers graphics control.</summary>
-		public TimersGraphicsDeviceControl(FrameworkElement element) {
-			ContinuousEvents = new ContinuousEvents(element);
-			ScheduledEvents = new ScheduledEvents(element);
+		public TimersGraphicsDeviceControl() {
+			ContinuousEvents = new ContinuousEvents(this);
+			ScheduledEvents = new ScheduledEvents(this);
 		}
 	}
 }

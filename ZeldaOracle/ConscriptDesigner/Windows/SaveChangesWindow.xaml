@@ -6,23 +6,23 @@
         xmlns:local="clr-namespace:ConscriptDesigner.Windows"
         mc:Ignorable="d"
         Title="Save Changes" Height="380" Width="420" Background="#FFF0F0F0" Icon="/ConscriptDesigner;component/Resources/Icons/SaveAll.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" SnapsToDevicePixels="True" UseLayoutRounding="True">
-    <Grid>
-        <!--<Label x:Name="labelMessage" Content="Save changes to the following files?" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,10,0,0"/>-->
-        <Grid Margin="10,10,10,57">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock x:Name="textBlockMessage" Text="Save changes to the following files?" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="2,5" TextWrapping="Wrap"/>
-            <ListView x:Name="listView" Grid.Row="1"/>
+  <Grid>
+    <!--<Label x:Name="labelMessage" Content="Save changes to the following files?" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,10,0,0"/>-->
+    <Grid Margin="10,10,10,57">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <TextBlock x:Name="textBlockMessage" Text="Save changes to the following files?" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="2,5" TextWrapping="Wrap"/>
+      <ListView x:Name="listView" Grid.Row="1"/>
 
-        </Grid>
-        <!--<TextBlock x:Name="textBlockMessagee2" Text="Save changes to the following files?" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Padding="2,5"/>
-        <ListView x:Name="listView2" Margin="10,36,10,57"/>-->
-        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Orientation="Horizontal">
-            <Button x:Name="button1" Content="Yes"    Margin="10,0,0,0" Click="OnButtonClicked" MinWidth="75" Padding="5,1" Tag="Yes"/>
-            <Button x:Name="button2" Content="No"     Margin="10,0,0,0" Click="OnButtonClicked" MinWidth="75" Padding="5,1" Tag="No"/>
-            <Button x:Name="button3" Content="Cancel" Margin="10,0,0,0" Click="OnButtonClicked" MinWidth="75" Padding="5,1" Tag="Cancel"/>
-        </StackPanel>
     </Grid>
+    <!--<TextBlock x:Name="textBlockMessagee2" Text="Save changes to the following files?" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Padding="2,5"/>
+        <ListView x:Name="listView2" Margin="10,36,10,57"/>-->
+    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Orientation="Horizontal">
+      <Button x:Name="button1" Content="Yes"    Margin="10,0,0,0" Click="OnButtonClicked" MinWidth="75" Padding="5,1" Tag="Yes"/>
+      <Button x:Name="button2" Content="No"     Margin="10,0,0,0" Click="OnButtonClicked" MinWidth="75" Padding="5,1" Tag="No"/>
+      <Button x:Name="button3" Content="Cancel" Margin="10,0,0,0" Click="OnButtonClicked" MinWidth="75" Padding="5,1" Tag="Cancel"/>
+    </StackPanel>
+  </Grid>
 </Window>

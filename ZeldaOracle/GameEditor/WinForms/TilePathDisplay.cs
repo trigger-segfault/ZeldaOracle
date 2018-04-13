@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using Microsoft.Xna.Framework.Content;
-using ZeldaEditor.Control;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -17,7 +11,7 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaWpf.Util;
 using ZeldaWpf.WinForms;
-using FrameworkElement = System.Windows.FrameworkElement;
+using ZeldaEditor.Control;
 
 namespace ZeldaEditor.WinForms {
 	public class TilePathDisplay : TimersGraphicsDeviceControl {
@@ -115,9 +109,7 @@ namespace ZeldaEditor.WinForms {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public TilePathDisplay(FrameworkElement element, Room room,
-			TileDataInstance tile) : base(element)
-		{
+		public TilePathDisplay(Room room, TileDataInstance tile) {
 			this.room = room;
 			this.tile = tile;
 			if (tile != null)

@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Size = System.Drawing.Size;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game;
-using ConscriptDesigner.Control;
 using ZeldaOracle.Game.Worlds;
 
 namespace ConscriptDesigner.WinForms {

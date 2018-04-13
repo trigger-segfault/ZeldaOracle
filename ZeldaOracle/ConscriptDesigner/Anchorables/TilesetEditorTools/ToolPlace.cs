@@ -13,11 +13,12 @@ using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Common.Graphics;
 using ConscriptDesigner.Control;
 using Key = System.Windows.Input.Key;
+using ZeldaWpf.Resources;
 
 namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 	public class ToolPlace : TilesetEditorTool {
 
-		private static readonly Cursor PencilCursor = LoadCursor("Pencil");
+		private static readonly Cursor PencilCursor = WpfCursors.Pencil;//LoadCursor("Pencil");
 		
 		//-----------------------------------------------------------------------------
 		// Constructor

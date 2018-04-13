@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ConscriptDesigner.Content;
-using ConscriptDesigner.Util;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Anchorables {
 	public class ImageDisplay : ContentFileDocument {
@@ -71,7 +66,7 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Reloads the image.</summary>
 		public void Reload() {
-			BitmapSource source = BitmapFactory.LoadSourceFromFile(File.FilePath);
+			BitmapSource source = BitmapFactory.FromFile(File.FilePath);
 			this.image.Source = source;
 			this.image.Width = source.PixelWidth;
 			this.image.Height = source.PixelHeight;

@@ -67,7 +67,7 @@ namespace ZeldaEditor {
 			//Closing += OnWindowClosing;
 
 			// Create the level display
-			levelDisplay					= new LevelDisplay(this);
+			levelDisplay					= new LevelDisplay();
 			levelDisplay.EditorControl		= editorControl;
 			levelDisplay.Name				= "levelDisplay";
 			levelDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;

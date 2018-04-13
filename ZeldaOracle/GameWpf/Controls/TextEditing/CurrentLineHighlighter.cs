@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Rendering;
+using ZeldaWpf.Util;
 
-namespace ConscriptDesigner.Controls.TextEditing {
-
-	/// <summary>Highlights the line even when the text editor doesn't have focus.
+namespace ZeldaWpf.Controls.TextEditing {
+	/// <summary>Highlights the current line even when the text editor doesn't have
+	/// focus.
 	/// https://stackoverflow.com/questions/5072761/avalonedit-highlight-current-line-even-when-not-focused </summary>
-	public class HighlightCurrentLineBackgroundRenderer : IBackgroundRenderer {
+	public class CurrentLineHighlighter : IBackgroundRenderer {
 
 		//-----------------------------------------------------------------------------
 		// Static Members
@@ -35,13 +32,12 @@ namespace ConscriptDesigner.Controls.TextEditing {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the line highlighter.</summary>
-		static HighlightCurrentLineBackgroundRenderer() {
-			pen = new Pen(new SolidColorBrush(Color.FromArgb(20, 40, 40, 42)), 2.0);
-			pen.Freeze();
+		static CurrentLineHighlighter() {
+			pen = WpfHelper.ColorPen(40, 40, 42, 20, 2.0).AsFrozen();
 		}
 
 		/// <summary>Constructs the line highlighter.</summary>
-		public HighlightCurrentLineBackgroundRenderer(TextEditor editor) {
+		public CurrentLineHighlighter(TextEditor editor) {
 			this.editor = editor;
 			this.editor.TextArea.Caret.PositionChanged += OnCaretPositionChanged;
 			this.editor.TextArea.TextView.SizeChanged += OnTextViewSizeChanged;

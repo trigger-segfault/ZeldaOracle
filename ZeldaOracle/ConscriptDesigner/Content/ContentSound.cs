@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConscriptDesigner.Content.Xnb;
+﻿using ConscriptDesigner.Content.Xnb;
 using ConscriptDesigner.Control;
-using Microsoft.Xna.Framework.Audio;
 
 namespace ConscriptDesigner.Content {
 	/// <summary>A content file representing .wav extension.</summary>

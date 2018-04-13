@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ConscriptDesigner.Control;
-using Xceed.Wpf.AvalonDock.Layout;
+using ZeldaWpf.Controls;
 
 namespace ConscriptDesigner.Anchorables {
-	/// <summary>A layout anchorable that conforms to the designer's dialog for close requesting.</summary>
-	public class RequestCloseAnchorable : LayoutAnchorable, IRequestCloseAnchorable {
-
+	/// <summary>A layout anchorable that conforms to the designer's dialog for close
+	/// requesting.</summary>
+	public class RequestCloseAnchorable : TimersLayoutAnchorable,
+		IRequestCloseAnchorable
+	{
 		/// <summary>True if the anchorable has already been force-closed.</summary>
 		private bool forceClosed;
 
@@ -24,7 +22,7 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Constructs the anchorable.</summary>
 		public RequestCloseAnchorable() {
-			this.forceClosed = false;
+			forceClosed = false;
 			Hiding += OnAnchorableHiding;
 			Closing += OnAnchorableClosing;
 			Closed += OnAnchorableClosed;
@@ -50,6 +48,7 @@ namespace ConscriptDesigner.Anchorables {
 			if (Content is UIElement)
 				((UIElement) Content).Focus();
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers

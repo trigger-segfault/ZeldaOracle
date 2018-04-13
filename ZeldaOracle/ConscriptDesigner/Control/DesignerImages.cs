@@ -1,54 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using ConscriptDesigner.Util;
+﻿using System.Windows.Media.Imaging;
+using ZeldaWpf.Resources;
 
 namespace ConscriptDesigner.Control {
-	public static class DesignerImages {
-		public static readonly BitmapSource Merge			= LoadIcon("Merge");
-		public static readonly BitmapSource Overwrite		= LoadIcon("Overwrite");
-		public static readonly BitmapSource FolderOpen		= LoadIcon("FolderOpen");
-		public static readonly BitmapSource FolderClosed	= LoadIcon("FolderClosed");
-		public static readonly BitmapSource FolderAdd		= LoadIcon("FolderClosed");
+	/// <summary>A static class for storing pre-loaded images.</summary>
+	public class DesignerImages : WpfImages {
 
-		public static readonly BitmapSource FolderBlueOpen  = LoadIcon("FolderBlueOpen");
-		public static readonly BitmapSource FolderBlueClosed= LoadIcon("FolderBlueClosed");
-		public static readonly BitmapSource Rename			= LoadIcon("Rename");
-		public static readonly BitmapSource Delete          = LoadIcon("Delete");
-		public static readonly BitmapSource Plus			= LoadIcon("Plus");
+		//-----------------------------------------------------------------------------
+		// Images
+		//-----------------------------------------------------------------------------
 
-		public static readonly BitmapSource ConscriptFile	= LoadIcon("ConscriptFile");
-		public static readonly BitmapSource ConscriptFileAdd= LoadIcon("ConscriptFileAdd");
-		public static readonly BitmapSource SpriteFontFile	= LoadIcon("SpriteFontFile");
-		public static readonly BitmapSource Content         = LoadIcon("Content");
-		public static readonly BitmapSource File			= LoadIcon("File");
-		public static readonly BitmapSource FileAdd			= LoadIcon("FileAdd");
-		public static readonly BitmapSource ContentFile		= LoadIcon("ContentFile");
-		public static readonly BitmapSource ContentProject	= LoadIcon("ContentProject");
-		public static readonly BitmapSource ContentProjectRemove= LoadIcon("ContentProjectRemove");
-		public static readonly BitmapSource ContentAdd		= LoadIcon("ContentAdd");
-		public static readonly BitmapSource ImageFile		= LoadIcon("ImageFile");
-		public static readonly BitmapSource SoundFile		= LoadIcon("SoundFile");
-		public static readonly BitmapSource ShaderFile		= LoadIcon("ShaderFile");
+		public static readonly BitmapImage Merge;
+		public static readonly BitmapImage Overwrite;
+		public static readonly BitmapImage FolderOpen;
+		public static readonly BitmapImage FolderClosed;
+		public static readonly BitmapImage FolderAdd;
 
-		public static readonly BitmapSource SelectAll		= LoadIcon("SelectAll");
-		public static readonly BitmapSource Copy			= LoadIcon("Copy");
-		public static readonly BitmapSource Cut				= LoadIcon("Cut");
-		public static readonly BitmapSource Paste			= LoadIcon("Paste");
+		public static readonly BitmapImage Rename;
+		public static readonly BitmapImage Delete;
+		public static readonly BitmapImage Plus;
 
-		public static readonly BitmapSource Open			= LoadIcon("Open");
+		public static readonly BitmapImage ConscriptFile;
+		public static readonly BitmapImage ConscriptFileAdd;
+		public static readonly BitmapImage SpriteFontFile;
+		public static readonly BitmapImage Content;
+		public static readonly BitmapImage File;
+		public static readonly BitmapImage FileAdd;
+		public static readonly BitmapImage ContentFile;
+		public static readonly BitmapImage ContentProject;
+		public static readonly BitmapImage ContentProjectRemove;
+		public static readonly BitmapImage ContentAdd;
+		public static readonly BitmapImage ImageFile;
+		public static readonly BitmapImage SoundFile;
+		public static readonly BitmapImage ShaderFile;
 
-		public static readonly BitmapSource MoveUp			= LoadIcon("MoveUp");
-		public static readonly BitmapSource MoveDown		= LoadIcon("MoveDown");
-		
-		private static BitmapSource LoadIcon(string name) {
-			return BitmapFactory.LoadSourceFromResource("Resources/Icons/" + name + ".png");
-		}
-		private static BitmapSource LoadResource(string name) {
-			return BitmapFactory.LoadSourceFromResource("Resources/" + name + ".png");
+		public static readonly BitmapImage SelectAll;
+		public static readonly BitmapImage Copy;
+		public static readonly BitmapImage Cut;
+		public static readonly BitmapImage Paste;
+
+		public static readonly BitmapImage Open;
+
+		public static readonly BitmapImage MoveUp;
+		public static readonly BitmapImage MoveDown;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Initializes the Designer images.</summary>
+		static DesignerImages() {
+			LoadImages(typeof(DesignerImages));
 		}
 	}
 }

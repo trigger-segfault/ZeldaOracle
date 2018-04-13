@@ -1,39 +1,19 @@
-﻿using Microsoft.Xna.Framework.Content;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Worlds.Editing;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Common.Audio;
-using ZeldaEditor.Control;
-using ZeldaOracle.Game.Tiles.Custom;
-using ZeldaOracle.Game.Entities.Monsters;
-using System.IO;
-using System.Threading;
-using System.Windows.Threading;
-using ZeldaEditor.Tools;
-using DrawMode = ZeldaOracle.Common.Graphics.DrawMode;
-
-using Effect = Microsoft.Xna.Framework.Graphics.Effect;
-using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
-using XnaColor = Microsoft.Xna.Framework.Color;
-using Matrix = Microsoft.Xna.Framework.Matrix;
-using SurfaceFormat = Microsoft.Xna.Framework.Graphics.SurfaceFormat;
-using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaWpf.Util;
-using ZeldaOracle.Common.Util;
-using FrameworkElement = System.Windows.FrameworkElement;
 using ZeldaWpf.WinForms;
+using ZeldaEditor.Control;
+using ZeldaEditor.Tools;
 
 namespace ZeldaEditor.WinForms {
 
@@ -67,7 +47,7 @@ namespace ZeldaEditor.WinForms {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public LevelDisplay(FrameworkElement element) : base(element) { }
+		public LevelDisplay() { }
 
 		protected override void Initialize() {
 				
@@ -677,7 +657,11 @@ namespace ZeldaEditor.WinForms {
 			get { return editorControl.CurrentTool; }
 		}
 
-		public Point2I ScrollPosition {
+		public int RoomSpacing {
+			get { return editorControl.RoomSpacing; }
+		}
+
+		/*public Point2I ScrollPosition {
 			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
 			set {
 				AutoScrollPosition = GMath.Clamp(value,
@@ -685,10 +669,6 @@ namespace ZeldaEditor.WinForms {
 					new Point2I(HorizontalScroll.Maximum, VerticalScroll.Maximum))
 						.ToGdiPoint();
 			}
-		}
-
-		public int RoomSpacing {
-			get { return editorControl.RoomSpacing; }
 		}
 
 		public new Point2I ClientSize {
@@ -721,7 +701,7 @@ namespace ZeldaEditor.WinForms {
 				return new Rectangle2I(ScrollPosition,
 					GMath.Min(ScrollSize, ClientSize));
 			}
-		}
+		}*/
 
 		public double FPS {
 			get { return fps; }
