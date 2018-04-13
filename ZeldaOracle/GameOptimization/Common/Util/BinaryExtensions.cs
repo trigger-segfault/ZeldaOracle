@@ -198,6 +198,13 @@ namespace ZeldaOracle.Common.Util {
 							 reader.ReadByte(), reader.ReadByte());
 		}
 
+		/// <summary>Reads the remaining bytes in the stream and advances the current
+		/// position.</summary>
+		public static byte[] ReadRemaining(this BinaryReader reader) {
+			int length = (int) (reader.BaseStream.Length - reader.BaseStream.Position);
+			return reader.ReadBytes(length);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Writers

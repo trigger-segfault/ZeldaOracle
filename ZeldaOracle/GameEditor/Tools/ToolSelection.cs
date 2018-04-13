@@ -20,6 +20,9 @@ using WFClipboard = System.Windows.Clipboard;
 using ZeldaOracle.Common.Content;
 using System.Media;
 using ZeldaEditor.Windows;
+using ZeldaWpf.Windows;
+using ZeldaWpf.Resources;
+using ZeldaWpf.Util;
 
 namespace ZeldaEditor.Tools {
 
@@ -29,8 +32,8 @@ namespace ZeldaEditor.Tools {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		private static readonly Cursor SelectionCursor = LoadCursor("Selection");
-		private static readonly Cursor DraggingCursor = Cursors.SizeAll;
+		private static readonly MultiCursor SelectionCursor = WpfCursors.Square;//LoadCursor("Selection");
+		private static readonly MultiCursor DraggingCursor = MultiCursors.SizeAll;
 
 		private const ModifierKeys DuplicateModifier = ModifierKeys.Control;
 		private const ModifierKeys RoomModeModifier = ModifierKeys.Shift;

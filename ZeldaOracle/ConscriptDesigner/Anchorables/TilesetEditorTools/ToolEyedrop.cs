@@ -10,11 +10,12 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
 using ConscriptDesigner.Control;
+using ZeldaWpf.Resources;
 
 namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 	public class ToolEyedrop : TilesetEditorTool {
 
-		private static readonly Cursor EyedropperCursor = LoadCursor("Eyedropper");
+		private static readonly Cursor EyedropperCursor = WpfCursors.Eyedropper;//LoadCursor("Eyedropper");
 
 		//-----------------------------------------------------------------------------
 		// Constructor

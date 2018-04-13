@@ -1,22 +1,9 @@
-﻿using Microsoft.Xna.Framework.Content;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ZeldaOracle.Common.Content;
+﻿using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
-using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Common.Audio;
-using ZeldaEditor.Control;
-using ZeldaOracle.Common.Graphics.Sprites;
-using System.Windows.Threading;
-using Size = System.Drawing.Size;
+using ZeldaWpf.WinForms;
 
 namespace ZeldaEditor.WinForms {
 
@@ -40,7 +27,7 @@ namespace ZeldaEditor.WinForms {
 		protected override void Initialize() {
 			initialized = true;
 			ResizeRedraw = true;
-			ClientSize = new Size(16, 16);
+			ClientSize = new Point2I(16, 16);
 		}
 
 

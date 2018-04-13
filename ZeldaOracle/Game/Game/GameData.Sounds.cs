@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Audio;
+﻿using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Graphics;
-
 
 namespace ZeldaOracle.Game {
-	public partial class GameData {
+	/// <summary>A static class for storing links to all game content.</summary>
+	public static partial class GameData {
 		
 		//-----------------------------------------------------------------------------
 		// Sound Groups
@@ -126,14 +121,14 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 		// Sound Loading
 		//-----------------------------------------------------------------------------
-		
-		// Loads the sound effects.
+
+		/// <summary>Loads "Sounds/sounds.conscript"</summary>
 		private static void LoadSounds() {
 			Resources.LoadSounds(Resources.SoundDirectory + "sounds.conscript");
 			IntegrateResources<Sound>("SOUND_");
 		}
 
-		// Loads the music.
+		/// <summary>Loads "Music/music.conscript"</summary>
 		private static void LoadMusic() {
 			Resources.LoadMusic(Resources.MusicDirectory + "music.conscript");
 		}

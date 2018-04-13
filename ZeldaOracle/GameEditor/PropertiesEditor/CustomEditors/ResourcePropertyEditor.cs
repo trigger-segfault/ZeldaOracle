@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaOracle.Common.Content;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	/*public class ResourcePropertyEditor<T> : ComboBoxEditor {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConscriptDesigner.Control;
+﻿using ConscriptDesigner.Control;
 
 namespace ConscriptDesigner.Content {
 	/// <summary>A content file representing .spritefont extension.</summary>

@@ -8,6 +8,7 @@ using ZeldaEditor.Control;
 using ZeldaEditor.Controls;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.TreeViews {
 			

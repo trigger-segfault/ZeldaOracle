@@ -11,11 +11,12 @@ using System.Windows.Input;
 using Cursor = System.Windows.Forms.Cursor;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds.Editing;
+using ZeldaWpf.Resources;
 
 namespace ZeldaEditor.Tools {
 	public class ToolEyedrop : EditorTool {
 
-		private static readonly Cursor EyedropperCursor = LoadCursor("Eyedropper");
+		private static readonly Cursor EyedropperCursor = WpfCursors.Eyedropper;//LoadCursor("Eyedropper");
 
 		//-----------------------------------------------------------------------------
 		// Constructor

@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Control;
-//using ZeldaEditor.PropertiesEditor.CustomEditors;
-using ZeldaEditor.Util;
 using System.Windows.Media;
 using ZeldaEditor.Windows;
 using System.Windows;
 using ZeldaOracle.Common.Scripting;
 using ZeldaEditor.Undo;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.TreeViews {
 	

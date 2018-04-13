@@ -1,37 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock.Layout.Serialization;
 using ConscriptDesigner.Anchorables;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Control;
-using ConscriptDesigner.Util;
 using ConscriptDesigner.Windows;
-using ConscriptDesigner.WinForms;
-using Xceed.Wpf.AvalonDock.Layout;
-using Xceed.Wpf.AvalonDock.Layout.Serialization;
-using Xceed.Wpf.AvalonDock.Themes;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ConscriptDesigner {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window {
+	public partial class MainWindow : TimersWindow {
 
 		private bool suppressEvents;
 
@@ -40,18 +29,14 @@ namespace ConscriptDesigner {
 		private SpriteBrowser spriteBrowser;
 		private SpriteSourceBrowser spriteSourceBrowser;
 		private StyleBrowser styleBrowser;
-		private TileDataBrowser tileDataBrowser;
-		private TilesetBrowser tilesetBrowser;
 		private TileBrowser tileBrowser;
 		private TilesetEditor tilesetEditor;
 
 		private FindReplaceWindow findReplaceWindow;
 		private PlaybackWindow playbackWindow;
-
-		private StoppableTimer checkOutdatedTimer;
-		private StoppableTimer loadedTimer;
-		private StoppableTimer displayTimer;
-		private StoppableTimer focusTimer;
+		
+		private ScheduledEvent checkOutdatedTimer;
+		private ScheduledEvent focusTimer;
 
 		private IRequestCloseAnchorable activeAnchorable;
 
@@ -61,10 +46,6 @@ namespace ConscriptDesigner {
 		//-----------------------------------------------------------------------------
 
 		public MainWindow() {
-			// Prevent System.Windows.Data Error: 4
-			PresentationTraceSources.DataBindingSource.Switch.Level =
-				SourceLevels.Critical;
-
 			suppressEvents = true;
 			InitializeComponent();
 
@@ -86,39 +67,16 @@ namespace ConscriptDesigner {
 			comboBoxScales.SelectedIndex = 0;
 
 
-			this.checkOutdatedTimer = StoppableTimer.Create(
-				TimeSpan.FromSeconds(0.1),
-				DispatcherPriority.ApplicationIdle, delegate {
+			checkOutdatedTimer = ScheduledEvents.New(0.1, TimerPriority.Low,
+				() => {
 					DesignerControl.CheckForOutdatedFiles(true);
-					checkOutdatedTimer.Stop();
 				});
-			/*this.checkOutdatedTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.1),
-				DispatcherPriority.ApplicationIdle, delegate {
-					DesignerControl.CheckForOutdatedFiles(true);
-					checkOutdatedTimer.Stop();
-				}, Dispatcher);
-			this.checkOutdatedTimer.Stop();*/
 
 			Application.Current.Activated += OnApplicationActivated;
 			Application.Current.Deactivated += OnApplicationDeactivated;
 
-			focusTimer = StoppableTimer.Create(
-				TimeSpan.FromMilliseconds(16),
-				DispatcherPriority.Render,
-				delegate {
-					if (activeAnchorable != null)
-						activeAnchorable.Focus();
-					focusTimer.Stop();
-				});
-			/*focusTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(16),
-				DispatcherPriority.Render,
-				delegate {
-					if (activeAnchorable != null)
-						activeAnchorable.Focus();
-					focusTimer.Stop();
-				}, Dispatcher);
-			focusTimer.Stop();*/
+			focusTimer = ScheduledEvents.New(0.02, TimerPriority.High,
+				() => { activeAnchorable?.Focus(); });
 		}
 
 
@@ -129,7 +87,7 @@ namespace ConscriptDesigner {
 		// HACK: This function is used to setup loading of the layout
 		// in a way that prevents GraphicsDevice.Reset from failing.
 		private void Initialize() {
-			dummyHost.Child = new DummyGraphicsDeviceControl();
+			graphicsInitializer.Initialize();
 			string[] args = Environment.GetCommandLineArgs();
 			if (args.Length > 1) {
 				DesignerControl.OpenProject(args[1]);
@@ -139,22 +97,13 @@ namespace ConscriptDesigner {
 			}
 
 			Visibility = Visibility.Collapsed;
-			displayTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(0.1),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					DisplayWindow();
-					displayTimer.Stop();
-					displayTimer = null;
-				});
-			/*displayTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(0.1),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					DisplayWindow();
-					displayTimer.Stop();
-					displayTimer = null;
-				}, Dispatcher);*/
+			ScheduledEvents.Start(0.01, TimerPriority.Low, DisplayWindow);
+		}
+
+		private void OnGraphicsInitialized(object sender, GraphicsInitializerEventArgs e) {
+			ZeldaResources.Initialize(e.GraphicsDevice, e.Services);
+			if (DesignerControl.IsProjectOpen)
+				DesignerControl.RunConscripts();
 		}
 
 		private void DisplayWindow() {
@@ -194,28 +143,14 @@ namespace ConscriptDesigner {
 			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
 			suppressEvents = false;
 
-			loadedTimer = StoppableTimer.StartNew(
-				TimeSpan.FromSeconds(0.1),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					Initialize();
-					loadedTimer.Stop();
-					loadedTimer = null;
-				});
-			/*loadedTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.1),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					Initialize();
-					loadedTimer.Stop();
-					loadedTimer = null;
-				}, Dispatcher);*/
+			ScheduledEvents.Start(0.1, TimerPriority.Low, Initialize);
 		}
 
 		private void OnApplicationActivated(object sender, EventArgs e) {
 			DesignerControl.IsActive = true;
-			// HACK: Prevent text editor keeping mouse down focus after closing any dialogs.
-			checkOutdatedTimer.Start();
+			// HACK: Prevent text editor keeping mouse
+			// down focus after closing any dialogs.
+			checkOutdatedTimer.Restart();
 		}
 
 		private void OnApplicationDeactivated(object sender, EventArgs e) {
@@ -250,10 +185,6 @@ namespace ConscriptDesigner {
 				spriteSourceBrowser.Reload();
 			if (styleBrowser != null)
 				styleBrowser.Reload();
-			if (tileDataBrowser != null)
-				tileDataBrowser.Reload();
-			if (tilesetBrowser != null)
-				tilesetBrowser.Reload();
 			if (tileBrowser != null)
 				tileBrowser.Reload();
 			if (tilesetEditor != null)
@@ -273,10 +204,6 @@ namespace ConscriptDesigner {
 				spriteSourceBrowser.Unload();
 			if (styleBrowser != null)
 				styleBrowser.Unload();
-			if (tileDataBrowser != null)
-				tileDataBrowser.Unload();
-			if (tilesetBrowser != null)
-				tilesetBrowser.Unload();
 			if (tileBrowser != null)
 				tileBrowser.Unload();
 			if (tilesetEditor != null)
@@ -307,7 +234,7 @@ namespace ConscriptDesigner {
 			CommandManager.InvalidateRequerySuggested();
 			if (ActiveAnchorableChanged != null && activeAnchorable != oldAnchorable) {
 				// HACK: Focus after a split second so focus actually transfers.
-				focusTimer.Start();
+				focusTimer.Restart();
 				ActiveAnchorableChanged(this, EventArgs.Empty);
 			}
 		}
@@ -324,10 +251,6 @@ namespace ConscriptDesigner {
 				spriteSourceBrowser = null;
 			else if (anchorable is StyleBrowser)
 				styleBrowser = null;
-			else if (anchorable is TileDataBrowser)
-				tileDataBrowser = null;
-			else if (anchorable is TilesetBrowser)
-				tilesetBrowser = null;
 			else if (anchorable is TileBrowser)
 				tileBrowser = null;
 			else if (anchorable is TilesetEditor)
@@ -371,15 +294,7 @@ namespace ConscriptDesigner {
 		public void OpenStyleBrowser() {
 			OnStyleBrowserCommand();
 		}
-
-		public void OpenTileDataBrowser() {
-			OnTileDataBrowserCommand();
-		}
-
-		public void OpenTilesetBrowser() {
-			OnTilesetBrowserCommand();
-		}
-
+		
 		public void OpenTileBrowser() {
 			OnTileBrowserCommand();
 		}
@@ -640,32 +555,6 @@ namespace ConscriptDesigner {
 			styleBrowser.IsActive = true;
 		}
 
-		private void OnTileDataBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
-			if (tileDataBrowser == null) {
-				tileDataBrowser = new TileDataBrowser();
-				tileDataBrowser.Closed += OnAnchorableClosed;
-				tileDataBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
-				var pane = tileDataBrowser.Parent as LayoutAnchorablePane;
-				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
-					tileDataBrowser.Reload();
-			}
-			tileDataBrowser.IsActive = true;
-		}
-
-		private void OnTilesetBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
-			if (tilesetBrowser == null) {
-				tilesetBrowser = new TilesetBrowser();
-				tilesetBrowser.Closed += OnAnchorableClosed;
-				tilesetBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
-				var pane = tilesetBrowser.Parent as LayoutAnchorablePane;
-				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && ZeldaResources.IsInitialized)
-					tilesetBrowser.Reload();
-			}
-			tilesetBrowser.IsActive = true;
-		}
-
 		private void OnTileBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
 			if (tileBrowser == null) {
 				tileBrowser = new TileBrowser();
@@ -816,16 +705,6 @@ namespace ConscriptDesigner {
 		public StyleBrowser StyleBrowser {
 			get { return styleBrowser; }
 			set { styleBrowser = value; }
-		}
-
-		public TileDataBrowser TileDataBrowser {
-			get { return tileDataBrowser; }
-			set { tileDataBrowser = value; }
-		}
-
-		public TilesetBrowser TilesetBrowser {
-			get { return tilesetBrowser; }
-			set { tilesetBrowser = value; }
 		}
 
 		public TileBrowser TileBrowser {

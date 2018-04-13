@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using ConscriptDesigner.Controls;
-using ConscriptDesigner.Control;
-using IOPath = System.IO.Path;
 using System.ComponentModel;
-using System.Windows.Media;
-using System.Windows;
+using System.IO;
+using IOPath = System.IO.Path;
+using System.Windows.Controls;
 using System.Windows.Input;
-using Xceed.Wpf.AvalonDock.Layout;
 using ConscriptDesigner.Anchorables;
-using ConscriptDesigner.Util;
+using ConscriptDesigner.Control;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Content {
 	/// <summary>The base file for all content project files.</summary>

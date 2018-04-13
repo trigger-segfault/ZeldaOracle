@@ -1,9 +1,44 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace ZeldaOracle.Common.Util {
 	/// <summary>A helper with extra methods for paths, files, and directories.</summary>
 	public static class PathHelper {
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The stored executable path for the entry assembly.</summary>
+		public static readonly string ExePath =
+			Assembly.GetEntryAssembly().Location;
+
+		/// <summary>The directory of the entry executable.</summary>
+		public static readonly string ExeDirectory =
+			Path.GetDirectoryName(ExePath);
+
+		/// <summary>Gets the file name of the entry executable.</summary>
+		public static readonly string ExeFile =
+			Path.GetFileName(ExePath);
+
+		/// <summary>Gets the file name of the entry executable without its extension.</summary>
+		public static readonly string ExeName =
+			Path.GetFileNameWithoutExtension(ExePath);
+		
+		/// <summary>Provides a platform-specific character used to separate directory
+		/// levels in a path string that reflects a hierarchical file system
+		/// organization.</summary>
+		public static readonly char[] DirectorySeparators = new char[] {
+			Path.DirectorySeparatorChar,
+			Path.AltDirectorySeparatorChar,
+		};
+
+
+		//-----------------------------------------------------------------------------
+		// Methods
+		//-----------------------------------------------------------------------------
+
 		/// <summary>Returns true if the fileName has valid characters.</summary>
 		public static bool IsValidName(string name) {
 			return name.IndexOfAny(Path.GetInvalidFileNameChars()) == -1;
@@ -80,7 +115,7 @@ namespace ZeldaOracle.Common.Util {
 		/// <summary>Returns a path that can be compared with another normalized path.</summary>
 		public static string NormalizePath(string path) {
 			return Path.GetFullPath(path)
-					   .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+					   .TrimEnd(DirectorySeparators)
 					   .ToUpperInvariant();
 		}
 
@@ -91,7 +126,7 @@ namespace ZeldaOracle.Common.Util {
 
 		/// <summary>Removes the ending directory separator from the path.</summary>
 		public static string TrimEnd(string path) {
-			return path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+			return path.TrimEnd(DirectorySeparators);
 		}
 
 		/// <summary>Returns a file path with copy appended to the filename.</summary>
@@ -108,12 +143,39 @@ namespace ZeldaOracle.Common.Util {
 			return finalPath;
 		}
 
+		/// <summary>Combines the specified paths with the executable directory.</summary>
+		public static string CombineExecutable(string path1) {
+			return Path.Combine(ExeDirectory, path1);
+		}
+
+		/// <summary>Combines the specified paths with the executable directory.</summary>
+		public static string CombineExecutable(string path1, string path2) {
+			return Path.Combine(ExeDirectory, path1, path2);
+		}
+
+		/// <summary>Combines the specified paths with the executable directory.</summary>
+		public static string CombineExecutable(string path1, string path2,
+			string path3)
+		{
+			return Path.Combine(ExeDirectory, path1, path2, path3);
+		}
+
+		/// <summary>Combines the specified paths with the executable directory.</summary>
+		public static string CombineExecutable(params string[] paths) {
+			return Path.Combine(ExeDirectory, Path.Combine(paths));
+		}
+
 		/// <summary>Returns a collection of all files and subfiles in the directory.</summary>
 		public static List<string> GetAllFiles(string directory) {
 			List<string> files = new List<string>();
 			AddAllFiles(files, directory);
 			return files;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Adds all of the files and subfiles in the directory to the list.</summary>
 		private static void AddAllFiles(List<string> files, string directory) {

@@ -10,6 +10,7 @@ using Xceed.Wpf.Toolkit;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaEditor.Controls;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	

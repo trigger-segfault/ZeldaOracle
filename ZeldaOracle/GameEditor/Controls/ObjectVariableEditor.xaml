@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeldaEditor.Controls"
+             xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
              mc:Ignorable="d" 
              d:DesignWidth="500" d:DesignHeight="325" KeyDown="OnKeyDown">
   <UserControl.Resources>
@@ -30,16 +31,16 @@
     
     <!-- Button bar -->
     <ToolBar DockPanel.Dock="Top" x:Name="toolbar" FocusManager.IsFocusScope="False">
-      <local:ImageButton x:Name="buttonToolCut" Source="/Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>
-      <local:ImageButton x:Name="buttonToolCopy" Source="/Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
-      <local:ImageButton x:Name="buttonToolPaste" Source="/Resources/Icons/Paste.png" ToolTip="Paste (Ctrl+V)" Command="Paste"/>
+      <common:ImageButton x:Name="buttonToolCut" Source="/Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut" IsTabStop="False" Focusable="False"/>
+      <common:ImageButton x:Name="buttonToolCopy" Source="/Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy" Focusable="False" IsTabStop="False"/>
+      <common:ImageButton x:Name="buttonToolPaste" Source="/Resources/Icons/Paste.png" ToolTip="Paste (Ctrl+V)" Command="Paste" IsTabStop="False" Focusable="False"/>
       <Separator/>
-      <local:ImageButton x:Name="buttonUndo" Source="/Resources/Icons/Undo.png" ToolTip="{Binding UndoTooltip}" Command="Undo"/>
-      <local:ImageButton x:Name="buttonRedo" Source="/Resources/Icons/Redo.png" ToolTip="{Binding RedoTooltip}" Command="Redo"/>
+      <common:ImageButton x:Name="buttonUndo" Source="/Resources/Icons/Undo.png" ToolTip="{Binding UndoTooltip}" Command="Undo" IsTabStop="False" Focusable="False"/>
+      <common:ImageButton x:Name="buttonRedo" Source="/Resources/Icons/Redo.png" ToolTip="{Binding RedoTooltip}" Command="Redo" IsTabStop="False" Focusable="False"/>
       <Separator/>
-      <local:ImageButton x:Name="buttonAdd" ToolTip="New Variable... (Ctrl+N)" Source="/Resources/Icons/Plus.png" Command="New"/>
-      <local:ImageButton x:Name="buttonEdit" ToolTip="Edit Variable... (Enter)" Source="/Resources/Icons/Edit.png" Command="Open"/>
-      <local:ImageButton x:Name="buttonDelete" ToolTip="Delete Variable (Del)" Source="/Resources/Icons/Delete.png" Command="Delete"/>
+      <common:ImageButton x:Name="buttonAdd" ToolTip="New Variable... (Ctrl+N)" Source="/Resources/Icons/Plus.png" Command="New" Focusable="False" IsTabStop="False"/>
+      <common:ImageButton x:Name="buttonEdit" ToolTip="Edit Variable... (Enter)" Source="/Resources/Icons/Edit.png" Command="Open" Focusable="False" IsTabStop="False"/>
+      <common:ImageButton x:Name="buttonDelete" ToolTip="Delete Variable (Del)" Source="/Resources/Icons/Delete.png" Command="Delete" Focusable="False" IsTabStop="False"/>
     </ToolBar>
         
     <ListView x:Name="listView" ItemContainerStyle="{StaticResource listViewStyle}">
@@ -68,13 +69,13 @@
       <!-- Context menu for variables -->
       <ListView.ContextMenu>
         <ContextMenu>
-          <local:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut" />
-          <local:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy" />
-          <local:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste" />
+          <common:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut" />
+          <common:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy" />
+          <common:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste" />
           <Separator />
-          <local:ImageMenuItem Header="New Variable..." Source="/Resources/Icons/Plus.png" Command="New" />
-          <local:ImageMenuItem Header="Edit Variable..." Source="/Resources/Icons/Edit.png" Command="Open" />
-          <local:ImageMenuItem Header="Delete Variable" Source="/Resources/Icons/Delete.png" Command="Delete" />
+          <common:ImageMenuItem Header="New Variable..." Source="/Resources/Icons/Plus.png" Command="New" />
+          <common:ImageMenuItem Header="Edit Variable..." Source="/Resources/Icons/Edit.png" Command="Open" />
+          <common:ImageMenuItem Header="Delete Variable" Source="/Resources/Icons/Delete.png" Command="Delete" />
         </ContextMenu>
       </ListView.ContextMenu>
     </ListView>

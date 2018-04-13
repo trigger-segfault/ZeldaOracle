@@ -34,23 +34,25 @@ namespace ZeldaOracle.Game.Tiles {
 		private void CycleColor() {
 			// Cycle the color (red -> yellow -> blue)
 			PuzzleColor color = Properties.GetEnum("color", PuzzleColor.Red);
-			if (color == PuzzleColor.Red)
+			color = (PuzzleColor) GMath.Wrap((int) color + 1, (int) PuzzleColor.Count);
+			/*if (color == PuzzleColor.Red)
 				color = PuzzleColor.Yellow;
 			else if (color == PuzzleColor.Yellow)
 				color = PuzzleColor.Blue;
 			else if (color == PuzzleColor.Blue)
- 				color = PuzzleColor.Red;
+ 				color = PuzzleColor.Red;*/
 
 			// Set the color property.
-			Properties.Set("color", (int) color);
+			Properties.SetEnum("color", color);
 
 			// Set the sprite.
-			if (color == PuzzleColor.Red)
+			/*if (color == PuzzleColor.Red)
 				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 			else if (color == PuzzleColor.Yellow)
 				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);*/
+			Graphics.PlayAnimation(SpriteList[(int) color]);
 				
 			AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 
@@ -65,12 +67,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnInitialize() {
 			// Set the sprite.
 			PuzzleColor color = Properties.GetEnum("color", PuzzleColor.Red);
-			if (color == PuzzleColor.Red)
+			/*if (color == PuzzleColor.Red)
 				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 			else if (color == PuzzleColor.Yellow)
 				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);*/
+			Graphics.PlayAnimation(SpriteList[(int) color]);
 			
 			// NOTE: The player automaticlly nullifies his events upon leaving the room.
 			RoomControl.Player.EventJump += OnPlayerJump;
@@ -112,13 +115,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			PuzzleColor tileColor = args.Properties.GetEnum<PuzzleColor>("color", PuzzleColor.Red);
-			ISprite sprite = null;
-			if (tileColor == PuzzleColor.Red)
+			PuzzleColor color = args.Properties.GetEnum("color", PuzzleColor.Red);
+			Tile.DrawTileDataIndex(g, args, (int) color);
+			/*ISprite sprite = null;
+			if (color == PuzzleColor.Red)
 				sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_RED;
-			else if (tileColor == PuzzleColor.Yellow)
+			else if (color == PuzzleColor.Yellow)
 				sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
-			else if (tileColor == PuzzleColor.Blue)
+			else if (color == PuzzleColor.Blue)
 				sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
 			if (sprite != null) {
 				g.DrawSprite(
@@ -126,7 +130,7 @@ namespace ZeldaOracle.Game.Tiles {
 					args.SpriteSettings,
 					args.Position,
 					args.Color);
-			}
+			}*/
 		}
 
 		/// <summary>Initializes the properties and events for the tile type.</summary>
@@ -147,13 +151,14 @@ namespace ZeldaOracle.Game.Tiles {
 		public PuzzleColor Color {
 			get { return Properties.GetEnum("color", PuzzleColor.Red); }
 			set {
-				Properties.Set("color", (int) value);
-				if (value == PuzzleColor.Red)
+				Properties.SetEnum("color", value);
+				/*if (value == PuzzleColor.Red)
 					Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 				else if (value == PuzzleColor.Yellow)
 					Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
 				else if (value == PuzzleColor.Blue)
-					Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
+					Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);*/
+				Graphics.PlayAnimation(SpriteList[(int) value]);
 			}
 		}
 		

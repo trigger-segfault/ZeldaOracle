@@ -13,10 +13,11 @@ using ZeldaEditor.Control;
 using ZeldaOracle.Common.Graphics;
 using System.Windows.Input;
 using Cursor = System.Windows.Forms.Cursor;
+using ZeldaWpf.Resources;
 
 namespace ZeldaEditor.Tools {
 	public class ToolSquare : EditorTool {
-		private static readonly Cursor SquareCursor = LoadCursor("Square");
+		private static readonly Cursor SquareCursor = WpfCursors.Square;//LoadCursor("Square");
 
 		private Point2I dragBeginCoord;
 		

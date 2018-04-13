@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         xmlns:treeViews="clr-namespace:ZeldaEditor.TreeViews"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:scripting="clr-namespace:ZeldaEditor.Scripting"
@@ -11,38 +12,38 @@
         xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         mc:Ignorable="d"
         Title="Object Editor" Height="494" Width="768" Icon="/Resources/Icons/Script.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Loaded="OnLoaded" Closing="OnClosing">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-    <DockPanel x:Name="dockPanel">
-        <local:AirspaceGridSplitter x:Name="airspaceGridSplitter"/>
-        <ToolBar DockPanel.Dock="Top">
-            <local:ObjectPreview x:Name="objectPreview" VerticalAlignment="Center" PreviewBackground="#FFFFFBFF"/>
-            <Separator/>
-        </ToolBar>
-        <TabControl DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" Padding="0,4,0,0">
-            <TabItem Header="Triggers">
-                <local:TriggerEditor x:Name="triggerEditor"/>
-            </TabItem>
-            <TabItem Header="Variables" x:Name="tabVariables">
-                <local:ObjectVariableEditor x:Name="objectVariableEditor"/>
-            </TabItem>
-            <TabItem Header="General">
-                <Grid x:Name="tabGeneral">
-                    <!--<local:ObjectTileEditor x:Name="objectTileEditor"/>-->
-                </Grid>
-            </TabItem>
-            <TabItem Header="Paths">
-                <Label Content="Content goes here..." />
-            </TabItem>
-            <TabItem Header="Drops">
-                <Label Content="Content goes here..." />
-            </TabItem>
-        </TabControl>
-    </DockPanel>
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ZeldaWpf;component/Themes/DefaultStyles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <DockPanel x:Name="dockPanel">
+    <common:AirspaceGridSplitter x:Name="airspaceGridSplitter"/>
+    <ToolBar DockPanel.Dock="Top">
+      <local:ObjectPreview x:Name="objectPreview" VerticalAlignment="Center" PreviewBackground="#FFFFFBFF"/>
+      <Separator/>
+    </ToolBar>
+    <TabControl DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" Padding="0,4,0,0">
+      <TabItem Header="Triggers">
+        <local:TriggerEditor x:Name="triggerEditor"/>
+      </TabItem>
+      <TabItem Header="Variables" x:Name="tabVariables">
+        <local:ObjectVariableEditor x:Name="objectVariableEditor"/>
+      </TabItem>
+      <TabItem Header="General">
+        <Grid x:Name="tabGeneral">
+          <!--<local:ObjectTileEditor x:Name="objectTileEditor"/>-->
+        </Grid>
+      </TabItem>
+      <TabItem Header="Paths">
+        <Label Content="Content goes here..." />
+      </TabItem>
+      <TabItem Header="Drops">
+        <Label Content="Content goes here..." />
+      </TabItem>
+    </TabControl>
+  </DockPanel>
 
 </Window>

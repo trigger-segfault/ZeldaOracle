@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Game.Items.Ammos;
-using ZeldaOracle.Game.Items.Drops;
-using ZeldaOracle.Game.Items;
+﻿using ZeldaOracle.Game.Items.Drops;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Game {
+	/// <summary>A static class for storing links to all game content.</summary>
+	public static partial class GameData {
 
-	public partial class GameData {
-		
 		//-----------------------------------------------------------------------------
 		// Inventory Loading
 		//-----------------------------------------------------------------------------
 
-		public static void LoadInventory() {
+		/// <summary>Loads "Items/items.conscript"</summary>
+		private static void LoadInventory() {
 			Resources.LoadItems(Resources.ItemDirectory + "items.conscript");
 			// No use for integrating these resources
 		}
@@ -31,7 +23,8 @@ namespace ZeldaOracle.Game {
 		// Reward Loading
 		//-----------------------------------------------------------------------------
 
-		public static void LoadRewards() {
+		/// <summary>Loads "Items/rewards.conscript"</summary>
+		private static void LoadRewards() {
 			Resources.LoadRewards(Resources.ItemDirectory + "rewards.conscript");
 			// No use for integrating these resources
 		}
@@ -41,6 +34,7 @@ namespace ZeldaOracle.Game {
 		// Drop Lists Loading
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Manually loads drops.</summary>
 		public static void LoadDrops(DropManager dropManager, RewardManager rewardManager) {
 
 			DropList dropsRupees = dropManager.CreateDropList("rupees");

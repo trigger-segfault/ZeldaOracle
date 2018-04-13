@@ -15,8 +15,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>The path to the content directory.</summary>
-		public static readonly string ContentDirectory = Path.Combine(
-				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+		public static readonly string ContentDirectory = PathHelper.CombineExecutable(
 				"Content");
 
 		/// <summary>The path to the preloaded paletted sprite database file.</summary>
@@ -88,16 +87,6 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Calculates the checksum for the content and sprites directory.</summary>
 		public int CalculateChecksum() {
-			/*string contentDir = Path.Combine(
-				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-				"Content");
-
-			string imagesDir = Path.Combine(contentDir, "Images");
-			string spritesDir = Path.Combine(contentDir, "Sprites");*/
-
-			//CalculateChecksum(ref checksum, imagesDir);
-			//CalculateChecksum(ref checksum, spritesDir);
-
 			int checksum = 0;
 			foreach (string directory in ChecksumDirectories) {
 				CalculateChecksum(ref checksum, directory);

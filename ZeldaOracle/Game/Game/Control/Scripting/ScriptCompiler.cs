@@ -4,6 +4,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 	/// <summary>Result information from compiling script code, including the 
@@ -128,9 +129,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			CompilerParameters options = new CompilerParameters();
 			options.GenerateExecutable = false;
 			options.GenerateInMemory = !generateAssembly;
-			options.OutputAssembly =
-				Path.GetFileNameWithoutExtension(
-					Assembly.GetEntryAssembly().Location) + "Scripts.dll";
+			options.OutputAssembly = PathHelper.ExeName + "Scripts.dll";
 
 			// Add the assembly references
 			foreach (Assembly assembly in Assemblies.Scripting)

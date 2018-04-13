@@ -16,30 +16,31 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Editor.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -309,13 +310,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\AirspaceGridSplitter.cs" />
-    <Compile Include="Controls\DropDownMenuItem.cs" />
     <Compile Include="Controls\FormatCodesDropdown.cs" />
     <Compile Include="Controls\HistoryListViewItem.cs" />
-    <Compile Include="Controls\HoverImageButton.cs" />
-    <Compile Include="Controls\ImageMenuItem.cs" />
-    <Compile Include="Controls\ImageTreeViewItem.cs" />
     <Compile Include="Controls\ObjectPreview.xaml.cs">
       <DependentUpon>ObjectPreview.xaml</DependentUpon>
     </Compile>
@@ -325,29 +321,21 @@
     <Compile Include="Controls\ObjectVariableEditor.xaml.cs">
       <DependentUpon>ObjectVariableEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PointUpDown.cs" />
-    <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
-    <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
-    <Compile Include="Controls\PropertyGridEditorPointUpDown.cs" />
     <Compile Include="Controls\ScriptTextEditor.xaml.cs">
       <DependentUpon>ScriptTextEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TimersUserControl.cs" />
-    <Compile Include="Controls\TimersWindow.cs" />
     <Compile Include="Controls\TilePathCommandItem.xaml.cs">
       <DependentUpon>TilePathCommandItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TilesetPalette.xaml.cs">
       <DependentUpon>TilesetPalette.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Controls\TriggerEditor.xaml.cs">
       <DependentUpon>TriggerEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
-    <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
     <Compile Include="Control\ScriptCompileService.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
     <Compile Include="EditorCommands.cs" />
@@ -363,7 +351,6 @@
     <Compile Include="PropertiesEditor\CustomEditors\WarpPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\WindowPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\LevelPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\NoneStringConverter.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\Point2IPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\ResourcePropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EventPropertyEditor.cs" />
@@ -372,7 +359,6 @@
     <Compile Include="PropertiesEditor\CustomProperties.cs" />
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
     <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs" />
-    <Compile Include="Controls\FolderTreeViewItem.cs" />
     <Compile Include="Scripting\NoBraceCompletionProvider.cs" />
     <Compile Include="Scripting\ScriptRoslynHost.cs" />
     <Compile Include="Scripting\ScriptFoldingStrategy.cs" />
@@ -407,12 +393,6 @@
     <Compile Include="Undo\ActionPlace.cs" />
     <Compile Include="Undo\ActionRenameID.cs" />
     <Compile Include="Undo\UndoHistory.cs" />
-    <Compile Include="Util\AlphanumComparatorFast.cs" />
-    <Compile Include="Util\ContinuousEvent.cs" />
-    <Compile Include="Util\ScheduledEvent.cs" />
-    <Compile Include="Util\TimerEvents.cs" />
-    <Compile Include="Util\WpfHelper.cs" />
-    <None Include="Util\StoppableTimer.cs" />
     <Compile Include="Windows\AddNewAreaWindow.xaml.cs">
       <DependentUpon>AddNewAreaWindow.xaml</DependentUpon>
     </Compile>
@@ -446,10 +426,6 @@
     <Compile Include="Windows\TilePathEditor.xaml.cs">
       <DependentUpon>TilePathEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\DummyGraphicsDeviceControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WinForms\FocusMessageFilter.cs" />
     <Compile Include="WinForms\SpritePreview.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -480,30 +456,11 @@
     <Compile Include="TreeViews\WorldTreeView.xaml.cs">
       <DependentUpon>WorldTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ImageButton.cs" />
-    <Compile Include="Controls\DropDownButton.cs" />
-    <Compile Include="Controls\ImageToggleButton.cs" />
-    <Compile Include="Util\BitmapFactory.cs" />
-    <Compile Include="Util\NativeMethods.cs" />
-    <Compile Include="Windows\ErrorMessageBox.xaml.cs">
-      <DependentUpon>ErrorMessageBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\RenameWindow.xaml.cs">
       <DependentUpon>RenameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\TextMessageEditor.xaml.cs">
       <DependentUpon>TextMessageEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\TriggerMessageBox.xaml.cs">
-      <DependentUpon>TriggerMessageBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\GraphicsDeviceControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WinForms\GraphicsDeviceService.cs" />
-    <Compile Include="WinForms\ServiceContainer.cs" />
-    <Compile Include="WinForms\TimersGraphicsDeviceControl.cs">
-      <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="Themes\TextMessageHighlighting.xshd" />
     <EmbeddedResource Include="Themes\CSharpMultilineHighlighting.xshd" />
@@ -547,10 +504,6 @@
       <DependentUpon>EditorWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Resource Include="Themes\DefaultStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Resource>
     <Page Include="Windows\AddNewAreaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -595,10 +548,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ErrorMessageBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\RenameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -614,10 +563,6 @@
     <Page Include="Windows\TilePathEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\TriggerMessageBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -655,6 +600,10 @@
     <ProjectReference Include="..\GameCommon\ZeldaCommon.csproj">
       <Project>{0f262418-7e4b-4005-b35e-18a180ac1239}</Project>
       <Name>ZeldaCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameWpf\ZeldaWpf.csproj">
+      <Project>{f77b3ad6-b926-4a1d-8bad-c4d4aa3d6a3f}</Project>
+      <Name>ZeldaWpf</Name>
     </ProjectReference>
     <ProjectReference Include="..\Game\Zelda.csproj">
       <Project>{899daec0-cf01-4b30-a6e4-a0db613978bd}</Project>
@@ -802,6 +751,7 @@
   <ItemGroup>
     <Folder Include="DevTools\" />
     <Folder Include="ObjectsEditor\CustomControls\" />
+    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\MoveDown.png" />
@@ -835,7 +785,7 @@
     <Resource Include="Resources\Icons\StringCodes.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\FormatCodeCharacters.png" />
+    <Resource Include="Resources\CharacterFormatCodes.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Paragraph.png" />

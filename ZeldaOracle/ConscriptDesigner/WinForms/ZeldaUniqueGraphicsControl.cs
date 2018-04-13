@@ -1,31 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using Size = System.Drawing.Size;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
-using System.Windows.Threading;
-using System.Diagnostics;
 using ZeldaOracle.Game.Worlds;
 using ConscriptDesigner.Control;
-using Microsoft.Xna.Framework.Graphics;
-using System.Windows.Forms;
-using ConscriptDesigner.Util;
+using ZeldaWpf.WinForms;
 
 namespace ConscriptDesigner.WinForms {
 
-	public class ZeldaUniqueGraphicsDeviceControl : GraphicsDeviceControl {
+	public class ZeldaUniqueGraphicsDeviceControl : TimersGraphicsDeviceControl {
 
 		// Static
 		private static RenderTarget2D renderTarget;
 		private static Zone defaultZone;
-
-		private StoppableTimer dispatcherTimer;
 
 		protected int columns;
 
@@ -74,15 +65,7 @@ namespace ConscriptDesigner.WinForms {
 
 			isInitialized = true;
 
-			this.dispatcherTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				TimerUpdate);
-			/*this.dispatcherTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate { TimerUpdate(); },
-				System.Windows.Application.Current.Dispatcher);*/
+			ContinuousEvents.StartRender(TimerUpdate);
 		}
 
 
@@ -205,7 +188,7 @@ namespace ConscriptDesigner.WinForms {
 		protected void UpdateSize(Point2I newSize) {
 			newSize *= scale;
 			sourceRect.Size = newSize;
-			AutoScrollMinSize = new Size(newSize.X, newSize.Y);
+			ScrollSize = newSize;
 			UpdateHoverSprite();
 			needsToInvalidate = true;
 		}
@@ -305,7 +288,7 @@ namespace ConscriptDesigner.WinForms {
 			get { return new Point2I(scale); }
 		}
 
-		public Point2I ScrollPosition {
+		/*public Point2I ScrollPosition {
 			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
 			set {
 				AutoScrollPosition = new System.Drawing.Point(
@@ -313,14 +296,14 @@ namespace ConscriptDesigner.WinForms {
 					GMath.Clamp(value.Y, VerticalScroll.Minimum, VerticalScroll.Maximum)
 				);
 			}
-		}
+		}*/
 
 		public Point2I UnscaledScrollPosition {
 			get { return ScrollPosition / scale; }
 		}
 
 		public Point2I UnscaledClientSize {
-			get { return new Point2I(ClientSize.Width, ClientSize.Height) / scale; }
+			get { return ClientSize / scale; }
 		}
 
 

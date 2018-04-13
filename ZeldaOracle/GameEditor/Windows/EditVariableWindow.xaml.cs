@@ -12,6 +12,7 @@ using ZeldaEditor.Controls;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

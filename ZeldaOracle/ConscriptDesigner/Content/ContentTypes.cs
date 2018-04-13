@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ConscriptDesigner.Content {
 	/// <summary>The types of identifyable content files.</summary>
 	public enum ContentTypes {

@@ -7,11 +7,12 @@ using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using System.Windows.Input;
 using Cursor = System.Windows.Forms.Cursor;
+using ZeldaWpf.Resources;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPan : EditorTool {
-		private static readonly Cursor HandOpenCursor = LoadCursor("HandOpen");
-		private static readonly Cursor HandClosedCursor = LoadCursor("HandClosed");
+		private static readonly Cursor HandOpenCursor = WpfCursors.HandOpen;//LoadCursor("HandOpen");
+		private static readonly Cursor HandClosedCursor = WpfCursors.HandClosed;//LoadCursor("HandClosed");
 
 		private bool isPanning;
 		private Point2I panStart;

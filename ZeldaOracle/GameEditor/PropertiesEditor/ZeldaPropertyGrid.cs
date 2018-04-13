@@ -18,6 +18,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
+using ZeldaWpf.WinForms;
 
 namespace ZeldaEditor.PropertiesEditor {
 	public class ZeldaPropertyGrid : PropertyGrid {

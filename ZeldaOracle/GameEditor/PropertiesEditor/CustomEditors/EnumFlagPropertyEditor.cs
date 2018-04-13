@@ -20,6 +20,7 @@ using System.Globalization;
 using Xceed.Wpf.Toolkit;
 using ZeldaEditor.Controls;
 using ZeldaOracle.Common.Util;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class EnumFlagPropertyEditor : TypeEditor<CheckComboBox>, ITypeEditor {

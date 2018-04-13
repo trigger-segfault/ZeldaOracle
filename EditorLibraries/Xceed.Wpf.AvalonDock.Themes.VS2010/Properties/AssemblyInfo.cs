@@ -61,8 +61,8 @@ using System;
 
 [assembly: XmlnsDefinition( "http://schemas.xceed.com/wpf/xaml/avalondock", "Xceed.Wpf.AvalonDock.Themes" )]
 
-#pragma warning disable 1699
+/*#pragma warning disable 1699
 [assembly: AssemblyDelaySign( false )]
 [assembly: AssemblyKeyFile( @"..\..\sn.snk" )]
 [assembly: AssemblyKeyName( "" )]
-#pragma warning restore 1699
+#pragma warning restore 1699*/

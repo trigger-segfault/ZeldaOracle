@@ -14,10 +14,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ZeldaEditor.Control;
-using ZeldaEditor.Util;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
 
 namespace ZeldaEditor.Controls {
 	/// <summary>A control for previewing a Zelda object.</summary>
@@ -28,7 +29,7 @@ namespace ZeldaEditor.Controls {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The dependency property for the previewed object.</summary>
-		public static DependencyProperty PreviewObjectProperty =
+		public static readonly DependencyProperty PreviewObjectProperty =
 			DependencyProperty.Register("PreviewObject", typeof(object),
 				typeof(ObjectPreview),
 				new FrameworkPropertyMetadata(OnPreviewObjectChanged));
@@ -49,7 +50,7 @@ namespace ZeldaEditor.Controls {
 
 
 		/// <summary>The dependency property for the background color.</summary>
-		public static DependencyProperty PreviewBackgroundProperty =
+		public static readonly DependencyProperty PreviewBackgroundProperty =
 			DependencyProperty.Register("PreviewBackground", typeof(Color),
 				typeof(ObjectPreview),
 				new FrameworkPropertyMetadata(OnPreviewBackgroundChanged));

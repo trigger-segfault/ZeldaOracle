@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Size = System.Drawing.Size;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game;
-using System.Windows.Threading;
-using System.Diagnostics;
 using ZeldaOracle.Game.Worlds;
 using ConscriptDesigner.Control;
 
@@ -25,8 +17,8 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		public SpritePreview() {
-			this.sprites = new List<SpriteInfo>();
-			this.spriteSize = Point2I.One;
+			sprites = new List<SpriteInfo>();
+			spriteSize = Point2I.One;
 		}
 
 		protected override void Initialize() {

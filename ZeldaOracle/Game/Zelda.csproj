@@ -252,6 +252,7 @@
     <Compile Include="Game\Control\VisualEffects\ShaderVisualEffect.cs" />
     <Compile Include="Game\Control\VisualEffects\SubrosiaWarpVisualEffect.cs" />
     <Compile Include="Game\Control\VisualEffects\UnderwaterVisualEffect.cs" />
+    <Compile Include="Game\GameData.Tiles.cs" />
     <Compile Include="Game\Debugging\DebugScripts.cs" />
     <Compile Include="Game\Debugging\DevSettings.cs" />
     <Compile Include="Game\Debugging\GameDebug.cs" />

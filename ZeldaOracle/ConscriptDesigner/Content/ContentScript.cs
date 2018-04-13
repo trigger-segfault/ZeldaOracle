@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using ICSharpCode.AvalonEdit;
 using ConscriptDesigner.Control;
-using Xceed.Wpf.AvalonDock.Layout;
 using ConscriptDesigner.Anchorables;
-using ConscriptDesigner.Windows;
 using System.IO;
 
 namespace ConscriptDesigner.Content {

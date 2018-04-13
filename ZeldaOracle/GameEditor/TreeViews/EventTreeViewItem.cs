@@ -10,11 +10,11 @@ using ZeldaEditor.Control;
 //using ZeldaEditor.PropertiesEditor.CustomEditors;
 using ZeldaEditor.Scripting;
 using ZeldaEditor.Undo;
-using ZeldaEditor.Util;
 using ZeldaEditor.Windows;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.TreeViews {
 
