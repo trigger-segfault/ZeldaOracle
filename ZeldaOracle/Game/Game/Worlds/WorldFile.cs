@@ -10,8 +10,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Util;
-using ZeldaOracle.Common;
-using System.Diagnostics;
+using ZeldaOracle.Common.Scripting.Internal;
 
 namespace ZeldaOracle.Game.Worlds {
 
@@ -63,13 +62,16 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 	}
 
-	// Used to save and load world files.
+	/// <summary>Used to save and load world files.</summary>
 	public class WorldFile {
 		
-		private static char[] MAGIC = { 'Z', 'w', 'd', '2' };
+		// Version Changelog:
 		// v3: Events are saved differently with scripts being loaded earlier
 		// v4: Implemented Event Triggers
-		private const int WORLDFILE_VERSION = 4;
+		// v5: Variables are now saved, and Properties are saved like Variables
+		
+		private static char[] MAGIC = { 'Z', 'w', 'd', '2' };
+		private const int WORLDFILE_VERSION = 5;
 
 		private const int NULL_TILE = -11;
 
@@ -91,9 +93,10 @@ namespace ZeldaOracle.Game.Worlds {
 		private Exception exception;
 		private bool skipRemainingResources;
 
-
-		//private int[]			zones;
-
+		/// <summary>Verify the given string matches the Zelda World File's magic
+		/// string.</summary>
+		/// <param name="magic"></param>
+		/// <returns></returns>
 		private static bool VerifyMagic(char[] magic) {
 			if (magic.Length != MAGIC.Length)
 				return false;
@@ -224,7 +227,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the world's properties.
 			ReadProperties(reader, world.Properties);
-			//ReadVariables(reader, world.Variables);
+			if (version >= 5)
+				ReadVariables(reader, world.Variables);
 			ReadTriggers(reader, world, world);
 
 			// Read the areas.
@@ -245,22 +249,26 @@ namespace ZeldaOracle.Game.Worlds {
 		private Area ReadArea(BinaryReader reader, World world) {
 			Area area = new Area();
 			ReadProperties(reader, area.Properties);
+			if (version >= 5)
+				ReadVariables(reader, area.Variables);
 			ReadTriggers(reader, area, world);
 			return area;
 		}
 
 		private Level ReadLevel(BinaryReader reader, World world) {
-			// Read the level dimensions.
+			// Read the level dimensions
 			Point2I dimensions	= reader.ReadPoint2I();
 			Point2I roomSize	= reader.ReadPoint2I();
 			int roomLayerCount	= reader.ReadInt32();
 			Level level = new Level(dimensions, roomLayerCount, roomSize);
 
-			// Read the level's properties.
+			// Read the level's properties
 			ReadProperties(reader, level.Properties);
+			if (version >= 5)
+				ReadVariables(reader, level.Variables);
 			ReadTriggers(reader, level, world);
 
-			// Read all the rooms in the level.
+			// Read all the rooms in the level
 			for (int y = 0; y < level.Height; y++) {
 				for (int x = 0; x < level.Width; x++) {
 					Room room = new Room(level, x, y);
@@ -279,6 +287,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the room's properties.
 			ReadProperties(reader, room.Properties);
+			if (version >= 5)
+				ReadVariables(reader, room.Variables);
 			ReadTriggers(reader, room, world);
 
 			// Read tile data for first layer (stored as a grid of tiles).
@@ -337,6 +347,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Read the tile's properties
 			ReadProperties(reader, tile.Properties);
+			if (version >= 5)
+				ReadVariables(reader, tile.Variables);
 			ReadTriggers(reader, tile, world);
 			if (tile.TileData != null)
 				tile.Properties.BaseProperties = tile.TileData.Properties;
@@ -354,6 +366,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 			ActionTileDataInstance actionTile = new ActionTileDataInstance(tileData, position);
 			ReadProperties(reader, actionTile.Properties);
+			if (version >= 5)
+				ReadVariables(reader, actionTile.Variables);
 			ReadTriggers(reader, actionTile, world);
 			actionTile.Properties.PropertyObject = actionTile;
 			if (tileData != null)
@@ -363,6 +377,7 @@ namespace ZeldaOracle.Game.Worlds {
 			return (actionTile.ActionTileData != null ? actionTile : null);
 		}
 
+		/// <summary>Read a collection of Triggers.</summary>
 		private void ReadTriggers(BinaryReader reader, ITriggerObject triggerObject, World world) {
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++) {
@@ -371,6 +386,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		/// <summary>Read a single Trigger.</summary>
 		private Trigger ReadTrigger(BinaryReader reader, ITriggerObject triggerObject) {
 			// Format:
 			//   Name : string
@@ -399,6 +415,7 @@ namespace ZeldaOracle.Game.Worlds {
 			return trigger;
 		}
 		
+		/// <summary>Read a collection of Properties.</summary>
 		private Properties ReadProperties(BinaryReader reader, Properties properties) {
 			int count = reader.ReadInt32();
 			for (int i = 0; i < count; i++) {
@@ -408,32 +425,78 @@ namespace ZeldaOracle.Game.Worlds {
 			return properties;
 		}
 
+		/// <summary>Read a single Property.</summary>
 		private Property ReadProperty(BinaryReader reader) {
-			VarType type = (VarType) reader.ReadInt32();
-			string name = ReadString(reader);
-
-			if (type == VarType.String)
-				return new Property(name, ReadString(reader));
-			return new Property(name, reader.ReadGeneric(type.ToType()));
-		}
-
-		private Variables ReadVariables(BinaryReader reader, Variables variables) {
-			return null; // TODO: Implement in v5
-			/*int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++) {
-				Variable variable = ReadVariable(reader);
-				variables.SetGeneric(variable.Name, variable.ObjectValue);
+			if (version >= 5) {
+				// TODO: We shouldn't need to write/read type info for a Property
+				string name = ReadString(reader);
+				VarType varType = (VarType) reader.ReadInt32();
+				ListType listType = (ListType) reader.ReadInt32();
+				Property property = new Property(name, varType, listType);
+				ReadVarBaseValue(reader, property);
+				return property;
 			}
-			return variables;*/
+			else {
+				VarType type = (VarType) reader.ReadInt32();
+				string name = ReadString(reader);
+				if (type == VarType.String)
+					return new Property(name, ReadString(reader));
+				return new Property(name, reader.ReadGeneric(type.ToType()));
+			}
 		}
 
-		private Variable ReadVariable(BinaryReader reader) {
-			VarType type = (VarType) reader.ReadInt32();
-			string name = ReadString(reader);
+		/// <summary>Read a collection of Variables.</summary>
+		private Variables ReadVariables(BinaryReader reader, Variables variables) {
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+				variables.AddVariable(ReadVariable(reader));
+			return variables;
+		}
 
+		/// <summary>Read a single Variable.</summary>
+		private Variable ReadVariable(BinaryReader reader) {
+			string name = ReadString(reader);
+			VarType varType = (VarType) reader.ReadInt32();
+			ListType listType = (ListType) reader.ReadInt32();
+			Variable variable = new Variable(name, varType, listType);
+			ReadVarBaseValue(reader, variable);
+			return variable;
+		}
+
+		/// <summary>Read the object value of a VarBase.</summary>
+		private void ReadVarBaseValue(BinaryReader reader, VarBase variable) {
+			if (variable.ListType == ListType.Single) {
+				variable.ObjectValue = ReadVarBaseElement(reader, variable.VarType);
+			}
+			else {
+				int count = reader.ReadInt32();
+
+				// TODO: this Array and List<> construction is duplicated in
+				// EditVariableWindow and should be put somewhere more common
+				if (variable.ListType == ListType.List) {
+					// Create a List<> of values
+					variable.ObjectValue = Activator.CreateInstance(
+						typeof(List<>).MakeGenericType(
+							new Type[] { variable.VarType.ToType() }));
+					for (int i = 0; i < count; i++)
+						variable.AddObjectAt(ReadVarBaseElement(reader, variable.VarType));
+				}
+				else if (variable.ListType == ListType.Array) {
+					// Create an array of values
+					variable.ObjectValue = Array.CreateInstance(
+						variable.VarType.ToType(), count);
+					for (int i = 0; i < count; i++)
+						variable.SetObjectAt(i, ReadVarBaseElement(reader, variable.VarType));
+				}
+			}
+		}
+
+		/// <summary>Read a single element in a VarBase's value.</summary>
+		private object ReadVarBaseElement(BinaryReader reader, VarType type) {
 			if (type == VarType.String)
-				return new Variable(name, ReadString(reader));
-			return new Variable(name, reader.ReadGeneric(type.ToType()));
+				return ReadString(reader);
+			else
+				return reader.ReadGeneric(type.ToType());
 		}
 
 		private string ReadString(BinaryReader reader) {
@@ -680,7 +743,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 			// Write the world's properties
 			WriteProperties(writer, world.Properties);
-			//WriteVariables(writer, world.Variables);
+			if (version >= 5)
+				WriteVariables(writer, world.Variables);
 			WriteTriggers(writer, world.Triggers);
 
 			// Write the area
@@ -696,6 +760,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private void WriteArea(BinaryWriter writer, Area area) {
 			WriteProperties(writer, area.Properties);
+			if (version >= 5)
+				WriteVariables(writer, area.Variables);
 			WriteTriggers(writer, area.Triggers);
 		}
 
@@ -705,6 +771,8 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write(level.RoomSize);
 			writer.Write(level.RoomLayerCount);
 			WriteProperties(writer, level.Properties);
+			if (version >= 5)
+				WriteVariables(writer, level.Variables);
 			WriteTriggers(writer, level.Triggers);
 
 			// Write rooms.
@@ -720,6 +788,8 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write(room.Size);
 			writer.Write(room.LayerCount);
 			WriteProperties(writer, room.Properties);
+			if (version >= 5)
+				WriteVariables(writer, room.Variables);
 			WriteTriggers(writer, room.Triggers);
 
 			// Write all tiles for the first tile layer.
@@ -758,6 +828,8 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write((int) -1);
 			WriteResource(writer, tile.TileData, tileData);
 			WriteProperties(writer, tile.Properties);
+			if (version >= 5)
+				WriteVariables(writer, tile.Variables);
 			WriteTriggers(writer, tile.Triggers);
 		}
 
@@ -767,15 +839,19 @@ namespace ZeldaOracle.Game.Worlds {
 			WriteResource(writer, actionTile.ActionTileData, actionTileData);
 			writer.Write(actionTile.Position);
 			WriteProperties(writer, actionTile.Properties);
+			if (version >= 5)
+				WriteVariables(writer, actionTile.Variables);
 			WriteTriggers(writer, actionTile.Triggers);
 		}
 		
+		/// <summary>Write a collection of triggers.</summary>
 		private void WriteTriggers(BinaryWriter writer, TriggerCollection triggers) {
 			writer.Write(triggers.Count);
 			foreach (Trigger trigger in triggers)
 				WriteTrigger(writer, trigger);
 		}
 		
+		/// <summary>Write a single trigger.</summary>
 		private void WriteTrigger(BinaryWriter writer, Trigger trigger) {
 			WriteString(writer, trigger.Name);
 			WriteString(writer, trigger.Description);
@@ -784,41 +860,68 @@ namespace ZeldaOracle.Game.Worlds {
 			WriteString(writer, trigger.EventType.Name);
 			WriteScriptBase(writer, trigger.Script);
 		}
-
+		
+		/// <summary>Write a collection of properties.</summary>
 		private void WriteProperties(BinaryWriter writer, Properties properties) {
-			writer.Write((int) properties.Count);
-			foreach (Property property in properties.GetProperties()) {
+			writer.Write(properties.Count);
+			foreach (Property property in properties.GetProperties())
 				WriteProperty(writer, property);
+		}
+
+		/// <summary>Write a single proprety.</summary>
+		private void WriteProperty(BinaryWriter writer, Property property) {
+			if (version >= 5) {
+				// TODO: We shouldn't need to write/read type info for a Property
+				WriteString(writer, property.Name);
+				writer.Write((int) property.VarType);
+				writer.Write((int) property.ListType);
+				WriteVarBaseValue(writer, property);
+			}
+			else {
+				writer.Write((int) property.VarType);
+				WriteString(writer, property.Name);
+
+				if (property.VarType == VarType.String)
+					WriteString(writer, property.Get<string>());
+				else
+					writer.WriteGeneric(property.FullType, property.ObjectValue);
 			}
 		}
 
-		private void WriteProperty(BinaryWriter writer, Property property) {
-			writer.Write((int) property.VarType);
-			WriteString(writer, property.Name);
-
-			if (property.VarType == VarType.String)
-				WriteString(writer, property.Get<string>());
-			else
-				writer.WriteGeneric(property.FullType, property.ObjectValue);
-		}
-
-
+		/// <summary>Write a collection of variables.</summary>
 		private void WriteVariables(BinaryWriter writer, Variables variables) {
-			return; // TODO: Implement in v5
-			/*writer.Write(variables.CustomCount);
-			foreach (Variable variable in variables.GetCustomVariables()) {
+			writer.Write(variables.CustomCount);
+			foreach (Variable variable in variables.GetCustomVariables())
 				WriteVariable(writer, variable);
-			}*/
 		}
 
+		/// <summary>Write a single variable.</summary>
 		private void WriteVariable(BinaryWriter writer, Variable variable) {
-			writer.Write((int) variable.VarType);
 			WriteString(writer, variable.Name);
+			writer.Write((int) variable.VarType);
+			writer.Write((int) variable.ListType);
+			WriteVarBaseValue(writer, variable);
+		}
 
-			if (variable.VarType == VarType.String)
-				WriteString(writer, variable.Get<string>());
+		/// <summary>Write the object value of a VarBase.</summary>
+		private void WriteVarBaseValue(BinaryWriter writer, VarBase variable) {
+			if (variable.ListType == ListType.Single) {
+				WriteVarBaseElement(writer, variable.VarType, variable.ObjectValue);
+			}
+			else {
+				writer.Write(variable.Count);
+				for (int i = 0; i < variable.Count; i++)
+					WriteVarBaseElement(writer, variable.VarType, variable[i]);
+			}
+		}
+
+		/// <summary>Write a variable value. This is called multiple times for
+		/// variables which are lists.</summary>
+		private void WriteVarBaseElement(BinaryWriter writer, VarType type, object value) {
+			if (type == VarType.String)
+				WriteString(writer, (string) value);
 			else
-				writer.WriteGeneric(variable.FullType, variable.ObjectValue);
+				writer.WriteGeneric(type.ToType(), value);
 		}
 
 		private void WriteStrings(BinaryWriter writer) {

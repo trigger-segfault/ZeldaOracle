@@ -27,11 +27,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		VarType baseType;
 
 		protected override IEnumerable CreateItemsSource(PropertyItem propertyItem) {
-			CustomPropertyDescriptor propertyDescriptor = (CustomPropertyDescriptor)propertyItem.PropertyDescriptor;
-			baseType = propertyDescriptor.Property.VarType;
-			string typeName = propertyDescriptor.Documentation.EditorSubType;
-			enumType = typeof(Directions);
-			return GetValues(enumType);
+			return GetValues(typeof(Directions));
 		}
 
 		private static object[] GetValues(Type enumType) {

@@ -7,13 +7,14 @@
         xmlns:local="clr-namespace:ZeldaEditor.Windows"
         mc:Ignorable="d"
         
-        Title="Edit Variable" Height="200" Width="320" MinWidth="280" MinHeight="180"
+        Title="Edit Variable" Height="340" Width="360" MinWidth="280" MinHeight="180"
         Background="#FFF0F0F0" ShowInTaskbar="False" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
         Icon="/ZeldaEditor;component/Resources/Icons/Level.png"
         SnapsToDevicePixels="True" UseLayoutRounding="True">
   <Grid>
     <Button Content="Cancel" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,4,4" Width="80"/>
-    <Button Content="OK" IsDefault="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,89,4" Width="80" Click="OnAdd"/>
+    <Button Content="OK" IsDefault="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,89,4" Width="80" Click="OnAdd"
+                IsEnabled="{Binding ElementName=textBoxVariableName, Path=Text.Length}" />
 
     <Grid Margin="0,0,0,31">
       <Grid.ColumnDefinitions>
@@ -27,13 +28,13 @@
       <Label Content="List Type:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,66,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
       <Label Content="Initial Value:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,96,4,0" HorizontalContentAlignment="Right" Grid.Column="0"/>
 
-      <TextBox x:Name="textBoxVariableName" VerticalAlignment="Top" Height="22" Margin="0,6,10,0" Grid.Column="1" Grid.ColumnSpan="2" />
-      <ComboBox x:Name="comboBoxVariableType" VerticalAlignment="Top" Margin="0,36,10,0" Grid.Column="1" Grid.ColumnSpan="2" />
+      <TextBox x:Name="textBoxVariableName" VerticalAlignment="Top" Height="22" Margin="0,6,10,0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding VariableName}"/>
+      <ComboBox x:Name="comboBoxVariableType" VerticalAlignment="Top" Margin="0,36,10,0" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="OnVariableTypeChanged" SelectedValue="{Binding VariableType}" />
 
-      <ComboBox x:Name="comboBoxListType" VerticalAlignment="Top" Margin="0,66,0,0" Grid.Column="1" />
-      <Label Content="Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,66,0,0" HorizontalContentAlignment="Left" Grid.Column="2"/>
-      <xctk:IntegerUpDown x:Name="spinnerListSize" Minimum="1" Maximum="32" VerticalAlignment="Top" Margin="44,66,10,0" Height="22" Grid.Column="2">
-        <!--IsEnabled == (comboBoxListType.SelectedItem == ListType.Single)-->
+      <ComboBox x:Name="comboBoxListType" VerticalAlignment="Top" Margin="0,66,0,0" Grid.Column="1" SelectionChanged="OnListTypeChanged" SelectedValue="{Binding ListType}" />
+      <Label Content="Size:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,66,0,0" HorizontalContentAlignment="Left" Grid.Column="2" />
+      <xctk:IntegerUpDown x:Name="spinnerListSize" Minimum="1" Maximum="32" VerticalAlignment="Top" Margin="44,66,10,0" Height="22" Grid.Column="2" ValueChanged="OnListSizeChanged" Value="{Binding ListCount}">
+        <!-- Enable the Size UpDown when the ListType is not Single -->
         <xctk:IntegerUpDown.Style>
           <Style TargetType="xctk:IntegerUpDown">
             <Setter Property="IsEnabled" Value="True"/>
@@ -46,7 +47,60 @@
         </xctk:IntegerUpDown.Style>
       </xctk:IntegerUpDown>
 
-      <TextBox x:Name="textBoxInitialValue" VerticalAlignment="Top" Height="22" Margin="0,96,10,0" Grid.Column="1" Grid.ColumnSpan="2"/>
+      <!-- Grid for the initial value of single-valued variables-->
+      <Grid x:Name="gridValue" VerticalAlignment="Top" Height="22" Margin="0,96,10,0" Grid.Column="1" Grid.ColumnSpan="2">
+      </Grid>
+
+      <!-- ListView for the initial values of List/Array variables -->
+      <ListView x:Name="listViewInitialValues" Margin="10,126,10,10" Grid.Column="0" Grid.ColumnSpan="3">
+        <ListView.Resources>
+          <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+          </Style>
+          <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Style.Triggers>
+              <MultiTrigger>
+                <MultiTrigger.Conditions>
+                  <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                  <Condition Property="IsMouseOver" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="Transparent" />
+              </MultiTrigger>
+            </Style.Triggers>
+          </Style>
+          <Style TargetType="{x:Type xctk:IntegerUpDown}" BasedOn="{StaticResource {x:Type xctk:IntegerUpDown}}">
+            <Style.Triggers>
+              <MultiTrigger>
+                <MultiTrigger.Conditions>
+                  <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                  <Condition Property="IsMouseOver" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="ShowButtonSpinner" Value="False" />
+              </MultiTrigger>
+            </Style.Triggers>
+          </Style>
+          <Style TargetType="{x:Type xctk:SingleUpDown}" BasedOn="{StaticResource {x:Type xctk:SingleUpDown}}">
+            <Style.Triggers>
+              <MultiTrigger>
+                <MultiTrigger.Conditions>
+                  <Condition Property="IsKeyboardFocusWithin" Value="False" />
+                  <Condition Property="IsMouseOver" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="ShowButtonSpinner" Value="False" />
+              </MultiTrigger>
+            </Style.Triggers>
+          </Style>
+        </ListView.Resources>
+        <ListView.View>
+          <GridView>
+            <GridViewColumn Header="Index" DisplayMemberBinding="{Binding Index}" Width="70" />
+            <GridViewColumn Header="Value" Width="210" />
+          </GridView>
+        </ListView.View>
+      </ListView>
     </Grid>
   </Grid>
 </Window>

@@ -14,6 +14,8 @@ namespace ZeldaEditor.Undo {
 		public ActionOpenWorld() {
 			ActionName = "Open World";
 			ActionIcon = EditorImages.Open;
+			IsUndoable = false;
+			IsRedoable = false;
 		}
 
 		public override void Undo(EditorControl editorControl) {

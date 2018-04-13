@@ -24,6 +24,7 @@ using System.Diagnostics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common;
 using Xceed.Wpf.Toolkit.PropertyGrid;
+using ZeldaEditor.Controls;
 
 namespace ZeldaEditor.PropertiesEditor {
 	public class PropertiesContainer : ICustomTypeDescriptor {

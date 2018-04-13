@@ -373,6 +373,10 @@
     <Compile Include="Undo\ActionDeleteLevel.cs" />
     <Compile Include="Undo\ActionDuplicateArea.cs" />
     <Compile Include="Undo\ActionDuplicateLevel.cs" />
+    <Compile Include="Undo\Variables\ActionEditVariable.cs" />
+    <Compile Include="Undo\Variables\ActionPasteVariable.cs" />
+    <Compile Include="Undo\Variables\ActionDeleteVariable.cs" />
+    <Compile Include="Undo\Variables\ActionNewVariable.cs" />
     <Compile Include="Undo\ActionPlaceAction.cs" />
     <Compile Include="Undo\ActionMoveArea.cs" />
     <Compile Include="Undo\ActionMoveLevel.cs" />

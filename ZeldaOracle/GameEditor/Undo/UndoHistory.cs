@@ -26,7 +26,7 @@ namespace ZeldaEditor.Undo {
 		IEnumerable ActionsSource { get; }
 	}
 
-	public class UndoHistory<Context> : IUndoHistory {
+	public class UndoHistory<TContext> : IUndoHistory {
 
 		private event EventHandler positionChanged;
 		private event EventHandler actionUndone;
@@ -34,9 +34,9 @@ namespace ZeldaEditor.Undo {
 		private event EventHandler actionUndoing;
 		private event EventHandler actionRedoing;
 
-		private ObservableCollection<UndoAction<Context>> undoActions;
+		private ObservableCollection<UndoAction<TContext>> undoActions;
 		private int undoPosition;
-		private Context context;
+		private TContext context;
 		private int maxUndos;
 
 
@@ -44,11 +44,11 @@ namespace ZeldaEditor.Undo {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public UndoHistory(Context context, int maxUndos) {
+		public UndoHistory(TContext context, int maxUndos) {
 			this.context = context;
 			this.maxUndos = maxUndos;
 			undoPosition = -1;
-			undoActions = new ObservableCollection<UndoAction<Context>>();
+			undoActions = new ObservableCollection<UndoAction<TContext>>();
 			positionChanged = null;
 		}
 
@@ -59,7 +59,7 @@ namespace ZeldaEditor.Undo {
 
 		/// <summary>Pushes the action to the list and performs the specified
 		/// execution.</summary>
-		public void PushAction(UndoAction<Context> action, ActionExecution execution) {
+		public void PushAction(UndoAction<TContext> action, ActionExecution execution) {
 			// Ignore if nothing occurred during this action
 			if (action.IgnoreAction)
 				return;
@@ -99,11 +99,11 @@ namespace ZeldaEditor.Undo {
 		/// <summary>Undos the last executed action. Returns true if any actions where
 		/// undone.</summary>
 		public bool Undo(int count = 1) {
-			if (undoPosition <= 0 || count <= 0)
+			if (!CanUndo || count <= 0)
 				return false;
 			actionUndoing?.Invoke(this, EventArgs.Empty);
-			for (int i = 0; i < count && undoPosition > 0; i++) {
-				undoActions[undoPosition].IsSelected = false;
+			undoActions[undoPosition].IsSelected = false;
+			for (int i = 0; i < count && undoPosition >= 0; i++) {
 				undoActions[undoPosition].IsUndone = true;
 				undoActions[undoPosition].Undo(context);
 				undoPosition--;
@@ -116,11 +116,12 @@ namespace ZeldaEditor.Undo {
 		/// <summary>Redos the next undone action. Returns true if any actions where
 		/// redone.</summary>
 		public bool Redo(int count = 1) {
-			if (undoPosition + 1 >= undoActions.Count || count <= 0)
+			if (!CanRedo || count <= 0)
 				return false;
 			actionRedoing?.Invoke(this, EventArgs.Empty);
-			for (int i = 0; i < count && undoPosition + 1 < undoActions.Count; i++) {
+			if (undoPosition > 0)
 				undoActions[undoPosition].IsSelected = false;
+			for (int i = 0; i < count && undoPosition + 1 < undoActions.Count; i++) {
 				undoPosition++;
 				undoActions[undoPosition].IsUndone = false;
 				undoActions[undoPosition].Redo(context);
@@ -132,7 +133,7 @@ namespace ZeldaEditor.Undo {
 
 		/// <summary>Navigates to the specified action in the history. Returns true if
 		/// any actions where undone or redone.</summary>
-		public bool GoToAction(UndoAction<Context> action) {
+		public bool GoToAction(UndoAction<TContext> action) {
 			return GoToAction(undoActions.IndexOf(action));
 		}
 
@@ -172,15 +173,24 @@ namespace ZeldaEditor.Undo {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the complete list of undo actions.</summary>
-		public ObservableCollection<UndoAction<Context>> UndoActions {
+		public ObservableCollection<UndoAction<TContext>> UndoActions {
 			get { return undoActions; }
 		}
 
-		/// <summary>The current action to be undone.</summary>
-		public UndoAction<Context> LastAction {
+		/// <summary>The current action which can be undone.</summary>
+		public UndoAction<TContext> UndoAction {
 			get {
 				if (undoPosition >= 0)
 					return undoActions[undoPosition];
+				return null;
+			}
+		}
+
+		/// <summary>The current action which can be redone.</summary>
+		public UndoAction<TContext> RedoAction {
+			get {
+				if (undoPosition + 1 < undoActions.Count)
+					return undoActions[undoPosition + 1];
 				return null;
 			}
 		}
@@ -194,12 +204,15 @@ namespace ZeldaEditor.Undo {
 
 		/// <summary>Returns true if there are any actions to undo.</summary>
 		public bool CanUndo {
-			get { return (undoPosition > 0); }
+			get { return (undoPosition >= 0 && UndoAction.IsUndoable); }
 		}
 
 		/// <summary>Returns true if there are any actions to redo.</summary>
 		public bool CanRedo {
-			get { return (undoPosition + 1 < undoActions.Count); }
+			get {
+				return (undoPosition + 1 < undoActions.Count &&
+					RedoAction.IsRedoable);
+			}
 		}
 
 		/// <summary>Called after the position in the undo history changes, after any
@@ -242,6 +255,12 @@ namespace ZeldaEditor.Undo {
 		/// <summary>Returns the iterable list of actions.</summary>
 		public IEnumerable ActionsSource {
 			get { return undoActions; }
+		}
+
+		/// <summary>Return the context in which actions performed.</summary>
+		public TContext Context {
+			get { return context; }
+			set { context = value; }
 		}
 	}
 }

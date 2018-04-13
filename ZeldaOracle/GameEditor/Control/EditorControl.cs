@@ -326,6 +326,7 @@ namespace ZeldaEditor.Control {
 				eventCache.Clear();
 				RefreshWorldTreeView();
 				
+				// Clear the undo history and create the initial "Open World" action
 				history.Clear();
 				PushAction(new ActionOpenWorld(), ActionExecution.None);
 				IsModified = worldFileLocatedResource;
@@ -558,9 +559,9 @@ namespace ZeldaEditor.Control {
 			}
 
 			// Combine contiguous proprety-change actions of the same property
-			if (history.LastAction is ActionChangeProperty) {
+			if (history.UndoAction is ActionChangeProperty) {
 				ActionChangeProperty lastAction =
-						(ActionChangeProperty) history.LastAction;
+						(ActionChangeProperty) history.UndoAction;
 				if (action.PropertyObject == lastAction.PropertyObject &&
 					action.PropertyName == lastAction.PropertyName) {
 					action.OldValue = lastAction.OldValue;
@@ -574,8 +575,8 @@ namespace ZeldaEditor.Control {
 		/// <summary>Called when the position in the undo history has changed.
 		/// </summary>
 		private void OnHistoryChanged(object sender, EventArgs e) {
-			if (history.LastAction != null) {
-				editorWindow.SelectHistoryItem(history.LastAction);
+			if (history.UndoAction != null) {
+				editorWindow.SelectHistoryItem(history.UndoAction);
 				IsModified = true;
 			}
 		}
