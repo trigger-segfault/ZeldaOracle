@@ -1,14 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ZeldaEditor.Control;
 using ZeldaEditor.Controls;
-using ZeldaEditor.Util;
+using ZeldaWpf.Util;
 using ZeldaOracle.Game.Control.Scripting;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

@@ -5,21 +5,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
-using Trigger = ZeldaOracle.Common.Scripting.Trigger;
-using TriggerCollection = ZeldaOracle.Common.Scripting.TriggerCollection;
 
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Common.Util;
 
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Control.Scripting;
@@ -35,9 +27,8 @@ using ZeldaEditor.TreeViews;
 using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
-using ZeldaOracle.Common.Graphics;
-using ZeldaEditor.Util;
-using ZeldaOracle.Common.Util;
+using ZeldaWpf.Util;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor.Control {
 
@@ -47,7 +38,7 @@ namespace ZeldaEditor.Control {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		private const int MaxUndos = 50;
+		private const int MaxUndos = 150;
 
 
 		//-----------------------------------------------------------------------------
@@ -123,9 +114,6 @@ namespace ZeldaEditor.Control {
 		private bool                        needsNewEventCache;
 
 
-		private HashSet<DispatcherTimer>	scheduledEvents;
-
-
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -140,7 +128,6 @@ namespace ZeldaEditor.Control {
 			timer					= null;
 			ticks					= 0;
 			isInitialized			= false;
-			scheduledEvents			= new HashSet<DispatcherTimer>();
 
 			// Settings
 			roomSpacing				= 1;
@@ -240,13 +227,6 @@ namespace ZeldaEditor.Control {
 					OpenWorld(args[1]);
 				}
 			}
-		}
-
-		public void Uninitialize() {
-			foreach (DispatcherTimer timer in scheduledEvents) {
-				timer.Stop();
-			}
-			scheduledEvents.Clear();
 		}
 
 
@@ -385,12 +365,10 @@ namespace ZeldaEditor.Control {
 		public void TestWorld() {
 			if (IsWorldOpen) {
 				CurrentTool.Finish();
-				string worldPath = Path.Combine(Path.GetDirectoryName(
-					Assembly.GetExecutingAssembly().Location), "testing.zwd");
+				string worldPath = PathHelper.CombineExecutable("testing.zwd");
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world, true);
-				string exePath = Path.Combine(Path.GetDirectoryName(
-					Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
+				string exePath = PathHelper.CombineExecutable("ZeldaOracle.exe");
 				string arguments = "\"" + worldPath + "\"";
 				if (debugConsole)
 					arguments += " -console";
@@ -404,12 +382,10 @@ namespace ZeldaEditor.Control {
 				CurrentTool.Finish();
 				playerPlaceMode = false;
 				int levelIndex = world.IndexOfLevel(level);
-				string worldPath = Path.Combine(Path.GetDirectoryName(
-					Assembly.GetExecutingAssembly().Location), "testing.zwd");
+				string worldPath = PathHelper.CombineExecutable("testing.zwd");
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world, true);
-				string exePath = Path.Combine(Path.GetDirectoryName(
-					Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
+				string exePath = PathHelper.CombineExecutable("ZeldaOracle.exe");
 				string arguments = "\"" + worldPath + "\"";
 				arguments += " -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y;
 				if (debugConsole)
@@ -709,46 +685,6 @@ namespace ZeldaEditor.Control {
 				this.eventCache = newEventCache;
 				editorWindow.WorldTreeView.RefreshScripts(false, true);
 			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Event Scheduling
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Schedules a delayed event.</summary>
-		public void ScheduleEvent(double seconds, Action action) {
-			ScheduleEvent(TimeSpan.FromSeconds(seconds), false, action);
-		}
-
-		/// <summary>Schedules a delayed event.</summary>
-		public void ScheduleEvent(double seconds, bool highPriority, Action action) {
-			ScheduleEvent(TimeSpan.FromSeconds(seconds), highPriority, action);
-		}
-
-		/// <summary>Schedules a delayed event.</summary>
-		public void ScheduleEvent(TimeSpan delay, Action action) {
-			ScheduleEvent(delay, false, action);
-		}
-
-		/// <summary>Schedules a delayed event.</summary>
-		public void ScheduleEvent(TimeSpan delay, bool highPriority,
-			Action action)
-		{
-			DispatcherPriority priority = DispatcherPriority.ApplicationIdle;
-			if (highPriority)
-				priority = DispatcherPriority.Render;
-			DispatcherTimer timer = new DispatcherTimer(
-				priority, Application.Current.Dispatcher);
-			timer.Interval = delay;
-			/*DispatcherTimer timer = new DispatcherTimer(
-				delay, priority, null, Application.Current.Dispatcher);*/
-			timer.Tick += (s, e) => {
-				action();
-				timer.Stop();
-				scheduledEvents.Remove((DispatcherTimer) s);
-			};
-			timer.Start();
 		}
 		
 

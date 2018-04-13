@@ -4,14 +4,13 @@ using System.Windows.Forms;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaEditor.Control;
-using System.Windows.Threading;
-using ZeldaEditor.Util;
-using ZeldaOracle.Common.Util;
-using FrameworkElement = System.Windows.FrameworkElement;
+using ZeldaWpf.WinForms;
+using ZeldaWpf.Util;
 
 namespace ZeldaEditor.WinForms {
 
@@ -61,7 +60,7 @@ namespace ZeldaEditor.WinForms {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public TilesetDisplay(FrameworkElement element) : base(element) { }
+		public TilesetDisplay() { }
 
 		protected override void Initialize() {
 			zone = null;
@@ -80,7 +79,7 @@ namespace ZeldaEditor.WinForms {
 			ResizeRedraw = true;
 
 			// Start the timer to refresh the panel
-			ContinuousEvents.Start(1d / 60, TimerPriority.High,
+			ContinuousEvents.StartRender(
 				() => {
 					if (editorControl.IsActive)
 						TimerUpdate();
@@ -131,7 +130,7 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		private void TimerUpdate() {
-			if (source.IsList && ClientSize.Width != AutoScrollMinSize.Width) {
+			if (source.IsList && ClientWidth != ScrollWidth) {
 				UpdateSize();
 			}
 			else if (editorControl.PlayAnimations)
@@ -164,9 +163,9 @@ namespace ZeldaEditor.WinForms {
 			Point2I size = Point2I.One;
 			if (source.IsList) {
 				// Calculate the number of columns that would fit
-				columns = Math.Max(1, (ClientSize.Width - 1) /
+				columns = Math.Max(1, (ClientWidth - 1) /
 					(GameSettings.TILE_SIZE + spacing));
-				size.X = ClientSize.Width;
+				size.X = ClientWidth;
 				size.Y = 1 + ((source.TileList.Count + columns - 1) / columns) *
 					(GameSettings.TILE_SIZE + spacing);
 			}
@@ -259,7 +258,7 @@ namespace ZeldaEditor.WinForms {
 				// Draw the list of tiles
 				int startRow = (ScrollPosition.Y + 1) / (GameSettings.TILE_SIZE + spacing);
 				int startIndex = startRow * columns;
-				int endRow = (ScrollPosition.Y + ClientSize.Height + 1 +
+				int endRow = (ScrollPosition.Y + ClientHeight + 1 +
 					GameSettings.TILE_SIZE) / (GameSettings.TILE_SIZE + spacing);
 				int endIndex = (endRow + 1) * columns;
 				for (int i = startIndex; i < endIndex &&
@@ -386,7 +385,7 @@ namespace ZeldaEditor.WinForms {
 			}
 		}
 
-		public Point2I ScrollPosition {
+		/*public Point2I ScrollPosition {
 			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
 			set {
 				AutoScrollPosition = new System.Drawing.Point(
@@ -394,7 +393,7 @@ namespace ZeldaEditor.WinForms {
 					GMath.Clamp(value.Y, VerticalScroll.Minimum, VerticalScroll.Maximum)
 				);
 			}
-		}
+		}*/
 
 		public int Spacing {
 			get { return spacing; }

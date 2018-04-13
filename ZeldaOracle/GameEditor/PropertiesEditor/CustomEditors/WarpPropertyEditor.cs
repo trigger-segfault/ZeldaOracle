@@ -12,6 +12,7 @@ using ZeldaEditor.Control;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class WarpPropertyEditor : ComboBoxEditor {

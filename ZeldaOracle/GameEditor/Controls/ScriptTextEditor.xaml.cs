@@ -19,11 +19,13 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using RoslynPad.Editor;
 using ZeldaEditor.Scripting;
-using ZeldaEditor.Util;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaEditor.Themes;
 using Trigger = ZeldaOracle.Common.Scripting.Trigger;
 using System.ComponentModel;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.Controls {
 	/// <summary>
@@ -139,10 +141,9 @@ namespace ZeldaEditor.Controls {
 			suppressEvents = true;
 			{
 				// Create the document for the Roslyn host
-				string workingDirectory = Path.GetDirectoryName(
-					Assembly.GetEntryAssembly().Location);
-				documentID = editor.Initialize(host, new ClassificationHighlightColors(),
-					workingDirectory, "");
+				documentID = editor.Initialize(host,
+					new ClassificationHighlightColors(),
+					PathHelper.ExeDirectory, "");
 			
 				// Disable automatic brace completion
 				FieldInfo fieldInfo = editor.GetType().GetField(

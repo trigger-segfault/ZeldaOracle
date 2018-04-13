@@ -4,17 +4,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
+using Microsoft.Win32;
 using ConscriptDesigner.Anchorables;
 using ConscriptDesigner.Content;
-using ConscriptDesigner.Util;
 using ConscriptDesigner.Windows;
-using Microsoft.Win32;
 using ZeldaOracle.Common.Conscripts;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
@@ -26,6 +23,8 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Util;
+using ZeldaWpf.Windows;
 
 namespace ConscriptDesigner.Control {
 	public static class DesignerControl {
@@ -42,8 +41,6 @@ namespace ConscriptDesigner.Control {
 		private static Thread busyThread;
 		private static bool busyTaskIsConscripts;
 		private static ConscriptReaderException lastScriptError;
-		private static StoppableTimer updateTimer;
-		private static StoppableTimer modifiedTimer;
 		private static List<IRequestCloseAnchorable> openAnchorables;
 		private static List<IRequestCloseAnchorable> closingAnchorables;
 
@@ -83,18 +80,10 @@ namespace ConscriptDesigner.Control {
 			};
 			openAnchorables = new List<IRequestCloseAnchorable>();
 			closingAnchorables = new List<IRequestCloseAnchorable>();
-			updateTimer = StoppableTimer.StartNew(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.Render,
-				Update);
-			modifiedTimer = StoppableTimer.StartNew(
-				TimeSpan.FromSeconds(3),
-				DispatcherPriority.ApplicationIdle,
-				delegate { CheckForOutdatedFiles(); });
-			/*updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
-			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
-			animationTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
-			*/
+			ContinuousEvents.Start(0.05, TimerPriority.High, Update);
+			ContinuousEvents.Start(3, TimerPriority.Low,
+				() => { CheckForOutdatedFiles(); });
+			
 			previewZone = null;
 			previewZoneID = "default";
 			previewZones = new ObservableCollection<string>();
@@ -196,8 +185,7 @@ namespace ConscriptDesigner.Control {
 		private static void LoadResources() {
 			LoadPreviewZones();
 			LoadPalettes();
-			if (ResourcesLoaded != null)
-				ResourcesLoaded(null, EventArgs.Empty);
+			ResourcesLoaded?.Invoke(null, EventArgs.Empty);
 		}
 
 		private static void UnloadResources() {
@@ -219,8 +207,7 @@ namespace ConscriptDesigner.Control {
 						lastScriptError = busyTask.Result;
 					busyTask = null;
 					busyThread = null;
-					if (FinishedBuilding != null)
-						FinishedBuilding(null, EventArgs.Empty);
+					FinishedBuilding?.Invoke(null, EventArgs.Empty);
 					if (busyTaskIsConscripts)
 						LoadResources();
 					CommandManager.InvalidateRequerySuggested();
@@ -387,7 +374,8 @@ namespace ConscriptDesigner.Control {
 				}
 				UpdateContentFolder(project);
 				Console.WriteLine("----------------------------------------------------------------");
-				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
+				Console.WriteLine("Finished! Duration: {0} ms",
+					watch.ElapsedMilliseconds);
 			}
 			catch (ThreadAbortException) { }
 			catch (Exception ex) {
@@ -398,8 +386,6 @@ namespace ConscriptDesigner.Control {
 		}
 
 		private static ConscriptReaderException RunConscriptsTask() {
-			//if (mainWindow.OutputConsole != null)
-			//	mainWindow.OutputConsole.SetOut();
 			busyThread = Thread.CurrentThread;
 			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
 			Clear();
@@ -419,12 +405,9 @@ namespace ConscriptDesigner.Control {
 				rewardManager = new RewardManager(inventory);
 				rewardManager.Initialize();
 
-				//Console.WriteLine("Loading Rewards");
-				//rewardManager = new RewardManager(null);
-				//GameData.LoadRewards(rewardManager);
-
 				Console.WriteLine("----------------------------------------------------------------");
-				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
+				Console.WriteLine("Finished! Duration: {0} ms",
+					watch.ElapsedMilliseconds);
 			}
 			catch (ThreadAbortException) { }
 			catch (ConscriptReaderException ex) {
@@ -546,8 +529,7 @@ namespace ConscriptDesigner.Control {
 		//-----------------------------------------------------------------------------
 
 		public static void InvalidatePreview() {
-			if (PreviewInvalidated != null)
-				PreviewInvalidated(null, EventArgs.Empty);
+			PreviewInvalidated?.Invoke(null, EventArgs.Empty);
 		}
 
 		public static bool RequestSaveAll(out bool errorOccurred) {
@@ -613,37 +595,37 @@ namespace ConscriptDesigner.Control {
 
 		public static void Undo() {
 			var anchorable = GetActiveCommandAnchorable();
-			if (anchorable != null) anchorable.Undo();
+			anchorable?.Undo();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Redo() {
 			var anchorable = GetActiveCommandAnchorable();
-			if (anchorable != null) anchorable.Redo();
+			anchorable?.Redo();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Cut() {
 			var anchorable = GetActiveCommandAnchorable();
-			if (anchorable != null) anchorable.Cut();
+			anchorable?.Cut();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Copy() {
 			var anchorable = GetActiveCommandAnchorable();
-			if (anchorable != null) anchorable.Copy();
+			anchorable?.Copy();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Paste() {
 			var anchorable = GetActiveCommandAnchorable();
-			if (anchorable != null) anchorable.Paste();
+			anchorable?.Paste();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Delete() {
 			var anchorable = GetActiveCommandAnchorable();
-			if (anchorable != null) anchorable.Delete();
+			anchorable?.Delete();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -662,16 +644,12 @@ namespace ConscriptDesigner.Control {
 					while (openAnchorables.Any()) {
 						openAnchorables[0].ForceClose();
 					}
-					if (mainWindow.OutputConsole != null)
-						mainWindow.OutputConsole.Clear();
-					if (mainWindow.ProjectExplorer != null)
-						mainWindow.ProjectExplorer.Clear();
+					mainWindow.OutputConsole?.Clear();
+					mainWindow.ProjectExplorer?.Clear();
 					project.Cleanup();
 					project = null;
-					if (ResourcesUnloaded != null)
-						ResourcesUnloaded(null, EventArgs.Empty);
-					if (ProjectClosed != null)
-						ProjectClosed(null, EventArgs.Empty);
+					ResourcesUnloaded?.Invoke(null, EventArgs.Empty);
+					ProjectClosed?.Invoke(null, EventArgs.Empty);
 					Resources.Unload();
 					selectedTileset = null;
 					selectedTileData = null;
@@ -693,8 +671,7 @@ namespace ConscriptDesigner.Control {
 				newProject.LoadContentProject(path);
 				project = newProject;
 				//mainWindow.LoadLayout();
-				if (ProjectOpened != null)
-					ProjectOpened(null, EventArgs.Empty);
+				ProjectOpened?.Invoke(null, EventArgs.Empty);
 				if (!ProjectUserSettings.Load()) {
 					mainWindow.OpenOutputConsole();
 					mainWindow.OpenProjectExplorer();
@@ -769,8 +746,7 @@ namespace ConscriptDesigner.Control {
 		public static void RunConscripts() {
 			if (busyTask == null) {
 				busyTaskIsConscripts = true;
-				if (ResourcesUnloaded != null)
-					ResourcesUnloaded(null, EventArgs.Empty);
+				ResourcesUnloaded?.Invoke(null, EventArgs.Empty);
 				UnloadResources();
 				busyTask = Task.Run(() => RunConscriptsTask());
 				CommandManager.InvalidateRequerySuggested();
@@ -824,8 +800,7 @@ namespace ConscriptDesigner.Control {
 
 		public static void RestartAnimations() {
 			animationWatch.Restart();
-			if (PreviewInvalidated != null)
-				PreviewInvalidated(null, EventArgs.Empty);
+			PreviewInvalidated?.Invoke(null, EventArgs.Empty);
 		}
 
 		public static void LaunchGame() {
@@ -862,42 +837,42 @@ namespace ConscriptDesigner.Control {
 		public static bool CanUndo {
 			get {
 				var content = GetActiveContentFile();
-				return (content != null ? content.CanUndo : false);
+				return (content?.CanUndo ?? false);
 			}
 		}
 
 		public static bool CanRedo {
 			get {
 				var content = GetActiveContentFile();
-				return (content != null ? content.CanRedo : false);
+				return (content?.CanRedo ?? false);
 			}
 		}
 
 		public static bool CanCut {
 			get {
 				var anchorable = GetActiveCommandAnchorable();
-				return (anchorable != null ? anchorable.CanCut : false);
+				return (anchorable?.CanCut ?? false);
 			}
 		}
 
 		public static bool CanCopy {
 			get {
 				var anchorable = GetActiveCommandAnchorable();
-				return (anchorable != null ? anchorable.CanCopy : false);
+				return (anchorable?.CanCopy ?? false);
 			}
 		}
 
 		public static bool CanPaste {
 			get {
 				var anchorable = GetActiveCommandAnchorable();
-				return (anchorable != null ? anchorable.CanPaste : false);
+				return (anchorable?.CanPaste ?? false);
 			}
 		}
 
 		public static bool CanDelete {
 			get {
 				var anchorable = GetActiveCommandAnchorable();
-				return (anchorable != null ? anchorable.CanDelete : false);
+				return (anchorable?.CanDelete ?? false);
 			}
 		}
 
@@ -907,10 +882,7 @@ namespace ConscriptDesigner.Control {
 		//-----------------------------------------------------------------------------
 
 		public static string DesignerContentDirectory {
-			get {
-				return Path.Combine(Path.GetDirectoryName(
-				Assembly.GetExecutingAssembly().Location), Resources.RootDirectory);
-			}
+			get { return PathHelper.CombineExecutable(Resources.RootDirectory); }
 		}
 
 		public static MainWindow MainWindow {
@@ -959,8 +931,7 @@ namespace ConscriptDesigner.Control {
 				if (previewZoneID != value && value != null) {
 					previewZoneID = value;
 					previewZone = Resources.Get<Zone>(previewZoneID);
-					if (PreviewInvalidated != null)
-						PreviewInvalidated(null, EventArgs.Empty);
+					PreviewInvalidated?.Invoke(null, EventArgs.Empty);
 				}
 			}
 		}
@@ -981,8 +952,7 @@ namespace ConscriptDesigner.Control {
 					previewTilePalette = Resources.Get<Palette>(previewTilePaletteID);
 					if (previewTilePalette != null && previewTilePalette.PaletteType != PaletteTypes.Tile)
 						previewTilePalette = null;
-					if (PreviewInvalidated != null)
-						PreviewInvalidated(null, EventArgs.Empty);
+					PreviewInvalidated?.Invoke(null, EventArgs.Empty);
 				}
 			}
 		}
@@ -1009,8 +979,7 @@ namespace ConscriptDesigner.Control {
 					previewEntityPalette = Resources.Get<Palette>(previewEntityPaletteID);
 					if (previewEntityPalette != null && previewEntityPalette.PaletteType != PaletteTypes.Entity)
 						previewEntityPalette = null;
-					if (PreviewInvalidated != null)
-						PreviewInvalidated(null, EventArgs.Empty);
+					PreviewInvalidated?.Invoke(null, EventArgs.Empty);
 				}
 			}
 		}
@@ -1030,8 +999,7 @@ namespace ConscriptDesigner.Control {
 					playAnimations = value;
 					if (value)
 						animationWatch.Restart();
-					else if (PreviewInvalidated != null)
-						PreviewInvalidated(null, EventArgs.Empty);
+					PreviewInvalidated?.Invoke(null, EventArgs.Empty);
 				}
 			}
 		}
@@ -1049,8 +1017,7 @@ namespace ConscriptDesigner.Control {
 			set {
 				if (previewScale != value) {
 					previewScale = value;
-					if (PreviewScaleChanged != null)
-						PreviewScaleChanged(null, EventArgs.Empty);
+					PreviewScaleChanged?.Invoke(null, EventArgs.Empty);
 				}
 			}
 		}
@@ -1073,6 +1040,16 @@ namespace ConscriptDesigner.Control {
 		public static bool IsActive {
 			get { return isActive; }
 			set { isActive = value; }
+		}
+
+		/// <summary>Gets the continuous events for the main window.</summary>
+		public static ContinuousEvents ContinuousEvents {
+			get { return mainWindow.ContinuousEvents; }
+		}
+
+		/// <summary>Gets the scheduled events for the main window.</summary>
+		public static ScheduledEvents ScheduledEvents {
+			get { return mainWindow.ScheduledEvents; }
 		}
 	}
 }

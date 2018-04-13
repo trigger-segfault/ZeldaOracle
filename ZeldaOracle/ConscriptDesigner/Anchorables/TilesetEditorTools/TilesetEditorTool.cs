@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Worlds;
 using System.IO;
 using System.Reflection;
 using System.Resources;
-using ConscriptDesigner.Util;
+//using ConscriptDesigner.Util;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.ActionTiles;
@@ -44,7 +44,7 @@ namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		protected static Cursor LoadCursor(string name) {
+		/*protected static Cursor LoadCursor(string name) {
 			int retryCount = 0;
 			while (retryCount < 4) {
 				try {
@@ -72,7 +72,7 @@ namespace ConscriptDesigner.Anchorables.TilesetEditorTools {
 				}
 			}
 			return null;
-		}
+		}*/
 
 		protected void StopDragging() {
 			isDragging = false;

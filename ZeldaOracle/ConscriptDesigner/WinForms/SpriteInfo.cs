@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZeldaOracle.Common.Geometry;
+﻿using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ConscriptDesigner.WinForms {
@@ -23,10 +18,10 @@ namespace ConscriptDesigner.WinForms {
 		}
 
 		public SpriteInfo(string spriteName, ISprite sprite, int substripIndex = 0) {
-			this.Name = spriteName;
-			this.Sprite = sprite;
-			this.Bounds = this.Sprite.Bounds;
-			this.SubstripIndex = substripIndex;
+			Name = spriteName;
+			Sprite = sprite;
+			Bounds = sprite.Bounds;
+			SubstripIndex = substripIndex;
 		}
 	}
 }

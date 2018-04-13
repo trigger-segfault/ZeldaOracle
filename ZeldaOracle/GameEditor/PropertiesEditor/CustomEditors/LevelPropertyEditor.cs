@@ -19,6 +19,7 @@ using System.Collections;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using System.Windows.Data;
 using System.Windows;
+using ZeldaWpf.Controls;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 

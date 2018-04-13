@@ -14,11 +14,12 @@ using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Graphics;
 using System.Windows.Input;
 using Cursor = System.Windows.Forms.Cursor;
+using ZeldaWpf.Resources;
 
 namespace ZeldaEditor.Tools {
 	public class ToolFill : EditorTool {
 
-		private static readonly Cursor FillCursor = LoadCursor("Fill");
+		private static readonly Cursor FillCursor = WpfCursors.Fill;//LoadCursor("Fill");
 
 		private ActionPlace action;
 

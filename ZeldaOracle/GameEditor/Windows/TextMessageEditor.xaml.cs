@@ -1,27 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Xml;
 using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ZeldaOracle.Common.Translation;
 using ZeldaEditor.Control;
 using ZeldaEditor.Controls;
 using ZeldaEditor.Themes;
 using ZeldaEditor.WinForms;
-using ZeldaOracle.Common.Translation;
-using ZeldaOracle.Common.Util;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>
@@ -54,7 +40,7 @@ namespace ZeldaEditor.Windows {
 
 			// Create the text display
 			string displayMessage = FormatCodes.EscapeMessage(message);
-			textDisplay                = new TextMessageDisplay(this, displayMessage);
+			textDisplay                = new TextMessageDisplay(displayMessage);
 			textDisplay.EditorControl  = editorControl;
 			textDisplay.Name           = "textDisplay";
 			textDisplay.Dock           = System.Windows.Forms.DockStyle.Fill;

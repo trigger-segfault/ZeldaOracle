@@ -306,12 +306,13 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_COLOR_FLAME_YELLOW;
 		public static Animation[] ANIM_EFFECT_SEEDS;
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Animations Loading
 		//-----------------------------------------------------------------------------
 
-		public static void LoadAnimations() {
+		/// <summary>Manually loads animations.</summary>
+		private static void LoadAnimations() {
 			// Create gale effect animation.
 			/*ANIM_EFFECT_SEED_GALE = new Animation();
 			for (int i = 0; i < 12; i++) {

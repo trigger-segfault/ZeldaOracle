@@ -6,7 +6,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Control;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ZeldaEditor.Util;
+using ZeldaWpf.Util;
 using ZeldaEditor.Controls;
 using System.Windows.Input;
 using System.Windows;
@@ -15,6 +15,8 @@ using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaEditor.WinForms;
+using ZeldaWpf.Controls;
+using ZeldaWpf.WinForms;
 
 namespace ZeldaEditor.TreeViews {
 	
@@ -324,11 +326,11 @@ namespace ZeldaEditor.TreeViews {
 			}
 			if (refreshEvents) {
 				if (internalScriptsNode == null)
-					internalScriptsNode = new FolderTreeViewItem("Events", false);
+					internalScriptsNode = new FolderBlueVTreeViewItem("Events", false);
 				internalScriptsNode.Items.Clear();
 				
-				TreeViewItem newCustomScriptWorldNode = new FolderTreeViewItem("World", IsNodeExpanded(customScriptWorldNode));
-				TreeViewItem newCustomScriptAreaNode = new FolderTreeViewItem("Areas", IsNodeExpanded(customScriptAreaNode));
+				TreeViewItem newCustomScriptWorldNode = new FolderBlueVTreeViewItem("World", IsNodeExpanded(customScriptWorldNode));
+				TreeViewItem newCustomScriptAreaNode = new FolderBlueVTreeViewItem("Areas", IsNodeExpanded(customScriptAreaNode));
 				Dictionary<string, TreeViewItem> newCustomScriptLevelNodes = new Dictionary<string, TreeViewItem>();
 
 				foreach (Event evnt in editorControl.EventCache) {
@@ -353,7 +355,7 @@ namespace ZeldaEditor.TreeViews {
 						if (!newCustomScriptLevelNodes.ContainsKey(level)) {
 							TreeViewItem previous;
 							customScriptLevelNodes.TryGetValue(level, out previous);
-							newCustomScriptLevelNodes.Add(level, new FolderTreeViewItem(
+							newCustomScriptLevelNodes.Add(level, new FolderBlueVTreeViewItem(
 								"Level '" + level + "'", IsNodeExpanded(previous)));
 						}
 						newCustomScriptLevelNodes[level].Items.Add(eventNode);

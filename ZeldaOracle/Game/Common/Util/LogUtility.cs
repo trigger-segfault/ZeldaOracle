@@ -120,7 +120,7 @@ namespace ZeldaOracle.Common.Util {
 
 
 	public static class Logs {
-		public static LoggingSystem LoggingSystem { get; set; }  = null;
+		public static LoggingSystem LoggingSystem { get; set; } = null;
 
 		public static Logger Initialization { get; set; }
 		public static Logger Scripts { get; set; }

@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 using System.Xml;
 using ConscriptDesigner.Control;
-using ConscriptDesigner.Util;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Anchorables {
 	public class OutputConsole : RequestCloseAnchorable {
@@ -63,8 +59,6 @@ namespace ConscriptDesigner.Anchorables {
 		private ScrollViewer scrollViewer;
 		/// <summary>The stack panel for each line of text.</summary>
 		private VirtualizingStackPanel stackPanel;
-		/// <summary>The timer to flush the buffer.</summary>
-		private StoppableTimer updateTimer;
 		/// <summary>The buffer for the text to be added to the output console.</summary>
 		private string buffer;
 		/// <summary>True if the console should be cleared during flush.</summary>
@@ -97,15 +91,7 @@ namespace ConscriptDesigner.Anchorables {
 
 			buffer = "";
 			requestClear = false;
-			updateTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(20),
-				DispatcherPriority.Render,
-				UpdateTimer);
-			/*updateTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(20),
-				DispatcherPriority.Render,
-				delegate { UpdateTimer(); },
-				Application.Current.Dispatcher);*/
+			ContinuousEvents.Start(0.02, TimerPriority.High, UpdateTimer);
 
 			Closed += OnAnchorableClosed;
 			AppendLine("");

@@ -7,13 +7,13 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Resize Tileset" Height="136" Width="258" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="/ConscriptDesigner;component/Resources/Icons/TilesetResize.png" Background="#FFF0F0F0" WindowStyle="ToolWindow" SnapsToDevicePixels="True" UseLayoutRounding="True">
-    <Grid>
-        <Label Content="Width:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,7,0,0" Width="68" HorizontalContentAlignment="Right"/>
-        <xctk:IntegerUpDown x:Name="spinnerWidth" Value="8" Minimum="1" Maximum="32" VerticalAlignment="Top" Margin="83,10,10,0"/>
-        <Label Content="Height:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,33,0,0" Width="68" HorizontalContentAlignment="Right"/>
-        <xctk:IntegerUpDown x:Name="spinnerHeight" Value="8" Minimum="1" Maximum="64" VerticalAlignment="Top" Margin="83,36,10,0"/>
-        
-        <Button Content="Resize" IsDefault="True" Margin="0,0,97,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnResize"/>
-        <Button Content="Cancel" IsCancel="True" Margin="0,0,10,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-    </Grid>
+  <Grid>
+    <Label Content="Width:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,7,0,0" Width="68" HorizontalContentAlignment="Right"/>
+    <xctk:IntegerUpDown x:Name="spinnerWidth" Value="8" Minimum="1" Maximum="32" VerticalAlignment="Top" Margin="83,10,10,0"/>
+    <Label Content="Height:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,33,0,0" Width="68" HorizontalContentAlignment="Right"/>
+    <xctk:IntegerUpDown x:Name="spinnerHeight" Value="8" Minimum="1" Maximum="64" VerticalAlignment="Top" Margin="83,36,10,0"/>
+
+    <Button Content="Resize" IsDefault="True" Margin="0,0,97,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnResize"/>
+    <Button Content="Cancel" IsCancel="True" Margin="0,0,10,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+  </Grid>
 </Window>

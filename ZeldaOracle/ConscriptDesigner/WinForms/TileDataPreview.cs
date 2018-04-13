@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Size = System.Drawing.Size;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
-using System.Windows.Threading;
-using System.Diagnostics;
 using ZeldaOracle.Game.Tiles;
 using ConscriptDesigner.Control;
 using ZeldaOracle.Game.Worlds;
@@ -83,7 +76,7 @@ namespace ConscriptDesigner.WinForms {
 			
 			int startRow = (UnscaledScrollPosition.Y + 1) / (GameSettings.TILE_SIZE + 1);
 			int startIndex = startRow * columns;
-			int endRow = (UnscaledScrollPosition.Y + ClientSize.Height + 1 + GameSettings.TILE_SIZE) / (GameSettings.TILE_SIZE + 1);
+			int endRow = (UnscaledScrollPosition.Y + ClientHeight + 1 + GameSettings.TILE_SIZE) / (GameSettings.TILE_SIZE + 1);
 			int endIndex = (endRow + 1) * columns;
 			for (int i = startIndex; i < endIndex && i < tileData.Count; i++) {
 				BaseTileData tile = tileData[i];

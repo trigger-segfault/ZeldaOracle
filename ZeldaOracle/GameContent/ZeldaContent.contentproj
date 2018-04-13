@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
-    <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
+    <OutputPath>bin\$(Configuration)</OutputPath>
     <ContentRootDirectory>Content</ContentRootDirectory>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>

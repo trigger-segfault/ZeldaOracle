@@ -1,10 +1,6 @@
 ﻿using System.Windows;
-using ZeldaEditor.Control;
-using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Scripting;
-using ZeldaEditor.WinForms;
-using ZeldaOracle.Game.Worlds;
-using System.Windows.Input;
+using ZeldaEditor.Control;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>

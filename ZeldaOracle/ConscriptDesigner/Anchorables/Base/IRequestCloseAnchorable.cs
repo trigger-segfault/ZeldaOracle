@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ConscriptDesigner.Anchorables {
 	/// <summary>An interface for an anchorable or document
 	/// that requests close without closing.</summary>

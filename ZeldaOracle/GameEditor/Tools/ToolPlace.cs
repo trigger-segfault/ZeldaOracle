@@ -15,11 +15,12 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaEditor.Control;
 using System.Windows.Input;
 using Cursor = System.Windows.Forms.Cursor;
+using ZeldaWpf.Resources;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPlace : EditorTool {
 
-		private static readonly Cursor PencilCursor = LoadCursor("Pencil");
+		private static readonly Cursor PencilCursor = WpfCursors.Pencil;//LoadCursor("Pencil");
 
 		private ActionPlace tileAction;
 

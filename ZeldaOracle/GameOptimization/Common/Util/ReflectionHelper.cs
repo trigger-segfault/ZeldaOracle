@@ -322,7 +322,7 @@ namespace ZeldaOracle.Common.Util {
 
 
 		//-----------------------------------------------------------------------------
-		// Is Browsable
+		// Attributes
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Returns true if the member info is browsable.</summary>
@@ -342,6 +342,16 @@ namespace ZeldaOracle.Common.Util {
 			if (member != null)
 				return member.IsBrowsable();
 			return false;
+		}
+
+		/// <summary>Gets if the member info has the specified attribute.</summary>
+		public static bool HasAttribute<A>(this MemberInfo info) where A : Attribute {
+			return info.GetCustomAttribute<A>() != null;
+		}
+
+		/// <summary>Gets if the member info has the specified attribute.</summary>
+		public static bool HasAttribute(this MemberInfo info, Type attributeType) {
+			return info.GetCustomAttribute(attributeType) != null;
 		}
 
 

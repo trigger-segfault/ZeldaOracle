@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using ConscriptDesigner.Controls;
-using IOPath = System.IO.Path;
-using ConscriptDesigner.Control;
 using System.ComponentModel;
-using ConscriptDesigner.Util;
+using System.Windows.Controls;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.Content {
 	public class ContentFolder : ContentFile, IComparable {
@@ -26,7 +20,7 @@ namespace ConscriptDesigner.Content {
 			base(name)
 		{
 			this.files = new Dictionary<string, ContentFile>(StringComparer.OrdinalIgnoreCase);
-			TreeViewItem = new FolderTreeViewItem(name, false);
+			TreeViewItem = new FolderManillaVTreeViewItem(name, false);
 			XmlInfo.ElementName = "Folder";
 		}
 

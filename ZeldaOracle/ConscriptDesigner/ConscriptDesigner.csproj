@@ -16,30 +16,31 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Conscript.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -121,7 +122,6 @@
     <Compile Include="Anchorables\TilesetEditorTools\ToolPlace.cs" />
     <Compile Include="Anchorables\TilesetEditorTools\ToolSelection.cs" />
     <Compile Include="Themes\Highlighting.cs" />
-    <Compile Include="Util\StoppableTimer.cs" />
     <Compile Include="Windows\ResizeTilesetWindow.xaml.cs">
       <DependentUpon>ResizeTilesetWindow.xaml</DependentUpon>
     </Compile>
@@ -134,14 +134,6 @@
     <Compile Include="Anchorables\StyleBrowserControl.xaml.cs">
       <DependentUpon>StyleBrowserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Anchorables\TileDataBrowser.cs" />
-    <Compile Include="Anchorables\TileDataBrowserControl.xaml.cs">
-      <DependentUpon>TileDataBrowserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Anchorables\TilesetBrowser.cs" />
-    <Compile Include="Anchorables\TilesetBrowserControl.xaml.cs">
-      <DependentUpon>TilesetBrowserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Commands.cs" />
     <Compile Include="ProjectUserSettings.cs" />
     <Compile Include="Content\ContentSpriteFont.cs" />
@@ -153,16 +145,7 @@
     <Compile Include="Content\Xnb\WavConverter.cs" />
     <Compile Include="Content\Xnb\XCompress.cs" />
     <Compile Include="Content\Xnb\XnbExtensions.cs" />
-    <Compile Include="Controls\DraggableImageTreeView.cs" />
-    <Compile Include="Controls\FolderTreeViewItem.cs" />
-    <Compile Include="Controls\TextEditing\ColorizeSearchResultsBackgroundRenderer.cs" />
-    <Compile Include="Controls\TextEditing\HighlightCurrentLineBackgroundRenderer.cs" />
-    <Compile Include="Controls\ImageButton.cs" />
-    <Compile Include="Controls\ImageMenuItem.cs" />
-    <Compile Include="Controls\ImageToggleButton.cs" />
-    <Compile Include="Controls\ImageTreeViewItem.cs" />
-    <Compile Include="Controls\TextEditing\NoIndentationStrategy.cs" />
-    <Compile Include="Controls\TreeViewLineConverter.cs" />
+    <Compile Include="Controls\TextEditing\SearchResultColorizer.cs" />
     <Compile Include="Content\ContentImage.cs" />
     <Compile Include="Content\ContentRoot.cs" />
     <Compile Include="Content\ContentScript.cs" />
@@ -171,14 +154,6 @@
     <Compile Include="Content\ContentFile.cs" />
     <Compile Include="Content\ContentFolder.cs" />
     <Compile Include="Control\DesignerImages.cs" />
-    <Compile Include="Util\AlphanumComparatorFast.cs" />
-    <Compile Include="Util\BitmapFactory.cs" />
-    <Compile Include="Util\ClipboardHelper.cs" />
-    <Compile Include="Util\Extensions.cs" />
-    <Compile Include="Util\NativeMethods.cs" />
-    <Compile Include="Windows\ErrorMessageBox.xaml.cs">
-      <DependentUpon>ErrorMessageBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\FindReplaceWindow.xaml.cs">
       <DependentUpon>FindReplaceWindow.xaml</DependentUpon>
     </Compile>
@@ -194,18 +169,6 @@
     <Compile Include="Windows\SaveChangesWindow.xaml.cs">
       <DependentUpon>SaveChangesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\TriggerMessageBox.xaml.cs">
-      <DependentUpon>TriggerMessageBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\DummyGraphicsDeviceControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WinForms\GraphicsDeviceControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WinForms\GraphicsDeviceService.cs" />
-    <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
-    <Compile Include="WinForms\ServiceContainer.cs" />
     <Compile Include="WinForms\SpritePreview.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -249,14 +212,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Anchorables\TileDataBrowserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Anchorables\TilesetBrowserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Anchorables\TilesetEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -273,18 +228,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Themes\DefaultStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ErrorMessageBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\FindReplaceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -308,10 +251,6 @@
     <Page Include="Windows\SaveChangesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\TriggerMessageBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -392,6 +331,10 @@
     <ProjectReference Include="..\GameEditor\ZeldaEditor.csproj">
       <Project>{ab05c473-9789-441a-b32f-e86154b91c09}</Project>
       <Name>ZeldaEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GameWpf\ZeldaWpf.csproj">
+      <Project>{f77b3ad6-b926-4a1d-8bad-c4d4aa3d6a3f}</Project>
+      <Name>ZeldaWpf</Name>
     </ProjectReference>
     <ProjectReference Include="..\Game\Zelda.csproj">
       <Project>{899daec0-cf01-4b30-a6e4-a0db613978bd}</Project>
@@ -505,6 +448,9 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\Merge.png" />
     <Resource Include="Resources\Icons\Overwrite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

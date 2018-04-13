@@ -1,50 +1,51 @@
-﻿<Window x:Class="ConscriptDesigner.Windows.PlaybackWindow"
+﻿<common:TimersWindow x:Class="ConscriptDesigner.Windows.PlaybackWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConscriptDesigner.Controls"
+        xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
         xmlns:cmd="clr-namespace:ConscriptDesigner"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Playback Window" Background="#FFF0F0F0" Icon="/ConscriptDesigner;component/Resources/Icons/SoundFile.png" ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" SizeToContent="WidthAndHeight" Closing="OnClosing" SnapsToDevicePixels="True" UseLayoutRounding="True">
-    <Window.CommandBindings>
-        <CommandBinding Command="cmd:Commands.EscapeClose" CanExecute="CanAlwaysExecute" Executed="OnEscapeCloseCommand"/>
-    </Window.CommandBindings>
-    <Grid Width="340" Height="90">
-        <Grid VerticalAlignment="Top" Margin="0,5,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="1.2*"/>
-            </Grid.ColumnDefinitions>
-            <Separator Height="20" VerticalAlignment="Top" Margin="10,0,0,0" />
-            <StackPanel Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0" Grid.Column="1">
-                <local:ImageToggleButton x:Name="toggleButtonLooping"  Source="/Resources/Icons/Loop.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="6,0,2,0" Click="OnLoopingChanged" ToolTip="Loop Mode"/>
-                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
-                <local:ImageToggleButton x:Name="toggleButtonStop" Source="/Resources/Icons/Stop.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="2,0,0,0" Click="OnStop" IsChecked="True" ToolTip="Stop sound playback"/>
-                <local:ImageToggleButton x:Name="toggleButtonPlay" Source="/Resources/Icons/Play.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="2,0,0,0" Click="OnPlay" ToolTip="Start sound playback"/>
-                <local:ImageToggleButton x:Name="toggleButtonPause" Source="/Resources/Icons/Pause.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="2,0,0,0" Click="OnPause" ToolTip="Pause sound playback"/>
-                <Label x:Name="labelPosition" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,6,0" Content="-:--.--/-:--.--" HorizontalContentAlignment="Right" Padding="0" VerticalContentAlignment="Center" Height="20" MinWidth="86" Width="Auto"/>
-            </StackPanel>
-            <Separator Height="20" VerticalAlignment="Top" Margin="0,0,10,0" Grid.Column="2" />
-        </Grid>
-
-        <Slider x:Name="sliderPosition" VerticalAlignment="Top" Margin="20,33,20,0" UseLayoutRounding="True" ValueChanged="OnPositionChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01" IsTabStop="False"/>
-
-        <Grid VerticalAlignment="Bottom" Margin="0,0,0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Separator Height="20" VerticalAlignment="Top" Margin="10,0,0,0" />
-            <StackPanel Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0" Grid.Column="1">
-
-                <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,0,6,0" Content="Volume:" HorizontalContentAlignment="Right" Padding="0" VerticalContentAlignment="Center" Height="20" Width="Auto"/>
-                <xctk:DoubleUpDown x:Name="spinnerVolume" Minimum="0" Value="1" VerticalAlignment="Bottom" Margin="0,0,6,0" HorizontalAlignment="Right" Width="80" Maximum="1" ValueChanged="OnVolumeChanged" Increment="0.05" FormatString="P0"/>
-            </StackPanel>
-            <Separator Height="20" VerticalAlignment="Top" Margin="0,0,10,0" Grid.Column="2" />
-        </Grid>
+  <common:TimersWindow.CommandBindings>
+    <CommandBinding Command="cmd:Commands.EscapeClose" CanExecute="CanAlwaysExecute" Executed="OnEscapeCloseCommand"/>
+  </common:TimersWindow.CommandBindings>
+  <Grid Width="340" Height="90">
+    <Grid VerticalAlignment="Top" Margin="0,5,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="1.2*"/>
+      </Grid.ColumnDefinitions>
+      <Separator Height="20" VerticalAlignment="Top" Margin="10,0,0,0" />
+      <StackPanel Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0" Grid.Column="1">
+        <common:ImageToggleButton x:Name="toggleButtonLooping"  Source="/Resources/Icons/Loop.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="6,0,2,0" Click="OnLoopingChanged" ToolTip="Loop Mode"/>
+        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+        <common:ImageToggleButton x:Name="toggleButtonStop" Source="/Resources/Icons/Stop.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="2,0,0,0" Click="OnStop" IsChecked="True" ToolTip="Stop sound playback"/>
+        <common:ImageToggleButton x:Name="toggleButtonPlay" Source="/Resources/Icons/Play.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="2,0,0,0" Click="OnPlay" ToolTip="Start sound playback"/>
+        <common:ImageToggleButton x:Name="toggleButtonPause" Source="/Resources/Icons/Pause.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Focusable="False" IsTabStop="False" Height="20" Padding="0" Margin="2,0,0,0" Click="OnPause" ToolTip="Pause sound playback"/>
+        <Label x:Name="labelPosition" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,6,0" Content="-:--.--/-:--.--" HorizontalContentAlignment="Right" Padding="0" VerticalContentAlignment="Center" Height="20" MinWidth="86" Width="Auto"/>
+      </StackPanel>
+      <Separator Height="20" VerticalAlignment="Top" Margin="0,0,10,0" Grid.Column="2" />
     </Grid>
-</Window>
+
+    <Slider x:Name="sliderPosition" VerticalAlignment="Top" Margin="20,33,20,0" UseLayoutRounding="True" ValueChanged="OnPositionChanged" Maximum="1" LargeChange="0.1" SmallChange="0.01" IsTabStop="False"/>
+
+    <Grid VerticalAlignment="Bottom" Margin="0,0,0,5">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Separator Height="20" VerticalAlignment="Top" Margin="10,0,0,0" />
+      <StackPanel Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0" Grid.Column="1">
+
+        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,0,6,0" Content="Volume:" HorizontalContentAlignment="Right" Padding="0" VerticalContentAlignment="Center" Height="20" Width="Auto"/>
+        <xctk:DoubleUpDown x:Name="spinnerVolume" Minimum="0" Value="1" VerticalAlignment="Bottom" Margin="0,0,6,0" HorizontalAlignment="Right" Width="80" Maximum="1" ValueChanged="OnVolumeChanged" Increment="0.05" FormatString="P0"/>
+      </StackPanel>
+      <Separator Height="20" VerticalAlignment="Top" Margin="0,0,10,0" Grid.Column="2" />
+    </Grid>
+  </Grid>
+</common:TimersWindow>

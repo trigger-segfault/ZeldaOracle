@@ -1,15 +1,16 @@
-﻿<local:TimersUserControl x:Class="ZeldaEditor.Controls.ScriptTextEditor"
+﻿<common:TimersUserControl x:Class="ZeldaEditor.Controls.ScriptTextEditor"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeldaEditor.Controls"
+             xmlns:common="clr-namespace:ZeldaWpf.Controls;assembly=ZeldaWpf"
              xmlns:roslyn="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <roslyn:RoslynCodeEditor x:Name="editor">
-        <roslyn:RoslynCodeEditor.Resources>
-            <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
-        </roslyn:RoslynCodeEditor.Resources>
-    </roslyn:RoslynCodeEditor>
-</local:TimersUserControl>
+  <roslyn:RoslynCodeEditor x:Name="editor">
+    <roslyn:RoslynCodeEditor.Resources>
+      <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>
+    </roslyn:RoslynCodeEditor.Resources>
+  </roslyn:RoslynCodeEditor>
+</common:TimersUserControl>

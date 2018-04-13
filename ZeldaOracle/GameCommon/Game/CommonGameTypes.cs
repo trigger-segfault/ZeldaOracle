@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,9 @@ namespace ZeldaOracle.Game {
 		Yellow,
 		/// <summary>Blue puzzle color.</summary>
 		Blue,
+		/// <summary>The number of puzzle colors.</summary>
+		[Browsable(false)]
+		Count,
 	}
 
 	/// <summary>The states of a dungeon door.</summary>

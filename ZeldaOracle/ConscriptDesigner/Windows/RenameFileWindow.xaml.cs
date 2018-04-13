@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using ConscriptDesigner.Content;
-using System.IO;
 using ZeldaOracle.Common.Util;
+using ZeldaWpf.Windows;
 
 namespace ConscriptDesigner.Windows {
 	/// <summary>

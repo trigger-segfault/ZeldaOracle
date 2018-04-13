@@ -1,27 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Media;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Rendering;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Control;
 using ConscriptDesigner.Controls.TextEditing;
-using ConscriptDesigner.Util;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Rendering;
 using ZeldaOracle.Common.Util;
+using ZeldaWpf.Controls;
+using ZeldaWpf.Util;
+using ZeldaWpf.Windows;
 
 namespace ConscriptDesigner.Windows {
 
@@ -41,7 +34,7 @@ namespace ConscriptDesigner.Windows {
 	/// <summary>
 	/// Interaction logic for FindAndReplaceDialog.xaml
 	/// </summary>
-	public partial class FindReplaceWindow : Window {
+	public partial class FindReplaceWindow : TimersWindow {
 
 		//-----------------------------------------------------------------------------
 		// Classes
@@ -137,9 +130,9 @@ namespace ConscriptDesigner.Windows {
 		/// <summary>The current script being hooked into.</summary>
 		private ContentScript lastScript;
 		/// <summary>The colorizer for search results.</summary>
-		private ColorizeSearchResultsBackgroundRenderer searchColorizor;
+		private SearchResultColorizer searchColorizor;
 		/// <summary>Used as a hack to focus on the find text box after changing modes.</summary>
-		private StoppableTimer focusTimer;
+		private ScheduledEvent focusTimer;
 
 		private bool suppressEvents;
 
@@ -163,7 +156,7 @@ namespace ConscriptDesigner.Windows {
 			checkBoxLiveSearch.IsChecked = ProjectUserSettings.FindAndReplace.LiveSearch;
 			textBoxReplace.Text = lastReplaceText;
 
-			this.searchColorizor = new ColorizeSearchResultsBackgroundRenderer();
+			this.searchColorizor = new SearchResultColorizer();
 			this.regexError = false;
 
 			FindScopes[] scopes = (FindScopes[])Enum.GetValues(typeof(FindScopes));
@@ -180,27 +173,13 @@ namespace ConscriptDesigner.Windows {
 			if (comboBoxScope.SelectedIndex == -1)
 				comboBoxScope.SelectedIndex = 0;
 
-			focusTimer = StoppableTimer.Create(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
+			focusTimer = ScheduledEvents.New(0.05, TimerPriority.Normal,
+				() => {
 					if (tabControl.SelectedIndex == 0)
 						textBoxFind.Focus();
 					else
 						textBoxReplaceFind.Focus();
-					focusTimer.Stop();
 				});
-			/*focusTimer = new DispatcherTimer(
-				TimeSpan.FromSeconds(0.05),
-				DispatcherPriority.ApplicationIdle,
-				delegate {
-					if (tabControl.SelectedIndex == 0)
-						textBoxFind.Focus();
-					else
-						textBoxReplaceFind.Focus();
-					focusTimer.Stop();
-				}, Dispatcher);
-			focusTimer.Stop();*/
 
 			if (replace)
 				ReplaceMode();
@@ -238,7 +217,7 @@ namespace ConscriptDesigner.Windows {
 			tabControl.SelectedIndex = 0;
 			// HACK: Focus on the textbox after a split second.
 			// Otherwise the tabitem will steal focus.
-			focusTimer.Start();
+			focusTimer.Restart();
 
 			ContentScript script = ActiveScript;
 			if (script != null && script.IsOpen && script.TextEditor.SelectionLength > 0) {
@@ -251,7 +230,7 @@ namespace ConscriptDesigner.Windows {
 			tabControl.SelectedIndex = 1;
 			// HACK: Focus on the textbox after a split second.
 			// Otherwise the tabitem will steal focus.
-			focusTimer.Start();
+			focusTimer.Restart();
 
 			ContentScript script = ActiveScript;
 			if (script != null && script.IsOpen) {

@@ -15,7 +15,7 @@ using ZeldaEditor.PropertiesEditor;
 using ZeldaEditor.Tools;
 using ZeldaEditor.TreeViews;
 using ZeldaEditor.Undo;
-using ZeldaEditor.Util;
+using ZeldaWpf.Util;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Geometry;
@@ -23,7 +23,9 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaWpf.Controls;
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
+using ZeldaWpf.Windows;
 
 namespace ZeldaEditor {
 	/// <summary>
@@ -49,10 +51,6 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 
 		public EditorWindow() {
-			// Prevent System.Windows.Data Error: 4
-			PresentationTraceSources.DataBindingSource.Switch.Level =
-				SourceLevels.Critical;
-
 			InitializeComponent();
 			// Create the editor control instance.
 			editorControl = new EditorControl(this);
@@ -69,7 +67,7 @@ namespace ZeldaEditor {
 			//Closing += OnWindowClosing;
 
 			// Create the level display
-			levelDisplay					= new LevelDisplay(this);
+			levelDisplay					= new LevelDisplay();
 			levelDisplay.EditorControl		= editorControl;
 			levelDisplay.Name				= "levelDisplay";
 			levelDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;
@@ -83,8 +81,6 @@ namespace ZeldaEditor {
 			tilesetPalette.SelectionChanged += (object sender, EventArgs args) => {
 				editorControl.SelectedTileData = tilesetPalette.SelectedTileData;
 			};
-
-			dummyHost.Child = new DummyGraphicsDeviceControl();
 
 			statusTask.Content = "";
 
@@ -135,6 +131,12 @@ namespace ZeldaEditor {
 			tilesetPalette.Zones = ZeldaResources.GetDictionary<Zone>().Values;
 
 			UpdateCurrentTool();
+		}
+
+		private void OnGraphicsInitialized(object sender,
+			GraphicsInitializerEventArgs e)
+		{
+			ZeldaResources.Initialize(e.GraphicsDevice, e.Services);
 		}
 
 		// Prompt the user to save unsaved changes if there are any. Returns

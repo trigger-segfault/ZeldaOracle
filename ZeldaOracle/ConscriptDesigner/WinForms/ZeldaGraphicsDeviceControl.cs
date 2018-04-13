@@ -1,31 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using Size = System.Drawing.Size;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
-using System.Windows.Threading;
-using System.Diagnostics;
 using ZeldaOracle.Game.Worlds;
 using ConscriptDesigner.Control;
-using Microsoft.Xna.Framework.Graphics;
-using System.Windows.Forms;
-using ConscriptDesigner.Util;
+using ZeldaWpf.WinForms;
+using ZeldaWpf.Util;
 
 namespace ConscriptDesigner.WinForms {
 	
-	public class ZeldaGraphicsDeviceControl : GraphicsDeviceControl {
+	public class ZeldaGraphicsDeviceControl : TimersGraphicsDeviceControl {
 		
 		// Static
 		private static RenderTarget2D renderTarget;
 		private static Zone defaultZone;
-
-		private StoppableTimer dispatcherTimer;
 		
 		protected int columns;
 
@@ -67,15 +59,7 @@ namespace ConscriptDesigner.WinForms {
 
 			isInitialized = true;
 
-			this.dispatcherTimer = StoppableTimer.StartNew(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				TimerUpdate);
-			/*this.dispatcherTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate { TimerUpdate(); },
-				System.Windows.Application.Current.Dispatcher);*/
+			ContinuousEvents.StartRender(TimerUpdate);
 		}
 
 
@@ -91,6 +75,7 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void WndProc(ref Message m) {
+			// TODO: Document why this is needed
 			Point2I scrollPositionBefore = ScrollPosition;
 			base.WndProc(ref m);
 			// 0x115 and 0x20a both tell the control to scroll. If either one comes 
@@ -143,9 +128,11 @@ namespace ConscriptDesigner.WinForms {
 		private void OnPostReset(object sender, EventArgs e) {
 			if (isInitialized) {
 				Point2I oldRenderTargetSize = new Point2I(renderTarget.Width, renderTarget.Height);
-				Point2I newRenderTargetSize = GMath.Max(oldRenderTargetSize, new Point2I(ClientSize.Width, ClientSize.Height));
-				renderTarget.Dispose();
-				renderTarget = new RenderTarget2D(GraphicsDevice, newRenderTargetSize.X, newRenderTargetSize.Y);
+				Point2I newRenderTargetSize = GMath.Max(oldRenderTargetSize, ClientSize);
+				if (newRenderTargetSize != oldRenderTargetSize) {
+					renderTarget.Dispose();
+					renderTarget = new RenderTarget2D(GraphicsDevice, newRenderTargetSize.X, newRenderTargetSize.Y);
+				}
 				ScrollPosition = Point2I.Zero;
 			}
 		}
@@ -198,7 +185,7 @@ namespace ConscriptDesigner.WinForms {
 
 		protected void UpdateSize(Point2I newSize) {
 			newSize *= DesignerControl.PreviewScale;
-			AutoScrollMinSize = new Size(newSize.X, newSize.Y);
+			ScrollSize = newSize;
 			UpdateHoverSprite();
 			needsToInvalidate = true;
 		}
@@ -215,10 +202,6 @@ namespace ConscriptDesigner.WinForms {
 			Graphics2D g = new Graphics2D();
 
 			if (GameData.SHADER_PALETTE != null && !GameData.SHADER_PALETTE.Effect.IsDisposed) {
-				//GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
-				//GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
-				//if (zone.Palette != null)
-				//	GameData.PaletteShader.TilePalette = zone.Palette;
 				GameData.SHADER_PALETTE.TilePalette = DesignerControl.PreviewTilePalette;
 				GameData.SHADER_PALETTE.EntityPalette = DesignerControl.PreviewEntityPalette;
 				GameData.SHADER_PALETTE.ApplyParameters();
@@ -286,7 +269,7 @@ namespace ConscriptDesigner.WinForms {
 			get { return new Point2I(DesignerControl.PreviewScale); }
 		}
 
-		protected Point2I ScrollPosition {
+		/*protected Point2I ScrollPosition {
 			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
 			set {
 				AutoScrollPosition = new System.Drawing.Point(
@@ -294,14 +277,14 @@ namespace ConscriptDesigner.WinForms {
 					GMath.Clamp(value.Y, VerticalScroll.Minimum, VerticalScroll.Maximum)
 				);
 			}
-		}
+		}*/
 
 		protected Point2I UnscaledScrollPosition {
 			get { return ScrollPosition / DesignerControl.PreviewScale; }
 		}
 
 		protected Point2I UnscaledClientSize {
-			get { return new Point2I(ClientSize.Width, ClientSize.Height) / DesignerControl.PreviewScale; }
+			get { return ClientSize / DesignerControl.PreviewScale; }
 		}
 
 
