@@ -680,12 +680,12 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Gets the current render target.</summary>
 		public RenderTarget GetRenderTarget() {
-			return RenderTarget.Wrap(GraphicsDevice.GetRenderTarget());
+			return GraphicsDevice.GetRenderTarget();
 		}
 
 		/// <summary>Sets the render target to draw to.</summary>
 		public void SetRenderTarget(RenderTarget2D renderTarget) {
-			spriteBatch.GraphicsDevice.SetRenderTarget(renderTarget);
+			GraphicsDevice.SetRenderTarget(renderTarget);
 		}
 
 

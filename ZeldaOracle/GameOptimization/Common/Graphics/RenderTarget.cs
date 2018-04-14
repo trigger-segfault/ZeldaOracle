@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
@@ -16,53 +17,59 @@ namespace ZeldaOracle.Common.Graphics {
 		private RenderTarget() { }
 
 		/// <summary>Constructs an render target with the specified render target.</summary>
-		private RenderTarget(RenderTarget2D renderTarget) : base(renderTarget) { }
+		private RenderTarget(RenderTarget2D renderTarget, bool asContent = true)
+			: base(renderTarget, asContent) { }
 
 		/// <summary>Constructs an new render target with the specified size.</summary>
-		public RenderTarget(int width, int height)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height)) { }
+		public RenderTarget(int width, int height, bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height),
+				  asContent) { }
 
 		/// <summary>Constructs an new render target with the specified size.</summary>
-		public RenderTarget(Point2I size)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y)) { }
-
-		/// <summary>Constructs an new render target with the specified texture
-		/// information.</summary>
-		public RenderTarget(int width, int height, SurfaceFormat format)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height, false,
-				format, DepthFormat.None)) { }
-
-		/// <summary>Constructs an new render target with the specified texture
-		/// information.</summary>
-		public RenderTarget(Point2I size, SurfaceFormat format)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y, false,
-				format, DepthFormat.None)) { }
-
-		/// <summary>Constructs an new render target with the specified texture
-		/// information.</summary>
-		public RenderTarget(int width, int height, RenderTargetUsage usage)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height, false,
-				SurfaceFormat.Color, DepthFormat.None, 0, usage)) { }
-
-		/// <summary>Constructs an new render target with the specified texture
-		/// information.</summary>
-		public RenderTarget(Point2I size, RenderTargetUsage usage)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y, false,
-				SurfaceFormat.Color, DepthFormat.None, 0, usage)) { }
+		public RenderTarget(Point2I size, bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y),
+				  asContent) { }
 
 		/// <summary>Constructs an new render target with the specified texture
 		/// information.</summary>
 		public RenderTarget(int width, int height, SurfaceFormat format,
-			RenderTargetUsage usage)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height, false,
-				format, DepthFormat.None, 0, usage)) { }
+			bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height,
+				false, format, DepthFormat.None), asContent) { }
+
+		/// <summary>Constructs an new render target with the specified texture
+		/// information.</summary>
+		public RenderTarget(Point2I size, SurfaceFormat format, bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y,
+				false, format, DepthFormat.None), asContent) { }
+
+		/// <summary>Constructs an new render target with the specified texture
+		/// information.</summary>
+		public RenderTarget(int width, int height, RenderTargetUsage usage,
+			bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height,
+				false, SurfaceFormat.Color, DepthFormat.None, 0, usage), asContent) { }
+
+		/// <summary>Constructs an new render target with the specified texture
+		/// information.</summary>
+		public RenderTarget(Point2I size, RenderTargetUsage usage,
+			bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y,
+				false, SurfaceFormat.Color, DepthFormat.None, 0, usage), asContent) { }
+
+		/// <summary>Constructs an new render target with the specified texture
+		/// information.</summary>
+		public RenderTarget(int width, int height, SurfaceFormat format,
+			RenderTargetUsage usage, bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, width, height,
+				false, format, DepthFormat.None, 0, usage), asContent) { }
 
 		/// <summary>Constructs an new render target with the specified texture
 		/// information.</summary>
 		public RenderTarget(Point2I size, SurfaceFormat format,
-			RenderTargetUsage usage)
-			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y, false,
-				format, DepthFormat.None, 0, usage)) { }
+			RenderTargetUsage usage, bool asContent = true)
+			: base(new RenderTarget2D(ContentContainer.GraphicsDevice, size.X, size.Y,
+				false, format, DepthFormat.None, 0, usage), asContent) { }
 
 
 		//-----------------------------------------------------------------------------
@@ -77,6 +84,32 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Used to auto-convert RenderTargets into XNA Texture2Ds.</summary>
 		public static implicit operator Texture2D(RenderTarget renderTarget) {
 			return renderTarget.texture;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Resizing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Wraps a new render target of the specified size.</summary>
+		public void Resize(int width, int height) {
+			Resize(new Point2I(width, height));
+		}
+
+		/// <summary>Wraps a new render target of the specified size.</summary>
+		public void Resize(Point2I newSize) {
+			if (IsRootTarget)
+				throw new InvalidOperationException("Cannot resize root render " +
+					"target!");
+			if (Size != newSize) {
+				SurfaceFormat format = Format;
+				RenderTargetUsage usage = Usage;
+				Dispose();
+				texture = new RenderTarget2D(ContentContainer.GraphicsDevice,
+					newSize.X, newSize.Y, false, format, DepthFormat.None, 0, usage);
+				if (asContent)
+					ContentContainer.AddDisposable(texture);
+			}
 		}
 
 
@@ -105,62 +138,62 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public new static RenderTarget FromFile(string filePath,
-			bool premultiply = false)
+			bool premultiply = false, bool asContent = true)
 		{
 			using (Stream stream = File.OpenRead(filePath))
-				return FromStream(stream, premultiply);
+				return FromStream(stream, premultiply, asContent);
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public static RenderTarget FromFile(string filePath, RenderTargetUsage usage,
-			bool premultiply = false)
+			bool premultiply = false, bool asContent = true)
 		{
 			using (Stream stream = File.OpenRead(filePath))
-				return FromStream(stream, usage, premultiply);
+				return FromStream(stream, usage, premultiply, asContent);
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public new static RenderTarget FromStreamAndSize(Stream stream,
-			bool premultiply = false)
+			bool premultiply = false, bool asContent = true)
 		{
 			using (Stream memory = BinaryCounter.ReadStream(stream)) {
 				if (memory.Length == 0)
 					return null;
-				return FromStream(memory, premultiply);
+				return FromStream(memory, premultiply, asContent);
 			}
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public static RenderTarget FromStreamAndSize(Stream stream,
-			RenderTargetUsage usage, bool premultiply = false)
+			RenderTargetUsage usage, bool premultiply = false, bool asContent = true)
 		{
 			using (Stream memory = BinaryCounter.ReadStream(stream)) {
 				if (memory.Length == 0)
 					return null;
-				return FromStream(memory, usage, premultiply);
+				return FromStream(memory, usage, premultiply, asContent);
 			}
 		}
 
 		/// <summary>Loads the texture from the stream.</summary>
 		public new static RenderTarget FromStream(Stream stream,
-			bool premultiply = false)
+			bool premultiply = false, bool asContent = true)
 		{
 			RenderTarget2D target =
 				Texture2DHelper.FromStream<RenderTarget2D>(stream);
 			if (premultiply)
 				Texture2DHelper.PremultiplyAlpha(target);
-			return new RenderTarget(target);
+			return new RenderTarget(target, asContent);
 		}
 
 		/// <summary>Loads the texture from the stream.</summary>
 		public static RenderTarget FromStream(Stream stream, RenderTargetUsage usage,
-			bool premultiply = false)
+			bool premultiply = false, bool asContent = true)
 		{
 			RenderTarget2D target =
 				Texture2DHelper.FromStream<RenderTarget2D>(stream, usage);
 			if (premultiply)
 				Texture2DHelper.PremultiplyAlpha(target);
-			return new RenderTarget(target);
+			return new RenderTarget(target, asContent);
 		}
 
 
@@ -212,6 +245,11 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Gets if this target is referencing the root render target.</summary>
 		public bool IsRootTarget {
 			get { return texture == null; }
+		}
+
+		/// <summary>Gets how the render target is used.</summary>
+		public RenderTargetUsage Usage {
+			get { return RenderTarget2D.RenderTargetUsage; }
 		}
 	}
 }

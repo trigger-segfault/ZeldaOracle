@@ -15,7 +15,7 @@ namespace ConscriptDesigner.WinForms {
 	public class ZeldaUniqueGraphicsDeviceControl : TimersGraphicsDeviceControl {
 
 		// Static
-		private static RenderTarget2D renderTarget;
+		private static RenderTarget renderTarget;
 		private static Zone defaultZone;
 
 		protected int columns;
@@ -59,7 +59,7 @@ namespace ConscriptDesigner.WinForms {
 
 		protected override void Initialize() {
 			if (renderTarget == null)
-				renderTarget = new RenderTarget2D(GraphicsDevice, 1, 1);
+				renderTarget = new RenderTarget(Point2I.One, false);
 			if (defaultZone == null)
 				defaultZone = new Zone();
 
@@ -123,12 +123,8 @@ namespace ConscriptDesigner.WinForms {
 
 		private void OnPostReset(object sender, EventArgs e) {
 			if (isInitialized) {
-				Point2I oldRenderTargetSize = new Point2I(renderTarget.Width, renderTarget.Height);
-				Point2I newRenderTargetSize = GMath.Max(oldRenderTargetSize, UnscaledClientSize);
-				if (newRenderTargetSize != oldRenderTargetSize) {
-					renderTarget.Dispose();
-					renderTarget = new RenderTarget2D(GraphicsDevice, newRenderTargetSize.X, newRenderTargetSize.Y);
-				}
+				Point2I newSize = GMath.Max(renderTarget.Size, ClientSize);
+				renderTarget.Resize(newSize);
 				ScrollPosition = Point2I.Zero;
 			}
 		}
