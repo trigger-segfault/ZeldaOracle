@@ -34,7 +34,7 @@ namespace ZeldaOracle.Common.Graphics.Shaders {
 		public override void ApplyParameters() {
 			Color color = background.UnmappedColorSafe;
 			Parameters["Background"].SetValue(color.ToXnaVector4());
-			RenderTarget target = RenderTarget.Wrap(GraphicsDevice.GetRenderTarget());
+			RenderTarget target = GraphicsDevice.GetRenderTarget();
 			Parameters["TargetSize"].SetValue(target.Size.ToXnaVector2());
 		}
 

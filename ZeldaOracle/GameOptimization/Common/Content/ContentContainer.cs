@@ -40,6 +40,14 @@ namespace ZeldaOracle.Common.Content {
 			independentResources.Add(disposable);
 		}
 
+		/// <summary>Removes an independent resource that has been disposed of.</summary>
+		public static void RemoveDisposable(IDisposable disposable) {
+			if (!isInitialized)
+				throw new InvalidOperationException("Cannot remove disposable when " +
+					"ContentContainer has not been initialized!");
+			independentResources.Remove(disposable);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
