@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override bool OnPush(int direction, float movementSpeed) {
+		public override bool OnPush(Direction direction, float movementSpeed) {
 			Area dungeon = RoomControl.Area;
 
 			// Check if we have a small key to use.

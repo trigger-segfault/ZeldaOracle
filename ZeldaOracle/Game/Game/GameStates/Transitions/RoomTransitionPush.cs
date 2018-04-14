@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		
 		private int timer;
 		private int distance;
-		private int direction;
+		private Direction direction;
 		private int maxDistance;
 		private float playerSpeed;
 		private bool isWaitingForView;
@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Constructor
 		//-----------------------------------------------------------------------------
 		
-		public RoomTransitionPush(int direction) {
+		public RoomTransitionPush(Direction direction) {
 			this.direction = direction;
 		}
 		
@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			NewRoomControl.DisableVisualEffect = true;
 			OldRoomControl.DisableVisualEffect = true;
 
-			if (Directions.IsVertical(direction))
+			if (direction.IsVertical)
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
 		}
 
@@ -63,13 +63,12 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					// Convert the player's position from the old room to the
 					// new room
 					Vector2F playerPosInNewRoom = Player.Position -
-						(Directions.ToPoint(direction) *
-						NewRoomControl.RoomBounds.Size);
+						(direction.ToPoint() * NewRoomControl.RoomBounds.Size);
 
 					// Setup the new room while pretending the player is in his
 					// final position after transitioning
-					Vector2F totalMovement = Directions.ToVector(direction) *
-						(playerSpeed * ((float) maxDistance / TRANSITION_SPEED));
+					Vector2F totalMovement = direction.ToVector(
+						playerSpeed * ((float) maxDistance / TRANSITION_SPEED));
 					Player.Position = playerPosInNewRoom + totalMovement;
 					SetupNewRoom(false);
 
@@ -87,7 +86,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			// Update screen panning
 			if (timer > TRANSITION_DELAY) {
 				distance += TRANSITION_SPEED;
-				Player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
+				Player.Position += direction.ToVector(playerSpeed);
 				
 				// Check if we are done panning
 				if (distance >= maxDistance) {
@@ -118,9 +117,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			Zone zoneNew = NewRoomControl.Room.Zone;
 			
 			// Determine room draw positions.
-			Point2I panOld = Directions.ToPoint(direction) * (-distance);
-			Point2I panNew = Directions.ToPoint(direction) *
-				(GameSettings.VIEW_SIZE - distance);
+			Point2I panOld = direction.ToPoint() * -distance;
+			Point2I panNew = direction.ToPoint() * (GameSettings.VIEW_SIZE - distance);
 
 			// Draw the old and new rooms.
 			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld, RoomDrawing.DrawBelow);

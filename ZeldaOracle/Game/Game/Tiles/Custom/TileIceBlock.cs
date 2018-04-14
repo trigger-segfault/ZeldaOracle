@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		// Called when the player wants to push the tile.
-		public override bool OnPush(int direction, float movementSpeed) {
+		public override bool OnPush(Direction direction, float movementSpeed) {
 			if (base.OnPush(direction, GameSettings.TILE_ICE_BLOCK_MOVEMENT_SPEED)) {
 				continuedMoveDirection = MoveDirection;
 				return true;

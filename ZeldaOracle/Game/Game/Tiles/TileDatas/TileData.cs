@@ -279,12 +279,12 @@ namespace ZeldaOracle.Game.Tiles {
 			set { properties.SetEnum("solidity", value); }
 		}
 
-		public int LedgeDirection {
+		public Direction LedgeDirection {
 			get { return properties.Get<int>("ledge_direction", Direction.Down); }
 			set { properties.Set("ledge_direction", value); }
 		}
 
-		public int ConveyorAngle {
+		public Angle ConveyorAngle {
 			get { return properties.Get<int>("conveyor_angle", -1); }
 			set { properties.Set("conveyor_angle", value); }
 		}

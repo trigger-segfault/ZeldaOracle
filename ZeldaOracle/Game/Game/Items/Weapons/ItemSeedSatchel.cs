@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			DroppedSeed seed = new DroppedSeed(type);
 
 			// Spawn the seed
-			Vector2F velocity = Directions.ToVector(Player.Direction);
+			Vector2F velocity = Player.Direction.ToVector();
 			Vector2F pos = Player.Position + (velocity * 4.0f);
 			seed.Physics.Velocity = velocity * 0.75f;
 			Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 6);

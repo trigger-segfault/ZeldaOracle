@@ -97,8 +97,9 @@ namespace ZeldaOracle.Game.Tiles {
 		// Find a door that's connected to this one in an adjacent room.
 		public TileDataInstance GetConnectedDoor() {
 			// Find the location of the adjacent room.
-			int dir = Directions.Reverse(Properties.Get<int>("direction", 0));
-			Point2I roomLocation = RoomControl.RoomLocation + Directions.ToPoint(dir);
+			Direction dir = Properties.Get<int>("direction", 0);
+			dir = dir.Reverse();
+			Point2I roomLocation = RoomControl.RoomLocation + dir.ToPoint();
 
 			if (RoomControl.Level.ContainsRoom(roomLocation)) {
 				Room adjacentRoom = RoomControl.Level.GetRoomAt(roomLocation);

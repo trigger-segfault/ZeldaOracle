@@ -168,6 +168,7 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_THWOMP_HIT_WAIT_DURATION				= 46 + 16;
 		public const float				MONSTER_BEAMOS_SHOOT_SPEED						= 8.0f;
 		public const int				MONSTER_BEAMOS_SHOOT_ANGLE_COUNT				= 24;
+		public const WindingOrder		MONSTER_BEAMOS_ROTATE_DIRECTION					= WindingOrder.Clockwise;
 		public const float				MONSTER_PINCER_STRIKE_SPEED						= 2.0f;
 		public const float				MONSTER_PINCER_RETURN_SPEED						= 1.0f;
 		public const float				MONSTER_PINCER_STRIKE_DISTANCE					= 32.0f;	// Distance to extend when striking

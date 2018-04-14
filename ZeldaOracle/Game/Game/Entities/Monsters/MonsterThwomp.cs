@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private GenericStateMachine<CrushState> stateMachine;
 		private Vector2F hoverPosition;
 		private float crushSpeed;
-		private int eyeAngle;
+		private Angle eyeAngle;
 
 
 		//-----------------------------------------------------------------------------
@@ -96,8 +96,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		private void OnUpdateIdleState() {
 			// Update eye angle
-			int angleToPlayer = Angles.NearestFromVector(
-				RoomControl.Player.Center - Center);
+			Angle angleToPlayer = Angle.FromVector(RoomControl.Player.Center - Center);
 			eyeAngle = angleToPlayer;
 			Graphics.SubStripIndex = eyeAngle;
 
@@ -158,7 +157,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			base.Initialize();
 
 			hoverPosition = position;
-			eyeAngle = Angles.Down;
+			eyeAngle = Angle.Down;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_THWOMP);
 
 			stateMachine.BeginState(CrushState.Idle);

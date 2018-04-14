@@ -27,10 +27,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		private Vector2F GetLandingPosition(Vector2F position) {
-			Vector2F moveVector = Directions.ToVector(direction);
+			Vector2F moveVector = direction.ToVector();
 			Vector2F landingPosition = position + (moveVector * 4);
 			while (!CanLandAtPosition(landingPosition))
-				landingPosition += Directions.ToVector(direction);
+				landingPosition += moveVector;
 			landingPosition += moveVector;
 			return landingPosition;
 		}
@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Inset the sides of the collision box to allow edge clipping
 			Vector2F edgeClipping = Vector2F.Zero;
-			int lateralAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+			int lateralAxis = direction.PerpendicularAxis;
 			edgeClipping[lateralAxis] = player.Physics.EdgeClipAmount;
 			collisionBox.Inflate(-edgeClipping);
 
@@ -89,7 +89,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Determine the jump speed based on the distance needed to move
 				// Smaller ledge distances have slower jump speeds
 				float distance = (landingPosition - player.Position).Dot(
-					Directions.ToVector(direction));
+					direction.ToVector());
 				float jumpSpeed = 1.5f;
 				if (distance >= 28)
 					jumpSpeed = 2.0f;
@@ -108,7 +108,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					jumpSpeed = speed;
 				}
 
-				velocity = Directions.ToVector(direction) * speed;
+				velocity = direction.ToVector(speed);
 				player.Physics.ZVelocity = jumpSpeed;
 				ledgeExtendsToNextRoom = false;
 			}
@@ -162,7 +162,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// End once the player has reached the landing position
 				if ((player.Position + velocity - landingPosition).Dot(
-					Directions.ToVector(direction)) >= 0.0f)
+					direction.ToVector()) >= 0.0f)
 				{
 					player.Position = landingPosition;
 					End();

@@ -208,8 +208,8 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 				"string angle, float speed",
 			delegate (CommandParam parameters) {
 				string str = parameters.GetString(0).ToLower();
-				int angle = -1;
-				if (Angles.TryParse(str, true, out angle))
+				Angle angle = -1;
+				if (Angle.TryParse(str, true, out angle))
 					tileData.ConveyorAngle = angle;
 				else if (parameters[0].Type == CommandParamType.Integer)
 					tileData.ConveyorAngle = parameters.GetInt(0);
@@ -425,8 +425,8 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 				tileData.SolidType = TileSolidType.Ledge;
 				tileData.CollisionModel = GetResource<CollisionModel>(parameters.GetString(0));
 				string dirName = parameters.GetString(1);
-				int direction;
-				if (Directions.TryParse(dirName, true, out direction))
+				Direction direction;
+				if (Direction.TryParse(dirName, true, out direction))
 					tileData.LedgeDirection = direction;
 				else
 					ThrowParseError("Unknown value for ledge direction: " + dirName);
@@ -438,8 +438,8 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 				tileData.SolidType = TileSolidType.BasicLedge;
 				tileData.CollisionModel = GetResource<CollisionModel>(parameters.GetString(0));
 				string dirName = parameters.GetString(1);
-				int direction;
-				if (Directions.TryParse(dirName, true, out direction))
+				Direction direction;
+				if (Direction.TryParse(dirName, true, out direction))
 					tileData.LedgeDirection = direction;
 				else
 					ThrowParseError("Unknown value for ledge direction: " + dirName);
@@ -450,8 +450,8 @@ namespace ZeldaOracle.Common.Conscripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				tileData.SolidType = TileSolidType.LeapLedge;
 				string dirName = parameters.GetString(0);
-				int direction;
-				if (Directions.TryParse(dirName, true, out direction))
+				Direction direction;
+				if (Direction.TryParse(dirName, true, out direction))
 					tileData.LedgeDirection = direction;
 				else
 					ThrowParseError("Unknown value for ledge direction: " + dirName);

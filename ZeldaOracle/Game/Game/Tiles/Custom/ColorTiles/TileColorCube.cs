@@ -48,14 +48,14 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override bool OnPush(int direction, float movementSpeed) {
+		public override bool OnPush(Direction direction, float movementSpeed) {
 			if (base.OnPush(direction, MOVEMENT_SPEED)) {
-				offset = Directions.ToPoint(direction);
+				offset = direction.ToPoint();
 				
 				ColorCubeOrientation oldOrientation = orientation;
 
 				// Find the new sprite index.
-				if (Directions.IsVertical(direction))
+				if (direction.IsVertical)
 					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation + 3, 6);
 				else if ((int) orientation % 2 == 0)
 					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation - 1, 6);

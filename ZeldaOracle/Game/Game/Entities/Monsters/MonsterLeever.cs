@@ -83,7 +83,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				// Unborrow between 3 to 5 tiles in front of the player
 				// First create a list of the possibly locations to unburrow
 				List<Point2I> possibleLocations = new List<Point2I>();
-				Point2I dirPoint = Directions.ToPoint(RoomControl.Player.Direction);
+				Point2I dirPoint = RoomControl.Player.Direction.ToPoint();
 				Point2I loc = RoomControl.GetTileLocation(RoomControl.Player.Position);
 
 				for (int i = 0; i <= 5 && RoomControl.IsTileInBounds(loc); i++) {
@@ -119,8 +119,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			duration = 180;
 			timer = 0;
-			Direction = Directions.NearestFromVector(
-				RoomControl.Player.Center - Center);
+			Direction = Direction.FromVector(RoomControl.Player.Center - Center);
 			Graphics.IsVisible = true;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_LEEVER_UNBURROW);
 			burrowState = BurrowState.Unburrowing;
@@ -172,15 +171,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					Burrow();
 				}
 				else if (Color == MonsterColor.Red) {
-					physics.Velocity = Directions.ToVector(Direction) * moveSpeed;
+					physics.Velocity = Direction.ToVector(moveSpeed);
 				}
 				else if (Color == MonsterColor.Blue) {
 					// Re-face player regularly.
 					if (timer % 30 == 0) {
-						Direction = Directions.NearestFromVector(
+						Direction = Direction.FromVector(
 							RoomControl.Player.Center - Center);
 					}
-					physics.Velocity = Directions.ToVector(Direction) * moveSpeed;
+					physics.Velocity = Direction.ToVector(moveSpeed);
 				}
 				else if (Color == MonsterColor.Orange) {
 					// Chase player

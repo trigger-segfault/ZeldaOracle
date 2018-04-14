@@ -27,7 +27,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			if (time == 0) {
 				// Shoot a fireball
 				FireShooterProjectile projectile = new FireShooterProjectile();
-				ShootFromDirection(projectile, Direction, 2f, Directions.ToVector(Direction) * 2f);
+				ShootFromDirection(projectile, Direction, 2.0f,
+					Direction.ToVector(2.0f));
 				AudioSystem.PlaySound(GameData.SOUND_FIRE_SHOOTER);
 			}
 		}

@@ -153,7 +153,7 @@ namespace ZeldaOracle.Game.Entities.Objects {
 			// Draw the connecting rod
 			if (extendDistance > 0.0f) {
 				ISprite spr;
-				if (Directions.IsHorizontal(direction))
+				if (direction.IsHorizontal)
 					spr = GameData.SPR_TILE_PULL_HANDLE_BAR_HORIZONTAL;
 				else
 					spr = GameData.SPR_TILE_PULL_HANDLE_BAR_VERTICAL;

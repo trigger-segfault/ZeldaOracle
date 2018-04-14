@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 		private string enterMessage; // Message to display after entering.
 		private float walkDistance; // Distance the player should walk.
-		private int walkDirection;
+		private Direction walkDirection;
 		private float walkSpeed;
 		private float distance;
 		private EnterExitType type;
@@ -29,12 +29,15 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Constructor
 		//-----------------------------------------------------------------------------
 		
-		private RoomEnterExitState(EnterExitType type, int walkDirection, float walkDistance, string enterMessage = null) :
+		private RoomEnterExitState(EnterExitType type, Direction walkDirection,
+			float walkDistance, string enterMessage = null) :
 			this(type, walkDirection, walkDistance, 0, enterMessage)
 		{
 		}
 
-		private RoomEnterExitState(EnterExitType type, int walkDirection, float walkDistance, float walkSpeed, string enterMessage = null) {
+		private RoomEnterExitState(EnterExitType type, Direction walkDirection,
+			float walkDistance, float walkSpeed, string enterMessage = null)
+		{
 			this.type			= type;
 			this.enterMessage	= enterMessage;
 			this.walkDirection	= walkDirection;
@@ -54,7 +57,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 			if (type == EnterExitType.Enter) {
 				Vector2F destination = player.Position +
-					Directions.ToVector(walkDirection) * walkDistance;
+					walkDirection.ToVector(walkDistance);
 				player.RequestSpawnNaturalState(destination, true);
 			}
 
@@ -83,7 +86,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 			// Move the player
 			distance += walkSpeed;
-			player.Position += Directions.ToVector(walkDirection) * walkSpeed;
+			player.Position += walkDirection.ToVector(walkSpeed);
 			player.UpdateGraphics();
 
 			if (distance >= walkDistance) {

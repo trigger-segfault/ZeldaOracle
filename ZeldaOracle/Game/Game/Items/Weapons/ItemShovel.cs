@@ -34,11 +34,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			// Look for tiles to dig up
 			float distance = 6.5f;
 			Vector2F center = Player.Center;
-			if (Directions.IsVertical(Player.Direction))
+			if (Player.Direction.IsVertical)
 				distance = 7.5f;
 			else
 				center.Y += 4.0f;
-			Vector2F hotspot = GMath.Round(center) + (Directions.ToVector(Player.Direction) * distance);
+			Vector2F hotspot = GMath.Round(center) +
+				Player.Direction.ToVector(distance);
 			Point2I tileLoc = RoomControl.GetTileLocation(hotspot);
 			if (!RoomControl.IsTileInBounds(tileLoc))
 				return;
@@ -51,11 +52,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				effect.Graphics.DepthLayer = DepthLayer.EffectDirt;
 				effect.CreateDestroyTimer(15);
 				effect.Physics.Enable(PhysicsFlags.HasGravity);
-				effect.Physics.Velocity = Directions.ToVector(Player.Direction) * 0.5f;
+				effect.Physics.Velocity = Player.Direction.ToVector(0.5f);
 				effect.Graphics.IsShadowVisible = false;
 				effect.Graphics.PlayAnimation(GameData.ANIM_EFFECT_DIRT);
 				effect.Graphics.SubStripIndex = Player.Direction;
-				if (Directions.IsHorizontal(Player.Direction)) {
+				if (Player.Direction.IsHorizontal) {
 					effect.Physics.ZVelocity	= 3.0f;
 					effect.Physics.Gravity		= 0.5f;
 				}

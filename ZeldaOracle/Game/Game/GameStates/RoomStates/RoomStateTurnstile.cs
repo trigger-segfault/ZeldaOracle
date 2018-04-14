@@ -25,8 +25,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private int timer;
 		private TileTurnstile turnstile;
 		private State state;
-		private int enterDirection;
-		private int exitDirection;
+		private Direction enterDirection;
+		private Direction exitDirection;
 		private float walkDistance;
 
 
@@ -73,7 +73,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			timer			= 0;
 			state			= State.BeforeTurn;
 			walkDistance	= 0.0f;
-			exitDirection	= Directions.Add(enterDirection, 1, turnstile.WindingOrder);
+			exitDirection	= enterDirection.Rotate(1, turnstile.WindingOrder);
 			
 			// Setup the player.
 			Player player = RoomControl.Player;
@@ -81,7 +81,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			player.IntegrateStateParameters();
 			player.Graphics.PlayAnimation(player.MoveAnimation);
 			player.SetPositionByCenter(turnstile.Center +
-				(Directions.ToVector(enterDirection) * PLAYER_ROTATE_OFFSETS[0]));
+				enterDirection.ToVector(PLAYER_ROTATE_OFFSETS[0]));
 			player.Direction = exitDirection;
 		}
 
@@ -108,11 +108,14 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				// Offset the player in the enter and exit directions separately.
 				timer++;
 				int enterOffsetIndex = (timer / PLAYER_ROTATE_OFFSET_INTERVAL) + 1;
-				enterOffsetIndex = GMath.Clamp(enterOffsetIndex, 0, PLAYER_ROTATE_OFFSETS.Length - 1);
+				enterOffsetIndex = GMath.Clamp(enterOffsetIndex,
+					0, PLAYER_ROTATE_OFFSETS.Length - 1);
 				int exitOffsetIndex = PLAYER_ROTATE_OFFSETS.Length - 1 - enterOffsetIndex;
 				player.SetPositionByCenter(turnstile.Center);
-				player.Position += PLAYER_ROTATE_OFFSETS[enterOffsetIndex] * Directions.ToVector(enterDirection);
-				player.Position += PLAYER_ROTATE_OFFSETS[exitOffsetIndex]  * Directions.ToVector(exitDirection);
+				player.Position += enterDirection.ToVector(
+					PLAYER_ROTATE_OFFSETS[enterOffsetIndex]);
+				player.Position += exitDirection.ToVector(
+					PLAYER_ROTATE_OFFSETS[exitOffsetIndex]);
 
 				if (turnstile.IsDoneTurning()) {
 					state = State.AfterTurn;
@@ -126,14 +129,15 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					state = State.Walking;
 					timer = 0;
 					player.Graphics.PlayAnimation(player.MoveAnimation);
-					player.SetPositionByCenter(turnstile.Center + (Directions.ToVector(exitDirection) * 12));
+					player.SetPositionByCenter(turnstile.Center + exitDirection.ToVector(12));
 				}
 			}
 			else if (state == State.Walking) {
 				// Player exits the turnstile.
 				timer++;
 				player.Graphics.AnimationPlayer.Update();
-				player.Position += Directions.ToVector(exitDirection) * GameSettings.PLAYER_MOVE_SPEED;
+				player.Position += exitDirection.ToVector(
+					GameSettings.PLAYER_MOVE_SPEED);
 				walkDistance += GameSettings.PLAYER_MOVE_SPEED;
 
 				if (walkDistance >= PLAYER_EXIT_WALK_DISTANCE) {

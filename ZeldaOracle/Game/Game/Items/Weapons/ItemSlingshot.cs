@@ -47,22 +47,22 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			SeedType seedType = CurrentSeedType;
 
-			int direction = Player.UseDirection;
+			Direction direction = Player.UseDirection;
 			Player.Direction = direction;
 
 			// Determine the seed spawn position based on player facing direction.
 			Vector2F seedPos;
 			if (direction == Direction.Up)
-				seedPos = Directions.ToVector(direction) * 1;
+				seedPos = direction.ToVector(1);
 			else if (direction == Direction.Down)
-				seedPos = Directions.ToVector(direction) * 8;
+				seedPos = direction.ToVector(8);
 			else
-				seedPos = new Vector2F(0, 6) + (Directions.ToVector(direction) * 4);
+				seedPos = new Vector2F(0, 6) + direction.ToVector(4);
 
 			// Spawn the main seed projectile.
 			SeedProjectile seed = new SeedProjectile(seedType, false);
 			Player.ShootProjectile(seed,
-				Directions.ToVector(direction) * GameSettings.SLINGSHOT_SEED_SPEED,
+				direction.ToVector(GameSettings.SLINGSHOT_SEED_SPEED),
 				seedPos, 5);
 			seedTracker.TrackEntity(seed);
 

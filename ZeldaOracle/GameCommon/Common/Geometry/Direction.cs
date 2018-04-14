@@ -564,16 +564,15 @@ namespace ZeldaOracle.Common.Geometry {
 		Direction,	// 4 directions
 		Angle,		// 8 angles
 	};
-
+	
 	public static class Orientations {
-		
 
 		// Return a unit vector in the given direction.
 		public static Vector2F ToVector(int orientation, OrientationStyle style) {
 			if (style == OrientationStyle.Direction)
-				return Directions.ToVector(orientation);
+				return ((Direction) orientation).ToVector();
 			else if (style == OrientationStyle.Angle)
-				return Angles.ToVector(orientation);
+				return ((Angle) orientation).ToVector();
 			return Vector2F.Zero;
 		}
 
@@ -642,185 +641,5 @@ namespace ZeldaOracle.Common.Geometry {
 					return (endAngle - startAngle);
 			}
 		}
-	}
-
-
-	public static class Directions {
-		
-		//-----------------------------------------------------------------------------
-		// Constants
-		//-----------------------------------------------------------------------------
-
-		public const int Count	= 4;
-
-		public const int Right	= 0;
-		public const int Up		= 1;
-		public const int Left	= 2;
-		public const int Down	= 3;
-
-		public const int East	= 0;
-		public const int North	= 1;
-		public const int West	= 2;
-		public const int South	= 3;
-		
-
-		//-----------------------------------------------------------------------------
-		// Methods
-		//-----------------------------------------------------------------------------
-		
-		public static int Add(int direction, int addAmount, WindingOrder windingOrder) {
-			if (windingOrder == WindingOrder.Clockwise)
-				direction -= addAmount;
-			else
-				direction += addAmount;
-			return GMath.Wrap(direction, Direction.Count);
-		}
-
-		
-		// Return the opposite of the given direction.
-		public static int Reverse(int direction) {
-			return ((direction + Direction.Count / 2) % Direction.Count);
-		}
-		
-		// Return true if the given direction is horizontal (left or right).
-		public static bool IsHorizontal(int direction) {
-			return (direction % 2 == 0);
-		}
-		
-		// Return true if the given direction is vertical (up or down).
-		public static bool IsVertical(int direction) {
-			return (direction % 2 == 1);
-		}
-
-		// Return the given direction flipped horizontally over the y-axis.
-		public static int FlipHorizontal(int direction) {
-			return (Directions.West + Direction.Count - direction) % Direction.Count;
-		}
-		
-		// Return the given direction flipped vertically over the x-axis.
-		public static int FlipVertical(int direction) {
-			return (Direction.Count - direction) % Direction.Count;
-		}
-		
-		// Return a unit vector as a point in the given direction.
-		public static Point2I ToPoint(int direction) {
-			direction = direction % Direction.Count;
-			if (direction == Right)
-				return new Point2I(1, 0);
-			else if (direction == Up)
-				return new Point2I(0, -1);
-			else if (direction == Left)
-				return new Point2I(-1, 0);
-			return new Point2I(0, 1);
-		}
-
-		// Return a unit vector in the given direction.
-		public static Vector2F ToVector(int direction) {
-			direction = direction % Direction.Count;
-			if (direction == Right)
-				return new Vector2F(1.0f, 0.0f);
-			else if (direction == Up)
-				return new Vector2F(0.0f, -1.0f);
-			else if (direction == Left)
-				return new Vector2F(-1.0f, 0.0f);
-			return new Vector2F(0.0f, 1.0f);
-		}
-
-		// Return the angle representation of the given direction.
-		public static int ToAngle(int direction) {
-			return (direction * 2);
-		}
-
-		// Return the axis that the given direction is aligned on.
-		public static int ToAxis(int direction) {
-			return (direction % 2);
-		}
-
-		public static int FromPoint(Point2I point) {
-			if (point.X > 0)
-				return Direction.Right;
-			if (point.Y < 0)
-				return Direction.Up;
-			if (point.X < 0)
-				return Direction.Left;
-			if (point.Y > 0)
-				return Direction.Down;
-			return -1;
-		}
-		
-		public static int NearestFromVector(Vector2F vector) {
-			// Cheap algorithm for turning a vector into an axis-aligned direction.
-			if (GMath.Abs(vector.X) >= GMath.Abs(vector.Y)) {
-				if (vector.X < 0)
-					return Direction.Left;
-				else if (vector.X > 0)
-					return Direction.Right;
-				else
-					return -1;
-			}
-			else if (vector.Y < 0)
-				return Direction.Up;
-			else
-				return Direction.Down;
-		}
-
-		public static int RoundFromRadians(float radians) {
-			int dir = GMath.RoundI(radians / GMath.QuarterAngle);
-			return GMath.Wrap(dir, Direction.Count);
-		}
-
-		public static string ToString(int direction) {
-			if (direction == Direction.Right)
-				return "right";
-			if (direction == Direction.Left)
-				return "left";
-			if (direction == Direction.Up)
-				return "up";
-			if (direction == Direction.Down)
-				return "down";
-			return "invalid";
-		}
-		
-		public static bool TryParse(string value, bool ignoreCase, out int result) {
-			if (ignoreCase)
-				value = value.ToLower();
-			if (value == "right" || value == "east")
-				result = Direction.Right;
-			else if (value == "left" || value == "west")
-				result = Direction.Left;
-			else if (value == "up" || value == "north")
-				result = Direction.Up;
-			else if (value == "down" || value == "south")
-				result = Direction.Down;
-			else {
-				result = Direction.Invalid;
-				return false;
-			}
-			return true;
-		}
-
-		public static bool TryParse(string value, bool ignoreCase, out Direction result) {
-			if (ignoreCase)
-				value = value.ToLower();
-			if (value == "right" || value == "east")
-				result = Direction.Right;
-			else if (value == "left" || value == "west")
-				result = Direction.Left;
-			else if (value == "up" || value == "north")
-				result = Direction.Up;
-			else if (value == "down" || value == "south")
-				result = Direction.Down;
-			else {
-				result = Direction.Invalid;
-				return false;
-			}
-			return true;
-		}
-
-		/*public static DirectionMask GetDirectionBit(int direction) {
-			if (direction >= 0 && direction < Count)
-				return (DirectionMask) (1 << direction);
-			return DirectionMask.None;
-		}*/
 	}
 }

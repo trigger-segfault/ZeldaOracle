@@ -56,9 +56,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
-		private bool CanMoveToNextTile(int direction) {
+		private bool CanMoveToNextTile(Direction direction) {
 			Point2I nextTileLocation = RoomControl.GetTileLocation(Center) +
-				Directions.ToPoint(direction);
+				direction.ToPoint();
 
 			// Check if the tile is outside of the room
 			if (!RoomControl.IsTileInBounds(nextTileLocation))
@@ -111,7 +111,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					moveSpeed = GameSettings.MONSTER_SPINNING_BLADE_TRAP_FAST_SPEED;
 				}
 
-				Physics.Velocity = Directions.ToVector(direction) * moveSpeed;
+				Physics.Velocity = direction.ToVector(moveSpeed);
 				moveDistance += moveSpeed;
 
 				// After moving one tile, check if we can move one more
@@ -124,7 +124,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 			else {
-				int directionToPlayer = Directions.NearestFromVector(
+				Direction directionToPlayer = Direction.FromVector(
 					RoomControl.Player.Center - Center);
 
 				// Check if player is aligned 

@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 		private int shootTimer;
 		private bool shooting;
 		private int canShoot;
-		private int angle;
+		private Angle angle;
 		private int rotateTimer;
 		private Vector2F shootVector;
 
@@ -72,7 +72,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			base.OnInitialize();
 			shootTimer	= 0;
 			shooting	= false;
-			angle		= Angles.Up;
+			angle		= Angle.Up;
 			rotateTimer	= 15;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_BEAMOS);
 			Graphics.Colors.SetAll("blue");
@@ -83,7 +83,7 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 			base.Update();
 
 			Vector2F vectorToPlayer = RoomControl.Player.Position - Center;
-			int angleToPlayer = Angles.NearestFromVector(vectorToPlayer);
+			Angle angleToPlayer = Angle.FromVector(vectorToPlayer);
 			
 			// Update shooting
 			if (shooting) {
@@ -122,8 +122,9 @@ namespace ZeldaOracle.Game.Tiles.Custom.Monsters {
 				// Update rotation
 				rotateTimer--;
 				if (rotateTimer <= 0) {
-					angle = (angle + 1) % Angles.AngleCount;
-					rotateTimer = (angle % 2 == 0 ? 15 : 25);
+					angle = angle.Rotate(1,
+						GameSettings.MONSTER_BEAMOS_ROTATE_DIRECTION);
+					rotateTimer = (angle.IsAxisAligned ? 15 : 25);
 					Graphics.SubStripIndex = angle;
 
 					if (canShoot > 0)

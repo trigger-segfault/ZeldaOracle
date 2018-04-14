@@ -65,7 +65,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					};
 					collectibleReward.CollectibleDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
 				}
-				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
+				dropEntity.Physics.Velocity = direction.ToVector(
+					GameSettings.DROP_ENTITY_DIG_VELOCITY);
 			}
 
 			return true;

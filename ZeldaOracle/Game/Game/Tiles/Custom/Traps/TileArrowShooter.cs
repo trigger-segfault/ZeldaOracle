@@ -42,7 +42,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				if (playerBox.Intersects(ViewBox)) {
 					// Shoot an arrow
 					MonsterArrow projectile = new MonsterArrow(true);
-					ShootFromDirection(projectile, Direction, 2f, Directions.ToVector(Direction) * 2f);
+					ShootFromDirection(projectile, Direction, 2.0f,
+						Direction.ToVector(2.0f));
 
 					// Set the duration before the next shot
 					timer = GameSettings.TILE_ARROW_SHOOTER_SHOOT_INTERVAL;
@@ -74,11 +75,11 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					start = Position + GameSettings.TILE_SIZE;
 					distance = RoomControl.Room.PixelSize - start;
 				}
-				if (Directions.IsHorizontal(Direction)) {
+				if (Direction.IsHorizontal) {
 					return new Rectangle2F(start.X, Position.Y - 3,
 						distance.X, GameSettings.TILE_SIZE + 6);
 				}
-				else if (Directions.IsVertical(Direction)) {
+				else if (Direction.IsVertical) {
 					return new Rectangle2F(Position.X - 3, start.Y,
 						GameSettings.TILE_SIZE + 6, distance.Y);
 				}

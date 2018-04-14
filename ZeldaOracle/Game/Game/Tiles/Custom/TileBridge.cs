@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		private bool isVertical;
-		private int bridgeDirection;
+		private Direction bridgeDirection;
 		private int timer;
 		private TileBridgeState state;
 		private Point2I pieceLocation;
@@ -41,14 +41,17 @@ namespace ZeldaOracle.Game.Tiles {
 		// Bridge Methods
 		//-----------------------------------------------------------------------------
 
-		public void CreateBridge(bool instantaneous = false, bool rememberState = false) {
-			if (bridgeDirection >= 0 && (state == TileBridgeState.Destroyed || state == TileBridgeState.Destroying)) {
-				
+		public void CreateBridge(bool instantaneous = false,
+			bool rememberState = false)
+		{
+			if (bridgeDirection >= 0 && (state == TileBridgeState.Destroyed ||
+				state == TileBridgeState.Destroying))
+			{
 				if (state == TileBridgeState.Destroying) {
-					pieceLocation += Directions.ToPoint(bridgeDirection);
+					pieceLocation += bridgeDirection.ToPoint();
 				}
 				else {
-					pieceLocation = Location + Directions.ToPoint(bridgeDirection);
+					pieceLocation = Location + bridgeDirection.ToPoint();
 				}
 
 				state = TileBridgeState.Creating;
@@ -64,7 +67,7 @@ namespace ZeldaOracle.Game.Tiles {
 							isVertical ? "bridge_vertical" : "bridge_horizontal");*/
 						Tile pieceTile = Tile.CreateTile(TileData.TileData);
 						RoomControl.PlaceTileOnHighestLayer(pieceTile, pieceLocation);
-						pieceLocation += Directions.ToPoint(bridgeDirection);
+						pieceLocation += bridgeDirection.ToPoint();
 					}
 					else {
 						state = TileBridgeState.Created;
@@ -82,7 +85,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (bridgeDirection >= 0 && (state == TileBridgeState.Created || state == TileBridgeState.Creating)) {
 
 				if (state == TileBridgeState.Creating) {
-					pieceLocation -= Directions.ToPoint(bridgeDirection);
+					pieceLocation -= bridgeDirection.ToPoint();
 					if (pieceLocation == Location)
 						return;
 				}
@@ -111,7 +114,7 @@ namespace ZeldaOracle.Game.Tiles {
 					TileBridge pieceTile = GetConnectedTile(pieceLocation);
 					if (pieceTile != null)
 						RoomControl.RemoveTile(pieceTile);
-					pieceLocation -= Directions.ToPoint(bridgeDirection);
+					pieceLocation -= bridgeDirection.ToPoint();
 					if (pieceLocation == Location) {
 						state = TileBridgeState.Destroyed;
 						break;
@@ -134,7 +137,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		private TileBridge GetConnectedTile(Direction direction) {
-			return GetConnectedTile(Location + Directions.ToPoint(direction));
+			return GetConnectedTile(Location + direction.ToPoint());
 		}
 
 		private TileBridge GetConnectedTile(Point2I location) {
@@ -209,7 +212,7 @@ namespace ZeldaOracle.Game.Tiles {
 							isVertical ? "bridge_vertical" : "bridge_horizontal");*/
 						Tile pieceTile = Tile.CreateTile(TileData.TileData);
 						RoomControl.PlaceTileOnHighestLayer(pieceTile, pieceLocation);
-						pieceLocation += Directions.ToPoint(bridgeDirection);
+						pieceLocation += bridgeDirection.ToPoint();
 					}
 					else {
 						state = TileBridgeState.Created;
@@ -227,7 +230,7 @@ namespace ZeldaOracle.Game.Tiles {
 						AudioSystem.PlaySound(GameData.SOUND_BARRIER);
 					}
 
-					pieceLocation -= Directions.ToPoint(bridgeDirection);
+					pieceLocation -= bridgeDirection.ToPoint();
 
 					if (pieceLocation == Location) {
 						state = TileBridgeState.Destroyed;

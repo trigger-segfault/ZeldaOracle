@@ -185,11 +185,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				ShootProjectile(projectile, vectorToPlayer.Normalized * shootSpeed);
 			}
 			else if (aimType == AimType.SeekPlayerByDirection) {
-				int shootDirection = Directions.NearestFromVector(vectorToPlayer);
+				Direction shootDirection = Direction.FromVector(vectorToPlayer);
 				ShootFromDirection(projectile, shootDirection, shootSpeed);
 			}
 			else if (aimType == AimType.SeekPlayerByAngle) {
-				int shootAngle = Angles.NearestFromVector(vectorToPlayer);
+				Angle shootAngle = Angle.FromVector(vectorToPlayer);
 				ShootFromAngle(projectile, shootAngle, shootSpeed);
 			}
 			else {
@@ -282,7 +282,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void UpdateSubStripIndex() {
 			if (syncAnimationWithDirection) {
 				if (isAnimationHorizontal) {
-					if (Directions.IsHorizontal(direction))
+					if (direction.IsHorizontal)
 						Graphics.SubStripIndex = direction / 2;
 				}
 				else {
@@ -335,7 +335,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				else {
 					// Check for charging.
 					if (chargeType != ChargeType.None) {
-						int directionToPlayer = Directions.NearestFromVector(RoomControl.Player.Center - Center);
+						Direction directionToPlayer = Direction.FromVector(RoomControl.Player.Center - Center);
 						if (Entity.AreEntitiesAligned(this, RoomControl.Player, directionToPlayer, chargeMinAlignment)) {
 							StartCharging(directionToPlayer);
 							return;

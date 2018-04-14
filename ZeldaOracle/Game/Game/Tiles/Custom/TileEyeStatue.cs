@@ -31,8 +31,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (player != null) {
 				Vector2F lookVector = player.Center - Center;
-				int lookAngle = Angles.NearestFromVector(lookVector);
-				eyeOffset = Angles.ToPoint(lookAngle);
+				Angle lookAngle = Angle.FromVector(lookVector);
+				eyeOffset = lookAngle.ToPoint();
 			}
 			else {
 				eyeOffset = Point2I.Zero;

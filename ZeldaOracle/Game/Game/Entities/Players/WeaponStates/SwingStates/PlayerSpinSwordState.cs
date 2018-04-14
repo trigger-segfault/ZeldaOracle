@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			swingCollisionBoxesNoLunge = new Rectangle2I[4, 9];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 9; j++) {
-					int angle = GMath.Wrap((i * 2) - j, Angles.AngleCount);
+					Angle angle = GMath.Wrap((i * 2) - j, Angle.Count);
 					swingCollisionBoxesNoLunge[i, j] = SWING_TOOL_BOXES_SPIN[angle];
 				}
 			}

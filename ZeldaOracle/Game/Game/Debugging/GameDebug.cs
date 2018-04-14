@@ -212,7 +212,7 @@ namespace ZeldaOracle.Game.Debugging {
 			Console.WriteLine("Player.IsOnGround:    {0}", player.Physics.IsOnGround);
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine("Player.Motion:        {0}", player.Movement.Motion);
-			Console.WriteLine("Player.Direction:     {0}", Directions.ToString(player.Direction));
+			Console.WriteLine("Player.Direction:     {0}", player.Direction.ToString());
 			Console.WriteLine("Player.UseDirection:  {0}", player.UseDirection.ToString());
 			Console.WriteLine("Player.UseAngle:      {0}", player.UseAngle.ToString());
 			Console.WriteLine("Player.MoveDirection: {0}", player.MoveDirection.ToString());
@@ -552,9 +552,9 @@ namespace ZeldaOracle.Game.Debugging {
 			}
 		}
 		
-		private static void ChangeRooms(int direction) {
+		private static void ChangeRooms(Direction direction) {
 			Point2I roomLocation = RoomControl.RoomLocation;
-			Point2I adjacentRoomLocation = roomLocation + Directions.ToPoint(direction);
+			Point2I adjacentRoomLocation = roomLocation + direction.ToPoint();
 			if (RoomControl.Level.ContainsRoom(adjacentRoomLocation)) {
 				Room adjacentRoom = RoomControl.Level.GetRoomAt(adjacentRoomLocation);
 				RoomControl.TransitionToRoom(adjacentRoom, new RoomTransitionInstant());
@@ -617,14 +617,14 @@ namespace ZeldaOracle.Game.Debugging {
 		}
 
 		private static void DrawCollisionModelEdge(Graphics2D g, CollisionModel model,
-			Vector2F position, int edgeDirection, float edgeWidth, Color color)
+			Vector2F position, Direction edgeDirection, float edgeWidth, Color color)
 		{
-			int axis = Directions.ToAxis(edgeDirection);
-			int lateralAxis = Axes.GetOpposite(axis);
+			int axis = edgeDirection.Axis;
+			int lateralAxis = edgeDirection.PerpendicularAxis;
 			foreach (Rectangle2F box in model.Boxes) {
 				Rectangle2F r = Rectangle2F.Translate(box, position);
 				r.Point = GameUtil.Bias(r.Point);
-				r.ExtendEdge(Directions.Reverse(edgeDirection),
+				r.ExtendEdge(edgeDirection.Reverse(),
 					-(r.Size[axis] - edgeWidth));
 				g.FillRectangle(r, color);
 			}
@@ -702,15 +702,15 @@ namespace ZeldaOracle.Game.Debugging {
 					}
 
 					// Draw the collision edge
-					int edgeDirection = Directions.Reverse(collision.Direction);
-					int axis = Directions.ToAxis(edgeDirection);
+					Direction edgeDirection = collision.Direction.Reverse();
+					int axis = edgeDirection.Axis;
 					Rectangle2F r = collision.SolidBox;
 					r.Point = GameUtil.Bias(r.Point);
 					if (collision.Source.IsInsideCollision)
 						r.ExtendEdge(edgeDirection, -r.Size[axis] + 1);
 					else
-						r.ExtendEdge(Directions.Reverse(edgeDirection), -r.Size[axis]);
-					r.ExtendEdge(Directions.Reverse(edgeDirection), penetrationEdgeWidth);
+						r.ExtendEdge(edgeDirection.Reverse(), -r.Size[axis]);
+					r.ExtendEdge(edgeDirection.Reverse(), penetrationEdgeWidth);
 					g.FillRectangle(r, color);
 				}
 

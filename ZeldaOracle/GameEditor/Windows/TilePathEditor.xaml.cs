@@ -214,7 +214,7 @@ namespace ZeldaEditor.Windows {
 				string param = (tokens.Length > 1 ? tokens[1] : "");
 
 				Direction direction;
-				if (Directions.TryParse(cmd, false, out direction)) {
+				if (Direction.TryParse(cmd, false, out direction)) {
 					int distance;
 					if (int.TryParse(param, out distance)) {
 						item = MakeItem();

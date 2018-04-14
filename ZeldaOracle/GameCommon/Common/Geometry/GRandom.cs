@@ -231,6 +231,17 @@ namespace ZeldaOracle.Common.Geometry {
 												random.Next(bounds.Size.Y));
 		}
 
+		// Orientations ---------------------------------------------------------------
+
+		public static Direction NextDirection() {
+			return (Direction) NextInt(Direction.Count);
+		}
+
+		public static Angle NextAngle() {
+			return (Angle) NextInt(Angle.Count);
+		}
+
+
 		// Containers -----------------------------------------------------------------
 
 		/// <summary>Choose a random element from a list.</summary>

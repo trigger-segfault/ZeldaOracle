@@ -39,8 +39,8 @@ namespace ZeldaOracle.Game.Debugging {
 		private float moveSpeed;
 		private bool isMoving;
 		private bool[] moveAxes;
-		private int moveAngle;
-		private int moveDirection;
+		private Angle moveAngle;
+		private Direction moveDirection;
 		private MonsterToolSword toolSword;
 
 
@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Debugging {
 			isMoving		= false;
 			moveAxes		= new bool[] { false, false };
 			moveDirection	= Direction.Right;
-			moveAngle		= Angles.Right;
+			moveAngle		= Angle.Right;
 
 			toolSword = new MonsterToolSword();
 
@@ -119,7 +119,7 @@ namespace ZeldaOracle.Game.Debugging {
 			direction = moveDirection;
 
 			if (isMoving) {
-				Vector2F moveVector = Angles.ToVector(moveAngle, true) * moveSpeed;
+				Vector2F moveVector = moveAngle.ToVector(moveSpeed);
 				physics.Velocity = moveVector;
 				if (!Graphics.IsAnimationPlaying) {
 					Graphics.PlayAnimation();

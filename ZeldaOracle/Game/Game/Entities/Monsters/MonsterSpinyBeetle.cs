@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private bool uncoverPause;
 
 		private float moveSpeed;
-		private int moveAngle;
+		private Angle moveAngle;
 		private int moveDuration;
 		private int moveTimer;
 
@@ -260,9 +260,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				return;
 			}
 
-			Vector2F velocity = Angles.ToVector(moveAngle) * moveSpeed;
-			int direction = moveAngle / 2;
-			int axis = Directions.ToAxis(direction);
+			Vector2F velocity = moveAngle.ToVector(moveSpeed);
+			Direction direction = moveAngle.ToDirection();
+			int axis = direction.Axis;
 
 			if (moveTimer == 1) {
 				if (direction == Direction.Left || direction == Direction.Up) {
@@ -303,10 +303,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveTimer--;
 		}
 
-		private void StartCharging(int direction) {
+		private void StartCharging(Direction direction) {
 			revealed = true;
 			moveTimer = chargeDuration;
-			moveAngle = Directions.ToAngle(direction);
+			moveAngle = direction.ToAngle();
 			Physics.CollisionBox = CHARGE_BOXES[direction];
 			
 			// Don't check for future collisions and force a popup if player is hit.
@@ -316,7 +316,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				//Interactions.Trigger(InteractionType.PlayerContact, RoomControl.Player);
 				//return;
 			//}
-			Vector2F nextVelocity = Angles.ToVector(moveAngle) * moveSpeed;
+			Vector2F nextVelocity = moveAngle.ToVector(moveSpeed);
 
 			// Avoid moving into a hazardous or solid tiles
 			foreach (Tile tile in Physics.GetTilesMeeting(Position + nextVelocity)) {
@@ -342,17 +342,18 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Change direction timer
 			if (moveTimer == 0) {
 				moveTimer = moveDuration;
-				moveAngle = GRandom.NextInt(Angles.AngleCount);
+				moveAngle = GRandom.NextAngle();
 			}
 
 
-			Vector2F velocity = Angles.ToVector(moveAngle) * moveSpeed;
+			Vector2F velocity = moveAngle.ToVector(moveSpeed);
 			
 			// Avoid moving into a hazardous tile
 			foreach (Tile tile in Physics.GetTilesMeeting(Position + velocity)) {
 				if (tile.IsHoleWaterOrLava) {
-					int direction = Directions.NearestFromVector(tile.Center - Physics.PositionedCollisionBox.Center);
-					int axis = Directions.ToAxis(direction);
+					Direction direction = Direction.FromVector(
+						tile.Center - Physics.PositionedCollisionBox.Center);
+					int axis = direction.Axis;
 					velocity[axis] = 0f;
 					if (Physics.IsPlaceMeetingSolidTile(Position + velocity, tile)) {
 						velocity = Vector2F.Zero;
@@ -374,7 +375,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 			Physics.Velocity = Vector2F.Zero;
 			Vector2F vectorToPlayer = RoomControl.Player.Center - Center;
-			int direction = Directions.NearestFromVector(vectorToPlayer);
+			Direction direction = Direction.FromVector(vectorToPlayer);
 			if (direction == Direction.Up) {
 				Rectangle2F box = new Rectangle2F(-8, -8, 16, 8) + Position;
 				if (RoomControl.Player.Interactions.

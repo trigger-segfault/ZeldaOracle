@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private bool isSwitched;
 		private float raisedZPosition;
 		private Point2I tileSwitchLocation;
-		private int direction;
+		private Direction direction;
 		private Vector2F playerPosition;
 		private Vector2F hookedEntityPosition;
 		private Vector2F hookProjectilePosition;
@@ -70,11 +70,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Position			= hookedEntityPosition;
 			hookedEntity.Position	= playerPosition;
 			hookProjectile.Position	= hookedEntity.Center;
-			player.Direction		= Directions.Reverse(player.Direction);
+			player.Direction		= player.Direction.Reverse();
 
 			// Align positions to grid for tiles
 			if (hookedObject is Tile) {
-				Vector2F center = (tileSwitchLocation * GameSettings.TILE_SIZE) + new Vector2F(8, 8);
+				Vector2F center = (tileSwitchLocation *
+					GameSettings.TILE_SIZE) + new Vector2F(8, 8);
 				hookedEntity.SetPositionByCenter(center);
 			}
 
@@ -109,14 +110,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Find location for tile to land at
 				tileSwitchLocation = player.RoomControl.GetTileLocation(player.Center);
-				int syncAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+				int syncAxis = direction.PerpendicularAxis;
 				tileSwitchLocation[syncAxis] = hookedTile.Location[syncAxis];
 				
 				// Check if there is a hazard tile
 				if (hookedTile.StaysOnSwitch && !CanTileLandAtLocation(tileSwitchLocation)) {
 					// Attempt to move landing location one tile further to avoid hazard
-					int checkDir = Directions.Reverse(direction);
-					Point2I newSwitchLocation = tileSwitchLocation + Directions.ToPoint(checkDir);
+					Direction checkDir = direction.Reverse();
+					Point2I newSwitchLocation = tileSwitchLocation + checkDir.ToPoint();
 					if (CanTileLandAtLocation(newSwitchLocation))
 						tileSwitchLocation = newSwitchLocation;
 				}

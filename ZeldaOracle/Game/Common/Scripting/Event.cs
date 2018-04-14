@@ -12,6 +12,7 @@ namespace ZeldaOracle.Common.Scripting {
 		[NonSerialized]
 		private EventDocumentation documentation;
 		/// <summary>The defined script for the event. This is only used in the editor. In-game, internalID refers to the script.</summary>
+		[NonSerialized]
 		private Script script;
 		/// <summary>The internal ID of the script that this event called. This value may change often when used in the editor.</summary>
 		private string internalID;

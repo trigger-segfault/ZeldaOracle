@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			arrow.Interactions.InteractionType = InteractionType.Arrow;
 			Player.ShootFromDirection(arrow, Player.Direction,
 				GameSettings.PROJECTILE_ARROW_SPEED,
-				Directions.ToVector(Player.Direction) * 8.0f);
+				Player.Direction.ToVector(8.0f));
 			arrowTracker.TrackEntity(arrow);
 
 			AudioSystem.PlaySound(GameData.SOUND_SHOOT_PROJECTILE);

@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					GameSettings.TILE_SIZE));
 		}
 
-		public override bool OnPush(int direction, float movementSpeed) {
+		public override bool OnPush(Direction direction, float movementSpeed) {
 			// Don't use the Tile's built in pushing
 			return false;
 		}

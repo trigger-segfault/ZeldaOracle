@@ -376,8 +376,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		/// player, or null if none was found.</summary>
 		private Tile GetMagnetTile() {
 			// Create an area to check for magnet tiles
-			int axis = Directions.ToAxis(player.Direction);
-			int lateralAxis = Axes.GetOpposite(axis);
+			int axis = player.Direction.Axis;
+			int lateralAxis = player.Direction.PerpendicularAxis;
 			Rectangle2F checkArea = new Rectangle2F(-16, -16, 32, 32);
 			checkArea.Point += player.Center;
 			checkArea.ExtendEdge(player.Direction, RoomControl.RoomBounds.Size[axis]);
@@ -399,7 +399,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					Vector2F tileToPlayer = player.Center - tile.Center;
 
 					if (lateralRange.Contains(tileToPlayer[lateralAxis]) &&
-						Directions.NearestFromVector(
+						Direction.FromVector(
 							tile.Center - player.Center) == player.Direction &&
 						(bestTile == null || distance < bestDistance))
 					{

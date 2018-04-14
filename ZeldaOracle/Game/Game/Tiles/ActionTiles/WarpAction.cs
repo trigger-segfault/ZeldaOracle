@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 		private WarpType warpType;
 		private bool warpEnabled;
-		private int edgeDirection;
+		private Direction edgeDirection;
 
 
 		//-----------------------------------------------------------------------------
@@ -76,10 +76,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			// Position the player.
 			if (warpType == WarpType.Entrance) {
 				if (edgeDirection == Direction.Down)
-					player.Position += Directions.ToVector(edgeDirection) * 8.0f;
+					player.Position += edgeDirection.ToVector(8.0f);
 				else
-					player.Position += Directions.ToVector(edgeDirection) * 16.0f;
-				player.Direction = Directions.Reverse(edgeDirection);
+					player.Position += edgeDirection.ToVector(16.0f);
+				player.Direction = edgeDirection.Reverse();
 			}
 			else {
 				int faceDirection = Properties.Get<int>("face_direction", Direction.Down);
@@ -106,7 +106,8 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			if (edgeDirection == Direction.Down)
 				distance += 8;
 			if (warpType == WarpType.Entrance)
-				return RoomEnterExitState.CreateEnter(Directions.Reverse(edgeDirection), distance, null);
+				return RoomEnterExitState.CreateEnter(
+					edgeDirection.Reverse(), distance, null);
 			return null;
 		}
 

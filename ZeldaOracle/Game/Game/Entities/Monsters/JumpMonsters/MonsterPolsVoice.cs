@@ -63,8 +63,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			}
 			else {
 				// Otherwise, jump in a random angle
-				Physics.Velocity = Angles.ToVector(
-					GRandom.NextInt(Angles.AngleCount)) * moveSpeed;
+				Physics.Velocity = GRandom.NextAngle().ToVector(moveSpeed);
 			}
 		}
 	}

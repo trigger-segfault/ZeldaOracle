@@ -46,9 +46,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_ANTI_FAIRY);
 
 			// Start moving in a random diagonal angle
-			int angle = ((GRandom.NextInt(4) * 2) + 1) % 8;
-			Physics.Velocity = Angles.ToVector(angle) * 
-				GameSettings.MONSTER_ANTI_FAIRY_MOVE_SPEED;
+			Angle angle = ((GRandom.NextInt(4) * 2) + 1) % 8;
+			Physics.Velocity = angle.ToVector(
+				GameSettings.MONSTER_ANTI_FAIRY_MOVE_SPEED);
 		}
 
 		public override void CreateDeathEffect() {
@@ -63,9 +63,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void UpdateAI() {
 			// Just in case we stopped moving, start moving again
 			if (Physics.Velocity.Length <= 0.1f) {
-				int angle = ((GRandom.NextInt(4) * 2) + 1) % 8;
-				Physics.Velocity = Angles.ToVector(angle) * 
-					GameSettings.MONSTER_ANTI_FAIRY_MOVE_SPEED;
+				Angle angle = ((GRandom.NextInt(4) * 2) + 1) % 8;
+				Physics.Velocity = angle.ToVector(
+					GameSettings.MONSTER_ANTI_FAIRY_MOVE_SPEED);
 			}
 		}
 	}

@@ -201,7 +201,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		/// <summary>Move over a distance.</summary>
-		protected bool Move(int direction, int distance, float movementSpeed) {
+		protected bool Move(Direction direction, int distance, float movementSpeed) {
 			if (isMoving)
 				return false;
 
@@ -211,7 +211,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			this.movementSpeed	= movementSpeed;
 			this.moveDistance	= distance;
-			this.moveDirection	= Directions.ToPoint(direction);
+			this.moveDirection	= direction.ToPoint();
 			this.isMoving		= true;
 			this.hasMoved		= true;
 			this.currentMoveDistance	= 0;
@@ -219,13 +219,13 @@ namespace ZeldaOracle.Game.Tiles {
 			// Move the tile one step forward.
 			Point2I oldLocation = location;
 			RoomControl.MoveTile(this, location + moveDirection, newLayer);
-			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
+			offset = -direction.ToVector(GameSettings.TILE_SIZE);
 
 			return true;
 		}
 
-		protected bool IsMoveObstructed(int direction, out int newLayer) {
-			Point2I newLocation = location + Directions.ToPoint(direction);
+		protected bool IsMoveObstructed(Direction direction, out int newLayer) {
+			Point2I newLocation = location + direction.ToPoint();
 			return IsMoveObstructed(newLocation, out newLayer);
 		}
 
@@ -308,7 +308,7 @@ namespace ZeldaOracle.Game.Tiles {
 				Break(true);
 		}
 
-		public virtual void OnGrab(int direction, ItemBracelet bracelet) {
+		public virtual void OnGrab(Direction direction, ItemBracelet bracelet) {
 			if (!isMoving && !flags.HasFlag(TileFlags.NotGrabbable)) {
 				Player player = roomControl.Player;
 				player.GrabState.Bracelet = bracelet;
@@ -318,10 +318,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		/// <summary>Called when the player wants to push the tile.</summary>
-		public virtual bool OnPush(int direction, float movementSpeed) {
+		public virtual bool OnPush(Direction direction, float movementSpeed) {
 			if (!HasFlag(TileFlags.Movable))
 				return false;
-			if (roomControl.IsSideScrolling && Directions.IsVertical(direction))
+			if (roomControl.IsSideScrolling && direction.IsVertical)
 				return false;
 			if (properties.Get<bool>("move_once", false) && hasMoved)
 				return false;
@@ -1242,7 +1242,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get {
 				if (roomControl.IsSideScrolling) {
 					Tile ssSurfaceTile = roomControl.TileManager.GetTopTile(
-						Location + Directions.ToPoint(Direction.Down));
+						Location + Direction.Down.ToPoint());
 					return (ssSurfaceTile == null || !ssSurfaceTile.IsSolid ||
 						ssSurfaceTile.IsInMotion);
 					// TODO: Check if collision box does not have a flat surface on top?

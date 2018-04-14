@@ -123,15 +123,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// Move the player's position diagonally
 			Vector2F moveAmount = Vector2F.Zero;
-			moveAmount += Directions.ToVector(player.Direction);
-			moveAmount -= Directions.ToVector(
-				Directions.Add(player.Direction, 1, RotationDirection));
+			moveAmount += player.Direction.ToVector();
+			moveAmount -= player.Direction.Rotate(1, RotationDirection).ToVector();
 			player.Position += moveAmount * 4.0f;
 
 			// Rotate the player's direction
 			if (rotateDirection)
-				player.Direction = Directions.Add(
-					player.Direction, 1, RotationDirection);
+				player.Direction = player.Direction.Rotate(1, RotationDirection);
 		}
 
 

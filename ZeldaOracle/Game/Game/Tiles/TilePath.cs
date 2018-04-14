@@ -126,7 +126,7 @@ namespace ZeldaOracle.Game.Tiles {
 				string param = (tokens.Length > 1 ? tokens[1] : "");
 
 				Direction direction;
-				if (Directions.TryParse(cmd, false, out direction)) {
+				if (Direction.TryParse(cmd, false, out direction)) {
 					int distance;
 					if (int.TryParse(param, out distance)) {
 						path.AddMove(direction, distance, speed, delay);

@@ -31,7 +31,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			if (timer == 0) {
 				// Shoot an arrow
 				MonsterArrow projectile = new MonsterArrow(true);
-				ShootFromDirection(projectile, Direction, 2f, Directions.ToVector(Direction) * 6f);
+				ShootFromDirection(projectile, Direction, 2f,
+					Direction.ToVector(6.0f));
 
 				// Set the duration before the next shot
 				int intervalCount = GameSettings.TILE_ARROW_CANNON_SHOOT_INTERVALS.Length;
