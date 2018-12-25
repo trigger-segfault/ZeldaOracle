@@ -7,6 +7,7 @@
 [![Commit Activity](https://img.shields.io/github/commit-activity/y/trigger-death/ZeldaOracle.svg)](https://github.com/trigger-death/ZeldaOracle/commits/develop)
 [![Trello Boards](https://img.shields.io/badge/trello-3%20boards-026AA7.svg?style=flat)](https://trello.com/zeldaoracleengine)
 [![Creation Date](https://img.shields.io/badge/created-september%202015-A642FF.svg?style=flat)](https://github.com/trigger-death/ZeldaOracle/commit/9da98a1d797ae34e845fe49c3440a4406f4d5381)
+[![Discord](https://img.shields.io/discord/436949335947870238.svg?style=flat&logo=discord&label=chat&colorB=7389DC&link=https://discord.gg/vB7jUbY)](https://discord.gg/vB7jUbY)
 
 ## Authors:
 * Robert Jordan (trigger_death)
