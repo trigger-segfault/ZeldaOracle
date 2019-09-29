@@ -12,7 +12,8 @@ using ZeldaOracle.Common.Util;
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>An image containing a texture.</summary>
 	public class Image : IDisposable {
-
+		/// <summary>True if the image was added to the Resources disposables.</summary>
+		protected bool asContent;
 		/// <summary>The texture of the image.</summary>
 		protected Texture2D texture;
 
@@ -24,41 +25,54 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Constructs an unassigned image and does not add it to the
 		/// content database's independent ContentContainer.</summary>
 		protected Image() {
+			asContent = false;
 			texture = null;
 		}
 
 		/// <summary>Constructs an image with the specified texture.</summary>
-		protected Image(Texture2D texture) {
+		protected Image(Texture2D texture, bool asContent = true) {
 			if (texture == null)
 				throw new ArgumentNullException("Image's texture cannot be null!");
+			this.asContent = asContent;
 			this.texture = texture;
-			ContentContainer.AddDisposable(texture);
+			if (asContent)
+				ContentContainer.AddDisposable(texture);
 		}
 
 		/// <summary>Constructs an new image with the specified texture size.</summary>
-		public Image(int width, int height) {
+		public Image(int width, int height, bool asContent = true) {
+			this.asContent = asContent;
 			texture = new Texture2D(ContentContainer.GraphicsDevice, width, height);
-			ContentContainer.AddDisposable(texture);
+			if (asContent)
+				ContentContainer.AddDisposable(texture);
 		}
 
 		/// <summary>Constructs an new image with the specified texture size.</summary>
-		public Image(Point2I size) {
+		public Image(Point2I size, bool asContent = true) {
+			this.asContent = asContent;
 			texture = new Texture2D(ContentContainer.GraphicsDevice, size.X, size.Y);
-			ContentContainer.AddDisposable(texture);
+			if (asContent)
+				ContentContainer.AddDisposable(texture);
 		}
 
 		/// <summary>Constructs an new image with the specified texture information.</summary>
-		public Image(int width, int height, SurfaceFormat format) {
+		public Image(int width, int height, SurfaceFormat format,
+			bool asContent = true)
+		{
+			this.asContent = asContent;
 			texture = new Texture2D(ContentContainer.GraphicsDevice,
 				width, height, false, format);
-			ContentContainer.AddDisposable(texture);
+			if (asContent)
+				ContentContainer.AddDisposable(texture);
 		}
 
 		/// <summary>Constructs an new image with the specified texture information.</summary>
-		public Image(Point2I size, SurfaceFormat format) {
+		public Image(Point2I size, SurfaceFormat format, bool asContent = true) {
+			this.asContent = asContent;
 			texture = new Texture2D(ContentContainer.GraphicsDevice,
 				size.X, size.Y, false, format);
-			ContentContainer.AddDisposable(texture);
+			if (asContent)
+				ContentContainer.AddDisposable(texture);
 		}
 
 
@@ -66,10 +80,13 @@ namespace ZeldaOracle.Common.Graphics {
 		// Disposing
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Immediately releases the unmanaged ContentContainer used by the texture.</summary>
-		public void Dispose() {
-			if (texture != null && !texture.IsDisposed)
+		/// <summary>Immediately releases the unmanaged resources used by the
+		/// texture.</summary>
+		public virtual void Dispose() {
+			if (texture != null && !texture.IsDisposed && asContent) {
 				texture.Dispose();
+				ContentContainer.RemoveDisposable(texture);
+			}
 		}
 
 
@@ -182,30 +199,32 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
-		public static Image FromFile(string filePath, bool premultiply = false) {
+		public static Image FromFile(string filePath, bool premultiply = false,
+			bool asContent = true)
+		{
 			using (Stream stream = File.OpenRead(filePath))
-				return FromStream(stream, premultiply);
+				return FromStream(stream, premultiply, asContent);
 		}
 
 		/// <summary>Loads the texture from the stream with the specified file size.</summary>
 		public static Image FromStreamAndSize(Stream stream,
-			bool premultiply = false)
+			bool premultiply = false, bool asContent = true)
 		{
 			using (Stream memory = BinaryCounter.ReadStream(stream)) {
 				if (memory.Length == 0)
 					return null;
-				return FromStream(memory, premultiply);
+				return FromStream(memory, premultiply, asContent);
 			}
 		}
 
 		/// <summary>Loads the texture from the stream.</summary>
 		public static Image FromStream(Stream stream,
-			bool premultiply = false)
+			bool premultiply = false, bool asContent = true)
 		{
 			Texture2D texture = Texture2DHelper.FromStream<Texture2D>(stream);
 			if (premultiply)
 				Texture2DHelper.PremultiplyAlpha(texture);
-			return new Image(texture);
+			return new Image(texture, asContent);
 		}
 
 

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Shaders;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Graphics {
-	
 	/// <summary>A structured used to lookup already-unmapped unmapped sprites.</summary>
 	public struct UnmappedSpriteLookup {
 		/// <summary>The sprite parts this unmapped sprite is made of.</summary>
@@ -28,18 +22,22 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Constructs an unmapped sprite lookup from the specified sprite,
 		/// settings, and palettes.</summary>
-		public UnmappedSpriteLookup(ISprite sprite, SpriteSettings settings, Palette tilePalette, Palette entityPalette) {
-			this.SpriteParts	= sprite.GetParts(settings);
-			this.TilePalette	= tilePalette;
-			this.EntityPalette	= entityPalette;
+		public UnmappedSpriteLookup(ISprite sprite, SpriteSettings settings,
+			Palette tilePalette, Palette entityPalette)
+		{
+			SpriteParts		= sprite.GetParts(settings);
+			TilePalette		= tilePalette;
+			EntityPalette	= entityPalette;
 		}
 
 		/// <summary>Constructs an unmapped sprite lookup from the specified sprite parts
 		/// and palettes.</summary>
-		public UnmappedSpriteLookup(SpritePart spriteParts, Palette tilePalette, Palette entityPalette) {
-			this.SpriteParts    = spriteParts;
-			this.TilePalette    = tilePalette;
-			this.EntityPalette  = entityPalette;
+		public UnmappedSpriteLookup(SpritePart spriteParts, Palette tilePalette,
+			Palette entityPalette)
+		{
+			SpriteParts		= spriteParts;
+			TilePalette		= tilePalette;
+			EntityPalette	= entityPalette;
 		}
 
 
@@ -104,44 +102,74 @@ namespace ZeldaOracle.Common.Graphics {
 
 
 		//-----------------------------------------------------------------------------
+		// Disposing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Disposes of all unmapped sprites.</summary>
+		public static void Dispose() {
+			foreach (var pair in unmappedSprites) {
+				pair.Value.Image.Dispose();
+			}
+			unmappedSprites.Clear();
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Unmapping
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Unmaps the specified sprite.</summary>
 		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite) {
-			return UnmapSprite(g, sprite, SpriteSettings.Default, GameData.PAL_TILES_DEFAULT, GameData.PAL_ENTITIES_DEFAULT);
+			return UnmapSprite(g, sprite, SpriteSettings.Default,
+				GameData.PAL_TILES_DEFAULT, GameData.PAL_ENTITIES_DEFAULT);
 		}
 
 		/// <summary>Unmaps the specified sprite.</summary>
-		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite, SpriteSettings settings) {
-			return UnmapSprite(g, sprite, settings, GameData.PAL_TILES_DEFAULT, GameData.PAL_ENTITIES_DEFAULT);
+		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite,
+			SpriteSettings settings)
+		{
+			return UnmapSprite(g, sprite, settings, GameData.PAL_TILES_DEFAULT,
+				GameData.PAL_ENTITIES_DEFAULT);
 		}
 
 		/// <summary>Unmaps the specified sprite.</summary>
-		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite, Palette tilePalette, Palette entityPalette) {
-			return UnmapSprite(g, sprite, SpriteSettings.Default, tilePalette, entityPalette);
+		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite,
+			Palette tilePalette, Palette entityPalette)
+		{
+			return UnmapSprite(g, sprite, SpriteSettings.Default, tilePalette,
+				entityPalette);
 		}
 
 		/// <summary>Unmaps the specified sprite.</summary>
-		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite, PaletteShader shader) {
-			return UnmapSprite(g, sprite, SpriteSettings.Default, shader.TilePalette, shader.EntityPalette);
+		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite,
+			PaletteShader shader)
+		{
+			return UnmapSprite(g, sprite, SpriteSettings.Default, shader.TilePalette,
+				shader.EntityPalette);
 		}
 
 		/// <summary>Unmaps the specified sprite.</summary>
-		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite, SpriteSettings settings, PaletteShader shader) {
-			return UnmapSprite(g, sprite, settings, shader.TilePalette, shader.EntityPalette);
+		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite,
+			SpriteSettings settings, PaletteShader shader)
+			{
+			return UnmapSprite(g, sprite, settings, shader.TilePalette,
+				shader.EntityPalette);
 		}
 
 		/// <summary>Unmaps the specified sprite.</summary>
-		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite, SpriteSettings settings, Palette tilePalette, Palette entityPalette) {
-			UnmappedSpriteLookup lookup = new UnmappedSpriteLookup(sprite, settings, tilePalette, entityPalette);
+		public static UnmappedSprite UnmapSprite(Graphics2D g, ISprite sprite,
+			SpriteSettings settings, Palette tilePalette, Palette entityPalette)
+		{
+			UnmappedSpriteLookup lookup = new UnmappedSpriteLookup(sprite, settings,
+				tilePalette, entityPalette);
 			UnmappedSprite unmappedSprite = null;
 			if (unmappedSprites.TryGetValue(lookup, out unmappedSprite))
 				return unmappedSprite;
 
 			Rectangle2I bounds = sprite.GetBounds(settings);
 			bounds.Size = GMath.Max(Point2I.One, bounds.Size);
-			RenderTarget renderTarget = new RenderTarget(bounds.Size, SurfaceFormat.Color);
+			RenderTarget renderTarget =
+				new RenderTarget(bounds.Size, SurfaceFormat.Color);
 			GameData.SHADER_PALETTE.TilePalette = tilePalette;
 			GameData.SHADER_PALETTE.EntityPalette = entityPalette;
 			GameData.SHADER_PALETTE.ApplyParameters();

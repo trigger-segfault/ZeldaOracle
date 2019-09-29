@@ -195,6 +195,8 @@ namespace ZeldaOracle.Common.Content {
 				resource.Dispose();
 			}
 			independentResources.Clear();
+
+			Unmapping.Dispose();
 		}
 
 		/*/// <summary>Adds an indenpendent resource that will be disposed
